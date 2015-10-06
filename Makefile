@@ -29,7 +29,7 @@ help:
 setup: provision
 	vagrant ssh -c 'cd /srv/app/symfony && make install'
 
-setup@test: provision@test
+setup@test: provision@test install@test
 
 #############
 # Provision #
