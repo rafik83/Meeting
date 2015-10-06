@@ -1,0 +1,4 @@
+services:
+#    vimeet_infrastructure.example:
+#        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

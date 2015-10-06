@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Sonata\IntlBundle\SonataIntlBundle(),
 
             // Vimeet
+            new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),
             new Proximum\Vimeet\Bundle\AppBundle\VimeetAppBundle(),
         );
 

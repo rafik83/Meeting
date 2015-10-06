@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi:             ~
@@ -59,6 +59,13 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        mappings:
+            entity:
+                type: yml
+                prefix: Proximum\Vimeet\Domain\Model
+                dir: %kernel.root_dir%/../src/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
+                alias: Entity
+                is_bundle: false
 
 # Swiftmailer Configuration
 swiftmailer:
