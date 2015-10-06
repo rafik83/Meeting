@@ -37,19 +37,11 @@ elao_apt_preferences:
   - ruby@bearstech
   - git@backports
   - ~@dotdeb:100
-  #- php@dotdeb
-  #- php@dotdeb_php55
   - php@dotdeb_php56
   - nginx@nginx
-  #- nodejs@nodesource_0_10
   - nodejs@nodesource_0_12
-  #- nodejs@nodesource_4
   # App
   - mysql@dotdeb
-  #- postgresql@postgresql
-  #- redis@dotdeb
-  #- elasticsearch@elasticsearch_1_7
-  #- mongodb@mongodb
 
 elao_apt_packages: []
 
@@ -145,40 +137,6 @@ elao_mysql_configs:
 
 elao_phpmyadmin_config_template: config/{{ _env }}.inc.php.j2
 
-##############
-# PostgreSQL #
-##############
-
-#elao_postgresql_version: 9.4
-
-#elao_postgresql_config_template: config/{{ _env }}.conf.j2
-
-#elao_postgresql_config_hba_template: config/hba/{{ _env }}.conf.j2
-
-##############
-# PhpPgAdmin #
-##############
-
-#elao_phppgadmin_config_template: config/{{ _env }}.inc.php.j2
-
-#########
-# Redis #
-#########
-
-#elao_redis_config_template: config/{{ _env }}.conf.j2
-
-#################
-# PhpRedisAdmin #
-#################
-
-#elao_phpredisadmin_config_template: config/{{ _env }}.inc.php.j2
-
-###########
-# MongoDB #
-###########
-
-#elao_mongodb_config_template: config/{{ _env }}.conf.j2
-
 #######
 # Php #
 #######
@@ -200,10 +158,8 @@ elao_php_extensions:
   - curl
   # App
   - mysqlnd
-  #- pgsql
 
 elao_php_configs_exclusive: true
-#elao_php_configs_global:    true # Php 5.4
 elao_php_configs:
   - file: 50-xdebug.ini
     template: configs/xdebug_{{ _env }}.ini.j2
@@ -221,9 +177,6 @@ elao_php_applications:
   - php-cs-fixer
   - phpcs
   # App
-  #- phpunit
-  #- phpunit@5.0.0
-  #- openl10n@0.2.0
 
 #########
 # Nginx #
@@ -264,47 +217,5 @@ _all_nginx_configs:
 #######
 
 elao_npm_packages:
-  #- name:    bower
-  #  version: 1
   - name:    gulp
     version: 3
-
-########
-# Cron #
-########
-
-#elao_cron_files:
-#  - file: app
-#    user: "{{ elao_php_user }}"
-#    jobs:
-#      # Do foo bar
-#      - name:   foo-bar
-#        job:    "php {{ _app_dir }}/symfony/bin/console app:foo:bar --env={{ _env }}"
-#        minute: 0
-#        hour:   7
-#        # Dev
-#        state:  absent
-
-##############
-# Supervisor #
-##############
-
-#elao_supervisor_config_template: config/{{ _env }}.conf.j2
-
-#elao_supervisor_configs_exclusive: true
-#elao_supervisor_configs:
-#  - file:     inet-http-server.conf
-#    template: configs/inet_http_server_{{ _env }}.conf.j2
-#  - file:     app.conf
-#    template: configs/program_{{ _env }}.conf.j2
-#    config:
-#      - foo-bar:
-#        - command:         php bin/console app:foo:bar --env={{ _env }} --no-interaction -vv
-#        - directory:       "{{ _app_dir }}/symfony"
-#        - user:            "{{ elao_php_user }}"
-#        - autorestart:     true
-#        - stdout_logfile:  "{{ elao_supervisor_log_dir }}/foo-bar.log"
-#        - redirect_stderr: true
-#        - environment:     "SYMFONY_ENV=\"{{ _env }}\""
-#        # Dev
-#        - autostart:       false
