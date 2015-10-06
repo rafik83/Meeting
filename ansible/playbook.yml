@@ -32,19 +32,6 @@
     - role: elao.nginx
       elao_nginx_configs: "{{ _all_nginx_configs + _env_nginx_configs|default([]) }}"
     # MySql
-    - { role: elao.mysql }
-    - { role: elao.phpmyadmin, when: _env == 'dev' }
-    # PostgreSQL
-    #- { role: elao.postgresql }
-    #- { role: elao.phppgadmin, when: _env == 'dev' }
-    # Redis
-    #- { role: elao.redis }
-    #- { role: elao.phpredisadmin, when: _env == 'dev' }
-    # Elasticsearch
-    #- { role: elao.java }
-    #- { role: elao.elasticsearch }
-    # MongoDB
-    #- { role: elao.mongodb }
     - role: elao.mysql
     - role: elao.phpmyadmin
       when: _env == 'dev'
