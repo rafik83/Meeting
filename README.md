@@ -1,5 +1,7 @@
 # Proximum - Vimeet
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/bcbc2002-8db7-41bd-82b8-1f5bf95f4a40/small.png)](https://insight.sensiolabs.com/projects/bcbc2002-8db7-41bd-82b8-1f5bf95f4a40)
+
 ## Development
 
 > Note: The `$` stands for your machine CLI, while the `⇒` stands for the VM CLI
