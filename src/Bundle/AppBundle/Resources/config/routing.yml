@@ -1,0 +1,3 @@
+vimeet_app_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: VimeetAppBundle:Default:index }

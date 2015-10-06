@@ -1,0 +1,4 @@
+vimeet_app:
+    resource: "@VimeetAppBundle/Resources/config/routing.yml"
+    prefix:   /
+

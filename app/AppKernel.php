@@ -17,7 +17,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             // Sonata - Intl
-            new Sonata\IntlBundle\SonataIntlBundle()
+            new Sonata\IntlBundle\SonataIntlBundle(),
+
+            // Vimeet
+            new Proximum\Vimeet\Bundle\AppBundle\VimeetAppBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -5,7 +5,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/",
+            "Proximum\\Vimeet\\": "src/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         }
     },
