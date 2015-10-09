@@ -15,9 +15,9 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-
-            // Sonata - Intl
             new Sonata\IntlBundle\SonataIntlBundle(),
+            new Elao\Bundle\FormBundle\ElaoFormBundle(),
+            new FOS\ElasticaBundle\FOSElasticaBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),
