@@ -177,6 +177,7 @@ elao_php_applications:
   - php-cs-fixer
   - phpcs
   # App
+  - openl10n@0.2.0
 
 #########
 # Nginx #
