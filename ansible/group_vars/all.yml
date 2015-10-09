@@ -220,3 +220,15 @@ _all_nginx_configs:
 elao_npm_packages:
   - name:    gulp
     version: 3
+
+############
+# Openl10n #
+############
+
+elao_openl10n_users:
+  - user: "{{ _user }}"
+    config:
+      - proximum.vimeet:
+        - hostname: openl10n.elao.ninja
+        - username: proximum.vimeet
+        - password: YUdB8sCR
