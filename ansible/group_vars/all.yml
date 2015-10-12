@@ -83,7 +83,9 @@ elao_ohmyzsh_users:
 # Files #
 #########
 
-_all_files: []
+_all_files:
+    - path: "{{ _app_dir }}/symfony/.openl10n.yml"
+      template: ./templates/.openl10n.j2
 
 #######
 # Gem #
@@ -177,6 +179,7 @@ elao_php_applications:
   - php-cs-fixer
   - phpcs
   # App
+  - openl10n@0.2.0
 
 #########
 # Nginx #

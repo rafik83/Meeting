@@ -34,3 +34,4 @@ ansible.cfg
 .php_cs.cache
 
 # App
+.openl10n.yml

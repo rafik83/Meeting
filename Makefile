@@ -142,6 +142,22 @@ deploy-capifony@demo:
 deploy-capifony@prod:
 	cap prod deploy
 
+################
+# Translations #
+################
+
+## Translations push
+trans-push: trans-openl10n-push
+
+trans-openl10n-push:
+	openl10n push --locale=all
+
+## Translations pull
+trans-pull: trans-openl10n-pull
+
+trans-openl10n-pull:
+	openl10n pull --locale=all
+
 ##########
 # Custom #
 ##########
