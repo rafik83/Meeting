@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f680924ea9bdcaf6ae64f251899ccf2",
+    "hash": "7a9d14f6d76cdfa5690e52784df27bf3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -4037,23 +4037,23 @@
             "time": "2015-03-17 06:36:52"
         },
         {
-            "name": "theofidry/alice-fixtures-extension",
-            "version": "v1.0.0-beta",
+            "name": "theofidry/alice-bundle-extension",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/theofidry/AliceFixturesExtension.git",
-                "reference": "ffb33d0c2b419abb8a834b97eb0f1062c42d23b8"
+                "url": "https://github.com/theofidry/AliceBundleExtension.git",
+                "reference": "6c97cdeaa24ae97e8591a64ae8b05cc475d378a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/AliceFixturesExtension/zipball/ffb33d0c2b419abb8a834b97eb0f1062c42d23b8",
-                "reference": "ffb33d0c2b419abb8a834b97eb0f1062c42d23b8",
+                "url": "https://api.github.com/repos/theofidry/AliceBundleExtension/zipball/6c97cdeaa24ae97e8591a64ae8b05cc475d378a0",
+                "reference": "6c97cdeaa24ae97e8591a64ae8b05cc475d378a0",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "~3.0",
                 "behat/symfony2-extension": "^2.0",
-                "hautelook/alice-bundle": "~1.0@beta",
+                "hautelook/alice-bundle": "~1.0",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -4061,6 +4061,7 @@
                 "doctrine/doctrine-fixtures-bundle": "~2.2",
                 "doctrine/orm": "~2.4",
                 "fabpot/php-cs-fixer": "~2.0@dev",
+                "phpunit/phpunit": "^4.8",
                 "symfony/console": "~2.1",
                 "symfony/expression-language": "^2.7",
                 "symfony/framework-bundle": "~2.1",
@@ -4070,7 +4071,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Fidry\\AliceFixturesExtension\\": "src"
+                    "Fidry\\AliceBundleExtension\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4095,16 +4096,13 @@
                 "orm",
                 "symfony"
             ],
-            "abandoned": "theofidry/alice-bundle-extension",
-            "time": "2015-09-06 17:36:21"
+            "time": "2015-10-06 08:54:56"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "elao/form-bundle": 20,
-        "hautelook/alice-bundle": 10,
-        "theofidry/alice-fixtures-extension": 10
+        "elao/form-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
