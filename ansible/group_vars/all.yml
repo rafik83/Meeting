@@ -83,7 +83,9 @@ elao_ohmyzsh_users:
 # Files #
 #########
 
-_all_files: []
+_all_files:
+    - path: "{{ _app_dir }}/symfony/.openl10n.yml"
+      template: ./templates/.openl10n.j2
 
 #######
 # Gem #
@@ -220,15 +222,3 @@ _all_nginx_configs:
 elao_npm_packages:
   - name:    gulp
     version: 3
-
-############
-# Openl10n #
-############
-
-elao_openl10n_users:
-  - user: "{{ _user }}"
-    config:
-      - proximum.vimeet:
-        - hostname: openl10n.elao.ninja
-        - username: proximum.vimeet
-        - password: YUdB8sCR
