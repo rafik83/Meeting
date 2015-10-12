@@ -36,7 +36,12 @@
         "behat/mink-selenium2-driver": "1.2.*",
         "knplabs/friendly-contexts": "0.5.*",
         "behat/symfony2-extension": "2.0.*",
-        "behat/mink-browserkit-driver": "1.2.*"
+        "behat/mink-browserkit-driver": "1.2.*",
+        "behat/mink-extension": "~2.0",
+        "behat/mink-goutte-driver": "~1.1",
+
+        "hautelook/alice-bundle": "~1.0@beta",
+        "theofidry/alice-fixtures-extension": "v1.0.0-beta"
     },
     "scripts": {
         "post-create-project-cmd": [
