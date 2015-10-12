@@ -1,4 +1,5 @@
 services:
-#    vimeet_app.example:
-#        class: Proximum\Vimeet\Bundle\AppBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    vimeet_app.form_extension.translation_domain_extension:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
+        tags:
+            - { name: form.type_extension }
