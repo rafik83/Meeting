@@ -14,12 +14,23 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public static function provideLocales()
+    {
+        return [
+            ['fr', 'Bonjour Maxime'],
+            ['en', 'Hello Maxime'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideLocales
+     */
+    public function testIndex($locale, $contains)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/fr/hello/Maxime');
+        $crawler = $client->request('GET', sprintf('/%s/hello/Maxime', $locale));
 
-        $this->assertTrue($crawler->filter('html:contains("Bonjour Maxime")')->count() > 0);
+        $this->assertTrue($crawler->filter(sprintf('html:contains("%s")', $contains))->count() > 0);
     }
 }
