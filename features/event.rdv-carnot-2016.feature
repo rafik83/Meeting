@@ -1,4 +1,4 @@
-Feature: Hello
+Feature: Show the homepage of 'Les rendez-vous Carnot 2016'
   I need to be able to see the event name and description
 
   Background:
