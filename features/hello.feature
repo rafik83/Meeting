@@ -3,4 +3,4 @@ Feature: Hello
 
   Scenario: Greeting Maxime
     When I go to "/hello/maxime"
-    Then I should see "Hello Maxime"
+    Then I should see "Bonjour Maxime"
