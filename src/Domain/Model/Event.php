@@ -30,7 +30,7 @@ class Event
     /**
      * Get id
      *
-     * @return mixed
+     * @return integer
      */
     public function getId()
     {
@@ -40,7 +40,7 @@ class Event
     /**
      * Get domain
      *
-     * @return mixed
+     * @return string
      */
     public function getDomain()
     {
@@ -50,10 +50,18 @@ class Event
     /**
      * Get title
      *
-     * @return mixed
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return EventTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }
