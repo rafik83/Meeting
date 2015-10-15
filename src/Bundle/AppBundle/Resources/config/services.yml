@@ -8,4 +8,4 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.event_repository
         tags:
-            - { name: request.param_converter, converter: event_domain_param_converter }
+            - { name: request.param_converter, priority: 2, converter: event_domain_param_converter }

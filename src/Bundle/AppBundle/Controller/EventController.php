@@ -18,8 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class EventController extends Controller
 {
     /**
-     * @ParamConverter("event", converter="event_domain_param_converter")
-     *
      * @param Event $event
      *
      * @return \Symfony\Component\HttpFoundation\Response

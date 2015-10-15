@@ -18,20 +18,21 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventDomainParamConverter implements ParamConverterInterface
 {
+    /**
+     * @var EventRepositoryInterface
+     */
     private $eventRepository;
 
+    /**
+     * @param EventRepositoryInterface $eventRepository
+     */
     public function __construct(EventRepositoryInterface $eventRepository)
     {
         $this->eventRepository = $eventRepository;
     }
 
     /**
-     * Stores the object in the request.
-     *
-     * @param Request        $request       The request
-     * @param ParamConverter $configuration Contains the name, class and options of the object
-     *
-     * @return bool True if the object has been successfully set, else false
+     * {@inheritdoc}
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
@@ -49,11 +50,7 @@ class EventDomainParamConverter implements ParamConverterInterface
     }
 
     /**
-     * Checks if the object is supported.
-     *
-     * @param ParamConverter $configuration Should be an instance of ParamConverter
-     *
-     * @return bool True if the object is supported, else false
+     * {@inheritdoc}
      */
     public function supports(ParamConverter $configuration)
     {
