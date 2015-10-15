@@ -8,4 +8,5 @@ event:
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event:index }
