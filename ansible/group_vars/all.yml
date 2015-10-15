@@ -204,7 +204,7 @@ _all_nginx_configs:
   - file:     "{{ _app_host }}.conf"
     template: configs/server_{{ _env }}.conf.j2
     config:
-      - server_name: "{{ _app_host }}.dev"
+      - server_name: "{{ _app_host }}.dev *.{{ _app_host }}.dev"
       - root:        "{{ _app_dir }}/symfony/web"
       - access_log:  "{{ elao_nginx_log_dir }}/app.access.log"
       - error_log:   "{{ elao_nginx_log_dir }}/app.error.log"
