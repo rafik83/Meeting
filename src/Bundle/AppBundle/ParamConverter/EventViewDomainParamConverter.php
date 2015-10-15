@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInte
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class EventDomainParamConverter implements ParamConverterInterface
+class EventViewDomainParamConverter implements ParamConverterInterface
 {
     /**
      * @var EventRepositoryInterface
@@ -38,7 +38,7 @@ class EventDomainParamConverter implements ParamConverterInterface
     {
         $domain = $request->getHost();
 
-        $event = $this->eventRepository->findByDomain($domain);
+        $event = $this->eventRepository->getEventViewByDomain($domain);
 
         if (null === $event) {
             throw new NotFoundHttpException('Event not found');
@@ -54,6 +54,6 @@ class EventDomainParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === 'Proximum\Vimeet\Domain\Model\Event';
+        return $configuration->getClass() === 'Proximum\Vimeet\Domain\Model\EventView';
     }
 }

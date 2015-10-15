@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class EventController extends Controller
 {
     /**
-     * @param Event $event
+     * @param EventView $event
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Event $event)
+    public function indexAction(EventView $event)
     {
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
             'event' => $event,

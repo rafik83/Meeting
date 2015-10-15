@@ -4,7 +4,7 @@ services:
         tags:
             - { name: form.type_extension }
     vimeet_app.param_converter.event_domain_param_converter:
-        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventDomainParamConverter
+        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventViewDomainParamConverter
         arguments:
             - @vimeet_infrastructure.repository.event_repository
         tags:

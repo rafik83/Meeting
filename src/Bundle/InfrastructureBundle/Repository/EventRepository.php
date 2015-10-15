@@ -31,12 +31,12 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByDomain($domain)
+    public function getEventViewByDomain($domain)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('event')
+            ->select('NEW Proximum\Vimeet\Domain\Model\EventView(event.title, event.description)')
             ->from('Entity:Event', 'event')
             ->where('event.domain = :domain')
             ->setParameter('domain', $domain)

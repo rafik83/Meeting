@@ -2,14 +2,14 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\EventView;
 
 interface EventRepositoryInterface
 {
     /**
      * @param string $domain
      *
-     * @return Event
+     * @return EventView
      */
-    public function findByDomain($domain);
+    public function getEventViewByDomain($domain);
 }
