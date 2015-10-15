@@ -37,8 +37,9 @@ class EventViewDomainParamConverter implements ParamConverterInterface
     public function apply(Request $request, ParamConverter $configuration)
     {
         $domain = $request->getHost();
+        $locale = $request->getLocale();
 
-        $event = $this->eventRepository->getEventViewByDomain($domain);
+        $event = $this->eventRepository->getEventViewByDomain($domain, $locale);
 
         if (null === $event) {
             throw new NotFoundHttpException('Event not found');
