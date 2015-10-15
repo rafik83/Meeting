@@ -3,6 +3,8 @@
 {% block title event.title %}
 
 {% block body %}
+    {{ 'greetings'|trans() }}
+    {{ 'now'|localizeddate('short', 'short', app.request.locale) }}
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
 {% endblock %}
