@@ -13,6 +13,26 @@ class Event
     private $description;
 
     /**
+     * Get id
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get domain
+     *
+     * @return mixed
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
      * Get title
      *
      * @return mixed
