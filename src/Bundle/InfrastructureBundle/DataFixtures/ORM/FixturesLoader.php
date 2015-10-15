@@ -1,6 +1,14 @@
 <?php
 
-namespace Proximum\Vimeet\Domain\Model;
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -29,23 +37,16 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
 
         $options = [
             'locale'    => 'fr_FR',
-            'providers' => [$this],
+            'providers' => [
+                $this->container->get('vimeet_infrastructure.data_fixtures_orm.provider')
+            ],
         ];
 
         Fixtures::load($files, $manager, $options);
     }
 
-    public function domain()
-    {
-        return $this->container->getParameter('domain');
-    }
-
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {

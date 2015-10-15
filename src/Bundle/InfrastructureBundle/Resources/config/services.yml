@@ -3,3 +3,9 @@ services:
       class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
       arguments:
           - @doctrine.orm.entity_manager
+  vimeet_infrastructure.data_fixtures_orm.provider:
+      class: Proximum\Vimeet\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
+      arguments:
+          - %domain%
+      tags:
+          - { name: hautelook_alice.faker.provider }
