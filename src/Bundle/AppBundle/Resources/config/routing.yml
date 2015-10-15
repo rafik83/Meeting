@@ -2,3 +2,10 @@ vimeet_app_homepage:
     path:     /hello/{name}
     defaults: { _controller: VimeetAppBundle:Default:index }
     methods:  [GET]
+
+event:
+    path: /
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    defaults: { _controller: VimeetAppBundle:Event:index }

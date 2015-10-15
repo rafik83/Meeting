@@ -3,3 +3,9 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
         tags:
             - { name: form.type_extension }
+    vimeet_app.param_converter.event_domain_param_converter:
+        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventDomainParamConverter
+        arguments:
+            - @vimeet_infrastructure.repository.event_repository
+        tags:
+            - { name: request.param_converter, converter: event_domain_param_converter }
