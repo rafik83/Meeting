@@ -1,11 +1,11 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
-        title: Les rendez-vous Carnot 2016
+        title: Les rendez-vous CARNOT 2016
         domain: rdv-carnot-2016.<domain()>
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:
-        description: Participez aux Rendez-vous CARNOT  2016 : le rendez-vous professionnel de la recherche au service des entreprises et des collectivités, les 18 et 19 novembre 2016 / Paris / France.
+        description: LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISES
         locale: fr
         event: @event_rdv_carnot_2016
     event_translation_rdv_carnot_2016_en:
