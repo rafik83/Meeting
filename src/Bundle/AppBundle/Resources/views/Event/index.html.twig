@@ -8,4 +8,10 @@
 
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
+
+    <ul>
+    {% for type in participant_types %}
+        <li>{{ type.title }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}

@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
+    type:  entity
+    table: participant_type_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: text
+        locale:
+            type: string
+    manyToOne:
+        type:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant\Type
+            inversedBy: translations

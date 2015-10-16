@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Participant;
 
-class EventView
+class TypeView
 {
     /**
      * @var integer
@@ -23,19 +23,12 @@ class EventView
     public $title;
 
     /**
-     * @var string
-     */
-    public $description;
-
-    /**
      * @param integer $id
      * @param string  $title
-     * @param string  $description
      */
-    public function __construct($id, $title, $description)
+    public function __construct($id, $title)
     {
         $this->id          = $id;
         $this->title       = $title;
-        $this->description = $description;
     }
 }
