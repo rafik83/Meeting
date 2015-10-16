@@ -16,7 +16,9 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
@@ -24,7 +26,7 @@ class EventController extends Controller
      * @param Request   $request
      * @param EventView $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function indexAction(Request $request, EventView $event)
     {
@@ -43,7 +45,7 @@ class EventController extends Controller
      * @param EventView $event
      * @param integer   $typeId
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function registerAction(Request $request, EventView $event, $typeId)
     {
