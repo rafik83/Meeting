@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    type:  entity
+    table: event_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        description:
+            type: text
+        locale:
+            type: string
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            inversedBy: translations

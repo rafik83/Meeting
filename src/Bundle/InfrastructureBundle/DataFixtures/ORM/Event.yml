@@ -1,9 +1,14 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
         title: Les rendez-vous CARNOT 2016
-        description: LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISES
         domain: rdv-carnot-2016.<domain()>
-    event_asddays:
-        title: ASD Days
-        description: ASD Days a lieu du 14 et 15 octobre 2016 à Paris Orly. La convention d’affaires industrielle et R&D des filières aéronautiques et spatiales internationales co-organisé par le pôle de compétitivité.
-        domain: asddays.<domain()>
+
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    event_translation_rdv_carnot_2016_fr:
+        description: LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISES
+        locale: fr
+        event: @event_rdv_carnot_2016
+    event_translation_rdv_carnot_2016_en:
+        description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
+        locale: en
+        event: @event_rdv_carnot_2016

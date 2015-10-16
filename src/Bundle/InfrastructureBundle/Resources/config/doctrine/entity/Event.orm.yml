@@ -9,7 +9,9 @@ Proximum\Vimeet\Domain\Model\Event:
     fields:
         title:
             type: string
-        description:
-            type: string
         domain:
             type: string
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation
+            mappedBy: event

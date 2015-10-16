@@ -8,8 +8,9 @@ interface EventRepositoryInterface
 {
     /**
      * @param string $domain
+     * @param string $locale
      *
      * @return EventView
      */
-    public function getEventViewByDomain($domain);
+    public function getEventViewByDomain($domain, $locale);
 }

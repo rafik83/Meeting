@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Event
 {
     private $id;
@@ -18,12 +20,17 @@ class Event
 
     private $title;
 
-    private $description;
+    private $translations;
+
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return mixed
+     * @return integer
      */
     public function getId()
     {
@@ -33,7 +40,7 @@ class Event
     /**
      * Get domain
      *
-     * @return mixed
+     * @return string
      */
     public function getDomain()
     {
@@ -43,7 +50,7 @@ class Event
     /**
      * Get title
      *
-     * @return mixed
+     * @return string
      */
     public function getTitle()
     {
@@ -51,12 +58,10 @@ class Event
     }
 
     /**
-     * Get description
-     *
-     * @return mixed
+     * @return EventTranslation[]
      */
-    public function getDescription()
+    public function getTranslations()
     {
-        return $this->description;
+        return $this->translations;
     }
 }
