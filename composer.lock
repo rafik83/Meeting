@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9ed76654769d4eae7aaaa3ba62971756",
+    "hash": "3db1fa5598be4ecb910caf8c20cc946b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -824,6 +824,61 @@
                 "javascript"
             ],
             "time": "2015-10-07 14:22:04"
+        },
+        {
+            "name": "elao/form-translation-bundle",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elao/ElaoFormTranslationBundle.git",
+                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/form": "~2.6",
+                "symfony/framework-bundle": "~2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elao\\Bundle\\FormTranslationBundle\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elao",
+                    "homepage": "http://www.elao.com"
+                },
+                {
+                    "name": "Thomas Jarrand",
+                    "homepage": "https://github.com/Tom32i"
+                }
+            ],
+            "description": "Generate translation key for forms",
+            "homepage": "https://github.com/Elao/ElaoFormTranslationBundle",
+            "keywords": [
+                "elao",
+                "form",
+                "translation"
+            ],
+            "time": "2014-12-04 07:24:04"
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",

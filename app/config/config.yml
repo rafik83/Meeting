@@ -90,3 +90,6 @@ fos_elastica:
         default: { host: localhost, port: 9200 }
     indexes:
         app: ~
+
+elao_form_translation:
+    auto_generate: true
