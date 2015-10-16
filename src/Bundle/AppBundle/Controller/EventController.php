@@ -71,7 +71,7 @@ class EventController extends Controller
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
             } catch (EmailAlreadyExistsException $exception) {
-                $form->addError(new FormError($this->get('translator')->trans('messages.register.email_already_exists')));
+                $form->get('email')->addError(new FormError($this->get('translator')->trans('messages.register.email_already_exists')));
             }
         }
 
