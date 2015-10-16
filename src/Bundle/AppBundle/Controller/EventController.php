@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,33 @@ class EventController extends Controller
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
             'event'             => $event,
             'participant_types' => $participantTypes,
+        ]);
+    }
+
+    public function registerAction(Request $request, EventView $event, $typeId)
+    {
+        $form = $this->createForm(new RegisterType(), null, [
+            'action' => $this->generateUrl('event_register', [
+                'typeId'    => $typeId,
+                'subdomain' => $request->attributes->get('subdomain'),
+            ]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted()) {
+
+            $this->addFlash('success', 'flash.event.register.success');
+
+            return $this->redirectToRoute('event_register', [
+                'typeId'    => $typeId,
+                'subdomain' => $request->attributes->get('subdomain'),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:register.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
         ]);
     }
 }

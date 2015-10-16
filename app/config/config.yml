@@ -37,6 +37,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:
+            - "ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig"
 
 # Doctrine Configuration
 doctrine:

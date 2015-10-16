@@ -22,7 +22,8 @@
 
         "sonata-project/intl-bundle": "2.2.*",
         "friendsofsymfony/elastica-bundle": "^3.1",
-        "elao/form-bundle": "^1.0@dev"
+        "elao/form-bundle": "^1.0@dev",
+        "elao/theme-twitter-bootstrap-3-bundle": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
