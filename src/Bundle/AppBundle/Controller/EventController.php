@@ -38,6 +38,13 @@ class EventController extends Controller
         ]);
     }
 
+    /**
+     * @param Request   $request
+     * @param EventView $event
+     * @param integer   $typeId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function registerAction(Request $request, EventView $event, $typeId)
     {
         $register = new Register();
