@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Sonata\IntlBundle\SonataIntlBundle(),
             new Elao\Bundle\FormBundle\ElaoFormBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),
@@ -31,7 +32,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
 
             // Fixtures
-            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
             $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
         }
 

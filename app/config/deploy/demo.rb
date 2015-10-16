@@ -11,4 +11,4 @@ set :clear_controllers, false
 role :app, domain, :primary => true
 
 # Scm
-set :branch, "master"
+set :branch, "demo"
