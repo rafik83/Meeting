@@ -1,0 +1,51 @@
+Proximum\Vimeet\Domain\Model\Event:
+    event_rdv_carnot_2016:
+        title: Les rendez-vous Carnot 2016
+        domain: rdv-carnot-2016.<domain()>
+
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    event_translation_rdv_carnot_2016_fr:
+        description: Participez aux Rendez-vous CARNOT  2016 : le rendez-vous professionnel de la recherche au service des entreprises et des collectivités, les 18 et 19 novembre 2016 / Paris / France.
+        locale: fr
+        event: @event_rdv_carnot_2016
+    event_translation_rdv_carnot_2016_en:
+        description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
+        locale: en
+        event: @event_rdv_carnot_2016
+
+Proximum\Vimeet\Domain\Model\Participant\Type:
+    exposant:
+        position: 0
+        event: @event_rdv_carnot_2016
+    visiteur:
+        position: 1
+        event: @event_rdv_carnot_2016
+    congressiste:
+        position: 2
+        event: @event_rdv_carnot_2016
+
+Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
+    exposant_fr:
+        title: Exposant
+        type: @exposant
+        locale: fr
+    exposant_en:
+        title: Exhibitor
+        type: @exposant
+        locale: en
+    visiteur_fr:
+        title: Visiteur
+        type: @visiteur
+        locale: fr
+    visiteur_en:
+        title: Visitor
+        type: @visiteur
+        locale: en
+    congressiste_fr:
+        title: Congressiste
+        type: @congressiste
+        locale: fr
+    congressiste_en:
+        title: Congressman
+        type: @congressiste
+        locale: en
