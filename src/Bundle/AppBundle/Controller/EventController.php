@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 class EventController extends Controller
@@ -37,7 +40,9 @@ class EventController extends Controller
 
     public function registerAction(Request $request, EventView $event, $typeId)
     {
-        $form = $this->createForm(new RegisterType(), null, [
+        $register = new Register();
+
+        $form = $this->createForm(new RegisterType(), $register, [
             'action' => $this->generateUrl('event_register', [
                 'typeId'    => $typeId,
                 'subdomain' => $request->attributes->get('subdomain'),
@@ -47,13 +52,18 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted()) {
+            try {
+                $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
 
-            $this->addFlash('success', 'flash.event.register.success');
+                $this->addFlash('success', 'flash.event.register.success');
 
-            return $this->redirectToRoute('event_register', [
-                'typeId'    => $typeId,
-                'subdomain' => $request->attributes->get('subdomain'),
-            ]);
+                return $this->redirectToRoute('event_register', [
+                    'typeId'    => $typeId,
+                    'subdomain' => $request->attributes->get('subdomain'),
+                ]);
+            } catch (EmailAlreadyExistsException $exception) {
+                $form->addError(new FormError($exception->getMessage()));
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:register.html.twig', [

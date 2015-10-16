@@ -34,6 +34,13 @@ class User implements UserInterface
      */
     private $salt;
 
+    public function __construct($email, $salt, $password)
+    {
+        $this->email    = $email;
+        $this->salt     = $salt;
+        $this->password = $password;
+    }
+
     /**
      * Get id
      *
