@@ -1,7 +1,7 @@
 Feature: Show the homepage of an event
   I need to be able to see the event name and description
 
-  Background:
+  Background: Re-init the database and load the fixtures
     Given the database is initialized
     And the fixtures "Event.yml" are loaded
 
