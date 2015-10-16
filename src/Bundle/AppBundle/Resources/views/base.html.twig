@@ -15,7 +15,7 @@
             {% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'danger' } %}
                 {% for message in app.session.flashbag.get(type) %}
                     <div class="alert alert-{{ mappedType }}">
-                        {{ message|trans({}, 'flashes')|raw }}
+                        {{ message|trans({}, 'flashes') }}
                     </div>
                 {% endfor %}
             {% endfor %}
