@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\User:
     fields:
         email:
             type: string
+            unique: true
         password:
             type: string
         salt:
