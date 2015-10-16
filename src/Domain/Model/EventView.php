@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Model;
+
+class EventView
+{
+    /**
+     * @var string
+     */
+    public $title;
+
+    /**
+     * @var string
+     */
+    public $description;
+
+    /**
+     * @param string $title
+     * @param string $description
+     */
+    public function __construct($title, $description)
+    {
+        $this->title       = $title;
+        $this->description = $description;
+    }
+}

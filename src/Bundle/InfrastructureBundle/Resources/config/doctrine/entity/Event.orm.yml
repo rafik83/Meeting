@@ -1,0 +1,15 @@
+Proximum\Vimeet\Domain\Model\Event:
+    type:  entity
+    table: event
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        description:
+            type: string
+        domain:
+            type: string

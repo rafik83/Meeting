@@ -13,3 +13,12 @@ default:
                     symfony2: ~
                 javascript:
                     selenium2: ~
+        Fidry\AliceBundleExtension\Extension:
+            fixtures_base_path: ~
+
+    suites:
+        default:
+            contexts:
+                - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
+                    basePath: %paths.base%/src/Bundle/InfrastructureBundle/DataFixtures/ORM
+                - FeatureContext: ~
