@@ -10,8 +10,8 @@
     <p>{{ event.description }}</p>
 
     <ul>
-    {% for type in participant_types %}
-        <li>{{ type.title }}</li>
-    {% endfor %}
+        {% for type in participant_types %}
+            <li>{{ type.title }}</li>
+        {% endfor %}
     </ul>
 {% endblock %}
