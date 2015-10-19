@@ -60,7 +60,7 @@ class EventController extends Controller
         ]);
         $form->add('submit', 'submit');
 
-        if ($form->handleRequest($request)->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
 

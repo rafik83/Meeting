@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\User\Register:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email: ~
+        password:
+            - NotBlank: ~
+            - Length: { min: 8 }
