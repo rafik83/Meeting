@@ -12,5 +12,10 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 interface FormRepositoryInterface
 {
+    /**
+     * @param integer $typeId
+     *
+     * @return string
+     */
     public function getTemplate($typeId);
 }

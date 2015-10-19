@@ -14,16 +14,37 @@ use Proximum\Vimeet\Domain\Model\Participant\Type;
 
 class Participant
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var User
+     */
     private $user;
 
+    /**
+     * @var Event
+     */
     private $event;
 
+    /**
+     * @var Type
+     */
     private $type;
 
+    /**
+     * @var string
+     */
     private $data;
 
+    /**
+     * @param User   $user
+     * @param Event  $event
+     * @param Type   $type
+     * @param string $data
+     */
     public function __construct(User $user, Event $event, Type $type, $data)
     {
         $this->user  = $user;
@@ -35,7 +56,7 @@ class Participant
     /**
      * Get id
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -43,19 +64,19 @@ class Participant
     }
 
     /**
-     * Get data
+     * Get user
      *
-     * @return mixed
+     * @return User
      */
-    public function getData()
+    public function getUser()
     {
-        return $this->data;
+        return $this->user;
     }
 
     /**
      * Get event
      *
-     * @return mixed
+     * @return Event
      */
     public function getEvent()
     {
@@ -65,7 +86,7 @@ class Participant
     /**
      * Get type
      *
-     * @return mixed
+     * @return Type
      */
     public function getType()
     {
@@ -73,12 +94,12 @@ class Participant
     }
 
     /**
-     * Get user
+     * Get data
      *
-     * @return mixed
+     * @return string
      */
-    public function getUser()
+    public function getData()
     {
-        return $this->user;
+        return $this->data;
     }
 }
