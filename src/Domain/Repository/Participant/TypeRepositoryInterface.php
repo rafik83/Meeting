@@ -13,4 +13,12 @@ interface TypeRepositoryInterface
      * @return TypeView[]
      */
     public function getTypeViewsByEvent($eventId, $locale);
+
+    /**
+     * @param integer $typeId
+     * @param string $locale
+     *
+     * @return TypeView
+     */
+    public function getTypeViewById($typeId, $locale);
 }

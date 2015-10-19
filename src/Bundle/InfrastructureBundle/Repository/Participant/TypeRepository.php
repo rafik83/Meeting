@@ -30,10 +30,7 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param integer $eventId
-     * @param string  $locale
-     *
-     * @return TypeView[]
+     * {@inheritdoc}
      */
     public function getTypeViewsByEvent($eventId, $locale)
     {
@@ -49,5 +46,24 @@ class TypeRepository implements TypeRepositoryInterface
             ->orderBy('type.position');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeViewById($typeId, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\Participant\TypeView(type.id, translations.title)')
+            ->from('Entity:Participant\Type', 'type')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('type.id = :typeId')
+            ->setParameter('typeId', $typeId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

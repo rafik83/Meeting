@@ -11,7 +11,7 @@
 
     <ul>
         {% for type in participant_types %}
-            <li><a href="{{ path('event_register', { 'typeId': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a></li>
+            <li><a href="{{ path('event_register', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

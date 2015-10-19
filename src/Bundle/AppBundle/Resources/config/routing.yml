@@ -7,7 +7,7 @@ event:
     defaults: { _controller: VimeetAppBundle:Event:index }
 
 event_register:
-    path: /register/{typeId}
+    path: /register/{typeView}
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
@@ -15,7 +15,7 @@ event_register:
     defaults: { _controller: VimeetAppBundle:Event:register }
 
 event_participation:
-    path: /participation/{typeId}
+    path: /participation/{typeView}
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"

@@ -9,3 +9,9 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: event_domain_param_converter }
+    vimeet_app.param_converter.participant_type_view_param_converter:
+        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\ParticipantTypeViewParamConverter
+        arguments:
+            - @vimeet_infrastructure.repository.participant.type_repository
+        tags:
+            - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
