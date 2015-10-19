@@ -3,7 +3,7 @@ greetings: 'Bonjour !'
 login:
   title: Connexion
   link: Connexion
-  logged_as: Vous êtes connecté en tant que %email%
+  logged_as: Bonjour %email%
   logout: Déconnexion
 
 logout:

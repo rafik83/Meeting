@@ -3,7 +3,7 @@ greetings: Hello!
 login:
   title: Login
   link: Login
-  logged_as: You are logged as %email%
+  logged_as: Hello %email%
 
 logout:
   title: Logout
