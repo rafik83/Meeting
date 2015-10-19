@@ -20,5 +20,5 @@ default:
         default:
             contexts:
                 - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
-                    basePath: %paths.base%/src/Bundle/InfrastructureBundle/DataFixtures/ORM
+                    basePath: %paths.base%/features/fixtures
                 - FeatureContext: ~

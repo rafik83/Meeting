@@ -24,13 +24,12 @@
         "friendsofsymfony/elastica-bundle": "^3.1",
         "elao/form-bundle": "^1.0@dev",
         "elao/form-translation-bundle": "1.2.*",
-        "elao/theme-twitter-bootstrap-3-bundle": "~1.0"
+        "elao/theme-twitter-bootstrap-3-bundle": "~1.0",
+        "nelmio/alice": "2.1.*",
+        "doctrine/doctrine-fixtures-bundle": "2.2.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-
-        "nelmio/alice": "2.1.*",
-        "doctrine/doctrine-fixtures-bundle": "2.2.*",
 
         "phpunit/phpunit": "~5.0",
 
