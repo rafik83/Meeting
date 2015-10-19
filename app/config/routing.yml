@@ -1,3 +1,5 @@
 vimeet_app:
     resource: "@VimeetAppBundle/Resources/config/routing.yml"
     prefix:   /{_locale}
+    defaults:
+        _locale: %locale%
