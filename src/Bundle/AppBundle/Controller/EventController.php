@@ -90,8 +90,9 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Event:register.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $eventView,
+            'form'      => $form->createView(),
+            'eventView' => $eventView,
+            'typeView'  => $typeView,
         ]);
     }
 
@@ -126,8 +127,9 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Event:participation.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $eventView,
+            'form'      => $form->createView(),
+            'eventView' => $eventView,
+            'typeView'  => $typeView,
         ]);
     }
 
