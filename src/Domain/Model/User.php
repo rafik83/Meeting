@@ -35,15 +35,22 @@ class User implements UserInterface
     private $salt;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @param string $email
      * @param string $salt
      * @param string $password
+     * @param string $locale
      */
-    public function __construct($email, $salt, $password)
+    public function __construct($email, $salt, $password, $locale)
     {
         $this->email    = $email;
         $this->salt     = $salt;
         $this->password = $password;
+        $this->locale   = $locale;
     }
 
     /**
@@ -64,6 +71,16 @@ class User implements UserInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     /**

@@ -53,6 +53,7 @@ class EventController extends Controller
     public function registerAction(Request $request, EventView $eventView, TypeView $typeView)
     {
         $register = new Register();
+        $register->locale = $request->getLocale();
 
         $form = $this->createForm(new RegisterType(), $register, [
             'action' => $this->generateUrl('event_register', [
