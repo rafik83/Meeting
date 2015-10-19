@@ -6,4 +6,9 @@ login:
   logged_as: Vous êtes connecté en tant que %email%
   logout: Déconnexion
 
+logout:
+  title: Déconnecter
+  link: Déconnecter
+  confirmation: Êtes vous sûr de vouloir vous déconnecter de votre compte ?
+
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà

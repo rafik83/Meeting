@@ -43,13 +43,29 @@ class SecurityController extends Controller
             'method' => 'POST',
         ]);
 
-        return $this->render(
-            'VimeetAppBundle:Security:login.html.twig',
-            [
-                'event' => $event,
-                'error' => $error,
-                'form'  => $form->createView(),
-            ]
-        );
+        return $this->render('VimeetAppBundle:Security:login.html.twig', [
+            'event' => $event,
+            'error' => $error,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $event
+     *
+     * @return Response|RedirectResponse
+     */
+    public function logoutConfirmationAction(Request $request, EventView $event)
+    {
+        $subdomain = $request->attributes->get('subdomain');
+
+        if (null === $this->getUser()) {
+            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
+        }
+
+        return $this->render('VimeetAppBundle:Security:logout_confirmation.html.twig', [
+            'event' => $event,
+        ]);
     }
 }

@@ -29,6 +29,14 @@ event_login_check:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [POST]
 
+event_logout_confirmation:
+    path: /logout-confirmation
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Security:logoutConfirmation }
+
 event_logout:
     path: /logout
     host: "{subdomain}.%domain%"
