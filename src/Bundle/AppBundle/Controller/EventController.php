@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -47,7 +49,7 @@ class EventController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function registerAction(Request $request, EventView $event, $typeId)
+    public function registerAction(Request $request, EventView $eventView, $typeId)
     {
         $register = new Register();
 
@@ -66,7 +68,7 @@ class EventController extends Controller
 
                 $this->addFlash('success', 'flash.event.register.success');
 
-                return $this->redirectToRoute('event_register', [
+                return $this->redirectToRoute('event_participation', [
                     'typeId'    => $typeId,
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
@@ -78,7 +80,20 @@ class EventController extends Controller
 
         return $this->render('VimeetAppBundle:Event:register.html.twig', [
             'form'  => $form->createView(),
-            'event' => $event,
+            'event' => $eventView,
+        ]);
+    }
+
+    public function participationAction(Request $request, EventView $eventView, $typeId)
+    {
+        $form  = $this->createForm(new ParticipantType(), null, [
+            'locale' => $request->getLocale(),
+            'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeId)
+        ]);
+
+        return $this->render('VimeetAppBundle:Event:participation.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $eventView,
         ]);
     }
 }

@@ -14,6 +14,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.form_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\FormRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+
+    #
+    # Fixture providers
+    #
     vimeet_infrastructure.data_fixtures_orm.provider:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
         arguments:
