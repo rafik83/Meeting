@@ -1,0 +1,42 @@
+Proximum\Vimeet\Domain\Model\Form:
+    form_exposant:
+        type: @exposant
+        template: >
+            {
+                { 'type': 'string', 'label': { 'fr': 'Nom', 'en': 'Lastname' } },
+                { 'type': 'string', 'label': { 'fr': 'Prénom', 'en': 'Firstname' } },
+                { 'type': 'string', 'label': { 'fr': 'Adresse', 'en': 'Address' } },
+                { 'type': 'string', 'label': { 'fr': 'Code postale', 'en': 'Zipcode' } },
+                { 'type': 'string', 'label': { 'fr': 'Ville', 'en': 'City' } },
+                { 'type': 'string', 'label': { 'fr': 'Pays', 'en': 'Country' } },
+                { 'type': 'string', 'label': { 'fr': 'Téléphone', 'en': 'Phone' } },
+                { 'type': 'string', 'label': { 'fr': 'Mobile', 'en': 'Mobile phone' } },
+                { 'type': 'textarea', 'label': { 'fr': 'Offres', 'en': 'Offers' } }
+            }
+    form_visiteur:
+        type: @visiteur
+        template: >
+            {
+                { 'type': 'string', 'label': { 'fr': 'Nom', 'en': 'Lastname' } },
+                { 'type': 'string', 'label': { 'fr': 'Prénom', 'en': 'Firstname' } },
+                { 'type': 'string', 'label': { 'fr': 'Adresse', 'en': 'Address' } },
+                { 'type': 'string', 'label': { 'fr': 'Code postale', 'en': 'Zipcode' } },
+                { 'type': 'string', 'label': { 'fr': 'Ville', 'en': 'City' } },
+                { 'type': 'string', 'label': { 'fr': 'Pays', 'en': 'Country' } },
+                { 'type': 'string', 'label': { 'fr': 'Téléphone', 'en': 'Phone' } },
+                { 'type': 'string', 'label': { 'fr': 'Mobile', 'en': 'Mobile phone' } },
+                { 'type': 'textarea', 'label': { 'fr': 'Besoins', 'en': 'Needs' } }
+            }
+    form_congressiste:
+        type: @congressiste
+        template: >
+            {
+                { 'type': 'string', 'label': { 'fr': 'Nom', 'en': 'Lastname' } },
+                { 'type': 'string', 'label': { 'fr': 'Prénom', 'en': 'Firstname' } },
+                { 'type': 'string', 'label': { 'fr': 'Adresse', 'en': 'Address' } },
+                { 'type': 'string', 'label': { 'fr': 'Code postale', 'en': 'Zipcode' } },
+                { 'type': 'string', 'label': { 'fr': 'Ville', 'en': 'City' } },
+                { 'type': 'string', 'label': { 'fr': 'Pays', 'en': 'Country' } },
+                { 'type': 'string', 'label': { 'fr': 'Téléphone', 'en': 'Phone' } },
+                { 'type': 'string', 'label': { 'fr': 'Mobile', 'en': 'Mobile phone' } },
+            }
