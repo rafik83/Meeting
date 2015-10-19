@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -44,7 +43,7 @@ class EventController extends Controller
 
     /**
      * @param Request   $request
-     * @param EventView $event
+     * @param EventView $eventView
      * @param integer   $typeId
      *
      * @return RedirectResponse|Response
@@ -90,6 +89,14 @@ class EventController extends Controller
             'locale' => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeId)
         ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'flash.event.participation.success');
+
+            return $this->redirect('event', [
+                'subdomain' => $request->attributes->get('subdomain'),
+            ]);
+        }
 
         return $this->render('VimeetAppBundle:Event:participation.html.twig', [
             'form'  => $form->createView(),
