@@ -36,10 +36,7 @@ class SecurityController extends Controller
 
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $user = [
-            '_username' => $authenticationUtils->getLastUsername(),
-            '_password' => null,
-        ];
+        $user = ['username' => $authenticationUtils->getLastUsername()];
 
         $form = $this->createForm(new LoginType(), $user, [
             'action' => $this->generateUrl('event_login_check', ['subdomain' => $subdomain]),
