@@ -2,13 +2,13 @@
 
 namespace Tests\Application\Command\User;
 
-use Proximum\Vimeet\Application\Command\User\Register;
-use Proximum\Vimeet\Application\Command\User\RegisterHandler;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
+use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Command\User\RegisterHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
 {
