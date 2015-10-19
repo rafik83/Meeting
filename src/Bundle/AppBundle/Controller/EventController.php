@@ -33,7 +33,7 @@ class EventController extends Controller
     {
         $participantTypes = $this
             ->get('vimeet_infrastructure.repository.participant.type_repository')
-            ->getTypeViewByEvent($event->id, $request->getLocale());
+            ->getTypeViewsByEvent($event->id, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
             'event'             => $event,

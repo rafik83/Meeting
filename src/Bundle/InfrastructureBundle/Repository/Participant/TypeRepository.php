@@ -35,7 +35,7 @@ class TypeRepository implements TypeRepositoryInterface
      *
      * @return TypeView[]
      */
-    public function getTypeViewByEvent($eventId, $locale)
+    public function getTypeViewsByEvent($eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
