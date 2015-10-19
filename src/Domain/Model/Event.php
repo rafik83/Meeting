@@ -14,14 +14,29 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Event
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $domain;
 
+    /**
+     * @var string
+     */
     private $title;
 
+    /**
+     * @var ArrayCollection
+     */
     private $translations;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->translations = new ArrayCollection();

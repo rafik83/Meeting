@@ -38,6 +38,9 @@ class UserRepository implements UserRepositoryInterface
         $this->entityManager->flush($user);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function emailExists($email)
     {
         $queryBuilder = $this

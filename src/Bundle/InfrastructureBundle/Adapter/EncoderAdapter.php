@@ -15,13 +15,22 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface as SymfonyP
 
 class EncoderAdapter implements PasswordEncoderInterface
 {
+    /**
+     * @var SymfonyPasswordEncoderInterface
+     */
     private $encoder;
 
+    /**
+     * @param SymfonyPasswordEncoderInterface $encoder
+     */
     public function __construct(SymfonyPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function encode($password, $salt)
     {
         return $this->encoder->encodePassword($password, $salt);

@@ -14,12 +14,24 @@ use Proximum\Vimeet\Domain\Model\Participant\Type;
 
 class TypeTranslation
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $locale;
 
+    /**
+     * @var Type
+     */
     private $type;
 
+    /**
+     * @var string
+     */
     private $title;
 
     /**
