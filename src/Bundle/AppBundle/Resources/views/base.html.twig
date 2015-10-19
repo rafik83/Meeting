@@ -11,6 +11,7 @@
     <body>
         <div class="container">
             {{ include('VimeetAppBundle::locales.html.twig') }}
+            {{ include('VimeetAppBundle::user.html.twig') }}
 
             {% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'danger' } %}
                 {% for message in app.session.flashbag.get(type) %}

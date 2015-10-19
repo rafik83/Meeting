@@ -13,3 +13,26 @@ event_register:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event:register }
+
+event_login:
+    path: /login
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Security:login }
+
+event_login_check:
+    path: /login_check
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [POST]
+    defaults: { _controller: VimeetAppBundle:Security:loginCheck }
+
+event_logout:
+    path: /logout
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]

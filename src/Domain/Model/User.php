@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class User implements UserInterface
+class User implements UserInterface, EquatableInterface, \Serializable
 {
     /**
      * @var integer
@@ -71,7 +72,7 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return [];
+        return ['ROLE_ADMIN'];
     }
 
     /**
@@ -104,5 +105,39 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         $this->password = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize([
+                             $this->id,
+                             $this->email,
+                             $this->password,
+                             $this->salt,
+                         ]);
+    }
+
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->salt
+        ) = unserialize($serialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        return $this->getUsername() === $user->getUsername();
     }
 }
