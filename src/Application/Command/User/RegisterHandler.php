@@ -17,16 +17,31 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class RegisterHandler
 {
+    /**
+     * @var UserRepositoryInterface
+     */
     private $userRepository;
 
+    /**
+     * @var PasswordEncoderInterface
+     */
     private $encoder;
 
+    /**
+     * @param UserRepositoryInterface  $userRepository
+     * @param PasswordEncoderInterface $encoder
+     */
     public function __construct(UserRepositoryInterface $userRepository, PasswordEncoderInterface $encoder)
     {
         $this->userRepository = $userRepository;
         $this->encoder        = $encoder;
     }
 
+    /**
+     * @param Register $register
+     *
+     * @throws EmailAlreadyExistsException
+     */
     public function handle(Register $register)
     {
         if ($this->userRepository->emailExists($register->email)) {

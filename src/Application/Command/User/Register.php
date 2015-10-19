@@ -12,7 +12,13 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 class Register
 {
+    /**
+     * @var string
+     */
     public $email;
 
+    /**
+     * @var string
+     */
     public $password;
 }
