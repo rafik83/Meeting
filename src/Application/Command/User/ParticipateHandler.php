@@ -37,5 +37,7 @@ class ParticipateHandler
         $participant = new Participant($participate->user, $participate->event, $participate->type, $data);
 
         $this->participantRepository->add($participant);
+
+        $participate->participant = $participant;
     }
 }

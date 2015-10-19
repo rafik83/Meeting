@@ -17,6 +17,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Participant\TypeView;
+use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -121,8 +122,9 @@ class EventController extends Controller
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
 
-            return $this->redirectToRoute('event', [
-                'subdomain' => $request->attributes->get('subdomain'),
+            return $this->redirectToRoute('event_summary', [
+                'subdomain'       => $request->attributes->get('subdomain'),
+                'participantView' => $participate->participant->getId(),
             ]);
         }
 
@@ -130,6 +132,13 @@ class EventController extends Controller
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
+        ]);
+    }
+
+    public function summaryAction(Request $request, ParticipantView $participantView)
+    {
+        return $this->render('VimeetAppBundle:Event:summary.html.twig', [
+            'participantView' => $participantView,
         ]);
     }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Participant\Type;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -35,6 +36,11 @@ class Participate
      * @var array
      */
     public $data;
+
+    /**
+     * @var Participant
+     */
+    public $participant;
 
     /**
      * @param User  $user

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\ParticipantView;
 
 interface ParticipantRepositoryInterface
 {
@@ -18,4 +19,11 @@ interface ParticipantRepositoryInterface
      * @param Participant $participant
      */
     public function add(Participant $participant);
+
+    /**
+     * @param $participantId
+     *
+     * @return ParticipantView
+     */
+    public function getParticipantView($participantId);
 }
