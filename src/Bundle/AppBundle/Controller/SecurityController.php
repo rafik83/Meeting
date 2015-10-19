@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,22 +26,32 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, EventView $event)
     {
+        $subdomain = $request->attributes->get('subdomain');
+
         if (null !== $this->getUser()) {
-            return $this->redirectToRoute('event', ['subdomain' => $request->attributes->get('subdomain')]);
+            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
         }
 
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $user = [
+            '_username' => $authenticationUtils->getLastUsername(),
+            '_password' => null,
+        ];
+
+        $form = $this->createForm(new LoginType(), $user, [
+            'action' => $this->generateUrl('event_login_check', ['subdomain' => $subdomain]),
+            'method' => 'POST',
+        ]);
 
         return $this->render(
             'VimeetAppBundle:Security:login.html.twig',
             [
-                'event'         => $event,
-                'last_username' => $lastUsername,
-                'error'         => $error,
+                'event' => $event,
+                'error' => $error,
+                'form'  => $form->createView(),
             ]
         );
     }

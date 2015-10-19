@@ -3,9 +3,6 @@ greetings: Hello!
 login:
   title: Login
   link: Login
-  email: Email
-  password: Password
-  submit: Submit
   logged_as: You are logged as %email%
   logout: Logout
 

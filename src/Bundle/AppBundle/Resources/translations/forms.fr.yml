@@ -11,3 +11,12 @@ form:
                         label: Ressaisir le mot de passe
             submit:
                 label: Envoyer
+
+    login:
+        children:
+            username:
+                label: Email
+            password:
+                label: Mot de passe
+            submit:
+                label: Se connecter

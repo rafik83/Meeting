@@ -11,3 +11,12 @@ form:
                         label: Refill the password
             submit:
                 label: Send
+
+    login:
+        children:
+            username:
+                label: Email
+            password:
+                label: Password
+            submit:
+                label: Login

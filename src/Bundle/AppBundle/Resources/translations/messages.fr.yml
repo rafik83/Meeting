@@ -3,9 +3,6 @@ greetings: 'Bonjour !'
 login:
   title: Connexion
   link: Se connecter
-  email: Adresse email
-  password: Mot de passe
-  submit: Envoyer
   logged_as: Vous êtes connecté en tant que %email%
   logout: Se déconnecter
 
