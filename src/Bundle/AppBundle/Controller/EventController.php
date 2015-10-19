@@ -54,6 +54,13 @@ class EventController extends Controller
      */
     public function registerAction(Request $request, EventView $eventView, TypeView $typeView)
     {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('event_participation', [
+                'typeView'  => $typeView->id,
+                'subdomain' => $request->attributes->get('subdomain'),
+            ]);
+        }
+
         $register = new Register();
         $register->locale = $request->getLocale();
 
