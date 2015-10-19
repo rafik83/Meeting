@@ -2,7 +2,10 @@ Proximum\Vimeet\Application\Command\User\Register:
     properties:
         email:
             - NotBlank: ~
-            - Email: ~
+            - Email:
+                message: validators.email
         password:
             - NotBlank: ~
-            - Length: { min: 8 }
+            - Length:
+                min: 8
+                minMessage: validators.password

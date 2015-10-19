@@ -1,3 +1,3 @@
 greetings: 'Bonjour !'
 
-messages.register.email_already_exists: Cette adresse email est déjà enregistrée
+messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
