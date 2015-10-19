@@ -2,8 +2,8 @@ greetings: 'Bonjour !'
 
 login:
   title: Connexion
-  link: Se connecter
+  link: Connexion
   logged_as: Vous êtes connecté en tant que %email%
-  logout: Se déconnecter
+  logout: Déconnexion
 
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
