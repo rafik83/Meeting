@@ -17,11 +17,13 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Participant\TypeView;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class EventController extends Controller
 {
@@ -67,7 +69,7 @@ class EventController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
-
+                $this->authenticate($register->user);
                 $this->addFlash('success', 'flash.event.register.success');
 
                 return $this->redirectToRoute('event_participation', [
@@ -99,18 +101,19 @@ class EventController extends Controller
             'locale' => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
         ]);
-        $form->add('submit', 'submit', ['mapped' => false]);
+        $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
 
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.participant.type_repository')->getById($typeView->id);
+
             $participate = new Participate($this->getUser(), $event, $type, $form->getData());
 
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
 
-            return $this->redirect('event', [
+            return $this->redirectToRoute('event', [
                 'subdomain' => $request->attributes->get('subdomain'),
             ]);
         }
@@ -119,5 +122,16 @@ class EventController extends Controller
             'form'  => $form->createView(),
             'event' => $eventView,
         ]);
+    }
+
+    /**
+     * Authenticate user
+     *
+     * @param User $user
+     */
+    private function authenticate(User $user)
+    {
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
     }
 }
