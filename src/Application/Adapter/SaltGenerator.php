@@ -17,6 +17,6 @@ class SaltGenerator implements SaltGeneratorInterface
      */
     public function generate()
     {
-        return uniqid();
+        return sha1(uniqid());
     }
 }
