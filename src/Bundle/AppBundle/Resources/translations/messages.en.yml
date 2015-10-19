@@ -1,3 +1,12 @@
 greetings: Hello!
 
+login:
+  title: Login
+  link: Login
+  email: Email
+  password: Password
+  submit: Submit
+  logged_as: You are logged as %email%
+  logout: Logout
+
 messages.register.email_already_exists: An account with this email address already exists

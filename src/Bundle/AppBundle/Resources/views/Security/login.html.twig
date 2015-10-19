@@ -1,0 +1,27 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block title 'login.title'|trans %}
+
+{% block body %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ 'login.title'|trans }}</h2>
+
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('event_login_check', { 'subdomain': app.request.attributes.get('subdomain') }) }}" method="post">
+        <label>
+            {{ 'login.email'|trans }}:
+            <input type="text" name="_username" value="{{ last_username }}" />
+        </label>
+
+        <label>
+            {{ 'login.password'|trans }}:
+            <input type="password" name="_password" />
+        </label>
+
+        <button type="submit">{{ 'login.submit'|trans }}</button>
+    </form>
+{% endblock %}
