@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Participant\Type;
 use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
@@ -61,6 +62,23 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
             ->setParameter('typeId', $typeId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Participant\Type', 'type')
+            ->where('type.id = :id')
+            ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();

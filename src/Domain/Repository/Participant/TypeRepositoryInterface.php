@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Participant;
 
+use Proximum\Vimeet\Domain\Model\Participant\Type;
 use Proximum\Vimeet\Domain\Model\Participant\TypeView;
 
 interface TypeRepositoryInterface
@@ -21,4 +22,11 @@ interface TypeRepositoryInterface
      * @return TypeView
      */
     public function getTypeViewById($typeId, $locale);
+
+    /**
+     * @param integer $id
+     *
+     * @return Type
+     */
+    public function getById($id);
 }

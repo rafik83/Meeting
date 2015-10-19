@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
@@ -97,8 +98,15 @@ class EventController extends Controller
             'locale' => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
         ]);
+        $form->add('submit', 'submit', ['mapped' => false]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+            $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+            $type        = $this->get('vimeet_infrastructure.repository.participant.type_repository')->getById($typeView->id);
+            $participate = new Participate($this->getUser(), $event, $type, $form->getData());
+
+            $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
 
             return $this->redirect('event', [
