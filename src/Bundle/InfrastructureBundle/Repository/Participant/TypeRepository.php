@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Participant\TypeView;
 use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
