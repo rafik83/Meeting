@@ -1,4 +1,7 @@
 services:
+    #
+    # Repositories
+    #
     vimeet_infrastructure.repository.event_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
@@ -18,18 +21,26 @@ services:
         tags:
             - { name: hautelook_alice.faker.provider }
 
+    #
+    # Handlers
+    #
     vimeet_infrastructure.application.command.user.register_handler:
         class: Proximum\Vimeet\Application\Command\User\RegisterHandler
         arguments:
             - @vimeet_infrastructure.repository.user_repository
             - @vimeet_infrastructure.adapter.encoder_adapter
+            - @vimeet_infrastructure.adapter.salt_generator
 
-
+    #
+    # Security
+    #
     vimeet_infrastructure.security.user_password_encoder:
         class: Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
         factory: ["@security.encoder_factory", getEncoder]
         arguments:
             - Proximum\Vimeet\Domain\Model\User
+    vimeet_infrastructure.adapter.salt_generator:
+        class: Proximum\Vimeet\Application\Adapter\SaltGenerator
     vimeet_infrastructure.adapter.encoder_adapter:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:

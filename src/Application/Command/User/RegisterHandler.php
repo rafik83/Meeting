@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
+use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -28,13 +29,23 @@ class RegisterHandler
     private $encoder;
 
     /**
+     * @var SaltGeneratorInterface
+     */
+    private $saltGenerator;
+
+    /**
      * @param UserRepositoryInterface  $userRepository
      * @param PasswordEncoderInterface $encoder
+     * @param SaltGeneratorInterface   $saltGenerator
      */
-    public function __construct(UserRepositoryInterface $userRepository, PasswordEncoderInterface $encoder)
-    {
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        PasswordEncoderInterface $encoder,
+        SaltGeneratorInterface $saltGenerator
+    ) {
         $this->userRepository = $userRepository;
         $this->encoder        = $encoder;
+        $this->saltGenerator  = $saltGenerator;
     }
 
     /**
@@ -48,7 +59,7 @@ class RegisterHandler
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $register->email));
         }
 
-        $salt     = uniqid();
+        $salt     = $this->saltGenerator->generate();
         $password = $this->encoder->encode($register->password, $salt);
 
         $user = new User($register->email, $salt, $password);
