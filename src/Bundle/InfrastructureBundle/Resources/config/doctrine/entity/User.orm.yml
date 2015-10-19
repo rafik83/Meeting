@@ -14,3 +14,5 @@ Proximum\Vimeet\Domain\Model\User:
             type: string
         salt:
             type: string
+        locale:
+            type: string

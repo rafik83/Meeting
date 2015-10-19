@@ -21,4 +21,9 @@ class Register
      * @var string
      */
     public $password;
+
+    /**
+     * @var string
+     */
+    public $locale;
 }
