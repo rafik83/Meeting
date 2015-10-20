@@ -14,13 +14,22 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class UpdateHandler
 {
+    /**
+     * @var ParticipantRepositoryInterface
+     */
     private $participantRepository;
 
+    /**
+     * @param ParticipantRepositoryInterface $participantRepository
+     */
     public function __construct(ParticipantRepositoryInterface $participantRepository)
     {
         $this->participantRepository = $participantRepository;
     }
 
+    /**
+     * @param Update $update
+     */
     public function handle(Update $update)
     {
         $participant = $this->participantRepository->findById($update->id);

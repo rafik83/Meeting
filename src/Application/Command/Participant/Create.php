@@ -12,5 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 class Create
 {
+    /**
+     * @var
+     */
     public $data;
 }
