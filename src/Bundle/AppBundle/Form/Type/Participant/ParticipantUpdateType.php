@@ -8,24 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantUpdateType extends AbstractType
+class ParticipantUpdateType extends AbstractParticipantType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('data', new ParticipantDataType(), ['template' => $options['template'], 'locale' => $options['locale']])
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */
