@@ -15,3 +15,11 @@ form:
         children:
             submit:
                 label: Envoyer
+    login:
+        children:
+            username:
+                label: Email
+            password:
+                label: Mot de passe
+            submit:
+                label: Se connecter

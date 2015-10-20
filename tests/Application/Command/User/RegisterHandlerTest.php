@@ -25,8 +25,9 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $command           = new Register();
         $command->email    = 'test@test.com';
         $command->password = 'password';
+        $command->locale   = 'fr';
 
-        $expectedUser = new User('test@test.com', '__salt__', 'encoded_password');
+        $expectedUser = new User('test@test.com', '__salt__', 'encoded_password', 'fr');
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');

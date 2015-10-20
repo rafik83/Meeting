@@ -15,3 +15,11 @@ form:
         children:
             submit:
                 label: Submit
+    login:
+        children:
+            username:
+                label: Email
+            password:
+                label: Password
+            submit:
+                label: Login

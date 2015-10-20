@@ -2,11 +2,13 @@ greetings: 'Bonjour !'
 
 login:
   title: Connexion
-  link: Se connecter
-  email: Adresse email
-  password: Mot de passe
-  submit: Envoyer
-  logged_as: Vous êtes connecté en tant que %email%
-  logout: Se déconnecter
+  link: Connexion
+  logged_as: Bonjour %email%
+  logout: Déconnexion
+
+logout:
+  title: Déconnecter
+  link: Déconnecter
+  confirmation: Êtes vous sûr de vouloir vous déconnecter de votre compte ?
 
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
