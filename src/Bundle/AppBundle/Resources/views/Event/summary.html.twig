@@ -3,5 +3,14 @@
 {% block body %}
     <h1>{{ participantView.eventTitle }}</h1>
     <h2>{{ participantView.typeTitle }}</h2>
-    {{ dump(participantView) }}
+
+    <table class="table">
+        {% for key, field in template %}
+            <tr>
+                <th>{{ field['label'][app.request.locale] }}</th>
+                <td>{{ participantView.data[key] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}

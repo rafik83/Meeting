@@ -113,7 +113,7 @@ class EventController extends Controller
     public function participationAction(Request $request, EventView $eventView, TypeView $typeView)
     {
         $form  = $this->createForm(new ParticipantType(), null, [
-            'locale' => $request->getLocale(),
+            'locale'   => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
         ]);
         $form->add('submit', 'submit');
@@ -155,8 +155,13 @@ class EventController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $template = $this
+            ->get('vimeet_infrastructure.repository.form_repository')
+            ->getTemplate($participantView->typeId);
+
         return $this->render('VimeetAppBundle:Event:summary.html.twig', [
             'participantView' => $participantView,
+            'template'        => json_decode($template, true),
         ]);
     }
 
