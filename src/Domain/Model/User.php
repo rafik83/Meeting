@@ -89,7 +89,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function getRoles()
     {
-        return ['ROLE_ADMIN'];
+        return ['ROLE_USER'];
     }
 
     /**
