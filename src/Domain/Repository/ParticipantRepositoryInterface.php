@@ -21,9 +21,10 @@ interface ParticipantRepositoryInterface
     public function add(Participant $participant);
 
     /**
-     * @param $participantId
+     * @param integer $participantId
+     * @param string  $locale
      *
      * @return ParticipantView
      */
-    public function getParticipantView($participantId);
+    public function getParticipantView($participantId, $locale);
 }

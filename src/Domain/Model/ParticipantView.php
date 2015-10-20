@@ -14,8 +14,17 @@ class ParticipantView
 {
     public $data;
 
-    public function __construct($data)
+    public $eventId;
+
+    public $eventTitle;
+
+    public $typeTitle;
+
+    public function __construct($data, $eventId, $eventTitle, $typeTitle)
     {
-        $this->data = json_decode($data, true);
+        $this->data       = json_decode($data, true);
+        $this->eventId    = $eventId;
+        $this->eventTitle = $eventTitle;
+        $this->typeTitle  = $typeTitle;
     }
 }

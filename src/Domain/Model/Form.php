@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+use Proximum\Vimeet\Domain\Model\Participant\Type;
 
 class Form
 {

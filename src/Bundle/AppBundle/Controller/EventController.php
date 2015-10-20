@@ -29,6 +29,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class EventController extends Controller
 {
     /**
+     * Event home
+     *
      * @param Request   $request
      * @param EventView $event
      *
@@ -47,6 +49,8 @@ class EventController extends Controller
     }
 
     /**
+     * Register an account
+     *
      * @param Request   $request
      * @param EventView $eventView
      * @param TypeView  $typeView
@@ -98,6 +102,8 @@ class EventController extends Controller
     }
 
     /**
+     * Create a participation
+     *
      * @param Request   $request
      * @param EventView $eventView
      * @param TypeView  $typeView
@@ -135,8 +141,20 @@ class EventController extends Controller
         ]);
     }
 
-    public function summaryAction(Request $request, ParticipantView $participantView)
+    /**
+     * Participation summary
+     *
+     * @param EventView       $eventView
+     * @param ParticipantView $participantView
+     *
+     * @return Response
+     */
+    public function summaryAction(EventView $eventView, ParticipantView $participantView)
     {
+        if ($eventView->id !== $participantView->eventId) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('VimeetAppBundle:Event:summary.html.twig', [
             'participantView' => $participantView,
         ]);

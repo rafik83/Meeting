@@ -41,13 +41,17 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getParticipantView($participantId)
+    public function getParticipantView($participantId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.data)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.data, event.id, event.title, typeTranslation.title)')
             ->from('Entity:Participant', 'participant')
+            ->join('participant.event', 'event')
+            ->join('participant.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('locale', $locale)
             ->where('participant.id = :participantId')
             ->setParameter('participantId', $participantId)
             ->setMaxResults(1);

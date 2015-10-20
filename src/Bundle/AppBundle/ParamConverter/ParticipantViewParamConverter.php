@@ -37,8 +37,9 @@ class ParticipantViewParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $id   = $request->attributes->get('participantView');
-        $type = $this->participantRepository->getParticipantView($id);
+        $id     = $request->attributes->get('participantView');
+        $locale = $request->getLocale();
+        $type   = $this->participantRepository->getParticipantView($id, $locale);
 
         if (null === $type) {
             throw new NotFoundHttpException('Participant not found');
