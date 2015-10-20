@@ -14,16 +14,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantUpdateType extends AbstractType
+class ParticipantDataType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('data', new ParticipantDataType(), ['template' => $options['template'], 'locale' => $options['locale']])
-        ;
+        $template = is_string($options['template']) ? json_decode($options['template'], true) : $options['template'];
+        $locale   = $options['locale'];
+
+        foreach ($template as $i => $field) {
+            $builder->add($i, $field['type'], ['label' => $field['label'][$locale]]);
+        }
     }
 
     /**
@@ -32,10 +35,6 @@ class ParticipantUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
-        $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Update',
-            'intention'  => 'participant_update',
-        ]);
     }
 
     /**
@@ -43,6 +42,6 @@ class ParticipantUpdateType extends AbstractType
      */
     public function getName()
     {
-        return 'participant_update';
+        return 'participant';
     }
 }

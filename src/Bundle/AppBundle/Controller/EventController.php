@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
@@ -126,7 +127,8 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $form  = $this->createForm(new ParticipantType(), null, [
+        $create = new Create();
+        $form   = $this->createForm(new ParticipantCreateType(), $create, [
             'locale'   => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
         ]);
@@ -135,7 +137,7 @@ class EventController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.participant.type_repository')->getById($typeView->id);
-            $participate = new Participate($this->getUser(), $event, $type, $form->getData());
+            $participate = new Participate($this->getUser(), $event, $type, $create->data);
 
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
