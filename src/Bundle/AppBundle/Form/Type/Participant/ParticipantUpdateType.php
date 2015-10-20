@@ -19,7 +19,8 @@ class ParticipantUpdateType extends AbstractParticipantType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['template', 'locale']);
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Update',
             'intention'  => 'participant_update',

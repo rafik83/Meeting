@@ -19,7 +19,8 @@ class ParticipantCreateType extends AbstractParticipantType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['template', 'locale']);
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Create',
             'intention'  => 'participant_create',
