@@ -29,11 +29,9 @@ class ChangePasswordController extends Controller
      */
     public function changePasswordAction(Request $request, EventView $eventView)
     {
-        $subdomain = $request->attributes->get('subdomain');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (null === $this->getUser()) {
-            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
-        }
+        $subdomain = $request->attributes->get('subdomain');
 
         $changePassword = new ChangePassword($this->getUser(), null, null);
 
@@ -46,9 +44,6 @@ class ChangePasswordController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.application.command.user.change_password')->handle($changePassword);
-
-            $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
-            $this->get('security.token_storage')->setToken($token);
 
             $this->addFlash('success', 'flash.change_password.success');
 

@@ -27,6 +27,8 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_ANONYMOUS');
+
         $subdomain = $request->attributes->get('subdomain');
 
         if (null !== $this->getUser()) {
@@ -59,11 +61,7 @@ class SecurityController extends Controller
      */
     public function logoutConfirmationAction(Request $request, EventView $eventView)
     {
-        $subdomain = $request->attributes->get('subdomain');
-
-        if (null === $this->getUser()) {
-            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
-        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         return $this->render('VimeetAppBundle:Security:logout_confirmation.html.twig', [
             'eventView' => $eventView,
