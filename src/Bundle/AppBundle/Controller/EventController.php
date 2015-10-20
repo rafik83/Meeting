@@ -235,7 +235,7 @@ class EventController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // Check if user own participation
-        if ($this->getUser() === null || $this->getUser()->getUsername() !== $participantView->userEmail) {
+        if ($this->getUser()->getUsername() !== $participantView->userEmail) {
             throw $this->createAccessDeniedException();
         }
 
