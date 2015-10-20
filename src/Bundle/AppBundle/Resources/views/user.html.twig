@@ -3,6 +3,7 @@
         {{ 'login.logged_as'|trans({'%email%': app.user.email}) }} |
         <a href="{{ path('event_logout_confirmation', { 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ 'logout.link'|trans }}</a>
     {% else %}
+        {{ 'greetings'|trans }}
         <a href="{{ path('event_login', { 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ 'login.link'|trans }}</a>
     {% endif %}
 </p>

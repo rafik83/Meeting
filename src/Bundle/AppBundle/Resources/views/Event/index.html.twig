@@ -3,11 +3,10 @@
 {% block title event.title %}
 
 {% block body %}
-    {{ 'greetings'|trans }}
-    {{ 'now'|format_datetime }}
-
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
+
+    <p>{{ 'now'|format_datetime }}</p>
 
     <ul>
         {% for type in participant_types %}
