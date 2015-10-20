@@ -130,11 +130,11 @@ class User implements UserInterface, EquatableInterface, \Serializable
     public function serialize()
     {
         return serialize([
-                             $this->id,
-                             $this->email,
-                             $this->password,
-                             $this->salt,
-                         ]);
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->salt,
+        ]);
     }
 
     /**
@@ -142,7 +142,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->email,
             $this->password,
