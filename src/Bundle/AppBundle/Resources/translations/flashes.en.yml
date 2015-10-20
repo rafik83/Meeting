@@ -1,0 +1,4 @@
+flash:
+    event:
+        register:
+            success: Your account is created

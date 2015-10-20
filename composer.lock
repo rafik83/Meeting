@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2ab3fd941259c71319c000aef5e5f84",
-    "content-hash": "963d5b89481667bcfa51372f2b463be0",
+    "hash": "05d6e8fcff89019a4e6dbd5db48393d4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -939,6 +938,117 @@
                 "javascript"
             ],
             "time": "2015-10-07 14:22:04"
+        },
+        {
+            "name": "elao/form-translation-bundle",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elao/ElaoFormTranslationBundle.git",
+                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/form": "~2.6",
+                "symfony/framework-bundle": "~2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elao\\Bundle\\FormTranslationBundle\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elao",
+                    "homepage": "http://www.elao.com"
+                },
+                {
+                    "name": "Thomas Jarrand",
+                    "homepage": "https://github.com/Tom32i"
+                }
+            ],
+            "description": "Generate translation key for forms",
+            "homepage": "https://github.com/Elao/ElaoFormTranslationBundle",
+            "keywords": [
+                "elao",
+                "form",
+                "translation"
+            ],
+            "time": "2014-12-04 07:24:04"
+        },
+        {
+            "name": "elao/theme-twitter-bootstrap-3-bundle",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle.git",
+                "reference": "b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f",
+                "reference": "b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.4"
+            },
+            "suggest": {
+                "elao/form-bundle": "~0.1@dev",
+                "elao/theme-bundle": "~0.1@dev"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elao\\Bundle\\Theme\\TwitterBootstrap3Bundle\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elao",
+                    "homepage": "http://www.elao.com"
+                },
+                {
+                    "name": "Thomas Jarrand",
+                    "homepage": "https://github.com/Tom32i"
+                }
+            ],
+            "description": "Twitter Bootstrap 3 theme bundle for ElaoThemeBundle",
+            "homepage": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle",
+            "keywords": [
+                "bootstrap",
+                "elao",
+                "theme-bundle",
+                "twitter"
+            ],
+            "time": "2015-07-23 09:41:56"
         },
         {
             "name": "friendsofsymfony/elastica-bundle",
@@ -4098,58 +4208,6 @@
                 "symfony"
             ],
             "time": "2015-10-06 08:54:56"
-        },
-        {
-            "name": "twig/extensions",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig-extensions.git",
-                "reference": "449e3c8a9ffad7c2479c7864557275a32b037499"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/449e3c8a9ffad7c2479c7864557275a32b037499",
-                "reference": "449e3c8a9ffad7c2479c7864557275a32b037499",
-                "shasum": ""
-            },
-            "require": {
-                "twig/twig": "~1.20|~2.0"
-            },
-            "require-dev": {
-                "symfony/translation": "~2.3"
-            },
-            "suggest": {
-                "symfony/translation": "Allow the time_diff output to be translated"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Twig_Extensions_": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Common additional features for Twig that do not directly belong in core",
-            "homepage": "http://twig.sensiolabs.org/doc/extensions/index.html",
-            "keywords": [
-                "i18n",
-                "text"
-            ],
-            "time": "2015-08-22 16:38:35"
         }
     ],
     "aliases": [],

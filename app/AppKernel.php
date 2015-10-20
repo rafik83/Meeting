@@ -17,6 +17,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
             new Elao\Bundle\FormBundle\ElaoFormBundle(),
+            new Elao\Bundle\FormTranslationBundle\ElaoFormTranslationBundle(),
+            new Elao\Bundle\Theme\TwitterBootstrap3Bundle\ElaoThemeTwitterBootstrap3Bundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 

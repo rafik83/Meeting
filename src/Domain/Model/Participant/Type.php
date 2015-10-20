@@ -15,12 +15,24 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Type
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var integer
+     */
     private $position;
 
+    /**
+     * @var Event
+     */
     private $event;
 
+    /**
+     * @var ArrayCollection
+     */
     private $translations;
 
     /**

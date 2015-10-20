@@ -2,7 +2,7 @@ services:
     vimeet_app.form_extension.translation_domain_extension:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
         tags:
-            - { name: form.type_extension }
+            - { name: form.type_extension, alias: form }
     vimeet_app.param_converter.event_domain_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventViewDomainParamConverter
         arguments:

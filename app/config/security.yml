@@ -1,11 +1,16 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+    encoders:
+        Proximum\Vimeet\Domain\Model\User:
+            algorithm: sha1
+            iterations: 5
+            encode_as_base64: true
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        user_provider:
+            entity: { class: Proximum\Vimeet\Domain\Model\User, property: email }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs

@@ -1,0 +1,4 @@
+flash:
+    event:
+        register:
+            success: Votre compte a bien été créé

@@ -1,0 +1,3 @@
+validators:
+    email: L'adresse mail saisie n'est pas valide
+    password: Le mot de passe doit comporter au moins {{ limit }} caractères

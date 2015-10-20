@@ -1,0 +1,13 @@
+form:
+    register:
+        children:
+            email:
+                label: Email
+            password:
+                children:
+                    first:
+                        label: Mot de passe
+                    second:
+                        label: Ressaisir le mot de passe
+            submit:
+                label: Envoyer

@@ -1,0 +1,13 @@
+form:
+    register:
+        children:
+            email:
+                label: Email
+            password:
+                children:
+                    first:
+                        label: Password
+                    second:
+                        label: Refill the password
+            submit:
+                label: Send

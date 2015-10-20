@@ -37,6 +37,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:
+            - "ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig"
 
 # Doctrine Configuration
 doctrine:
@@ -87,3 +90,6 @@ fos_elastica:
         default: { host: localhost, port: 9200 }
     indexes:
         app: ~
+
+elao_form_translation:
+    auto_generate: true

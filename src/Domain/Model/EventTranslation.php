@@ -12,12 +12,24 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class EventTranslation
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var Event
+     */
     private $event;
 
+    /**
+     * @var string
+     */
     private $locale;
 
+    /**
+     * @var string
+     */
     private $description;
 
     /**
