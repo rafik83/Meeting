@@ -112,6 +112,8 @@ class EventController extends Controller
      */
     public function participationAction(Request $request, EventView $eventView, TypeView $typeView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form  = $this->createForm(new ParticipantType(), null, [
             'locale'   => $request->getLocale(),
             'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
@@ -151,6 +153,12 @@ class EventController extends Controller
      */
     public function summaryAction(EventView $eventView, ParticipantView $participantView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($this->getUser() === null || $this->getUser()->getUsername() !== $participantView->userEmail) {
+            throw $this->createAccessDeniedException();
+        }
+
         if ($eventView->id !== $participantView->eventId) {
             throw $this->createNotFoundException();
         }

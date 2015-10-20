@@ -46,8 +46,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.data, event.id, event.title, type.id, typeTranslation.title)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.data, user.email, event.id, event.title, type.id, typeTranslation.title)')
             ->from('Entity:Participant', 'participant')
+            ->join('participant.user', 'user')
             ->join('participant.event', 'event')
             ->join('participant.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
