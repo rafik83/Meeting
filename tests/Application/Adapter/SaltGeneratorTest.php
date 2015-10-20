@@ -1,0 +1,33 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Adapter;
+
+use Proximum\Vimeet\Application\Adapter\SaltGenerator;
+
+class SaltGeneratorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGenerate()
+    {
+        $generator = new SaltGenerator();
+
+        $salt1 = $generator->generate();
+        $salt2 = $generator->generate();
+        $salt3 = $generator->generate();
+
+        $this->assertInternalType('string', $salt1);
+        $this->assertInternalType('string', $salt2);
+        $this->assertInternalType('string', $salt3);
+
+        $this->assertNotEquals($salt1, $salt2);
+        $this->assertNotEquals($salt2, $salt3);
+        $this->assertNotEquals($salt3, $salt1);
+    }
+}
