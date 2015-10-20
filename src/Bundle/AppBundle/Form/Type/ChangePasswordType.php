@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class ChangePasswordType extends AbstractType
 {
@@ -22,9 +21,7 @@ class ChangePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('currentPassword', 'password', [
-                'constraints' => new UserPassword(),
-            ])
+            ->add('currentPassword', 'password')
             ->add('plainPassword', 'repeated', [
                 'type' => 'password',
             ])
