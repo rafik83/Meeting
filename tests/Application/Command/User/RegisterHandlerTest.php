@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;

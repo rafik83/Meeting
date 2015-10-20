@@ -10,26 +10,26 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\ParamConverter;
 
-use Proximum\Vimeet\Domain\Model\EventView;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Participant\TypeView;
+use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class EventViewDomainParamConverter implements ParamConverterInterface
+class ParticipantTypeViewParamConverter implements ParamConverterInterface
 {
     /**
-     * @var EventRepositoryInterface
+     * @var TypeRepositoryInterface
      */
-    private $eventRepository;
+    private $typeRepository;
 
     /**
-     * @param EventRepositoryInterface $eventRepository
+     * @param TypeRepositoryInterface $typeRepository
      */
-    public function __construct(EventRepositoryInterface $eventRepository)
+    public function __construct(TypeRepositoryInterface $typeRepository)
     {
-        $this->eventRepository = $eventRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -37,16 +37,16 @@ class EventViewDomainParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $domain = $request->getHost();
+        $id     = $request->attributes->get('typeView');
         $locale = $request->getLocale();
 
-        $event = $this->eventRepository->getEventViewByDomain($domain, $locale);
+        $type = $this->typeRepository->getTypeViewById($id, $locale);
 
-        if (null === $event) {
-            throw new NotFoundHttpException('Event not found');
+        if (null === $type) {
+            throw new NotFoundHttpException('Type not found');
         }
 
-        $request->attributes->set($configuration->getName(), $event);
+        $request->attributes->set($configuration->getName(), $type);
 
         return true;
     }
@@ -56,6 +56,6 @@ class EventViewDomainParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === EventView::class;
+        return $configuration->getClass() === TypeView::class;
     }
 }

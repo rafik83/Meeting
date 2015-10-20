@@ -10,8 +10,11 @@ form:
                     second:
                         label: Refill the password
             submit:
-                label: Send
-
+                label: Submit
+    participant:
+        children:
+            submit:
+                label: Submit
     login:
         children:
             username:

@@ -64,5 +64,7 @@ class RegisterHandler
         $user     = new User($register->email, $salt, $password, $register->locale);
 
         $this->userRepository->add($user);
+
+        $register->user = $user;
     }
 }

@@ -12,13 +12,22 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\DataFixtures\ORM;
 
 class Provider
 {
+    /**
+     * @var string
+     */
     private $domain;
 
+    /**
+     * @param $domain
+     */
     public function __construct($domain)
     {
         $this->domain = $domain;
     }
 
+    /**
+     * @return string
+     */
     public function domain()
     {
         return $this->domain;
