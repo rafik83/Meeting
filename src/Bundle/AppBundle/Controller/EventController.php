@@ -121,10 +121,8 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.participant.type_repository')->getById($typeView->id);
-
             $participate = new Participate($this->getUser(), $event, $type, $form->getData());
 
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
