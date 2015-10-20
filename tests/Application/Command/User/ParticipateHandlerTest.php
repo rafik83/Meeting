@@ -27,9 +27,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expectedData = '{"foobar":"barfoo"}';
 
-        $user = new User('test@test.com', 'salt', 'password');
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
-        $type = new Participant\Type();
+        $type  = new Participant\Type();
 
         $expectedParticipant = new Participant($user, $event, $type, $expectedData);
 
