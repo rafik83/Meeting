@@ -21,6 +21,18 @@ interface ParticipantRepositoryInterface
     public function add(Participant $participant);
 
     /**
+     * @param integer $id
+     *
+     * @return Participant
+     */
+    public function findById($id);
+
+    /**
+     * @param Participant $participant
+     */
+    public function set(Participant $participant);
+
+    /**
      * @param integer $participantId
      * @param string  $locale
      *

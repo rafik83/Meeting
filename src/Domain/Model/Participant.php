@@ -102,4 +102,18 @@ class Participant
     {
         return $this->data;
     }
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     *
+     * @return Participant
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }

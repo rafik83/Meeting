@@ -9,10 +9,14 @@
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
     {% if is_granted('IS_AUTHENTICATED_FULLY') and participantId is not null %}
-        <a href="{{ path('event_summary', {
+        <a href="{{ path('event_participation_summary', {
             'subdomain': app.request.attributes.get('subdomain'),
             'participantView': participantId
-        }) }}">{{ 'link.summary'|trans }}</a>
+        }) }}">{{ 'link.participation.summary'|trans }}</a>
+        <a href="{{ path('event_participation_update', {
+            'subdomain': app.request.attributes.get('subdomain'),
+            'participantView': participantId
+        }) }}">{{ 'link.participation.update'|trans }}</a>
     {% else %}
         <ul>
             {% for type in participant_types %}

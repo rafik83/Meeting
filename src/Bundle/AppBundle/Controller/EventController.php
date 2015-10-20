@@ -10,12 +10,15 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Participant\TypeView;
 use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\User;
@@ -137,7 +140,7 @@ class EventController extends Controller
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
 
-            return $this->redirectToRoute('event_summary', [
+            return $this->redirectToRoute('event_participation_summary', [
                 'subdomain'       => $request->attributes->get('subdomain'),
                 'participantView' => $participate->participant->getId(),
             ]);
@@ -151,6 +154,43 @@ class EventController extends Controller
     }
 
     /**
+     * Edit a participation
+     *
+     * @param Request         $request
+     * @param EventView       $eventView
+     * @param ParticipantView $participantView
+     *
+     * @return RedirectResponse|Response
+     */
+    public function participationUpdateAction(Request $request, EventView $eventView, ParticipantView $participantView)
+    {
+        $this->checkParticipantAccess($eventView, $participantView);
+
+        $update = new Update($participantView->id, $participantView->data);
+        $form   = $this->createForm(new ParticipantUpdateType(), $update, [
+            'locale'   => $request->getLocale(),
+            'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($participantView->typeId)
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')->handle($update);
+            $this->addFlash('success', 'flash.event.participation.update.success');
+
+            return $this->redirectToRoute('event_participation_update', [
+                'subdomain'       => $request->attributes->get('subdomain'),
+                'participantView' => $participantView->id,
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:participationUpdate.html.twig', [
+            'form'            => $form->createView(),
+            'eventView'       => $eventView,
+            'participantView' => $participantView,
+        ]);
+    }
+
+    /**
      * Participation summary
      *
      * @param EventView       $eventView
@@ -158,23 +198,15 @@ class EventController extends Controller
      *
      * @return Response
      */
-    public function summaryAction(EventView $eventView, ParticipantView $participantView)
+    public function participationSummaryAction(EventView $eventView, ParticipantView $participantView)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if ($this->getUser() === null || $this->getUser()->getUsername() !== $participantView->userEmail) {
-            throw $this->createAccessDeniedException();
-        }
-
-        if ($eventView->id !== $participantView->eventId) {
-            throw $this->createNotFoundException();
-        }
+        $this->checkParticipantAccess($eventView, $participantView);
 
         $template = $this
             ->get('vimeet_infrastructure.repository.form_repository')
             ->getTemplate($participantView->typeId);
 
-        return $this->render('VimeetAppBundle:Event:summary.html.twig', [
+        return $this->render('VimeetAppBundle:Event:participationSummary.html.twig', [
             'participantView' => $participantView,
             'template'        => json_decode($template, true),
         ]);
@@ -189,5 +221,25 @@ class EventController extends Controller
     {
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
+    }
+
+    /**
+     * @param EventView       $eventView
+     * @param ParticipantView $participantView
+     */
+    private function checkParticipantAccess(EventView $eventView, ParticipantView $participantView)
+    {
+        // Check if user is authenticated
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Check if user own participation
+        if ($this->getUser() === null || $this->getUser()->getUsername() !== $participantView->userEmail) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // Check if the participation is for this event
+        if ($eventView->id !== $participantView->eventId) {
+            throw $this->createNotFoundException();
+        }
     }
 }
