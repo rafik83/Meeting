@@ -12,7 +12,9 @@
             {{ 'logout.confirmation'|trans }}
 
             <div class="text-center">
-                <a href="{{ path('event_logout', { 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">{{ 'logout.link'|trans }}</a>
+                <a href="{{ path('event_logout', { 'subdomain': app.request.attributes.get('subdomain') }) }}"
+                   class="btn btn-primary"
+                >{{ 'logout.link'|trans }}</a>
             </div>
         </div>
     </div>
