@@ -64,7 +64,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastParticipantForEventAndUser($userEmail, $eventId)
+    public function getLastParticipantIdForEventAndUser($userEmail, $eventId)
     {
         $queryBuilder = $this
             ->entityManager

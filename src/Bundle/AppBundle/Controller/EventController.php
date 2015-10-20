@@ -41,7 +41,7 @@ class EventController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $participantId = $this
                 ->get('vimeet_infrastructure.repository.participant_repository')
-                ->getLastParticipantForEventAndUser($this->getUser()->getUsername(), $event->id);
+                ->getLastParticipantIdForEventAndUser($this->getUser()->getUsername(), $event->id);
         } else {
             $participantId = null;
         }
