@@ -11,3 +11,6 @@ logout:
     confirmation: Are you sure you want to logout of your account?
 
 messages.register.email_already_exists: An account with this email address already exists
+
+link:
+    summary: See my participation sheet

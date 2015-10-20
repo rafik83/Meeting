@@ -8,6 +8,9 @@
 
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and participantId is not null %}
+        <a href="{{ path('event_summary', {'subdomain': app.request.attributes.get('subdomain'), 'participantView': participantId}) }}">{{ 'link.summary'|trans }}</a>
+    {% endif %}
 
     <ul>
         {% for type in participant_types %}
