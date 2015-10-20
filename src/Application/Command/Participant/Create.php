@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Domain\Model\Participant;
-
 class Create
 {
     public $data;
