@@ -4,3 +4,4 @@ Proximum\Vimeet\Domain\Model\User:
         email: "test@test.com"
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
+        locale: "fr"
