@@ -27,11 +27,9 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, EventView $eventView)
     {
-        $this->denyAccessUnlessGranted('IS_ANONYMOUS');
-
         $subdomain = $request->attributes->get('subdomain');
 
-        if (null !== $this->getUser()) {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
         }
 
