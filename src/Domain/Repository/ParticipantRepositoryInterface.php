@@ -31,6 +31,7 @@ interface ParticipantRepositoryInterface
     /**
      * @param $userEmail
      * @param $eventId
+     *
      * @return integer
      */
     public function getLastParticipantIdForEventAndUser($userEmail, $eventId);

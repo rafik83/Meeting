@@ -64,21 +64,22 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastParticipantIdForEventAndUser($userEmail, $eventId)
+    public function getLastParticipantIdForEventAndUser($userId, $eventId)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant.id')
             ->from('Entity:Participant', 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user.email = :userEmail')
-            ->setParameter('userEmail', $userEmail)
+            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->setParameter('userId', $userId)
             ->join('participant.event', 'event', 'WITH', 'event.id = :eventId')
             ->setParameter('eventId', $eventId)
             ->orderBy('participant.id', 'DESC')
             ->setMaxResults(1);
 
         $result = $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+
         return $result ? intval($result) : null;
     }
 }
