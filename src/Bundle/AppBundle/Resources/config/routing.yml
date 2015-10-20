@@ -59,3 +59,11 @@ event_logout:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
+
+event_change_password:
+    path: /change-password
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:ChangePassword:changePassword }

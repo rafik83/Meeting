@@ -25,4 +25,11 @@ interface UserRepositoryInterface
      * @param User $user
      */
     public function add(User $user);
+
+    /**
+     * @param User $user
+     * @param string $salt
+     * @param string $password
+     */
+    public function updatePassword(User $user, $salt, $password);
 }

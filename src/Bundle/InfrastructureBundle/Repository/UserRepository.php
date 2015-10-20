@@ -54,4 +54,13 @@ class UserRepository implements UserRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult() ? true : false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updatePassword(User $user, $salt, $password)
+    {
+        $user->updatePassword($salt, $password);
+        $this->entityManager->flush($user);
+    }
 }
