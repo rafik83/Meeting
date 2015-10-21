@@ -13,18 +13,96 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         locale: en
         event: @event_rdv_carnot_2016
 
-Proximum\Vimeet\Domain\Model\Participant\Type:
+Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
         event: @event_rdv_carnot_2016
+        participantTemplate: >
+            [
+                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
+                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
+                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
+                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
+                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+            ]
+        sheetTemplate: >
+            [
+                {
+                    "title": { "fr": "Société", "en": "Company" },
+                    "template": {
+                        { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } }
+                    }
+                },
+                {
+                    "title": { "fr": "Offre", "en": "Needs" },
+                    "template": {
+                        { "type": "textarea", "label": { "fr": "Offres", "en": "Offers" } }
+                    }
+                }
+            ]
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
+        participantTemplate: >
+            [
+                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
+                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
+                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
+                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
+                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+            ]
+        sheetTemplate: >
+            [
+                {
+                    "title": { "fr": "Société", "en": "Company" },
+                    "template": {
+                        { "type": "text", "label": { "fr": "Nom", "en": "Name" } },
+                    }
+                },
+                {
+                    "title": { "fr": "Offre", "en": "Needs" },
+                    "template": {
+                        { "type": "textarea", "label": { "fr": "Besoins", "en": "Needs" } }
+                    }
+                }
+            ]
     congressiste:
         position: 2
         event: @event_rdv_carnot_2016
+        participantTemplate: >
+            [
+                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
+                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
+                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
+                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
+                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+            ]
+        sheetTemplate: >
+            [
+                {
+                    "title": { "fr": "Société", "en": "Company" },
+                    "template": {
+                        { "type": "text", "label": { "fr": "Nom", "en": "Name" } }
+                    }
+                },
+                {
+                    "title": { "fr": "Offre", "en": "Needs" },
+                    "template": {
+                        { "type": "textarea", "label": { "fr": "Besoins", "en": "Needs" } }
+                    }
+                }
+            ]
 
-Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
+Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_fr:
         title: Exposant
         type: @exposant
@@ -49,46 +127,3 @@ Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
         title: Congressman
         type: @congressiste
         locale: en
-
-Proximum\Vimeet\Domain\Model\Form:
-    form_exposant:
-        type: @exposant
-        template: >
-            [
-                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
-                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } },
-                { "type": "textarea", "label": { "fr": "Offres", "en": "Offers" } }
-            ]
-    form_visiteur:
-        type: @visiteur
-        template: >
-            [
-                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
-                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } },
-                { "type": "textarea", "label": { "fr": "Besoins", "en": "Needs" } }
-            ]
-    form_congressiste:
-        type: @congressiste
-        template: >
-            [
-                { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
-                { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
-            ]
