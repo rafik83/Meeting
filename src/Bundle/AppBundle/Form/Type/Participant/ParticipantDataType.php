@@ -24,6 +24,10 @@ class ParticipantDataType extends AbstractType
         $template = is_string($options['template']) ? json_decode($options['template'], true) : $options['template'];
         $locale   = $options['locale'];
 
+        if ($template === null) {
+            throw new \InvalidArgumentException('Invalid json template');
+        }
+
         foreach ($template as $i => $field) {
             $builder->add($i, $field['type'], ['label' => $field['label'][$locale]]);
         }

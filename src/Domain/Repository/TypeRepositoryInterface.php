@@ -37,4 +37,11 @@ interface TypeRepositoryInterface
      * @return Type
      */
     public function getById($id);
+
+    /**
+     * @param $typeId
+     *
+     * @return string
+     */
+    public function getParticipantTemplate($typeId);
 }

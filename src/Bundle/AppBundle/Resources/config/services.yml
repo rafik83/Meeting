@@ -12,7 +12,7 @@ services:
     vimeet_app.param_converter.participant_type_view_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\TypeViewParamConverter
         arguments:
-            - @vimeet_infrastructure.repository.participant.type_repository
+            - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
     vimeet_app.param_converter.participant_view_param_converter:
