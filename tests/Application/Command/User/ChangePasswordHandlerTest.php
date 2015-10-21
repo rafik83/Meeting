@@ -27,8 +27,6 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new ChangePassword($user);
         $command->plainPassword = 'new-password';
 
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__new_salt__');
 
@@ -38,6 +36,7 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn('encoded_new_password');
 
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->set($expectedUser)->shouldBeCalled();
 
         $handler = new ChangePasswordHandler(
