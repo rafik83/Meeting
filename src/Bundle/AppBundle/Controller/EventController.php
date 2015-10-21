@@ -38,6 +38,14 @@ class EventController extends Controller
      */
     public function indexAction(Request $request, EventView $event)
     {
+        $participantId = null;
+
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $participantId = $this
+                ->get('vimeet_infrastructure.repository.participant_repository')
+                ->getLastParticipantIdForEventAndUser($this->getUser()->getId(), $event->id);
+        }
+
         $participantTypes = $this
             ->get('vimeet_infrastructure.repository.participant.type_repository')
             ->getTypeViewsByEvent($event->id, $request->getLocale());
@@ -45,6 +53,7 @@ class EventController extends Controller
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
             'event'             => $event,
             'participant_types' => $participantTypes,
+            'participantId'     => $participantId,
         ]);
     }
 

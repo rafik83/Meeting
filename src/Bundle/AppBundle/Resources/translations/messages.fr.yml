@@ -11,3 +11,6 @@ logout:
     confirmation: Êtes vous sûr de vouloir vous déconnecter de votre compte ?
 
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
+
+link:
+    summary: Voir ma fiche de participation

@@ -27,4 +27,12 @@ interface ParticipantRepositoryInterface
      * @return ParticipantView
      */
     public function getParticipantView($participantId, $locale);
+
+    /**
+     * @param $userEmail
+     * @param $eventId
+     *
+     * @return integer
+     */
+    public function getLastParticipantIdForEventAndUser($userEmail, $eventId);
 }

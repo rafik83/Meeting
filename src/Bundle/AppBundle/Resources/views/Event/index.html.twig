@@ -8,16 +8,22 @@
 
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
-
-    <ul>
-        {% for type in participant_types %}
-            <li>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a href="{{ path('event_participation', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
-                {% else %}
-                    <a href="{{ path('event_register', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and participantId is not null %}
+        <a href="{{ path('event_summary', {
+            'subdomain': app.request.attributes.get('subdomain'),
+            'participantView': participantId
+        }) }}">{{ 'link.summary'|trans }}</a>
+    {% else %}
+        <ul>
+            {% for type in participant_types %}
+                <li>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('event_participation', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
+                    {% else %}
+                        <a href="{{ path('event_register', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
