@@ -13,4 +13,6 @@ logout:
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
 
 link:
-    summary: Voir ma fiche de participation
+    participation:
+        summary: Voir ma fiche de participation
+        update: Modifier ma fiche de participation

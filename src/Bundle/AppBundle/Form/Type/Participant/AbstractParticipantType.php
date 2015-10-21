@@ -8,25 +8,25 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantType extends AbstractType
+abstract class AbstractParticipantType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $template = is_string($options['template']) ? json_decode($options['template'], true) : $options['template'];
-        $locale   = $options['locale'];
-
-        foreach ($template as $i => $field) {
-            $builder->add($i, $field['type'], ['label' => $field['label'][$locale]]);
-        }
+        $builder
+            ->add('data', new ParticipantDataType(), [
+                'template' => $options['template'],
+                'locale'   => $options['locale']
+            ])
+        ;
     }
 
     /**
@@ -35,13 +35,5 @@ class ParticipantType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant';
     }
 }

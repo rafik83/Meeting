@@ -11,8 +11,16 @@ form:
                         label: Ressaisir le mot de passe
             submit:
                 label: Envoyer
-    participant:
+    participant_create:
         children:
+            data:
+                label: Participation
+            submit:
+                label: Envoyer
+    participant_update:
+        children:
+            data:
+                label: Participation
             submit:
                 label: Envoyer
     login:
