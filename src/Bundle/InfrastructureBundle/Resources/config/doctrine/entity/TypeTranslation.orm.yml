@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type:  entity
-    table: participant_type_translation
+    table: type_translation
     id:
         id:
             type: integer
