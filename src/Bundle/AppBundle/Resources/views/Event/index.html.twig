@@ -19,7 +19,7 @@
         }) }}">{{ 'link.participation.update'|trans }}</a>
     {% else %}
         <ul>
-            {% for type in participant_types %}
+            {% for type in types %}
                 <li>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <a href="{{ path('event_participation', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>

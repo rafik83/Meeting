@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Participant\Type:
+Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
         event: @event_rdv_carnot_2016
@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\Participant\Type:
         position: 2
         event: @event_rdv_carnot_2016
 
-Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
+Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_fr:
         title: Exposant
         type: @exposant

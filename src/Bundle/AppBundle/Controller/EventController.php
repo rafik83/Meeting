@@ -19,8 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Participant\TypeView;
+use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,27 +35,27 @@ class EventController extends Controller
      * Event home
      *
      * @param Request   $request
-     * @param EventView $event
+     * @param EventView $eventView
      *
      * @return Response
      */
-    public function indexAction(Request $request, EventView $event)
+    public function indexAction(Request $request, EventView $eventView)
     {
         $participantId = null;
 
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $participantId = $this
                 ->get('vimeet_infrastructure.repository.participant_repository')
-                ->getLastParticipantIdForEventAndUser($this->getUser()->getId(), $event->id);
+                ->getLastParticipantIdForEventAndUser($this->getUser()->getId(), $eventView->id);
         }
 
-        $participantTypes = $this
+        $typeViews = $this
             ->get('vimeet_infrastructure.repository.participant.type_repository')
-            ->getTypeViewsByEvent($event->id, $request->getLocale());
+            ->getTypeViewsByEvent($eventView->id, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
-            'event'             => $event,
-            'participant_types' => $participantTypes,
+            'event'             => $eventView,
+            'types'             => $typeViews,
             'participantId'     => $participantId,
         ]);
     }

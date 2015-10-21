@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\ParamConverter;
 
-use Proximum\Vimeet\Domain\Model\Participant\TypeView;
-use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\TypeView;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ParticipantTypeViewParamConverter implements ParamConverterInterface
+class TypeViewParamConverter implements ParamConverterInterface
 {
     /**
      * @var TypeRepositoryInterface
