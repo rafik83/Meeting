@@ -2,3 +2,5 @@ flash:
     event:
         register:
             success: Your account is created
+        participation:
+            success: Your participate entry has been saved

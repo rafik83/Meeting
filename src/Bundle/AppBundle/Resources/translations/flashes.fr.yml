@@ -2,3 +2,5 @@ flash:
     event:
         register:
             success: Votre compte a bien été créé
+        participation:
+            success: Votre fiche de participation a été sauvegardée

@@ -11,7 +11,10 @@ form:
                         label: Ressaisir le mot de passe
             submit:
                 label: Envoyer
-
+    participant:
+        children:
+            submit:
+                label: Envoyer
     login:
         children:
             username:

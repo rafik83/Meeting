@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Participant\TypeView;
 use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
@@ -30,12 +29,9 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param integer $eventId
-     * @param string  $locale
-     *
-     * @return TypeView[]
+     * {@inheritdoc}
      */
-    public function getTypeViewByEvent($eventId, $locale)
+    public function getTypeViewsByEvent($eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -49,5 +45,41 @@ class TypeRepository implements TypeRepositoryInterface
             ->orderBy('type.position');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeViewById($typeId, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\Participant\TypeView(type.id, translations.title)')
+            ->from('Entity:Participant\Type', 'type')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('type.id = :typeId')
+            ->setParameter('typeId', $typeId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Participant\Type', 'type')
+            ->where('type.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

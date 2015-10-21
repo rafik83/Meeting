@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Domain\Model\User;
+
 class Register
 {
     /**
@@ -26,4 +28,9 @@ class Register
      * @var string
      */
     public $locale;
+
+    /**
+     * @var User
+     */
+    public $user;
 }

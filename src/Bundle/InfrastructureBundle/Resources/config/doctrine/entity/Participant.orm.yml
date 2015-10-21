@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Participant:
+    type:  entity
+    table: participant
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        data:
+            type: text
+
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        type:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant\Type

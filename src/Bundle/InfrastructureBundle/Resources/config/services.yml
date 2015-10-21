@@ -14,6 +14,18 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.form_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\FormRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.participant_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ParticipantRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+
+    #
+    # Fixture providers
+    #
     vimeet_infrastructure.data_fixtures_orm.provider:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
         arguments:
@@ -30,6 +42,10 @@ services:
             - @vimeet_infrastructure.repository.user_repository
             - @vimeet_infrastructure.adapter.encoder_adapter
             - @vimeet_infrastructure.adapter.salt_generator
+    vimeet_infrastructure.application.command.user.participate_handler:
+        class: Proximum\Vimeet\Application\Command\User\ParticipateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.participant_repository
 
     #
     # Security

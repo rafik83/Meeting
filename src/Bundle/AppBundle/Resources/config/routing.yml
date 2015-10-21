@@ -7,12 +7,28 @@ event:
     defaults: { _controller: VimeetAppBundle:Event:index }
 
 event_register:
-    path: /register/{typeId}
+    path: /register/{typeView}
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event:register }
+
+event_participation:
+    path: /participation/{typeView}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event:participation }
+
+event_summary:
+    path: /summary/{participantView}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event:summary }
 
 event_login:
     path: /login
