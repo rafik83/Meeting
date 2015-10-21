@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -29,7 +30,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
-        $type  = new Participant\Type();
+        $type  = new Type();
 
         $expectedParticipant = new Participant($user, $event, $type, $expectedData);
 

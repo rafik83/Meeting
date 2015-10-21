@@ -28,8 +28,14 @@ class ParticipantView
 
     public function __construct($id, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
     {
+        $data = json_decode($data, true);
+
+        if ($data === null) {
+            throw new \InvalidArgumentException('Invalid json data');
+        }
+
         $this->id         = $id;
-        $this->data       = json_decode($data, true);
+        $this->data       = $data;
         $this->userEmail  = $userEmail;
         $this->eventId    = $eventId;
         $this->eventTitle = $eventTitle;
