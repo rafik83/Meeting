@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Type:
     type:  entity
-    table: participant_type
+    table: type
     id:
         id:
             type: integer
