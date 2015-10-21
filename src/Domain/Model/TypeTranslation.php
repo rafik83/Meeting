@@ -8,9 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Participant;
-
-use Proximum\Vimeet\Domain\Model\Participant\Type;
+namespace Proximum\Vimeet\Domain\Model;
 
 class TypeTranslation
 {

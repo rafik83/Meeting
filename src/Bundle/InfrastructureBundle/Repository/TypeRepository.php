@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant;
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Repository\Participant\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
 {
@@ -36,8 +36,8 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\Participant\TypeView(type.id, translations.title)')
-            ->from('Entity:Participant\Type', 'type')
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->from('Entity:Type', 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.event = :eventId')
@@ -55,8 +55,8 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\Participant\TypeView(type.id, translations.title)')
-            ->from('Entity:Participant\Type', 'type')
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->from('Entity:Type', 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
@@ -75,7 +75,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Participant\Type', 'type')
+            ->from('Entity:Type', 'type')
             ->where('type.id = :id')
             ->setParameter('id', $id)
             ->setMaxResults(1);

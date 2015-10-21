@@ -11,4 +11,4 @@ Proximum\Vimeet\Domain\Model\Form:
             type: text
     manyToOne:
         type:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant\Type
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
