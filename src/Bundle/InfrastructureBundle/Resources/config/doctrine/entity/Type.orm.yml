@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Participant\Type:
+Proximum\Vimeet\Domain\Model\Type:
     type:  entity
     table: participant_type
     id:
@@ -11,7 +11,7 @@ Proximum\Vimeet\Domain\Model\Participant\Type:
             type: integer
     oneToMany:
         translations:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant\TypeTranslation
+            targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
             mappedBy: type
     manyToOne:
         event:

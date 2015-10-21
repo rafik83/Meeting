@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Participant;
+namespace Proximum\Vimeet\Domain\Model;
 
 class TypeView
 {

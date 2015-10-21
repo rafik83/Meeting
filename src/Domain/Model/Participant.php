@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Participant\Type;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Participant
 {

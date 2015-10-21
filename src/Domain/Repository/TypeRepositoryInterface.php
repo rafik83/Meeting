@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository\Participant;
+namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\Participant\Type;
-use Proximum\Vimeet\Domain\Model\Participant\TypeView;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\TypeView;
 
 interface TypeRepositoryInterface
 {

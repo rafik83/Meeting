@@ -7,7 +7,7 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.participant.type_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant\TypeRepository
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.user_repository:
