@@ -11,4 +11,5 @@
         {{ 'greetings'|trans }}
         <a href="{{ path('event_login', { 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ 'login.link'|trans }}</a>
     {% endif %}
+    | {{ 'now'|format_datetime }}
 </p>
