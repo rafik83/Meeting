@@ -12,7 +12,7 @@ Feature: Register and login user
     And I press "Se connecter"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
     And I follow "Voir ma fiche de participation"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/summary/1"
+    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/participation/1/summary"
     And I should see "Exposant"
     And I should see "Offres"
     And I should see "Je vends des tests"
