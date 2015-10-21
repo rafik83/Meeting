@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * "Type de participation"
+ */
 class Type
 {
     /**
@@ -33,6 +36,16 @@ class Type
      * @var ArrayCollection
      */
     private $translations;
+
+    /**
+     * @var string
+     */
+    private $participantTemplate;
+
+    /**
+     * @var string
+     */
+    private $sheetTemplate;
 
     /**
      * Constructor
@@ -72,5 +85,25 @@ class Type
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Get participantTemplate
+     *
+     * @return string
+     */
+    public function getParticipantTemplate()
+    {
+        return $this->participantTemplate;
+    }
+
+    /**
+     * Get sheetTemplate
+     *
+     * @return string
+     */
+    public function getSheetTemplate()
+    {
+        return $this->sheetTemplate;
     }
 }

@@ -50,7 +50,7 @@ class EventController extends Controller
         }
 
         $typeViews = $this
-            ->get('vimeet_infrastructure.repository.participant.type_repository')
+            ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewsByEvent($eventView->id, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
@@ -129,13 +129,13 @@ class EventController extends Controller
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
             'locale'   => $request->getLocale(),
-            'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($typeView->id)
+            'template' => $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($typeView->id)
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-            $type        = $this->get('vimeet_infrastructure.repository.participant.type_repository')->getById($typeView->id);
+            $type        = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
             $participate = new Participate($this->getUser(), $event, $type, $create->data);
 
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
@@ -170,7 +170,7 @@ class EventController extends Controller
         $update = new Update($participantView->id, $participantView->data);
         $form   = $this->createForm(new ParticipantUpdateType(), $update, [
             'locale'   => $request->getLocale(),
-            'template' => $this->get('vimeet_infrastructure.repository.form_repository')->getTemplate($participantView->typeId)
+            'template' => $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($participantView->typeId)
         ]);
         $form->add('submit', 'submit');
 
@@ -204,8 +204,8 @@ class EventController extends Controller
         $this->checkParticipantAccess($eventView, $participantView);
 
         $template = $this
-            ->get('vimeet_infrastructure.repository.form_repository')
-            ->getTemplate($participantView->typeId);
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getParticipantTemplate($participantView->typeId);
 
         return $this->render('VimeetAppBundle:Event:participationSummary.html.twig', [
             'participantView' => $participantView,

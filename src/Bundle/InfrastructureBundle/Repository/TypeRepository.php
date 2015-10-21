@@ -82,4 +82,21 @@ class TypeRepository implements TypeRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantTemplate($typeId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.participantTemplate')
+            ->from('Entity:Type', 'type')
+            ->where('type.id = :typeId')
+            ->setParameter('typeId', $typeId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

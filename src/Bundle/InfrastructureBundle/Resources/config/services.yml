@@ -6,16 +6,12 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
             - @doctrine.orm.entity_manager
-    vimeet_infrastructure.repository.participant.type_repository:
+    vimeet_infrastructure.repository.type_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
-        arguments:
-            - @doctrine.orm.entity_manager
-    vimeet_infrastructure.repository.form_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\FormRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.participant_repository:

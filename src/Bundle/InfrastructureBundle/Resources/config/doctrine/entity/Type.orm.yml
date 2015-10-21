@@ -9,6 +9,10 @@ Proximum\Vimeet\Domain\Model\Type:
     fields:
         position:
             type: integer
+        participantTemplate:
+            type: text
+        sheetTemplate:
+            type: text
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
