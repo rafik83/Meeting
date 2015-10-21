@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Proximum\Vimeet\Domain\Model\Type;
 
+/**
+ * "Participant"
+ */
 class Participant
 {
     /**

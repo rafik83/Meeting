@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Domain\Model;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
+/**
+ * "Compte utilisateur"
+ */
 class User implements UserInterface, EquatableInterface, \Serializable
 {
     /**
