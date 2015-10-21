@@ -58,9 +58,8 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function updatePassword(User $user, $salt, $password)
+    public function set(User $user)
     {
-        $user->updatePassword($salt, $password);
         $this->entityManager->flush($user);
     }
 }

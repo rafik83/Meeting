@@ -55,6 +55,7 @@ class ChangePasswordHandler
         $salt     = $this->saltGenerator->generate();
         $password = $this->encoder->encode($changePassword->plainPassword, $salt);
 
-        $this->userRepository->updatePassword($user, $salt, $password);
+        $user->updatePassword($salt, $password);
+        $this->userRepository->set($user);
     }
 }

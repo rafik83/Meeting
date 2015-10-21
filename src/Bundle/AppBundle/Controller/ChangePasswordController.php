@@ -32,7 +32,7 @@ class ChangePasswordController extends Controller
 
         $subdomain = $request->attributes->get('subdomain');
 
-        $changePassword = new ChangePassword($this->getUser(), null, null);
+        $changePassword = new ChangePassword($this->getUser());
 
         $form = $this->createForm(new ChangePasswordType(), $changePassword, [
             'action' => $this->generateUrl('event_change_password', ['subdomain' => $subdomain]),

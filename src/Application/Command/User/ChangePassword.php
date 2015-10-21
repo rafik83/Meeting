@@ -30,14 +30,10 @@ class ChangePassword
     public $plainPassword;
 
     /**
-     * @param User   $user
-     * @param string $currentPassword
-     * @param string $plainPassword
+     * @param User $user
      */
-    public function __construct(User $user, $currentPassword, $plainPassword)
+    public function __construct(User $user)
     {
-        $this->user            = $user;
-        $this->currentPassword = $currentPassword;
-        $this->plainPassword   = $plainPassword;
+        $this->user = $user;
     }
 }
