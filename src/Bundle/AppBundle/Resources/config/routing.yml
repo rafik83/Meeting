@@ -22,13 +22,21 @@ event_participation:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event:participation }
 
-event_summary:
-    path: /summary/{participantView}
+event_participation_summary:
+    path: /participation/{participantView}/summary
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event:summary }
+    defaults: { _controller: VimeetAppBundle:Event:participationSummary }
+
+event_participation_update:
+    path: /participation/{participantView}/update
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event:participationUpdate }
 
 event_login:
     path: /login

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -41,12 +42,37 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Participant $participant)
+    {
+        $this->entityManager->flush($participant);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from('Entity:Participant', 'participant')
+            ->where('participant.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getParticipantView($participantId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.data, user.email, event.id, event.title, type.id, typeTranslation.title)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.id, participant.data, user.email, event.id, event.title, type.id, typeTranslation.title)')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user')
             ->join('participant.event', 'event')
@@ -58,5 +84,27 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastParticipantIdForEventAndUser($userId, $eventId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant.id')
+            ->from('Entity:Participant', 'participant')
+            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->setParameter('userId', $userId)
+            ->join('participant.event', 'event', 'WITH', 'event.id = :eventId')
+            ->setParameter('eventId', $eventId)
+            ->orderBy('participant.id', 'DESC')
+            ->setMaxResults(1);
+
+        $result = $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+
+        return $result ? intval($result) : null;
     }
 }

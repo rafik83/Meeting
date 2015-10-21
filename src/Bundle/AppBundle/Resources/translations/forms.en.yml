@@ -11,8 +11,16 @@ form:
                         label: Refill the password
             submit:
                 label: Submit
-    participant:
+    participant_create:
         children:
+            data:
+                label: Participation
+            submit:
+                label: Submit
+    participant_update:
+        children:
+            data:
+                label: Participation
             submit:
                 label: Submit
     login:

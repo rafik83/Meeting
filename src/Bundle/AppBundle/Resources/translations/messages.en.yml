@@ -15,3 +15,8 @@ change_password:
     link: Change password
 
 messages.register.email_already_exists: An account with this email address already exists
+
+link:
+    participation:
+        summary: See my participation sheet
+        update: Update my participation sheet

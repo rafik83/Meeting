@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class ParticipantView
 {
+    public $id;
+
     public $data;
 
     public $userEmail;
@@ -24,8 +26,9 @@ class ParticipantView
 
     public $typeTitle;
 
-    public function __construct($data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
+    public function __construct($id, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
     {
+        $this->id         = $id;
         $this->data       = json_decode($data, true);
         $this->userEmail  = $userEmail;
         $this->eventId    = $eventId;
