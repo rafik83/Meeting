@@ -130,9 +130,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $participationNumber = count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()));
-
-        if (1 <= $participationNumber) {
+        if (1 <= count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()))) {
             throw new AccessDeniedException('Participation already created');
         }
 
@@ -145,9 +143,6 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if (1 <= $participationNumber) {
-                throw new AccessDeniedException('Participation already created');
-            }
 
             // Create the participant
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
