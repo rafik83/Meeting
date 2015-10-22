@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block body %}
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -90,17 +90,34 @@ class Type
     /**
      * Get participantTemplate
      *
-     * @return string
+     * @return array
      */
     public function getParticipantTemplate()
     {
         return json_decode($this->participantTemplate, true);
     }
 
+    public function getSheetData()
+    {
+        $data = [];
+
+        $template = $this->getSheetTemplate();
+
+        foreach ($template as $key => $block) {
+            $data[$key] = [];
+
+            foreach ($block['template'] as $i => $row) {
+                $data[$key][$i] = null;
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * Get sheetTemplate
      *
-     * @return string
+     * @return array
      */
     public function getSheetTemplate()
     {

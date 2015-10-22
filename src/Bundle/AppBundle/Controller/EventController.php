@@ -258,7 +258,7 @@ class EventController extends Controller
     {
         $updateBlock = new UpdateBlock($sheet, $block);
         $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
-            'template' => $sheet->getType()->getSheetTemplate()[$block],
+            'template' => $sheet->getType()->getSheetTemplate()[$block]['template'],
             'locale' => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
@@ -277,6 +277,7 @@ class EventController extends Controller
         return $this->render('VimeetAppBundle:Event:updateBlock.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
+            'form'      => $form->createView(),
         ]);
     }
 
