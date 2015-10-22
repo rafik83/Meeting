@@ -36,22 +36,15 @@ class Participant
     private $data;
 
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $data
+     * @param Sheet $sheet
+     * @param User  $user
+     * @param array $data
      */
-    public function __construct(Sheet $sheet, User $user, $data)
+    public function __construct(Sheet $sheet, User $user, array $data)
     {
         $this->sheet = $sheet;
         $this->user  = $user;
-
-        $data = json_encode($data);
-
-        if ($data === null) {
-            throw new \InvalidArgumentException('Invalid json data');
-        }
-
-        $this->data = $data;
+        $this->setData($data);
     }
 
     /**
@@ -87,7 +80,7 @@ class Participant
     /**
      * Get data
      *
-     * @return string
+     * @return array
      */
     public function getData()
     {
@@ -103,8 +96,12 @@ class Participant
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $data = json_encode($data);
 
-        return $this;
+        if ($data === null) {
+            throw new \InvalidArgumentException('Invalid json data');
+        }
+
+        $this->data = $data;
     }
 }
