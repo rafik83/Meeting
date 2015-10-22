@@ -31,5 +31,3 @@ event:
                 title: Participants
             add_participant:
                 title: Add a participant
-        add_participant:
-            title: Add a participant
