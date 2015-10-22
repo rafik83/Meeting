@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EventController extends Controller
 {
@@ -131,6 +132,12 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $participationNumber = count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()));
+
+        if (1 <= $participationNumber) {
+            throw new AccessDeniedException('Participation already created');
+        }
+
         // Create participate form
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
@@ -140,6 +147,10 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if (1 <= $participationNumber) {
+                throw new AccessDeniedException('Participation already created');
+            }
+
             // Create the participant
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);

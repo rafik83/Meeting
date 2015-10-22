@@ -109,4 +109,17 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $result ? intval($result) : null;
     }
+
+    public function getAllParticipantForUser($userId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant.id')
+            ->from('Entity:Participant', 'participant')
+            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->setParameter('userId', $userId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
