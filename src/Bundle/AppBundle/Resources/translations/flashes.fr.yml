@@ -6,3 +6,6 @@ flash:
             success: Votre fiche de participation a été sauvegardée
     change_password:
         success: Votre mot de passe a été changé
+    sheet:
+        add_participant:
+            success: Le participant a bien été ajouter
