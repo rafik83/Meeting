@@ -31,11 +31,6 @@ class Participant
     private $user;
 
     /**
-     * @var Type
-     */
-    private $type;
-
-    /**
      * @var string
      */
     private $data;
@@ -43,15 +38,20 @@ class Participant
     /**
      * @param Sheet  $sheet
      * @param User   $user
-     * @param Type   $type
      * @param string $data
      */
-    public function __construct(Sheet $sheet, User $user, Type $type, $data)
+    public function __construct(Sheet $sheet, User $user, $data)
     {
         $this->sheet = $sheet;
         $this->user  = $user;
-        $this->type  = $type;
-        $this->data  = $data;
+
+        $data = json_encode($data);
+
+        if ($data === null) {
+            throw new \InvalidArgumentException('Invalid json data');
+        }
+
+        $this->data = $data;
     }
 
     /**
@@ -85,23 +85,13 @@ class Participant
     }
 
     /**
-     * Get type
-     *
-     * @return Type
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Get data
      *
      * @return string
      */
     public function getData()
     {
-        return $this->data;
+        return json_decode($this->data, true);
     }
 
     /**
