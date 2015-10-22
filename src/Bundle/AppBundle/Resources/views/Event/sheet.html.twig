@@ -5,6 +5,9 @@
 {% block body %}
     {{ include('VimeetAppBundle:Event:title.html.twig') }}
 
+    <h2>{{ type_view.title }}</h2>
+    <h3>{{ 'sheet.participant.title'|trans }}</h3>
+
     <h3>Participants</h3>
     {% for participant in sheet.participants %}
         <div class="row">
