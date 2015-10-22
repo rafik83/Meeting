@@ -10,6 +10,10 @@ logout:
     link: Logout
     confirmation: Are you sure you want to logout of your account?
 
+change_password:
+    title: Change password
+    link: Change password
+
 messages.register.email_already_exists: An account with this email address already exists
 
 event:

@@ -3,7 +3,7 @@
 {% block title 'logout.title'|trans %}
 
 {% block body %}
-    <h1>{{ event.title }}</h1>
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
 
     <h2>{{ 'logout.title'|trans }}</h2>
 

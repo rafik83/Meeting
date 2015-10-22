@@ -234,6 +234,7 @@ class EventController extends Controller
             ->getParticipantTemplate($participantView->typeId);
 
         return $this->render('VimeetAppBundle:Event:participationSummary.html.twig', [
+            'eventView'       => $eventView,
             'participantView' => $participantView,
             'template'        => $template,
         ]);

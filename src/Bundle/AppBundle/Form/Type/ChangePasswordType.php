@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegisterType extends AbstractType
+class ChangePasswordType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -22,8 +22,8 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email')
-            ->add('password', 'repeated', [
+            ->add('currentPassword', 'password')
+            ->add('plainPassword', 'repeated', [
                 'type'            => 'password',
                 'invalid_message' => 'validators.password.mismatch',
             ])
@@ -36,7 +36,7 @@ class RegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'intention'  => 'register',
+            'intention'  => 'change_password',
         ]);
     }
 
@@ -45,6 +45,6 @@ class RegisterType extends AbstractType
      */
     public function getName()
     {
-        return 'register';
+        return 'change_password';
     }
 }

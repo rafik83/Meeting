@@ -4,3 +4,5 @@ flash:
             success: Your account is created
         participation:
             success: Your participate entry has been saved
+    change_password:
+        success: Your password has been updated

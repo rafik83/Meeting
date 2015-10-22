@@ -4,3 +4,5 @@ flash:
             success: Votre compte a bien été créé
         participation:
             success: Votre fiche de participation a été sauvegardée
+    change_password:
+        success: Votre mot de passe a été changé

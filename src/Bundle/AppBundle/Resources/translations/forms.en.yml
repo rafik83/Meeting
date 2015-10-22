@@ -31,3 +31,15 @@ form:
                 label: Password
             submit:
                 label: Login
+    change_password:
+        children:
+            currentPassword:
+                label: Current password
+            plainPassword:
+                children:
+                    first:
+                        label: New password
+                    second:
+                        label: Refill the new password
+            submit:
+                label: Submit

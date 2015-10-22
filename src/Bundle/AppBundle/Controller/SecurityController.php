@@ -21,15 +21,15 @@ class SecurityController extends Controller
 {
     /**
      * @param Request   $request
-     * @param EventView $event
+     * @param EventView $eventView
      *
      * @return Response|RedirectResponse
      */
-    public function loginAction(Request $request, EventView $event)
+    public function loginAction(Request $request, EventView $eventView)
     {
         $subdomain = $request->attributes->get('subdomain');
 
-        if (null !== $this->getUser()) {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
         }
 
@@ -45,28 +45,24 @@ class SecurityController extends Controller
         ]);
 
         return $this->render('VimeetAppBundle:Security:login.html.twig', [
-            'event' => $event,
-            'error' => $error,
-            'form'  => $form->createView(),
+            'eventView' => $eventView,
+            'error'     => $error,
+            'form'      => $form->createView(),
         ]);
     }
 
     /**
      * @param Request   $request
-     * @param EventView $event
+     * @param EventView $eventView
      *
      * @return Response|RedirectResponse
      */
-    public function logoutConfirmationAction(Request $request, EventView $event)
+    public function logoutConfirmationAction(Request $request, EventView $eventView)
     {
-        $subdomain = $request->attributes->get('subdomain');
-
-        if (null === $this->getUser()) {
-            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
-        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         return $this->render('VimeetAppBundle:Security:logout_confirmation.html.twig', [
-            'event' => $event,
+            'eventView' => $eventView,
         ]);
     }
 }

@@ -42,6 +42,12 @@ services:
             - @vimeet_infrastructure.repository.user_repository
             - @vimeet_infrastructure.adapter.encoder_adapter
             - @vimeet_infrastructure.adapter.salt_generator
+    vimeet_infrastructure.application.command.user.change_password:
+        class: Proximum\Vimeet\Application\Command\User\ChangePasswordHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.adapter.encoder_adapter
+            - @vimeet_infrastructure.adapter.salt_generator
     vimeet_infrastructure.application.command.user.participate_handler:
         class: Proximum\Vimeet\Application\Command\User\ParticipateHandler
         arguments:
