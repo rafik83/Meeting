@@ -37,4 +37,25 @@ class SheetRepository implements SheetRepositoryInterface
         $this->entityManager->persist($sheet);
         $this->entityManager->flush($sheet);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsIdByUserAndEvent($user, $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\SheetView(sheet.id, typeTranslation.title)')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user)
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
