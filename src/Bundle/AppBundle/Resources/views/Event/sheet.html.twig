@@ -29,6 +29,8 @@
         </div>
     </div>
 
+    {% set data = sheet.data %}
+
     {% for i, block in sheet.type.sheetTemplate %}
         <h3>{{ block['title'][app.request.locale] }}</h3>
         <table class="table">
@@ -41,7 +43,4 @@
         </table>
         <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Edit</a>
     {% endfor %}
-    <a href="{{ path('event_sheet_add_participant', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">
-        {{ 'event.sheet.block.participants.add'|trans }}
-    </a>
 {% endblock %}
