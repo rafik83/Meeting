@@ -19,6 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\User;
@@ -71,13 +72,15 @@ class EventController extends Controller
      */
     public function registerAction(Request $request, EventView $eventView, TypeView $typeView)
     {
+        // Redirect to participate form if the user is already authenticated
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('event_participation', [
+            return $this->redirectToRoute('event_participate', [
                 'typeView'  => $typeView->id,
                 'subdomain' => $request->attributes->get('subdomain'),
             ]);
         }
 
+        // Else, create the register form
         $register = new Register();
         $register->locale = $request->getLocale();
 
@@ -92,11 +95,13 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
+                // Register and authenticate the user
                 $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
                 $this->authenticate($register->user);
                 $this->addFlash('success', 'flash.event.register.success');
 
-                return $this->redirectToRoute('event_participation', [
+                // Go to participate form
+                return $this->redirectToRoute('event_participate', [
                     'typeView'  => $typeView->id,
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
@@ -122,10 +127,11 @@ class EventController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function participationAction(Request $request, EventView $eventView, TypeView $typeView)
+    public function participateAction(Request $request, EventView $eventView, TypeView $typeView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // Create participate form
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
             'locale'   => $request->getLocale(),
@@ -134,6 +140,7 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            // Create the participant
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
             $participate = new Participate($this->getUser(), $event, $type, $create->data);
@@ -141,16 +148,35 @@ class EventController extends Controller
             $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
             $this->addFlash('success', 'flash.event.participation.success');
 
-            return $this->redirectToRoute('event_participation_summary', [
-                'subdomain'       => $request->attributes->get('subdomain'),
-                'participantView' => $participate->participant->getId(),
+            // Go to the sheet
+            return $this->redirectToRoute('event_sheet', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $participate->sheet->getId(),
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Event:participation.html.twig', [
+        return $this->render('VimeetAppBundle:Event:participate.html.twig', [
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
+        ]);
+    }
+
+
+    /**
+     * Sheet
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return RedirectResponse|Response
+     */
+    public function sheetAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
         ]);
     }
 

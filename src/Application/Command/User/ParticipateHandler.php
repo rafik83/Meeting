@@ -11,20 +11,31 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class ParticipateHandler
 {
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
     /**
      * @var ParticipantRepositoryInterface
      */
     private $participantRepository;
 
     /**
+     * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        ParticipantRepositoryInterface $participantRepository
+    ) {
+        $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
     }
 
@@ -33,11 +44,14 @@ class ParticipateHandler
      */
     public function handle(Participate $participate)
     {
-        $data        = json_encode($participate->data);
-        $participant = new Participant($participate->user, $participate->event, $participate->type, $data);
+        // Create a new sheet for this event
+        $sheet = new Sheet($participate->event);
+        $this->sheetRepository->add($sheet);
 
+        // Create a new participant
+        $participant = new Participant($sheet, $participate->user, $participate->type, json_encode($participate->data));
         $this->participantRepository->add($participant);
 
-        $participate->participant = $participant;
+        $participate->sheet = $sheet;
     }
 }
