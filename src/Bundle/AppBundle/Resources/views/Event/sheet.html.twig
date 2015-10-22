@@ -4,9 +4,8 @@
 
 {% block body %}
     <h1>{{ eventView.title }}</h1>
-    <div class="row">
-        {% for participant in sheet.participants %}
-            {{ dump(participant.data) }}
-        {% endfor %}
-    </div>
+    <h2>Participants</h2>
+    {% for participant in sheet.participants %}
+        {{ include('VimeetAppBundle:Event:participant.html.twig', { 'template': sheet.type.participantTemplate, 'data': participant.data }) }}
+    {% endfor %}
 {% endblock %}
