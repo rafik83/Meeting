@@ -98,7 +98,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
             ->setParameter('userId', $userId)
-            ->join('participant.event', 'event', 'WITH', 'event.id = :eventId')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.type', 'type')
+            ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
             ->setParameter('eventId', $eventId)
             ->orderBy('participant.id', 'DESC')
             ->setMaxResults(1);

@@ -16,7 +16,6 @@ change_password:
 
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
 
-link:
-    participation:
-        summary: Voir ma fiche de participation
-        update: Modifier ma fiche de participation
+event:
+    link:
+        see_my_sheet: Voir ma fiche %type%
