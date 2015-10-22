@@ -3,7 +3,8 @@
 {% block title eventView.title %}
 
 {% block body %}
-    <h1>{{ eventView.title }}</h1>
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+
     <h2>Participants</h2>
     {% for participant in sheet.participants %}
         {{ include('VimeetAppBundle:Event:participant.html.twig', { 'template': sheet.type.participantTemplate, 'data': participant.data }) }}
