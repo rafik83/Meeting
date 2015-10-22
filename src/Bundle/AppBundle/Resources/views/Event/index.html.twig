@@ -5,7 +5,6 @@
 {% block body %}
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
-
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         {% for sheet in sheets %}
             <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
