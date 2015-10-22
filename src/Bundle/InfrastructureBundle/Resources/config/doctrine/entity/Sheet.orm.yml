@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Sheet:
+    type:  entity
+    table: sheet
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        data:
+            type: text
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        participants:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            mappedBy: sheet

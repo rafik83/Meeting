@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Type;
-
 /**
  * "Participant"
  */
@@ -23,14 +21,14 @@ class Participant
     private $id;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @var User
      */
     private $user;
-
-    /**
-     * @var Event
-     */
-    private $event;
 
     /**
      * @var Type
@@ -43,15 +41,15 @@ class Participant
     private $data;
 
     /**
+     * @param Sheet  $sheet
      * @param User   $user
-     * @param Event  $event
      * @param Type   $type
      * @param string $data
      */
-    public function __construct(User $user, Event $event, Type $type, $data)
+    public function __construct(Sheet $sheet, User $user, Type $type, $data)
     {
+        $this->sheet = $sheet;
         $this->user  = $user;
-        $this->event = $event;
         $this->type  = $type;
         $this->data  = $data;
     }
@@ -77,13 +75,13 @@ class Participant
     }
 
     /**
-     * Get event
+     * Get sheet
      *
-     * @return Event
+     * @return Sheet
      */
-    public function getEvent()
+    public function getSheet()
     {
-        return $this->event;
+        return $this->sheet;
     }
 
     /**
