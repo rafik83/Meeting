@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block body %}
+    <h1>{{ eventView.title }}</h1>
+    <div class="row">
+        {% for participant in sheet.participants %}
+            {{ dump(participant.data) }}
+        {% endfor %}
+    </div>
+{% endblock %}
