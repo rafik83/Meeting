@@ -3,9 +3,10 @@
 {% block title eventView.title %}
 
 {% block body %}
-    <h1>{{ eventView.title }}</h1>
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
     <h2>Participants</h2>
     {% for participant in sheet.participants %}
         {{ include('VimeetAppBundle:Event:participant.html.twig', { 'template': sheet.type.participantTemplate, 'data': participant.data }) }}
     {% endfor %}
+    <a href="{{ path('event_sheet_add_participant', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Ajouter un participant</a>
 {% endblock %}

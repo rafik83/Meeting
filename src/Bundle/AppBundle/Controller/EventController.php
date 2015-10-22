@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
@@ -177,6 +179,40 @@ class EventController extends Controller
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return RedirectResponse|Response
+     */
+    public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $add  = new Add($sheet, $request->getLocale());
+        $form = $this->createForm(new AddParticipantType(), $add, [
+            'template' => $sheet->getType()->getParticipantTemplate(),
+            'locale'   => $request->getLocale(),
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+            $this->addFlash('success', 'flash.event.sheet.add_participant.success');
+
+            // Go to the sheet
+            return $this->redirectToRoute('event_sheet', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'form'      => $form->createView(),
         ]);
     }
 
