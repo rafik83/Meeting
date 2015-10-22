@@ -42,6 +42,11 @@ class Sheet
      */
     private $data;
 
+    /**
+     * @param Event $event
+     * @param Type  $type
+     * @param array $data
+     */
     public function __construct(Event $event, Type $type, array $data)
     {
         $this->event        = $event;
