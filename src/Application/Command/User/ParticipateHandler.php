@@ -45,11 +45,11 @@ class ParticipateHandler
     public function handle(Participate $participate)
     {
         // Create a new sheet for this event
-        $sheet = new Sheet($participate->event);
+        $sheet = new Sheet($participate->event, $participate->type);
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
-        $participant = new Participant($sheet, $participate->user, $participate->type, json_encode($participate->data));
+        $participant = new Participant($sheet, $participate->user, $participate->data);
         $this->participantRepository->add($participant);
 
         $participate->sheet = $sheet;
