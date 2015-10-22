@@ -26,7 +26,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type();
-        $sheet = new Sheet($event, $type);
+        $sheet = new Sheet($event, $type, []);
         $owner = false;
 
         $expectedUser        = new User('test@test.com', '', '', 'fr');
@@ -51,7 +51,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type();
-        $sheet = new Sheet($event, $type);
+        $sheet = new Sheet($event, $type, []);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
 
