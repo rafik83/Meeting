@@ -12,7 +12,6 @@ logout:
 
 messages.register.email_already_exists: An account with this email address already exists
 
-link:
-    participation:
-        summary: See my participation sheet
-        update: Update my participation sheet
+event:
+    link:
+        see_my_sheet: See my %type% sheet
