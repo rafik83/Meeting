@@ -16,5 +16,3 @@ Proximum\Vimeet\Domain\Model\Participant:
             inversedBy: participants
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
-        type:
-            targetEntity: Proximum\Vimeet\Domain\Model\Type

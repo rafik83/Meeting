@@ -25,6 +25,11 @@ class Sheet
     private $event;
 
     /**
+     * @var Type
+     */
+    private $type;
+
+    /**
      * @var ArrayCollection
      */
     private $participants;
@@ -34,9 +39,10 @@ class Sheet
      */
     private $data;
 
-    public function __construct(Event $event)
+    public function __construct(Event $event, Type $type)
     {
         $this->event        = $event;
+        $this->type         = $type;
         $this->participants = new ArrayCollection();
     }
 
@@ -58,6 +64,16 @@ class Sheet
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * Get type
+     *
+     * @return Type
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
