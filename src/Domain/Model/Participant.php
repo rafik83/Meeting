@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Participant\Type;
-
+/**
+ * "Participant"
+ */
 class Participant
 {
     /**
@@ -20,19 +21,14 @@ class Participant
     private $id;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @var User
      */
     private $user;
-
-    /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var Type
-     */
-    private $type;
 
     /**
      * @var string
@@ -40,17 +36,15 @@ class Participant
     private $data;
 
     /**
-     * @param User   $user
-     * @param Event  $event
-     * @param Type   $type
-     * @param string $data
+     * @param Sheet $sheet
+     * @param User  $user
+     * @param array $data
      */
-    public function __construct(User $user, Event $event, Type $type, $data)
+    public function __construct(Sheet $sheet, User $user, array $data)
     {
+        $this->sheet = $sheet;
         $this->user  = $user;
-        $this->event = $event;
-        $this->type  = $type;
-        $this->data  = $data;
+        $this->setData($data);
     }
 
     /**
@@ -74,33 +68,23 @@ class Participant
     }
 
     /**
-     * Get event
+     * Get sheet
      *
-     * @return Event
+     * @return Sheet
      */
-    public function getEvent()
+    public function getSheet()
     {
-        return $this->event;
-    }
-
-    /**
-     * Get type
-     *
-     * @return Type
-     */
-    public function getType()
-    {
-        return $this->type;
+        return $this->sheet;
     }
 
     /**
      * Get data
      *
-     * @return string
+     * @return array
      */
     public function getData()
     {
-        return $this->data;
+        return json_decode($this->data, true);
     }
 
     /**
@@ -112,8 +96,12 @@ class Participant
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $data = json_encode($data);
 
-        return $this;
+        if ($data === null) {
+            throw new \InvalidArgumentException('Invalid json data');
+        }
+
+        $this->data = $data;
     }
 }

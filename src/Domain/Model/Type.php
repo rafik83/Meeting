@@ -8,11 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Participant;
+namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Event;
 
+/**
+ * "Type de participation"
+ */
 class Type
 {
     /**
@@ -34,6 +36,16 @@ class Type
      * @var ArrayCollection
      */
     private $translations;
+
+    /**
+     * @var string
+     */
+    private $participantTemplate;
+
+    /**
+     * @var string
+     */
+    private $sheetTemplate;
 
     /**
      * Constructor
@@ -73,5 +85,25 @@ class Type
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Get participantTemplate
+     *
+     * @return string
+     */
+    public function getParticipantTemplate()
+    {
+        return json_decode($this->participantTemplate, true);
+    }
+
+    /**
+     * Get sheetTemplate
+     *
+     * @return string
+     */
+    public function getSheetTemplate()
+    {
+        return json_decode($this->sheetTemplate, true);
     }
 }

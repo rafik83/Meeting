@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Participant\Type:
+Proximum\Vimeet\Domain\Model\Type:
     type:  entity
-    table: participant_type
+    table: type
     id:
         id:
             type: integer
@@ -9,9 +9,13 @@ Proximum\Vimeet\Domain\Model\Participant\Type:
     fields:
         position:
             type: integer
+        participantTemplate:
+            type: text
+        sheetTemplate:
+            type: text
     oneToMany:
         translations:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant\TypeTranslation
+            targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
             mappedBy: type
     manyToOne:
         event:

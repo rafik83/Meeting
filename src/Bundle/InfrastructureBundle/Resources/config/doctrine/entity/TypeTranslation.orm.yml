@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
+Proximum\Vimeet\Domain\Model\TypeTranslation:
     type:  entity
-    table: participant_type_translation
+    table: type_translation
     id:
         id:
             type: integer
@@ -13,5 +13,5 @@ Proximum\Vimeet\Domain\Model\Participant\TypeTranslation:
             type: string
     manyToOne:
         type:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant\Type
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
             inversedBy: translations

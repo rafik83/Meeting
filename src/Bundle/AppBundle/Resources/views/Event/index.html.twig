@@ -5,19 +5,15 @@
 {% block body %}
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
-
-    {% if is_granted('IS_AUTHENTICATED_FULLY') and participantId is not null %}
-        <a href="{{ path('event_participation_summary', {
-            'subdomain': app.request.attributes.get('subdomain'),
-            'participantView': participantId
-        }) }}">{{ 'link.participation.summary'|trans }}</a>
-        <a href="{{ path('event_participation_update', {
-            'subdomain': app.request.attributes.get('subdomain'),
-            'participantView': participantId
-        }) }}">{{ 'link.participation.update'|trans }}</a>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% for sheet in sheets %}
+            <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
+            </a>
+        {% endfor %}
     {% else %}
         <ul>
-            {% for type in participant_types %}
+            {% for type in types %}
                 <li>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <a href="{{ path('event_participation', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>

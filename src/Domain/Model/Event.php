@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * "Evènement"
+ */
 class Event
 {
     /**

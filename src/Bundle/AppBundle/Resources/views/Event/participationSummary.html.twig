@@ -8,8 +8,8 @@
     <table class="table">
         {% for key, field in template %}
             <tr>
-                <th>{{ field['label'][app.request.locale] }}</th>
-                <td>{{ participantView.data[key] }}</td>
+                <th>{{ field['label'][app.request.locale]|default }}</th>
+                <td>{{ participantView.data[key]|default }}</td>
             </tr>
         {% endfor %}
     </table>

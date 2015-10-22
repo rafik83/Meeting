@@ -6,20 +6,20 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
             - @doctrine.orm.entity_manager
-    vimeet_infrastructure.repository.participant.type_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Participant\TypeRepository
+    vimeet_infrastructure.repository.type_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
             - @doctrine.orm.entity_manager
-    vimeet_infrastructure.repository.form_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\FormRepository
-        arguments:
-            - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.participant_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ParticipantRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.sheet_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
             - @doctrine.orm.entity_manager
 
@@ -51,6 +51,7 @@ services:
     vimeet_infrastructure.application.command.user.participate_handler:
         class: Proximum\Vimeet\Application\Command\User\ParticipateHandler
         arguments:
+            - @vimeet_infrastructure.repository.sheet_repository
             - @vimeet_infrastructure.repository.participant_repository
     vimeet_infrastructure.vimeet.application.command.participant.update_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler

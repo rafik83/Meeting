@@ -1,26 +1,3 @@
-Proximum\Vimeet\Domain\Model\User:
-    test:
-        __construct: false
-        email: "test@test.com"
-        salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
-        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
-        locale: "fr"
-
-Proximum\Vimeet\Domain\Model\Event:
-    event_rdv_carnot_2016:
-        title: Les rendez-vous Carnot 2016
-        domain: rdv-carnot-2016.<domain()>
-
-Proximum\Vimeet\Domain\Model\EventTranslation:
-    event_translation_rdv_carnot_2016_fr:
-        description: Participez aux Rendez-vous CARNOT  2016 : le rendez-vous professionnel de la recherche au service des entreprises et des collectivités, les 18 et 19 novembre 2016 / Paris / France.
-        locale: fr
-        event: @event_rdv_carnot_2016
-    event_translation_rdv_carnot_2016_en:
-        description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
-        locale: en
-        event: @event_rdv_carnot_2016
-
 Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
@@ -135,21 +112,3 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         title: Congressman
         type: @congressiste
         locale: en
-
-Proximum\Vimeet\Domain\Model\Participant:
-    participant_1:
-        __construct: false
-        user: @test
-        event: @event_rdv_carnot_2016
-        type: @exposant
-        data: >
-            [
-                "Dutest",
-                "Jean",
-                "12, rue du test",
-                "75002",
-                "Testville",
-                "TestLand",
-                "0909090909",
-                "0909090909"
-            ]

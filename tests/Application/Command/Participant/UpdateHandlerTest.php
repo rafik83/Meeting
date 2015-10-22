@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -23,10 +25,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
-        $type  = new Participant\Type();
+        $type  = new Type();
+        $sheet = new Sheet($event, $type);
 
-        $participant         = new Participant($user, $event, $type, '{"foobar":"barfoo"}');
-        $expectedParticipant = new Participant($user, $event, $type, '{"foobar":"foobar"}');
+        $participant         = new Participant($sheet, $user, ['foobar' => 'barfoo']);
+        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'foobar']);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->findById(1)->shouldBeCalled()->willReturn($participant);
