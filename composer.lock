@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "05d6e8fcff89019a4e6dbd5db48393d4",
+    "hash": "734227673109ad9b9bb5a7c4ec481944",
+    "content-hash": "09c9f14a6582cb5ce4f3661ac322922a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1283,6 +1284,51 @@
                 "sql"
             ],
             "time": "2014-01-12 16:20:24"
+        },
+        {
+            "name": "maximecolin/satisfaction",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maximecolin/satisfaction.git",
+                "reference": "10e75db072560cc69764f71791342acce4eb202c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maximecolin/satisfaction/zipball/10e75db072560cc69764f71791342acce4eb202c",
+                "reference": "10e75db072560cc69764f71791342acce4eb202c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Satisfaction": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maxime Colin",
+                    "email": "contact@maximecolin.fr"
+                }
+            ],
+            "description": "A PHP implementation of the specification pattern for DDD",
+            "homepage": "http://www.maximecolin.fr",
+            "keywords": [
+                "ddd",
+                "pattern",
+                "specification"
+            ],
+            "time": "2014-11-01 12:50:26"
         },
         {
             "name": "monolog/monolog",

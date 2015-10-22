@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -185,69 +186,24 @@ class EventController extends Controller
      */
     public function sheetAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-        ]);
-    }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-    /**
-     * Edit a participation
-     *
-     * @param Request         $request
-     * @param EventView       $eventView
-     * @param ParticipantView $participantView
-     *
-     * @return RedirectResponse|Response
-     */
-    public function participationUpdateAction(Request $request, EventView $eventView, ParticipantView $participantView)
-    {
-        $this->checkParticipantAccess($eventView, $participantView);
+        $sheetSpecification = new CanAccess($this->getUser());
 
-        $update = new Update($participantView->id, $participantView->data);
-        $form   = $this->createForm(new ParticipantUpdateType(), $update, [
-            'locale'   => $request->getLocale(),
-            'template' => $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($participantView->typeId)
-        ]);
-        $form->add('submit', 'submit');
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')->handle($update);
-            $this->addFlash('success', 'flash.event.participation.update.success');
-
-            return $this->redirectToRoute('event_participation_update', [
-                'subdomain'       => $request->attributes->get('subdomain'),
-                'participantView' => $participantView->id,
-            ]);
+        if (!$sheetSpecification->isSatisfiedBy($sheet))
+        {
+            throw new AccessDeniedException('No participant for this user attached on this sheet');
         }
 
-        return $this->render('VimeetAppBundle:Event:participationUpdate.html.twig', [
-            'form'            => $form->createView(),
-            'eventView'       => $eventView,
-            'participantView' => $participantView,
-        ]);
-    }
 
-    /**
-     * Participation summary
-     *
-     * @param EventView       $eventView
-     * @param ParticipantView $participantView
-     *
-     * @return Response
-     */
-    public function participationSummaryAction(EventView $eventView, ParticipantView $participantView)
-    {
-        $this->checkParticipantAccess($eventView, $participantView);
-
-        $template = $this
+        $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getParticipantTemplate($participantView->typeId);
+            ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event:participationSummary.html.twig', [
-            'eventView'       => $eventView,
-            'participantView' => $participantView,
-            'template'        => $template,
+        return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
+            'eventView' => $eventView,
+            'type_view' => $typeView,
+            'sheet'     => $sheet,
         ]);
     }
 
