@@ -13,6 +13,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+        type:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
     oneToMany:
         participants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
