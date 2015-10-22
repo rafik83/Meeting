@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     fields:
         data:
             type: text
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

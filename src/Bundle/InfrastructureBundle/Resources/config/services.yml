@@ -18,6 +18,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ParticipantRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.sheet_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -41,6 +45,7 @@ services:
     vimeet_infrastructure.application.command.user.participate_handler:
         class: Proximum\Vimeet\Application\Command\User\ParticipateHandler
         arguments:
+            - @vimeet_infrastructure.repository.sheet_repository
             - @vimeet_infrastructure.repository.participant_repository
     vimeet_infrastructure.vimeet.application.command.participant.update_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
