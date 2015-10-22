@@ -54,4 +54,12 @@ class UserRepository implements UserRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult() ? true : false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(User $user)
+    {
+        $this->entityManager->flush($user);
+    }
 }

@@ -10,6 +10,10 @@ logout:
     link: Déconnecter
     confirmation: Êtes vous sûr de vouloir vous déconnecter de votre compte ?
 
+change_password:
+    title: Changer le mot de passe
+    link: Changer le mot de passe
+
 messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
 
 link:
