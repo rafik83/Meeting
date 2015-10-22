@@ -173,6 +173,8 @@ class EventController extends Controller
      */
     public function sheetAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
@@ -188,6 +190,8 @@ class EventController extends Controller
      */
     public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $add  = new Add($sheet, $request->getLocale());
         $form = $this->createForm(new AddParticipantType(), $add, [
             'template' => $sheet->getType()->getParticipantTemplate(),
