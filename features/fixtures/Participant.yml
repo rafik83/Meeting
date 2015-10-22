@@ -20,6 +20,7 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
         locale: en
         event: @event_rdv_carnot_2016
+
 Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
@@ -149,4 +150,3 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_1
         sheet: @sheet_1
         data:  ["Dutest","Jean","12, rue du test","75002","Testville","TestLand","0909090909","0909090909"]
-
