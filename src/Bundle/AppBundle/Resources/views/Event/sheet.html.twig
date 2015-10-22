@@ -41,4 +41,5 @@
         </table>
         <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Edit</a>
     {% endfor %}
+    <a href="{{ path('event_sheet_add_participant', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Ajouter un participant</a>
 {% endblock %}

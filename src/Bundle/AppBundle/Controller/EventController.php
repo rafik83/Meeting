@@ -283,6 +283,40 @@ class EventController extends Controller
     }
 
     /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return RedirectResponse|Response
+     */
+    public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $add  = new Add($sheet, $request->getLocale());
+        $form = $this->createForm(new AddParticipantType(), $add, [
+            'template' => $sheet->getType()->getParticipantTemplate(),
+            'locale'   => $request->getLocale(),
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+            $this->addFlash('success', 'flash.event.sheet.add_participant.success');
+
+            // Go to the sheet
+            return $this->redirectToRoute('event_sheet', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
      * Authenticate user
      *
      * @param User $user

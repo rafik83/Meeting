@@ -46,8 +46,8 @@ class Add
     public $owner;
 
     /**
-     * @param Sheet   $sheet
-     * @param string  $locale
+     * @param Sheet  $sheet
+     * @param string $locale
      */
     public function __construct(Sheet $sheet, $locale)
     {
