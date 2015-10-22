@@ -135,6 +135,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // Check if the user has already created a participate
         if (1 <= count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()))) {
             throw new AccessDeniedException('Participation already created');
         }
