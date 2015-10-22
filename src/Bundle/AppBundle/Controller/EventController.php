@@ -319,6 +319,40 @@ class EventController extends Controller
     }
 
     /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param integer   $block
+     *
+     * @return Response
+     */
+    public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
+    {
+        $updateBlock = new UpdateBlock($sheet, $block);
+        $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
+            'template' => $sheet->getType()->getSheetTemplate()[$block],
+            'locale' => $request->getLocale(),
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
+            $this->addFlash('success', 'flash.event.sheet.update_block.success');
+
+            // Go to the sheet
+            return $this->redirectToRoute('event_sheet', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:updateBlock.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+        ]);
+    }
+
+    /**
      * Authenticate user
      *
      * @param User $user
