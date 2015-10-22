@@ -41,6 +41,14 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Sheet $sheet)
+    {
+        $this->entityManager->flush($sheet);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsIdByUserAndEvent($user, $event, $locale)
     {
         $queryBuilder = $this

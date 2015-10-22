@@ -23,6 +23,11 @@ interface SheetRepositoryInterface
     public function add(Sheet $sheet);
 
     /**
+     * @param Sheet $sheet
+     */
+    public function set(Sheet $sheet);
+
+    /**
      * @param integer|User  $user
      * @param integer|Event $event
      * @param string        $locale
