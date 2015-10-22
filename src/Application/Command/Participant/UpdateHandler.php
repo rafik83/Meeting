@@ -33,7 +33,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $participant = $this->participantRepository->findById($update->id);
-        $participant->setData(json_encode($update->data));
+        $participant->setData($update->data);
 
         $this->participantRepository->set($participant);
     }
