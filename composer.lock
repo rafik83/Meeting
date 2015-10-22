@@ -1287,16 +1287,16 @@
         },
         {
             "name": "maximecolin/satisfaction",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maximecolin/satisfaction.git",
-                "reference": "10e75db072560cc69764f71791342acce4eb202c"
+                "reference": "4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maximecolin/satisfaction/zipball/10e75db072560cc69764f71791342acce4eb202c",
-                "reference": "10e75db072560cc69764f71791342acce4eb202c",
+                "url": "https://api.github.com/repos/maximecolin/satisfaction/zipball/4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e",
+                "reference": "4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e",
                 "shasum": ""
             },
             "require": {
@@ -1328,7 +1328,7 @@
                 "pattern",
                 "specification"
             ],
-            "time": "2014-11-01 12:50:26"
+            "time": "2015-10-22 13:34:06"
         },
         {
             "name": "monolog/monolog",
