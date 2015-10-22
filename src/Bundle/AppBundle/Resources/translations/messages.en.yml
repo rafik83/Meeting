@@ -14,12 +14,15 @@ change_password:
     title: Change password
     link: Change password
 
-messages.register.email_already_exists: An account with this email address already exists
+register:
+    email_already_exists: An account with this email address already exists
 
 event:
     link:
         see_my_sheet: See my %type% sheet
     sheet:
+        participant:
+            already_exists: This participant has already been added
         block:
             participants:
                 title: Participants

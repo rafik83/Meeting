@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -41,6 +42,8 @@ class AddHandler
 
     /**
      * @param Add $add
+     *
+     * @throws ParticipantAlreadyExistException
      */
     public function handle(Add $add)
     {
@@ -53,6 +56,11 @@ class AddHandler
             $this->userRepository->add($user);
         }
 
+        foreach ($add->sheet->getParticipants() as $participant) {
+            if ($participant->getUser() == $user) {
+                throw new ParticipantAlreadyExistException('User already linked to this sheet');
+            }
+        }
         // Add the new partipant
         $participant = new Participant($add->sheet, $user, $add->data);
         $this->participantRepository->add($participant);

@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
@@ -105,7 +106,7 @@ class EventController extends Controller
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
             } catch (EmailAlreadyExistsException $exception) {
-                $error = new FormError($this->get('translator')->trans('messages.register.email_already_exists'));
+                $error = new FormError($this->get('translator')->trans('register.email_already_exists'));
                 $form->get('email')->addError($error);
             }
         }
@@ -200,14 +201,19 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
-            $this->addFlash('success', 'flash.event.sheet.add_participant.success');
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+                $this->addFlash('success', 'flash.event.sheet.add_participant.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                ]);
+            } catch (ParticipantAlreadyExistException $exception) {
+                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
+                $form->get('email')->addError($error);
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
