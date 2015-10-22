@@ -110,6 +110,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $result ? intval($result) : null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getAllParticipantForUser($userId)
     {
         $queryBuilder = $this

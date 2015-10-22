@@ -16,8 +16,22 @@ use Satisfaction\CompositeSpecification;
 
 class CanAccess extends CompositeSpecification
 {
+    /**
+     * @var User
+     */
     private $user;
 
+    /**
+     * @param User $user
+     */
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isSatisfiedBy($sheet)
     {
         if (!$sheet instanceof Sheet) {
@@ -31,10 +45,5 @@ class CanAccess extends CompositeSpecification
         }
 
         return false;
-    }
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
     }
 }
