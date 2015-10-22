@@ -27,12 +27,20 @@ class UpdateBlock
     /**
      * @var array
      */
-    public $data;
+    public $data = [];
 
     public function __construct(Sheet $sheet, $block)
     {
         $this->sheet = $sheet;
         $this->block = $block;
-        $this->data  = $sheet->getData()[$block];
+
+        $sheetTemplate = $sheet->getType()->getSheetTemplate();
+        $blockTemplate = $sheetTemplate[$block]['template'];
+        $blockData     = array_combine(array_keys($blockTemplate), array_fill(0, count($blockTemplate), null));
+        $sheetData     = isset($sheet->getData()[$block]) ? $sheet->getData()[$block] : $blockData;
+
+        foreach ($blockData as $key => $value) {
+            $this->data[$key] = isset($sheetData[$key]) ? $sheetData[$key] : null;
+        }
     }
 }
