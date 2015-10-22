@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RegisterType extends AbstractType
 {
@@ -23,9 +24,20 @@ class RegisterType extends AbstractType
         $builder
             ->add('email', 'email')
             ->add('password', 'repeated', [
-                'type' => 'password'
+                'type'            => 'password',
+                'invalid_message' => 'validators.password.mismatch',
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'intention'  => 'register',
+        ]);
     }
 
     /**

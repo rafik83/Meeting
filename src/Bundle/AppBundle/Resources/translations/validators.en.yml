@@ -1,4 +1,6 @@
 validators:
     email: Email address is not valid
-    password: Password is too short, minimum is {{ limit }} characters
+    password:
+        min: Password is too short, minimum is {{ limit }} characters
+        mismatch: Password mismatch
     currentPassword: Current password is not correct
