@@ -217,24 +217,4 @@ class EventController extends Controller
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
     }
-
-    /**
-     * @param EventView       $eventView
-     * @param ParticipantView $participantView
-     */
-    private function checkParticipantAccess(EventView $eventView, ParticipantView $participantView)
-    {
-        // Check if user is authenticated
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        // Check if user own participation
-        if ($this->getUser()->getUsername() !== $participantView->userEmail) {
-            throw $this->createAccessDeniedException();
-        }
-
-        // Check if the participation is for this event
-        if ($eventView->id !== $participantView->eventId) {
-            throw $this->createNotFoundException();
-        }
-    }
 }
