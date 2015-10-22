@@ -291,6 +291,8 @@ class EventController extends Controller
      */
     public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $add  = new Add($sheet, $request->getLocale());
         $form = $this->createForm(new AddParticipantType(), $add, [
             'template' => $sheet->getType()->getParticipantTemplate(),
