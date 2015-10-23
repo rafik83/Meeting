@@ -12,20 +12,55 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class ParticipantView
 {
+    /**
+     * @var integer
+     */
     public $id;
 
+    /**
+     * @var string
+     */
     public $data;
 
+    /**
+     * @var boolean
+     */
+    public $owner;
+
+    /**
+     * @var string
+     */
     public $userEmail;
 
+    /**
+     * @var integer
+     */
     public $eventId;
 
+    /**
+     * @var string
+     */
     public $eventTitle;
 
+    /**
+     * @var integer
+     */
     public $typeId;
 
+    /**
+     * @var string
+     */
     public $typeTitle;
 
+    /**
+     * @param integer $id
+     * @param string  $data
+     * @param string  $userEmail
+     * @param integer $eventId
+     * @param string  $eventTitle
+     * @param integer $typeId
+     * @param string  $typeTitle
+     */
     public function __construct($id, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
     {
         $data = json_decode($data, true);
