@@ -54,6 +54,7 @@ class ParticipantView
 
     /**
      * @param integer $id
+     * @param boolean $owner
      * @param string  $data
      * @param string  $userEmail
      * @param integer $eventId
@@ -61,7 +62,7 @@ class ParticipantView
      * @param integer $typeId
      * @param string  $typeTitle
      */
-    public function __construct($id, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
+    public function __construct($id, $owner, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
     {
         $data = json_decode($data, true);
 
@@ -70,6 +71,7 @@ class ParticipantView
         }
 
         $this->id         = $id;
+        $this->owner      = $owner;
         $this->data       = $data;
         $this->userEmail  = $userEmail;
         $this->eventId    = $eventId;
