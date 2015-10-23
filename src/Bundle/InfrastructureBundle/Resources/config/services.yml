@@ -57,6 +57,11 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
+    vimeet_infrastructure.vimeet.application.command.participant.add_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\AddHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.repository.participant_repository
 
     #
     # Security

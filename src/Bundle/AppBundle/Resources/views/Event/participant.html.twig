@@ -2,7 +2,22 @@
     {% for key, field in template %}
         <tr>
             <th>{{ field['label'][app.request.locale]|default }}</th>
-            <td>{{ data[key]|default }}</td>
+            <td>{{ participantView.data[key]|default }}</td>
         </tr>
     {% endfor %}
+    <tr>
+        <th>{{ 'event.sheet.participant.email'|trans }}</th>
+        <td>{{ participantView.userEmail }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <span class="label label-info">
+                {% if participantView.owner %}
+                    {{ 'event.sheet.participant.owner'|trans }}
+                {% else %}
+                    {{ 'event.sheet.participant.guest'|trans }}
+                {% endif %}
+            </span>
+        </td>
+    </tr>
 </table>

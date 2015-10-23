@@ -4,5 +4,8 @@ flash:
             success: Votre compte a bien été créé
         participation:
             success: Votre fiche de participation a été sauvegardée
+        sheet:
+            add_participant:
+                success: Le participant a bien été ajouté
     change_password:
         success: Votre mot de passe a été changé

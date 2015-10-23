@@ -36,14 +36,21 @@ class Participant
     private $data;
 
     /**
-     * @param Sheet $sheet
-     * @param User  $user
-     * @param array $data
+     * @var boolean
      */
-    public function __construct(Sheet $sheet, User $user, array $data)
+    private $owner;
+
+    /**
+     * @param Sheet   $sheet
+     * @param User    $user
+     * @param array   $data
+     * @param boolean $owner
+     */
+    public function __construct(Sheet $sheet, User $user, array $data, $owner)
     {
         $this->sheet = $sheet;
         $this->user  = $user;
+        $this->owner = $owner;
         $this->setData($data);
     }
 
@@ -75,6 +82,16 @@ class Participant
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * Is owner
+     *
+     * @return boolean
+     */
+    public function isOwner()
+    {
+        return $this->owner;
     }
 
     /**

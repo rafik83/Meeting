@@ -43,3 +43,11 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    add_participant:
+        children:
+            email:
+                label: Email
+            data:
+                label: Coordonnées du participant
+            submit:
+                label: Envoyer

@@ -5,17 +5,29 @@
 {% block body %}
     {{ include('VimeetAppBundle:Event:title.html.twig') }}
 
-    <h2>{{ type_view.title }}</h2>
-    <h3>{{ 'sheet.participant.title'|trans }}</h3>
+    <h2>{{ typeView.title }}</h2>
 
-    <h3>Participants</h3>
-    {% for participant in sheet.participants %}
-        <div class="row">
-            <div class="col-md-{{ 12/sheet.participants|length }}">
-                {{ include('VimeetAppBundle:Event:participant.html.twig', { 'template': sheet.type.participantTemplate, 'data': participant.data }) }}
+    <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
+
+    <div class="row">
+        {% for participantView in participantViews %}
+            <div class="col-md-3">
+                {{ include('VimeetAppBundle:Event:participant.html.twig', {
+                    'template': sheet.type.participantTemplate,
+                    'participant': participantView
+                }) }}
             </div>
+        {% endfor %}
+
+        <div class="col-md-3">
+            <a href="{{ path('event_sheet_add_participant', {
+                'id': sheet.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.block.add_participant.title'|trans }}
+            </a>
         </div>
-    {% endfor %}
+    </div>
 
     {% for block in sheet.type.sheetTemplate %}
         <h3>{{ block['title'][app.request.locale] }}</h3>

@@ -14,12 +14,22 @@ change_password:
     title: Changer le mot de passe
     link: Changer le mot de passe
 
-messages.register.email_already_exists: Un compte associé à cette adresse mail existe déjà
+register:
+    email_already_exists: Un compte associé à cette adresse mail existe déjà
 
 event:
     link:
         see_my_sheet: Voir ma fiche %type%
-
-sheet:
-    participant:
-        title: Participants
+    sheet:
+        participant:
+            already_exists: Ce participant est déjà ajouté
+            email: Adresse email
+            owner: Propriétaire
+            guest: Invité
+        block:
+            participants:
+                title: Participants
+            add_participant:
+                title: Ajouter un participant
+        add_participant:
+            title: Ajouter un participant

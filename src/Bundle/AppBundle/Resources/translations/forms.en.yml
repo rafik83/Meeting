@@ -43,3 +43,11 @@ form:
                         label: Refill the new password
             submit:
                 label: Submit
+    add_participant:
+        children:
+            email:
+                label: Email
+            data:
+                label: Participant personnal informations
+            submit:
+                label: Submit

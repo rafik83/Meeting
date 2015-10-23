@@ -62,4 +62,21 @@ class UserRepository implements UserRepositoryInterface
     {
         $this->entityManager->flush($user);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEmail($email)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from('Entity:User', 'user')
+            ->where('user.email = :email')
+            ->setParameter('email', $email)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

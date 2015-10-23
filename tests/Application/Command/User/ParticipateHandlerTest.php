@@ -27,9 +27,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
         $type  = new Type();
+        $owner = true;
 
         $expectedSheet       = new Sheet($event, $type);
-        $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo']);
+        $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo'], $owner);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();

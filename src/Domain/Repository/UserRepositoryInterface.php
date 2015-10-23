@@ -30,4 +30,11 @@ interface UserRepositoryInterface
      * @param User $user
      */
     public function set(User $user);
+
+    /**
+     * @param string $email
+     *
+     * @return User
+     */
+    public function findByEmail($email);
 }

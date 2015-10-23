@@ -49,7 +49,7 @@ class ParticipateHandler
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
-        $participant = new Participant($sheet, $participate->user, $participate->data);
+        $participant = new Participant($sheet, $participate->user, $participate->data, $participate->owner);
         $this->participantRepository->add($participant);
 
         $participate->sheet = $sheet;

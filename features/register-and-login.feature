@@ -22,7 +22,7 @@ Feature: Register and login user
     And I fill in "form.register.children.password.children.first.label" with "p@ssw0rd"
     And I fill in "form.register.children.password.children.second.label" with "p@ssw0rd"
     And I press "form.register.children.submit.label"
-    Then I should see "messages.register.email_already_exists"
+    Then I should see "register.email_already_exists"
 
   Scenario: Login successful
     When the fixtures "User.yml" are loaded

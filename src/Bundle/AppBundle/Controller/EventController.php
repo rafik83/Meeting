@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
@@ -105,7 +108,7 @@ class EventController extends Controller
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
             } catch (EmailAlreadyExistsException $exception) {
-                $error = new FormError($this->get('translator')->trans('messages.register.email_already_exists'));
+                $error = new FormError($this->get('translator')->trans('register.email_already_exists'));
                 $form->get('email')->addError($error);
             }
         }
@@ -143,7 +146,6 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             // Create the participant
             $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
             $type        = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
@@ -166,7 +168,6 @@ class EventController extends Controller
         ]);
     }
 
-
     /**
      * Sheet
      *
@@ -182,20 +183,64 @@ class EventController extends Controller
 
         $sheetSpecification = new CanAccess($this->getUser());
 
-        if (!$sheetSpecification->isSatisfiedBy($sheet))
-        {
+        if (!$sheetSpecification->isSatisfiedBy($sheet)) {
             throw new AccessDeniedException('No participant for this user attached on this sheet');
         }
-
 
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
 
+        $participantViews = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantViewsBySheet($sheet->getId());
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
+            'eventView'        => $eventView,
+            'typeView'         => $typeView,
+            'sheet'            => $sheet,
+            'participantViews' => $participantViews,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return RedirectResponse|Response
+     */
+    public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $add  = new Add($sheet, $request->getLocale());
+        $form = $this->createForm(new AddParticipantType(), $add, [
+            'template' => $sheet->getType()->getParticipantTemplate(),
+            'locale'   => $request->getLocale(),
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+                $this->addFlash('success', 'flash.event.sheet.add_participant.success');
+
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                ]);
+            } catch (ParticipantAlreadyExistException $exception) {
+                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
+                $form->get('email')->addError($error);
+            }
+        }
+
+        return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
             'eventView' => $eventView,
-            'type_view' => $typeView,
             'sheet'     => $sheet,
+            'form'      => $form->createView(),
         ]);
     }
 

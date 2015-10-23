@@ -13,16 +13,9 @@
             {{ include('VimeetAppBundle::locales.html.twig') }}
             {{ include('VimeetAppBundle::user.html.twig') }}
 
-            {% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'danger' } %}
-                {% for message in app.session.flashbag.get(type) %}
-                    <div class="alert alert-{{ mappedType }}">
-                        {{ message|trans({}, 'flashes') }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
             {% block body %}{% endblock %}
             {% block javascripts %}
+                <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
             {% endblock %}
         </div>
