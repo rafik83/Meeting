@@ -9,19 +9,17 @@
 
     <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
 
-    {% set colSize = 3 %}
-
     <div class="row">
-        {% for participant in sheet.participants %}
-            <div class="col-md-{{ colSize }}">
+        {% for participantView in participantViews %}
+            <div class="col-md-3">
                 {{ include('VimeetAppBundle:Event:participant.html.twig', {
                     'template': sheet.type.participantTemplate,
-                    'participant': participant
+                    'participant': participantView
                 }) }}
             </div>
         {% endfor %}
 
-        <div class="col-md-{{ colSize }}">
+        <div class="col-md-3">
             <a href="{{ path('event_sheet_add_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')

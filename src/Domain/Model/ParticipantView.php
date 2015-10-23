@@ -23,46 +23,22 @@ class ParticipantView
     public $data;
 
     /**
-     * @var boolean
-     */
-    public $owner;
-
-    /**
      * @var string
      */
     public $userEmail;
 
     /**
-     * @var integer
+     * @var boolean
      */
-    public $eventId;
-
-    /**
-     * @var string
-     */
-    public $eventTitle;
-
-    /**
-     * @var integer
-     */
-    public $typeId;
-
-    /**
-     * @var string
-     */
-    public $typeTitle;
+    public $owner;
 
     /**
      * @param integer $id
-     * @param boolean $owner
      * @param string  $data
      * @param string  $userEmail
-     * @param integer $eventId
-     * @param string  $eventTitle
-     * @param integer $typeId
-     * @param string  $typeTitle
+     * @param boolean $owner
      */
-    public function __construct($id, $owner, $data, $userEmail, $eventId, $eventTitle, $typeId, $typeTitle)
+    public function __construct($id, $data, $userEmail, $owner)
     {
         $data = json_decode($data, true);
 
@@ -71,12 +47,8 @@ class ParticipantView
         }
 
         $this->id         = $id;
-        $this->owner      = $owner;
         $this->data       = $data;
         $this->userEmail  = $userEmail;
-        $this->eventId    = $eventId;
-        $this->eventTitle = $eventTitle;
-        $this->typeId     = $typeId;
-        $this->typeTitle  = $typeTitle;
+        $this->owner      = $owner;
     }
 }

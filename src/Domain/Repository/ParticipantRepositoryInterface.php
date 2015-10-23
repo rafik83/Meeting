@@ -33,14 +33,6 @@ interface ParticipantRepositoryInterface
     public function set(Participant $participant);
 
     /**
-     * @param integer $participantId
-     * @param string  $locale
-     *
-     * @return ParticipantView
-     */
-    public function getParticipantView($participantId, $locale);
-
-    /**
      * @param $userEmail
      * @param $eventId
      *
@@ -54,4 +46,11 @@ interface ParticipantRepositoryInterface
      * @return array
      */
     public function getAllParticipantForUser($userId);
+
+    /**
+     * @param integer $sheetId
+     *
+     * @return array
+     */
+    public function getParticipantViewsBySheet($sheetId);
 }

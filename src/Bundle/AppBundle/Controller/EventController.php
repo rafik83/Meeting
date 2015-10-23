@@ -191,10 +191,15 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
 
+        $participantViews = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantViewsBySheet($sheet->getId());
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
-            'eventView' => $eventView,
-            'typeView' => $typeView,
-            'sheet'     => $sheet,
+            'eventView'        => $eventView,
+            'typeView'         => $typeView,
+            'sheet'            => $sheet,
+            'participantViews' => $participantViews,
         ]);
     }
 
