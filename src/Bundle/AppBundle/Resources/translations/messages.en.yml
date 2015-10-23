@@ -19,3 +19,7 @@ messages.register.email_already_exists: An account with this email address alrea
 event:
     link:
         see_my_sheet: See my %type% sheet
+
+sheet:
+    participant:
+        title: Participants

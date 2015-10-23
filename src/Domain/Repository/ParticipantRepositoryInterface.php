@@ -47,4 +47,11 @@ interface ParticipantRepositoryInterface
      * @return integer
      */
     public function getLastParticipantIdForEventAndUser($userEmail, $eventId);
+
+    /**
+     * @param integer $userId
+     *
+     * @return array
+     */
+    public function getAllParticipantForUser($userId);
 }

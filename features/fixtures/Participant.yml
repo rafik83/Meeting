@@ -1,5 +1,5 @@
 Proximum\Vimeet\Domain\Model\User:
-    test:
+    user_1:
         __construct: false
         email: "test@test.com"
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
@@ -136,20 +136,17 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         type: @congressiste
         locale: en
 
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_1:
+        __construct: false
+        type: @exposant
+        event: @event_rdv_carnot_2016
+        data: >
+            []
+
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
         __construct: false
-        user: @test
-        event: @event_rdv_carnot_2016
-        type: @exposant
-        data: >
-            [
-                "Dutest",
-                "Jean",
-                "12, rue du test",
-                "75002",
-                "Testville",
-                "TestLand",
-                "0909090909",
-                "0909090909"
-            ]
+        user: @user_1
+        sheet: @sheet_1
+        data:  ["Dutest","Jean","12, rue du test","75002","Testville","TestLand","0909090909","0909090909"]

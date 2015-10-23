@@ -30,14 +30,6 @@ event_sheet:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event:sheet }
 
-event_participation_update:
-    path: /participation/{participantView}/update
-    host: "{subdomain}.%domain%"
-    requirements:
-        subdomain: "[a-zA-Z0-9\-]+"
-    methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event:participationUpdate }
-
 event_login:
     path: /login
     host: "{subdomain}.%domain%"
