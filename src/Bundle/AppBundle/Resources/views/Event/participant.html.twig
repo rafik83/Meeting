@@ -2,7 +2,11 @@
     {% for key, field in template %}
         <tr>
             <th>{{ field['label'][app.request.locale]|default }}</th>
-            <td>{{ data[key]|default }}</td>
+            <td>{{ participant.data[key]|default }}</td>
         </tr>
     {% endfor %}
+    <tr>
+        <th>{{ 'event.sheet.participant.email'|trans }}</th>
+        <td>{{ participant.user.email }}</td>
+    </tr>
 </table>

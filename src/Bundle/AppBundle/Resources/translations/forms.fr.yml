@@ -48,6 +48,6 @@ form:
             email:
                 label: Email
             data:
-                label: Informations
+                label: Coordonnées du participant
             submit:
                 label: Envoyer

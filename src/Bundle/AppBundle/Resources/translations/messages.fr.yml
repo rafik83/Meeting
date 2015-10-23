@@ -23,9 +23,11 @@ event:
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté
+            email: Adresse email
         block:
             participants:
                 title: Participants
-                add: Ajouter un participant
+            add_participant:
+                title: Ajouter un participant
         add_participant:
             title: Ajouter un participant
