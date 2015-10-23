@@ -48,11 +48,11 @@ provision-vagrant:
 	vagrant provision
 
 provision-ansible@test:
-	ansible-galaxy install -r ansible/roles.yml -p ansible/roles -f
+	sudo ansible-galaxy install -r ansible/roles.yml -f
 	ansible-playbook -i ansible/hosts -l env_test,app -s -e "_user=${_ANSIBLE_USER}" --force-handlers ansible/playbook.yml
 
 provision-services-ansible@test:
-	ansible-playbook -i ansible/hosts -l env_test,app -s -e "_user=${_ANSIBLE_USER}" --force-handlers --tags=elao_services ansible/playbook.yml
+	ansible-playbook -i ansible/hosts -l env_test,app -s --tags=elao_services ansible/playbook.yml
 
 ###########
 # Install #
@@ -77,8 +77,8 @@ install-db:
 
 install-db@test:
 	bin/console doctrine:database:drop --force --if-exists --env=test
-	bin/console doctrine:database:create --env=test
-	bin/console doctrine:schema:create --env=test
+	bin/console doctrine:database:create --if-not-exists --env=test
+	bin/console doctrine:schema:update --force --env=test
 
 install-db-fixtures:
 	#bin/console doctrine:fixtures:load -n
@@ -103,6 +103,22 @@ build-assets:
 
 build-assets@prod:
 	gulp
+
+################
+# Translations #
+################
+
+## Translations push
+trans-push: trans-openl10n-push
+
+trans-openl10n-push:
+	openl10n push --locale=all
+
+## Translations pull
+trans-pull: trans-openl10n-pull
+
+trans-openl10n-pull:
+	openl10n pull --locale=all
 
 ########
 # Test #
@@ -141,22 +157,6 @@ deploy-capifony@demo:
 
 deploy-capifony@prod:
 	cap prod deploy
-
-################
-# Translations #
-################
-
-## Translations push
-trans-push: trans-openl10n-push
-
-trans-openl10n-push:
-	openl10n push --locale=all
-
-## Translations pull
-trans-pull: trans-openl10n-pull
-
-trans-openl10n-pull:
-	openl10n pull --locale=all
 
 ##########
 # Custom #
