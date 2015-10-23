@@ -1,5 +1,5 @@
 Proximum\Vimeet\Domain\Model\User:
-    test:
+    user_1:
         __construct: false
         email: "test@test.com"
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
@@ -29,26 +29,25 @@ Proximum\Vimeet\Domain\Model\Type:
             [
                 { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
                 { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
                 { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+                { "type": "text", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
             [
                 {
                     "title": { "fr": "Société", "en": "Company" },
-                    "template": {
-                        { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } }
-                    }
+                    "template": [
+                        { "type": "text", "label": { "fr": "Nom", "en": "Name" } },
+                        { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
+                        { "type": "text", "label": { "fr": "Site web", "en": "Website" } },
+                        { "type": "text", "label": { "fr": "Descriptif", "en": "Description" } }
+                    ]
                 },
                 {
-                    "title": { "fr": "Offre", "en": "Needs" },
-                    "template": {
-                        { "type": "textarea", "label": { "fr": "Offres", "en": "Offers" } }
-                    }
+                    "title": { "fr": "Offres", "en": "Offers" },
+                    "template": [
+                        { "type": "textarea", "label": { "fr": "Mes offres", "en": "My offers" } }
+                    ]
                 }
             ]
     visiteur:
@@ -58,26 +57,25 @@ Proximum\Vimeet\Domain\Model\Type:
             [
                 { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
                 { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
                 { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+                { "type": "text", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
             [
                 {
                     "title": { "fr": "Société", "en": "Company" },
-                    "template": {
+                    "template": [
                         { "type": "text", "label": { "fr": "Nom", "en": "Name" } },
-                    }
+                        { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
+                        { "type": "text", "label": { "fr": "Site web", "en": "Website" } },
+                        { "type": "text", "label": { "fr": "Descriptif", "en": "Description" } }
+                    ]
                 },
                 {
-                    "title": { "fr": "Offre", "en": "Needs" },
-                    "template": {
-                        { "type": "textarea", "label": { "fr": "Besoins", "en": "Needs" } }
-                    }
+                    "title": { "fr": "Besoins", "en": "Needs" },
+                    "template": [
+                        { "type": "textarea", "label": { "fr": "Mes besoins", "en": "My needs" } }
+                    ]
                 }
             ]
     congressiste:
@@ -87,28 +85,11 @@ Proximum\Vimeet\Domain\Model\Type:
             [
                 { "type": "text", "label": { "fr": "Nom", "en": "Lastname" } },
                 { "type": "text", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "label": { "fr": "Adresse", "en": "Address" } },
-                { "type": "text", "label": { "fr": "Code postale", "en": "Zipcode" } },
-                { "type": "text", "label": { "fr": "Ville", "en": "City" } },
-                { "type": "text", "label": { "fr": "Pays", "en": "Country" } },
                 { "type": "text", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "label": { "fr": "Mobile", "en": "Mobile phone" } }
+                { "type": "text", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
-            [
-                {
-                    "title": { "fr": "Société", "en": "Company" },
-                    "template": {
-                        { "type": "text", "label": { "fr": "Nom", "en": "Name" } }
-                    }
-                },
-                {
-                    "title": { "fr": "Offre", "en": "Needs" },
-                    "template": {
-                        { "type": "textarea", "label": { "fr": "Besoins", "en": "Needs" } }
-                    }
-                }
-            ]
+            []
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_fr:
@@ -136,20 +117,17 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         type: @congressiste
         locale: en
 
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_1:
+        __construct: false
+        type: @exposant
+        event: @event_rdv_carnot_2016
+        data: >
+            []
+
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
         __construct: false
-        user: @test
-        event: @event_rdv_carnot_2016
-        type: @exposant
-        data: >
-            [
-                "Dutest",
-                "Jean",
-                "12, rue du test",
-                "75002",
-                "Testville",
-                "TestLand",
-                "0909090909",
-                "0909090909"
-            ]
+        user: @user_1
+        sheet: @sheet_1
+        data:  ["Dutest","Jean","0909090909","Developer"]

@@ -4,11 +4,42 @@
 
 {% block body %}
     {{ include('VimeetAppBundle:Event:title.html.twig') }}
-    <h2>{{ 'event.sheet.block.participants.title'|trans }}</h2>
-    {% for participant in sheet.participants %}
-        {{ include('VimeetAppBundle:Event:participant.html.twig', { 'template': sheet.type.participantTemplate, 'data': participant.data }) }}
+
+    <h2>{{ type_view.title }}</h2>
+
+    <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
+
+    {% set colSize = 12 / (sheet.participants|length + 1) %}
+
+    <div class="row">
+        {% for participant in sheet.participants %}
+            <div class="col-md-{{ colSize }}">
+                {{ include('VimeetAppBundle:Event:participant.html.twig', {
+                    'template': sheet.type.participantTemplate,
+                    'data': participant.data
+                }) }}
+            </div>
+        {% endfor %}
+
+        <div class="col-md-{{ colSize }}">
+            <a href="{{ path('event_sheet_add_participant', {
+                'id': sheet.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.block.participants.add'|trans }}
+            </a>
+        </div>
+    </div>
+
+    {% for block in sheet.type.sheetTemplate %}
+        <h3>{{ block['title'][app.request.locale] }}</h3>
+        <table class="table">
+            {% for key, field in block.template %}
+                <tr>
+                    <th>{{ field['label'][app.request.locale]|default }}</th>
+                    <td>-</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endfor %}
-    <a href="{{ path('event_sheet_add_participant', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">
-        {{ 'event.sheet.block.participants.add'|trans }}
-    </a>
 {% endblock %}

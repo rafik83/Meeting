@@ -23,12 +23,14 @@ use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EventController extends Controller
 {
@@ -131,6 +133,10 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if (1 <= count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()))) {
+            throw new AccessDeniedException('Participation already created');
+        }
+
         // Create participate form
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
@@ -162,7 +168,6 @@ class EventController extends Controller
         ]);
     }
 
-
     /**
      * Sheet
      *
@@ -176,8 +181,19 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $sheetSpecification = new CanAccess($this->getUser());
+
+        if (!$sheetSpecification->isSatisfiedBy($sheet)) {
+            throw new AccessDeniedException('No participant for this user attached on this sheet');
+        }
+
+        $typeView = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView' => $eventView,
+            'type_view' => $typeView,
             'sheet'     => $sheet,
         ]);
     }
