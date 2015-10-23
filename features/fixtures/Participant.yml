@@ -130,4 +130,5 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: @user_1
         sheet: @sheet_1
-        data:  ["Dutest","Jean","0909090909","Developer"]
+        owner: true
+        data: ["Dutest","Jean","0909090909","Developer"]
