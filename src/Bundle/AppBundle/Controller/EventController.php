@@ -193,7 +193,7 @@ class EventController extends Controller
 
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView' => $eventView,
-            'type_view' => $typeView,
+            'typeView' => $typeView,
             'sheet'     => $sheet,
         ]);
     }
