@@ -24,6 +24,8 @@ event:
         participant:
             already_exists: Ce participant est déjà ajouté
             email: Adresse email
+            owner: Propriétaire
+            guest: Invité
         block:
             participants:
                 title: Participants

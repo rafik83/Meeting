@@ -9,7 +9,8 @@ Proximum\Vimeet\Domain\Model\Participant:
     fields:
         data:
             type: text
-
+        owner:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

@@ -9,4 +9,15 @@
         <th>{{ 'event.sheet.participant.email'|trans }}</th>
         <td>{{ participant.user.email }}</td>
     </tr>
+    <tr>
+        <td colspan="2">
+            <span class="label label-info">
+                {% if participant.owner %}
+                    {{ 'event.sheet.participant.owner'|trans }}
+                {% else %}
+                    {{ 'event.sheet.participant.guest'|trans }}
+                {% endif %}
+            </span>
+        </td>
+    </tr>
 </table>
