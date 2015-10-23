@@ -32,7 +32,10 @@
     {% set data = sheet.data %}
 
     {% for i, block in sheet.type.sheetTemplate %}
-        <h3>{{ block['title'][app.request.locale] }}</h3>
+        <h3>
+            {{ block['title'][app.request.locale] }}
+            <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">{{ 'event.sheet.block.edit'|trans }}</a>
+        </h3>
         <table class="table">
             {% for key, field in block.template %}
                 <tr>
@@ -41,6 +44,6 @@
                 </tr>
             {% endfor %}
         </table>
-        <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Edit</a>
+
     {% endfor %}
 {% endblock %}

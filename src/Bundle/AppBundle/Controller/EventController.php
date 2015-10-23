@@ -337,7 +337,7 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
-            $this->addFlash('success', 'flash.event.sheet.update_block.success');
+            $this->addFlash('success', 'flash.sheet.update_block.success');
 
             // Go to the sheet
             return $this->redirectToRoute('event_sheet', [

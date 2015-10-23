@@ -12,3 +12,5 @@ flash:
     sheet:
         add_participant:
             success: The participant has been added
+        update_block:
+            success: Informations has been updated
