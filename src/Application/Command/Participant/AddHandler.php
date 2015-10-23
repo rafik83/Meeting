@@ -62,7 +62,7 @@ class AddHandler
             }
         }
         // Add the new partipant
-        $participant = new Participant($add->sheet, $user, $add->data);
+        $participant = new Participant($add->sheet, $user, $add->data, $add->owner);
         $this->participantRepository->add($participant);
 
         $add->participant = $participant;

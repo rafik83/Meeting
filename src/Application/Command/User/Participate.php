@@ -43,6 +43,11 @@ class Participate
     public $sheet;
 
     /**
+     * @var boolean
+     */
+    public $owner;
+
+    /**
      * @param User  $user
      * @param Event $event
      * @param Type  $type
@@ -50,9 +55,10 @@ class Participate
      */
     public function __construct(User $user, Event $event, Type $type, array $data)
     {
-        $this->user  = $user;
-        $this->event = $event;
-        $this->type  = $type;
-        $this->data  = $data;
+        $this->user   = $user;
+        $this->event  = $event;
+        $this->type   = $type;
+        $this->data   = $data;
+        $this->owner  = true;
     }
 }

@@ -27,9 +27,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type();
         $sheet = new Sheet($event, $type);
+        $owner = false;
 
         $expectedUser        = new User('test@test.com', '', '', 'fr');
-        $expectedParticipant = new Participant($sheet, $expectedUser, ['foobar' => 'barfoo']);
+        $expectedParticipant = new Participant($sheet, $expectedUser, ['foobar' => 'barfoo'], $owner);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
@@ -52,8 +53,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type();
         $sheet = new Sheet($event, $type);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
+        $owner = false;
 
-        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'barfoo']);
+        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);

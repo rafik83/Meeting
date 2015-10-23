@@ -41,12 +41,18 @@ class Add
     public $participant;
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @var boolean
+     */
+    public $owner;
+
+    /**
+     * @param Sheet   $sheet
+     * @param string  $locale
      */
     public function __construct(Sheet $sheet, $locale)
     {
         $this->sheet  = $sheet;
         $this->locale = $locale;
+        $this->owner  = false;
     }
 }
