@@ -216,7 +216,7 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
-        $deleteForm = array();
+        $participantDeleteForms = array();
 
         if ($userParticipant->isOwner()) {
             foreach ($participantViews as $key => $participantView) {
@@ -237,17 +237,17 @@ class EventController extends Controller
                     )->createView();
                 }
 
-                $deleteForm[$participantView->id] = $form;
+                $participantDeleteForms[$participantView->id] = $form;
             }
         }
 
 
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
-            'eventView'        => $eventView,
-            'typeView'         => $typeView,
-            'sheet'            => $sheet,
-            'participantViews' => $participantViews,
-            'delete_form'      => $deleteForm,
+            'eventView'                => $eventView,
+            'typeView'                 => $typeView,
+            'sheet'                    => $sheet,
+            'participantViews'         => $participantViews,
+            'participant_delete_forms' => $participantDeleteForms,
         ]);
     }
 
