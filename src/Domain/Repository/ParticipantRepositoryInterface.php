@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface ParticipantRepositoryInterface
 {
@@ -18,6 +20,11 @@ interface ParticipantRepositoryInterface
      * @param Participant $participant
      */
     public function add(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     */
+    public function delete(Participant $participant);
 
     /**
      * @param integer $id
@@ -38,6 +45,14 @@ interface ParticipantRepositoryInterface
      * @return integer
      */
     public function getLastParticipantIdForEventAndUser($userEmail, $eventId);
+
+    /**
+     * @param User  $user
+     * @param Sheet $sheet
+     *
+     * @return Participant
+     */
+    public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
     /**
      * @param integer $userId
