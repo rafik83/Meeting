@@ -140,7 +140,11 @@ class EventController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // Check if the user has already created a participate
-        if (1 <= count($this->get('vimeet_infrastructure.repository.participant_repository')->getAllParticipantForUser($this->getUser()->getId()))) {
+        $participants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getAllParticipantForUser($this->getUser()->getId());
+
+        if (1 <= count($participants)) {
             throw new AccessDeniedException('Participation already created');
         }
 
@@ -148,7 +152,9 @@ class EventController extends Controller
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
             'locale'   => $request->getLocale(),
-            'template' => $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($typeView->id)
+            'template' => $this
+                ->get('vimeet_infrastructure.repository.type_repository')
+                ->getParticipantTemplate($typeView->id)
         ]);
         $form->add('submit', 'submit');
 
@@ -265,8 +271,12 @@ class EventController extends Controller
      *
      * @return Response
      */
-    public function updateParticipantAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
-    {
+    public function updateParticipantAction(
+        Request $request,
+        EventView $eventView,
+        Sheet $sheet,
+        Participant $participant
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
@@ -276,7 +286,7 @@ class EventController extends Controller
         $updateParticipant = new Update($participant->getId(), $participant->getData());
         $form              = $this->createForm(new ParticipantUpdateType(), $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale' => $request->getLocale(),
+            'locale'   => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 
@@ -319,7 +329,10 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
+                ->handle($updateBlock);
+
             $this->addFlash('success', 'flash.event.sheet.update_block.success');
 
             // Go to the sheet
