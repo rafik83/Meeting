@@ -135,7 +135,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-
     /**
      * {@inheritdoc}
      */

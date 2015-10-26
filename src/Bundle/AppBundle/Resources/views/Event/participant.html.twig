@@ -30,6 +30,12 @@
                     'participant_id': participantView.id,
                     'subdomain':      app.request.attributes.get('subdomain')
                 }) }}" class="btn btn-xs btn-primary">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
+
+                {% if delete_form[participantView.id] is not null %}
+                    {{ form_start(delete_form[participantView.id]) }}
+                    {{ form_widget(delete_form[participantView.id].submit, {attr: {class: 'btn btn-xs btn-danger'}}) }}
+                    {{ form_end(delete_form[participantView.id]) }}
+                {% endif %}
             {% endif %}
         </td>
     </tr>

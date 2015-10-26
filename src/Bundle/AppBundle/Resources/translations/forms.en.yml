@@ -60,4 +60,4 @@ form:
     delete_participant:
         children:
             submit:
-                label: Supprimer
+                label: Delete

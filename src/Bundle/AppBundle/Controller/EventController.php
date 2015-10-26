@@ -29,7 +29,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\EventView;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
@@ -224,14 +223,17 @@ class EventController extends Controller
                 $form = null;
                 if (!$participantView->owner) {
                     $delete = new Delete($sheet, $this->getUser(), $participantView->id);
-                    $form   = $this->createForm(
+                    $form = $this->createForm(
                         new DeleteParticipantType(),
                         $delete,
-                        ['action' => $this->generateUrl('event_sheet_delete_participant', [
-                            'subdomain'   => $request->attributes->get('subdomain'),
-                            'id'          => $sheet->getId(),
-                            'participant' => $participantView->id,
-                        ])]
+                        [
+                            'action' => $this->generateUrl(
+                                'event_sheet_delete_participant', [
+                                'subdomain'   => $request->attributes->get('subdomain'),
+                                'id'          => $sheet->getId(),
+                                'participant' => $participantView->id,
+                            ])
+                        ]
                     )->createView();
                 }
 
