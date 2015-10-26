@@ -57,3 +57,7 @@ form:
                 label: Modifier les informations
             submit:
                 label: Envoyer
+    delete_participant:
+        children:
+            submit:
+                label: Supprimer

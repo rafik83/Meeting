@@ -48,7 +48,7 @@ class DeleteHandler
 
         $participant = $this->participantRepository->findById($delete->participantId);
 
-        if ($participant->isOwner()) {
+        if (null !== $participant && $participant->isOwner()) {
             throw new OwnerCanNotBeDeletedException('The participant selected to be deleted is owner of the sheet');
         }
 

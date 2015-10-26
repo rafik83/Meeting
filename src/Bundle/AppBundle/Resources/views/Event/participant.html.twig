@@ -20,8 +20,8 @@
             </span>
         </td>
         <td>
-            {% if not participantView.owner %}
-                <a href="{{ path('event_sheet_delete_participant', {subdomain: app.request.attributes.get('subdomain'), id: sheet.id, participant: participantView.id}) }}" class="btn btn-danger">{{ 'event.sheet.block.delete_participant.title'|trans }}</a>
+            {% if delete_form[participantView.id] is not null %}
+                {{ form(delete_form[participantView.id]) }}
             {% endif %}
 
             {% if participantView.userId == app.user.id %}

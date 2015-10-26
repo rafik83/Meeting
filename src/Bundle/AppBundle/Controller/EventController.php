@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedExcept
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
@@ -212,11 +213,41 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantViewsBySheet($sheet->getId());
 
+        $userParticipant = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+
+        $deleteForm = array();
+
+        if ($userParticipant->isOwner())
+        {
+            foreach ($participantViews as $key => $participantView)
+            {
+                $form = null;
+                if (!$participantView->owner)
+                {
+                    $delete = new Delete($sheet, $this->getUser(), $participantView->id);
+                    $form   = $this->createForm(
+                        new DeleteParticipantType(),
+                        $delete,
+                        ['action' => $this->generateUrl('event_sheet_delete_participant', [
+                            'subdomain'   => $request->attributes->get('subdomain'),
+                            'id'          => $sheet->getId(),
+                            'participant' => $participantView->id,
+                        ])]
+                    )->createView();
+                }
+                $deleteForm[$participantView->id] = $form;
+            }
+        }
+
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView'        => $eventView,
             'typeView'         => $typeView,
             'sheet'            => $sheet,
             'participantViews' => $participantViews,
+            'delete_form'      => $deleteForm,
         ]);
     }
 
@@ -354,27 +385,30 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param Sheet       $sheet
-     * @param Participant $participant
+     * @param Request $request
+     * @param Sheet   $sheet
+     * @param integer $participant
      *
      * @return RedirectResponse
      */
-    public function deleteParticipantAction(Request $request, Sheet $sheet, Participant $participant)
+    public function deleteParticipantAction(Request $request, Sheet $sheet, $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $delete = new Delete($sheet, $this->getUser(), $participant);
+        $form   = $this->createForm(new DeleteParticipantType(), $delete);
 
-        try {
-            $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
-            $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
-        } catch (IsNotLinkedToSheetException $exception) {
-            $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
-        } catch (OwnerCanNotBeDeletedException $exception) {
-            $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
-        } catch (IsNotOwnerException $exception) {
-            $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()){
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
+                $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
+            } catch (IsNotLinkedToSheetException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            } catch (OwnerCanNotBeDeletedException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            } catch (IsNotOwnerException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            }
         }
 
         // Go to the sheet

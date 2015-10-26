@@ -57,3 +57,7 @@ form:
                 label: Information update
             submit:
                 label: Submit
+    delete_participant:
+        children:
+            submit:
+                label: Supprimer

@@ -36,6 +36,5 @@ event:
             edit: Modifier
             delete_participant:
                 title: Supprimer ce participant
-                confirm: Êtes vous sûr de vouloir supprimer ce participant ?
         add_participant:
             title: Ajouter un participant
