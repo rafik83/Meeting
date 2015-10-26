@@ -39,8 +39,8 @@
         <table class="table">
             {% for key, field in block.template %}
                 <tr>
-                    <th>{{ field['label'][app.request.locale]|default }}</th>
-                    <td>{{ data[i][key]|default }}</td>
+                    <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
+                    <td class="col-md-9">{{ data[i][key]|default|nl2br }}</td>
                 </tr>
             {% endfor %}
         </table>
