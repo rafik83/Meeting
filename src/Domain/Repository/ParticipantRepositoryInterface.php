@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\ParticipantView;
 
 interface ParticipantRepositoryInterface
 {
