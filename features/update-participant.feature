@@ -11,7 +11,7 @@ Feature: Update self participant sheet
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
     And I press "form.login.children.submit.label"
     Then I follow "event.link.see_my_sheet"
-    Then I follow "event.sheet.block.update_participant.title.edit"
+    Then I follow "event.sheet.block.update_participant.title"
     And I fill in the following:
       |Nom       |Jean        |
       |Prénom    |Dupond      |
