@@ -219,13 +219,10 @@ class EventController extends Controller
 
         $deleteForm = array();
 
-        if ($userParticipant->isOwner())
-        {
-            foreach ($participantViews as $key => $participantView)
-            {
+        if ($userParticipant->isOwner()) {
+            foreach ($participantViews as $key => $participantView) {
                 $form = null;
-                if (!$participantView->owner)
-                {
+                if (!$participantView->owner) {
                     $delete = new Delete($sheet, $this->getUser(), $participantView->id);
                     $form   = $this->createForm(
                         new DeleteParticipantType(),
@@ -237,6 +234,7 @@ class EventController extends Controller
                         ])]
                     )->createView();
                 }
+
                 $deleteForm[$participantView->id] = $form;
             }
         }
@@ -398,7 +396,7 @@ class EventController extends Controller
         $delete = new Delete($sheet, $this->getUser(), $participant);
         $form   = $this->createForm(new DeleteParticipantType(), $delete);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()){
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
                 $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
