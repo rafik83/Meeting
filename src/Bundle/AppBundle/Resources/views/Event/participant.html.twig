@@ -12,14 +12,18 @@
     <tr>
         <td>
             <span class="label label-info">
-                {% if participantView.owner %}
-                    {{ 'event.sheet.participant.owner'|trans }}
-                {% else %}
-                    {{ 'event.sheet.participant.guest'|trans }}
-                {% endif %}
+            {% if participantView.owner %}
+                {{ 'event.sheet.participant.owner'|trans }}
+            {% else %}
+                {{ 'event.sheet.participant.guest'|trans }}
+            {% endif %}
             </span>
         </td>
         <td>
+            {% if not participantView.owner %}
+                <a href="{{ path('event_sheet_delete_participant', {subdomain: app.request.attributes.get('subdomain'), id: sheet.id, participant: participantView.id}) }}" class="btn btn-danger">{{ 'event.sheet.block.delete_participant.title'|trans }}</a>
+            {% endif %}
+
             {% if participantView.userId == app.user.id %}
                 <a href="{{ path('event_sheet_update_participant', {
                     'id':             sheet.id,

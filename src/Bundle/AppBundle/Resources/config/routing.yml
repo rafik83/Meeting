@@ -54,6 +54,14 @@ event_sheet_update_block:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event:updateBlock }
 
+event_sheet_delete_participant:
+    path: /sheet/{id}/delete-participant/{participant}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event:deleteParticipant }
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"

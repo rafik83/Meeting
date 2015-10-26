@@ -7,6 +7,10 @@ flash:
         sheet:
             add_participant:
                 success: Le participant a bien été ajouté
+            delete_participant:
+                success: Le participant a bien été supprimé
+                access_denied:
+                    error: Vous n'avez pas les droits pour effectuer cette action
     change_password:
         success: Votre mot de passe a été changé
     sheet:
