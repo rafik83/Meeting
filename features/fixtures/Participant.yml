@@ -5,6 +5,12 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
         locale: "fr"
+    user_2:
+        __construct: false
+        email: "test-2@test.com"
+        salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
+        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
+        locale: "fr"
 
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
@@ -132,3 +138,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         sheet: @sheet_1
         owner: true
         data: ["Dutest","Jean","0909090909","Developer"]
+    participant_2:
+        __construct: false
+        user: @user_2
+        sheet: @sheet_1
+        owner: false
+        data: ["Super","Test","08080808","SuperPersonne"]
