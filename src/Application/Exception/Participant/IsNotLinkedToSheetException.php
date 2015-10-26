@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Participant;
 
-class isNotOwnerException extends ParticipantException
+class IsNotLinkedToSheetException extends ParticipantException
 {
 }

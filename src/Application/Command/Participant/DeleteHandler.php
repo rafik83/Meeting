@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Exception\Participant\isNotOwnerException;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
@@ -34,15 +35,16 @@ class DeleteHandler
     /**
      * @param Delete $delete
      *
+     * @throws IsNotLinkedToSheetException
+     * @throws IsNotOwnerException
      * @throws OwnerCanNotBeDeletedException
-     * @throws isNotOwnerException
      */
     public function handle(Delete $delete)
     {
         $sheetSpecification = new CanAccess($delete->requester);
 
         if (!$sheetSpecification->isSatisfiedBy($delete->sheet)) {
-            throw new AccessDeniedException('No participant for this user attached on this sheet');
+            throw new IsNotLinkedToSheetException('No participant for this user attached on this sheet');
         }
 
         $participant = $this->participantRepository->findById($delete->participantId);
@@ -54,7 +56,7 @@ class DeleteHandler
         $requesterParticipant = $this->participantRepository->getParticipantForUserAndSheet($delete->requester, $delete->sheet);
 
         if (!$requesterParticipant->isOwner()) {
-            throw new isNotOwnerException('The requester is not owner of the sheet and therefore can not delete a participant');
+            throw new IsNotOwnerException('The requester is not owner of the sheet and therefore can not delete a participant');
         }
 
         $this->participantRepository->delete($participant);

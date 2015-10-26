@@ -14,11 +14,11 @@ use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
-use Proximum\Vimeet\Application\Command\Participant\DeleteHandler;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
-use Proximum\Vimeet\Application\Exception\Participant\isNotOwnerException;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
@@ -35,7 +35,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -370,11 +369,11 @@ class EventController extends Controller
         try {
             $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
             $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
-        } catch (AccessDeniedException $exception) {
+        } catch (IsNotLinkedToSheetException $exception) {
             $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
         } catch (OwnerCanNotBeDeletedException $exception) {
             $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
-        } catch (isNotOwnerException $exception) {
+        } catch (IsNotOwnerException $exception) {
             $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
         }
 
