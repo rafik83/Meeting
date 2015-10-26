@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
+use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
@@ -19,13 +20,16 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -241,6 +245,56 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "participant",
+     *   class="Proximum\Vimeet\Domain\Model\Participant",
+     *   options={"id" = "participant_id"}
+     * )
+     *
+     * @param Request     $request
+     * @param EventView   $eventView
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     *
+     * @return Response
+     */
+    public function updateParticipantAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
+            throw new AccessDeniedException('You can not update other participant');
+        }
+
+        $updateParticipant = new Update($participant->getId(), $participant->getData());
+        $form              = $this->createForm(new ParticipantUpdateType(), $updateParticipant, [
+            'template' => $sheet->getType()->getParticipantTemplate(),
+            'locale' => $request->getLocale(),
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
+                ->handle($updateParticipant);
+
+            $this->addFlash('success', 'flash.sheet.update_participant.success');
+
+            // Go to the sheet
+            return $this->redirectToRoute('event_sheet', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event:updateParticipant.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),

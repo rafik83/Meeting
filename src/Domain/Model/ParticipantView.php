@@ -23,6 +23,11 @@ class ParticipantView
     public $data;
 
     /**
+     * @var integer
+     */
+    public $userId;
+
+    /**
      * @var string
      */
     public $userEmail;
@@ -35,10 +40,11 @@ class ParticipantView
     /**
      * @param integer $id
      * @param string  $data
+     * @param integer $userId
      * @param string  $userEmail
      * @param boolean $owner
      */
-    public function __construct($id, $data, $userEmail, $owner)
+    public function __construct($id, $data, $userId, $userEmail, $owner)
     {
         $data = json_decode($data, true);
 
@@ -48,6 +54,7 @@ class ParticipantView
 
         $this->id         = $id;
         $this->data       = $data;
+        $this->userId     = $userId;
         $this->userEmail  = $userEmail;
         $this->owner      = $owner;
     }
