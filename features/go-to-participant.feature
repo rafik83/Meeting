@@ -2,7 +2,7 @@ Feature: Test to go to the participant sheet
   I need to be able to register to an event and login to my account
 
   Background: Re-init the database and load the fixtures
-    Given the database is initialized
+    Given the database is empty
     And the fixtures "Participant.yml" are loaded
 
   Scenario: I can go to the participant sheet of the user
