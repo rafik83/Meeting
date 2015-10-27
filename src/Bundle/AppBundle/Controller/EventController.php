@@ -217,33 +217,30 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
-        $participantDeleteForms = array();
+        $participantDeleteForms = [];
 
         if ($userParticipant->isOwner()) {
-            foreach ($participantViews as $key => $participantView) {
-                $form = null;
+            foreach ($participantViews as $participantView) {
                 if (!$participantView->owner) {
                     $delete = new Delete($sheet, $this->getUser(), $participantView->id);
-                    $form = $this->createForm(
+
+                    $participantDeleteForms[$participantView->id] = $this->createForm(
                         new DeleteParticipantType(),
                         $delete,
                         [
                             'action' => $this->generateUrl(
                                 'event_sheet_delete_participant',
                                 [
-                                    'subdomain'   => $request->attributes->get('subdomain'),
-                                    'id'          => $sheet->getId(),
-                                    'participant' => $participantView->id,
+                                    'subdomain'      => $request->attributes->get('subdomain'),
+                                    'id'             => $sheet->getId(),
+                                    'participant_id' => $participantView->id,
                                 ]
                             )
                         ]
                     )->createView();
                 }
-
-                $participantDeleteForms[$participantView->id] = $form;
             }
         }
-
 
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView'                => $eventView,
@@ -388,13 +385,19 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Sheet   $sheet
-     * @param integer $participant
+     * @ParamConverter(
+     *   "participant",
+     *   class="Proximum\Vimeet\Domain\Model\Participant",
+     *   options={"id" = "participant_id"}
+     * )
+     *
+     * @param Request     $request
+     * @param Sheet       $sheet
+     * @param Participant $participant
      *
      * @return RedirectResponse
      */
-    public function deleteParticipantAction(Request $request, Sheet $sheet, $participant)
+    public function deleteParticipantAction(Request $request, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
