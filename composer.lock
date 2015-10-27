@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "734227673109ad9b9bb5a7c4ec481944",
-    "content-hash": "09c9f14a6582cb5ce4f3661ac322922a",
+    "hash": "ddf512ec64b5a5919e25411f38aceca8",
+    "content-hash": "7597adde083819e9a67c21c2b41a688a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -4195,16 +4195,16 @@
         },
         {
             "name": "theofidry/alice-bundle-extension",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theofidry/AliceBundleExtension.git",
-                "reference": "6c97cdeaa24ae97e8591a64ae8b05cc475d378a0"
+                "reference": "dfcb439dc6dfc9081a042f4b95c82f4eea3d5610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/AliceBundleExtension/zipball/6c97cdeaa24ae97e8591a64ae8b05cc475d378a0",
-                "reference": "6c97cdeaa24ae97e8591a64ae8b05cc475d378a0",
+                "url": "https://api.github.com/repos/theofidry/AliceBundleExtension/zipball/dfcb439dc6dfc9081a042f4b95c82f4eea3d5610",
+                "reference": "dfcb439dc6dfc9081a042f4b95c82f4eea3d5610",
                 "shasum": ""
             },
             "require": {
@@ -4253,7 +4253,7 @@
                 "orm",
                 "symfony"
             ],
-            "time": "2015-10-06 08:54:56"
+            "time": "2015-10-26 16:29:36"
         }
     ],
     "aliases": [],

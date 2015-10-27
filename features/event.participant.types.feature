@@ -3,7 +3,9 @@ Feature: Show the homepage of an event
 
   Background:
     Given the database is empty
-    And the fixtures file "Event.yml" is loaded
+    And the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
 
   Scenario: Show the participant types of 'Les rendez-vous Carnot 2016' in French
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"

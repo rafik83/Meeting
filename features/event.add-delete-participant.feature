@@ -3,7 +3,12 @@ Feature: Add and delete participant
 
   Background: Re-init the database and load the fixtures
     Given the database is empty
-    And the fixtures "Participant.yml" are loaded
+    And the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
+      | User.yml                                               |
+      | Sheet.yml                                              |
+      | Participant.yml                                        |
 
   Scenario: I can delete a participant as an owner
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

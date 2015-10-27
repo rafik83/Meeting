@@ -29,12 +29,4 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->kernel = $kernel;
     }
-
-    /**
-     * @return EntityManager
-     */
-    private function getEntityManager()
-    {
-        return $this->kernel->getContainer()->get('doctrine')->getManager();
-    }
 }
