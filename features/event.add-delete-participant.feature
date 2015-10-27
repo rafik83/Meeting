@@ -16,7 +16,7 @@ Feature: Add and delete participant
     And I should see "Exposant"
     And I should see "form.delete_participant.children.submit.label"
     Then I press "form.delete_participant.children.submit.label"
-    And I should see "flash.event.sheet.delete_participant.success"
+    And I should see "flash.sheet.delete_participant.success"
 
   Scenario: I can not delete a participant as a guest
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -49,6 +49,6 @@ Feature: Add and delete participant
     Then I press "form.add_participant.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "Le Tester"
-    And I should see "flash.event.sheet.add_participant.success"
+    And I should see "flash.sheet.add_participant.success"
 
 

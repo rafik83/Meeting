@@ -122,7 +122,7 @@ class SheetController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
-                $this->addFlash('success', 'flash.event.sheet.add_participant.success');
+                $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
@@ -233,7 +233,7 @@ class SheetController extends Controller
                 ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
                 ->handle($updateBlock);
 
-            $this->addFlash('success', 'flash.event.sheet.update_block.success');
+            $this->addFlash('success', 'flash.sheet.update_block.success');
 
             // Go to the sheet
             return $this->redirectToRoute('event_sheet', [
@@ -274,13 +274,13 @@ class SheetController extends Controller
                 $this
                     ->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')
                     ->handle($delete);
-                $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
+                $this->addFlash('success', 'flash.sheet.delete_participant.success');
             } catch (IsNotLinkedToSheetException $exception) {
-                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
             } catch (OwnerCanNotBeDeletedException $exception) {
-                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
             } catch (IsNotOwnerException $exception) {
-                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
             }
         }
 

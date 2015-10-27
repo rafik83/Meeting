@@ -4,20 +4,14 @@ flash:
             success: Votre compte a bien été créé
         participation:
             success: Votre fiche de participation a été sauvegardée
-        sheet:
-            add_participant:
-                success: Le participant a bien été ajouté
-            delete_participant:
-                success: Le participant a bien été supprimé
-                access_denied:
-                    error: Vous n'avez pas les droits pour effectuer cette action
-            update_block:
-                success: Les informations ont bien été enregistrées
     change_password:
         success: Votre mot de passe a été changé
     sheet:
         add_participant:
             success: Le participant a bien été ajouté
+        delete_participant:
+            success: Le participant a bien été supprimé
+            access_denied: Vous n'avez pas les droits pour effectuer cette action
         update_participant:
             success: La fiche participant a bien été modifiée
         update_block:
