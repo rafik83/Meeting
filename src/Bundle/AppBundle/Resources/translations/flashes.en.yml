@@ -4,19 +4,15 @@ flash:
             success: Your account is created
         participation:
             success: Your participate entry has been saved
-        sheet:
-            add_participant:
-                success: The participant has been added
-            delete_participant:
-                success: The participant has been deleted
-                access_denied:
-                    error: You don't have the right to do this
     change_password:
         success: Your password has been updated
     sheet:
         add_participant:
             success: The participant has been added
+        delete_participant:
+            success: The participant has been deleted
+            access_denied: You don't have the right to do this
         update_participant:
             success: The participant has been updated
         update_block:
-            success: Informations has been updated
+            success: Information has been updated
