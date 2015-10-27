@@ -81,13 +81,18 @@ install-db@test:
 	bin/console doctrine:schema:update --force --env=test
 
 install-db-fixtures:
-	#bin/console doctrine:fixtures:load -n
+	bin/console doctrine:fixtures:load -n
 
 install-db-fixtures@test:
 	#bin/console doctrine:fixtures:load -n --env=test
 
 install-dep:
 	npm --no-spin install
+
+init-db:
+	bin/console doctrine:schema:drop --force
+	bin/console doctrine:schema:create
+	bin/console doctrine:fixtures:load -n
 
 #########
 # Build #
