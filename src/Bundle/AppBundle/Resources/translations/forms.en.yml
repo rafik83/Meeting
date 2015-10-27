@@ -54,6 +54,6 @@ form:
     update_sheet_block:
         children:
             data:
-                label: Informations update
+                label: Information update
             submit:
                 label: Submit

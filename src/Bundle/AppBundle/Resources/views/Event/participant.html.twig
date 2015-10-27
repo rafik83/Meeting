@@ -10,7 +10,7 @@
         <td>{{ participantView.userEmail }}</td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
             <span class="label label-info">
                 {% if participantView.owner %}
                     {{ 'event.sheet.participant.owner'|trans }}
@@ -18,6 +18,15 @@
                     {{ 'event.sheet.participant.guest'|trans }}
                 {% endif %}
             </span>
+        </td>
+        <td>
+            {% if participantView.userId == app.user.id %}
+                <a href="{{ path('event_sheet_update_participant', {
+                    'id':             sheet.id,
+                    'participant_id': participantView.id,
+                    'subdomain':      app.request.attributes.get('subdomain')
+                }) }}" class="btn btn-xs btn-primary">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
+            {% endif %}
         </td>
     </tr>
 </table>

@@ -31,4 +31,6 @@ event:
                 title: Participants
             add_participant:
                 title: Add a participant
+            update_participant:
+                title: Edit
             edit: Edit
