@@ -66,6 +66,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
             - @vimeet_infrastructure.repository.sheet_repository
+    vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
+        arguments:
+            - @vimeet_infrastructure.repository.participant_repository
 
     #
     # Security

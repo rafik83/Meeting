@@ -13,12 +13,17 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\Participant\Update;
+use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
+use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
+use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
@@ -208,11 +213,41 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantViewsBySheet($sheet->getId());
 
+        $userParticipant = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+
+        $participantDeleteForms = [];
+
+        if ($userParticipant->isOwner()) {
+            foreach ($participantViews as $participantView) {
+                if (!$participantView->owner) {
+                    $delete = new Delete($sheet, $this->getUser(), $participantView->id);
+
+                    $participantDeleteForms[$participantView->id] = $this->createForm(
+                        new DeleteParticipantType(),
+                        $delete,
+                        [
+                            'action' => $this->generateUrl(
+                                'event_sheet_delete_participant',
+                                [
+                                    'subdomain'      => $request->attributes->get('subdomain'),
+                                    'id'             => $sheet->getId(),
+                                    'participant_id' => $participantView->id,
+                                ]
+                            )
+                        ]
+                    )->createView();
+                }
+            }
+        }
+
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
-            'eventView'        => $eventView,
-            'typeView'         => $typeView,
-            'sheet'            => $sheet,
-            'participantViews' => $participantViews,
+            'eventView'                => $eventView,
+            'typeView'                 => $typeView,
+            'sheet'                    => $sheet,
+            'participantViews'         => $participantViews,
+            'participant_delete_forms' => $participantDeleteForms,
         ]);
     }
 
@@ -346,6 +381,48 @@ class EventController extends Controller
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "participant",
+     *   class="Proximum\Vimeet\Domain\Model\Participant",
+     *   options={"id" = "participant_id"}
+     * )
+     *
+     * @param Request     $request
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     *
+     * @return RedirectResponse
+     */
+    public function deleteParticipantAction(Request $request, Sheet $sheet, Participant $participant)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $delete = new Delete($sheet, $this->getUser(), $participant);
+        $form   = $this->createForm(new DeleteParticipantType(), $delete);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')
+                    ->handle($delete);
+                $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
+            } catch (IsNotLinkedToSheetException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            } catch (OwnerCanNotBeDeletedException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            } catch (IsNotOwnerException $exception) {
+                $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
+            }
+        }
+
+        // Go to the sheet
+        return $this->redirectToRoute('event_sheet', [
+            'subdomain' => $request->attributes->get('subdomain'),
+            'id'        => $sheet->getId(),
         ]);
     }
 

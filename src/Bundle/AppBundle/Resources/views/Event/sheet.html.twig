@@ -11,15 +11,16 @@
 
     <div class="row">
         {% for participantView in participantViews %}
-            <div class="col-md-3">
-                {{ include('VimeetAppBundle:Event:participant.html.twig', {
-                    'template': sheet.type.participantTemplate,
-                    'participant': participantView
-                }) }}
+            <div class="col-md-4">
+                {% include 'VimeetAppBundle:Event:participant.html.twig' with {
+                    'template'               : sheet.type.participantTemplate,
+                    'participant'            : participantView,
+                    'participant_delete_form': participant_delete_forms is not empty and participant_delete_forms[participantView.id] is defined ? participant_delete_forms[participantView.id] : null
+                } %}
             </div>
         {% endfor %}
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <a href="{{ path('event_sheet_add_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')

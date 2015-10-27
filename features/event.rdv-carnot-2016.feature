@@ -2,7 +2,7 @@ Feature: Show the homepage of an event
   I need to be able to see the event name and description
 
   Background: Re-init the database and load the fixtures
-    Given the database is initialized
+    Given the database is empty
     And the fixtures "Event.yml" are loaded
 
   Scenario: Show the homepage of 'Les rendez-vous Carnot 2016' in French

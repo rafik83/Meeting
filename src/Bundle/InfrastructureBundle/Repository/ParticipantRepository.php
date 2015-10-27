@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class ParticipantRepository implements ParticipantRepositoryInterface
@@ -36,6 +38,15 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     public function add(Participant $participant)
     {
         $this->entityManager->persist($participant);
+        $this->entityManager->flush($participant);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(Participant $participant)
+    {
+        $this->entityManager->remove($participant);
         $this->entityManager->flush($participant);
     }
 
@@ -103,6 +114,25 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $result = $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
 
         return $result ? intval($result) : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantForUserAndSheet(User $user, Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from('Entity:Participant', 'participant')
+            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id = :sheetId')
+            ->setParameter('sheetId', $sheet->getId())
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

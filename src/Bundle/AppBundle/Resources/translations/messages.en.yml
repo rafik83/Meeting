@@ -34,3 +34,7 @@ event:
             update_participant:
                 title: Edit
             edit: Edit
+            delete_participant:
+                title: Delete this participant
+        add_participant:
+            title: Add a participant

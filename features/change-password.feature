@@ -2,7 +2,7 @@ Feature: Change password
   When I am logged, I need to be able to change my password
 
   Background: Re-init the database and load the fixtures
-    Given the database is initialized
+    Given the database is empty
     And the fixtures "Event.yml" are loaded
     And the fixtures "User.yml" are loaded
 

@@ -12,11 +12,11 @@
     <tr>
         <td>
             <span class="label label-info">
-                {% if participantView.owner %}
-                    {{ 'event.sheet.participant.owner'|trans }}
-                {% else %}
-                    {{ 'event.sheet.participant.guest'|trans }}
-                {% endif %}
+            {% if participantView.owner %}
+                {{ 'event.sheet.participant.owner'|trans }}
+            {% else %}
+                {{ 'event.sheet.participant.guest'|trans }}
+            {% endif %}
             </span>
         </td>
         <td>
@@ -26,6 +26,12 @@
                     'participant_id': participantView.id,
                     'subdomain':      app.request.attributes.get('subdomain')
                 }) }}" class="btn btn-xs btn-primary">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
+            {% endif %}
+
+            {% if participant_delete_form is not null %}
+                {{ form_start(participant_delete_form) }}
+                {{ form_widget(participant_delete_form.submit, {attr: {class: 'btn btn-xs btn-danger'}}) }}
+                {{ form_end(participant_delete_form) }}
             {% endif %}
         </td>
     </tr>
