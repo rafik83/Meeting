@@ -2,7 +2,7 @@ Feature: Update self participant sheet
   I need to be able to update my participant informations
 
   Background: Re-init the database and load the fixtures
-    Given the database is initialized
+    Given the database is empty
     And the fixtures "Participant.yml" are loaded
 
   Scenario: I can go to the participant sheet and update it
@@ -13,9 +13,9 @@ Feature: Update self participant sheet
     Then I follow "event.link.see_my_sheet"
     Then I follow "event.sheet.block.update_participant.title"
     And I fill in the following:
-      |Nom       |Jean        |
-      |Prénom    |Dupond      |
-      |Téléphone |0611111111  |
-      |Fonction  |Developpeur |
+      | Nom       | Jean        |
+      | Prénom    | Dupond      |
+      | Téléphone | 0611111111  |
+      | Fonction  | Développeur |
     And I press "form.participant_update.children.submit.label"
     Then I should see "flash.sheet.update_participant.success"
