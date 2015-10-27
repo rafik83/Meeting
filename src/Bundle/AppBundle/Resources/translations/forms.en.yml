@@ -51,3 +51,9 @@ form:
                 label: Participant personnal informations
             submit:
                 label: Submit
+    update_sheet_block:
+        children:
+            data:
+                label: Informations update
+            submit:
+                label: Submit

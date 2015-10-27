@@ -51,3 +51,9 @@ form:
                 label: Coordonnées du participant
             submit:
                 label: Envoyer
+    update_sheet_block:
+        children:
+            data:
+                label: Modifier les informations
+            submit:
+                label: Envoyer

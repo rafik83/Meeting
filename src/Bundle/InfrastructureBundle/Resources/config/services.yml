@@ -62,6 +62,10 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.user_repository
             - @vimeet_infrastructure.repository.participant_repository
+    vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
+        arguments:
+            - @vimeet_infrastructure.repository.sheet_repository
 
     #
     # Security

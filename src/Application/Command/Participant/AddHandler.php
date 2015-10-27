@@ -61,7 +61,8 @@ class AddHandler
                 throw new ParticipantAlreadyExistException('User already linked to this sheet');
             }
         }
-        // Add the new partipant
+
+        // Add the new participant
         $participant = new Participant($add->sheet, $user, $add->data, $add->owner);
         $this->participantRepository->add($participant);
 

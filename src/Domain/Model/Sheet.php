@@ -42,11 +42,18 @@ class Sheet
      */
     private $data;
 
-    public function __construct(Event $event, Type $type)
+    /**
+     * @param Event $event
+     * @param Type  $type
+     * @param array $data
+     */
+    public function __construct(Event $event, Type $type, array $data)
     {
         $this->event        = $event;
         $this->type         = $type;
         $this->participants = new ArrayCollection();
+
+        $this->setData($data);
     }
 
     /**
@@ -96,7 +103,7 @@ class Sheet
      */
     public function getData()
     {
-        return $this->data;
+        return json_decode($this->data, true);
     }
 
     /**
@@ -108,8 +115,12 @@ class Sheet
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $data = json_encode($data);
 
-        return $this;
+        if ($data === null) {
+            throw new \InvalidArgumentException('Invalid json data');
+        }
+
+        $this->data = $data;
     }
 }

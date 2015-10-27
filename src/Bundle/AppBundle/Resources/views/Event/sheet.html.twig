@@ -29,15 +29,21 @@
         </div>
     </div>
 
-    {% for block in sheet.type.sheetTemplate %}
-        <h3>{{ block['title'][app.request.locale] }}</h3>
+    {% set data = sheet.data %}
+
+    {% for i, block in sheet.type.sheetTemplate %}
+        <h3>
+            {{ block['title'][app.request.locale] }}
+            <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">{{ 'event.sheet.block.edit'|trans }}</a>
+        </h3>
         <table class="table">
             {% for key, field in block.template %}
                 <tr>
-                    <th>{{ field['label'][app.request.locale]|default }}</th>
-                    <td>-</td>
+                    <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
+                    <td class="col-md-9">{{ data[i][key]|default|nl2br }}</td>
                 </tr>
             {% endfor %}
         </table>
+
     {% endfor %}
 {% endblock %}

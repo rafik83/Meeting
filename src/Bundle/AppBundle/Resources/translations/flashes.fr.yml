@@ -9,3 +9,8 @@ flash:
                 success: Le participant a bien été ajouté
     change_password:
         success: Votre mot de passe a été changé
+    sheet:
+        add_participant:
+            success: Le participant a bien été ajouté
+        update_block:
+            success: Les informations ont bien été enregistrées

@@ -45,7 +45,7 @@ class ParticipateHandler
     public function handle(Participate $participate)
     {
         // Create a new sheet for this event
-        $sheet = new Sheet($participate->event, $participate->type);
+        $sheet = new Sheet($participate->event, $participate->type, []);
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
