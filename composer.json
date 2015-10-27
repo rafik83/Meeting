@@ -43,7 +43,7 @@
         "behat/mink-goutte-driver": "~1.1",
 
         "hautelook/alice-bundle": "~1.0",
-        "theofidry/alice-bundle-extension": "v1.0.0"
+        "theofidry/alice-bundle-extension": "v1.1.0"
     },
     "scripts": {
         "post-create-project-cmd": [
