@@ -29,6 +29,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
@@ -228,11 +229,13 @@ class EventController extends Controller
                         $delete,
                         [
                             'action' => $this->generateUrl(
-                                'event_sheet_delete_participant', [
-                                'subdomain'   => $request->attributes->get('subdomain'),
-                                'id'          => $sheet->getId(),
-                                'participant' => $participantView->id,
-                            ])
+                                'event_sheet_delete_participant',
+                                [
+                                    'subdomain'   => $request->attributes->get('subdomain'),
+                                    'id'          => $sheet->getId(),
+                                    'participant' => $participantView->id,
+                                ]
+                            )
                         ]
                     )->createView();
                 }
@@ -400,7 +403,9 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')
+                    ->handle($delete);
                 $this->addFlash('success', 'flash.event.sheet.delete_participant.success');
             } catch (IsNotLinkedToSheetException $exception) {
                 $this->addFlash('error', 'flash.event.sheet.delete_participant.access_denied.error');
