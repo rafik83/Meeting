@@ -206,6 +206,21 @@ class SheetController extends Controller
      */
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $isUserParticipant = false;
+
+        foreach ($sheet->getParticipants() as $participant) {
+            if ($this->getUser() === $participant->getUser()) {
+                $isUserParticipant = true;
+                break;
+            }
+        }
+
+        if (!$isUserParticipant) {
+            throw new AccessDeniedException('You can not update this data');
+        }
+
         $updateBlock = new UpdateBlock($sheet, $block);
         $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
             'template' => $sheet->getType()->getSheetTemplate()[$block]['template'],

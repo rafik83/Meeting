@@ -11,6 +11,8 @@ flash:
                 success: The participant has been deleted
                 access_denied:
                     error: You don't have the right to do this
+            update_block:
+                success: Informations has been updated
     change_password:
         success: Your password has been updated
     sheet:

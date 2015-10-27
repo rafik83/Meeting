@@ -89,7 +89,7 @@ class Sheet
     /**
      * Get participants
      *
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getParticipants()
     {
@@ -99,7 +99,7 @@ class Sheet
     /**
      * Get data
      *
-     * @return mixed
+     * @return array
      */
     public function getData()
     {
@@ -109,7 +109,7 @@ class Sheet
     /**
      * Set data
      *
-     * @param mixed $data
+     * @param array $data
      *
      * @return Sheet
      */
