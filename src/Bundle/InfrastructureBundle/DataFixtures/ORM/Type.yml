@@ -27,6 +27,49 @@ Proximum\Vimeet\Domain\Model\Type:
                     ]
                 }
             ]
+        packageTemplate: >
+            [
+                {
+                    "title": { "fr": "Forfait de participation", "en": "Participaton package" },
+                    "description": { "fr": "Description bloc fr", "en": "Description bloc en" },
+                    "template": [
+                        {
+                            "label": { "fr": "Forfait", "en": "Package" },
+                            "quantity": "false",
+                            "type": "choice",
+                            "required": "true",
+                            "multiple": "false",
+                            "choices": [
+                                {
+                                    "label": { "fr": "Formule Exposant", "en": "Exhibitors package" },
+                                    "description": { "fr": "Desc Exposant", "en": "Desc Exhibitors" },
+                                    "unitPrice": 2190
+                                },
+                                {
+                                    "label": { "fr": "Formule Découverte", "en": "Discovery formula" },
+                                    "description": { "fr": "Desc Découverte", "en": "Desc Discovery" },
+                                    "unitPrice": 1090
+                                },
+                                {
+                                    "label": { "fr": "Forfait Silver", "en": "Silver formula" },
+                                    "description": { "fr": "Desc Silver", "en": "Desc Silver" },
+                                    "unitPrice": 3990
+                                },
+                                {
+                                    "label": { "fr": "Forfait Gold", "en": "Gold formula" },
+                                    "description": { "fr": "Desc Gold", "en": "Desc Gold" },
+                                    "unitPrice": 5990
+                                },
+                                {
+                                    "label": { "fr": "Formule de sponsoring des CONFERENCES", "en": "Sponsoring formula for CONFERENCES" },
+                                    "description": { "fr": "Desc sponsoring", "en": "Desc sponsoring" },
+                                    "unitPrice": 11000
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
@@ -55,6 +98,8 @@ Proximum\Vimeet\Domain\Model\Type:
                     ]
                 }
             ]
+        packageTemplate: >
+            []
     congressiste:
         position: 2
         event: @event_rdv_carnot_2016
@@ -66,6 +111,8 @@ Proximum\Vimeet\Domain\Model\Type:
                 { "type": "text", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
+            []
+        packageTemplate: >
             []
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:

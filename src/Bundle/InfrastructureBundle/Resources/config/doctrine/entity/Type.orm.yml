@@ -13,6 +13,8 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         sheetTemplate:
             type: text
+        packageTemplate:
+            type: text
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
