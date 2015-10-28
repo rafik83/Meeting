@@ -14,13 +14,22 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateBlockHandler
 {
+    /**
+     * @var SheetRepositoryInterface
+     */
     private $sheetRepository;
 
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     */
     public function __construct(SheetRepositoryInterface $sheetRepository)
     {
         $this->sheetRepository = $sheetRepository;
     }
 
+    /**
+     * @param UpdateBlock $updateBlock
+     */
     public function handle(UpdateBlock $updateBlock)
     {
         $data = $updateBlock->sheet->getData();

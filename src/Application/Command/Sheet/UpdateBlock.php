@@ -29,6 +29,10 @@ class UpdateBlock
      */
     public $data = [];
 
+    /**
+     * @param Sheet   $sheet
+     * @param integer $block
+     */
     public function __construct(Sheet $sheet, $block)
     {
         $this->sheet = $sheet;
