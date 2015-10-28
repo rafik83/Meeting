@@ -1,4 +1,6 @@
 form:
+    field:
+        private: Private field
     register:
         children:
             email:
