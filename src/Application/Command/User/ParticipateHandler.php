@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -42,6 +43,7 @@ class ParticipateHandler extends BaseHandler
 
     /**
      * @param Participate $participate
+     * @throws RequiredDataEmptyException
      */
     public function handle(Participate $participate)
     {

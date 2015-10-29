@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -45,6 +46,7 @@ class AddHandler extends BaseHandler
      * @param Add $add
      *
      * @throws ParticipantAlreadyExistException
+     * @throws RequiredDataEmptyException
      */
     public function handle(Add $add)
     {

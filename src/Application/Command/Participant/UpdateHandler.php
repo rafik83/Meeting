@@ -33,8 +33,8 @@ class UpdateHandler extends BaseHandler
     /**
      * @param Update $update
      *
-     * @throws RequiredDataEmptyException
      * @throws UnknownParticipantException
+     * @throws RequiredDataEmptyException
      */
     public function handle(Update $update)
     {

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateBlockHandler extends BaseHandler
@@ -22,6 +23,11 @@ class UpdateBlockHandler extends BaseHandler
         $this->sheetRepository = $sheetRepository;
     }
 
+    /**
+     * @param UpdateBlock $updateBlock
+     *
+     * @throws RequiredDataEmptyException
+     */
     public function handle(UpdateBlock $updateBlock)
     {
         $data = $updateBlock->sheet->getData();
