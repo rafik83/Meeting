@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetExceptio
 use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
@@ -129,9 +130,24 @@ class SheetController extends Controller
                     'subdomain' => $request->attributes->get('subdomain'),
                     'id'        => $sheet->getId(),
                 ]);
+
             } catch (ParticipantAlreadyExistException $exception) {
                 $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
                 $form->get('email')->addError($error);
+
+            } catch (RequiredDataEmptyException $exception) {
+                foreach ($add->data as $key => $value) {
+                    if ($sheet->getType()->getParticipantTemplate()[$key]['required'] === 'true'
+                        && $value === null
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.field.required', [], 'validators')
+                        );
+                        $form->get('data')->get($key)->addError($error);
+                    }
+                }
             }
         }
 
@@ -176,17 +192,32 @@ class SheetController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
-                ->handle($updateParticipant);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
+                    ->handle($updateParticipant);
 
-            $this->addFlash('success', 'flash.sheet.update_participant.success');
+                $this->addFlash('success', 'flash.sheet.update_participant.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id' => $sheet->getId(),
+                ]);
+            } catch (RequiredDataEmptyException $exception) {
+                foreach ($updateParticipant->data as $key => $value) {
+                    if ($sheet->getType()->getParticipantTemplate()[$key]['required'] === 'true'
+                        && $value === null
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.field.required', [], 'validators')
+                        );
+                        $form->get('data')->get($key)->addError($error);
+                    }
+                }
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:updateParticipant.html.twig', [
@@ -224,22 +255,37 @@ class SheetController extends Controller
         $updateBlock = new UpdateBlock($sheet, $block);
         $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
             'template' => $sheet->getType()->getSheetTemplate()[$block]['template'],
-            'locale' => $request->getLocale(),
+            'locale'   => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
-                ->handle($updateBlock);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
+                    ->handle($updateBlock);
 
-            $this->addFlash('success', 'flash.sheet.update_block.success');
+                $this->addFlash('success', 'flash.sheet.update_block.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id' => $sheet->getId(),
+                ]);
+            } catch (RequiredDataEmptyException $exception) {
+                foreach ($updateBlock->data as $key => $value) {
+                    if ($sheet->getType()->getSheetTemplate()[$block]['template'][$key]['required'] === 'true'
+                        && $value === null
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.field.required', [], 'validators')
+                        );
+                        $form->get('data')->get($key)->addError($error);
+                    }
+                }
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:updateBlock.html.twig', [
