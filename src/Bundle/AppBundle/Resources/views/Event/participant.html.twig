@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-bordered table-condensed">
     {% for key, field in template %}
         {% if field['private'] == 'false' %}
             <tr>
@@ -27,7 +27,7 @@
                     'id':             sheet.id,
                     'participant_id': participantView.id,
                     'subdomain':      app.request.attributes.get('subdomain')
-                }) }}" class="btn btn-xs btn-primary">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
+                }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
             {% endif %}
 
             {% if participant_delete_form is not null %}
