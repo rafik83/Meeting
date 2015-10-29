@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\BaseHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class AddHandler
+class AddHandler extends BaseHandler
 {
     /**
      * @var UserRepositoryInterface
@@ -47,6 +48,9 @@ class AddHandler
      */
     public function handle(Add $add)
     {
+        // Check the constraint on the data (required) before
+        $this->checkDataConstraint($add->data, $add->sheet->getType()->getParticipantTemplate());
+
         // Try to find user
         $user = $this->userRepository->findByEmail($add->email);
 
