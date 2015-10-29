@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,18 +137,11 @@ class SheetController extends Controller
                 $form->get('email')->addError($error);
 
             } catch (RequiredDataEmptyException $exception) {
-                foreach ($add->data as $key => $value) {
-                    if ($sheet->getType()->getParticipantTemplate()[$key]['required'] === 'true'
-                        && $value === null
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.field.required', [], 'validators')
-                        );
-                        $form->get('data')->get($key)->addError($error);
-                    }
-                }
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $add->data
+                );
             }
         }
 
@@ -205,18 +199,11 @@ class SheetController extends Controller
                     'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                foreach ($updateParticipant->data as $key => $value) {
-                    if ($sheet->getType()->getParticipantTemplate()[$key]['required'] === 'true'
-                        && $value === null
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.field.required', [], 'validators')
-                        );
-                        $form->get('data')->get($key)->addError($error);
-                    }
-                }
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $updateParticipant->data
+                );
             }
         }
 
@@ -273,18 +260,11 @@ class SheetController extends Controller
                     'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                foreach ($updateBlock->data as $key => $value) {
-                    if ($sheet->getType()->getSheetTemplate()[$block]['template'][$key]['required'] === 'true'
-                        && $value === null
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.field.required', [], 'validators')
-                        );
-                        $form->get('data')->get($key)->addError($error);
-                    }
-                }
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getSheetTemplate()[$block]['template'],
+                    $updateBlock->data
+                );
             }
         }
 
@@ -335,5 +315,28 @@ class SheetController extends Controller
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
+    }
+
+    /**
+     * @param Form $form
+     * @param array $template
+     * @param array $data
+     *
+     * @return Form
+     */
+    private function addRequiredErrorOnForm(Form $form, array $template, array $data)
+    {
+        foreach ($data as $key => $value) {
+            if ($template[$key]['required'] === 'true' && $value === null) {
+                $error = new FormError(
+                    $this
+                        ->get('translator')
+                        ->trans('validators.field.required', [], 'validators')
+                );
+                $form->get('data')->get($key)->addError($error);
+            }
+        }
+
+        return $form;
     }
 }
