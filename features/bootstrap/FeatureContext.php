@@ -29,4 +29,21 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->kernel = $kernel;
     }
+
+    /**
+     * @When /^(?:|I )check the "([^"]*)" radio$/
+     */
+    public function iCheckTheRadio($radioLabel)
+    {
+        foreach ($this->getSession()->getPage()->findAll('css', 'label') as $label) {
+            if ($radioLabel === $label->getText() && $label->has('css', 'input[type="radio"]')) {
+                $this->fillField(
+                    $label->find('css', 'input[type="radio"]')->getAttribute('name'),
+                    $label->find('css', 'input[type="radio"]')->getAttribute('value')
+                );
+                return;
+            }
+        }
+        throw new \Exception('Radio button not found');
+    }
 }
