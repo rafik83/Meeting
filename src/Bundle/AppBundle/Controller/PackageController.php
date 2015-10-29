@@ -14,12 +14,10 @@ use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class PackageController extends Controller
+class PackageController extends BaseController
 {
     /**
      * @param Request   $request
@@ -32,19 +30,7 @@ class PackageController extends Controller
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $isUserParticipant = false;
-
-        foreach ($sheet->getParticipants() as $participant) {
-            if ($this->getUser() === $participant->getUser()) {
-                $isUserParticipant = true;
-                break;
-            }
-        }
-
-        if (!$isUserParticipant) {
-            throw new AccessDeniedException('You can not update this data');
-        }
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $packageTemplate = $sheet->getType()->getPackageTemplate();
 

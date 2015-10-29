@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 
@@ -41,5 +42,25 @@ class BaseController extends Controller
         }
 
         return $form;
+    }
+
+    /**
+     * @param array $participants
+     *
+     * @throws AccessDeniedException
+     */
+    protected function denyAccessForNonParticipant($participants)
+    {
+        $isUserParticipant = false;
+
+        foreach ($participants as $participant) {
+            if ($this->getUser() === $participant->getUser()) {
+                $isUserParticipant = true;
+            }
+        }
+
+        if (!$isUserParticipant) {
+            throw new AccessDeniedException('You can not update this data');
+        }
     }
 }

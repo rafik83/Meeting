@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
-use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
@@ -224,7 +223,7 @@ class SheetController extends BaseController
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->isParticipant($sheet->getParticipants());
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
 
@@ -308,25 +307,5 @@ class SheetController extends BaseController
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
-    }
-
-    /**
-     * @param PersistentCollection $participants
-     *
-     * @throws AccessDeniedException
-     */
-    private function isParticipant(PersistentCollection $participants)
-    {
-        $isUserParticipant = false;
-
-        foreach ($participants as $participant) {
-            if ($this->getUser() === $participant->getUser()) {
-                $isUserParticipant = true;
-            }
-        }
-
-        if (!$isUserParticipant) {
-            throw new AccessDeniedException('You can not update this data');
-        }
     }
 }
