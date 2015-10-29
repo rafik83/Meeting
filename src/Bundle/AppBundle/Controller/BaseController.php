@@ -26,7 +26,11 @@ class BaseController extends Controller
     protected function addRequiredErrorOnForm(Form $form, array $template, array $data)
     {
         foreach ($data as $key => $value) {
-            if ($template[$key]['required'] === 'true' && $value === null) {
+            if (isset($template[$key])
+                && isset($template[$key]['required'])
+                && $template[$key]['required'] === 'true'
+                && $value === null
+            ) {
                 $error = new FormError(
                     $this
                         ->get('translator')

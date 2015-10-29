@@ -16,14 +16,18 @@ class BaseHandler
 {
     /**
      * @param array   $data
-     * @param string  $template
+     * @param array   $template
      *
      * @throws RequiredDataEmptyException
      */
-    public function checkDataConstraint(array $data, $template)
+    public function checkDataConstraint(array $data, array $template)
     {
         foreach ($data as $key => $value) {
-            if (isset($template[$key]['required']) && $template[$key]['required'] === 'true' && $value === null) {
+            if (isset($template[$key])
+                && isset($template[$key]['required'])
+                && $template[$key]['required'] === 'true'
+                && $value === null
+            ) {
                 throw new RequiredDataEmptyException('A required field is empty');
             }
         }
