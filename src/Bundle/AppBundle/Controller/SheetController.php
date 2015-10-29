@@ -221,10 +221,16 @@ class SheetController extends Controller
             throw new AccessDeniedException('You can not update this data');
         }
 
+        $sheetTemplate = $sheet->getType()->getSheetTemplate();
+
+        if (!isset($sheetTemplate[$block])) {
+            throw new \InvalidArgumentException();
+        }
+
         $updateBlock = new UpdateBlock($sheet, $block);
         $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
-            'template' => $sheet->getType()->getSheetTemplate()[$block]['template'],
-            'locale' => $request->getLocale(),
+            'template' => $sheetTemplate[$block]['template'],
+            'locale'   => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 

@@ -63,3 +63,9 @@ form:
         children:
             submit:
                 label: Supprimer
+    update_sheet_package_step:
+        children:
+            packageData:
+                label: ''
+            submit:
+                label: Valider et aller à la suite

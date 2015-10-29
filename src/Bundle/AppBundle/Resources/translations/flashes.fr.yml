@@ -16,3 +16,6 @@ flash:
             success: La fiche participant a bien été modifiée
         update_block:
             success: Les informations ont bien été enregistrées
+    package:
+        update_step:
+            success: Les informations ont bien été enregistrées
