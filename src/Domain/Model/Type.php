@@ -123,4 +123,20 @@ class Type
     {
         return json_decode($this->sheetTemplate, true);
     }
+
+    /**
+     * @param string $participantTemplate
+     */
+    public function setParticipantTemplate($participantTemplate)
+    {
+        $this->participantTemplate = $participantTemplate;
+    }
+
+    /**
+     * @param string $sheetTemplate
+     */
+    public function setSheetTemplate($sheetTemplate)
+    {
+        $this->sheetTemplate = $sheetTemplate;
+    }
 }
