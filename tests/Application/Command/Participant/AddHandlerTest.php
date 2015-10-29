@@ -26,6 +26,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type();
+        $type->setParticipantTemplate(
+            json_encode(
+                ['foobar' => [
+                    "required" => "true",
+                    "private"  => "false",
+                ]]
+            )
+        );
         $sheet = new Sheet($event, $type, []);
         $owner = false;
 
@@ -51,6 +59,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type();
+        $type->setParticipantTemplate(
+            json_encode(
+                ['foobar' => [
+                    "required" => "true",
+                    "private"  => "false",
+                ]]
+            )
+        );
         $sheet = new Sheet($event, $type, []);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;

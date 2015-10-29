@@ -1,4 +1,6 @@
 validators:
+    field:
+        required: This field is required
     email: Email address is not valid
     password:
         min: Password is too short, minimum is {{ limit }} characters

@@ -30,8 +30,9 @@ class ParticipantDataType extends AbstractType
 
         foreach ($template as $i => $field) {
             $builder->add($i, $field['type'], [
-                'label' => $field['label'][$locale],
-                'help'  => $field['private'] === 'true' ? 'form.field.private' : null,
+                'label'    => $field['label'][$locale],
+                'help'     => $field['private'] === 'true' ? 'form.field.private' : null,
+                'required' => isset($field['required']) && $field['required'] === 'true',
             ]);
         }
     }
