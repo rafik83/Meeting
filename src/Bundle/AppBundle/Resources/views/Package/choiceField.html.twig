@@ -1,0 +1,15 @@
+<table class="table table-bordered table-condensed">
+    {% for key, subfield in fields %}
+        <tr>
+            <td>
+                {{ form_row(subfield) }}
+            </td>
+            <td>
+                {{ choicesTemplate[key]['description'][app.request.locale]|nl2br }}
+            </td>
+            <td class="text-right">
+                {{ choicesTemplate[key]['unitPrice']|number_format_currency('EUR') }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

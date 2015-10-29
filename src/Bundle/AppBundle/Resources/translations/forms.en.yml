@@ -65,7 +65,5 @@ form:
                 label: Delete
     update_sheet_package_step:
         children:
-            packageData:
-                label: ''
             submit:
                 label: Save and go to next step

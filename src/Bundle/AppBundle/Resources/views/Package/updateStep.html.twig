@@ -15,28 +15,16 @@
         {{ form_label(field) }}
 
         {% if field.vars["label_attr"]["data-description"] is defined %}
-            <p>{{ field.vars["label_attr"]["data-description"]|raw }}</p>
+            <p>{{ field.vars["label_attr"]["data-description"] }}</p>
         {% endif %}
 
         {{ form_errors(field) }}
 
         {% if field.children|length %}
-            <table class="table table-bordered table-condensed">
-            {% for subkey, subfield in field.children %}
-                {% set fieldTemplate = stepPackageTemplate['template'][key]['choices'][subkey] %}
-                <tr>
-                    <td>
-                        {{ form_row(subfield) }}
-                    </td>
-                    <td>
-                        {{ fieldTemplate['description'][app.request.locale]|default|raw }}
-                    </td>
-                    <td class="text-right">
-                        {{ fieldTemplate['unitPrice']|number_format_currency('EUR') }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </table>
+            {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
+                'fields': field.children,
+                'choicesTemplate': stepPackageTemplate['template'][key]['choices']
+            } %}
         {% else %}
             {{ form_widget(field) }}
         {% endif %}

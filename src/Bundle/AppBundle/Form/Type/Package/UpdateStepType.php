@@ -25,7 +25,8 @@ class UpdateStepType extends AbstractType
         $builder
             ->add('packageData', new ParticipantDataType(), [
                 'template' => $options['template'],
-                'locale'   => $options['locale']
+                'locale'   => $options['locale'],
+                'label'    => false,
             ])
         ;
     }
