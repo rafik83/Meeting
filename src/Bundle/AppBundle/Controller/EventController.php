@@ -20,7 +20,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class EventController extends Controller
+class EventController extends BaseController
 {
     /**
      * Event home
@@ -165,18 +164,7 @@ class EventController extends Controller
                     'id'        => $participate->sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                foreach ($create->data as $key => $value) {
-                    if ($type->getParticipantTemplate()[$key]['required'] === 'true'
-                        && $value === null
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.field.required', [], 'validators')
-                        );
-                        $form->get('data')->get($key)->addError($error);
-                    }
-                }
+                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data);
             }
         }
 

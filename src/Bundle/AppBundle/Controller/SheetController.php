@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
@@ -28,15 +29,13 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class SheetController extends Controller
+class SheetController extends BaseController
 {
     /**
      * Sheet
@@ -225,19 +224,7 @@ class SheetController extends Controller
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $isUserParticipant = false;
-
-        foreach ($sheet->getParticipants() as $participant) {
-            if ($this->getUser() === $participant->getUser()) {
-                $isUserParticipant = true;
-                break;
-            }
-        }
-
-        if (!$isUserParticipant) {
-            throw new AccessDeniedException('You can not update this data');
-        }
+        $this->isParticipant($sheet->getParticipants());
 
         $updateBlock = new UpdateBlock($sheet, $block);
         $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
@@ -318,25 +305,22 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Form $form
-     * @param array $template
-     * @param array $data
+     * @param PersistentCollection $participants
      *
-     * @return Form
+     * @throws AccessDeniedException
      */
-    private function addRequiredErrorOnForm(Form $form, array $template, array $data)
+    private function isParticipant(PersistentCollection $participants)
     {
-        foreach ($data as $key => $value) {
-            if ($template[$key]['required'] === 'true' && $value === null) {
-                $error = new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.field.required', [], 'validators')
-                );
-                $form->get('data')->get($key)->addError($error);
+        $isUserParticipant = false;
+
+        foreach ($participants as $participant) {
+            if ($this->getUser() === $participant->getUser()) {
+                $isUserParticipant = true;
             }
         }
 
-        return $form;
+        if (!$isUserParticipant) {
+            throw new AccessDeniedException('You can not update this data');
+        }
     }
 }
