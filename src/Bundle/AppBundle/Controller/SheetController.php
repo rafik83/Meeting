@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
@@ -18,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetExceptio
 use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
@@ -27,14 +29,13 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class SheetController extends Controller
+class SheetController extends BaseController
 {
     /**
      * Sheet
@@ -129,9 +130,17 @@ class SheetController extends Controller
                     'subdomain' => $request->attributes->get('subdomain'),
                     'id'        => $sheet->getId(),
                 ]);
+
             } catch (ParticipantAlreadyExistException $exception) {
                 $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
                 $form->get('email')->addError($error);
+
+            } catch (RequiredDataEmptyException $exception) {
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $add->data
+                );
             }
         }
 
@@ -176,17 +185,25 @@ class SheetController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
-                ->handle($updateParticipant);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
+                    ->handle($updateParticipant);
 
-            $this->addFlash('success', 'flash.sheet.update_participant.success');
+                $this->addFlash('success', 'flash.sheet.update_participant.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id' => $sheet->getId(),
+                ]);
+            } catch (RequiredDataEmptyException $exception) {
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $updateParticipant->data
+                );
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:updateParticipant.html.twig', [
@@ -207,19 +224,7 @@ class SheetController extends Controller
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $isUserParticipant = false;
-
-        foreach ($sheet->getParticipants() as $participant) {
-            if ($this->getUser() === $participant->getUser()) {
-                $isUserParticipant = true;
-                break;
-            }
-        }
-
-        if (!$isUserParticipant) {
-            throw new AccessDeniedException('You can not update this data');
-        }
+        $this->isParticipant($sheet->getParticipants());
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
 
@@ -235,17 +240,25 @@ class SheetController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
-                ->handle($updateBlock);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
+                    ->handle($updateBlock);
 
-            $this->addFlash('success', 'flash.sheet.update_block.success');
+                $this->addFlash('success', 'flash.sheet.update_block.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id' => $sheet->getId(),
+                ]);
+            } catch (RequiredDataEmptyException $exception) {
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getSheetTemplate()[$block]['template'],
+                    $updateBlock->data
+                );
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:updateBlock.html.twig', [
@@ -295,5 +308,25 @@ class SheetController extends Controller
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
+    }
+
+    /**
+     * @param PersistentCollection $participants
+     *
+     * @throws AccessDeniedException
+     */
+    private function isParticipant(PersistentCollection $participants)
+    {
+        $isUserParticipant = false;
+
+        foreach ($participants as $participant) {
+            if ($this->getUser() === $participant->getUser()) {
+                $isUserParticipant = true;
+            }
+        }
+
+        if (!$isUserParticipant) {
+            throw new AccessDeniedException('You can not update this data');
+        }
     }
 }

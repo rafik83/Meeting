@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
+use Proximum\Vimeet\Application\Exception\Participant\UnknownParticipantException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
-class UpdateHandler
+class UpdateHandler extends BaseHandler
 {
     /**
      * @var ParticipantRepositoryInterface
@@ -29,10 +32,21 @@ class UpdateHandler
 
     /**
      * @param Update $update
+     *
+     * @throws UnknownParticipantException
+     * @throws RequiredDataEmptyException
      */
     public function handle(Update $update)
     {
         $participant = $this->participantRepository->findById($update->id);
+
+        if ($participant === null) {
+            throw new UnknownParticipantException();
+        }
+
+        // Check the constraint on the data (required)
+        $this->checkDataConstraint($update->data, $participant->getSheet()->getType()->getParticipantTemplate());
+
         $participant->setData($update->data);
 
         $this->participantRepository->set($participant);

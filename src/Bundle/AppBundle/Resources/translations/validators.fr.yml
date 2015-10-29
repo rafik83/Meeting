@@ -1,4 +1,6 @@
 validators:
+    field:
+        required: Ce champ est requis
     email: L'adresse mail saisie n'est pas valide
     password:
         min: Le mot de passe doit comporter au moins {{ limit }} caractères

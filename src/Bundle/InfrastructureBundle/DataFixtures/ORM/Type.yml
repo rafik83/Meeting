@@ -4,26 +4,26 @@ Proximum\Vimeet\Domain\Model\Type:
         event: @event_rdv_carnot_2016
         participantTemplate: >
             [
-                { "type": "text", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
             [
                 {
                     "title": { "fr": "Société", "en": "Company" },
                     "template": [
-                        { "type": "text", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
                     ]
                 },
                 {
                     "title": { "fr": "Offres", "en": "Offers" },
                     "template": [
-                        { "type": "textarea", "private": "false", "label": { "fr": "Mes offres", "en": "My offers" } }
+                        { "type": "textarea", "required": "false", "private": "false", "label": { "fr": "Mes offres", "en": "My offers" } }
                     ]
                 }
             ]
@@ -86,26 +86,26 @@ Proximum\Vimeet\Domain\Model\Type:
         event: @event_rdv_carnot_2016
         participantTemplate: >
             [
-                { "type": "text", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
             [
                 {
                     "title": { "fr": "Société", "en": "Company" },
                     "template": [
-                        { "type": "text", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
-                        { "type": "text", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
+                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
                     ]
                 },
                 {
                     "title": { "fr": "Besoins", "en": "Needs" },
                     "template": [
-                        { "type": "textarea", "private": "false", "label": { "fr": "Mes besoins", "en": "My needs" } }
+                        { "type": "textarea", "required": "false", "private": "false", "label": { "fr": "Mes besoins", "en": "My needs" } }
                     ]
                 }
             ]
@@ -116,10 +116,10 @@ Proximum\Vimeet\Domain\Model\Type:
         event: @event_rdv_carnot_2016
         participantTemplate: >
             [
-                { "type": "text", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
+                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
+                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
             ]
         sheetTemplate: >
             []

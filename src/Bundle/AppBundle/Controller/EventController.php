@@ -13,13 +13,13 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class EventController extends Controller
+class EventController extends BaseController
 {
     /**
      * Event home
@@ -148,19 +148,24 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            // Create the participant
-            $event       = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-            $type        = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
-            $participate = new Participate($this->getUser(), $event, $type, $create->data);
+            $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+            $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-            $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
-            $this->addFlash('success', 'flash.event.participation.success');
+            try {
+                // Create the participant
+                $participate = new Participate($this->getUser(), $event, $type, $create->data);
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $participate->sheet->getId(),
-            ]);
+                $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
+                $this->addFlash('success', 'flash.event.participation.success');
+
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $participate->sheet->getId(),
+                ]);
+            } catch (RequiredDataEmptyException $exception) {
+                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data);
+            }
         }
 
         return $this->render('VimeetAppBundle:Event:participate.html.twig', [

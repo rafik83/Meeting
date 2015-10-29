@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class UpdateBlockHandler
+class UpdateBlockHandler extends BaseHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -29,11 +31,18 @@ class UpdateBlockHandler
 
     /**
      * @param UpdateBlock $updateBlock
+     *
+     * @throws RequiredDataEmptyException
      */
     public function handle(UpdateBlock $updateBlock)
     {
         $data = $updateBlock->sheet->getData();
         $data[$updateBlock->block] = $updateBlock->data;
+
+        $sheetTemplate = $updateBlock->sheet->getType()->getSheetTemplate();
+
+        // Check the constraint on the data (required) before
+        $this->checkDataConstraint($updateBlock->data, $sheetTemplate[$updateBlock->block]['template']);
 
         $updateBlock->sheet->setData($data);
 

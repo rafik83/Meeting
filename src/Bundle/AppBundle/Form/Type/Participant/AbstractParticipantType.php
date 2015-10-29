@@ -24,7 +24,8 @@ abstract class AbstractParticipantType extends AbstractType
         $builder
             ->add('data', new ParticipantDataType(), [
                 'template' => $options['template'],
-                'locale'   => $options['locale']
+                'locale'   => $options['locale'],
+                'label'    => false,
             ])
         ;
     }
