@@ -31,7 +31,7 @@ class Participant
     private $user;
 
     /**
-     * @var string
+     * @var array
      */
     private $data;
 
@@ -50,8 +50,8 @@ class Participant
     {
         $this->sheet = $sheet;
         $this->user  = $user;
+        $this->data  = $data;
         $this->owner = $owner;
-        $this->setData($data);
     }
 
     /**
@@ -101,24 +101,18 @@ class Participant
      */
     public function getData()
     {
-        return json_decode($this->data, true);
+        return $this->data;
     }
 
     /**
      * Set data
      *
-     * @param string $data
+     * @param array $data
      *
      * @return Participant
      */
-    public function setData($data)
+    public function setData(array $data)
     {
-        $data = json_encode($data);
-
-        if ($data === null) {
-            throw new \InvalidArgumentException('Invalid json data');
-        }
-
         $this->data = $data;
     }
 }

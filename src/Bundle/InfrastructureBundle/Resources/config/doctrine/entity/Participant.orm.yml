@@ -8,7 +8,7 @@ Proximum\Vimeet\Domain\Model\Participant:
                 strategy: AUTO
     fields:
         data:
-            type: text
+            type: json_array
         owner:
             type: boolean
     manyToOne:

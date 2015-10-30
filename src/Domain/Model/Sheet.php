@@ -57,10 +57,9 @@ class Sheet
     {
         $this->event        = $event;
         $this->type         = $type;
+        $this->data         = $data;
+        $this->packageData  = $packageData;
         $this->participants = new ArrayCollection();
-
-        $this->setData($data);
-        $this->setPackageData($packageData);
     }
 
     /**
@@ -110,7 +109,7 @@ class Sheet
      */
     public function getData()
     {
-        return json_decode($this->data, true);
+        return $this->data;
     }
 
     /**
@@ -118,14 +117,8 @@ class Sheet
      *
      * @param array $data
      */
-    public function setData($data)
+    public function setData(array $data)
     {
-        $data = json_encode($data);
-
-        if ($data === null) {
-            throw new \InvalidArgumentException('Invalid json data');
-        }
-
         $this->data = $data;
     }
 
@@ -136,7 +129,7 @@ class Sheet
      */
     public function getPackageData()
     {
-        return json_decode($this->packageData, true);
+        return $this->packageData;
     }
 
     /**
@@ -144,14 +137,8 @@ class Sheet
      *
      * @param array $packageData
      */
-    public function setPackageData($packageData)
+    public function setPackageData(array $packageData)
     {
-        $packageData = json_encode($packageData);
-
-        if ($packageData === null) {
-            throw new \InvalidArgumentException('Invalid json data');
-        }
-
         $this->packageData = $packageData;
     }
 }

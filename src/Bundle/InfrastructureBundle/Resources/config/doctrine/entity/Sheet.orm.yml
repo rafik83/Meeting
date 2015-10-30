@@ -8,10 +8,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 strategy: AUTO
     fields:
         data:
-            type: text
+            type: json_array
             nullable: true
         packageData:
-            type: text
+            type: json_array
             nullable: true
     manyToOne:
         event:
