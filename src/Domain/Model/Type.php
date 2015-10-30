@@ -18,12 +18,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Type
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      */
     private $position;
 
@@ -56,7 +56,7 @@ class Type
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -64,7 +64,7 @@ class Type
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {

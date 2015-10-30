@@ -24,7 +24,7 @@ interface EventRepositoryInterface
     public function getEventViewByDomain($domain, $locale);
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return Event
      */

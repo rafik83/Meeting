@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class EventView
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -28,9 +28,9 @@ class EventView
     public $description;
 
     /**
-     * @param integer $id
-     * @param string  $title
-     * @param string  $description
+     * @param int    $id
+     * @param string $title
+     * @param string $description
      */
     public function __construct($id, $title, $description)
     {

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * "Compte utilisateur"
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 class User implements UserInterface, EquatableInterface, \Serializable
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -60,7 +60,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

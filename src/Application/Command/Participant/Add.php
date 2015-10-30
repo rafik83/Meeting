@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Add
 {
@@ -41,7 +41,7 @@ class Add
     public $participant;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $owner;
 

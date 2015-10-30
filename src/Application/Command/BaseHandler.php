@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 class BaseHandler
 {
     /**
-     * @param array   $data
-     * @param array   $template
+     * @param array $data
+     * @param array $template
      *
      * @throws RequiredDataEmptyException
      */

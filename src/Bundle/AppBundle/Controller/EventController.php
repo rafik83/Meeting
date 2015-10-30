@@ -78,7 +78,7 @@ class EventController extends BaseController
         }
 
         // Else, create the register form
-        $register = new Register();
+        $register         = new Register();
         $register->locale = $request->getLocale();
 
         $form = $this->createForm(new RegisterType(), $register, [
@@ -143,7 +143,7 @@ class EventController extends BaseController
             'locale'   => $request->getLocale(),
             'template' => $this
                 ->get('vimeet_infrastructure.repository.type_repository')
-                ->getParticipantTemplate($typeView->id)
+                ->getParticipantTemplate($typeView->id),
         ]);
         $form->add('submit', 'submit');
 
