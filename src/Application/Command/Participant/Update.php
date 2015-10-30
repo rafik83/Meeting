@@ -23,8 +23,8 @@ class Update
     public $data;
 
     /**
-     * @param integer $id
-     * @param array   $data
+     * @param int   $id
+     * @param array $data
      */
     public function __construct($id, array $data)
     {

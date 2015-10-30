@@ -20,7 +20,7 @@ class UpdateBlock
     public $sheet;
 
     /**
-     * @var integer
+     * @var int
      */
     public $block;
 

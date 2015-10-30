@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetView;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface SheetRepositoryInterface
 {
@@ -28,9 +28,9 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
-     * @param integer|User  $user
-     * @param integer|Event $event
-     * @param string        $locale
+     * @param int|User  $user
+     * @param int|Event $event
+     * @param string    $locale
      *
      * @return SheetView[]
      */

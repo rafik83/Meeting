@@ -43,7 +43,7 @@ class Participate
     public $sheet;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $owner;
 

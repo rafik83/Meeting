@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Sheet
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 

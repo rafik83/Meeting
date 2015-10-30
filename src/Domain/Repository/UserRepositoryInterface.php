@@ -17,7 +17,7 @@ interface UserRepositoryInterface
     /**
      * @param $email
      *
-     * @return boolean
+     * @return bool
      */
     public function emailExists($email);
 

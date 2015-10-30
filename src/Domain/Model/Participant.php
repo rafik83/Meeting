@@ -16,7 +16,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class Participant
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -36,15 +36,15 @@ class Participant
     private $data;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $owner;
 
     /**
-     * @param Sheet   $sheet
-     * @param User    $user
-     * @param array   $data
-     * @param boolean $owner
+     * @param Sheet $sheet
+     * @param User  $user
+     * @param array $data
+     * @param bool  $owner
      */
     public function __construct(Sheet $sheet, User $user, array $data, $owner)
     {
@@ -87,7 +87,7 @@ class Participant
     /**
      * Is owner
      *
-     * @return boolean
+     * @return bool
      */
     public function isOwner()
     {
