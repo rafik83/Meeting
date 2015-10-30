@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class EventTranslation
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -41,7 +41,7 @@ class EventTranslation
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class TypeTranslation
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -33,7 +33,7 @@ class TypeTranslation
     private $title;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {

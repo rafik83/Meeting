@@ -16,15 +16,15 @@ use Proximum\Vimeet\Domain\Model\TypeView;
 interface TypeRepositoryInterface
 {
     /**
-     * @param integer $eventId
-     * @param string  $locale
+     * @param int    $eventId
+     * @param string $locale
      *
      * @return TypeView[]
      */
     public function getTypeViewsByEvent($eventId, $locale);
 
     /**
-     * @param integer $typeId
+     * @param int    $typeId
      * @param string $locale
      *
      * @return TypeView
@@ -32,7 +32,7 @@ interface TypeRepositoryInterface
     public function getTypeViewById($typeId, $locale);
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return Type
      */

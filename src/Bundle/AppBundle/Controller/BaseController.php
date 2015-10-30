@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormError;
 class BaseController extends Controller
 {
     /**
-     * @param Form $form
+     * @param Form  $form
      * @param array $template
      * @param array $data
      *

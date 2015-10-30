@@ -26,14 +26,14 @@ class Delete
     public $requester;
 
     /**
-     * @var integer
+     * @var int
      */
     public $participantId;
 
     /**
-     * @param Sheet   $sheet
-     * @param User    $requester
-     * @param integer $participantId
+     * @param Sheet $sheet
+     * @param User  $requester
+     * @param int   $participantId
      */
     public function __construct(Sheet $sheet, User $requester, $participantId)
     {

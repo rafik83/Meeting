@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class TypeView
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -23,8 +23,8 @@ class TypeView
     public $title;
 
     /**
-     * @param integer $id
-     * @param string  $title
+     * @param int    $id
+     * @param string $title
      */
     public function __construct($id, $title)
     {
