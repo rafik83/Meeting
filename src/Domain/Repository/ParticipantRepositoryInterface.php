@@ -27,7 +27,7 @@ interface ParticipantRepositoryInterface
     public function delete(Participant $participant);
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return Participant
      */
@@ -42,7 +42,7 @@ interface ParticipantRepositoryInterface
      * @param $userEmail
      * @param $eventId
      *
-     * @return integer
+     * @return int
      */
     public function getLastParticipantIdForEventAndUser($userEmail, $eventId);
 
@@ -55,14 +55,14 @@ interface ParticipantRepositoryInterface
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
     /**
-     * @param integer $userId
+     * @param int $userId
      *
      * @return array
      */
     public function getAllParticipantForUser($userId);
 
     /**
-     * @param integer $sheetId
+     * @param int $sheetId
      *
      * @return array
      */

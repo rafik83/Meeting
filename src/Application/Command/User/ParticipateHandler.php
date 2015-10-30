@@ -43,6 +43,7 @@ class ParticipateHandler extends BaseHandler
 
     /**
      * @param Participate $participate
+     *
      * @throws RequiredDataEmptyException
      */
     public function handle(Participate $participate)

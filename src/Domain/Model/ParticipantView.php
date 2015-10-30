@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class ParticipantView
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -23,7 +23,7 @@ class ParticipantView
     public $data;
 
     /**
-     * @var integer
+     * @var int
      */
     public $userId;
 
@@ -33,16 +33,16 @@ class ParticipantView
     public $userEmail;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $owner;
 
     /**
-     * @param integer $id
-     * @param string  $data
-     * @param integer $userId
-     * @param string  $userEmail
-     * @param boolean $owner
+     * @param int    $id
+     * @param string $data
+     * @param int    $userId
+     * @param string $userEmail
+     * @param bool   $owner
      */
     public function __construct($id, $data, $userId, $userEmail, $owner)
     {

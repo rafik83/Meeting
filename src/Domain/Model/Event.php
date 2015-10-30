@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Event
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -48,7 +48,7 @@ class Event
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

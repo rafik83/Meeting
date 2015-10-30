@@ -39,7 +39,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
         $options = [
             'locale'    => 'fr_FR',
             'providers' => [
-                $this->container->get('vimeet_infrastructure.data_fixtures_orm.provider')
+                $this->container->get('vimeet_infrastructure.data_fixtures_orm.provider'),
             ],
         ];
 

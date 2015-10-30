@@ -12,14 +12,14 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Command\Participant\Add;
-use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
+use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
+use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
 use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
@@ -86,7 +86,7 @@ class SheetController extends BaseController
                                     'id'             => $sheet->getId(),
                                     'participant_id' => $participantView->id,
                                 ]
-                            )
+                            ),
                         ]
                     )->createView();
                 }
@@ -130,11 +130,9 @@ class SheetController extends BaseController
                     'subdomain' => $request->attributes->get('subdomain'),
                     'id'        => $sheet->getId(),
                 ]);
-
             } catch (ParticipantAlreadyExistException $exception) {
                 $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
                 $form->get('email')->addError($error);
-
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -195,7 +193,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id' => $sheet->getId(),
+                    'id'        => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
@@ -217,7 +215,7 @@ class SheetController extends BaseController
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
-     * @param integer   $block
+     * @param int       $block
      *
      * @return Response
      */
@@ -244,7 +242,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id' => $sheet->getId(),
+                    'id'        => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
