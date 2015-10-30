@@ -48,8 +48,8 @@ class ParticipantDataType extends AbstractType
             }
 
             $builder->add($i, $type, array_merge($options, [
-                'label' => $field['label'][$locale],
-                'help'  => isset($field['private']) && $field['private'] === 'true' ? 'form.field.private' : null,
+                'label'    => $field['label'][$locale],
+                'help'     => isset($field['private']) && $field['private'] === 'true' ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === 'true',
             ]));
         }
