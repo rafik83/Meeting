@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantDataType extends AbstractType
+class DataType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -64,6 +64,6 @@ class ParticipantDataType extends AbstractType
      */
     public function getName()
     {
-        return 'participant';
+        return 'data';
     }
 }

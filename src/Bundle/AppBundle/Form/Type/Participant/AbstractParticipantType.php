@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +23,7 @@ abstract class AbstractParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('data', new ParticipantDataType(), [
+            ->add('data', new DataType(), [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,
