@@ -20,7 +20,7 @@ class UpdateStep
     public $sheet;
 
     /**
-     * @var integer
+     * @var int
      */
     public $step;
 
@@ -30,8 +30,8 @@ class UpdateStep
     public $packageData = [];
 
     /**
-     * @param Sheet   $sheet
-     * @param integer $step
+     * @param Sheet $sheet
+     * @param int   $step
      */
     public function __construct(Sheet $sheet, $step)
     {

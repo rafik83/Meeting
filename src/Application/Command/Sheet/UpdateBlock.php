@@ -30,8 +30,8 @@ class UpdateBlock
     public $data = [];
 
     /**
-     * @param Sheet   $sheet
-     * @param integer $block
+     * @param Sheet $sheet
+     * @param int   $block
      */
     public function __construct(Sheet $sheet, $block)
     {

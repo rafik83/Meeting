@@ -29,7 +29,7 @@ class ParticipantDataType extends AbstractType
         }
 
         foreach ($template as $i => $field) {
-            $type = $field['type'];
+            $type    = $field['type'];
             $options = [];
 
             if ('radio' === $type) {
@@ -43,7 +43,7 @@ class ParticipantDataType extends AbstractType
 
                 $options = [
                     'choices'  => $choices,
-                    'expanded' => true
+                    'expanded' => true,
                 ];
             }
 

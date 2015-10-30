@@ -32,7 +32,7 @@ class UpdateStepHandler
      */
     public function handle(UpdateStep $updateStep)
     {
-        $packageData = $updateStep->sheet->getPackageData();
+        $packageData                    = $updateStep->sheet->getPackageData();
         $packageData[$updateStep->step] = $updateStep->packageData;
 
         $updateStep->sheet->setPackageData($packageData);

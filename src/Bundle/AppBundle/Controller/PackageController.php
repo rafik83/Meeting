@@ -23,7 +23,7 @@ class PackageController extends BaseController
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
-     * @param integer   $step
+     * @param int       $step
      *
      * @return Response
      */
