@@ -35,15 +35,33 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iCheckTheRadio($radioLabel)
     {
-        foreach ($this->getSession()->getPage()->findAll('css', 'label') as $label) {
-            if ($radioLabel === $label->getText() && $label->has('css', 'input[type="radio"]')) {
-                $this->fillField(
-                    $label->find('css', 'input[type="radio"]')->getAttribute('name'),
-                    $label->find('css', 'input[type="radio"]')->getAttribute('value')
-                );
+        $page = $this->getSession()->getPage();
+
+        foreach ($page->findAll('css', 'label') as $label) {
+            if ($radioLabel === $label->getText()) {
+                $input = $label->find('css', 'input[type="radio"]');
+
+                if (null == $input) {
+                    $for = $label->getAttribute('for');
+
+                    if (null != $for) {
+                        $input = $page->find('named', ['id', $for]);
+                    }
+                }
+
+                if ($input) {
+                    $this->fillField(
+                        $input->getAttribute('name'),
+                        $input->getAttribute('value')
+                    );
+
+                    return;
+                }
+
                 return;
             }
         }
+        
         throw new \Exception('Radio button not found');
     }
 }
