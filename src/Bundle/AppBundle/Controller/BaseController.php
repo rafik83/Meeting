@@ -45,7 +45,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @param array $participants
+     * @param \Traversable|array $participants
      *
      * @throws AccessDeniedException
      */
