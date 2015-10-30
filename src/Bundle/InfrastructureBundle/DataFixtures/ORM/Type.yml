@@ -132,6 +132,14 @@ Proximum\Vimeet\Domain\Model\Type:
                         choices:
                             -
                                 label:
+                                    fr: "Je ne veux pas"
+                                    en: "I dont want it"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 0
+                            -
+                                label:
                                     fr: "Formule 1"
                                     en: "Formula 1"
                                 description:

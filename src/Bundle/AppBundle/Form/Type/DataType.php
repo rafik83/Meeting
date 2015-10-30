@@ -38,8 +38,9 @@ class DataType extends AbstractType
                 }
 
                 $options = [
-                    'choices'  => $choices,
-                    'expanded' => true,
+                    'choices'     => $choices,
+                    'expanded'    => true,
+                    'placeholder' => false,
                 ];
             }
 
