@@ -2,7 +2,10 @@
     {% for key, subfield in fields %}
         <tr>
             <td>
-                {{ form_row(subfield) }}
+                {{ form_widget(subfield) }}
+            </td>
+            <td>
+                {{ form_label(subfield) }}
             </td>
             <td>
                 {{ choicesTemplate[key]['description'][app.request.locale]|nl2br }}
