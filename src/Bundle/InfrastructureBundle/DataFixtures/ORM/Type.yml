@@ -17,6 +17,8 @@ Proximum\Vimeet\Domain\Model\Type:
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Logo", "en": "Logo" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Bannière pub", "en": "Ad banner" } }
             -
                 title:
                     fr: "Offres"
@@ -92,6 +94,66 @@ Proximum\Vimeet\Domain\Model\Type:
                                     fr: "Description forfait  sponsoring"
                                     en: "Description sponsoring"
                                 unitPrice: 11000
+            -
+                title:
+                    fr: "Champs de la fiche participation en options payantes"
+                    en: "Options fields in participation sheet"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    -
+                        label:
+                            fr: "Logo"
+                            en: "Logo"
+                        description:
+                            fr: "Description en français"
+                            en: "Description in english"
+                        type: "checkbox"
+                        required: false
+                        unitPrice: 99
+                        linkTo:
+                            template: "sheetTemplate"
+                            blockIndex: 0
+                            fieldIndex: 4
+                    -
+                        label:
+                            fr: "Bannière pub"
+                            en: "Ads banner"
+                        description:
+                            fr: "Description en français"
+                            en: "Description in english"
+                        type: "radio"
+                        required: false
+                        linkTo:
+                            template: "sheetTemplate"
+                            blockIndex: 0
+                            fieldIndex: 5
+                        choices:
+                            -
+                                label:
+                                    fr: "Formule 1"
+                                    en: "Formula 1"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 199
+                            -
+                                label:
+                                    fr: "Formule 2"
+                                    en: "Formula 2"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 249
+                            -
+                                label:
+                                    fr: "Formule 3"
+                                    en: "Formula 3"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 399
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
