@@ -10,7 +10,7 @@ Feature: Choose a package
       | Sheet.yml                                              |
       | Participant.yml                                        |
 
-  Scenario: I can delete a participant as an owner
+  Scenario: I can choose the Silver package
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
