@@ -38,6 +38,16 @@ class Event
     private $translations;
 
     /**
+     * @var array
+     */
+    private $locales;
+
+    /**
+     * @var string
+     */
+    private $fallback;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -81,5 +91,25 @@ class Event
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Get locales
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+
+    /**
+     * Get fallback
+     *
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->fallback;
     }
 }

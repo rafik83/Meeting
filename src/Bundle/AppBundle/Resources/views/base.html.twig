@@ -11,7 +11,13 @@
     </head>
     <body>
         <div class="container">
-            {{ include('VimeetAppBundle::locales.html.twig') }}
+            {% block locales %}
+                {% if event is defined %}
+                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': event.locales }) }}
+                {% else %}
+                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+                {% endif %}
+            {% endblock %}
             {{ include('VimeetAppBundle::user.html.twig') }}
 
             {% block body %}{% endblock %}
