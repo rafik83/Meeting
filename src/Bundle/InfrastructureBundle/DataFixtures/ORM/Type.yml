@@ -50,7 +50,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                     en: "Exhibitors package"
                                 description:
                                     fr: >
-                                        "Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
+                                        Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
                                            - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
                                            - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
                                            - L’ouverture de votre « Espace Client » sur notre site internet.
@@ -59,7 +59,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                            - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
                                            - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
                                            - L’accès à la pause café permanente propice au contact informel.
-                                           - Une invitation au cocktail inaugural."
+                                           - Une invitation au cocktail inaugural.
                                     en: "Description Exhibitors"
                                 unitPrice: 2190
                             -
