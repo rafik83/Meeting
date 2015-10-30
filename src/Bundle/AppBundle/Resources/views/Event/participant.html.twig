@@ -1,6 +1,6 @@
 <table class="table table-bordered table-condensed">
     {% for key, field in template %}
-        {% if field['private'] == 'false' %}
+        {% if field['private'] == false %}
             <tr>
                 <th>{{ field['label'][app.request.locale]|default }}</th>
                 <td>{{ participantView.data[key]|default }}</td>
