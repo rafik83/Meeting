@@ -17,8 +17,25 @@ Proximum\Vimeet\Domain\Model\Type:
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Logo", "en": "Logo" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Bannière pub", "en": "Ad banner" } }
+            -
+                title:
+                    fr: "Logo"
+                    en: "Brand"
+                template:
+                    -
+                        type: "linked"
+                        linkTo:
+                            template: "packageTemplate"
+                            blockIndex: 1
+                            fieldIndex: 0
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Lien sur le logo vers votre site internet ", "en": "Link" } }
+                    -
+                        type: "linked"
+                        linkTo:
+                            template: "packageTemplate"
+                            blockIndex: 1
+                            fieldIndex: 1
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Lien sur la bannière pub vers votre site internet ", "en": "Link on the ads banner" } }
             -
                 title:
                     fr: "Offres"
@@ -104,8 +121,8 @@ Proximum\Vimeet\Domain\Model\Type:
                 template:
                     -
                         label:
-                            fr: "Logo"
-                            en: "Logo"
+                            fr: "L’insertion de votre logo sur le catalogue en ligne"
+                            en: "Your logo on the catalog"
                         description:
                             fr: "Description en français"
                             en: "Description in english"
@@ -118,10 +135,10 @@ Proximum\Vimeet\Domain\Model\Type:
                             fieldIndex: 4
                     -
                         label:
-                            fr: "Bannière pub"
+                            fr: "Pack Pub"
                             en: "Ads banner"
                         description:
-                            fr: "Description en français"
+                            fr: "Publicité + logo sur votre fiche de présentation en ligne."
                             en: "Description in english"
                         type: "radio"
                         required: false
@@ -130,14 +147,6 @@ Proximum\Vimeet\Domain\Model\Type:
                             blockIndex: 0
                             fieldIndex: 5
                         choices:
-                            -
-                                label:
-                                    fr: "Je ne veux pas"
-                                    en: "I dont want it"
-                                description:
-                                    fr: ""
-                                    en: ""
-                                unitPrice: 0
                             -
                                 label:
                                     fr: "Formule 1"
@@ -162,6 +171,14 @@ Proximum\Vimeet\Domain\Model\Type:
                                     fr: ""
                                     en: ""
                                 unitPrice: 399
+                            -
+                                label:
+                                    fr: "Je ne prends pas"
+                                    en: "I do not take"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 0
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016

@@ -25,8 +25,8 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $type    = $field['type'];
-            $options = [];
+            $type         = $field['type'];
+            $fieldOptions = [];
 
             if ('radio' === $type) {
                 $type = 'choice';
@@ -37,14 +37,14 @@ class DataType extends AbstractType
                     $choices[] = $choice['label'][$locale];
                 }
 
-                $options = [
+                $fieldOptions = [
                     'choices'     => $choices,
                     'expanded'    => true,
                     'placeholder' => false,
                 ];
             }
 
-            $builder->add($i, $type, array_merge($options, [
+            $builder->add($i, $type, array_merge($fieldOptions, [
                 'label'    => $field['label'][$locale],
                 'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === true,
