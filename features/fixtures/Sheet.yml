@@ -3,5 +3,4 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         type: @exposant
         event: @event_rdv_carnot_2016
-        data: >
-            []
+        data: []

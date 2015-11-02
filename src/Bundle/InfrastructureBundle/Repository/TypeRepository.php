@@ -91,12 +91,14 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('type.participantTemplate')
+            ->select('PARTIAL type.{id,participantTemplate}')
             ->from('Entity:Type', 'type')
             ->where('type.id = :typeId')
             ->setParameter('typeId', $typeId)
             ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        $type = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return $type ? $type->getParticipantTemplate() : [];
     }
 }

@@ -99,7 +99,7 @@ class Type
      */
     public function getParticipantTemplate()
     {
-        return json_decode($this->participantTemplate, true);
+        return $this->participantTemplate;
     }
 
     /**
@@ -109,7 +109,7 @@ class Type
      */
     public function getSheetTemplate()
     {
-        return json_decode($this->sheetTemplate, true);
+        return $this->sheetTemplate;
     }
 
     /**
@@ -139,7 +139,7 @@ class Type
      */
     public function getPackageTemplate()
     {
-        return json_decode($this->packageTemplate, true);
+        return $this->packageTemplate;
     }
 
     /**

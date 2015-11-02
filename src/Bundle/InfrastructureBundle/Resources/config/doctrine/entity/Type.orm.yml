@@ -10,11 +10,11 @@ Proximum\Vimeet\Domain\Model\Type:
         position:
             type: integer
         participantTemplate:
-            type: text
+            type: json_array
         sheetTemplate:
-            type: text
+            type: json_array
         packageTemplate:
-            type: text
+            type: json_array
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation

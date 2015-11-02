@@ -29,7 +29,7 @@ class BaseController extends Controller
         foreach ($data as $key => $value) {
             if (isset($template[$key])
                 && isset($template[$key]['required'])
-                && $template[$key]['required'] === 'true'
+                && $template[$key]['required'] === true
                 && $value === null
             ) {
                 $error = new FormError(
@@ -45,7 +45,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @param array $participants
+     * @param \Traversable|array $participants
      *
      * @throws AccessDeniedException
      */

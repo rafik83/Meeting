@@ -9,7 +9,7 @@
     </h3>
     <table class="table table-bordered table-condensed">
         {% for key, field in block.template %}
-            {% if field['private'] == 'false' %}
+            {% if field['private'] == false %}
                 <tr>
                     <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
                     <td class="col-md-9">{{ data[i][key]|default('...')|nl2br }}</td>

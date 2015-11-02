@@ -8,25 +8,21 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantDataType extends AbstractType
+class DataType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $template = is_string($options['template']) ? json_decode($options['template'], true) : $options['template'];
+        $template = $options['template'];
         $locale   = $options['locale'];
-
-        if ($template === null) {
-            throw new \InvalidArgumentException('Invalid json template');
-        }
 
         foreach ($template as $i => $field) {
             $type    = $field['type'];
@@ -49,8 +45,8 @@ class ParticipantDataType extends AbstractType
 
             $builder->add($i, $type, array_merge($options, [
                 'label'    => $field['label'][$locale],
-                'help'     => isset($field['private']) && $field['private'] === 'true' ? 'form.field.private' : null,
-                'required' => isset($field['required']) && $field['required'] === 'true',
+                'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
+                'required' => isset($field['required']) && $field['required'] === true,
             ]));
         }
     }
@@ -68,6 +64,6 @@ class ParticipantDataType extends AbstractType
      */
     public function getName()
     {
-        return 'participant';
+        return 'data';
     }
 }

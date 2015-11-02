@@ -61,7 +61,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 return;
             }
         }
-        
+
         throw new \Exception('Radio button not found');
     }
 }

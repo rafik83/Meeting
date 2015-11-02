@@ -41,7 +41,7 @@ interface TypeRepositoryInterface
     /**
      * @param $typeId
      *
-     * @return string
+     * @return array
      */
     public function getParticipantTemplate($typeId);
 }

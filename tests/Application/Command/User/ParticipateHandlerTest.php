@@ -27,14 +27,12 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
         $type  = new Type();
-        $type->setParticipantTemplate(
-            json_encode(
-                ['foobar' => [
-                    "required" => "true",
-                    "private"  => "false",
-                ]]
-            )
-        );
+        $type->setParticipantTemplate([
+            'foobar' => [
+                'required' => true,
+                'private'  => false,
+            ]
+        ]);
         $owner = true;
 
         $expectedSheet       = new Sheet($event, $type, [], []);

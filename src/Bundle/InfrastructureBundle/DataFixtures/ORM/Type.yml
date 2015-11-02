@@ -2,129 +2,127 @@ Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
         event: @event_rdv_carnot_2016
-        participantTemplate: >
-            [
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
-            ]
-        sheetTemplate: >
-            [
-                {
-                    "title": { "fr": "Société", "en": "Company" },
-                    "template": [
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
-                    ]
-                },
-                {
-                    "title": { "fr": "Offres", "en": "Offers" },
-                    "template": [
-                        { "type": "textarea", "required": "false", "private": "false", "label": { "fr": "Mes offres", "en": "My offers" } }
-                    ]
-                }
-            ]
-        packageTemplate: >
-            [
-                {
-                    "title": { "fr": "Forfait de participation", "en": "Participation package" },
-                    "description": { "fr": "Description de l'étape en français", "en": "Step Description in english" },
-                    "template": [
-                        {
-                            "label": { "fr": "Forfait", "en": "Package" },
-                            "description": { "fr": "Description forfait fr", "en": "Description package en" },
-                            "type": "radio",
-                            "required": "true",
-                            "choices": [
-                                {
-                                    "label": { "fr": "Formule Exposant", "en": "Exhibitors package" },
-                                    "description": {
-                                        "fr": "Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
-                                               - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
-                                               - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
-                                               - L’ouverture de votre « Espace Client » sur notre site internet.
-                                               - L’assistance logistique de notre équipe avant et pendant le salon.
-                                               - Un planning de rendez-vous préprogrammés sur 2 jours.
-                                               - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
-                                               - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
-                                               - L’accès à la pause café permanente propice au contact informel.
-                                               - Une invitation au cocktail inaugural.",
-                                        "en": "Description Exhibitors"
-                                    },
-                                    "unitPrice": 2190
-                                },
-                                {
-                                    "label": { "fr": "Formule Découverte", "en": "Discovery formula" },
-                                    "description": { "fr": "Description forfait Découverte", "en": "Description Discovery" },
-                                    "unitPrice": 1090
-                                },
-                                {
-                                    "label": { "fr": "Forfait Silver", "en": "Silver formula" },
-                                    "description": { "fr": "Description forfait  Silver", "en": "Description Silver" },
-                                    "unitPrice": 3990
-                                },
-                                {
-                                    "label": { "fr": "Forfait Gold", "en": "Gold formula" },
-                                    "description": { "fr": "Description forfait  Gold", "en": "Description Gold" },
-                                    "unitPrice": 5990
-                                },
-                                {
-                                    "label": { "fr": "Formule de sponsoring des CONFERENCES", "en": "Sponsoring formula for CONFERENCES" },
-                                    "description": { "fr": "Description forfait  sponsoring", "en": "Description sponsoring" },
-                                    "unitPrice": 11000
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+        participantTemplate:
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate:
+            -
+                title:
+                    fr: "Société"
+                    en: "Company"
+                template:
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+            -
+                title:
+                    fr: "Offres"
+                    en: "Offers"
+                template:
+                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
+        packageTemplate:
+            -
+                title:
+                    fr: "Forfait de participation"
+                    en: "Participation package"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    -
+                        label:
+                            fr: "Forfait"
+                            en: "Package"
+                        description:
+                            fr: "Description forfait fr"
+                            en: "Description package en"
+                        type: "radio"
+                        required: true
+                        choices:
+                            -
+                                label:
+                                    fr: "Formule Exposant"
+                                    en: "Exhibitors package"
+                                description:
+                                    fr: >
+                                        "Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
+                                           - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
+                                           - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
+                                           - L’ouverture de votre « Espace Client » sur notre site internet.
+                                           - L’assistance logistique de notre équipe avant et pendant le salon.
+                                           - Un planning de rendez-vous préprogrammés sur 2 jours.
+                                           - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
+                                           - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
+                                           - L’accès à la pause café permanente propice au contact informel.
+                                           - Une invitation au cocktail inaugural."
+                                    en: "Description Exhibitors"
+                                unitPrice: 2190
+                            -
+                                label:
+                                    fr: "Formule Découverte"
+                                    en: "Discovery formula"
+                                description:
+                                    fr: "Description forfait Découverte"
+                                    en: "Description Discovery"
+                                unitPrice: 1090
+                            -
+                                label:
+                                    fr: "Forfait Silver"
+                                    en: "Silver formula"
+                                description:
+                                    fr: "Description forfait  Silver"
+                                    en: "Description Silver"
+                                unitPrice: 3990
+                            -
+                                label:
+                                    fr: "Forfait Gold"
+                                    en: "Gold formula"
+                                description:
+                                    fr: "Description forfait  Gold"
+                                    en: "Description Gold"
+                                unitPrice: 5990
+                            -
+                                label:
+                                    fr: "Formule de sponsoring des CONFERENCES"
+                                    en: "Sponsoring formula for CONFERENCES"
+                                description:
+                                    fr: "Description forfait  sponsoring"
+                                    en: "Description sponsoring"
+                                unitPrice: 11000
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
-        participantTemplate: >
-            [
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
-            ]
-        sheetTemplate: >
-            [
-                {
-                    "title": { "fr": "Société", "en": "Company" },
-                    "template": [
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Nom", "en": "Name" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Adresse", "en": "Address" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Site web", "en": "Website" } },
-                        { "type": "text", "required": "false", "private": "false", "label": { "fr": "Descriptif", "en": "Description" } }
-                    ]
-                },
-                {
-                    "title": { "fr": "Besoins", "en": "Needs" },
-                    "template": [
-                        { "type": "textarea", "required": "false", "private": "false", "label": { "fr": "Mes besoins", "en": "My needs" } }
-                    ]
-                }
-            ]
-        packageTemplate: >
-            []
+        participantTemplate:
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate:
+            -
+                title: { "fr": "Société", "en": "Company" }
+                template:
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+            -
+                title: { "fr": "Besoins", "en": "Needs" }
+                template:
+                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
+        packageTemplate: []
     congressiste:
         position: 2
         event: @event_rdv_carnot_2016
-        participantTemplate: >
-            [
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Nom", "en": "Lastname" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Prénom", "en": "Firstname" } },
-                { "type": "text", "required": "true", "private": "true", "label": { "fr": "Téléphone", "en": "Phone" } },
-                { "type": "text", "required": "true", "private": "false", "label": { "fr": "Fonction", "en": "Position" } }
-            ]
-        sheetTemplate: >
-            []
-        packageTemplate: >
-            []
+        participantTemplate:
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate: []
+        packageTemplate: []
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_fr:
