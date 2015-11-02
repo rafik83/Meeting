@@ -35,7 +35,7 @@ elao_apt_repositories: []
 
 elao_apt_preferences:
   - ruby@bearstech
-  - git@backports
+  - git@debian_backports
   - ~@dotdeb:100
   - php@dotdeb_php56
   - nginx@nginx
