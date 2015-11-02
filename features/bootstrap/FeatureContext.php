@@ -64,4 +64,50 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         throw new \Exception('Radio button not found');
     }
+
+    /**
+     * @When I select the quantity :quantity for the checkbox :checkbox
+     */
+    public function iSelectTheQuantityForTheCheckbox($quantity, $checkbox)
+    {
+        $page = $this->getSession()->getPage();
+
+        $thead = $this->getSession()->getPage()->findAll('css', 'table thead th');
+        $tbody = $this->getSession()->getPage()->findAll('css', 'table tbody tr');
+
+        $numColumnQuantity = null;
+        $numColumnCheckbox = null;
+        $numLine           = null;
+
+        foreach ($thead as $key => $th) {
+            if (strpos($th->getText(), 'quantity')) {
+                $numColumnQuantity = $key + 1;
+            }
+            if (strpos($th->getText(), 'label')) {
+                $numColumnCheckbox = $key + 1;
+            }
+        }
+
+        if (null != $numColumnCheckbox) {
+            foreach ($tbody as $key => $td)
+            if (null != $this->getSession()->getPage()->find(
+                'css',
+                sprintf('table tbody tr:nth-child(%s) td:nth-child(%s):contains("%s")', $key+1, $numColumnCheckbox, $checkbox)
+            )) {
+                $numLine = $key + 1;
+                break;
+            }
+        }
+
+        if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
+            $this->getSession()->getPage()->find(
+                'css',
+                sprintf('table tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
+            )->selectOption($quantity);
+
+            return;
+        }
+
+        throw new \Exception('Element not found');
+    }
 }

@@ -12,19 +12,21 @@
     {{ form_start(form) }}
 
     <table class="table table-bordered table-condensed">
-        <tr>
+        <thead>
             <th class="col-md-1">{{ 'event.sheet.package.column.choices'|trans }}</th>
             <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
             <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
             <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
             <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
-        </tr>
-        {% for key, field in form.children["packageData"].children %}
-               {% include 'VimeetAppBundle:Package:optionField.html.twig' with {
-               'fields': field.children,
-               'template': stepPackageTemplate['template'][key]
-               } %}
-       {% endfor %}
+        </thead>
+        <tbody>
+            {% for key, field in form.children["packageData"].children %}
+                   {% include 'VimeetAppBundle:Package:optionField.html.twig' with {
+                   'fields': field.children,
+                   'template': stepPackageTemplate['template'][key]
+                   } %}
+           {% endfor %}
+        </tbody>
     </table>
 
    {{ form_end(form) }}
