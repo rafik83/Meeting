@@ -31,6 +31,22 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getEventByDomain($domain)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from('Entity:Event', 'event')
+            ->where('event.domain = :domain')
+            ->setParameter('domain', $domain);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEventViewByDomain($domain, $locale)
     {
         $queryBuilder = $this

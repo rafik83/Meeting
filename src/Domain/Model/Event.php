@@ -112,4 +112,16 @@ class Event
     {
         return $this->fallback;
     }
+
+    /**
+     * Has locale
+     *
+     * @param $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
+    }
 }
