@@ -1,6 +1,109 @@
-event_root:
+event:
     path: /
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event:index }
+
+event_register:
+    path: /register/{typeView}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event:register }
+
+event_participate:
+    path: /participate/{typeView}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event:participate }
+
+event_sheet:
+    path: /sheet/{id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Sheet:sheet }
+
+event_sheet_add_participant:
+    path: /sheet/{id}/add_participant
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Sheet:addParticipant }
+
+event_sheet_update_participant:
+    path: /sheet/{id}/update_participant/{participant_id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Sheet:updateParticipant }
+
+event_sheet_update_block:
+    path: /sheet/{id}/update_block/{block}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Sheet:updateBlock }
+
+event_sheet_delete_participant:
+    path: /sheet/{id}/delete_participant/{participant_id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [DELETE]
+    defaults: { _controller: VimeetAppBundle:Sheet:deleteParticipant }
+
+event_sheet_package_update_step:
+    path: /sheet/{id}/update_step/{step}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Package:updateStep }
+
+event_login:
+    path: /login
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Security:login }
+
+event_login_check:
+    path: /login_check
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [POST]
+
+event_logout_confirmation:
+    path: /logout-confirmation
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Security:logoutConfirmation }
+
+event_logout:
+    path: /logout
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+
+event_change_password:
+    path: /change-password
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:ChangePassword:changePassword }

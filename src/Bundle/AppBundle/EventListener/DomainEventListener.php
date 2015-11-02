@@ -49,29 +49,17 @@ class DomainEventListener
         }
 
         $request = $getResponseEvent->getRequest();
-        $domain  = $request->getHost();
-        $params  = $request->attributes->get('_route_params', []);
-        $route   = $request->attributes->get('_route');
-        $event   = $this->eventRepository->getEventByDomain($domain);
+        $event   = $this->eventRepository->getEventByDomain($request->getHost());
 
         if (!$event) {
             return;
         }
 
-        // No locale
-        if ($route === 'event_root') {
-            $params['_locale'] = $event->getFallback();
-            $path              = $this->router->generate('event', $params);
-            $getResponseEvent->setResponse(new RedirectResponse($path));
-
-            return;
-        }
-
-        // Unknow locale
         if (!$event->hasLocale($request->getLocale())) {
-            $params['_locale'] = $event->getFallback();
-            $route             = $request->attributes->get('_route');
-            $path              = $this->router->generate($route, $params);
+            $path = $this->router->generate(
+                $request->attributes->get('_route'),
+                array_merge($request->attributes->get('_route_params', []), ['_locale' => $event->getFallback()])
+            );
             $getResponseEvent->setResponse(new RedirectResponse($path));
 
             return;
