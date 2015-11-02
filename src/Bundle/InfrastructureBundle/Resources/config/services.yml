@@ -70,6 +70,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
+    vimeet_infrastructure.vimeet.application.command.package.update_step_handler:
+        class: Proximum\Vimeet\Application\Command\Package\UpdateStepHandler
+        arguments:
+            - @vimeet_infrastructure.repository.sheet_repository
 
     #
     # Security

@@ -16,3 +16,6 @@ flash:
             success: The participant has been updated
         update_block:
             success: Information has been updated
+    package:
+        update_step:
+            success: Information has been updated

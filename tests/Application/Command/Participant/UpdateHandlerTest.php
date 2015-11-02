@@ -34,7 +34,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 ]]
             )
         );
-        $sheet = new Sheet($event, $type, []);
+        $sheet = new Sheet($event, $type, [], []);
         $owner = true;
 
         $participant         = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner);

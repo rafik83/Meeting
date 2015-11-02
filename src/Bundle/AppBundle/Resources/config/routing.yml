@@ -62,6 +62,14 @@ event_sheet_delete_participant:
     methods:  [DELETE]
     defaults: { _controller: VimeetAppBundle:Sheet:deleteParticipant }
 
+event_sheet_package_update_step:
+    path: /sheet/{id}/update_step/{step}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Package:updateStep }
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"

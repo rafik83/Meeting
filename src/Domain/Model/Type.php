@@ -48,6 +48,11 @@ class Type
     private $sheetTemplate;
 
     /**
+     * @var string
+     */
+    private $packageTemplate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -97,6 +102,19 @@ class Type
         return json_decode($this->participantTemplate, true);
     }
 
+    /**
+     * Get sheetTemplate
+     *
+     * @return array
+     */
+    public function getSheetTemplate()
+    {
+        return json_decode($this->sheetTemplate, true);
+    }
+
+    /**
+     * @return array
+     */
     public function getSheetData()
     {
         $data = [];
@@ -115,13 +133,33 @@ class Type
     }
 
     /**
-     * Get sheetTemplate
+     * Get packageTemplate
      *
      * @return array
      */
-    public function getSheetTemplate()
+    public function getPackageTemplate()
     {
-        return json_decode($this->sheetTemplate, true);
+        return json_decode($this->packageTemplate, true);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackageData()
+    {
+        $data = [];
+
+        $template = $this->getPackageTemplate();
+
+        foreach ($template as $key => $block) {
+            $data[$key] = [];
+
+            foreach ($block['template'] as $i => $row) {
+                $data[$key][$i] = null;
+            }
+        }
+
+        return $data;
     }
 
     /**

@@ -1,0 +1,34 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block body %}
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+
+    <h2>{{ stepPackageTemplate['title'][app.request.locale]|default }}</h2>
+    <p>{{ stepPackageTemplate['description'][app.request.locale]|default }}</p>
+    <hr>
+
+    {{ form_start(form) }}
+
+    {% for key, field in form.children["packageData"].children %}
+        {{ form_label(field) }}
+
+        {% if field.vars["label_attr"]["data-description"] is defined %}
+            <p>{{ field.vars["label_attr"]["data-description"] }}</p>
+        {% endif %}
+
+        {{ form_errors(field) }}
+
+        {% if field.children|length %}
+            {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
+                'fields': field.children,
+                'choicesTemplate': stepPackageTemplate['template'][key]['choices']
+            } %}
+        {% else %}
+            {{ form_widget(field) }}
+        {% endif %}
+    {% endfor %}
+
+    {{ form_end(form) }}
+{% endblock %}

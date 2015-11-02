@@ -29,11 +29,29 @@ class ParticipantDataType extends AbstractType
         }
 
         foreach ($template as $i => $field) {
-            $builder->add($i, $field['type'], [
+            $type    = $field['type'];
+            $options = [];
+
+            if ('radio' === $type) {
+                $type = 'choice';
+
+                $choices = [];
+
+                foreach ($field['choices'] as $choice) {
+                    $choices[] = $choice['label'][$locale];
+                }
+
+                $options = [
+                    'choices'  => $choices,
+                    'expanded' => true,
+                ];
+            }
+
+            $builder->add($i, $type, array_merge($options, [
                 'label'    => $field['label'][$locale],
-                'help'     => $field['private'] === 'true' ? 'form.field.private' : null,
+                'help'     => isset($field['private']) && $field['private'] === 'true' ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === 'true',
-            ]);
+            ]));
         }
     }
 

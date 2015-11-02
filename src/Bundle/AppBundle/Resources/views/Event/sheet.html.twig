@@ -24,29 +24,28 @@
             <a href="{{ path('event_sheet_add_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">
+            }) }}" class="btn btn-default">
                 {{ 'event.sheet.block.add_participant.title'|trans }}
             </a>
         </div>
     </div>
 
-    {% set data = sheet.data %}
+    {% include 'VimeetAppBundle:Event:block.html.twig' with {
+        'sheet' : sheet,
+        'data'  : sheet.data,
+        'blocks': sheet.type.sheetTemplate,
+    } %}
 
-    {% for i, block in sheet.type.sheetTemplate %}
-        <h3>
-            {{ block['title'][app.request.locale] }}
-            <a href="{{ path('event_sheet_update_block', { 'id': sheet.id, 'block': i, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">{{ 'event.sheet.block.edit'|trans }}</a>
-        </h3>
-        <table class="table">
-            {% for key, field in block.template %}
-                {% if field['private'] == 'false' %}
-                    <tr>
-                        <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
-                        <td class="col-md-9">{{ data[i][key]|default|nl2br }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
-
-    {% endfor %}
+    {% if sheet.type.packageTemplate[0] is defined %}
+        <hr>
+        <div class="text-center">
+            <a href="{{ path('event_sheet_package_update_step', {
+                'id'       : sheet.id,
+                'step'     : 0,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.package.step.next'|trans }}
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}

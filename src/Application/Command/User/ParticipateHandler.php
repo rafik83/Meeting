@@ -52,7 +52,7 @@ class ParticipateHandler extends BaseHandler
         $this->checkDataConstraint($participate->data, $participate->type->getParticipantTemplate());
 
         // Create a new sheet for this event
-        $sheet = new Sheet($participate->event, $participate->type, []);
+        $sheet = new Sheet($participate->event, $participate->type, [], []);
         $this->sheetRepository->add($sheet);
 
         // Create a new participant

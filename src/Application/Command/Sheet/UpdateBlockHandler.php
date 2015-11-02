@@ -16,8 +16,14 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateBlockHandler extends BaseHandler
 {
+    /**
+     * @var SheetRepositoryInterface
+     */
     private $sheetRepository;
 
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     */
     public function __construct(SheetRepositoryInterface $sheetRepository)
     {
         $this->sheetRepository = $sheetRepository;

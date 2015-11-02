@@ -63,3 +63,7 @@ form:
         children:
             submit:
                 label: Delete
+    update_sheet_package_step:
+        children:
+            submit:
+                label: Save and go to next step

@@ -10,6 +10,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data:
             type: text
             nullable: true
+        packageData:
+            type: text
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

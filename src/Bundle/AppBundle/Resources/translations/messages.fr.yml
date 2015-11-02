@@ -38,3 +38,6 @@ event:
                 title: Supprimer ce participant
         add_participant:
             title: Ajouter un participant
+        package:
+            step:
+                next: Choisir votre forfait
