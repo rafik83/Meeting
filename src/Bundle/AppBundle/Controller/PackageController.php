@@ -52,8 +52,7 @@ class PackageController extends BaseController
                 ->handle($updateStep);
 
 
-            if (isset($packageTemplate[$step + 1]))
-            {
+            if (isset($packageTemplate[$step + 1])) {
                 $this->addFlash('success', 'flash.package.update_step.success');
 
                 // Go to the next step

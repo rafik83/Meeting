@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PackageDataType extends AbstractType
+class DataType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class PackageDataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $builder->add($i, new QuantityDataType(), [
+            $builder->add($i, new QuantityType(), [
                 'field'  => $field,
                 'key'    => $i,
                 'locale' => $locale,
@@ -46,6 +46,6 @@ class PackageDataType extends AbstractType
      */
     public function getName()
     {
-        return 'data';
+        return 'package_data';
     }
 }

@@ -14,9 +14,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuantityDataType extends AbstractType
+class QuantityType extends AbstractType
 {
-
     /**
      * {@inheritdoc}
      */
@@ -27,6 +26,7 @@ class QuantityDataType extends AbstractType
         $locale  = $options['locale'];
         $type    = $field['type'];
         $options = [];
+
         if ('radio' === $type) {
             $type = 'choice';
 
@@ -76,6 +76,6 @@ class QuantityDataType extends AbstractType
      */
     public function getName()
     {
-        return 'quantity_data';
+        return 'quantity';
     }
 }
