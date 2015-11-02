@@ -41,7 +41,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             if ($radioLabel === $label->getText()) {
                 $input = $label->find('css', 'input[type="radio"]');
 
-
                 if (null == $input) {
                     $for = $label->getAttribute('for');
 
@@ -62,6 +61,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 return;
             }
         }
+
         throw new \Exception('Radio button not found');
     }
 }
