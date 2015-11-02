@@ -23,7 +23,7 @@ class UpdateStepType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('packageData', new DataType(), [
+            ->add('packageData', new PackageDataType(), [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,

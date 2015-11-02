@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DataType extends AbstractType
+class PackageDataType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,10 +25,10 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $builder->add($i, $field['type'], [
-                'label'    => $field['label'][$locale],
-                'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
-                'required' => isset($field['required']) && $field['required'] === true,
+            $builder->add($i, new QuantityDataType(), [
+                'field'  => $field,
+                'key'    => $i,
+                'locale' => $locale,
             ]);
         }
     }
