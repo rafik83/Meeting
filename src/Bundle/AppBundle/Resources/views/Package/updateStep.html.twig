@@ -7,28 +7,24 @@
 
     <h2>{{ stepPackageTemplate['title'][app.request.locale]|default }}</h2>
     <p>{{ stepPackageTemplate['description'][app.request.locale]|default }}</p>
-    <hr>
 
     {{ form_start(form) }}
 
-    {% for key, field in form.children["packageData"].children %}
-        {{ form_label(field) }}
-
-        {% if field.vars["label_attr"]["data-description"] is defined %}
-            <p>{{ field.vars["label_attr"]["data-description"] }}</p>
-        {% endif %}
-
-        {{ form_errors(field) }}
-
-        {% if field.children|length %}
-            {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
-                'fields': field.children,
-                'choicesTemplate': stepPackageTemplate['template'][key]['choices']
-            } %}
-        {% else %}
-            {{ form_widget(field) }}
-        {% endif %}
-    {% endfor %}
+    <table class="table table-bordered table-condensed">
+        {% for key, field in form.children["packageData"].children %}
+            {% if field.children|length %}
+                {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
+                    'fields': field.children,
+                    'choicesTemplate': stepPackageTemplate['template'][key]
+                } %}
+            {% else %}
+                {% include 'VimeetAppBundle:Package:row.html.twig' with {
+                    'field': field,
+                    'fieldTemplate': stepPackageTemplate['template'][key],
+                } %}
+            {% endif %}
+        {% endfor %}
+    </table>
 
     {{ form_end(form) }}
 {% endblock %}

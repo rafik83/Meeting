@@ -25,7 +25,12 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $type         = $field['type'];
+            $type = $field['type'];
+
+            if ('linked' === $type) {
+                continue;
+            }
+
             $fieldOptions = [];
 
             if ('radio' === $type) {
