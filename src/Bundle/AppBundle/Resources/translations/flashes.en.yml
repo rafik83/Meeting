@@ -19,3 +19,5 @@ flash:
     package:
         update_step:
             success: Information has been updated
+        final_step:
+            success: Your package information has been saved

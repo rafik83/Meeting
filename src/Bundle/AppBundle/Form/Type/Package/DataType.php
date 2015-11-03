@@ -14,20 +14,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateStepType extends AbstractType
+class DataType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('packageData', new DataType(), [
-                'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'label'    => false,
-            ])
-        ;
+        $template = $options['template'];
+        $locale   = $options['locale'];
+
+        foreach ($template as $i => $field) {
+            $builder->add($i, new QuantityType(), [
+                'field'  => $field,
+                'key'    => $i,
+                'locale' => $locale,
+            ]);
+        }
     }
 
     /**
@@ -35,11 +38,6 @@ class UpdateStepType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
-            'intention'  => 'update_sheet_package_step',
-        ]);
-
         $resolver->setRequired(['template', 'locale']);
     }
 
@@ -48,6 +46,6 @@ class UpdateStepType extends AbstractType
      */
     public function getName()
     {
-        return 'update_sheet_package_step';
+        return 'package_data';
     }
 }

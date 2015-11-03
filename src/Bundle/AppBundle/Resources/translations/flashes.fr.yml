@@ -19,3 +19,5 @@ flash:
     package:
         update_step:
             success: Les informations ont bien été enregistrées
+        final_step:
+            success: Les informations de votre forfait ont bien été enregistrées

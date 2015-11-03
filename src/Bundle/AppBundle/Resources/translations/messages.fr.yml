@@ -41,3 +41,9 @@ event:
         package:
             step:
                 next: Choisir votre forfait
+            column:
+                choices: Choix
+                label: Intitulé
+                description: Description
+                unitPrice: Prix unitaire
+                quantity: Quantité
