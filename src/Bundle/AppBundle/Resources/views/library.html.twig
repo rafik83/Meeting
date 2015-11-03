@@ -1,7 +1,7 @@
 {% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
 
 {% block choice_with_description_row %}
-
+    {{ form_errors(form) }}
     <table class="table table-bordered table-condensed">
         <thead>
             <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
@@ -13,8 +13,7 @@
             {% for key, child in form.value %}
                 <tr>
                     <td>
-                        {{ form_widget(child) }}&nbsp;
-                        {{ form_label(child) }}
+                        {{ form_widget(child) }}&nbsp;{{ form_label(child) }}
                     </td>
                     <td>
                         {{ template['choices'][key]['description'][locale] }}
@@ -31,10 +30,16 @@
                             {% else %}
                                 1
                             {% endif %}
+
                         </td>
                     {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block quantity_row %}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
 {% endblock %}

@@ -46,14 +46,10 @@ class ChoiceWithDescription extends AbstractType
             && isset($template['quantity']['max'])
             && $template['quantity']['min'] < $template['quantity']['max']
         ) {
-            $range = range(
-                $template['quantity']['min'],
-                $template['quantity']['max'],
-                isset($template['quantity']['range']) ? $template['quantity']['range'] : 1
-            );
-
-            $builder->add('quantity', 'choice', [
-                'choices' => array_combine($range, $range),
+            $builder->add('quantity', new QuantityType(), [
+                'min'   => $template['quantity']['min'],
+                'max'   => $template['quantity']['max'],
+                'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1
             ]);
         }
     }
