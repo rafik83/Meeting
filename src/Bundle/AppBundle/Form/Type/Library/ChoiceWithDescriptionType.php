@@ -26,20 +26,15 @@ class ChoiceWithDescriptionType extends AbstractType
         $template = $options['template'];
         $locale   = $options['locale'];
 
-        // Choices must be an array of objects, ChoiceType don't work as we expect with array of array
-        $choices = array_map(function ($value) {
-            return new \ArrayObject($value);
+        $choices = array_map(function ($value) use ($locale) {
+            return $value['label'][$locale];
         }, $template['choices']);
 
         $builder
             ->add('value', 'choice', [
-                'choices'           => $choices,
-                'expanded'          => true,
-                'choices_as_values' => true,
-                'choice_label'      => function ($value) use ($locale) {
-                    return $value['label'][$locale];
-                },
-                'required'          => isset($template['required']) ? $template['required'] : true,
+                'choices'  => $choices,
+                'expanded' => true,
+                'required' => isset($template['required']) ? $template['required'] : true,
             ]);
 
         if (isset($template['quantity']['min'])

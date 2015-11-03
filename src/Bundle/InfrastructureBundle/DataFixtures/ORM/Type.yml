@@ -123,7 +123,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                 description: { "fr": "", "en": "" }
                                 unitPrice: 0
                     -
-                        type: "text"
+                        type: "lib_text"
                         required: false
                         label:
                             fr: "Lien sur le logo vers votre site internet"
@@ -172,7 +172,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                     en: ""
                                 unitPrice: 0
                     -
-                        type: "text"
+                        type: "lib_text"
                         required: false
                         label:
                             fr: "Lien sur la bannière pub vers votre site internet"
@@ -183,7 +183,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: ""
                             en: ""
-                        type: "checkbox"
+                        type: "lib_option"
                         unitPrice: 3990
                         quantity:
                             min: 1
@@ -195,7 +195,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Description forfait  Gold"
                             en: "Description Gold"
-                        type: "checkbox"
+                        type: "lib_option"
                         unitPrice: 5990
                         quantity:
                             min: 1
@@ -207,7 +207,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Description forfait  sponsoring"
                             en: "Description sponsoring"
-                        type: "checkbox"
+                        type: "lib_option"
                         unitPrice: 11000
                         quantity:
                             min: 1
@@ -227,7 +227,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: ''
                             en: ''
-                        type: "checkbox"
+                        type: "lib_option"
                         unitPrice: 0
                     -
                         label:
@@ -237,7 +237,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             en: ''
                             fr: ''
                         unitPrice: 95
-                        type: "checkbox"
+                        type: "lib_option"
                         quantity:
                             min: 1
                             max: 5
@@ -249,7 +249,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             en: ''
                             fr: ''
                         unitPrice: 2600
-                        type: "checkbox"
+                        type: "lib_option"
 
     visiteur:
         position: 1
