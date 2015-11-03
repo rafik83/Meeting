@@ -25,35 +25,11 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $type = $field['type'];
-
-            if ('linked' === $type) {
-                continue;
-            }
-
-            $fieldOptions = [];
-
-            if ('radio' === $type) {
-                $type = 'choice';
-
-                $choices = [];
-
-                foreach ($field['choices'] as $choice) {
-                    $choices[] = $choice['label'][$locale];
-                }
-
-                $fieldOptions = [
-                    'choices'     => $choices,
-                    'expanded'    => true,
-                    'placeholder' => false,
-                ];
-            }
-
-            $builder->add($i, $type, array_merge($fieldOptions, [
+            $builder->add($i, $field['type'], [
                 'label'    => $field['label'][$locale],
                 'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === true,
-            ]));
+            ]);
         }
     }
 

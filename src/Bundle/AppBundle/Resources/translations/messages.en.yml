@@ -41,3 +41,9 @@ event:
         package:
             step:
                 next: Choose your package
+            column:
+                choices: Choices
+                label: Label
+                description: Description
+                unitPrice: Unit price
+                quantity: Quantity

@@ -25,28 +25,11 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $type = $field['type'];
-
-            if ('uploadWithChoices' === $type) {
-                $builder->add($i, new UploadWithChoiceType(), [
-                    'fieldId' => $i,
-                    'field'   => $field,
-                    'locale'  => $locale,
-                    'label'   => false,
-                ]);
-            } elseif ('radio' === $type) {
-                $builder->add($i, new ChoiceType(), [
-                    'fieldId' => $i,
-                    'field'   => $field,
-                    'locale'  => $locale,
-                    'label'   => false,
-                ]);
-            } else {
-                $builder->add($i, $type, [
-                    'label'    => $field['label'][$locale],
-                    'required' => isset($field['required']) && $field['required'] === true,
-                ]);
-            }
+            $builder->add($i, new QuantityType(), [
+                'field'  => $field,
+                'key'    => $i,
+                'locale' => $locale,
+            ]);
         }
     }
 
@@ -63,6 +46,6 @@ class DataType extends AbstractType
      */
     public function getName()
     {
-        return 'package';
+        return 'package_data';
     }
 }

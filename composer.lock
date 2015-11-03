@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3e47fc36623990912a020e65eb887277",
+    "hash": "fe598bb0a156a567fee194f56623fb17",
+    "content-hash": "dc89f53b1d0c11cb3ebd3d39872199a8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -941,16 +942,16 @@
         },
         {
             "name": "elao/form-translation-bundle",
-            "version": "v1.2.0",
+            "version": "v1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormTranslationBundle.git",
-                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e"
+                "reference": "04289c8feda0c6488f6b66db835657a28fadf16f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/848879507bf38406d46d205ec028ffcfd1a89c6e",
-                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/04289c8feda0c6488f6b66db835657a28fadf16f",
+                "reference": "04289c8feda0c6488f6b66db835657a28fadf16f",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +993,7 @@
                 "form",
                 "translation"
             ],
-            "time": "2014-12-04 07:24:04"
+            "time": "2015-11-01 20:41:26"
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",

@@ -7,24 +7,27 @@
 
     <h2>{{ stepPackageTemplate['title'][app.request.locale]|default }}</h2>
     <p>{{ stepPackageTemplate['description'][app.request.locale]|default }}</p>
+    <hr>
 
     {{ form_start(form) }}
 
     <table class="table table-bordered table-condensed">
-        {% for key, field in form.children["packageData"].children %}
-            {% if field.children|length %}
-                {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
-                    'fields': field.children,
-                    'choicesTemplate': stepPackageTemplate['template'][key]
-                } %}
-            {% else %}
-                {% include 'VimeetAppBundle:Package:row.html.twig' with {
-                    'field': field,
-                    'fieldTemplate': stepPackageTemplate['template'][key],
-                } %}
-            {% endif %}
-        {% endfor %}
+        <thead>
+            <th class="col-md-1">{{ 'event.sheet.package.column.choices'|trans }}</th>
+            <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
+            <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
+            <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
+            <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        </thead>
+        <tbody>
+            {% for key, field in form.children["packageData"].children %}
+                   {% include 'VimeetAppBundle:Package:optionField.html.twig' with {
+                   'fields': field.children,
+                   'template': stepPackageTemplate['template'][key]
+                   } %}
+           {% endfor %}
+        </tbody>
     </table>
 
-    {{ form_end(form) }}
+   {{ form_end(form) }}
 {% endblock %}

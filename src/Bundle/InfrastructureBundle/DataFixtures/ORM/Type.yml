@@ -94,8 +94,8 @@ Proximum\Vimeet\Domain\Model\Type:
                                 unitPrice: 11000
             -
                 title:
-                    fr: "Champs de la fiche participation en options payantes"
-                    en: "Options fields in participation sheet"
+                    fr: "Options proposées pour optimiser votre participation"
+                    en: "Options to optimize your participation:"
                 description:
                     fr: "Description de l'étape en français"
                     en: "Step Description in english"
@@ -177,7 +177,80 @@ Proximum\Vimeet\Domain\Model\Type:
                         label:
                             fr: "Lien sur la bannière pub vers votre site internet"
                             en: "Link on the ads banner"
-                        description: { "fr": "", "en": "" }
+                        description:
+                            fr: "Module équipé de 4m² supplémentaires"
+                            en: "Additional equipped booth of 4 sqm"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "checkbox"
+                        unitPrice: 3990
+                        quantity:
+                            min: 1
+                            max: 5
+                    -
+                        label:
+                            fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
+                            en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
+                        description:
+                            fr: "Description forfait  Gold"
+                            en: "Description Gold"
+                        type: "checkbox"
+                        unitPrice: 5990
+                        quantity:
+                            min: 1
+                            max: 1
+                    -
+                        label:
+                            fr: "Formule de sponsoring des CONFERENCES"
+                            en: "Sponsoring formula for CONFERENCES"
+                        description:
+                            fr: "Description forfait  sponsoring"
+                            en: "Description sponsoring"
+                        type: "checkbox"
+                        unitPrice: 11000
+                        quantity:
+                            min: 1
+                            max: 5
+            -
+                title:
+                    en: 'Options supplémentaires'
+                    fr: 'Options supplémentaires'
+                description:
+                    en: 'ceci est une description'
+                    fr: 'ceci est une description'
+                template:
+                    -
+                        label:
+                            fr: ' Wifi sur place'
+                            en: ' Wifi sur place'
+                        description:
+                            fr: ''
+                            en: ''
+                        type: "checkbox"
+                        unitPrice: 0
+                    -
+                        label:
+                            fr: 'traduction de votre fiche de présentation'
+                            en: 'traduction de votre fiche de présentation'
+                        description:
+                            en: ''
+                            fr: ''
+                        unitPrice: 95
+                        type: "checkbox"
+                        quantity:
+                            min: 1
+                            max: 5
+                    -
+                        label:
+                            fr: 'Insertion de votre brochure dans les pochettes d’accueil'
+                            en: 'Insertion de votre brochure dans les pochettes d’accueil'
+                        description:
+                            en: ''
+                            fr: ''
+                        unitPrice: 2600
+                        type: "checkbox"
+
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
