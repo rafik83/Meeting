@@ -193,20 +193,20 @@ Proximum\Vimeet\Domain\Model\Type:
                             fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
                             en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
                         description:
-                            fr: "bla bla bla "
-                            en: "bla bla bla"
+                            fr: "Quantité min 3, quantité max 3"
+                            en: "Quantité min 3, quantité max 3"
                         type: "lib_option"
                         unitPrice: 5990
                         quantity:
-                            min: 1
-                            max: 1
+                            min: 3
+                            max: 3
                     -
                         label:
                             fr: "Option payant avec sélection de quantité"
                             en: "Option payant avec sélection de quantité"
                         description:
-                            fr: "bla bla bla"
-                            en: "bla bla bla"
+                            fr: "Quantité min 1, quantité max 5"
+                            en: "Quantité min 1, quantité max 5"
                         type: "lib_option"
                         unitPrice: 11000
                         quantity:

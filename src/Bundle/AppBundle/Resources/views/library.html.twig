@@ -1,12 +1,8 @@
 {% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
 
 {% block quantity %}
-    {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] and form.quantity is defined %}
+    {% if template['quantity'] is defined and form.quantity is defined %}
         {{ form_row(form.quantity) }}
-    {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
-        {{ template['quantity']['min'] }}
-    {% else %}
-        1
     {% endif %}
 {% endblock %}
 
