@@ -2,6 +2,8 @@ Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
         title: Les rendez-vous CARNOT 2016
         domain: rdv-carnot-2016.<domain()>
+        locales: [fr, en]
+        fallback: fr
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:

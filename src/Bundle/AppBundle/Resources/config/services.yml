@@ -39,3 +39,15 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
             - { name: form.type, alias: lib_option }
+
+    #
+    # Event Listener
+    #
+    vimeet_app.domain_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\DomainEventListener
+        arguments:
+            - @router.default
+            - @vimeet_infrastructure.repository.event_repository
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+

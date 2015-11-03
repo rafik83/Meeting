@@ -17,6 +17,13 @@ interface EventRepositoryInterface
 {
     /**
      * @param string $domain
+     *
+     * @return Event
+     */
+    public function getEventByDomain($domain);
+
+    /**
+     * @param string $domain
      * @param string $locale
      *
      * @return EventView
