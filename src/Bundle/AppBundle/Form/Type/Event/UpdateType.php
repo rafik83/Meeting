@@ -28,7 +28,7 @@ class UpdateType extends AbstractType
             ])
             ->add('fallback', 'locale')
             ->add('translations', 'collection', [
-                'type' => new UpdateTranslationType(),
+                'type'  => new UpdateTranslationType(),
                 'label' => false,
             ])
         ;
