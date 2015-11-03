@@ -15,3 +15,11 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
+
+    #
+    # Form type
+    #
+    vimeet_app.form_type_library.choice_with_description:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescription
+        tags:
+            - { name: form.type, alias: choice_with_description }

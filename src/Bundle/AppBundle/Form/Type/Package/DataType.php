@@ -25,10 +25,10 @@ class DataType extends AbstractType
         $locale   = $options['locale'];
 
         foreach ($template as $i => $field) {
-            $builder->add($i, new QuantityType(), [
-                'field'  => $field,
-                'key'    => $i,
-                'locale' => $locale,
+            $builder->add($i, $field['type'], [
+                'label'    => $field['label'][$locale],
+                'template' => $field,
+                'locale'   => $locale,
             ]);
         }
     }

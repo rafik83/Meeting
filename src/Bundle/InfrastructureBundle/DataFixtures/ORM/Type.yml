@@ -39,7 +39,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Description forfait fr"
                             en: "Description package en"
-                        type: "radio"
+                        type: "choice_with_description"
                         required: true
                         choices:
                             -
