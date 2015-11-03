@@ -53,7 +53,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('event')
+            ->select('NEW Proximum\Vimeet\Domain\Model\EventListView(event.id, event.title)')
             ->from('Entity:Event', 'event');
 
         return $this->paginator->paginate($queryBuilder, $page, $limit);
