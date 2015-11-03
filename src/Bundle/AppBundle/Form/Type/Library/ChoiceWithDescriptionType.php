@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChoiceWithDescription extends AbstractType
+class ChoiceWithDescriptionType extends AbstractType
 {
     /**
      * {@inheritdoc}
