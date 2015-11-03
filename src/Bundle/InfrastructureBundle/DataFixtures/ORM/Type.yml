@@ -107,7 +107,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Description en français"
                             en: "Description in english"
-                        type: "uploadWithChoices"
+                        type: "upload_with_choices"
                         required: true
                         choices:
                             -
@@ -136,7 +136,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Publicité + logo sur votre fiche de présentation en ligne."
                             en: "Description in english"
-                        type: "uploadWithChoices"
+                        type: "upload_with_choices"
                         required: true
                         choices:
                             -

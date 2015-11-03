@@ -23,3 +23,15 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:
             - { name: form.type, alias: choice_with_description }
+    vimeet_app.form_type_library.upload_with_choices_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType
+        tags:
+            - { name: form.type, alias: upload_with_choices }
+    vimeet_app.form_type_library.text_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+        tags:
+            - { name: form.type, alias: lib_text }
+    vimeet_app.form_type_library.option_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
+        tags:
+            - { name: form.type, alias: lib_option }

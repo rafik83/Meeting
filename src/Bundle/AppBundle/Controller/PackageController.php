@@ -51,7 +51,6 @@ class PackageController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
                 ->handle($updateStep);
 
-
             if (isset($packageTemplate[$step + 1])) {
                 $this->addFlash('success', 'flash.package.update_step.success');
 

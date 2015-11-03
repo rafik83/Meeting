@@ -43,3 +43,43 @@
     {{ form_errors(form) }}
     {{ form_widget(form) }}
 {% endblock %}
+
+{% block upload_with_choices %}
+    {{ form_row(form.file) }}
+    {{ form_row(form.value) }}
+{% endblock %}
+
+{% block lib_option_row %}
+    {{ form_errors(form) }}
+    <table class="table table-bordered table-condensed">
+        <thead>
+        <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
+        <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
+        <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
+        <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{ form_widget(form.value) }}&nbsp;{{ form_label(form.value) }}
+                </td>
+                <td>
+                    {{ template['description'][locale] }}
+                </td>
+                <td>
+                    {{ template['unitPrice']|number_format_currency('EUR') }}
+                </td>
+                <td>
+                    {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] and form.quantity is defined %}
+                        {{ form_row(form.quantity) }}
+                    {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
+                        {{ template['quantity']['min'] }}
+                    {% else %}
+                        1
+                    {% endif %}
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
