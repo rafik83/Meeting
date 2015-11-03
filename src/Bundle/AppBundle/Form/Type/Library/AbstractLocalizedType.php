@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\AbstractType as SymfonyAbstractType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractType extends SymfonyAbstractType
+abstract class AbstractLocalizedType extends AbstractType
 {
     /**
      * {@inheritdoc}

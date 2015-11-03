@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UploadWithChoicesType extends AbstractType
+class UploadWithChoicesType extends AbstractLocalizedType
 {
     /**
      * {@inheritdoc}

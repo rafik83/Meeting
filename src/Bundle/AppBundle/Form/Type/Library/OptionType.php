@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Symfony\Component\Form\FormBuilderInterface;
 
-class OptionType extends AbstractType
+class OptionType extends AbstractLocalizedType
 {
     /**
      * {@inheritdoc}
