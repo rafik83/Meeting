@@ -72,13 +72,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $tables = $this->getSession()->getPage()->findAll('css', 'table');
 
-        foreach ($tables as $table) {
+        foreach ($tables as $keytb => $table) {
             $numColumnQuantity = null;
             $numColumnCheckbox = null;
             $numLine           = null;
 
             $thead = $table->findAll('css', 'thead th');
-            $tbody = $table->findAll('css', 'tbody td');
+            $tbody = $table->findAll('css', 'tbody tr');
 
             foreach ($thead as $key => $th) {
                 if (strpos($th->getText(), 'quantity')) {
@@ -89,13 +89,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 }
             }
 
-            foreach ($tbody as $key => $tb) {
+            foreach ($tbody as $key => $tr) {
                 if (null != $numColumnCheckbox) {
-                    if (null != $this->getSession()->getPage()->find(
+                    if (null != $tr->find(
                             'css',
                             sprintf(
-                                'table tbody tr:nth-child(%s) td:nth-child(%s):contains("%s")',
-                                $key + 1,
+                                'td:nth-child(%s):contains("%s")',
                                 $numColumnCheckbox,
                                 $checkbox
                             )
@@ -108,9 +107,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             }
 
             if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
-                $this->getSession()->getPage()->find(
+                $table->find(
                     'css',
-                    sprintf('table tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
+                    sprintf('tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
                 )->selectOption($quantity);
 
                 return;

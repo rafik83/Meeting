@@ -41,7 +41,7 @@ Feature: Choose a package
     Then I should see "flash.package.update_step.success"
     And I check "traduction de votre fiche de présentation"
     And I check "Insertion de votre brochure dans les pochettes d’accueil"
-    And I select the quantity "2" for the checkbox "Insertion de votre brochure dans les pochettes d’accueil"
+    And I select the quantity "2" for the checkbox "traduction de votre fiche de présentation"
     And I check "Wifi sur place"
     And I press "form.update_sheet_package_step.children.submit.label"
     Then I should see "flash.package.final_step.success"
