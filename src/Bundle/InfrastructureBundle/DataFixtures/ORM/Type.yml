@@ -3,26 +3,26 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate:
             -
                 title:
                     fr: "Société"
                     en: "Company"
                 template:
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             -
                 title:
                     fr: "Offres"
                     en: "Offers"
                 template:
-                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
+                    - { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
         packageTemplate:
             -
                 title:
@@ -255,31 +255,31 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate:
             -
                 title: { "fr": "Société", "en": "Company" }
                 template:
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             -
                 title: { "fr": "Besoins", "en": "Needs" }
                 template:
-                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
+                    - { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
         packageTemplate: []
     congressiste:
         position: 2
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate: []
         packageTemplate: []
 

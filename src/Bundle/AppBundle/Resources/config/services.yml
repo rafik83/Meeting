@@ -31,6 +31,10 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
         tags:
             - { name: form.type, alias: lib_text }
+    vimeet_app.form_type_library.textarea_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType
+        tags:
+            - { name: form.type, alias: lib_textarea }
     vimeet_app.form_type_library.option_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
