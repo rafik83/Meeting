@@ -25,7 +25,8 @@ class UploadWithChoicesType extends AbstractType
     {
         $builder
             ->add('file', 'file', [
-                'required' => false
+                'required' => false,
+                'label'    => false,
             ])
             ->add('value', 'choice_with_description', [
                 'template' => $options['template'],
