@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
@@ -37,6 +40,16 @@ class UpdateType extends AbstractType
                 'label' => false,
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        foreach ($view->children['translations'] as $translation) {
+            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+        }
     }
 
     /**
