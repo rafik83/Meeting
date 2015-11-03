@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
 {
@@ -26,8 +27,22 @@ class UpdateType extends AbstractType
                 'multiple' => true,
             ])
             ->add('fallback', 'locale')
+            ->add('translations', 'collection', [
+                'type' => new UpdateTranslationType(),
+                'label' => false,
+            ])
         ;
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['locales']);
+        $resolver->setDefaults([
+            'data_class' => 'Proximum\Vimeet\Application\Command\Event\Update',
+        ]);
     }
 
     /**

@@ -35,6 +35,12 @@ class UpdateHandler
         $event = $update->event;
         $event->update($update->title, $update->locales, $update->fallback);
 
+        foreach ($event->getTranslations() as $translation) {
+            if (isset($update->translations[$translation->getLocale()])) {
+                $translation->update($update->translations[$translation->getLocale()]['description']);
+            }
+        }
+
         $this->eventRepository->set($event);
     }
 }

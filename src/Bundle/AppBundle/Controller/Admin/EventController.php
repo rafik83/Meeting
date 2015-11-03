@@ -34,8 +34,9 @@ class EventController extends Controller
         $update = new Update($event);
 
         $form = $this->createForm(new UpdateType(), $update, [
-            'method' => 'POST',
-            'action' => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
+            'locales' => $event->getLocales(),
+            'method'  => 'POST',
+            'action'  => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
         ]);
         $form->add('submit', 'submit');
 

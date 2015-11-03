@@ -43,6 +43,10 @@ class EventRepository implements EventRepositoryInterface
     public function set(Event $event)
     {
         $this->entityManager->flush($event);
+
+        foreach ($event->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**

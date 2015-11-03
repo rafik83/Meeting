@@ -63,4 +63,12 @@ class EventTranslation
     {
         return $this->description;
     }
+
+    /**
+     * @param $description
+     */
+    public function update($description)
+    {
+        $this->description = $description;
+    }
 }
