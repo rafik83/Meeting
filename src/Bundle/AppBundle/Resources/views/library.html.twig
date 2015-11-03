@@ -13,14 +13,7 @@
 {% block choice_with_description_row %}
     {{ form_errors(form) }}
     <table class="table table-condensed">
-        <thead>
-            <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
-            <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
-            <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
-            {% if template['quantity'] is defined %}
-                <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
-            {% endif %}
-        </thead>
+        {{ block('thead') }}
         <tbody>
             {% for key, child in form.value %}
                 <tr>
@@ -54,17 +47,21 @@
     {{ form_row(form.value) }}
 {% endblock %}
 
-{% block lib_option_row %}
-    {{ form_errors(form) }}
-    <table class="table table-condensed">
-        <thead>
+{% block thead %}
+    <thead>
         <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
         <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
         <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
         {% if template['quantity'] is defined %}
             <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
         {% endif %}
-        </thead>
+    </thead>
+{% endblock %}
+
+{% block lib_option_row %}
+    {{ form_errors(form) }}
+    <table class="table table-condensed">
+        {{ block('thead') }}
         <tbody>
             <tr>
                 <td>
