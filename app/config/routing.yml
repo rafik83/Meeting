@@ -6,8 +6,12 @@ default:
         permanent: true
     methods: [GET]
 
-vimeet_app:
-    resource: "@VimeetAppBundle/Resources/config/routing.yml"
+vimeet_admin:
+    resource: "@VimeetAppBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin
+
+vimeet_event:
+    resource: "@VimeetAppBundle/Resources/config/routing/event.yml"
     prefix:   /{_locale}
     defaults:
         _locale: %locale%

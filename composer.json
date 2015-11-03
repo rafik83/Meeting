@@ -27,7 +27,8 @@
         "elao/theme-twitter-bootstrap-3-bundle": "~1.0",
         "nelmio/alice": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
-        "maximecolin/satisfaction": "~1.0"
+        "maximecolin/satisfaction": "~1.0",
+        "knplabs/knp-paginator-bundle": "^2.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

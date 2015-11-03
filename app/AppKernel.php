@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Elao\Bundle\Theme\TwitterBootstrap3Bundle\ElaoThemeTwitterBootstrap3Bundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),
