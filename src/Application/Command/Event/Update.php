@@ -14,14 +14,34 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Update
 {
+    /**
+     * @var Event
+     */
     public $event;
 
+    /**
+     * @var string
+     */
     public $title;
 
+    /**
+     * @var array
+     */
     public $locales;
 
+    /**
+     * @var string
+     */
     public $fallback;
 
+    /**
+     * @var array
+     */
+    public $translations;
+
+    /**
+     * @param Event $event
+     */
     public function __construct(Event $event)
     {
         $this->event        = $event;
