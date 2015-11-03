@@ -193,8 +193,8 @@ Proximum\Vimeet\Domain\Model\Type:
                             fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
                             en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
                         description:
-                            fr: "Description forfait  Gold"
-                            en: "Description Gold"
+                            fr: "bla bla bla "
+                            en: "bla bla bla"
                         type: "lib_option"
                         unitPrice: 5990
                         quantity:
@@ -202,11 +202,11 @@ Proximum\Vimeet\Domain\Model\Type:
                             max: 1
                     -
                         label:
-                            fr: "Formule de sponsoring des CONFERENCES"
-                            en: "Sponsoring formula for CONFERENCES"
+                            fr: "Option payant avec sélection de quantité"
+                            en: "Option payant avec sélection de quantité"
                         description:
-                            fr: "Description forfait  sponsoring"
-                            en: "Description sponsoring"
+                            fr: "bla bla bla"
+                            en: "bla bla bla"
                         type: "lib_option"
                         unitPrice: 11000
                         quantity:
