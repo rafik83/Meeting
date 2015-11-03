@@ -49,7 +49,7 @@ class EventController extends BaseController
 
         $typeViews = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewsByEvent($eventView->id, $request->getLocale());
+            ->getTypeViewsByEvent($eventView->id, $eventView->locale);
 
         return $this->render('VimeetAppBundle:Event:index.html.twig', [
             'event'  => $eventView,
@@ -140,7 +140,7 @@ class EventController extends BaseController
         // Create participate form
         $create = new Create();
         $form   = $this->createForm(new ParticipantCreateType(), $create, [
-            'locale'   => $request->getLocale(),
+            'locale'   => $eventView->locale,
             'template' => $this
                 ->get('vimeet_infrastructure.repository.type_repository')
                 ->getParticipantTemplate($typeView->id),

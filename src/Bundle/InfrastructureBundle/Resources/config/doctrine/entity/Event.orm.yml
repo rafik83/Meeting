@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         domain:
             type: string
+        locales:
+            type: json_array
+        fallback:
+            type: string
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation

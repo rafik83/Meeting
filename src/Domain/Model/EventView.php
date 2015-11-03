@@ -28,14 +28,28 @@ class EventView
     public $description;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
+     * @var array
+     */
+    public $locales;
+
+    /**
      * @param int    $id
      * @param string $title
      * @param string $description
+     * @param string $locale
+     * @param array  $locales
      */
-    public function __construct($id, $title, $description)
+    public function __construct($id, $title, $description, $locale, array $locales)
     {
         $this->id          = $id;
         $this->title       = $title;
         $this->description = $description;
+        $this->locale      = $locale;
+        $this->locales     = $locales;
     }
 }
