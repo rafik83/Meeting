@@ -10,11 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UploadWithChoicesType extends AbstractType
 {
@@ -33,23 +29,6 @@ class UploadWithChoicesType extends AbstractType
                 'locale'   => $options['locale'],
                 'required' => isset($options['template']['required']) ? $options['template']['required'] : false,
             ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['template'] = $options['template'];
-        $view->vars['locale']   = $options['locale'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired(['template', 'locale']);
     }
 
     /**
