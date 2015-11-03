@@ -1,0 +1,42 @@
+{% if field.children|length %}
+    <tr>
+        <td></td>
+        <td>
+            <b>{{ fieldTemplate['label'][app.request.locale]|nl2br }}</b>
+        </td>
+        <td colspan="2">
+            {{ fieldTemplate['description'][app.request.locale]|nl2br }}
+        </td>
+    </tr>
+
+    {% for key, subfield in field.children %}
+        <tr>
+            <td>
+                {{ form_widget(subfield) }}
+            </td>
+            <td>
+                {{ form_label(subfield) }}
+            </td>
+            <td>
+                {{ fieldTemplate['choices'][key]['description'][app.request.locale]|nl2br }}
+            </td>
+            <td class="text-right">
+                {{ fieldTemplate['choices'][key]['unitPrice']|number_format_currency('EUR') }}
+            </td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td></td>
+        <td>
+            {{ form_label(field) }}
+            {{ form_widget(field) }}
+        </td>
+        <td>
+            {{ fieldTemplate['description'][app.request.locale]|nl2br }}
+        </td>
+        <td class="text-right">
+            {{ fieldTemplate['unitPrice'] is defined ? fieldTemplate['unitPrice']|number_format_currency('EUR') : '' }}
+        </td>
+    </tr>
+{% endif %}

@@ -15,6 +15,34 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
+
+    #
+    # Form type
+    #
+    vimeet_app.form_type_library.choice_with_description:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
+        tags:
+            - { name: form.type, alias: choice_with_description }
+    vimeet_app.form_type_library.upload_with_choices_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType
+        tags:
+            - { name: form.type, alias: upload_with_choices }
+    vimeet_app.form_type_library.text_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+        tags:
+            - { name: form.type, alias: lib_text }
+    vimeet_app.form_type_library.textarea_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType
+        tags:
+            - { name: form.type, alias: lib_textarea }
+    vimeet_app.form_type_library.option_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
+        tags:
+            - { name: form.type, alias: lib_option }
+
+    #
+    # Event Listener
+    #
     vimeet_app.domain_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\DomainEventListener
         arguments:
@@ -22,3 +50,4 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+

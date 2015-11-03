@@ -1,27 +1,6 @@
 {% for key, subfield in fields %}
-    <tr>
-        <td>
-            {{ form_widget(subfield) }}
-        </td>
-        <td>
-            {{ form_label(subfield) }}
-        </td>
-        <td>
-            {{ choicesTemplate[key]['description'][app.request.locale]|nl2br }}
-        </td>
-        <td class="text-right">
-            {{ choicesTemplate[key]['unitPrice']|number_format_currency('EUR') }}
-        </td>
-        {% if loop.first %}
-            <td rowspan="{{ fields|length }}" class="text-right">
-                {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] %}
-                    {{ form_widget(fields|last) }}
-                {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
-                    {{ template['quantity']['min'] }}
-                {% else %}
-                    1
-                {% endif %}
-            </td>
-        {% endif %}
-    </tr>
+    {% include 'VimeetAppBundle:Package:row.html.twig' with {
+        'field': subfield,
+        'fieldTemplate': choicesTemplate,
+    } %}
 {% endfor %}

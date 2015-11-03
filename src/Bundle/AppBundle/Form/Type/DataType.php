@@ -29,6 +29,8 @@ class DataType extends AbstractType
                 'label'    => $field['label'][$locale],
                 'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === true,
+                'template' => $field,
+                'locale'   => $locale,
             ]);
         }
     }

@@ -155,7 +155,10 @@ class EventController extends BaseController
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $create->data);
 
-                $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
+                $this
+                    ->get('vimeet_infrastructure.application.command.user.participate_handler')
+                    ->handle($participate);
+
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet

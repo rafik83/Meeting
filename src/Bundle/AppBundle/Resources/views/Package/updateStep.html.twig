@@ -1,5 +1,7 @@
 {% extends 'VimeetAppBundle::base.html.twig' %}
 
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
 {% block title eventView.title %}
 
 {% block body %}
@@ -9,25 +11,6 @@
     <p>{{ stepPackageTemplate['description'][app.request.locale]|default }}</p>
     <hr>
 
-    {{ form_start(form) }}
+    {{ form(form) }}
 
-    <table class="table table-bordered table-condensed">
-        <thead>
-            <th class="col-md-1">{{ 'event.sheet.package.column.choices'|trans }}</th>
-            <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
-            <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
-            <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
-            <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
-        </thead>
-        <tbody>
-            {% for key, field in form.children["packageData"].children %}
-                   {% include 'VimeetAppBundle:Package:optionField.html.twig' with {
-                   'fields': field.children,
-                   'template': stepPackageTemplate['template'][key]
-                   } %}
-           {% endfor %}
-        </tbody>
-    </table>
-
-   {{ form_end(form) }}
 {% endblock %}

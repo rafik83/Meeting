@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fe598bb0a156a567fee194f56623fb17",
-    "content-hash": "dc89f53b1d0c11cb3ebd3d39872199a8",
+    "hash": "9206d347f0efd357589f808ef6aa0319",
+    "content-hash": "19e16f53f5b6ec1c98a91ccc69aef9dd",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1720,22 +1720,22 @@
         },
         {
             "name": "sonata-project/intl-bundle",
-            "version": "2.2.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataIntlBundle.git",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb"
+                "reference": "3271832db183b1a0853ba7b03f62a91876fe74a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/3271832db183b1a0853ba7b03f62a91876fe74a0",
+                "reference": "3271832db183b1a0853ba7b03f62a91876fe74a0",
                 "shasum": ""
             },
             "require": {
                 "symfony/dependency-injection": "~2.2",
                 "symfony/http-kernel": "~2.2",
-                "symfony/locale": "~2.2",
+                "symfony/intl": "^2.3.21",
                 "symfony/templating": "~2.2",
                 "twig/twig": "~1.12"
             },
@@ -1779,7 +1779,7 @@
                 "sonata",
                 "time"
             ],
-            "time": "2015-08-26 14:55:43"
+            "time": "2015-11-03 08:57:01"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4312,6 +4312,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "sonata-project/intl-bundle": 20,
         "elao/form-bundle": 20
     },
     "prefer-stable": false,
