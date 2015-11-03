@@ -16,6 +16,8 @@ class Update
 {
     public $event;
 
+    public $title;
+
     public $locales;
 
     public $fallback;
@@ -23,6 +25,7 @@ class Update
     public function __construct(Event $event)
     {
         $this->event    = $event;
+        $this->title    = $event->getTitle();
         $this->locales  = $event->getLocales();
         $this->fallback = $event->getFallback();
     }

@@ -27,8 +27,14 @@ class UpdateHandler
         $this->eventRepository = $eventRepository;
     }
 
+    /**
+     * @param Update $update
+     */
     public function handler(Update $update)
     {
+        $event = $update->event;
+        $event->update($update->title, $update->locales, $update->fallback);
 
+        $this->eventRepository->set($event);
     }
 }

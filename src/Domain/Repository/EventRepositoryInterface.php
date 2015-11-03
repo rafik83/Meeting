@@ -24,6 +24,11 @@ interface EventRepositoryInterface
     public function paginate($page, $limit);
 
     /**
+     * @param Event $event
+     */
+    public function set(Event $event);
+
+    /**
      * @param string $domain
      *
      * @return Event

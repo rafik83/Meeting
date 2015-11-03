@@ -21,6 +21,7 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('title', 'text')
             ->add('locales', 'locale', [
                 'multiple' => true,
             ])
