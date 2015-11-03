@@ -21,12 +21,17 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $prefered = ['fr', 'en', 'es', 'de', 'it', 'zh'];
+
         $builder
             ->add('title', 'text')
             ->add('locales', 'locale', [
-                'multiple' => true,
+                'multiple'          => true,
+                'preferred_choices' => $prefered,
             ])
-            ->add('fallback', 'locale')
+            ->add('fallback', 'locale', [
+                'preferred_choices' => $prefered,
+            ])
             ->add('translations', 'collection', [
                 'type'  => new UpdateTranslationType(),
                 'label' => false,
