@@ -12,12 +12,14 @@
 
 {% block choice_with_description_row %}
     {{ form_errors(form) }}
-    <table class="table table-bordered table-condensed">
+    <table class="table table-condensed">
         <thead>
             <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
             <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
             <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
-            <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+            {% if template['quantity'] is defined %}
+                <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+            {% endif %}
         </thead>
         <tbody>
             {% for key, child in form.value %}
@@ -31,7 +33,7 @@
                     <td>
                         {{ template['choices'][key]['unitPrice']|number_format_currency('EUR') }}
                     </td>
-                    {% if loop.first %}
+                    {% if loop.first and template['quantity'] is defined %}
                         <td rowspan="{{ loop.length }}">
                             {{ block('quantity') }}
                         </td>
@@ -54,12 +56,14 @@
 
 {% block lib_option_row %}
     {{ form_errors(form) }}
-    <table class="table table-bordered table-condensed">
+    <table class="table table-condensed">
         <thead>
         <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
         <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
         <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
-        <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        {% if template['quantity'] is defined %}
+            <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        {% endif %}
         </thead>
         <tbody>
             <tr>
@@ -72,9 +76,11 @@
                 <td>
                     {{ template['unitPrice']|number_format_currency('EUR') }}
                 </td>
-                <td>
-                    {{ block('quantity') }}
-                </td>
+                {% if template['quantity'] is defined %}
+                    <td>
+                        {{ block('quantity') }}
+                    </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
