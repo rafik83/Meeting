@@ -1,5 +1,15 @@
 {% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
 
+{% block quantity %}
+    {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] and form.quantity is defined %}
+        {{ form_row(form.quantity) }}
+    {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
+        {{ template['quantity']['min'] }}
+    {% else %}
+        1
+    {% endif %}
+{% endblock %}
+
 {% block choice_with_description_row %}
     {{ form_errors(form) }}
     <table class="table table-bordered table-condensed">
@@ -23,14 +33,7 @@
                     </td>
                     {% if loop.first %}
                         <td rowspan="{{ loop.length }}">
-                            {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] and form.quantity is defined %}
-                                {{ form_row(form.quantity) }}
-                            {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
-                                {{ template['quantity']['min'] }}
-                            {% else %}
-                                1
-                            {% endif %}
-
+                            {{ block('quantity') }}
                         </td>
                     {% endif %}
                 </tr>
@@ -70,14 +73,7 @@
                     {{ template['unitPrice']|number_format_currency('EUR') }}
                 </td>
                 <td>
-                    {% if template['quantity'] is defined and template['quantity']['min'] != template['quantity']['max'] and form.quantity is defined %}
-                        {{ form_row(form.quantity) }}
-                    {% elseif template['quantity'] is defined and template['quantity']['min'] == template['quantity']['max'] %}
-                        {{ template['quantity']['min'] }}
-                    {% else %}
-                        1
-                    {% endif %}
-
+                    {{ block('quantity') }}
                 </td>
             </tr>
         </tbody>
