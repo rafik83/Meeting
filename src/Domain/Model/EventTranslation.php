@@ -33,6 +33,18 @@ class EventTranslation
     private $description;
 
     /**
+     * @param Event  $event
+     * @param string $locale
+     * @param string $description
+     */
+    public function __construct(Event $event, $locale, $description)
+    {
+        $this->event       = $event;
+        $this->locale      = $locale;
+        $this->description = $description;
+    }
+
+    /**
      * @return Event
      */
     public function getEvent()

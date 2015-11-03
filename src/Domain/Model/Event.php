@@ -86,7 +86,7 @@ class Event
     }
 
     /**
-     * @return EventTranslation[]
+     * @return ArrayCollection
      */
     public function getTranslations()
     {
