@@ -70,42 +70,52 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iSelectTheQuantityForTheCheckbox($quantity, $checkbox)
     {
-        $page = $this->getSession()->getPage();
+        $tables = $this->getSession()->getPage()->findAll('css', 'table');
 
-        $thead = $this->getSession()->getPage()->findAll('css', 'table thead th');
-        $tbody = $this->getSession()->getPage()->findAll('css', 'table tbody tr');
+        foreach ($tables as $table) {
+            $numColumnQuantity = null;
+            $numColumnCheckbox = null;
+            $numLine           = null;
 
-        $numColumnQuantity = null;
-        $numColumnCheckbox = null;
-        $numLine           = null;
+            $thead = $table->findAll('css', 'thead th');
+            $tbody = $table->findAll('css', 'tbody td');
 
-        foreach ($thead as $key => $th) {
-            if (strpos($th->getText(), 'quantity')) {
-                $numColumnQuantity = $key + 1;
+            foreach ($thead as $key => $th) {
+                if (strpos($th->getText(), 'quantity')) {
+                    $numColumnQuantity = $key + 1;
+                }
+                if (strpos($th->getText(), 'label')) {
+                    $numColumnCheckbox = $key + 1;
+                }
             }
-            if (strpos($th->getText(), 'label')) {
-                $numColumnCheckbox = $key + 1;
+
+            foreach ($tbody as $key => $tb) {
+                if (null != $numColumnCheckbox) {
+                    if (null != $this->getSession()->getPage()->find(
+                            'css',
+                            sprintf(
+                                'table tbody tr:nth-child(%s) td:nth-child(%s):contains("%s")',
+                                $key + 1,
+                                $numColumnCheckbox,
+                                $checkbox
+                            )
+                        )
+                    ) {
+                        $numLine = $key + 1;
+                        break;
+                    }
+                }
             }
-        }
 
-        if (null != $numColumnCheckbox) {
-            foreach ($tbody as $key => $td)
-            if (null != $this->getSession()->getPage()->find(
-                'css',
-                sprintf('table tbody tr:nth-child(%s) td:nth-child(%s):contains("%s")', $key+1, $numColumnCheckbox, $checkbox)
-            )) {
-                $numLine = $key + 1;
-                break;
+            if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
+                $this->getSession()->getPage()->find(
+                    'css',
+                    sprintf('table tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
+                )->selectOption($quantity);
+
+                return;
             }
-        }
 
-        if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
-            $this->getSession()->getPage()->find(
-                'css',
-                sprintf('table tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
-            )->selectOption($quantity);
-
-            return;
         }
 
         throw new \Exception('Element not found');

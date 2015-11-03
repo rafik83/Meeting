@@ -33,10 +33,15 @@ Feature: Choose a package
     When I check the "Forfait Silver" radio
     And I press "form.update_sheet_package_step.children.submit.label"
     Then I should see "flash.package.update_step.success"
-    And I check "Module équipé de 4m² supplémentaires"
-    And I select the quantity "2" for the checkbox "Module équipé de 4m² supplémentaires"
-    And I check "Formule de sponsoring des CONFERENCES"
+    And I check the "Je ne prends pas" radio
+    And I check the "Formule 3" radio
+    And I check "Option payant avec sélection de quantité"
+    And I select the quantity "2" for the checkbox "Option payant avec sélection de quantité"
     And I press "form.update_sheet_package_step.children.submit.label"
+    Then I should see "flash.package.update_step.success"
+    And I check "traduction de votre fiche de présentation"
+    And I check "Insertion de votre brochure dans les pochettes d’accueil"
+    And I select the quantity "2" for the checkbox "Insertion de votre brochure dans les pochettes d’accueil"
     And I check "Wifi sur place"
     And I press "form.update_sheet_package_step.children.submit.label"
     Then I should see "flash.package.final_step.success"
