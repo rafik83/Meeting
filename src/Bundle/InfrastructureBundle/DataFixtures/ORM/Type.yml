@@ -3,26 +3,26 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate:
             -
                 title:
                     fr: "Société"
                     en: "Company"
                 template:
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             -
                 title:
                     fr: "Offres"
                     en: "Offers"
                 template:
-                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
+                    - { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
         packageTemplate:
             -
                 title:
@@ -39,7 +39,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         description:
                             fr: "Description forfait fr"
                             en: "Description package en"
-                        type: "radio"
+                        type: "choice_with_description"
                         required: true
                         choices:
                             -
@@ -48,7 +48,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                     en: "Exhibitors package"
                                 description:
                                     fr: >
-                                        "Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
+                                        Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
                                            - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
                                            - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
                                            - L’ouverture de votre « Espace Client » sur notre site internet.
@@ -57,7 +57,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                            - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
                                            - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
                                            - L’accès à la pause café permanente propice au contact informel.
-                                           - Une invitation au cocktail inaugural."
+                                           - Une invitation au cocktail inaugural.
                                     en: "Description Exhibitors"
                                 unitPrice: 2190
                             -
@@ -92,35 +92,194 @@ Proximum\Vimeet\Domain\Model\Type:
                                     fr: "Description forfait  sponsoring"
                                     en: "Description sponsoring"
                                 unitPrice: 11000
+            -
+                title:
+                    fr: "Options proposées pour optimiser votre participation"
+                    en: "Options to optimize your participation:"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    -
+                        label:
+                            fr: "Votre logo"
+                            en: "Your logo"
+                        description:
+                            fr: "Description en français"
+                            en: "Description in english"
+                        type: "upload_with_choices"
+                        required: true
+                        choices:
+                            -
+                                label:
+                                    fr: "L’insertion de votre logo sur le catalogue en ligne"
+                                    en: "Your logo on the catalog"
+                                description: { "fr": "", "en": "" }
+                                unitPrice: 59
+                            -
+                                label:
+                                    fr: "Je ne prends pas"
+                                    en: "I do not take"
+                                description: { "fr": "", "en": "" }
+                                unitPrice: 0
+                    -
+                        type: "lib_text"
+                        required: false
+                        label:
+                            fr: "Lien sur le logo vers votre site internet"
+                            en: "Link on the brand"
+                        description: { "fr": "", "en": "" }
+                    -
+                        label:
+                            fr: "Pack Pub"
+                            en: "Ads banner"
+                        description:
+                            fr: "Publicité + logo sur votre fiche de présentation en ligne."
+                            en: "Description in english"
+                        type: "upload_with_choices"
+                        required: true
+                        choices:
+                            -
+                                label:
+                                    fr: "Formule 1"
+                                    en: "Formula 1"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 199
+                            -
+                                label:
+                                    fr: "Formule 2"
+                                    en: "Formula 2"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 249
+                            -
+                                label:
+                                    fr: "Formule 3"
+                                    en: "Formula 3"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 399
+                            -
+                                label:
+                                    fr: "Je ne prends pas"
+                                    en: "I do not take"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 0
+                    -
+                        type: "lib_text"
+                        required: false
+                        label:
+                            fr: "Lien sur la bannière pub vers votre site internet"
+                            en: "Link on the ads banner"
+                        description:
+                            fr: "Module équipé de 4m² supplémentaires"
+                            en: "Additional equipped booth of 4 sqm"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 3990
+                        quantity:
+                            min: 1
+                            max: 5
+                    -
+                        label:
+                            fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
+                            en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
+                        description:
+                            fr: "Quantité min 3, quantité max 3"
+                            en: "Quantité min 3, quantité max 3"
+                        type: "lib_option"
+                        unitPrice: 5990
+                        quantity:
+                            min: 3
+                            max: 3
+                    -
+                        label:
+                            fr: "Option payant avec sélection de quantité"
+                            en: "Option payant avec sélection de quantité"
+                        description:
+                            fr: "Quantité min 1, quantité max 5"
+                            en: "Quantité min 1, quantité max 5"
+                        type: "lib_option"
+                        unitPrice: 11000
+                        quantity:
+                            min: 1
+                            max: 5
+            -
+                title:
+                    en: 'Options supplémentaires'
+                    fr: 'Options supplémentaires'
+                description:
+                    en: 'ceci est une description'
+                    fr: 'ceci est une description'
+                template:
+                    -
+                        label:
+                            fr: ' Wifi sur place'
+                            en: ' Wifi sur place'
+                        description:
+                            fr: ''
+                            en: ''
+                        type: "lib_option"
+                        unitPrice: 0
+                    -
+                        label:
+                            fr: 'traduction de votre fiche de présentation'
+                            en: 'traduction de votre fiche de présentation'
+                        description:
+                            en: ''
+                            fr: ''
+                        unitPrice: 95
+                        type: "lib_option"
+                        quantity:
+                            min: 1
+                            max: 5
+                    -
+                        label:
+                            fr: 'Insertion de votre brochure dans les pochettes d’accueil'
+                            en: 'Insertion de votre brochure dans les pochettes d’accueil'
+                        description:
+                            en: ''
+                            fr: ''
+                        unitPrice: 2600
+                        type: "lib_option"
+
     visiteur:
         position: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate:
             -
                 title: { "fr": "Société", "en": "Company" }
                 template:
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    - { "type": "text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             -
                 title: { "fr": "Besoins", "en": "Needs" }
                 template:
-                    - { "type": "textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
+                    - { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
         packageTemplate: []
     congressiste:
         position: 2
         event: @event_rdv_carnot_2016
         participantTemplate:
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            - { "type": "text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            - { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
         sheetTemplate: []
         packageTemplate: []
 

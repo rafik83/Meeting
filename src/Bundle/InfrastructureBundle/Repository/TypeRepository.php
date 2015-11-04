@@ -31,6 +31,25 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getTypeViewById($typeId, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->from('Entity:Type', 'type')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('type.id = :typeId')
+            ->setParameter('typeId', $typeId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeViewsByEvent($eventId, $locale)
     {
         $queryBuilder = $this
@@ -50,15 +69,13 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeViewById($typeId, $locale)
+    public function getTypeTemplatesViewById($typeId)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeTemplatesView(type.id, type.participantTemplate, type.sheetTemplate, type.packageTemplate)')
             ->from('Entity:Type', 'type')
-            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
-            ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
             ->setParameter('typeId', $typeId)
             ->setMaxResults(1);

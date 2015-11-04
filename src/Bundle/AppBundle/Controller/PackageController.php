@@ -39,6 +39,7 @@ class PackageController extends BaseController
         }
 
         $updateStep = new UpdateStep($sheet, $step);
+
         $form       = $this->createForm(new UpdateStepType(), $updateStep, [
             'template' => $packageTemplate[$step]['template'],
             'locale'   => $request->getLocale(),
@@ -50,13 +51,24 @@ class PackageController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
                 ->handle($updateStep);
 
-            $this->addFlash('success', 'flash.package.update_step.success');
+            if (isset($packageTemplate[$step + 1])) {
+                $this->addFlash('success', 'flash.package.update_step.success');
 
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+                // Go to the next step
+                return $this->redirectToRoute('event_sheet_package_update_step', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                    'step'      => $step + 1,
+                ]);
+            } else {
+                $this->addFlash('success', 'flash.package.final_step.success');
+
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                ]);
+            }
         }
 
         return $this->render('VimeetAppBundle:Package:updateStep.html.twig', [

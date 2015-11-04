@@ -94,6 +94,12 @@ init-db:
 	bin/console doctrine:schema:create
 	bin/console doctrine:fixtures:load -n
 
+init-db@test:
+	bin/console doctrine:schema:drop --force --env=test
+	bin/console doctrine:schema:create --env=test
+	bin/console doctrine:fixtures:load -n --env=test
+	bin/console cache:clear --env=test
+
 #########
 # Build #
 #########
@@ -142,6 +148,7 @@ test-phpunit@test:
 	bin/phpunit --log-junit var/tests/junit.xml --coverage-clover var/tests/clover.xml --coverage-html var/tests/coverage
 
 test-behat:
+	bin/console ca:cl --env=test
 	bin/behat
 
 test-behat@test:

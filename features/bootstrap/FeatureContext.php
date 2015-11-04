@@ -64,4 +64,59 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         throw new \Exception('Radio button not found');
     }
+
+    /**
+     * @When I select the quantity :quantity for the checkbox :checkbox
+     */
+    public function iSelectTheQuantityForTheCheckbox($quantity, $checkbox)
+    {
+        $tables = $this->getSession()->getPage()->findAll('css', 'table');
+
+        foreach ($tables as $keytb => $table) {
+            $numColumnQuantity = null;
+            $numColumnCheckbox = null;
+            $numLine           = null;
+
+            $thead = $table->findAll('css', 'thead th');
+            $tbody = $table->findAll('css', 'tbody tr');
+
+            foreach ($thead as $key => $th) {
+                if (strpos($th->getText(), 'quantity')) {
+                    $numColumnQuantity = $key + 1;
+                }
+                if (strpos($th->getText(), 'label')) {
+                    $numColumnCheckbox = $key + 1;
+                }
+            }
+
+            foreach ($tbody as $key => $tr) {
+                if (null != $numColumnCheckbox) {
+                    if (null != $tr->find(
+                            'css',
+                            sprintf(
+                                'td:nth-child(%s):contains("%s")',
+                                $numColumnCheckbox,
+                                $checkbox
+                            )
+                        )
+                    ) {
+                        $numLine = $key + 1;
+                        break;
+                    }
+                }
+            }
+
+            if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
+                $table->find(
+                    'css',
+                    sprintf('tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)
+                )->selectOption($quantity);
+
+                return;
+            }
+
+        }
+
+        throw new \Exception('Element not found');
+    }
 }

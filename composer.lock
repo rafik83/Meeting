@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "501aed744869bc4282094048e7cab005",
-    "content-hash": "0a06a3bb48b580918f0ebb3b7b9b111b",
+    "hash": "71afa65a3adda956b0135e7ffa8443d5",
+    "content-hash": "4e49cedc2a78e6a778bf791e4e8f6a83",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -942,16 +942,16 @@
         },
         {
             "name": "elao/form-translation-bundle",
-            "version": "v1.2.0",
+            "version": "v1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormTranslationBundle.git",
-                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e"
+                "reference": "04289c8feda0c6488f6b66db835657a28fadf16f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/848879507bf38406d46d205ec028ffcfd1a89c6e",
-                "reference": "848879507bf38406d46d205ec028ffcfd1a89c6e",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/04289c8feda0c6488f6b66db835657a28fadf16f",
+                "reference": "04289c8feda0c6488f6b66db835657a28fadf16f",
                 "shasum": ""
             },
             "require": {
@@ -993,7 +993,7 @@
                 "form",
                 "translation"
             ],
-            "time": "2014-12-04 07:24:04"
+            "time": "2015-11-01 20:41:26"
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",
@@ -1849,22 +1849,22 @@
         },
         {
             "name": "sonata-project/intl-bundle",
-            "version": "2.2.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataIntlBundle.git",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb"
+                "reference": "3271832db183b1a0853ba7b03f62a91876fe74a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/3271832db183b1a0853ba7b03f62a91876fe74a0",
+                "reference": "3271832db183b1a0853ba7b03f62a91876fe74a0",
                 "shasum": ""
             },
             "require": {
                 "symfony/dependency-injection": "~2.2",
                 "symfony/http-kernel": "~2.2",
-                "symfony/locale": "~2.2",
+                "symfony/intl": "^2.3.21",
                 "symfony/templating": "~2.2",
                 "twig/twig": "~1.12"
             },
@@ -1908,7 +1908,7 @@
                 "sonata",
                 "time"
             ],
-            "time": "2015-08-26 14:55:43"
+            "time": "2015-11-03 08:57:01"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4441,6 +4441,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "sonata-project/intl-bundle": 20,
         "elao/form-bundle": 20
     },
     "prefer-stable": false,
