@@ -10,6 +10,13 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate:
             -
                 title:
+                    fr: "Logo"
+                    en: "Brand"
+                linkTo:
+                    template: "packageTemplate"
+                    index: 1
+            -
+                title:
                     fr: "Société"
                     en: "Company"
                 template:

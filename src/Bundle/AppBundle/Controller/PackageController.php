@@ -51,7 +51,14 @@ class PackageController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
                 ->handle($updateStep);
 
-            if (isset($packageTemplate[$step + 1])) {
+            $redirectTo = $request->get('redirect_to');
+
+            if (null !== $redirectTo) {
+                $this->addFlash('success', 'flash.package.update_step.success');
+
+                return $this->redirect($redirectTo);
+
+            } elseif (isset($packageTemplate[$step + 1])) {
                 $this->addFlash('success', 'flash.package.update_step.success');
 
                 // Go to the next step
@@ -60,6 +67,7 @@ class PackageController extends BaseController
                     'id'        => $sheet->getId(),
                     'step'      => $step + 1,
                 ]);
+
             } else {
                 $this->addFlash('success', 'flash.package.final_step.success');
 

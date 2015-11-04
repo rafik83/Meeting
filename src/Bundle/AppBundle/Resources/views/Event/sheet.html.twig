@@ -31,9 +31,11 @@
     </div>
 
     {% include 'VimeetAppBundle:Event:block.html.twig' with {
-        'sheet' : sheet,
-        'data'  : sheet.data,
+        'sheet': sheet,
+        'data': sheet.data,
+        'packageData': sheet.packageData,
         'blocks': sheet.type.sheetTemplate,
+        'packageTemplate': sheet.type.packageTemplate,
     } %}
 
     {% if sheet.type.packageTemplate[0] is defined %}
