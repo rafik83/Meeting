@@ -38,7 +38,7 @@ class UpdateHandler
 
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
-                $event->getTranslations()->add(new EventTranslation($event, $locale, ''));
+                $event->getTranslations()->set($locale, new EventTranslation($event, $locale, ''));
             }
         }
 
