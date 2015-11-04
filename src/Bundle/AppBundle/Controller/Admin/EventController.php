@@ -41,7 +41,7 @@ class EventController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handler($update);
+            $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handle($update);
 
             return $this->redirectToRoute('admin_event_update', ['id' => $event->getId()]);
         }

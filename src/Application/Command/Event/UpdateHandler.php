@@ -31,7 +31,7 @@ class UpdateHandler
     /**
      * @param Update $update
      */
-    public function handler(Update $update)
+    public function handle(Update $update)
     {
         $event = $update->event;
         $event->update($update->title, $update->locales, $update->fallback);
