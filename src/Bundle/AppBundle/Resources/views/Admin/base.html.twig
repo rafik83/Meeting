@@ -9,12 +9,13 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body>
-<div class="container">
-    {% block body %}{% endblock %}
+    <div class="container" style="padding: 30px 0px;">
+        {{ include('VimeetAppBundle::flashes.html.twig') }}
+        {% block body %}{% endblock %}
+    </div>
     {% block javascripts %}
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     {% endblock %}
-</div>
 </body>
 </html>
