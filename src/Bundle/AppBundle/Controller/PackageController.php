@@ -41,7 +41,7 @@ class PackageController extends BaseController
 
         $updateStep = new UpdateStep($sheet, $step);
         $form       = $this->createForm(new UpdateStepType(), $updateStep, [
-            'template' => $sheet->getType()->getPackageTemplate()[$step]['template'],
+            'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
@@ -57,7 +57,7 @@ class PackageController extends BaseController
         return $this->render('VimeetAppBundle:Package:updateStep.html.twig', [
             'eventView'           => $eventView,
             'sheet'               => $sheet,
-            'stepPackageTemplate' => $sheet->getType()->getPackageTemplate()[$step],
+            'stepPackageTemplate' => $sheet->getTypePackageTemplate()[$step],
             'form'                => $form->createView(),
         ]);
     }
@@ -70,7 +70,7 @@ class PackageController extends BaseController
      */
     private function denyAccessPackageStepNotExists(Sheet $sheet, $step)
     {
-        $packageTemplate = $sheet->getType()->getPackageTemplate();
+        $packageTemplate = $sheet->getTypePackageTemplate();
 
         if (!isset($packageTemplate[$step])) {
             throw $this->createNotFoundException();
@@ -89,7 +89,7 @@ class PackageController extends BaseController
         $this->addFlash('success', 'flash.package.update_step.success');
 
         $redirectTo      = $request->get('redirect_to');
-        $packageTemplate = $sheet->getType()->getPackageTemplate();
+        $packageTemplate = $sheet->getTypePackageTemplate();
 
         if (null !== $redirectTo) {
             return $redirectTo;
