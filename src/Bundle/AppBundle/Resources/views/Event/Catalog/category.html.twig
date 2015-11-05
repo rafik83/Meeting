@@ -4,9 +4,7 @@
     <h1>{{ eventView.title }}</h1>
     <h2>Catalogue "{{ category.title }}"</h2>
 
-    <ul>
-        {% for sheet in sheets %}
-            <li>{{ sheet.id }}</li>
-        {% endfor %}
-    </ul>
+    {% for sheet in sheets %}
+        {{ include(template_from_string(sheet.type.previewTemplate), { 'sheet': sheet }) }}
+    {% endfor %}
 {% endblock %}
