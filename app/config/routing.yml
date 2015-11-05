@@ -1,9 +1,17 @@
 default:
     pattern: /
+    host: "%domain%"
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
         path: /%locale%/
         permanent: true
+    methods: [GET]
+
+default_event:
+    path: /
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
     methods: [GET]
 
 vimeet_admin:

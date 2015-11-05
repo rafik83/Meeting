@@ -64,5 +64,15 @@ class DomainEventListener
 
             return;
         }
+
+        if ($request->attributes->get('_route') === 'default_event') {
+            $path = $this->router->generate(
+                'event',
+                array_merge($request->attributes->get('_route_params', []), ['_locale' => $event->getFallback()])
+            );
+            $getResponseEvent->setResponse(new RedirectResponse($path));
+
+            return;
+        }
     }
 }
