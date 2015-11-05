@@ -22,6 +22,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.category_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
