@@ -22,17 +22,9 @@
     </h3>
 
     {% if block.template is defined and data is defined %}
-        <table class="table table-bordered table-condensed">
-            {% for key, field in block.template %}
-                {% if not (field['private'] is defined and field['private'] == true) %}
-                    <tr>
-                        <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
-                        <td class="col-md-9">
-                            {{ data[i][key]|default('...')|nl2br }}
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
+        {% include 'VimeetAppBundle:Event:blockData.html.twig' with {
+            'template': block.template,
+            'data': data[i]|default,
+        } %}
     {% endif %}
 {% endfor %}
