@@ -7,5 +7,5 @@ Proximum\Vimeet\Domain\Model\Category:
     category_visiteur:
         title: Visiteurs
         filters:
-            type: [@type_visiteur->id, @type_congressiste->id]
+            type: [@type_visiteur->id]
         event: @event_rdv_carnot_2016
