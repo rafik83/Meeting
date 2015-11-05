@@ -1,5 +1,5 @@
 Proximum\Vimeet\Domain\Model\Type:
-    exposant:
+    type_exposant:
         position: 0
         event: @event_rdv_carnot_2016
         participantTemplate:
@@ -251,7 +251,7 @@ Proximum\Vimeet\Domain\Model\Type:
                         unitPrice: 2600
                         type: "lib_option"
 
-    visiteur:
+    type_visiteur:
         position: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
@@ -272,7 +272,7 @@ Proximum\Vimeet\Domain\Model\Type:
                 template:
                     - { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
         packageTemplate: []
-    congressiste:
+    type_congressiste:
         position: 2
         event: @event_rdv_carnot_2016
         participantTemplate:
@@ -286,25 +286,25 @@ Proximum\Vimeet\Domain\Model\Type:
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_fr:
         title: Exposant
-        type: @exposant
+        type: @type_exposant
         locale: fr
     exposant_en:
         title: Exhibitor
-        type: @exposant
+        type: @type_exposant
         locale: en
     visiteur_fr:
         title: Visiteur
-        type: @visiteur
+        type: @type_visiteur
         locale: fr
     visiteur_en:
         title: Visitor
-        type: @visiteur
+        type: @type_visiteur
         locale: en
     congressiste_fr:
         title: Congressiste
-        type: @congressiste
+        type: @type_congressiste
         locale: fr
     congressiste_en:
         title: Congressman
-        type: @congressiste
+        type: @type_congressiste
         locale: en

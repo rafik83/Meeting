@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_exposant{1..20}:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_exposant
+        data:
+            -
+                - <company()>
+                - <address()>
+                - <url()>
+                - <text(100)>
+            -
+                - <text(200)>
+        packageData: []
+    sheet_visiteur{1..20}:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_visiteur
+        data:
+            -
+                - <company()>
+                - <address()>
+                - <url()>
+                - <text(100)>
+            -
+                - <text(200)>
+        packageData: []
+    sheet_congressiste{1..20}:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_congressiste
+        data: []
+        packageData: []
