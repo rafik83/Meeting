@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\PaymentModeType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,10 +89,8 @@ class PackageController extends BaseController
      */
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        $form = $this
-            ->createFormBuilder()
-            ->add('mode', new PaymentModeType())
-            ->add('submit', 'submit');
+        $form = $this->createForm(new ChoosePaymentModeType());
+        $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->addFlash('success', 'flash.package.payment_mode.success');
