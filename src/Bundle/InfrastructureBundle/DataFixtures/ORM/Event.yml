@@ -7,10 +7,12 @@ Proximum\Vimeet\Domain\Model\Event:
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:
+        __construct: false
         description: LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISES
         locale: fr
         event: @event_rdv_carnot_2016
     event_translation_rdv_carnot_2016_en:
+        __construct: false
         description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
         locale: en
         event: @event_rdv_carnot_2016

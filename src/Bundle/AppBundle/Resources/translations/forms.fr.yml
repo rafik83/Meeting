@@ -67,3 +67,18 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
+    event_update:
+        children:
+            title:
+                label: Titre
+            locales:
+                label: Langues
+            fallback:
+                label: Langue par défaut
+            translations:
+                prototype:
+                    children:
+                        description:
+                            label: Description
+            submit:
+                label: Enregistrer
