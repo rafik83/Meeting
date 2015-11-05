@@ -48,6 +48,11 @@ class Event
     private $fallback;
 
     /**
+     * @var string
+     */
+    private $billingTemplate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -123,5 +128,29 @@ class Event
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @return array
+     */
+    public function getBillingTemplate()
+    {
+        return $this->billingTemplate;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBillingData()
+    {
+        $data = [];
+
+        $template = $this->getBillingTemplate();
+
+        foreach ($template as $key => $field) {
+            $data[$key] = null;
+        }
+
+        return $data;
     }
 }

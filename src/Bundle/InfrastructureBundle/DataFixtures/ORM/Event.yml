@@ -4,6 +4,16 @@ Proximum\Vimeet\Domain\Model\Event:
         domain: rdv-carnot-2016.<domain()>
         locales: [fr, en]
         fallback: fr
+        billingTemplate:
+            - { "type": "lib_text", "required": true, "label": { "fr": "Nom", "en": "Name" } }
+            - { "type": "lib_text", "required": false, "label": { "fr": "Téléphone", "en": "Phone" } }
+            - { "type": "lib_text", "required": true, "label": { "fr": "Email", "en": "Email" } }
+            - { "type": "lib_text", "required": true, "label": { "fr": "Raison sociale", "en": "Company" } }
+            - { "type": "lib_text", "required": true, "label": { "fr": "Adresse", "en": "Address" } }
+            - { "type": "lib_text", "required": true, "label": { "fr": "Code postal", "en": "Zip code" } }
+            - { "type": "lib_text", "required": true, "label": { "fr": "Ville", "en": "City" } }
+            - { "type": "lib_country", "required": true, "label": { "fr": "Pays", "en": "Country" } }
+            - { "type": "lib_text", "required": false, "label": { "fr": "N° de TVA intracommunautaire", "en": "N° VAT" } }
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:
