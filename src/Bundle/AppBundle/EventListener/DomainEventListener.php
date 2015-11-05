@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -55,24 +57,36 @@ class DomainEventListener
             return;
         }
 
+        // If the locale is not in event locales, redirect to the fallback locale
         if (!$event->hasLocale($request->getLocale())) {
-            $path = $this->router->generate(
-                $request->attributes->get('_route'),
-                array_merge($request->attributes->get('_route_params', []), ['_locale' => $event->getFallback()])
-            );
-            $getResponseEvent->setResponse(new RedirectResponse($path));
+            $route = $request->attributes->get('_route');
+            $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, $route));
 
             return;
         }
 
+        // If no locale in the url, redirect to the fallback locale
         if ($request->attributes->get('_route') === 'default_event') {
-            $path = $this->router->generate(
-                'event',
-                array_merge($request->attributes->get('_route_params', []), ['_locale' => $event->getFallback()])
-            );
-            $getResponseEvent->setResponse(new RedirectResponse($path));
+            $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, 'event'));
 
             return;
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param string  $route
+     *
+     * @return RedirectResponse
+     */
+    private function createRedirectResponse(Request $request, Event $event, $route)
+    {
+        $path = $this->router->generate(
+            $route,
+            array_merge($request->attributes->get('_route_params', []), ['_locale' => $event->getFallback()])
+        );
+
+        return new RedirectResponse($path, 301);
     }
 }
