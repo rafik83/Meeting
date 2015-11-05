@@ -1,0 +1,9 @@
+admin_event_list:
+    path: /event
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Event:list }
+
+admin_event_update:
+    path: /event/{id}/update
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Event:update }
