@@ -48,6 +48,7 @@ Proximum\Vimeet\Domain\Model\Type:
                     563cb10a524c5: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
                     563cb10fcc9fe: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     563cb115bbeb9: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    563ccd1fe3a81: { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
             563cae5f48ce2:
                 title:
                     fr: "Offres"

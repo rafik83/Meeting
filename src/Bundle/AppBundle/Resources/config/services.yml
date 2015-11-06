@@ -39,6 +39,14 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
             - { name: form.type, alias: lib_option }
+    vimeet_app.form_type_library.country_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType
+        tags:
+            - { name: form.type, alias: lib_country }
+    vimeet_app.form_type_library.email_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
+        tags:
+            - { name: form.type, alias: lib_email }
 
     #
     # Event Listener
@@ -50,4 +58,3 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: kernel.event_listener, event: kernel.request }
-

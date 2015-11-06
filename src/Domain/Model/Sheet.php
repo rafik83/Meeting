@@ -38,14 +38,19 @@ class Sheet
     private $participants;
 
     /**
-     * @var string
+     * @var array
      */
     private $data;
 
     /**
-     * @var string
+     * @var array
      */
     private $packageData;
+
+    /**
+     * @var array
+     */
+    private $billingData;
 
     /**
      * @param Event $event
@@ -140,6 +145,26 @@ class Sheet
     public function setPackageData(array $packageData)
     {
         $this->packageData = $packageData;
+    }
+
+    /**
+     * Get billingData
+     *
+     * @return array
+     */
+    public function getBillingData()
+    {
+        return $this->billingData;
+    }
+
+    /**
+     * Set billingData
+     *
+     * @param array $billingData
+     */
+    public function setBillingData(array $billingData)
+    {
+        $this->billingData = $billingData;
     }
 
     /**

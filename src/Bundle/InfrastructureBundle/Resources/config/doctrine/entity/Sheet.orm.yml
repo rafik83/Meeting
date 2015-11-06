@@ -13,6 +13,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData:
             type: json_array
             nullable: true
+        billingData:
+            type: json_array
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -47,3 +47,5 @@ event:
                 description: Description
                 unitPrice: Prix unitaire
                 quantity: Quantité
+        billing:
+            title: Facturation

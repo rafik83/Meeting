@@ -106,7 +106,7 @@ class PackageController extends BaseController
 
         $this->addFlash('success', 'flash.package.final_step.success');
 
-        return $this->generateUrl('event_sheet_package_payment_mode', [
+        return $this->generateUrl('event_sheet_billing', [
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
