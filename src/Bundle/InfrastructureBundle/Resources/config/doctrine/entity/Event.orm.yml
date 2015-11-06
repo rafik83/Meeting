@@ -21,3 +21,6 @@ Proximum\Vimeet\Domain\Model\Event:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation
             mappedBy: event
+            indexBy: locale
+            cascade: ["all"]
+            orphanRemoval: true

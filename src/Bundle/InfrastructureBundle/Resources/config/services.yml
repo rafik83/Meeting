@@ -6,6 +6,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
             - @doctrine.orm.entity_manager
+            - @knp_paginator
     vimeet_infrastructure.repository.type_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
@@ -20,6 +21,10 @@ services:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.category_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
             - @doctrine.orm.entity_manager
 
@@ -78,6 +83,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:
             - @vimeet_infrastructure.repository.sheet_repository
+    vimeet_infrastructure.vimeet.application.command.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.event_repository
 
     #
     # Security

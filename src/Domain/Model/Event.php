@@ -91,7 +91,7 @@ class Event
     }
 
     /**
-     * @return EventTranslation[]
+     * @return ArrayCollection
      */
     public function getTranslations()
     {
@@ -144,5 +144,17 @@ class Event
     public function getBillingTemplate()
     {
         return $this->billingTemplate;
+    }
+
+    /**
+     * @param string $title
+     * @param array  $locales
+     * @param string $fallback
+     */
+    public function update($title, array $locales, $fallback)
+    {
+        $this->title    = $title;
+        $this->locales  = $locales;
+        $this->fallback = $fallback;
     }
 }

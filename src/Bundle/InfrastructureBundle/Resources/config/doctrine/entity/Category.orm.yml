@@ -1,0 +1,16 @@
+Proximum\Vimeet\Domain\Model\Category:
+    type:  entity
+    table: category
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        filters:
+            type: json_array
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event

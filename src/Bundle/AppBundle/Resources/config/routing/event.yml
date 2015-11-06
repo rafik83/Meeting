@@ -78,6 +78,14 @@ event_sheet_billing:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Billing:billing }
 
+event_sheet_package_payment_mode:
+    path: /sheet/{id}/payment_mode
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Package:paymentMode }
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"
@@ -115,3 +123,19 @@ event_change_password:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:ChangePassword:changePassword }
+
+event_catalog:
+    path: /catalog
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Catalog:categories }
+
+event_catalog_category:
+    path: /catalog/{id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Catalog:category }

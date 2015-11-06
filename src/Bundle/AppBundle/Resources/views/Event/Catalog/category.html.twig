@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1>{{ eventView.title }}</h1>
+    <h2>Catalogue "{{ category.title }}"</h2>
+
+    <ul>
+        {% for sheet in sheets %}
+            <li>{{ sheet.id }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
