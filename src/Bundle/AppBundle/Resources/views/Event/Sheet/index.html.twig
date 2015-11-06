@@ -12,7 +12,7 @@
     <div class="row">
         {% for participantView in participantViews %}
             <div class="col-md-4">
-                {% include 'VimeetAppBundle:Event:participant.html.twig' with {
+                {% include 'VimeetAppBundle:Event/Sheet:participant.html.twig' with {
                     'template'               : sheet.type.participantTemplate,
                     'participant'            : participantView,
                     'participant_delete_form': participant_delete_forms is not empty and participant_delete_forms[participantView.id] is defined ? participant_delete_forms[participantView.id] : null
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    {% include 'VimeetAppBundle:Event:block.html.twig' with {
+    {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {
         'sheet' : sheet,
         'data'  : sheet.data,
         'blocks': sheet.type.sheetTemplate,
