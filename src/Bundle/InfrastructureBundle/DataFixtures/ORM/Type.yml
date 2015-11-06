@@ -3,6 +3,7 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         event: @event_rdv_carnot_2016
         maxParticipant: 4
+        maxPlanning: 4
         freeParticipant: 1
         participantTemplate:
             - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
@@ -282,6 +283,7 @@ Proximum\Vimeet\Domain\Model\Type:
     visiteur:
         position: 1
         maxParticipant: 4
+        maxPlanning: 4
         freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
@@ -305,6 +307,7 @@ Proximum\Vimeet\Domain\Model\Type:
     congressiste:
         position: 2
         maxParticipant: 4
+        maxPlanning: 4
         freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:

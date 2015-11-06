@@ -63,6 +63,11 @@ class Type
     private $freeParticipant;
 
     /**
+     * @var int
+     */
+    private $maxPlanning;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -202,5 +207,13 @@ class Type
     public function getFreeParticipant()
     {
         return $this->freeParticipant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPlanning()
+    {
+        return $this->maxPlanning;
     }
 }

@@ -21,8 +21,9 @@ class PlanningType extends AbstractLocalizedType
     {
         $template = $options['template'];
         $locale   = $options['locale'];
+        $sheet    = $options['sheet'];
 
-        $choices = [1 => 1, 2 => 2, 3 => 3];
+        $range = range(0, $sheet->getType()->getMaxPlanning(), 1);
 
         $builder
             ->add('planning', 'checkbox', [
@@ -30,7 +31,7 @@ class PlanningType extends AbstractLocalizedType
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
             ->add('planning_bought', 'choice', [
-                'choices'  => $choices,
+                'choices'  => array_combine($range, $range),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
             ]);

@@ -17,6 +17,8 @@ Proximum\Vimeet\Domain\Model\Type:
             type: json_array
         maxParticipant:
             type: integer
+        maxPlanning:
+            type: integer
         freeParticipant:
             type: integer
     oneToMany:
