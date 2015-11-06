@@ -33,6 +33,7 @@ event:
                 title: Fill this participant
             buy_participant:
                 title: Add a participant
+                option: Option
             update_participant:
                 title: Edit
             edit: Edit
