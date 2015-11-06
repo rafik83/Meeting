@@ -119,6 +119,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
                         required: false
                         type: "lib_participant"
+                        unitPrice: 400
                     -
                         label:
                             fr: "Ajouter des plannings"
@@ -128,6 +129,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
                         required: false
                         type: "lib_planning"
+                        unitPrice: 550
             -
                 title:
                     fr: "Options proposées pour optimiser votre participation"

@@ -37,7 +37,7 @@
             {% endfor %}
         {% endif %}
         {% if buttonPartipant.canBuyParticipant %}
-            <a href="{{ path('event_sheet_add_participant', {
+            <a href="{{ path('event_sheet_buy_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-default">
