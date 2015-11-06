@@ -66,4 +66,24 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function search(array $filters)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from('Entity:Sheet', 'sheet');
+
+        if (isset($filters['type'])) {
+            $queryBuilder
+                ->andWhere('sheet.type IN (:type)')
+                ->setParameter('type', $filters['type']);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

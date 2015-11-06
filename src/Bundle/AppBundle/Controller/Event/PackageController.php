@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
@@ -55,7 +55,7 @@ class PackageController extends BaseController
             return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
         }
 
-        return $this->render('VimeetAppBundle:Package:updateStep.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Package:updateStep.html.twig', [
             'eventView'           => $eventView,
             'sheet'               => $sheet,
             'stepPackageTemplate' => $sheet->getTypePackageTemplate()[$step],
@@ -134,7 +134,7 @@ class PackageController extends BaseController
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Package:paymentMode.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Package:paymentMode.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
