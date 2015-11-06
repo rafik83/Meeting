@@ -1,0 +1,7 @@
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_1:
+        __construct: false
+        user: @user_1
+        sheet: @sheet_1
+        owner: true
+        data: ["Dutest","Jean","0909090909","Developer"]

@@ -43,8 +43,8 @@ Feature: Add and delete participant
     And I follow "event.link.see_my_sheet"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "Exposant"
-    And I should see "event.sheet.block.add_participant.title"
-    Then I follow "event.sheet.block.add_participant.title"
+    And I should see "event.sheet.block.buy_participant.title"
+    Then I follow "event.sheet.block.buy_participant.title"
     And I fill in the following:
     |form.add_participant.children.email.label |test-3@test.fr |
     |Nom                                       |Le Tester      |
@@ -65,8 +65,8 @@ Feature: Add and delete participant
     And I follow "event.link.see_my_sheet"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "Exposant"
-    And I should see "event.sheet.block.add_participant.title"
-    Then I follow "event.sheet.block.add_participant.title"
+    And I should see "event.sheet.block.buy_participant.title"
+    Then I follow "event.sheet.block.buy_participant.title"
     And I fill in the following:
       |form.add_participant.children.email.label |test-4@test.fr |
       |Nom                                       |Blablabla      |

@@ -40,6 +40,14 @@ class UpdateStepHandler
         foreach ($updateStep->packageData as $elementKey => $element) {
             if (isset($element['participant'])) {
                 if ($element['participant']) {
+                    if (!isset($updateStep->packageData[$elementKey]['participant_bought'])) {
+                        $updateStep->packageData[$elementKey]['participant_bought'] = 0;
+                    }
+
+                    if (!isset($packageData[$updateStep->step][$elementKey]['participant_bought'])) {
+                        $packageData[$updateStep->step][$elementKey]['participant_bought'] = 0;
+                    }
+
                     if (($updateStep->packageData[$elementKey]['participant_bought'] + $packageData[$updateStep->step][$elementKey]['participant_bought']) <= $updateStep->sheet->getType()->getMaxParticipant()) {
                         $updateStep->packageData[$elementKey]['participant_bought'] += $packageData[$updateStep->step][$elementKey]['participant_bought'];
                     }
