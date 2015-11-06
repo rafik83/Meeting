@@ -38,7 +38,7 @@ Proximum\Vimeet\Domain\Model\Type:
                     en: "Brand"
                 linkTo:
                     template: "packageTemplate"
-                    index: 1
+                    index: 563cae9c37ff6
             563cae566af03:
                 title:
                     fr: "Société"
