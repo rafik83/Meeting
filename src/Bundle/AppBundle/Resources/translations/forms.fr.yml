@@ -67,6 +67,10 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
+    update_sheet_billing:
+        children:
+            submit:
+                label: Enregistrer
     choose_payment_mode:
         children:
             submit:
@@ -86,3 +90,5 @@ form:
                             label: Description
             submit:
                 label: Enregistrer
+country:
+    select: --- Sélectionner un pays ---

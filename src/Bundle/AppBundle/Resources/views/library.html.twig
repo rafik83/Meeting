@@ -11,16 +11,16 @@
     <table class="table table-condensed">
         {{ block('thead') }}
         <tbody>
-            {% for key, child in form.value %}
+            {% for child in form.value %}
                 <tr>
                     <td>
                         {{ form_widget(child) }}&nbsp;{{ form_label(child) }}
                     </td>
                     <td>
-                        {{ template['choices'][key]['description'][locale] }}
+                        {{ template['choices'][child.vars.value]['description'][locale] }}
                     </td>
                     <td>
-                        {{ template['choices'][key]['unitPrice']|number_format_currency('EUR') }}
+                        {{ template['choices'][child.vars.value]['unitPrice']|number_format_currency('EUR') }}
                     </td>
                     {% if loop.first and template['quantity'] is defined %}
                         <td rowspan="{{ loop.length }}">

@@ -94,22 +94,39 @@ class PackageController extends BaseController
             $this->addFlash('success', 'flash.package.update_step.success');
 
             return $redirectTo;
-        } elseif (isset($packageTemplate[$step + 1])) {
+        } elseif ($nextStep = self::nextStep($step, array_keys($packageTemplate))) {
             $this->addFlash('success', 'flash.package.update_step.success');
 
             return $this->generateUrl('event_sheet_package_update_step', [
                 'subdomain' => $request->attributes->get('subdomain'),
                 'id'        => $sheet->getId(),
-                'step'      => $step + 1,
+                'step'      => $nextStep,
             ]);
         }
 
         $this->addFlash('success', 'flash.package.final_step.success');
 
-        return $this->generateUrl('event_sheet_package_payment_mode', [
+        return $this->generateUrl('event_sheet_billing', [
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
+    }
+
+    /**
+     * @param string $current
+     * @param array  $array
+     *
+     * @return string|null
+     */
+    private static function nextStep($current, array $array)
+    {
+        foreach ($array as $key => $value) {
+            if ($value === $current) {
+                return isset($array[$key + 1]) ? $array[$key + 1] : null;
+            }
+        }
+
+        return null;
     }
 
     /**
