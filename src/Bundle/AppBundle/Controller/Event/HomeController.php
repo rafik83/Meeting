@@ -52,9 +52,9 @@ class HomeController extends BaseController
             ->getTypeViewsByEvent($eventView->id, $eventView->locale);
 
         return $this->render('VimeetAppBundle:Event/Home:index.html.twig', [
-            'event'  => $eventView,
-            'types'  => $typeViews,
-            'sheets' => $sheets,
+            'eventView' => $eventView,
+            'types'     => $typeViews,
+            'sheets'    => $sheets,
         ]);
     }
 

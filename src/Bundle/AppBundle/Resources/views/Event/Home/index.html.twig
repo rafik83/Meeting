@@ -1,13 +1,9 @@
-{% extends 'VimeetAppBundle::base.html.twig' %}
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
-{% block title event.title %}
+{% block title eventView.title %}
 
-{% block body %}
-    <h1>{{ event.title }}</h1>
-
-    {{ include('VimeetAppBundle::flashes.html.twig') }}
-
-    <p>{{ event.description }}</p>
+{% block content %}
+    <p>{{ eventView.description }}</p>
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') and sheets is not empty %}
         {% for sheet in sheets %}
