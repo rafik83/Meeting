@@ -92,7 +92,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Home:sheet.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheet'                    => $sheet,
@@ -141,7 +141,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Home:addParticipant.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:addParticipant.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -203,7 +203,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Home:updateParticipant.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:updateParticipant.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -258,7 +258,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Home:updateBlock.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:updateBlock.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
