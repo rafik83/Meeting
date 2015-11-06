@@ -110,4 +110,30 @@ class ParticipantManager
 
         return ($this->getBoughtParticipant($sheet) + $sheet->getType()->getFreeParticipant()) - count($sheet->getParticipants());
     }
+
+    public function getParticipantPrice(Sheet $sheet)
+    {
+        $packageData = $sheet->getTypePackageTemplate();
+
+        foreach ($packageData as $template) {
+            foreach ($template['template'] as $block) {
+                if ($block['type'] === 'lib_participant') {
+                    return isset($block['unitPrice']) ? $block['unitPrice'] : null;
+                }
+            }
+        }
+    }
+
+    public function getPlanningPrice(Sheet $sheet)
+    {
+        $packageData = $sheet->getTypePackageTemplate();
+
+        foreach ($packageData as $template) {
+            foreach ($template['template'] as $block) {
+                if ($block['type'] === 'lib_planning') {
+                    return isset($block['unitPrice']) ? $block['unitPrice'] : null;
+                }
+            }
+        }
+    }
 }
