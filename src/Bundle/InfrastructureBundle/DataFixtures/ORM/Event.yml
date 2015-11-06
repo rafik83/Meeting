@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\Event:
         billingTemplate:
             - { "type": "lib_text", "required": true, "label": { "fr": "Nom", "en": "Name" } }
             - { "type": "lib_text", "required": false, "label": { "fr": "Téléphone", "en": "Phone" } }
-            - { "type": "lib_text", "required": true, "label": { "fr": "Email", "en": "Email" } }
+            - { "type": "lib_email", "required": true, "label": { "fr": "Email", "en": "Email" } }
             - { "type": "lib_text", "required": true, "label": { "fr": "Raison sociale", "en": "Company" } }
             - { "type": "lib_text", "required": true, "label": { "fr": "Adresse", "en": "Address" } }
             - { "type": "lib_text", "required": true, "label": { "fr": "Code postal", "en": "Zip code" } }

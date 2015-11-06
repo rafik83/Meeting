@@ -137,20 +137,4 @@ class Event
     {
         return $this->billingTemplate;
     }
-
-    /**
-     * @return array
-     */
-    public function getBillingData()
-    {
-        $data = [];
-
-        $template = $this->getBillingTemplate();
-
-        foreach ($template as $key => $field) {
-            $data[$key] = null;
-        }
-
-        return $data;
-    }
 }

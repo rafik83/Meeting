@@ -48,6 +48,11 @@ class Sheet
     private $packageData;
 
     /**
+     * @var string
+     */
+    private $billingData;
+
+    /**
      * @param Event $event
      * @param Type  $type
      * @param array $data
@@ -140,5 +145,25 @@ class Sheet
     public function setPackageData(array $packageData)
     {
         $this->packageData = $packageData;
+    }
+
+    /**
+     * Get billingData
+     *
+     * @return array
+     */
+    public function getBillingData()
+    {
+        return $this->billingData;
+    }
+
+    /**
+     * Set billingData
+     *
+     * @param array $billingData
+     */
+    public function setBillingData(array $billingData)
+    {
+        $this->billingData = $billingData;
     }
 }

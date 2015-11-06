@@ -74,6 +74,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\UpdateStepHandler
         arguments:
             - @vimeet_infrastructure.repository.sheet_repository
+    vimeet_infrastructure.vimeet.application.command.billing.update_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.sheet_repository
 
     #
     # Security

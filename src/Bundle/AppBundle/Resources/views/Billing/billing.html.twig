@@ -1,0 +1,13 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block body %}
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+
+    <h2>{{ 'event.sheet.billing.title'|trans }}</h2>
+
+    {{ form(form) }}
+{% endblock %}

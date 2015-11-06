@@ -18,13 +18,14 @@ use Symfony\Component\Form\FormError;
 class BaseController extends Controller
 {
     /**
-     * @param Form  $form
-     * @param array $template
-     * @param array $data
+     * @param Form   $form
+     * @param array  $template
+     * @param array  $data
+     * @param string $dataName
      *
      * @return Form
      */
-    protected function addRequiredErrorOnForm(Form $form, array $template, array $data)
+    protected function addRequiredErrorOnForm(Form $form, array $template, array $data, $dataName = 'data')
     {
         foreach ($data as $key => $value) {
             if (isset($template[$key])
@@ -37,7 +38,8 @@ class BaseController extends Controller
                         ->get('translator')
                         ->trans('validators.field.required', [], 'validators')
                 );
-                $form->get('data')->get($key)->addError($error);
+
+                $form->get($dataName)->get($key)->addError($error);
             }
         }
 
