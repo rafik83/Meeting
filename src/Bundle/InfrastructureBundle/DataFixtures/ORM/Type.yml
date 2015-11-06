@@ -20,7 +20,7 @@ Proximum\Vimeet\Domain\Model\Type:
             563caf2f0ddbd:
                 type: lib_text
                 required: true
-                private: true,
+                private: true
                 label:
                     fr: "Téléphone"
                     en: "Phone"
