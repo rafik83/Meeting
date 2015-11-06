@@ -67,6 +67,10 @@ class SheetController extends BaseController
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
+        $participantManager = $this->get('vimeet_app.service.participant_manager');
+        $canBuyParticipant  = $participantManager->canBuyParticipant($sheet);
+        $addParticipant     = $participantManager->availableAddParticipant($sheet);
+
         $participantDeleteForms = [];
 
         if ($userParticipant->isOwner()) {
@@ -98,6 +102,8 @@ class SheetController extends BaseController
             'sheet'                    => $sheet,
             'participantViews'         => $participantViews,
             'participant_delete_forms' => $participantDeleteForms,
+            'addParticipant'           => $addParticipant,
+            'buyParticipant'           => $canBuyParticipant,
         ]);
     }
 
@@ -111,6 +117,10 @@ class SheetController extends BaseController
     public function addParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($sheet->getType()->getMaxParticipant() <= count($sheet->getParticipants())) {
+            throw new AccessDeniedException('You can not add a new participant');
+        }
 
         $add  = new Add($sheet, $request->getLocale());
         $form = $this->createForm(new AddParticipantType(), $add, [

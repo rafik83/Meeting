@@ -35,4 +35,11 @@ interface SheetRepositoryInterface
      * @return SheetView[]
      */
     public function getSheetsIdByUserAndEvent($user, $event, $locale);
+
+    /**
+     * @param int $sheetId
+     *
+     * @return Sheet
+     */
+    public function getSheetById($sheetId);
 }

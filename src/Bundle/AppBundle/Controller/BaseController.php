@@ -45,6 +45,33 @@ class BaseController extends Controller
     }
 
     /**
+     * @param Form   $form
+     * @param array  $template
+     * @param array  $data
+     * @param string $dataName
+     *
+     * @return Form
+     */
+    protected function addBoughtParticipantCanNotBeUncheckedErrorOnForm(Form $form, array $template, array $data, $dataName)
+    {
+        foreach ($data as $key => $value) {
+            if (isset($template['template'][$key])
+                && isset($value['participant'])
+                && $value['participant'] === false
+            ) {
+                $error = new FormError(
+                    $this
+                        ->get('translator')
+                        ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
+                );
+                $form->get($dataName)->get($key)->addError($error);
+            }
+        }
+
+        return $form;
+    }
+
+    /**
      * @param \Traversable|array $participants
      *
      * @throws AccessDeniedException

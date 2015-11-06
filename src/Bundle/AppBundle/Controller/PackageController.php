@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
+use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -43,31 +44,36 @@ class PackageController extends BaseController
         $form       = $this->createForm(new UpdateStepType(), $updateStep, [
             'template' => $packageTemplate[$step]['template'],
             'locale'   => $request->getLocale(),
+            'sheet'    => $sheet,
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
-                ->handle($updateStep);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
+                    ->handle($updateStep);
 
-            if (isset($packageTemplate[$step + 1])) {
-                $this->addFlash('success', 'flash.package.update_step.success');
+                if (isset($packageTemplate[$step + 1])) {
+                    $this->addFlash('success', 'flash.package.update_step.success');
 
-                // Go to the next step
-                return $this->redirectToRoute('event_sheet_package_update_step', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                    'step'      => $step + 1,
-                ]);
-            } else {
-                $this->addFlash('success', 'flash.package.final_step.success');
+                    // Go to the next step
+                    return $this->redirectToRoute('event_sheet_package_update_step', [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                        'step'      => $step + 1,
+                    ]);
+                } else {
+                    $this->addFlash('success', 'flash.package.final_step.success');
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                    // Go to the sheet
+                    return $this->redirectToRoute('event_sheet', [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                    ]);
+                }
+            } catch (BoughtParticipantAlreadyAddedException $exception) {
+                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm($form, $packageTemplate[$step], $updateStep->packageData, 'packageData');
             }
         }
 
