@@ -6,3 +6,6 @@ validators:
         min: Password is too short, minimum is {{ limit }} characters
         mismatch: Password mismatch
     currentPassword: Current password is not correct
+    option:
+        participant:
+            alreadyAddedBoughtParticipant: You can not disabled this option, you must first delete participant on your
