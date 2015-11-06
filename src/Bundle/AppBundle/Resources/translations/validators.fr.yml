@@ -8,4 +8,6 @@ validators:
     currentPassword: Le mot de passe actuel n'est pas correct
     option:
         participant:
-            alreadyAddedBoughtParticipant: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
+            optionCanNotBeUnselected: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
+            alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
+

@@ -62,6 +62,16 @@ class BaseController extends Controller
                 $error = new FormError(
                     $this
                         ->get('translator')
+                        ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
+                );
+                $form->get($dataName)->get($key)->addError($error);
+            } elseif (isset($template['template'][$key])
+                && isset($value['participant'])
+                && $value['participant'] === true
+            ) {
+                $error = new FormError(
+                    $this
+                        ->get('translator')
                         ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
                 );
                 $form->get($dataName)->get($key)->addError($error);
