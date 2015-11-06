@@ -21,3 +21,9 @@ flash:
             success: Les informations ont bien été enregistrées
         final_step:
             success: Les informations de votre forfait ont bien été enregistrées
+        payment_mode:
+            success: Votre mode de paiement a bien été pris en compte
+    admin:
+        event:
+            update:
+                success: L'événement a bien été mis à jour

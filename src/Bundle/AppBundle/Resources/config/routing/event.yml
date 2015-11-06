@@ -70,6 +70,14 @@ event_sheet_package_update_step:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Package:updateStep }
 
+event_sheet_package_payment_mode:
+    path: /sheet/{id}/payment_mode
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Package:paymentMode }
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"

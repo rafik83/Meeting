@@ -86,7 +86,7 @@ class Event
     }
 
     /**
-     * @return EventTranslation[]
+     * @return ArrayCollection
      */
     public function getTranslations()
     {
@@ -123,5 +123,12 @@ class Event
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    public function update($title, array $locales, $fallback)
+    {
+        $this->title    = $title;
+        $this->locales  = $locales;
+        $this->fallback = $fallback;
     }
 }
