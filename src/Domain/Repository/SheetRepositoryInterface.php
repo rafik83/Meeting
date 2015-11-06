@@ -35,4 +35,11 @@ interface SheetRepositoryInterface
      * @return SheetView[]
      */
     public function getSheetsIdByUserAndEvent($user, $event, $locale);
+
+    /**
+     * @param array $filters
+     *
+     * @return mixed
+     */
+    public function search(array $filters);
 }
