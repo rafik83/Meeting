@@ -1,11 +1,9 @@
 {% extends 'VimeetAppBundle::base.html.twig' %}
 
-{% block title 'change_password.title'|trans %}
+{% block title eventView.title %}
 
 {% block body %}
-    {{ include('VimeetAppBundle:Event:title.html.twig') }}
-
-    <h2>{{ 'change_password.title'|trans }}</h2>
+    {{ include('VimeetAppBundle:Event/Home:title.html.twig') }}
 
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
