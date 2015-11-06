@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Type de participation"
  */
-class Type
+class Type implements WhoInterface
 {
     /**
      * @var int

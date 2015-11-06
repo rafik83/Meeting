@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 /**
  * "Categorie de participant"
  */
-class Category
+class Category implements WhoInterface
 {
     /**
      * @var int
