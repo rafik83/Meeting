@@ -17,8 +17,6 @@ services:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
     vimeet_app.service.participant_manager:
         class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
-        arguments:
-            - @vimeet_infrastructure.repository.sheet_repository
 
     #
     # Form type

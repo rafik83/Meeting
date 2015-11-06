@@ -16,19 +16,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 class ParticipantManager
 {
     /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
-    /**
-     * @param SheetRepositoryInterface $sheetRepository
-     */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
-        $this->sheetRepository = $sheetRepository;
-    }
-
-    /**
      * @param Sheet $sheet
      *
      * @return int

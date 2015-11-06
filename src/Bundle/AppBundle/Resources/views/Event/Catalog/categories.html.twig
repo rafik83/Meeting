@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% block body %}
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+    <h2>Catalogue</h2>
+
+    <ul>
+        {% for category in categories %}
+            <li><a href="{{ path('event_catalog_category', { 'id': category.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ category.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

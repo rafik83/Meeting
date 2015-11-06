@@ -12,9 +12,23 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\Model\EventListView;
 
 interface EventRepositoryInterface
 {
+    /**
+     * @param int $page
+     * @param int $limit
+     *
+     * @return EventListView[]
+     */
+    public function paginate($page, $limit);
+
+    /**
+     * @param Event $event
+     */
+    public function set(Event $event);
+
     /**
      * @param string $domain
      *

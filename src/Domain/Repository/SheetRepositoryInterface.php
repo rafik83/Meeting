@@ -42,4 +42,11 @@ interface SheetRepositoryInterface
      * @return Sheet
      */
     public function getSheetById($sheetId);
+
+    /**
+     * @param array $filters
+     *
+     * @return mixed
+     */
+    public function search(array $filters);
 }
