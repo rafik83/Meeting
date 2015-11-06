@@ -46,7 +46,7 @@ interface SheetRepositoryInterface
     /**
      * @param array $filters
      *
-     * @return mixed
+     * @return Sheet[]
      */
     public function search(array $filters);
 }

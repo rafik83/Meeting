@@ -21,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Type:
             type: integer
         freeParticipant:
             type: integer
+        previewTemplate:
+            type: text
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation

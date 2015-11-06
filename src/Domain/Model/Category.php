@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 /**
  * "Categorie de participant"
  */
@@ -70,7 +68,7 @@ class Category
     /**
      * Get event
      *
-     * @return \Proximum\Vimeet\Domain\Model\Event
+     * @return Event
      */
     public function getEvent()
     {

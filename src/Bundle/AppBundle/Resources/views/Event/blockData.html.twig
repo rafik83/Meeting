@@ -1,0 +1,12 @@
+<table class="table table-condensed">
+    {% for key, field in template %}
+        {% if not (field['private'] is defined and field['private'] == true) %}
+            <tr>
+                <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
+                <td class="col-md-9">
+                    {{ data[key]|default('...')|nl2br }}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

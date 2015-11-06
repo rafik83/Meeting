@@ -106,3 +106,9 @@ knp_paginator:
 # From translation
 elao_form_translation:
     auto_generate: true
+
+services:
+    twig.extension.text:
+       class: Twig_Extension_StringLoader
+       tags:
+           - { name: twig.extension }

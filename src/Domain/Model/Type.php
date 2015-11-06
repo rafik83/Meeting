@@ -68,6 +68,11 @@ class Type
     private $maxPlanning;
 
     /**
+     * @var string
+     */
+    private $previewTemplate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -215,5 +220,15 @@ class Type
     public function getMaxPlanning()
     {
         return $this->maxPlanning;
+    }
+
+    /**
+     * Get preview
+     *
+     * @return mixed
+     */
+    public function getPreviewTemplate()
+    {
+        return $this->previewTemplate;
     }
 }
