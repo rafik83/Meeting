@@ -352,29 +352,117 @@ Proximum\Vimeet\Domain\Model\Type:
             <div>
                 <h1>{{ sheet.id }}</h1>
             </div>
+    type_a:
+        position: 3
+        event: @event_rdv_carnot_2016
+        participantTemplate:
+            563cb0568a3bb: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            563cb06a1a441: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate: []
+        packageTemplate: []
+        previewTemplate: >
+            <div>
+                <h1>{{ sheet.id }}</h1>
+            </div>
+    type_b:
+        position: 4
+        event: @event_rdv_carnot_2016
+        participantTemplate:
+            563cb0568a3bb: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            563cb06a1a441: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate: []
+        packageTemplate: []
+        previewTemplate: >
+            <div>
+                <h1>{{ sheet.id }}</h1>
+            </div>
+    type_c:
+        position: 4
+        event: @event_rdv_carnot_2016
+        participantTemplate:
+            563cb0568a3bb: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            563cb06a1a441: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate: []
+        packageTemplate: []
+        previewTemplate: >
+            <div>
+                <h1>{{ sheet.id }}</h1>
+            </div>
+    type_d:
+        position: 5
+        event: @event_rdv_carnot_2016
+        participantTemplate:
+            563cb0568a3bb: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            563cb06a1a441: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Fonction", "en": "Position" } }
+        sheetTemplate: []
+        packageTemplate: []
+        previewTemplate: >
+            <div>
+                <h1>{{ sheet.id }}</h1>
+            </div>
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
-    exposant_fr:
+    translation_type_exposant_fr:
         title: Exposant
         type: @type_exposant
         locale: fr
-    exposant_en:
+    translation_type_exposant_en:
         title: Exhibitor
         type: @type_exposant
         locale: en
-    visiteur_fr:
+    translation_type_visiteur_fr:
         title: Visiteur
         type: @type_visiteur
         locale: fr
-    visiteur_en:
+    translation_type_visiteur_en:
         title: Visitor
         type: @type_visiteur
         locale: en
-    congressiste_fr:
+    translation_type_congressiste_fr:
         title: Congressiste
         type: @type_congressiste
         locale: fr
-    congressiste_en:
+    translation_type_congressiste_en:
         title: Congressman
         type: @type_congressiste
+        locale: en
+    translation_type_a_fr:
+        title: Type A
+        type: @type_a
+        locale: fr
+    translation_type_a_en:
+        title: Type A
+        type: @type_a
+        locale: en
+    translation_type_b_fr:
+        title: Type B
+        type: @type_b
+        locale: fr
+    translation_type_b_en:
+        title: Type B
+        type: @type_b
+        locale: en
+    translation_type_c_fr:
+        title: Type C
+        type: @type_c
+        locale: fr
+    translation_type_c_en:
+        title: Type C
+        type: @type_c
+        locale: en
+    translation_type_d_fr:
+        title: Type D
+        type: @type_d
+        locale: fr
+    translation_type_d_en:
+        title: Type D
+        type: @type_d
         locale: en

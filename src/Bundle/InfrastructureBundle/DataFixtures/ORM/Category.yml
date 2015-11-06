@@ -2,10 +2,15 @@ Proximum\Vimeet\Domain\Model\Category:
     category_exposant:
         title: Exposants
         filters:
-            type: [@type_exposant->id]
+            type: [@type_exposant->id, @type_a->id]
         event: @event_rdv_carnot_2016
     category_visiteur:
         title: Visiteurs
         filters:
-            type: [@type_visiteur->id]
+            type: [@type_visiteur->id, @type_b->id]
+        event: @event_rdv_carnot_2016
+    category_c:
+        title: Catégorie C
+        filters:
+            type: [@type_c->id, @type_d->id]
         event: @event_rdv_carnot_2016

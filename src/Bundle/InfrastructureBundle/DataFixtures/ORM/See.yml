@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Model\See:
+    see_1:
+        __construct: [@category_visiteur, @category_exposant]
+    see_2:
+        __construct: [@category_exposant, @category_visiteur]
