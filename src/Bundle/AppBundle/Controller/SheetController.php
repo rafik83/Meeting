@@ -72,30 +72,7 @@ class SheetController extends BaseController
         $buttonParticipant['canBuyParticipant'] = $participantManager->canBuyParticipant($sheet);
         $buttonParticipant['addParticipant']    = $participantManager->availableAddParticipant($sheet);
 
-        $participantDeleteForms = [];
-
-        if ($userParticipant->isOwner()) {
-            foreach ($participantViews as $participantView) {
-                if (!$participantView->owner) {
-                    $delete = new Delete($sheet, $this->getUser(), $participantView->id);
-
-                    $participantDeleteForms[$participantView->id] = $this->createForm(
-                        new DeleteParticipantType(),
-                        $delete,
-                        [
-                            'action' => $this->generateUrl(
-                                'event_sheet_delete_participant',
-                                [
-                                    'subdomain'      => $request->attributes->get('subdomain'),
-                                    'id'             => $sheet->getId(),
-                                    'participant_id' => $participantView->id,
-                                ]
-                            ),
-                        ]
-                    )->createView();
-                }
-            }
-        }
+        $participantDeleteForms = $this->addDeleteParticipantForm($request, $sheet, $userParticipant, $participantViews);
 
         return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
             'eventView'                => $eventView,
@@ -315,5 +292,35 @@ class SheetController extends BaseController
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
+    }
+
+    public function addDeleteParticipantForm(Request$request, Sheet $sheet, $userParticipant, $participantViews)
+    {
+        $participantDeleteForms = [];
+
+        if ($userParticipant->isOwner()) {
+            foreach ($participantViews as $participantView) {
+                if (!$participantView->owner) {
+                    $delete = new Delete($sheet, $this->getUser(), $participantView->id);
+
+                    $participantDeleteForms[$participantView->id] = $this->createForm(
+                        new DeleteParticipantType(),
+                        $delete,
+                        [
+                            'action' => $this->generateUrl(
+                                'event_sheet_delete_participant',
+                                [
+                                    'subdomain'      => $request->attributes->get('subdomain'),
+                                    'id'             => $sheet->getId(),
+                                    'participant_id' => $participantView->id,
+                                ]
+                            ),
+                        ]
+                    )->createView();
+                }
+            }
+        }
+
+        return $participantDeleteForms;
     }
 }
