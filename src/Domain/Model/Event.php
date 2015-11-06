@@ -131,6 +131,14 @@ class Event
     }
 
     /**
+     * @param array $billingTemplate
+     */
+    public function setBillingTemplate(array $billingTemplate)
+    {
+        $this->billingTemplate = $billingTemplate;
+    }
+
+    /**
      * @return array
      */
     public function getBillingTemplate()
