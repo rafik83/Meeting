@@ -68,8 +68,9 @@ class SheetController extends BaseController
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
         $participantManager = $this->get('vimeet_app.service.participant_manager');
-        $canBuyParticipant  = $participantManager->canBuyParticipant($sheet);
-        $addParticipant     = $participantManager->availableAddParticipant($sheet);
+
+        $buttonParticipant['canBuyParticipant'] = $participantManager->canBuyParticipant($sheet);
+        $buttonParticipant['addParticipant']    = $participantManager->availableAddParticipant($sheet);
 
         $participantDeleteForms = [];
 
@@ -102,8 +103,7 @@ class SheetController extends BaseController
             'sheet'                    => $sheet,
             'participantViews'         => $participantViews,
             'participant_delete_forms' => $participantDeleteForms,
-            'addParticipant'           => $addParticipant,
-            'buyParticipant'           => $canBuyParticipant,
+            'buttonPartipant'          => $buttonParticipant,
         ]);
     }
 

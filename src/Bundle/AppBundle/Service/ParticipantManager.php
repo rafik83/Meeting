@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Service;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class ParticipantManager
 {

@@ -20,8 +20,8 @@
             </div>
         {% endfor %}
 
-        {% if addParticipant >= 1%}
-            {% for i in 1..addParticipant %}
+        {% if buttonPartipant.addParticipant >= 1%}
+            {% for i in 1..buttonPartipant.addParticipant %}
                 <div class="col-md-4">
                     <table class="table table-bordered table-condensed" style="height: 160px;">
                         <tr>
@@ -38,7 +38,7 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if buyParticipant %}
+        {% if buttonPartipant.canBuyParticipant %}
             <a href="{{ path('event_sheet_add_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')
