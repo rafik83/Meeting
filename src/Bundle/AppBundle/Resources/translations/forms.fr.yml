@@ -67,6 +67,10 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
+    choose_payment_mode:
+        children:
+            submit:
+                label: Enregistrer
     event_update:
         children:
             title:
