@@ -53,6 +53,11 @@ class Type
     private $packageTemplate;
 
     /**
+     * @var string
+     */
+    private $previewTemplate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -176,5 +181,15 @@ class Type
     public function setSheetTemplate($sheetTemplate)
     {
         $this->sheetTemplate = $sheetTemplate;
+    }
+
+    /**
+     * Get preview
+     *
+     * @return mixed
+     */
+    public function getPreviewTemplate()
+    {
+        return $this->previewTemplate;
     }
 }

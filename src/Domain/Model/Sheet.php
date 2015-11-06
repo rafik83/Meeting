@@ -166,4 +166,14 @@ class Sheet
     {
         $this->billingData = $billingData;
     }
+
+    /**
+     * Get type packageTemplate
+     *
+     * @return array
+     */
+    public function getTypePackageTemplate()
+    {
+        return $this->getType()->getPackageTemplate();
+    }
 }

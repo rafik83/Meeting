@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Billing\Update;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
@@ -62,7 +62,7 @@ class BillingController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Billing:billing.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Billing:billing.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),

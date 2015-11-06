@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\EventView;
@@ -44,7 +44,7 @@ class SecurityController extends Controller
             'method' => 'POST',
         ]);
 
-        return $this->render('VimeetAppBundle:Security:login.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [
             'eventView' => $eventView,
             'error'     => $error,
             'form'      => $form->createView(),
@@ -61,7 +61,7 @@ class SecurityController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        return $this->render('VimeetAppBundle:Security:logout_confirmation.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Security:logout_confirmation.html.twig', [
             'eventView' => $eventView,
         ]);
     }

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class EventController extends BaseController
+class HomeController extends BaseController
 {
     /**
      * Event home
@@ -51,10 +51,10 @@ class EventController extends BaseController
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewsByEvent($eventView->id, $eventView->locale);
 
-        return $this->render('VimeetAppBundle:Event:index.html.twig', [
-            'event'  => $eventView,
-            'types'  => $typeViews,
-            'sheets' => $sheets,
+        return $this->render('VimeetAppBundle:Event/Home:index.html.twig', [
+            'eventView' => $eventView,
+            'types'     => $typeViews,
+            'sheets'    => $sheets,
         ]);
     }
 
@@ -108,7 +108,7 @@ class EventController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:register.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Home:register.html.twig', [
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
@@ -171,7 +171,7 @@ class EventController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:participate.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Home:participate.html.twig', [
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,

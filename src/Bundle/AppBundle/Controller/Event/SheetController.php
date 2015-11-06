@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
@@ -92,7 +92,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:sheet.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheet'                    => $sheet,
@@ -141,7 +141,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:addParticipant.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:addParticipant.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -203,7 +203,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:updateParticipant.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:updateParticipant.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -258,7 +258,7 @@ class SheetController extends BaseController
             }
         }
 
-        return $this->render('VimeetAppBundle:Event:updateBlock.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Sheet:updateBlock.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -282,7 +282,7 @@ class SheetController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $delete = new Delete($sheet, $this->getUser(), $participant);
+        $delete = new Delete($sheet, $this->getUser(), $participant->getId());
         $form   = $this->createForm(new DeleteParticipantType(), $delete);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

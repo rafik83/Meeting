@@ -1,12 +1,10 @@
-{% extends 'VimeetAppBundle::base.html.twig' %}
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
 {% form_theme form 'VimeetAppBundle::library.html.twig' %}
 
 {% block title eventView.title %}
 
-{% block body %}
-    {{ include('VimeetAppBundle:Event:title.html.twig') }}
-
+{% block content %}
     <h2>{{ 'event.sheet.billing.title'|trans }}</h2>
 
     {{ form(form) }}

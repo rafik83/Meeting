@@ -4,7 +4,7 @@ event:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event:index }
+    defaults: { _controller: VimeetAppBundle:Event/Home:index }
 
 event_register:
     path: /register/{typeView}
@@ -12,7 +12,7 @@ event_register:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event:register }
+    defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
 event_participate:
     path: /participate/{typeView}
@@ -20,7 +20,7 @@ event_participate:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event:participate }
+    defaults: { _controller: VimeetAppBundle:Event/Home:participate }
 
 event_sheet:
     path: /sheet/{id}
@@ -28,7 +28,7 @@ event_sheet:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Sheet:sheet }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
 
 event_sheet_add_participant:
     path: /sheet/{id}/add_participant
@@ -36,7 +36,7 @@ event_sheet_add_participant:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Sheet:addParticipant }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:addParticipant }
 
 event_sheet_update_participant:
     path: /sheet/{id}/update_participant/{participant_id}
@@ -44,7 +44,7 @@ event_sheet_update_participant:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Sheet:updateParticipant }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:updateParticipant }
 
 event_sheet_update_block:
     path: /sheet/{id}/update_block/{block}
@@ -52,7 +52,7 @@ event_sheet_update_block:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Sheet:updateBlock }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:updateBlock }
 
 event_sheet_delete_participant:
     path: /sheet/{id}/delete_participant/{participant_id}
@@ -60,7 +60,7 @@ event_sheet_delete_participant:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [DELETE]
-    defaults: { _controller: VimeetAppBundle:Sheet:deleteParticipant }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:deleteParticipant }
 
 event_sheet_package_update_step:
     path: /sheet/{id}/update_step/{step}
@@ -68,7 +68,7 @@ event_sheet_package_update_step:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Package:updateStep }
+    defaults: { _controller: VimeetAppBundle:Event/Package:updateStep }
 
 event_sheet_billing:
     path: /sheet/{id}/billing
@@ -76,7 +76,7 @@ event_sheet_billing:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Billing:billing }
+    defaults: { _controller: VimeetAppBundle:Event/Billing:billing }
 
 event_sheet_package_payment_mode:
     path: /sheet/{id}/payment_mode
@@ -84,7 +84,7 @@ event_sheet_package_payment_mode:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Package:paymentMode }
+    defaults: { _controller: VimeetAppBundle:Event/Package:paymentMode }
 
 event_login:
     path: /login
@@ -92,7 +92,7 @@ event_login:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Security:login }
+    defaults: { _controller: VimeetAppBundle:Event/Security:login }
 
 event_login_check:
     path: /login_check
@@ -107,7 +107,7 @@ event_logout_confirmation:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Security:logoutConfirmation }
+    defaults: { _controller: VimeetAppBundle:Event/Security:logoutConfirmation }
 
 event_logout:
     path: /logout
@@ -122,7 +122,7 @@ event_change_password:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:ChangePassword:changePassword }
+    defaults: { _controller: VimeetAppBundle:Event/ChangePassword:changePassword }
 
 event_catalog:
     path: /catalog
