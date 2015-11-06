@@ -53,6 +53,16 @@ class Type
     private $packageTemplate;
 
     /**
+     * @var int
+     */
+    private $maxParticipant;
+
+    /**
+     * @var int
+     */
+    private $freeParticipant;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -176,5 +186,21 @@ class Type
     public function setSheetTemplate($sheetTemplate)
     {
         $this->sheetTemplate = $sheetTemplate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxParticipant()
+    {
+        return $this->maxParticipant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFreeParticipant()
+    {
+        return $this->freeParticipant;
     }
 }

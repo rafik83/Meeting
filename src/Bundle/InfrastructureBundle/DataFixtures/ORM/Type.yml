@@ -2,6 +2,8 @@ Proximum\Vimeet\Domain\Model\Type:
     exposant:
         position: 0
         event: @event_rdv_carnot_2016
+        maxParticipant: 4
+        freeParticipant: 1
         participantTemplate:
             - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
             - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
@@ -92,6 +94,32 @@ Proximum\Vimeet\Domain\Model\Type:
                                     fr: "Description forfait  sponsoring"
                                     en: "Description sponsoring"
                                 unitPrice: 11000
+            -
+                title:
+                    fr: "Augmenter le nombre de participants sur votre fiche"
+                    en: "Traduction en anglais"
+                description:
+                    fr: "description en fr"
+                    en: "description en en"
+                template:
+                    -
+                        label:
+                            fr: "Ajouter des participants"
+                            en: "Add participants"
+                        description:
+                            fr: "Vous pouvez ajouter des participants à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
+                        required: false
+                        type: "lib_participant"
+                    -
+                        label:
+                            fr: "Ajouter des plannings"
+                            en: "Add plannings"
+                        description:
+                            fr: "Vous pouvez ajouter des plannings à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
+                        required: false
+                        type: "lib_planning"
             -
                 title:
                     fr: "Options proposées pour optimiser votre participation"
@@ -253,6 +281,8 @@ Proximum\Vimeet\Domain\Model\Type:
 
     visiteur:
         position: 1
+        maxParticipant: 4
+        freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
             - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
@@ -274,6 +304,8 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: []
     congressiste:
         position: 2
+        maxParticipant: 4
+        freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
             - { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }

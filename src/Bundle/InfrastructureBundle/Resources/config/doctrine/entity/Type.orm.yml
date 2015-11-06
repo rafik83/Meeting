@@ -15,6 +15,10 @@ Proximum\Vimeet\Domain\Model\Type:
             type: json_array
         packageTemplate:
             type: json_array
+        maxParticipant:
+            type: integer
+        freeParticipant:
+            type: integer
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
