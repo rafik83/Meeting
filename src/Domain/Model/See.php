@@ -54,4 +54,44 @@ class See
             throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seen)));
         }
     }
+
+    /**
+     * Get seerType
+     *
+     * @return Type
+     */
+    public function getSeerType()
+    {
+        return $this->seerType;
+    }
+
+    /**
+     * Get seerCategory
+     *
+     * @return Category
+     */
+    public function getSeerCategory()
+    {
+        return $this->seerCategory;
+    }
+
+    /**
+     * Get seenType
+     *
+     * @return Type
+     */
+    public function getSeenType()
+    {
+        return $this->seenType;
+    }
+
+    /**
+     * Get seenCategory
+     *
+     * @return Category
+     */
+    public function getSeenCategory()
+    {
+        return $this->seenCategory;
+    }
 }
