@@ -24,6 +24,7 @@ Proximum\Vimeet\Domain\Model\Type:
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    - { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
             -
                 title:
                     fr: "Offres"
