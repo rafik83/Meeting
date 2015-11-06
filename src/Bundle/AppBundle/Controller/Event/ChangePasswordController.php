@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller;
+namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\User\ChangePassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ChangePasswordType;
@@ -51,7 +51,7 @@ class ChangePasswordController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:ChangePassword:change_password.html.twig', [
+        return $this->render('VimeetAppBundle:Event/ChangePassword:change_password.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
