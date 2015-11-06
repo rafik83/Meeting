@@ -102,7 +102,7 @@ class PackageController extends BaseController
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Package:paymentMode.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Package:paymentMode.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
