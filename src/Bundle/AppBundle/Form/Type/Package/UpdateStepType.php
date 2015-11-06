@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,9 +22,10 @@ class UpdateStepType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('packageData', new DataType(), [
+            ->add('packageData', new DataPackageType(), [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
+                'sheet'    => $options['sheet'],
                 'label'    => false,
             ])
         ;
@@ -42,6 +42,7 @@ class UpdateStepType extends AbstractType
         ]);
 
         $resolver->setRequired(['template', 'locale']);
+        $resolver->setDefined(['sheet']);
     }
 
     /**
