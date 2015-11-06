@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -27,19 +26,19 @@ class Delete
     public $requester;
 
     /**
-     * @var Participant
+     * @var int
      */
-    public $participant;
+    public $participantId;
 
     /**
-     * @param Sheet       $sheet
-     * @param User        $requester
-     * @param Participant $participant
+     * @param Sheet $sheet
+     * @param User  $requester
+     * @param int   $participantId
      */
-    public function __construct(Sheet $sheet, User $requester, Participant $participant)
+    public function __construct(Sheet $sheet, User $requester, $participantId)
     {
-        $this->sheet       = $sheet;
-        $this->requester   = $requester;
-        $this->participant = $participant;
+        $this->sheet         = $sheet;
+        $this->requester     = $requester;
+        $this->participantId = $participantId;
     }
 }

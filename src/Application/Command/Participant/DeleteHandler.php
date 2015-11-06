@@ -46,7 +46,9 @@ class DeleteHandler
             throw new IsNotLinkedToSheetException('No participant for this user attached on this sheet');
         }
 
-        if ($delete->participant->isOwner()) {
+        $participant = $this->participantRepository->findById($delete->participantId);
+
+        if (null !== $participant && $participant->isOwner()) {
             throw new OwnerCanNotBeDeletedException('The participant selected to be deleted is owner of the sheet');
         }
 
@@ -56,6 +58,6 @@ class DeleteHandler
             throw new IsNotOwnerException('The requester is not owner of the sheet and therefore can not delete a participant');
         }
 
-        $this->participantRepository->delete($delete->participant);
+        $this->participantRepository->delete($participant);
     }
 }
