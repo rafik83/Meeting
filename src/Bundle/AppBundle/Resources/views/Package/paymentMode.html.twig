@@ -1,0 +1,16 @@
+{% extends 'VimeetAppBundle::base.html.twig' %}
+
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block body %}
+    {{ include('VimeetAppBundle:Event:title.html.twig') }}
+
+    <h2>Mode de paiement</h2>
+    <p>Choisissez votre mode de paiement</p>
+    <hr>
+
+    {{ form(form) }}
+
+{% endblock %}
