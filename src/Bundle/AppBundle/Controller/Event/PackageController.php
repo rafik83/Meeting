@@ -118,7 +118,7 @@ class PackageController extends BaseController
      *
      * @return string|null
      */
-    public static function nextStep($current, array $array)
+    private static function nextStep($current, array $array)
     {
         foreach ($array as $key => $value) {
             if ($value === $current) {
