@@ -48,8 +48,9 @@ class UpdateStepHandler
                         $packageData[$updateStep->step][$elementKey]['participant_bought'] = 0;
                     }
 
-                    if (($updateStep->packageData[$elementKey]['participant_bought'] + $packageData[$updateStep->step][$elementKey]['participant_bought']) <= $updateStep->sheet->getType()->getMaxParticipant()) {
-                        $updateStep->packageData[$elementKey]['participant_bought'] += $packageData[$updateStep->step][$elementKey]['participant_bought'];
+                    $boughtAndAddedParticipant = count($updateStep->sheet->getParticipants()) - $updateStep->sheet->getType()->getFreeParticipant();
+                    if ($updateStep->packageData[$elementKey]['participant_bought'] < $boughtAndAddedParticipant) {
+                        throw new BoughtParticipantAlreadyAddedException();
                     }
                 } else {
                     if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant()) {

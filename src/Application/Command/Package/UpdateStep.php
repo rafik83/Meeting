@@ -44,14 +44,6 @@ class UpdateStep
         $sheetData     = isset($sheet->getPackageData()[$step]) ? $sheet->getPackageData()[$step] : $stepData;
 
         foreach ($stepData as $key => $value) {
-            if (isset($sheetData[$key]) && !isset($sheetData[$key]['participant'])) {
-                $this->packageData[$key] = $sheetData[$key];
-            } elseif (isset($sheetData[$key]) && isset($sheetData[$key]['participant']) && $sheetData[$key]['participant']) {
-                $this->packageData[$key]['participant']        = $sheetData[$key]['participant'];
-                $this->packageData[$key]['participant_bought'] = null;
-            } else {
-                $this->packageData[$key] = null;
-            }
             $this->packageData[$key] = isset($sheetData[$key]) ? $sheetData[$key] : null;
         }
     }

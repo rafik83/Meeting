@@ -58,6 +58,19 @@ class ParticipantManager
      *
      * @return int
      */
+    public function getBuyQuantityParticipant(Sheet $sheet)
+    {
+        $max    = $sheet->getType()->getMaxParticipant();
+        $free   = $sheet->getType()->getFreeParticipant();
+
+        return intval($max - $free);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
     public function getRemainingPossibleParticipant(Sheet $sheet)
     {
         $max   = $sheet->getType()->getMaxParticipant();

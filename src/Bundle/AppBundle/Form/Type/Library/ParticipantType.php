@@ -45,7 +45,6 @@ class ParticipantType extends AbstractLocalizedType
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
             ->add('participant_bought', 'choice', [
-                'data'     => '',
                 'choices'  => $this->getParticipantChoices($sheet),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
@@ -67,8 +66,13 @@ class ParticipantType extends AbstractLocalizedType
      */
     private function getParticipantChoices(Sheet $sheet)
     {
-        $remaining = $this->participantManager->getRemainingPossibleParticipantToBuy($sheet);
-        $range     = range(0, $remaining, 1);
+        $remaining = $this->participantManager->getBuyQuantityParticipant($sheet);
+
+        if ($remaining === 0) {
+            return [];
+        }
+
+        $range = range(1, $remaining, 1);
 
         return array_combine($range, $range);
     }
