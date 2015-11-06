@@ -36,12 +36,12 @@
         'packageTemplate': sheet.type.packageTemplate,
     } %}
 
-    {% if sheet.type.packageTemplate[0] is defined %}
+    {% if sheet.type.packageTemplate is not empty %}
         <hr>
         <div class="text-center">
             <a href="{{ path('event_sheet_package_update_step', {
                 'id'       : sheet.id,
-                'step'     : 0,
+                'step'     : sheet.type.packageTemplate|keys|first,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-primary">
                 {{ 'event.sheet.package.step.next'|trans }}
