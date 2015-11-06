@@ -48,7 +48,7 @@ class Event
     private $fallback;
 
     /**
-     * @var string
+     * @var array
      */
     private $billingTemplate;
 

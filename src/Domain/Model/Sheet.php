@@ -38,17 +38,17 @@ class Sheet
     private $participants;
 
     /**
-     * @var string
+     * @var array
      */
     private $data;
 
     /**
-     * @var string
+     * @var array
      */
     private $packageData;
 
     /**
-     * @var string
+     * @var array
      */
     private $billingData;
 
