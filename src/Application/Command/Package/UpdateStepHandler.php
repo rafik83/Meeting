@@ -25,7 +25,7 @@ class UpdateStepHandler
      */
     public function __construct(SheetRepositoryInterface $sheetRepository)
     {
-        $this->sheetRepository    = $sheetRepository;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -52,8 +52,7 @@ class UpdateStepHandler
                         $updateStep->packageData[$elementKey]['participant_bought'] += $packageData[$updateStep->step][$elementKey]['participant_bought'];
                     }
                 } else {
-                    if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant())
-                    {
+                    if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant()) {
                         throw new BoughtParticipantAlreadyAddedException();
                     }
                 }
