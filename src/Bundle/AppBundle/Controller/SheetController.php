@@ -294,7 +294,7 @@ class SheetController extends BaseController
         ]);
     }
 
-    public function addDeleteParticipantForm(Request$request, Sheet $sheet, $userParticipant, $participantViews)
+    private function addDeleteParticipantForm(Request$request, Sheet $sheet, $userParticipant, $participantViews)
     {
         $participantDeleteForms = [];
 
