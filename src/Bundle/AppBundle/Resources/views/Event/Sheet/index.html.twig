@@ -32,6 +32,8 @@
         'sheet' : sheet,
         'data'  : sheet.data,
         'blocks': sheet.type.sheetTemplate,
+        'packageData': sheet.packageData,
+        'packageTemplate': sheet.type.packageTemplate,
     } %}
 
     {% if sheet.type.packageTemplate[0] is defined %}

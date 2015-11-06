@@ -1,20 +1,30 @@
 {% for i, block in blocks %}
     <h3>
         {{ block['title'][app.request.locale] }}
-        <a href="{{ path('event_sheet_update_block', {
-            'id': sheet.id,
-            'block': i,
-            'subdomain': app.request.attributes.get('subdomain')
-        }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
+
+        {% if block.linkTo is defined and 'packageTemplate' == block.linkTo['template'] %}
+            <a href="{{ path('event_sheet_package_update_step', {
+                'id': sheet.id,
+                'step': block.linkTo['index'],
+                'subdomain': app.request.attributes.get('subdomain'),
+                'redirect_to': path(
+                    app.request.attributes.get('_route'),
+                    app.request.attributes.get('_route_params')
+                )
+            }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
+        {% elseif block.template is defined %}
+            <a href="{{ path('event_sheet_update_block', {
+                'id': sheet.id,
+                'block': i,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
+        {% endif %}
     </h3>
-    <table class="table table-bordered table-condensed">
-        {% for key, field in block.template %}
-            {% if not (field['private'] is defined and field['private'] == true) %}
-                <tr>
-                    <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
-                    <td class="col-md-9">{{ data[i][key]|default('...')|nl2br }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
+
+    {% if block.template is defined and data is defined %}
+        {% include 'VimeetAppBundle:Event:blockData.html.twig' with {
+            'template': block.template,
+            'data': data[i]|default,
+        } %}
+    {% endif %}
 {% endfor %}

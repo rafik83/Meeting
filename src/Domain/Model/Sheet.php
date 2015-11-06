@@ -141,4 +141,14 @@ class Sheet
     {
         $this->packageData = $packageData;
     }
+
+    /**
+     * Get type packageTemplate
+     *
+     * @return array
+     */
+    public function getTypePackageTemplate()
+    {
+        return $this->getType()->getPackageTemplate();
+    }
 }
