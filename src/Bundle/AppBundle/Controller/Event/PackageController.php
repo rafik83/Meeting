@@ -15,9 +15,11 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PackageController extends BaseController
 {
@@ -27,22 +29,20 @@ class PackageController extends BaseController
      * @param Sheet     $sheet
      * @param int       $step
      *
-     * @return Response
+     * @return RedirectResponse|Response
+     *
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
      */
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
-
-        $packageTemplate = $sheet->getType()->getPackageTemplate();
-
-        if (!isset($packageTemplate[$step])) {
-            throw new \InvalidArgumentException();
-        }
+        $this->denyAccessPackageStepNotExists($sheet, $step);
 
         $updateStep = new UpdateStep($sheet, $step);
         $form       = $this->createForm(new UpdateStepType(), $updateStep, [
-            'template' => $packageTemplate[$step]['template'],
+            'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
@@ -52,31 +52,63 @@ class PackageController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
                 ->handle($updateStep);
 
-            if (isset($packageTemplate[$step + 1])) {
-                $this->addFlash('success', 'flash.package.update_step.success');
-
-                // Go to the next step
-                return $this->redirectToRoute('event_sheet_package_update_step', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                    'step'      => $step + 1,
-                ]);
-            } else {
-                $this->addFlash('success', 'flash.package.final_step.success');
-
-                // Go to the payment mode
-                return $this->redirectToRoute('event_sheet_package_payment_mode', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
-            }
+            return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
         }
 
         return $this->render('VimeetAppBundle:Event/Package:updateStep.html.twig', [
             'eventView'           => $eventView,
             'sheet'               => $sheet,
-            'stepPackageTemplate' => $packageTemplate[$step],
+            'stepPackageTemplate' => $sheet->getTypePackageTemplate()[$step],
             'form'                => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param int   $step
+     *
+     * @throws NotFoundHttpException
+     */
+    private function denyAccessPackageStepNotExists(Sheet $sheet, $step)
+    {
+        $packageTemplate = $sheet->getTypePackageTemplate();
+
+        if (!isset($packageTemplate[$step])) {
+            throw $this->createNotFoundException();
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     * @param int     $step
+     *
+     * @return string
+     */
+    private function urlAfterUpdateStep(Request $request, Sheet $sheet, $step)
+    {
+        $redirectTo      = $request->get('redirect_to');
+        $packageTemplate = $sheet->getTypePackageTemplate();
+
+        if (null !== $redirectTo) {
+            $this->addFlash('success', 'flash.package.update_step.success');
+
+            return $redirectTo;
+        } elseif (isset($packageTemplate[$step + 1])) {
+            $this->addFlash('success', 'flash.package.update_step.success');
+
+            return $this->generateUrl('event_sheet_package_update_step', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+                'step'      => $step + 1,
+            ]);
+        }
+
+        $this->addFlash('success', 'flash.package.final_step.success');
+
+        return $this->generateUrl('event_sheet_package_payment_mode', [
+            'subdomain' => $request->attributes->get('subdomain'),
+            'id'        => $sheet->getId(),
         ]);
     }
 
