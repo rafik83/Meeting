@@ -282,7 +282,7 @@ class SheetController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $delete = new Delete($sheet, $this->getUser(), $participant);
+        $delete = new Delete($sheet, $this->getUser(), $participant->getId());
         $form   = $this->createForm(new DeleteParticipantType(), $delete);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
