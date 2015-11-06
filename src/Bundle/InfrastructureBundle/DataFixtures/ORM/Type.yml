@@ -253,7 +253,6 @@ Proximum\Vimeet\Domain\Model\Type:
         previewTemplate: >
             <div>
                 <h1>{{ sheet.data[0][0] }}</h1>
-                <a href="{{ sheet.data[0][2] }}">{{ sheet.data[0][2] }}</a>
                 <p>{{ sheet.data[0][3] }}</p>
             </div>
 
@@ -281,7 +280,6 @@ Proximum\Vimeet\Domain\Model\Type:
         previewTemplate: >
             <div>
                 <h1>{{ sheet.data[0][0] }}</h1>
-                <a href="{{ sheet.data[0][2] }}">{{ sheet.data[0][2] }}</a>
                 <p>{{ sheet.data[0][3] }}</p>
             </div>
     type_congressiste:
