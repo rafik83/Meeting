@@ -64,8 +64,7 @@ class PackageController extends BaseController
             } else {
                 $this->addFlash('success', 'flash.package.final_step.success');
 
-                // Go to the payment mode
-                return $this->redirectToRoute('event_sheet_package_payment_mode', [
+                return $this->redirectToRoute('event_sheet_billing', [
                     'subdomain' => $request->attributes->get('subdomain'),
                     'id'        => $sheet->getId(),
                 ]);

@@ -48,8 +48,7 @@ class BillingController extends BaseController
 
                 $this->addFlash('success', 'flash.sheet.update_billing.success');
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
+                return $this->redirectToRoute('event_sheet_package_payment_mode', [
                     'subdomain' => $request->attributes->get('subdomain'),
                     'id'        => $sheet->getId(),
                 ]);
