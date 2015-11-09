@@ -117,7 +117,8 @@
             <tr>
                 <td>
                     {{ form_errors(form.participant) }}
-                    {{ form_widget(form.participant) }}&nbsp;{{ form_label(form.participant) }}
+                    {{ form_widget(form.participant) }}&nbsp;{{ form_label(form.participant) }}&nbsp;
+                    {{ 'event.sheet.package.participant.boughtNumber'|transchoice(boughtParticipant,{'count': boughtParticipant}) }}
                 </td>
                 <td>
                     {{ template['unitPrice']|number_format_currency('EUR') }}

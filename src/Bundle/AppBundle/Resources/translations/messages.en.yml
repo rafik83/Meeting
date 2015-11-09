@@ -50,3 +50,5 @@ event:
                 description: Description
                 unitPrice: Unit price
                 quantity: Quantity
+        participant:
+            boughtNumber: '{0}|{1} You have already added %count% participant on your sheet|]1,Inf[ You have already added %count% participants on your sheet'

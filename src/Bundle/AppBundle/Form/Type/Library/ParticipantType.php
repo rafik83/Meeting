@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 use Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParticipantType extends AbstractLocalizedType
 {
@@ -32,6 +35,16 @@ class ParticipantType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::finishView($view, $form, $options);
+
+        $view->vars['boughtParticipant'] = $this->participantManager->getAddedBoughtParticipant($options['sheet']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
@@ -41,7 +54,6 @@ class ParticipantType extends AbstractLocalizedType
         $builder
             ->add('participant', 'checkbox', [
                 'label'    => $template['label'][$locale],
-                'required' => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
             ->add('participant_bought', 'choice', [
@@ -66,14 +78,21 @@ class ParticipantType extends AbstractLocalizedType
      */
     private function getParticipantChoices(Sheet $sheet)
     {
-        $remaining = $this->participantManager->getBuyQuantityParticipant($sheet);
+        $participantManager = $this->participantManager;
+        $remaining          = $participantManager->getBuyQuantityParticipant($sheet);
+        $added              = $participantManager->getAddedBoughtParticipant($sheet);
 
         if ($remaining === 0) {
             return [];
         }
 
-        $range = range(1, $remaining, 1);
+        if ($added === 0) {
+            $added = 1;
+        }
+
+        $range = range($added, $remaining, 1);
 
         return array_combine($range, $range);
     }
+
 }

@@ -150,4 +150,13 @@ class ParticipantManager
 
         return null;
     }
+
+    public function getAddedBoughtParticipant(Sheet $sheet)
+    {
+        $freeParticipant = $sheet->getType()->getFreeParticipant();
+        $participants    = count($sheet->getParticipants());
+
+        return $participants - $freeParticipant;
+
+    }
 }

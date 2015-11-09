@@ -23,7 +23,7 @@ class PlanningType extends AbstractLocalizedType
         $locale   = $options['locale'];
         $sheet    = $options['sheet'];
 
-        $range = range(0, $sheet->getType()->getMaxPlanning(), 1);
+        $range = range(1, $sheet->getType()->getMaxPlanning(), 1);
 
         $builder
             ->add('planning', 'checkbox', [
