@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
@@ -31,13 +32,15 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoryViewsByEvent($event)
+    public function getCategoryViewsByEvent($event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, category.title)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
             ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
             ->where('category.event = :event')
             ->setParameter('event', $event);
 

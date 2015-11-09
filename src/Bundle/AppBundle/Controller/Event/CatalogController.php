@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CatalogController extends Controller
@@ -20,15 +21,16 @@ class CatalogController extends Controller
     /**
      * Display catalog categories of an event
      *
+     * @param Request   $request
      * @param EventView $eventView
      *
      * @return Response
      */
-    public function categoriesAction(EventView $eventView)
+    public function categoriesAction(Request $request, EventView $eventView)
     {
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
-            ->getCategoryViewsByEvent($eventView->id);
+            ->getCategoryViewsByEvent($eventView->id, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Catalog:categories.html.twig', [
             'eventView'  => $eventView,
