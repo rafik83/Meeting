@@ -12,6 +12,19 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>
         packageData: []
+    sheet_investisseur{1..20}:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_investisseur
+        data:
+            563cae566af03:
+                563cb103926e6: <company()>
+                563cb10a524c5: <address()>
+                563cb10fcc9fe: <url()>
+                563cb115bbeb9: <text(100)>
+            563cae5f48ce2:
+                563cb11d08df1: <text(200)>
+        packageData: []
     sheet_visiteur{1..20}:
         __construct: false
         event: @event_rdv_carnot_2016
@@ -25,33 +38,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cb014e2784:
                 563cb03f9a509: <text(200)>
         packageData: []
-    sheet_congressiste{1..20}:
+    sheet_visiteur_visio{1..20}:
         __construct: false
         event: @event_rdv_carnot_2016
-        type: @type_congressiste
-        data: []
-        packageData: []
-    sheet_type_a{1..20}:
-        __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_a
-        data: []
-        packageData: []
-    sheet_type_b{1..20}:
-        __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_b
-        data: []
-        packageData: []
-    sheet_type_c{1..20}:
-        __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_c
-        data: []
-        packageData: []
-    sheet_type_d{1..20}:
-        __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_d
-        data: []
+        type: @type_visiteur_visio
+        data:
+            563cb00c629d8:
+                563cb02125c23: <company()>
+                563cb02932fc8: <address()>
+                563cb02fc1df1: <url()>
+                563cb0364f1c6: <text(100)>
+            563cb014e2784:
+                563cb03f9a509: <text(200)>
         packageData: []
