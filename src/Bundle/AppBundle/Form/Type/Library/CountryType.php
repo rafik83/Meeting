@@ -32,7 +32,7 @@ class CountryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
-        $resolver->setDefaults(['placeholder' => 'country.select']);
+        $resolver->setDefaults(['placeholder' => 'country.placeholder']);
     }
 
     /**
