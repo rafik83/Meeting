@@ -23,7 +23,7 @@ class WhoSeeWhoType extends AbstractType
     {
         $builder
             ->add('seer', 'who', ['event' => $options['event'], 'placeholder' => ''])
-            ->add('seen', 'who', ['event' => $options['event'], 'placeholder' => ''])
+            ->add('seeable', 'who', ['event' => $options['event'], 'placeholder' => ''])
         ;
     }
 

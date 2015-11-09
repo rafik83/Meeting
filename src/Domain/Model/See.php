@@ -13,6 +13,11 @@ namespace Proximum\Vimeet\Domain\Model;
 class See
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var Type
      */
     private $seerType;
@@ -25,18 +30,18 @@ class See
     /**
      * @var Type
      */
-    private $seenType;
+    private $seeableType;
 
     /**
      * @var Category
      */
-    private $seenCategory;
+    private $seeableCategory;
 
     /**
      * @param WhoInterface $seer
-     * @param WhoInterface $seen
+     * @param WhoInterface $seeable
      */
-    public function __construct(WhoInterface $seer, WhoInterface $seen)
+    public function __construct(WhoInterface $seer, WhoInterface $seeable)
     {
         if ($seer instanceof Type) {
             $this->seerType = $seer;
@@ -46,13 +51,23 @@ class See
             throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seer)));
         }
         
-        if ($seen instanceof Type) {
-            $this->seenType = $seen;
-        } elseif ($seen instanceof Category) {
-            $this->seenCategory = $seen;
+        if ($seeable instanceof Type) {
+            $this->seeableType = $seeable;
+        } elseif ($seeable instanceof Category) {
+            $this->seeableCategory = $seeable;
         } else {
-            throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seen)));
+            throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seeable)));
         }
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -76,22 +91,22 @@ class See
     }
 
     /**
-     * Get seenType
+     * Get seeableType
      *
      * @return Type
      */
-    public function getSeenType()
+    public function getSeeableType()
     {
-        return $this->seenType;
+        return $this->seeableType;
     }
 
     /**
-     * Get seenCategory
+     * Get seeableCategory
      *
      * @return Category
      */
-    public function getSeenCategory()
+    public function getSeeableCategory()
     {
-        return $this->seenCategory;
+        return $this->seeableCategory;
     }
 }
