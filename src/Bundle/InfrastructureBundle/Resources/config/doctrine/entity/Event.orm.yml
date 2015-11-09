@@ -15,6 +15,8 @@ Proximum\Vimeet\Domain\Model\Event:
             type: json_array
         fallback:
             type: string
+        billingTemplate:
+            type: json_array
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation

@@ -4,10 +4,18 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_1
         sheet: @sheet_1
         owner: true
-        data: ["Dutest","Jean","0909090909","Developer"]
+        data:
+            563caf1d9b1cb: "Dutest"
+            563caf2746398: "Jean"
+            563caf2f0ddbd: "0909090909"
+            563caf34eed69: "Developer"
     participant_2:
         __construct: false
         user: @user_2
         sheet: @sheet_1
         owner: false
-        data: ["Super","Test","08080808","SuperPersonne"]
+        data:
+            563caf1d9b1cb: "Super"
+            563caf2746398: "Test"
+            563caf2f0ddbd: "08080808"
+            563caf34eed69: "SuperPersonne"

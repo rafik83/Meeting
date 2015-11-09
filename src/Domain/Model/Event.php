@@ -48,6 +48,11 @@ class Event
     private $fallback;
 
     /**
+     * @var array
+     */
+    private $billingTemplate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -125,6 +130,27 @@ class Event
         return in_array($locale, $this->locales);
     }
 
+    /**
+     * @param array $billingTemplate
+     */
+    public function setBillingTemplate(array $billingTemplate)
+    {
+        $this->billingTemplate = $billingTemplate;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBillingTemplate()
+    {
+        return $this->billingTemplate;
+    }
+
+    /**
+     * @param string $title
+     * @param array  $locales
+     * @param string $fallback
+     */
     public function update($title, array $locales, $fallback)
     {
         $this->title    = $title;

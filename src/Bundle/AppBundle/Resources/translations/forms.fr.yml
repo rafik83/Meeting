@@ -77,6 +77,10 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
+    update_sheet_billing:
+        children:
+            submit:
+                label: Enregistrer
     choose_payment_mode:
         children:
             submit:
@@ -98,3 +102,5 @@ form:
                 label: Enregistrer
     planning:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
+country:
+    select: --- Sélectionner un pays ---
