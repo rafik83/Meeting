@@ -5,7 +5,7 @@
                 <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
                 <td class="col-md-9">
                     {% if 'lib_country' == template[key]['type'] %}
-                        {{ data[key]|country }}
+                        {{ data[key]|default|country }}
                     {% else %}
                         {{ data[key]|default('...')|nl2br }}
                     {% endif %}
