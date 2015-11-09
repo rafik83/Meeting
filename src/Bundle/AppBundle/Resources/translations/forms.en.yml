@@ -53,6 +53,16 @@ form:
                 label: Participant personnal informations
             submit:
                 label: Submit
+    buy_participant:
+        children:
+            participantData:
+                children:
+                    email:
+                        label: Email
+            data:
+                label: Participant personnal informations
+            submit:
+                label: Submit
     update_sheet_block:
         children:
             data:
@@ -67,3 +77,5 @@ form:
         children:
             submit:
                 label: Save and go to next step
+    planning:
+        add_with_participant: Add a planning with this participant

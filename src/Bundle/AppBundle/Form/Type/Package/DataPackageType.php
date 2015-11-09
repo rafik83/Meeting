@@ -14,21 +14,27 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateStepType extends AbstractType
+class DataPackageType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('packageData', new DataPackageType(), [
-                'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'sheet'    => $options['sheet'],
-                'label'    => false,
-            ])
-        ;
+        $template = $options['template'];
+        $locale   = $options['locale'];
+        $sheet    = $options['sheet'];
+
+        foreach ($template as $i => $field) {
+            $builder->add($i, $field['type'], [
+                'label'    => $field['label'][$locale],
+                'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
+                'required' => isset($field['required']) && $field['required'] === true,
+                'template' => $field,
+                'locale'   => $locale,
+                'sheet'    => $sheet,
+            ]);
+        }
     }
 
     /**
@@ -36,11 +42,6 @@ class UpdateStepType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
-            'intention'  => 'update_sheet_package_step',
-        ]);
-
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
     }
@@ -50,6 +51,6 @@ class UpdateStepType extends AbstractType
      */
     public function getName()
     {
-        return 'update_sheet_package_step';
+        return 'data_package';
     }
 }

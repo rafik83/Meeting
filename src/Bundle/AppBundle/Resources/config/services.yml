@@ -15,6 +15,8 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
+    vimeet_app.service.participant_manager:
+        class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
 
     #
     # Form type
@@ -39,6 +41,16 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
             - { name: form.type, alias: lib_option }
+    vimeet_app.form_type_library.participant_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType
+        tags:
+            - { name: form.type, alias: lib_participant }
+        arguments:
+            - @vimeet_app.service.participant_manager
+    vimeet_app.form_type_library.planning_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType
+        tags:
+            - { name: form.type, alias: lib_planning }
     vimeet_app.form_type_library.country_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType
         tags:

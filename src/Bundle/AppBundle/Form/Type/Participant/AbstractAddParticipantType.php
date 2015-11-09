@@ -13,13 +13,17 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddParticipantType extends AbstractAddParticipantType
+abstract class AbstractAddParticipantType extends AbstractParticipantType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('email', 'email')
+        ;
+
         parent::buildForm($builder, $options);
     }
 
@@ -29,11 +33,6 @@ class AddParticipantType extends AbstractAddParticipantType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-
-        $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Add',
-            'intention'  => 'add_participant',
-        ]);
     }
 
     /**
@@ -41,6 +40,6 @@ class AddParticipantType extends AbstractAddParticipantType
      */
     public function getName()
     {
-        return 'add_participant';
+        return 'abstract_add_participant';
     }
 }

@@ -38,6 +38,14 @@ event_sheet_add_participant:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:addParticipant }
 
+event_sheet_buy_participant:
+    path: /sheet/{id}/buy_participant
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:buyParticipant }
+
 event_sheet_update_participant:
     path: /sheet/{id}/update_participant/{participant_id}
     host: "{subdomain}.%domain%"

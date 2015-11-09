@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
+use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
@@ -44,15 +45,25 @@ class PackageController extends BaseController
         $form       = $this->createForm(new UpdateStepType(), $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
+            'sheet'    => $sheet,
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
-                ->handle($updateStep);
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
+                    ->handle($updateStep);
 
-            return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
+                return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
+            } catch (BoughtParticipantAlreadyAddedException $exception) {
+                $packageTemplate = $sheet->getTypePackageTemplate();
+                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm(
+                    $form,
+                    $packageTemplate[$step],
+                    $updateStep->packageData,
+                    $form->get('packageData'));
+            }
         }
 
         return $this->render('VimeetAppBundle:Event/Package:updateStep.html.twig', [

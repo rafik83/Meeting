@@ -22,6 +22,7 @@ class QuantityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['min', 'max']);
+        $resolver->setDefined(['sheet']);
         $resolver->setDefaults([
             'range'   => 1,
             'choices' => function (Options $options) {
