@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\TypeTranslation:
+Proximum\Vimeet\Domain\Model\CategoryTranslation:
     type:  entity
-    table: type_translation
+    table: category_translation
     id:
         id:
             type: integer
@@ -12,6 +12,6 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         locale:
             type: string
     manyToOne:
-        type:
-            targetEntity: Proximum\Vimeet\Domain\Model\Type
+        category:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
             inversedBy: translations

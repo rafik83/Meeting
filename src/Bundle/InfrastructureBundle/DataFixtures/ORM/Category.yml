@@ -1,16 +1,39 @@
 Proximum\Vimeet\Domain\Model\Category:
     category_exposant:
-        title: Exposants
         filters:
             type: [@type_exposant->id, @type_a->id]
         event: @event_rdv_carnot_2016
     category_visiteur:
-        title: Visiteurs
         filters:
             type: [@type_visiteur->id, @type_b->id]
         event: @event_rdv_carnot_2016
     category_c:
-        title: Catégorie C
         filters:
             type: [@type_c->id, @type_d->id]
         event: @event_rdv_carnot_2016
+
+Proximum\Vimeet\Domain\Model\CategoryTranslation:
+    category_exposant_fr:
+        category: @category_exposant
+        title: Exposants
+        locale: fr
+    category_visiteur_fr:
+        category: @category_visiteur
+        title: Visiteurs
+        locale: fr
+    category_c_fr:
+        category: @category_c
+        title: Catégorie C
+        locale: fr
+    category_exposant_en:
+        category: @category_exposant
+        title: Visitors
+        locale: en
+    category_visiteur_en:
+        category: @category_visiteur
+        title: Exhibitors
+        locale: en
+    category_c_en:
+        category: @category_c
+        title: Category C
+        locale: en

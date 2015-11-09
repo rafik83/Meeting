@@ -21,6 +21,7 @@ Proximum\Vimeet\Domain\Model\Type:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
             mappedBy: type
+            indexBy: locale
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
