@@ -58,11 +58,17 @@ class Type implements WhoInterface
     private $previewTemplate;
 
     /**
+     * @var ArrayCollection
+     */
+    private $categories;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->translations = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
     }
 
     /**
@@ -191,5 +197,15 @@ class Type implements WhoInterface
     public function getPreviewTemplate()
     {
         return $this->previewTemplate;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

@@ -26,7 +26,8 @@ class SearchQueryBuilder extends QueryBuilder
         $this
             ->select('sheet')
             ->from('Entity:Sheet', 'sheet')
-            ->join('sheet.type', 'type');
+            ->join('sheet.type', 'type')
+            ->join('type.categories', 'category');
     }
 
     /**
@@ -36,13 +37,9 @@ class SearchQueryBuilder extends QueryBuilder
      */
     public function withCategory(Category $category)
     {
-        $filters = $category->getFilters();
-
-        if (isset($filters['type'])) {
-            $this
-                ->andWhere('sheet.type IN (:type)')
-                ->setParameter('type', $filters['type']);
-        }
+        $this
+            ->andWhere('category = :category')
+            ->setParameter('category', $category);
 
         return $this;
     }

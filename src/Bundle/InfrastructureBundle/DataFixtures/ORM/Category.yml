@@ -1,11 +1,9 @@
 Proximum\Vimeet\Domain\Model\Category:
     category_exposant:
-        filters:
-            type: [@type_exposant->id, @type_investisseur->id]
+        types: [@type_exposant, @type_investisseur]
         event: @event_rdv_carnot_2016
     category_visiteur:
-        filters:
-            type: [@type_visiteur->id, @type_visiteur_visio->id]
+        types: [@type_visiteur, @type_visiteur_visio]
         event: @event_rdv_carnot_2016
 
 Proximum\Vimeet\Domain\Model\CategoryTranslation:

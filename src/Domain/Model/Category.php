@@ -27,6 +27,11 @@ class Category implements WhoInterface
     private $translations;
 
     /**
+     * @var ArrayCollection
+     */
+    private $types;
+
+    /**
      * @var array
      */
     private $filters = [];
@@ -41,6 +46,7 @@ class Category implements WhoInterface
      */
     public function __construct()
     {
+        $this->types        = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
@@ -52,6 +58,16 @@ class Category implements WhoInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get types
+     *
+     * @return ArrayCollection
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**
