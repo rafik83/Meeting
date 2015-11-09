@@ -19,6 +19,17 @@ services:
     #
     # Form type
     #
+    vimeet_app.form_type.who_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType
+        arguments:
+            - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
+        tags:
+            - { name: form.type, alias: who }
+
+    #
+    # Library
+    #
     vimeet_app.form_type_library.choice_with_description:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:

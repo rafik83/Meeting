@@ -22,4 +22,6 @@ interface CategoryRepositoryInterface
      * @return CategoryView[]
      */
     public function getCategoryViewsByEvent($event, $locale);
+
+    public function getCategoriesByEvent(Event $event);
 }

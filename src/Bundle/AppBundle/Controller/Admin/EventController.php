@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,22 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Event:update.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    public function whoSeeWhoAction(Request $request, Event $event)
+    {
+        $form = $this->createForm(new WhoSeeWhoType(), [], [
+            'event' => $event,
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('admin_event_who_see_who', ['id' => $event->getId()]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Event:whoSeeWho.html.twig', [
             'form' => $form->createView(),
         ]);
     }

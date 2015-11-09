@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeView;
 
@@ -51,4 +52,6 @@ interface TypeRepositoryInterface
      * @return array
      */
     public function getParticipantTemplate($typeId);
+
+    public function getTypesByEvent(Event $event);
 }

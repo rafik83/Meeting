@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
@@ -117,5 +118,21 @@ class TypeRepository implements TypeRepositoryInterface
         $type = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $type ? $type->getParticipantTemplate() : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
