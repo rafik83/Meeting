@@ -101,4 +101,14 @@ class BaseController extends Controller
             throw new AccessDeniedException('You can not update this data');
         }
     }
+
+    /**
+     * @param $error
+     * @param $field
+     */
+    protected function addGivenErrorOnGivenField($error, $field)
+    {
+        $error = new FormError($error);
+        $field->addError($error);
+    }
 }

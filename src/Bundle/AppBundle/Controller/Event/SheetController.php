@@ -122,14 +122,15 @@ class SheetController extends BaseController
                     'id'        => $sheet->getId(),
                 ]);
             } catch (EmailCanNotBeNullException $exception) {
-                $error = new FormError($this
-                    ->get('translator')
-                    ->trans('validators.field.required', [], 'validators')
+                $this->addGivenErrorOnGivenField(
+                    $this->get('translator')->trans('validators.field.required', [], 'validators'),
+                    $form->get('email')
                 );
-                $form->get('email')->addError($error);
             } catch (ParticipantAlreadyExistException $exception) {
-                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
-                $form->get('email')->addError($error);
+                $this->addGivenErrorOnGivenField(
+                    $this->get('translator')->trans('event.sheet.participant.already_exists'),
+                    $form->get('email')
+                );
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -382,14 +383,15 @@ class SheetController extends BaseController
                     'id'        => $sheet->getId(),
                 ]);
             } catch (EmailCanNotBeNullException $exception) {
-                $error = new FormError($this
-                    ->get('translator')
-                    ->trans('validators.field.required', [], 'validators')
+                $this->addGivenErrorOnGivenField(
+                    $this->get('translator')->trans('validators.field.required', [], 'validators'),
+                    $form->get('participantData')->get('email')
                 );
-                $form->get('participantData')->get('email')->addError($error);
             } catch (ParticipantAlreadyExistException $exception) {
-                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
-                $form->get('participantData')->get('email')->addError($error);
+                $this->addGivenErrorOnGivenField(
+                    $this->get('translator')->trans('event.sheet.participant.already_exists'),
+                    $form->get('participantData')->get('email')
+                );
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
