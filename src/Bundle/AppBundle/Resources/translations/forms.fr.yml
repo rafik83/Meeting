@@ -91,4 +91,4 @@ form:
             submit:
                 label: Enregistrer
 country:
-    select: --- Sélectionner un pays ---
+    placeholder: --- Sélectionner un pays ---
