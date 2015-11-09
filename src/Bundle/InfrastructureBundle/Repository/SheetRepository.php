@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Sheet\SearchQueryBuilder;
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -70,19 +72,10 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function search(array $filters)
+    public function search(Category $category)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from('Entity:Sheet', 'sheet');
-
-        if (isset($filters['type'])) {
-            $queryBuilder
-                ->andWhere('sheet.type IN (:type)')
-                ->setParameter('type', $filters['type']);
-        }
+        $queryBuilder = new SearchQueryBuilder($this->entityManager);
+        $queryBuilder->withCategory($category);
 
         return $queryBuilder->getQuery()->getResult();
     }

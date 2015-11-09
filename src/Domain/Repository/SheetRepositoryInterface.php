@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetView;
@@ -37,9 +38,9 @@ interface SheetRepositoryInterface
     public function getSheetsIdByUserAndEvent($user, $event, $locale);
 
     /**
-     * @param array $filters
+     * @param Category $category
      *
      * @return Sheet[]
      */
-    public function search(array $filters);
+    public function search(Category $category);
 }

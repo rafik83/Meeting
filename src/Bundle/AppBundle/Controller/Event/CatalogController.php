@@ -48,10 +48,9 @@ class CatalogController extends Controller
      */
     public function categoryAction(EventView $eventView, Category $category)
     {
-        $filters = $category->getFilters();
         $sheets  = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->search($filters);
+            ->search($category);
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
             'eventView'  => $eventView,
