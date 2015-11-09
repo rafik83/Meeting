@@ -20,11 +20,12 @@ Proximum\Vimeet\Domain\Model\Type:
                     fr: "Société"
                     en: "Company"
                 template:
-                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom", "en": "Name" } }
+                    - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Nom de l'organisation", "en": "Organisation name" } }
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    - { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     - { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
-                    - { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
+                    - { "type": "lib_nomenclature", "id": 1, "required": true, "private": false, "label": { "fr": "Activité", "en": "Activity" } }
             -
                 title:
                     fr: "Offres"

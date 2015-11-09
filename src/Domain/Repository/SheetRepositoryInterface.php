@@ -42,4 +42,12 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function search(array $filters);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getData(Sheet $sheet, $locale);
 }

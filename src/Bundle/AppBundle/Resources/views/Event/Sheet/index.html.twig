@@ -30,7 +30,7 @@
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {
         'sheet' : sheet,
-        'data'  : sheet.data,
+        'data'  : data,
         'blocks': sheet.type.sheetTemplate,
         'packageData': sheet.packageData,
         'packageTemplate': sheet.type.packageTemplate,

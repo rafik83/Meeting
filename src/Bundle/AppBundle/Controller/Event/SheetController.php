@@ -67,6 +67,10 @@ class SheetController extends BaseController
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
+        $data = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getData($sheet, $request->getLocale());
+
         $participantDeleteForms = [];
 
         if ($userParticipant->isOwner()) {
@@ -96,6 +100,7 @@ class SheetController extends BaseController
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheet'                    => $sheet,
+            'data'                     => $data,
             'participantViews'         => $participantViews,
             'participant_delete_forms' => $participantDeleteForms,
         ]);

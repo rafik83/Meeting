@@ -47,6 +47,12 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
         tags:
             - { name: form.type, alias: lib_email }
+    vimeet_app.form_type_library.nomenclature_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\NomenclatureType
+        arguments:
+            - @vimeet_infrastructure.repository.nomenclature_item_repository
+        tags:
+            - { name: form.type, alias: lib_nomenclature }
 
     #
     # Event Listener
