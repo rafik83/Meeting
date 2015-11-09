@@ -31,7 +31,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,18 +111,33 @@ class SheetController extends BaseController
         ]);
         $form->add('submit', 'submit');
 
-        $response = $this->handleParticipant(
-            $form,
-            $request,
-            $sheet,
-            $add,
-            'vimeet_infrastructure.vimeet.application.command.participant.add_handler',
-            $form,
-            $add->data
-        );
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+                $this->addFlash('success', 'flash.sheet.add_participant.success');
 
-        if ($response instanceof Response) {
-            return $response;
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                ]);
+            } catch (EmailCanNotBeNullException $exception) {
+                $error = new FormError($this
+                    ->get('translator')
+                    ->trans('validators.field.required', [], 'validators')
+                );
+                $form->get('email')->addError($error);
+            } catch (ParticipantAlreadyExistException $exception) {
+                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
+                $form->get('email')->addError($error);
+            } catch (RequiredDataEmptyException $exception) {
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $add->data,
+                    $form->get('data')
+                );
+            }
         }
 
         return $this->render('VimeetAppBundle:Event/Sheet:addParticipant.html.twig', [
@@ -357,44 +371,9 @@ class SheetController extends BaseController
         ]);
         $form->add('submit', 'submit');
 
-        $response = $this->handleParticipant(
-            $form,
-            $request,
-            $sheet,
-            $buyParticipant,
-            'vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler',
-            $form->get('participantData')
-        );
-
-        if ($response instanceof Response) {
-            return $response;
-        }
-
-        return $this->render('VimeetAppBundle:Event/Sheet:buyParticipant.html.twig', [
-            'eventView'        => $eventView,
-            'sheet'            => $sheet,
-            'form'             => $form->createView(),
-            'participantPrice' => $participantPrice,
-            'planningPrice'    => $planningPrice,
-        ]);
-    }
-
-
-    /**
-     * @param Form $form
-     * @param Request $request
-     * @param Sheet $sheet
-     * @param $handleVariable
-     * @param $service
-     * @param $formData
-     *
-     * @return Form|RedirectResponse
-     */
-    private function handleParticipant(Form $form, Request $request, Sheet $sheet, $handleVariable, $service, $formData)
-    {
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get($service)->handle($handleVariable);
+                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler')->handle($buyParticipant);
                 $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
@@ -407,29 +386,26 @@ class SheetController extends BaseController
                     ->get('translator')
                     ->trans('validators.field.required', [], 'validators')
                 );
-                $formData->get('email')->addError($error);
+                $form->get('participantData')->get('email')->addError($error);
             } catch (ParticipantAlreadyExistException $exception) {
                 $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
-                $formData->get('email')->addError($error);
+                $form->get('participantData')->get('email')->addError($error);
             } catch (RequiredDataEmptyException $exception) {
-                if ($handleVariable instanceof BuyParticipant) {
-                    $form = $this->addRequiredErrorOnForm(
-                        $form,
-                        $sheet->getType()->getParticipantTemplate(),
-                        $handleVariable->participantData['data'],
-                        $formData->get('data')
-                    );
-                } else {
-                    $form = $this->addRequiredErrorOnForm(
-                        $form,
-                        $sheet->getType()->getParticipantTemplate(),
-                        $handleVariable->data,
-                        $formData->get('data')
-                    );
-                }
+                $form = $this->addRequiredErrorOnForm(
+                    $form,
+                    $sheet->getType()->getParticipantTemplate(),
+                    $buyParticipant->participantData['data'],
+                    $form->get('participantData')->get('data')
+                );
             }
         }
 
-        return $form;
+        return $this->render('VimeetAppBundle:Event/Sheet:buyParticipant.html.twig', [
+            'eventView'        => $eventView,
+            'sheet'            => $sheet,
+            'form'             => $form->createView(),
+            'participantPrice' => $participantPrice,
+            'planningPrice'    => $planningPrice,
+        ]);
     }
 }
