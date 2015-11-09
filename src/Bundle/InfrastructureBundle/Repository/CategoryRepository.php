@@ -62,4 +62,24 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoryViewById($id, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
+            ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('category.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+
+    }
 }

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\CategoryView;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,21 +41,21 @@ class CatalogController extends Controller
     /**
      * Display sheets matching category
      *
-     * @param EventView $eventView
-     * @param Category  $category
+     * @param EventView    $eventView
+     * @param CategoryView $categoryView
      *
      * @return Response
      */
-    public function categoryAction(EventView $eventView, Category $category)
+    public function categoryAction(EventView $eventView, CategoryView $categoryView)
     {
         $sheets  = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->search($category);
+            ->search($categoryView->id);
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
-            'eventView'  => $eventView,
-            'category'   => $category,
-            'sheets'     => $sheets,
+            'eventView'    => $eventView,
+            'categoryView' => $categoryView,
+            'sheets'       => $sheets,
         ]);
     }
 }

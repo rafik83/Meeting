@@ -38,9 +38,9 @@ interface SheetRepositoryInterface
     public function getSheetsIdByUserAndEvent($user, $event, $locale);
 
     /**
-     * @param Category $category
+     * @param Category|int $category
      *
      * @return Sheet[]
      */
-    public function search(Category $category);
+    public function search($category);
 }

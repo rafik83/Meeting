@@ -31,11 +31,11 @@ class SearchQueryBuilder extends QueryBuilder
     }
 
     /**
-     * @param Category $category
+     * @param Category|int $category
      *
      * @return SearchQueryBuilder
      */
-    public function withCategory(Category $category)
+    public function withCategory($category)
     {
         $this
             ->andWhere('category = :category')

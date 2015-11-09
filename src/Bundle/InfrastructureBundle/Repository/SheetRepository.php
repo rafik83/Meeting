@@ -72,7 +72,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function search(Category $category)
+    public function search($category)
     {
         $queryBuilder = new SearchQueryBuilder($this->entityManager);
         $queryBuilder->withCategory($category);
