@@ -21,10 +21,11 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
     {
         $template = $options['template'];
         $locale   = $options['locale'];
+        $choices  = [];
 
-        $choices = array_map(function ($value) use ($locale) {
-            return $value['label'][$locale];
-        }, $template['choices']);
+        foreach ($template['choices'] as $key => $choice) {
+            $choices[$key] = $choice['label'][$locale];
+        }
 
         $builder
             ->add('value', 'choice', [
@@ -53,4 +54,3 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
         return 'choice_with_description';
     }
 }
-
