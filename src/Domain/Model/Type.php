@@ -199,6 +199,14 @@ class Type
     }
 
     /**
+     * @param string $packageTemplate
+     */
+    public function setPackageTemplate($packageTemplate)
+    {
+        $this->packageTemplate = $packageTemplate;
+    }
+
+    /**
      * @return int
      */
     public function getMaxParticipant()
