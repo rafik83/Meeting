@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\NomenclatureItemView;
 use Proximum\Vimeet\Domain\Repository\NomenclatureItemRepositoryInterface;
 
 class NomenclatureItemRepository implements NomenclatureItemRepositoryInterface
