@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParticipantType extends AbstractLocalizedType
 {
