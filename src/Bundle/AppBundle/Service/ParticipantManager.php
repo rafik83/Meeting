@@ -108,9 +108,14 @@ class ParticipantManager
             return 0;
         }
 
-        return ($this->getBoughtParticipant($sheet) + $sheet->getType()->getFreeParticipant()) - count($sheet->getParticipants());
+        return $this->getBoughtParticipant($sheet) + $sheet->getType()->getFreeParticipant() - count($sheet->getParticipants());
     }
 
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int|null
+     */
     public function getParticipantPrice(Sheet $sheet)
     {
         $packageData = $sheet->getTypePackageTemplate();
@@ -122,8 +127,15 @@ class ParticipantManager
                 }
             }
         }
+
+        return null;
     }
 
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int|null
+     */
     public function getPlanningPrice(Sheet $sheet)
     {
         $packageData = $sheet->getTypePackageTemplate();
@@ -135,5 +147,7 @@ class ParticipantManager
                 }
             }
         }
+
+        return null;
     }
 }
