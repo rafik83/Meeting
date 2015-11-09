@@ -62,7 +62,7 @@ class BuyParticipantHandler extends BaseHandler
     public function handle(BuyParticipant $buyParticipant)
     {
         // Check the constraint on the data (required) before
-        $this->checkDataConstraint($buyParticipant->participantData, $buyParticipant->sheet->getType()->getParticipantTemplate());
+        $this->checkDataConstraint($buyParticipant->participantData['data'], $buyParticipant->sheet->getType()->getParticipantTemplate());
 
         if ($buyParticipant->participantData['email'] === null) {
             throw new EmailCanNotBeNullException();

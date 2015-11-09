@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,35 +112,18 @@ class SheetController extends BaseController
         ]);
         $form->add('submit', 'submit');
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
-                $this->addFlash('success', 'flash.sheet.add_participant.success');
+        $response = $this->handleParticipant(
+            $form,
+            $request,
+            $sheet,
+            $add,
+            'vimeet_infrastructure.vimeet.application.command.participant.add_handler',
+            $form,
+            $add->data
+        );
 
-                // Go to the sheet
-                return $this->redirectToRoute(
-                    'event_sheet',
-                    [
-                        'subdomain' => $request->attributes->get('subdomain'),
-                        'id'        => $sheet->getId(),
-                    ]
-                );
-            } catch (EmailCanNotBeNullException $exception) {
-                $error = new FormError($this
-                    ->get('translator')
-                    ->trans('validators.field.required', [], 'validators')
-                );
-                $form->get('email')->addError($error);
-            } catch (ParticipantAlreadyExistException $exception) {
-                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
-                $form->get('email')->addError($error);
-            } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $add->data
-                );
-            }
+        if ($response instanceof Response) {
+            return $response;
         }
 
         return $this->render('VimeetAppBundle:Event/Sheet:addParticipant.html.twig', [
@@ -254,7 +238,8 @@ class SheetController extends BaseController
                 $form = $this->addRequiredErrorOnForm(
                     $form,
                     $sheet->getType()->getSheetTemplate()[$block]['template'],
-                    $updateBlock->data
+                    $updateBlock->data,
+                    $form->get('data')
                 );
             }
         }
@@ -372,26 +357,17 @@ class SheetController extends BaseController
         ]);
         $form->add('submit', 'submit');
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler')->handle($buyParticipant);
-                $this->addFlash('success', 'flash.sheet.add_participant.success');
+        $response = $this->handleParticipant(
+            $form,
+            $request,
+            $sheet,
+            $buyParticipant,
+            'vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler',
+            $form->get('participantData')
+        );
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
-            } catch (ParticipantAlreadyExistException $exception) {
-                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
-                $form->get('participantData')->get('email')->addError($error);
-            } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $buyParticipant->participantData
-                );
-            }
+        if ($response instanceof Response) {
+            return $response;
         }
 
         return $this->render('VimeetAppBundle:Event/Sheet:buyParticipant.html.twig', [
@@ -401,5 +377,59 @@ class SheetController extends BaseController
             'participantPrice' => $participantPrice,
             'planningPrice'    => $planningPrice,
         ]);
+    }
+
+
+    /**
+     * @param Form $form
+     * @param Request $request
+     * @param Sheet $sheet
+     * @param $handleVariable
+     * @param $service
+     * @param $formData
+     *
+     * @return Form|RedirectResponse
+     */
+    private function handleParticipant(Form $form, Request $request, Sheet $sheet, $handleVariable, $service, $formData)
+    {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get($service)->handle($handleVariable);
+                $this->addFlash('success', 'flash.sheet.add_participant.success');
+
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheet->getId(),
+                ]);
+            } catch (EmailCanNotBeNullException $exception) {
+                $error = new FormError($this
+                    ->get('translator')
+                    ->trans('validators.field.required', [], 'validators')
+                );
+                $formData->get('email')->addError($error);
+            } catch (ParticipantAlreadyExistException $exception) {
+                $error = new FormError($this->get('translator')->trans('event.sheet.participant.already_exists'));
+                $formData->get('email')->addError($error);
+            } catch (RequiredDataEmptyException $exception) {
+                if ($handleVariable instanceof BuyParticipant) {
+                    $form = $this->addRequiredErrorOnForm(
+                        $form,
+                        $sheet->getType()->getParticipantTemplate(),
+                        $handleVariable->participantData['data'],
+                        $formData->get('data')
+                    );
+                } else {
+                    $form = $this->addRequiredErrorOnForm(
+                        $form,
+                        $sheet->getType()->getParticipantTemplate(),
+                        $handleVariable->data,
+                        $formData->get('data')
+                    );
+                }
+            }
+        }
+
+        return $form;
     }
 }

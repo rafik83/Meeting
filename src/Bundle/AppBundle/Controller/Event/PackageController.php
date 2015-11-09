@@ -58,7 +58,11 @@ class PackageController extends BaseController
                 return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
             } catch (BoughtParticipantAlreadyAddedException $exception) {
                 $packageTemplate = $sheet->getTypePackageTemplate();
-                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm($form, $packageTemplate[$step], $updateStep->packageData, 'packageData');
+                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm(
+                    $form,
+                    $packageTemplate[$step],
+                    $updateStep->packageData,
+                    $form->get('packageData'));
             }
         }
 

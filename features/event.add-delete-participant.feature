@@ -34,7 +34,7 @@ Feature: Add and delete participant
     And I should see "Exposant"
     And I should not see "form.delete_participant.children.submit.label"
 
-  Scenario: I can add a participant
+  Scenario: I can buy a participant
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And I fill in "form.login.children.username.label" with "test-2@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
@@ -46,17 +46,17 @@ Feature: Add and delete participant
     And I should see "event.sheet.block.buy_participant.title"
     Then I follow "event.sheet.block.buy_participant.title"
     And I fill in the following:
-    |form.add_participant.children.email.label |test-3@test.fr |
-    |Nom                                       |Le Tester      |
-    |Prénom                                    |Test           |
-    |Téléphone                                 |0101010101     |
-    |Fonction                                  |Operator       |
-    Then I press "form.add_participant.children.submit.label"
+    |form.buy_participant.children.participantData.children.email.label |test-3@test.fr |
+    |Nom                                                                |Le Tester      |
+    |Prénom                                                             |Test           |
+    |Téléphone                                                          |0101010101     |
+    |Fonction                                                           |Operator       |
+    Then I press "form.buy_participant.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "Le Tester"
     And I should see "flash.sheet.add_participant.success"
 
-  Scenario: I can not add a participant without all the information
+  Scenario: I can not buy a participant without all the information
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And I fill in "form.login.children.username.label" with "test-2@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
@@ -68,12 +68,12 @@ Feature: Add and delete participant
     And I should see "event.sheet.block.buy_participant.title"
     Then I follow "event.sheet.block.buy_participant.title"
     And I fill in the following:
-      |form.add_participant.children.email.label |test-4@test.fr |
-      |Nom                                       |Blablabla      |
-      |Prénom                                    |               |
-      |Téléphone                                 |0202020202     |
-      |Fonction                                  |Decorator      |
-    Then I press "form.add_participant.children.submit.label"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/add_participant"
+      |form.buy_participant.children.participantData.children.email.label |test-4@test.fr |
+      |Nom                                                                |Blablabla      |
+      |Prénom                                                             |               |
+      |Téléphone                                                          |0202020202     |
+      |Fonction                                                           |Decorator      |
+    Then I press "form.buy_participant.children.submit.label"
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/buy_participant"
     And I should see "validators.field.required"
 

@@ -21,10 +21,11 @@ class BaseController extends Controller
      * @param Form  $form
      * @param array $template
      * @param array $data
+     * @param $formData
      *
      * @return Form
      */
-    protected function addRequiredErrorOnForm(Form $form, array $template, array $data)
+    protected function addRequiredErrorOnForm(Form $form, array $template, array $data, $formData)
     {
         foreach ($data as $key => $value) {
             if (isset($template[$key])
@@ -37,7 +38,7 @@ class BaseController extends Controller
                         ->get('translator')
                         ->trans('validators.field.required', [], 'validators')
                 );
-                $form->get('data')->get($key)->addError($error);
+                $formData->get($key)->addError($error);
             }
         }
 
@@ -45,14 +46,14 @@ class BaseController extends Controller
     }
 
     /**
-     * @param Form   $form
-     * @param array  $template
-     * @param array  $data
-     * @param string $dataName
+     * @param Form $form
+     * @param array $template
+     * @param array $data
+     * @param $formData
      *
      * @return Form
      */
-    protected function addBoughtParticipantCanNotBeUncheckedErrorOnForm(Form $form, array $template, array $data, $dataName)
+    protected function addBoughtParticipantCanNotBeUncheckedErrorOnForm(Form $form, array $template, array $data, $formData)
     {
         foreach ($data as $key => $value) {
             if (isset($template['template'][$key])
@@ -64,7 +65,7 @@ class BaseController extends Controller
                         ->get('translator')
                         ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
                 );
-                $form->get($dataName)->get($key)->addError($error);
+                $formData->get($key)->addError($error);
             } elseif (isset($template['template'][$key])
                 && isset($value['participant'])
                 && $value['participant'] === true
@@ -74,7 +75,7 @@ class BaseController extends Controller
                         ->get('translator')
                         ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
                 );
-                $form->get($dataName)->get($key)->addError($error);
+                $formData->get($key)->addError($error);
             }
         }
 
