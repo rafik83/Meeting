@@ -4,16 +4,8 @@
             <tr>
                 <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
                 <td class="col-md-9">
-                    {% if 'lib_country' == template[key].type %}
-                        {{ data[key]|default|country }}
-                    {% elseif 'lib_nomenclature' == template[key].type and data[key].label is defined %}
-                        {{ data[key].label }}
-                    {% elseif data[key] is defined %}
-                        {% if data[key] is iterable and data[key].value is defined %}
-                            {{ data[key].value|default('...')|nl2br }}
-                        {% else %}
-                            {{ data[key]|default('...')|nl2br }}
-                        {% endif %}
+                    {% if data[key] is defined and template[key] is defined %}
+                        {{ data[key]|default|format_data(template[key])|nl2br }}
                     {% else %}
                         ...
                     {% endif %}

@@ -64,3 +64,14 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    #
+    # Twig extension
+    #
+    vimeet_app.twig_extension:
+        class: Proximum\Vimeet\Bundle\AppBundle\Twig\AppExtension
+        public: false
+        arguments:
+            - @sonata.intl.templating.helper.locale
+        tags:
+            - { name: twig.extension }
