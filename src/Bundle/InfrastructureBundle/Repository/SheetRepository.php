@@ -23,20 +23,11 @@ class SheetRepository implements SheetRepositoryInterface
     private $entityManager;
 
     /**
-     * @var NomenclatureItemRepositoryInterface
-     */
-    private $nomenclatureItemRepository;
-
-    /**
      * @param EntityManager $entityManager
-     * @param NomenclatureItemRepositoryInterface $nomenclatureItemRepository
      */
-    public function __construct(
-        EntityManager $entityManager,
-        NomenclatureItemRepositoryInterface $nomenclatureItemRepository
-    ) {
-        $this->entityManager              = $entityManager;
-        $this->nomenclatureItemRepository = $nomenclatureItemRepository;
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -111,31 +102,5 @@ class SheetRepository implements SheetRepositoryInterface
         }
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData(Sheet $sheet, $locale)
-    {
-        $sheetTemplate = $sheet->getTypeSheetTemplate();
-        $data          = $sheet->getData();
-
-        foreach ($sheetTemplate as $keyBlock => $block) {
-            if (isset($block['template'])) {
-                foreach ($block['template'] as $keyField => $field) {
-                    if (isset($field['type'])
-                        && 'lib_nomenclature' === $field['type']
-                        && isset($data[$keyBlock][$keyField]['value'])
-                    ) {
-                        $data[$keyBlock][$keyField]['label'] = $this
-                            ->nomenclatureItemRepository
-                            ->getNomenclatureItemLabelById($data[$keyBlock][$keyField]['value'], $locale);
-                    }
-                }
-            }
-        }
-
-        return $data;
     }
 }

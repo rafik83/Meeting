@@ -69,23 +69,26 @@ class SheetController extends BaseController
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
-        $data = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getData($sheet, $request->getLocale());
+        $sheetDataView = $this
+            ->get('vimeet_infrastructure.application.components.sheet.sheet')
+            ->getSheetDataView($sheet, $request->getLocale());
 
         $participantManager = $this->get('vimeet_app.service.participant_manager');
 
         $buttonParticipant['canBuyParticipant'] = $participantManager->canBuyParticipant($sheet);
         $buttonParticipant['addParticipant']    = $participantManager->availableAddParticipant($sheet);
 
-        $participantDeleteForms = [];
-        $participantDeleteForms = $this->addDeleteParticipantForm($request, $sheet, $userParticipant, $participantViews);
+        $participantDeleteForms = $this->addDeleteParticipantForm(
+            $request,
+            $sheet,
+            $userParticipant,
+            $participantViews
+        );
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
-            'sheet'                    => $sheet,
-            'data'                     => $data,
+            'sheetDataView'            => $sheetDataView,
             'participantViews'         => $participantViews,
             'participant_delete_forms' => $participantDeleteForms,
             'buttonPartipant'          => $buttonParticipant,
@@ -203,7 +206,8 @@ class SheetController extends BaseController
                 $form = $this->addRequiredErrorOnForm(
                     $form,
                     $sheet->getType()->getParticipantTemplate(),
-                    $updateParticipant->data
+                    $updateParticipant->data,
+                    $form->get('data')
                 );
             }
         }
@@ -379,7 +383,10 @@ class SheetController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler')->handle($buyParticipant);
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler')
+                    ->handle($buyParticipant);
+
                 $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
