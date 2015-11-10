@@ -18,14 +18,32 @@
             </div>
         {% endfor %}
 
-        <div class="col-md-4">
-            <a href="{{ path('event_sheet_add_participant', {
+        {% if buttonPartipant.addParticipant >= 1 %}
+            {% for i in 1..buttonPartipant.addParticipant %}
+                <div class="col-md-4">
+                    <table class="table table-bordered table-condensed" style="height: 160px;">
+                        <tr>
+                            <td class="text-center">
+                                <a href="{{ path('event_sheet_add_participant', {
+                                    'id': sheet.id,
+                                    'subdomain': app.request.attributes.get('subdomain')
+                                }) }}" class="btn btn-default">
+                                    {{ 'event.sheet.block.add_participant.title'|trans }}
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if buttonPartipant.canBuyParticipant %}
+            <a href="{{ path('event_sheet_buy_participant', {
                 'id': sheet.id,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-default">
-                {{ 'event.sheet.block.add_participant.title'|trans }}
+                {{ 'event.sheet.block.buy_participant.title'|trans }}
             </a>
-        </div>
+        {% endif %}
     </div>
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {

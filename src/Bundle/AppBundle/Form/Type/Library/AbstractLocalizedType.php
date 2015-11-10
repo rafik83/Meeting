@@ -36,5 +36,6 @@ abstract class AbstractLocalizedType extends AbstractType
             'template' => ['array'],
             'locale'   => ['string'],
         ]);
+        $resolver->setDefined(['sheet']);
     }
 }

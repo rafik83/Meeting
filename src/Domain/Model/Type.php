@@ -53,6 +53,21 @@ class Type implements WhoInterface
     private $packageTemplate;
 
     /**
+     * @var int
+     */
+    private $maxParticipant;
+
+    /**
+     * @var int
+     */
+    private $freeParticipant;
+
+    /**
+     * @var int
+     */
+    private $maxPlanning;
+
+    /**
      * @var string
      */
     private $previewTemplate;
@@ -187,6 +202,38 @@ class Type implements WhoInterface
     public function setSheetTemplate($sheetTemplate)
     {
         $this->sheetTemplate = $sheetTemplate;
+    }
+
+    /**
+     * @param string $packageTemplate
+     */
+    public function setPackageTemplate($packageTemplate)
+    {
+        $this->packageTemplate = $packageTemplate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxParticipant()
+    {
+        return $this->maxParticipant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFreeParticipant()
+    {
+        return $this->freeParticipant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPlanning()
+    {
+        return $this->maxPlanning;
     }
 
     /**

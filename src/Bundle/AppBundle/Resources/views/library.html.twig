@@ -78,3 +78,56 @@
         </tbody>
     </table>
 {% endblock %}
+
+{% block lib_planning_row %}
+    {{ form_errors(form) }}
+    <table class="table table-condensed">
+        <thead>
+            <th class="col-md-8">{{ 'event.sheet.package.column.label'|trans }}</th>
+            <th class="col-md-2">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
+            <th class="col-md-2">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{ form_errors(form.planning) }}
+                    {{ form_widget(form.planning) }}&nbsp;{{ form_label(form.planning) }}
+                </td>
+                <td>
+                    {{ template['unitPrice']|number_format_currency('EUR') }}
+                </td>
+                <td>
+                    {{ form_errors(form.planning_bought) }}
+                    {{ form_widget(form.planning_bought) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block lib_participant_row %}
+    {{ form_errors(form) }}
+    <table class="table table-condensed">
+        <thead>
+            <th class="col-md-8">{{ 'event.sheet.package.column.label'|trans }}</th>
+            <th class="col-md-2">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
+            <th class="col-md-2">{{ 'event.sheet.package.column.quantity'|trans }}</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{ form_errors(form.participant) }}
+                    {{ form_widget(form.participant) }}&nbsp;{{ form_label(form.participant) }}&nbsp;
+                    {{ 'event.sheet.package.participant.boughtNumber'|transchoice(boughtParticipant,{'count': boughtParticipant}) }}
+                </td>
+                <td>
+                    {{ template['unitPrice']|number_format_currency('EUR') }}
+                </td>
+                <td>
+                    {{ form_errors(form.participant_bought) }}
+                    {{ form_widget(form.participant_bought) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

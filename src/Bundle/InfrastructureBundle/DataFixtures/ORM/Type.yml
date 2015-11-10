@@ -2,6 +2,9 @@ Proximum\Vimeet\Domain\Model\Type:
     type_exposant:
         position: 0
         event: @event_rdv_carnot_2016
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
         participantTemplate:
             563caf1d9b1cb:
                 type: lib_text
@@ -38,7 +41,7 @@ Proximum\Vimeet\Domain\Model\Type:
                     en: "Brand"
                 linkTo:
                     template: "packageTemplate"
-                    index: 563cae9c37ff6
+                    index: 56407fa453f4e
             563cae566af03:
                 title:
                     fr: "Société"
@@ -125,6 +128,34 @@ Proximum\Vimeet\Domain\Model\Type:
                                     en: "Description sponsoring"
                                 unitPrice: 11000
             563cae9c37ff6:
+                title:
+                    fr: "Augmenter le nombre de participants sur votre fiche"
+                    en: "Traduction en anglais"
+                description:
+                    fr: "description en fr"
+                    en: "description en en"
+                template:
+                    56407f8b58f6b:
+                        label:
+                            fr: "Ajouter des participants"
+                            en: "Add participants"
+                        description:
+                            fr: "Vous pouvez ajouter des participants à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
+                        required: false
+                        type: "lib_participant"
+                        unitPrice: 400
+                    56407f9b2a1a3:
+                        label:
+                            fr: "Ajouter des plannings"
+                            en: "Add plannings"
+                        description:
+                            fr: "Vous pouvez ajouter des plannings à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
+                        required: false
+                        type: "lib_planning"
+                        unitPrice: 550
+            56407fa453f4e:
                 title:
                     fr: "Options proposées pour optimiser votre participation"
                     en: "Options to optimize your participation:"
@@ -290,6 +321,9 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_investisseur:
         position: 1
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
             563caf1d9b1cb:
@@ -414,6 +448,34 @@ Proximum\Vimeet\Domain\Model\Type:
                                     en: "Description sponsoring"
                                 unitPrice: 11000
             563cae9c37ff6:
+                title:
+                    fr: "Augmenter le nombre de participants sur votre fiche"
+                    en: "Traduction en anglais"
+                description:
+                    fr: "description en fr"
+                    en: "description en en"
+                template:
+                    56407f8b58f6b:
+                        label:
+                            fr: "Ajouter des participants"
+                            en: "Add participants"
+                        description:
+                            fr: "Vous pouvez ajouter des participants à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
+                        required: false
+                        type: "lib_participant"
+                        unitPrice: 400
+                    56407f9b2a1a3:
+                        label:
+                            fr: "Ajouter des plannings"
+                            en: "Add plannings"
+                        description:
+                            fr: "Vous pouvez ajouter des plannings à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
+                        required: false
+                        type: "lib_planning"
+                        unitPrice: 550
+            56407fa453f4e:
                 title:
                     fr: "Options proposées pour optimiser votre participation"
                     en: "Options to optimize your participation:"
@@ -579,6 +641,9 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_visiteur:
         position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
             563cafaae8f29:
@@ -630,6 +695,9 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_visiteur_visio:
         position: 3
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
         event: @event_rdv_carnot_2016
         participantTemplate:
             563cafaae8f29:

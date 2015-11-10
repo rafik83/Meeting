@@ -38,6 +38,13 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * @param int $sheetId
+     *
+     * @return Sheet
+     */
+    public function getSheetById($sheetId);
+
+    /**
      * @param Category|int $category
      * @param User|int     $user
      *

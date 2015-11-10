@@ -129,13 +129,7 @@ class HomeController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // Check if the user has already created a participate
-        $participants = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getAllParticipantForUser($this->getUser()->getId());
-
-        if (1 <= count($participants)) {
-            throw new AccessDeniedException('Participation already created');
-        }
+        $this->hasUserAlreadyCreatedParticipant($this->getUser()->getId());
 
         // Create participate form
         $create = new Create();
@@ -167,7 +161,7 @@ class HomeController extends BaseController
                     'id'        => $participate->sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data);
+                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form);
             }
         }
 
@@ -187,5 +181,19 @@ class HomeController extends BaseController
     {
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
+    }
+
+    /**
+     * @param int $userId
+     */
+    private function hasUserAlreadyCreatedParticipant($userId)
+    {
+        $participants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getAllParticipantForUser($userId);
+
+        if (1 <= count($participants)) {
+            throw new AccessDeniedException('Participation already created');
+        }
     }
 }

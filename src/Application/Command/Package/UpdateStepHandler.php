@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateStepHandler
@@ -29,10 +30,36 @@ class UpdateStepHandler
 
     /**
      * @param UpdateStep $updateStep
+     *
+     * @throws BoughtParticipantAlreadyAddedException
      */
     public function handle(UpdateStep $updateStep)
     {
-        $packageData                    = $updateStep->sheet->getPackageData();
+        $packageData = $updateStep->sheet->getPackageData();
+
+        foreach ($updateStep->packageData as $elementKey => $element) {
+            if (isset($element['participant'])) {
+                if ($element['participant']) {
+                    if (!isset($updateStep->packageData[$elementKey]['participant_bought'])) {
+                        $updateStep->packageData[$elementKey]['participant_bought'] = 0;
+                    }
+
+                    if (!isset($packageData[$updateStep->step][$elementKey]['participant_bought'])) {
+                        $packageData[$updateStep->step][$elementKey]['participant_bought'] = 0;
+                    }
+
+                    $boughtAndAddedParticipant = count($updateStep->sheet->getParticipants()) - $updateStep->sheet->getType()->getFreeParticipant();
+                    if ($updateStep->packageData[$elementKey]['participant_bought'] < $boughtAndAddedParticipant) {
+                        throw new BoughtParticipantAlreadyAddedException();
+                    }
+                } else {
+                    if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant()) {
+                        throw new BoughtParticipantAlreadyAddedException();
+                    }
+                }
+            }
+        }
+
         $packageData[$updateStep->step] = $updateStep->packageData;
 
         $updateStep->sheet->setPackageData($packageData);

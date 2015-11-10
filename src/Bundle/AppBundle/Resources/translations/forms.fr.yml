@@ -53,6 +53,16 @@ form:
                 label: Coordonnées du participant
             submit:
                 label: Envoyer
+    buy_participant:
+        children:
+            participantData:
+                children:
+                    email:
+                        label: Email
+            data:
+                label: Coordonnées du participant
+            submit:
+                label: Envoyer
     update_sheet_block:
         children:
             data:
@@ -98,6 +108,7 @@ form:
                 label: Voit
             submit:
                 label: Ajouter
-
+    planning:
+        add_with_participant: Ajouter un planning supplémentaire avec le participant
 country:
-    select: --- Sélectionner un pays ---
+    placeholder: --- Sélectionner un pays ---

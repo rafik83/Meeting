@@ -8,7 +8,7 @@ Feature: Choose a package
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | Package.yml                                        |
 
   Scenario: I can choose the Silver package
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -31,6 +31,10 @@ Feature: Choose a package
     Then I follow "event.sheet.package.step.next"
     And I should see "Forfait de participation"
     When I check the "Forfait Silver" radio
+    And I press "form.update_sheet_package_step.children.submit.label"
+    Then I should see "flash.package.update_step.success"
+    And I check "Ajouter des participants"
+    And I select the quantity "2" for the checkbox "Ajouter des participants"
     And I press "form.update_sheet_package_step.children.submit.label"
     Then I should see "flash.package.update_step.success"
     And I check the "Je ne prends pas" radio

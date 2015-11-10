@@ -81,6 +81,22 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetById($sheetId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from('Entity:Sheet', 'sheet')
+            ->where('sheet.id = :sheetId')
+            ->setParameter('sheetId', $sheetId);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function search($category, $user)
     {
         $queryBuilder = new SearchQueryBuilder($this->entityManager);
