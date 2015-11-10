@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\See;
 use Proximum\Vimeet\Domain\Repository\SeeRepositoryInterface;
