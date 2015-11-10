@@ -58,7 +58,7 @@ class See
         } else {
             throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seer)));
         }
-        
+
         if ($seeable instanceof Type) {
             $this->seeableType = $seeable;
         } elseif ($seeable instanceof Category) {

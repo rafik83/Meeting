@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 use Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class ParticipantType extends AbstractLocalizedType
 {
@@ -93,5 +93,4 @@ class ParticipantType extends AbstractLocalizedType
 
         return array_combine($range, $range);
     }
-
 }

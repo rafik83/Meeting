@@ -29,7 +29,7 @@ class QuantityType extends AbstractType
                 $range = range($options['min'], $options['max'], $options['range']);
 
                 return array_combine($range, $range);
-            }
+            },
         ]);
     }
 

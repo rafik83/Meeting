@@ -58,7 +58,7 @@ class WhoType extends AbstractType
                 ];
             },
             'choices_as_values' => true,
-            'choice_label' => function ($choice) {
+            'choice_label'      => function ($choice) {
                 if ($choice instanceof Type || $choice instanceof Category) {
                     return $choice->getTranslations()->get('fr')->getTitle();
                 }
@@ -74,8 +74,8 @@ class WhoType extends AbstractType
                     return sprintf('category:%s', $choice->getId());
                 }
 
-                return null;
-            }
+                return;
+            },
         ]);
     }
 
