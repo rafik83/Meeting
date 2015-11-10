@@ -194,7 +194,7 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('seeableType.id')
+            ->select('DISTINCT seeableType.id')
             ->from('Entity:Type', 'seeableType', 'seeableType.id')
             ->leftJoin('seeableType.categories', 'seeableCategory')
             ->join('Entity:See', 'see', 'WITH', '(see.seeableType = seeableType OR see.seeableCategory = seeableCategory) AND see IN (:sees)')

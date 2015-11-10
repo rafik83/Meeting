@@ -32,7 +32,7 @@ class CatalogController extends Controller
 
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
-            ->getCategoryViewsByEvent($eventView->id, $request->getLocale());
+            ->getCategoryViewsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Catalog:categories.html.twig', [
             'eventView'  => $eventView,
