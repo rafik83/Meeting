@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Nomenclature:
+    type:  entity
+    table: nomenclature
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        label:
+            type: text
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\NomenclatureTranslation
+            mappedBy: nomenclature
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -1,0 +1,15 @@
+Proximum\Vimeet\Domain\Model\NomenclatureItem:
+    type:  entity
+    table: nomenclature_item
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\NomenclatureItemTranslation
+            mappedBy: nomenclatureItem
+    manyToOne:
+        nomenclature:
+            targetEntity: Proximum\Vimeet\Domain\Model\Nomenclature

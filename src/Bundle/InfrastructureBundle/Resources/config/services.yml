@@ -27,6 +27,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.nomenclature_item_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -109,3 +113,10 @@ services:
         arguments:
             - @vimeet_infrastructure.security.user_password_encoder
 
+    #
+    # Security
+    #
+    vimeet_infrastructure.application.components.sheet.sheet:
+        class: Proximum\Vimeet\Application\Components\Sheet\Sheet
+        arguments:
+            - @vimeet_infrastructure.repository.nomenclature_item_repository

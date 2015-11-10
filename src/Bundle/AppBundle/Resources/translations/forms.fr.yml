@@ -104,3 +104,6 @@ form:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
 country:
     placeholder: --- Sélectionner un pays ---
+
+nomenclature:
+    placeholder: --- Sélectionner un item  ---

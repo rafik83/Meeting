@@ -54,4 +54,3 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
         return 'choice_with_description';
     }
 }
-
