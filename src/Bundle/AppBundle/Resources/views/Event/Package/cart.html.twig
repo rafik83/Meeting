@@ -1,0 +1,49 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+
+    <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
+    <table class="table table-condensed">
+        <thead>
+            <th>{{ 'event.sheet.cart.column.product'|trans }}</th>
+            <th>{{ 'event.sheet.cart.column.unitPrice'|trans }}</th>
+            <th>{{ 'event.sheet.cart.column.quantity'|trans }}</th>
+            <th>{{ 'event.sheet.cart.column.total'|trans }}</th>
+        </thead>
+        <tbody>
+        {% for step in cart  %}
+            {% if step.options is defined and step.options|length > 0 %}
+                <tr class="active">
+                    <td colspan="3">{{ step.title }}</td>
+                    <td>{{ step.subTotal|number_format_currency('EUR') }}</td>
+                </tr>
+                {% for line in step.options %}
+                    <tr>
+                        <td>{{ line.label }} {% if line.choice is defined %}{{ line.choice }}{% endif %}</td>
+                        <td>{{ line.unitPrice|number_format_currency('EUR') }}</td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.total|number_format_currency('EUR') }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% if cart.total is defined %}
+            <tr class="info">
+                <td colspan="3" >{{ 'event.sheet.cart.label.totalPrice'|trans }}</td>
+                <td>{{ cart.total|number_format_currency('EUR') }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="{{ path('event_sheet_billing', {
+            'id'       : sheet.id,
+            'subdomain': app.request.attributes.get('subdomain')
+        }) }}" class="btn btn-primary">
+            {{ 'event.sheet.cart.label.billingStep'|trans }}
+        </a>
+    </div>
+{% endblock %}
