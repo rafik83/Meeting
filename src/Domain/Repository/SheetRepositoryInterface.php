@@ -35,7 +35,7 @@ interface SheetRepositoryInterface
      *
      * @return SheetView[]
      */
-    public function getSheetsIdByUserAndEvent($user, $event, $locale);
+    public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
      * @param Category|int $category
