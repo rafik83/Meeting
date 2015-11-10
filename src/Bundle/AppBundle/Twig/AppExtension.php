@@ -48,8 +48,12 @@ class AppExtension extends \Twig_Extension
         if (isset($fieldTemplate['type']) && isset($value)) {
             if ('lib_country' === $fieldTemplate['type']) {
                 return $this->localeHelper->country($value);
-            } elseif ('lib_nomenclature' === $fieldTemplate['type'] && isset($value['label'])) {
-                return $value['label'];
+            } elseif ('lib_nomenclature' === $fieldTemplate['type']) {
+                if (isset($value['label'])) {
+                    return $value['label'];
+                } else {
+                    return $value['value'];
+                }
             }
         }
 
