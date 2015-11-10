@@ -90,5 +90,14 @@ form:
                             label: Description
             submit:
                 label: Enregistrer
+    who_see_who:
+        children:
+            seer:
+                label: Qui
+            seeable:
+                label: Voit
+            submit:
+                label: Ajouter
+
 country:
     select: --- Sélectionner un pays ---
