@@ -33,8 +33,8 @@ class NomenclatureType extends AbstractLocalizedType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $template       = $options['template'];
-        $locale         = $options['locale'];
+        $template = $options['template'];
+        $locale   = $options['locale'];
 
         $choices = $this->nomenclatureItemRepository->getArrayOfNomenclatureItemsByNomenclatureId(
             $template['id'],
@@ -45,7 +45,7 @@ class NomenclatureType extends AbstractLocalizedType
             'choices'     => $choices,
             'placeholder' => 'nomenclature.placeholder',
             'required'    => isset($template['required']) ? $template['required'] : true,
-            'label' => false,
+            'label'       => false,
         ]);
     }
 
