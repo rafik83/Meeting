@@ -119,4 +119,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         throw new \Exception('Element not found');
     }
+
+    /**
+     * This step help to debug tests
+     *
+     * @When I dump the page
+     */
+    public function iDumpThePage()
+    {
+        echo $this->getSession()->getPage()->getOuterHtml();
+    }
 }

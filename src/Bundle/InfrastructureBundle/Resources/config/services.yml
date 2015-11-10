@@ -76,6 +76,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
             - @vimeet_infrastructure.repository.sheet_repository
+    vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BuyParticipantHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.repository.participant_repository
+            - @vimeet_infrastructure.repository.sheet_repository
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:

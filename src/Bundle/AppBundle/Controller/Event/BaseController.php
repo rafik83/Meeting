@@ -18,14 +18,14 @@ use Symfony\Component\Form\FormError;
 class BaseController extends Controller
 {
     /**
-     * @param Form   $form
-     * @param array  $template
-     * @param array  $data
-     * @param string $dataName
+     * @param Form  $form
+     * @param array $template
+     * @param array $data
+     * @param $formData
      *
      * @return Form
      */
-    protected function addRequiredErrorOnForm(Form $form, array $template, array $data, $dataName = 'data')
+    protected function addRequiredErrorOnForm(Form $form, array $template, array $data, $formData)
     {
         foreach ($data as $key => $value) {
             if (isset($template[$key])
@@ -38,8 +38,44 @@ class BaseController extends Controller
                         ->get('translator')
                         ->trans('validators.field.required', [], 'validators')
                 );
+                $formData->get($key)->addError($error);
+            }
+        }
 
-                $form->get($dataName)->get($key)->addError($error);
+        return $form;
+    }
+
+    /**
+     * @param Form $form
+     * @param array $template
+     * @param array $data
+     * @param $formData
+     *
+     * @return Form
+     */
+    protected function addBoughtParticipantCanNotBeUncheckedErrorOnForm(Form $form, array $template, array $data, $formData)
+    {
+        foreach ($data as $key => $value) {
+            if (isset($template['template'][$key])
+                && isset($value['participant'])
+                && $value['participant'] === false
+            ) {
+                $error = new FormError(
+                    $this
+                        ->get('translator')
+                        ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
+                );
+                $formData->get($key)->addError($error);
+            } elseif (isset($template['template'][$key])
+                && isset($value['participant'])
+                && $value['participant'] === true
+            ) {
+                $error = new FormError(
+                    $this
+                        ->get('translator')
+                        ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
+                );
+                $formData->get($key)->addError($error);
             }
         }
 
@@ -64,5 +100,15 @@ class BaseController extends Controller
         if (!$isUserParticipant) {
             throw new AccessDeniedException('You can not update this data');
         }
+    }
+
+    /**
+     * @param $error
+     * @param $field
+     */
+    protected function addGivenErrorOnGivenField($error, $field)
+    {
+        $error = new FormError($error);
+        $field->addError($error);
     }
 }

@@ -8,19 +8,25 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddParticipantType extends AbstractAddParticipantType
+class BuyParticipantOptionType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
+        $builder
+            ->add('planning', 'checkbox', [
+                'label'    => 'form.planning.add_with_participant',
+                'required' => false,
+            ])
+        ;
     }
 
     /**
@@ -28,12 +34,7 @@ class AddParticipantType extends AbstractAddParticipantType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Add',
-            'intention'  => 'add_participant',
-        ]);
+        $resolver->setRequired(['template', 'locale']);
     }
 
     /**
@@ -41,6 +42,6 @@ class AddParticipantType extends AbstractAddParticipantType
      */
     public function getName()
     {
-        return 'add_participant';
+        return 'buy_participant_option';
     }
 }

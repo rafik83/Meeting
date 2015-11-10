@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateStepType extends AbstractType
+class BuyParticipantType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -22,10 +22,15 @@ class UpdateStepType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('packageData', new DataPackageType(), [
+            ->add('participantData', new BuyAddParticipantType(), [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
-                'sheet'    => $options['sheet'],
+                'label'    => false,
+            ])
+            ->add('participantBuyOption', new BuyParticipantOptionType(), [
+                'template' => $options['template'],
+                'locale'   => $options['locale'],
+                'required' => false,
                 'label'    => false,
             ])
         ;
@@ -37,12 +42,11 @@ class UpdateStepType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
-            'intention'  => 'update_sheet_package_step',
+            'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\BuyParticipant',
+            'intention'  => 'buy_participant',
         ]);
 
         $resolver->setRequired(['template', 'locale']);
-        $resolver->setDefined(['sheet']);
     }
 
     /**
@@ -50,6 +54,6 @@ class UpdateStepType extends AbstractType
      */
     public function getName()
     {
-        return 'update_sheet_package_step';
+        return 'buy_participant';
     }
 }
