@@ -20,6 +20,7 @@ register:
 event:
     link:
         see_my_sheet: Voir ma fiche %type%
+        see_catalog: Voir le catalogue
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté
