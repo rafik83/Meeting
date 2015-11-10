@@ -21,7 +21,7 @@
                 </tr>
                 {% for line in step.options %}
                     <tr>
-                        <td>{{ line.label }} {% if line.choice is defined %}{{ line.choice }}{% endif %}</td>
+                        <td>{{ line.label }}</td>
                         <td class="text-right">{{ line.unitPrice|number_format_currency('EUR') }}</td>
                         <td class="text-right">{{ line.quantity }}</td>
                         <td class="text-right">{{ line.total|number_format_currency('EUR') }}</td>
