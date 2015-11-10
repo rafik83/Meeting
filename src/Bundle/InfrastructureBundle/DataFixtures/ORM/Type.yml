@@ -184,6 +184,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                     fr: "Je ne prends pas"
                                     en: "I do not take"
                                 description: { "fr": "", "en": "" }
+                                placeholder: true
                                 unitPrice: 0
                     563caeb152464:
                         type: "lib_text"
@@ -233,6 +234,7 @@ Proximum\Vimeet\Domain\Model\Type:
                                 description:
                                     fr: ""
                                     en: ""
+                                placeholder: true
                                 unitPrice: 0
                     563caec361723:
                         type: "lib_text"
