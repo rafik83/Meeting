@@ -109,3 +109,28 @@ services:
         arguments:
             - @vimeet_infrastructure.security.user_password_encoder
 
+    #
+    # Components
+    #
+    vimeet_infrastructure.application.components.cart.cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Cart
+        calls:
+           - [registerCart, ['libChoiceWithDescription', '@vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart']]
+           - [registerCart, ['libOption', '@vimeet_infrastructure.application.components.cart.carts.lib_option_cart']]
+           - [registerCart, ['libParticipant', '@vimeet_infrastructure.application.components.cart.carts.lib_participant_cart']]
+           - [registerCart, ['libPlanning', '@vimeet_infrastructure.application.components.cart.carts.lib_planning_cart']]
+           - [registerCart, ['libUploadWithChoices', '@vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart']]
+
+    #
+    # Carts components
+    #
+    vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart
+    vimeet_infrastructure.application.components.cart.carts.lib_option_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart
+    vimeet_infrastructure.application.components.cart.carts.lib_participant_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibParticipantCart
+    vimeet_infrastructure.application.components.cart.carts.lib_planning_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
+    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart

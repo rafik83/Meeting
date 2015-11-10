@@ -74,7 +74,6 @@ class PackageController extends BaseController
         ]);
     }
 
-
     /**
      * @param Request $request
      * @param EventView $eventView
@@ -87,112 +86,13 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $cart = $this->renderCart($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart')->cartBuilder($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'cart'      => $cart,
         ]);
-    }
-
-    /**
-     * @param array  $packageTemplate
-     * @param array  $packageData
-     * @param string $locale
-     *
-     * @return array $cart
-     */
-    private function renderCart(array $packageTemplate, array $packageData, $locale)
-    {
-        $cart  = [];
-        $total = 0;
-
-        foreach ($packageTemplate as $blockKey => $block) {
-            $data            = [];
-            $data['title']    = $block['title'][$locale];
-            $data['options'] = [];
-            $subTotal        = 0;
-
-            foreach ($block['template'] as $templateKey => $template) {
-                if (isset($template['type'])) {
-                    $options = [];
-
-                    if ($template['type'] === 'choice_with_description') {
-                        if (isset($packageData[$blockKey][$templateKey]['value'])) {
-                            $options['label']     = $template['label'][$locale];
-                            $options['choice']    = $template['choices'][$packageData[$blockKey][$templateKey]['value']]['label'][$locale];
-                            $options['quantity']  = 1;
-                            $options['unitPrice'] = $template['choices'][$packageData[$blockKey][$templateKey]['value']]['unitPrice'];
-                            $options['total']     = $options['quantity'] * $options['unitPrice'];
-                        }
-                    }
-
-                    if ($template['type'] === 'lib_participant') {
-                        if (isset($packageData[$blockKey][$templateKey]['participant'])
-                            && $packageData[$blockKey][$templateKey]['participant'] === true
-                        ) {
-                            $options['label']     = $template['label'][$locale];
-                            $options['quantity']  = isset($packageData[$blockKey][$templateKey]['participant_bought']) && $packageData[$blockKey][$templateKey]['participant_bought'] !== null ? $packageData[$blockKey][$templateKey]['participant_bought'] : 0;
-                            $options['unitPrice'] = $template['unitPrice'];
-                            $options['total']     = $options['quantity'] * $options['unitPrice'];
-                        }
-                    }
-
-                    if ($template['type'] === 'lib_planning') {
-                        if (isset($packageData[$blockKey][$templateKey]['planning'])
-                            && $packageData[$blockKey][$templateKey]['planning'] === true
-                        ) {
-                            $options['label']     = $template['label'][$locale];
-                            $options['quantity']  = isset($packageData[$blockKey][$templateKey]['planning_bought']) && $packageData[$blockKey][$templateKey]['planning_bought'] !== null ? $packageData[$blockKey][$templateKey]['planning_bought'] : 0;
-                            $options['unitPrice'] = $template['unitPrice'];
-                            $options['total']     = $options['quantity'] * $options['unitPrice'];
-                        }
-                    }
-
-                    if ($template['type'] === 'upload_with_choices') {
-                        if (isset($packageData[$blockKey][$templateKey]['value']['value'])) {
-                            if (!isset($template['choices'][$packageData[$blockKey][$templateKey]['value']['value']]['placeholder'])
-                            ) {
-                                $options['label']     = $template['label'][$locale];
-                                $options['choice']    = $template['choices'][$packageData[$blockKey][$templateKey]['value']['value']]['label'][$locale];
-                                $options['quantity']  = isset($packageData[$blockKey][$templateKey]['value']['quantity']) ? $packageData[$blockKey][$templateKey]['value']['quantity'] : 1;
-                                $options['unitPrice'] = $template['choices'][$packageData[$blockKey][$templateKey]['value']['value']]['unitPrice'];
-                                $options['total']     = $options['quantity'] * $options['unitPrice'];
-                            }
-                        }
-
-                    }
-
-                    if ($template['type'] === 'lib_option') {
-                        if (isset($packageData[$blockKey][$templateKey]['value']) && $packageData[$blockKey][$templateKey]['value'] !== false) {
-                            $options['label']     = $template['label'][$locale];
-                            $options['unitPrice'] = $template['unitPrice'];
-                            $options['quantity']  = isset($packageData[$blockKey][$templateKey]['quantity']) && $packageData[$blockKey][$templateKey]['quantity'] !== null ? $packageData[$blockKey][$templateKey]['quantity'] : 1;
-                            $options['total']     = $options['quantity'] * $options['unitPrice'];
-                        }
-
-                    }
-                }
-
-                if(isset($options['total'])) {
-                    $total += $options['total'];
-                    $subTotal += $options['total'];
-                }
-
-                if ($options !== []) {
-                    array_push($data['options'], $options);
-                }
-            }
-
-            $data['subTotal'] = $subTotal;
-            array_push($cart, $data);
-        }
-
-        $cart['total'] = $total;
-
-        return $cart;
-
     }
 
     /**
