@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\See:
             generator:
                 strategy: AUTO
     manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
         seerType:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
         seerCategory:

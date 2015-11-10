@@ -18,6 +18,11 @@ class See
     private $id;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var Type
      */
     private $seerType;
@@ -38,11 +43,14 @@ class See
     private $seeableCategory;
 
     /**
+     * @param Event        $event
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      */
-    public function __construct(WhoInterface $seer, WhoInterface $seeable)
+    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
+        $this->event = $event;
+
         if ($seer instanceof Type) {
             $this->seerType = $seer;
         } elseif ($seer instanceof Category) {
@@ -68,6 +76,16 @@ class See
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 
     /**
