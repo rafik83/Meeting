@@ -43,4 +43,18 @@ class SearchQueryBuilder extends QueryBuilder
 
         return $this;
     }
+
+    /**
+     * @param array $types
+     *
+     * @return SearchQueryBuilder
+     */
+    public function withTypes(array $types)
+    {
+        $this
+            ->andWhere('type IN (:types)')
+            ->setParameter('types', $types);
+
+        return $this;
+    }
 }

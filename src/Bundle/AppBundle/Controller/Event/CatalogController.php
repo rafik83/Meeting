@@ -28,6 +28,8 @@ class CatalogController extends Controller
      */
     public function categoriesAction(Request $request, EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
             ->getCategoryViewsByEvent($eventView->id, $request->getLocale());
@@ -48,9 +50,11 @@ class CatalogController extends Controller
      */
     public function categoryAction(EventView $eventView, CategoryView $categoryView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $sheets  = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->search($categoryView->id);
+            ->search($categoryView->id, $this->getUser());
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
             'eventView'    => $eventView,

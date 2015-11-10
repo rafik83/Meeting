@@ -39,8 +39,9 @@ interface SheetRepositoryInterface
 
     /**
      * @param Category|int $category
+     * @param User|int     $user
      *
      * @return Sheet[]
      */
-    public function search($category);
+    public function search($category, $user);
 }
