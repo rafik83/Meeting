@@ -47,16 +47,8 @@ class Cart
                     $options   = [];
                     $dataValue = isset($packageData[$blockKey][$templateKey]) ? $packageData[$blockKey][$templateKey] : null;
 
-                    if ($template['type'] === 'choice_with_description') {
-                        $options = $this->cartLibs['libChoiceWithDescription']->prepare($template, $dataValue, $locale);
-                    } elseif ($template['type'] === 'lib_participant') {
-                        $options = $this->cartLibs['libParticipant']->prepare($template, $dataValue, $locale);
-                    } elseif ($template['type'] === 'lib_planning') {
-                        $options = $this->cartLibs['libPlanning']->prepare($template, $dataValue, $locale);
-                    } elseif ($template['type'] === 'upload_with_choices') {
-                        $options = $this->cartLibs['libUploadWithChoices']->prepare($template, $dataValue, $locale);
-                    } elseif ($template['type'] === 'lib_option') {
-                        $options = $this->cartLibs['libOption']->prepare($template, $dataValue, $locale);
+                    if (isset($this->cartLibs[$template['type']])) {
+                        $options = $this->cartLibs[$template['type']]->prepare($template, $dataValue, $locale);
                     }
                 }
 

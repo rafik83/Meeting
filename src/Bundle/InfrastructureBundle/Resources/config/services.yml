@@ -115,11 +115,11 @@ services:
     vimeet_infrastructure.application.components.cart.cart:
         class: Proximum\Vimeet\Application\Components\Cart\Cart
         calls:
-           - [registerCart, ['libChoiceWithDescription', '@vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart']]
-           - [registerCart, ['libOption', '@vimeet_infrastructure.application.components.cart.carts.lib_option_cart']]
-           - [registerCart, ['libParticipant', '@vimeet_infrastructure.application.components.cart.carts.lib_participant_cart']]
-           - [registerCart, ['libPlanning', '@vimeet_infrastructure.application.components.cart.carts.lib_planning_cart']]
-           - [registerCart, ['libUploadWithChoices', '@vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart']]
+           - [registerCart, ['choice_with_description', '@vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart']]
+           - [registerCart, ['lib_option', '@vimeet_infrastructure.application.components.cart.carts.lib_option_cart']]
+           - [registerCart, ['lib_participant', '@vimeet_infrastructure.application.components.cart.carts.lib_participant_cart']]
+           - [registerCart, ['lib_planning', '@vimeet_infrastructure.application.components.cart.carts.lib_planning_cart']]
+           - [registerCart, ['upload_with_choices', '@vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart']]
 
     #
     # Carts components
