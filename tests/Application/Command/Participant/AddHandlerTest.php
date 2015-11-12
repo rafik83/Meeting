@@ -25,7 +25,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWhenUserNotExists()
     {
         $event = new Event();
-        $type  = new Type();
+        $type  = new Type($event);
         $type->setParticipantTemplate([
             'foobar' => [
                 'required' => 'true',
@@ -56,7 +56,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWhenUserExists()
     {
         $event = new Event();
-        $type  = new Type();
+        $type  = new Type($event);
         $type->setParticipantTemplate([
             'foobar' => [
                 'required' => true,

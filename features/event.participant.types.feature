@@ -4,6 +4,7 @@ Feature: Show the homepage of an event
   Background:
     Given the database is empty
     And the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml     |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
