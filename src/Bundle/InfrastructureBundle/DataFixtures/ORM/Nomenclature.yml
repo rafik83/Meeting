@@ -1,4 +1,3 @@
-# Activité économique
 Proximum\Vimeet\Domain\Model\Nomenclature:
     nomenclature_activity:
         event: @event_rdv_carnot_2016
