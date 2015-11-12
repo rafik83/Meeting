@@ -42,3 +42,7 @@ Enable/Disable php xdebug
 * *OPcache Dashboard*: http://vimeet.proximum.dev:2013
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
 * *openl10n*: http://openl10n-app.elao.ninja/ or http://openl10n.elao.ninja/
+
+### Fixtures
+
+User exhibitor: test@elao.com / p@ssw0rd
