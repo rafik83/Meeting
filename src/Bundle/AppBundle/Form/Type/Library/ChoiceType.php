@@ -10,14 +10,47 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChoiceType extends AbstractLocalizedType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['template', 'locale']);
+        $resolver->setDefaults([
+           'placeholder' => 'choice.placeholder',
+           'choices' => function (Options $options) {
+               return $this->getChoices($options);
+           }
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'choice';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'lib_choice';
+    }
+
+    /**
+     * @param $options
+     *
+     * @return array
+     */
+    private function getChoices($options)
     {
         $template  = $options['template'];
         $locale    = $options['locale'];
@@ -49,19 +82,6 @@ class ChoiceType extends AbstractLocalizedType
             asort($choices);
         }
 
-        $builder->add('value', 'choice', [
-            'choices'     => $choices,
-            'placeholder' => 'choice.placeholder',
-            'required'    => isset($template['required']) ? $template['required'] : true,
-            'label'       => false,
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'lib_choice';
+        return $choices;
     }
 }

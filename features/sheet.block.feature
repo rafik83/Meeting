@@ -4,11 +4,11 @@ Feature: Update a sheet block
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
-      | User.yml                                                      |
-      | Sheet.yml                                                     |
-      | Participant.yml                                               |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
+      | User.yml                                               |
+      | Sheet.yml                                              |
+      | Participant.yml                                        |
 
   Scenario: I can set my company informations
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -17,19 +17,15 @@ Feature: Update a sheet block
     And I press "form.login.children.submit.label"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/update_block/563cae566af03"
     And I fill in the following:
-      | Nom                                         | CompanySAS             |
-      | Adresse                                     | 1 rue de Clery, Paris  |
-      | Site web                                    | http://www.site.web    |
-      | Descriptif                                  | Lorem ipsum            |
-      | Pays                                        | FR                     |
-      # Activité
-      | update_sheet_block_data_563cb1036EB88_value | activity2              |
-      # Taille
-      #| update_sheet_block_data_5641f581998c1_value | 27                     |
-      # Chiffre d'affaire
-      #| update_sheet_block_data_5641f59737211_value | 28                     |
-      # Type de structure
-      #| update_sheet_block_data_5641f59e537b9_value | 34                     |
+      | Nom               | CompanySAS             |
+      | Adresse           | 1 rue de Clery, Paris  |
+      | Site web          | http://www.site.web    |
+      | Descriptif        | Lorem ipsum            |
+      | Pays              | FR                     |
+      | Activité          | activity2              |
+      | Taille            | size3                  |
+      | Chiffre d'affaire | turnover2              |
+      | Statut juridique  | status1                |
     And I press "form.update_sheet_block.children.submit.label"
     Then I should see "Pays"
     And I should see "France"

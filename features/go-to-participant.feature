@@ -4,11 +4,11 @@ Feature: Test to go to the participant sheet
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
-      | User.yml                                                      |
-      | Sheet.yml                                                     |
-      | Participant.yml                                               |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
+      | User.yml                                               |
+      | Sheet.yml                                              |
+      | Participant.yml                                        |
 
   Scenario: I can go to the participant sheet of the user
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

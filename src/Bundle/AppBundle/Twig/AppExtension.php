@@ -49,9 +49,8 @@ class AppExtension extends \Twig_Extension
         if (isset($fieldTemplate['type']) && isset($value)) {
             if ('lib_country' === $fieldTemplate['type']) {
                 return $this->localeHelper->country($value, $locale);
-            } elseif ('lib_choice' === $fieldTemplate['type'] && isset($value['value'])) {
+            } elseif ('lib_choice' === $fieldTemplate['type']) {
                 $choices = $fieldTemplate['choices'];
-                $value   = $value['value'];
 
                 foreach ($choices as $key => $choice) {
                     if (isset($choices[$value]['label'])) {
@@ -62,6 +61,8 @@ class AppExtension extends \Twig_Extension
                         }
                     }
                 }
+
+                return;
             }
         }
 
