@@ -25,7 +25,7 @@ class CartStep
     private $subTotal;
 
     /**
-     * @var ArrayCollection
+     * @var CartRow[]
      */
     private $cartRows;
 
@@ -70,7 +70,7 @@ class CartStep
     }
 
     /**
-     * @return ArrayCollection
+     * @return CartRow[]
      */
     public function getCartRows()
     {

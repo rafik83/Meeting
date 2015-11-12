@@ -20,7 +20,7 @@ class Cart
     private $total;
 
     /**
-     * @var ArrayCollection
+     * @var CartStep[]
      */
     private $cartSteps;
 
@@ -59,7 +59,7 @@ class Cart
     }
 
     /**
-     * @return ArrayCollection
+     * @return CartStep[]
      */
     public function getCartSteps()
     {
