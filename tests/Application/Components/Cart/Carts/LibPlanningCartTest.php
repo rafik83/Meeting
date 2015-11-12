@@ -10,8 +10,8 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +24,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibPlanningCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
@@ -41,9 +39,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibPlanningCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
@@ -67,20 +63,13 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
             'planning_bought' => 2,
         ];
 
-        $result = [
-            'label'     => 'Ajouter des plannings',
-            'quantity'  => 2,
-            'unitPrice' => 550,
-            'total'     => 1100,
-        ];
+        $result = new CartRow('Ajouter des plannings', 2, 550);
 
         $locale = 'fr';
 
         $optionCart = new LibPlanningCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($result !== $cart) {
-            throw new Exception('Cart should not be empty');
-        }
+        $this->assertEquals($result, $cart);
     }
 }

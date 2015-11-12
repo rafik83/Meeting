@@ -10,8 +10,8 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class LibChoiceWithDescriptionCartTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +24,7 @@ class LibChoiceWithDescriptionCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibChoiceWithDescriptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
@@ -41,9 +39,7 @@ class LibChoiceWithDescriptionCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibChoiceWithDescriptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
@@ -134,20 +130,13 @@ class LibChoiceWithDescriptionCartTest extends \PHPUnit_Framework_TestCase
             'value'    => '563cb15fbf353',
         ];
 
-        $result = [
-            'label'     => 'Forfait : Formule de sponsoring des CONFERENCES',
-            'quantity'  => 1,
-            'unitPrice' => 11000,
-            'total'     => 11000,
-        ];
+        $result = new CartRow('Forfait : Formule de sponsoring des CONFERENCES', 1, 11000);
 
         $locale = 'fr';
 
         $optionCart = new LibChoiceWithDescriptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($result !== $cart) {
-            throw new Exception('Cart should not be empty');
-        }
+        $this->assertEquals($result, $cart);
     }
 }

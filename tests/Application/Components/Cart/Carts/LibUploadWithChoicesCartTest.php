@@ -10,8 +10,8 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class LibUploadWithChoicesCartTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +24,7 @@ class LibUploadWithChoicesCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibUploadWithChoicesCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
@@ -42,9 +40,7 @@ class LibUploadWithChoicesCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibUploadWithChoicesCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithPlaceholder()
@@ -96,16 +92,12 @@ class LibUploadWithChoicesCartTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $result = [];
-
         $locale    = 'fr';
 
         $optionCart = new LibUploadWithChoicesCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($result !== $cart) {
-            throw new Exception('Cart should not be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
@@ -157,20 +149,13 @@ class LibUploadWithChoicesCartTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $result = [
-            'label'     => "Votre logo : L’insertion de votre logo sur le catalogue en ligne",
-            'quantity'  => 1,
-            'unitPrice' => 59,
-            'total'     => 59,
-        ];
+        $result = new CartRow("Votre logo : L’insertion de votre logo sur le catalogue en ligne", 1, 59);
 
         $locale = 'fr';
 
         $optionCart = new LibUploadWithChoicesCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($result !== $cart) {
-            throw new Exception('Cart should not be empty');
-        }
+        $this->assertEquals($result, $cart);
     }
 }

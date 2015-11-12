@@ -10,8 +10,8 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class LibOptionCartTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +24,7 @@ class LibOptionCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibOptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
@@ -42,9 +40,7 @@ class LibOptionCartTest extends \PHPUnit_Framework_TestCase
         $optionCart = new LibOptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($cart !== []) {
-            throw new Exception('Cart should be empty');
-        }
+        $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
@@ -71,20 +67,17 @@ class LibOptionCartTest extends \PHPUnit_Framework_TestCase
             'quantity' => 3,
         ];
 
-        $result = [
-            'label'     => 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"',
-            'quantity'  => 3,
-            'unitPrice' => 5990,
-            'total'     => 17970,
-        ];
+        $result = new CartRow(
+            'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"',
+            3,
+            5990
+        );
 
         $locale = 'fr';
 
         $optionCart = new LibOptionCart();
         $cart       = $optionCart->prepare($template, $dataValue, $locale);
 
-        if ($result !== $cart) {
-            throw new Exception('Cart should not be empty');
-        }
+        $this->assertEquals($result, $cart);
     }
 }

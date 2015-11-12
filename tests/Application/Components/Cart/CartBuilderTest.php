@@ -10,28 +10,24 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\Cart;
 use Proximum\Vimeet\Application\Components\Cart\CartBuilder;
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Proximum\Vimeet\Application\Components\Cart\CartStep;
 
 class CartBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testCartBuilderWithEmptyTemplateAndData()
     {
-        $template  = [];
-        $dataValue = [];
-        $locale    = 'fr';
-
-        $result = [
-            'total' => 0,
-        ];
-
+        $template   = [];
+        $dataValue  = [];
+        $locale     = 'fr';
+        $result     = new Cart(0);
         $cart       = new CartBuilder();
-        $cartResult = $cart->cartBuilder($template, $dataValue, $locale);
+        $cartResult = $cart->create($template, $dataValue, $locale);
 
-        if ($result !== $cartResult) {
-            throw new Exception('The given cart is not correct');
-        }
+        $this->assertEquals($result, $cartResult);
     }
 
     public function testCartBuilder()
@@ -140,21 +136,11 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $result = [
-            0 => [
-                'title'   => 'Forfait de participation',
-                'options' => [
-                    0 => [
-                        'label'     => 'Forfait : Formule de sponsoring des CONFERENCES',
-                        'quantity'  => 1,
-                        'unitPrice' => 11000,
-                        'total'     => 11000,
-                    ],
-                ],
-                'subTotal' => 11000,
-            ],
-            'total' => 11000,
-        ];
+        $result = new Cart(0);
+        $resultStep = new CartStep('Forfait de participation', 0);
+        $libChoiceWithDescriptionResult = new CartRow('Forfait : Formule de sponsoring des CONFERENCES', 1, 11000);
+        $resultStep->addCartRow($libChoiceWithDescriptionResult);
+        $result->addCartStep($resultStep);
 
         $libChoiceWithDescriptionTemplate = [
             'label'       =>
@@ -242,13 +228,6 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
             'value'    => '563cb15fbf353',
         ];
 
-        $libChoiceWithDescriptionResult = [
-            'label'     => 'Forfait : Formule de sponsoring des CONFERENCES',
-            'quantity'  => 1,
-            'unitPrice' => 11000,
-            'total'     => 11000,
-        ];
-
         $locale = 'fr';
         $cart   = new CartBuilder();
 
@@ -260,10 +239,8 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
 
         $cart->registerCart('choice_with_description', $libChoiceWithDescription->reveal());
 
-        $cartResult = $cart->cartBuilder($template, $dataValue, $locale);
+        $cartResult = $cart->create($template, $dataValue, $locale);
 
-        if ($result !== $cartResult) {
-            throw new Exception('The given cart is not correct');
-        }
+        $this->assertEquals($result, $cartResult);
     }
 }
