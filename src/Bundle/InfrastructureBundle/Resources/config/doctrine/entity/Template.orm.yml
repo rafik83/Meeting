@@ -1,0 +1,13 @@
+Proximum\Vimeet\Domain\Model\Template:
+    type:  entity
+    table: template
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: string
+        data:
+            type: json_array
