@@ -10,24 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Proximum\Vimeet\Domain\Repository\NomenclatureItemRepositoryInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class NomenclatureType extends AbstractLocalizedType
+class ChoiceType extends AbstractLocalizedType
 {
-    /**
-     * @var NomenclatureItemRepositoryInterface
-     */
-    private $nomenclatureItemRepository;
-
-    /**
-     * @param NomenclatureItemRepositoryInterface $nomenclatureItemRepository
-     */
-    public function __construct(NomenclatureItemRepositoryInterface $nomenclatureItemRepository)
-    {
-        $this->nomenclatureItemRepository = $nomenclatureItemRepository;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -35,15 +21,17 @@ class NomenclatureType extends AbstractLocalizedType
     {
         $template = $options['template'];
         $locale   = $options['locale'];
+        $choices  = [];
 
-        $choices = $this->nomenclatureItemRepository->getArrayOfNomenclatureItemsByNomenclatureId(
-            $template['id'],
-            $locale
-        );
+        foreach ($template['choices'] as $key => $choice) {
+            $choices[$key] = $choice['label'][$locale];
+        }
+
+        asort($choices);
 
         $builder->add('value', 'choice', [
             'choices'     => $choices,
-            'placeholder' => 'nomenclature.placeholder',
+            'placeholder' => 'choice.placeholder',
             'required'    => isset($template['required']) ? $template['required'] : true,
             'label'       => false,
         ]);
@@ -54,6 +42,6 @@ class NomenclatureType extends AbstractLocalizedType
      */
     public function getName()
     {
-        return 'lib_nomenclature';
+        return 'lib_choice';
     }
 }

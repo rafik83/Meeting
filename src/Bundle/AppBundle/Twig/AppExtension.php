@@ -40,20 +40,17 @@ class AppExtension extends \Twig_Extension
     /**
      * @param mixed  $value
      * @param string $fieldTemplate
+     * @param string $locale
      *
      * @return string
      */
-    public function formatData($value, $fieldTemplate)
+    public function formatData($value, $fieldTemplate, $locale)
     {
         if (isset($fieldTemplate['type']) && isset($value)) {
             if ('lib_country' === $fieldTemplate['type']) {
-                return $this->localeHelper->country($value);
-            } elseif ('lib_nomenclature' === $fieldTemplate['type']) {
-                if (isset($value['label'])) {
-                    return $value['label'];
-                } else {
-                    return $value['value'];
-                }
+                return $this->localeHelper->country($value, $locale);
+            } elseif ('lib_choice' === $fieldTemplate['type']) {
+                return $fieldTemplate['choices'][$value['value']]['label'][$locale];
             }
         }
 

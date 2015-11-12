@@ -5,7 +5,6 @@ Feature: Test to go to the participant sheet
     Given the database is empty
     And the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
       | User.yml                                                      |
       | Sheet.yml                                                     |
