@@ -52,7 +52,7 @@ class Cart
                     }
                 }
 
-                if(isset($options['total'])) {
+                if (isset($options['total'])) {
                     $total += $options['total'];
                     $subTotal += $options['total'];
                 }
