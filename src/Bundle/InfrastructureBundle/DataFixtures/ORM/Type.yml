@@ -79,9 +79,41 @@ Proximum\Vimeet\Domain\Model\Type:
                             activity19: { label: { "fr": "AUTRES ACTIVITÉS DE SERVICES", "en": "AUTRES ACTIVITÉS DE SERVICES" } }
                             activity20: { label: { "fr": "ACT. MÉNAGES: EMPL., PROD. PR US. PROPRE", "en": "ACT. MÉNAGES: EMPL., PROD. PR US. PROPRE" } }
                             activity21: { label: { "fr": "ACTIVITÉS EXTRA-TERRITORIALES", "en": "ACTIVITÉS EXTRA-TERRITORIALES" } }
-                    #5641f581998c1: { "type": "lib_nomenclature", "id": @nomenclature_size->id, "required": false, "private": false, "label": { "fr": "Taille", "en": "Size" } }
-                    #5641f59737211: { "type": "lib_nomenclature", "id": @nomenclature_turnover->id, "required": false, "private": false, "label": { "fr": "Chiffre d'affaire", "en": "Turnover" } }
-                    #5641f59e537b9: { "type": "lib_nomenclature", "id": @nomenclature_type->id, "required": false, "private": false, "label": { "fr": "Type de structure", "en": "Type" } }
+                    5641f581998c1:
+                        type: "lib_choice"
+                        label: { "fr": "Taille", "en": "Size" }
+                        required": false
+                        private: false
+                        choices:
+                            size1: { label: { "fr": "0-9", "en": "0-9" } }
+                            size2: { label: { "fr": "TPE (10-49)", "en": "TPE (10-49)" } }
+                            size3: { label: { "fr": "PME (50-249)", "en": "PME (50-249)" } }
+                            size4: { label: { "fr": "ETI (250-4999)", "en": "ETI (250-4999)" } }
+                            size5: { label: { "fr": "Grande entreprise/Groupes", "en": "Big company / Group" } }
+                    5641f59737211:
+                        type: "lib_choice"
+                        label: { "fr": "Chiffre d'affaire", "en": "Turnover" }
+                        required": false
+                        private: false
+                        choices:
+                            turnover1: { label: { "fr": "NC", "en": "NC" } }
+                            turnover2: { label: { "fr": "< 2M€", "en": "< 2M€" } }
+                            turnover3: { label: { "fr": "2-10 M€", "en": "2-10 M€" } }
+                            turnover4: { label: { "fr": "10-50 M€", "en": "10-50 M€" } }
+                            turnover5: { label: { "fr": "50-1500 M€", "en": "50-1500 M€" } }
+                            turnover6: { label: { "fr": ">1500 M€", "en": ">1500 M€" } }
+                    5641f59e537b9:
+                        type: "lib_choice"
+                        label: { "fr": "Statut juridique", "en": "Status" }
+                        required": false
+                        private: false
+                        choices:
+                            status1: { label: { "fr": "EI", "en": "EI" } }
+                            status2: { label: { "fr": "EIRL", "en": "EIRL" } }
+                            status3: { label: { "fr": "SARL", "en": "SARL" } }
+                            status4: { label: { "fr": "SA", "en": "SA" } }
+                            status5: { label: { "fr": "SAS/SASU", "en": "SAS/SASU" } }
+                            status6: { label: { "fr": "SNC", "en": "SNC" } }
             563cae5f48ce2:
                 title:
                     fr: "Offres"
