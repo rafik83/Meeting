@@ -7,10 +7,12 @@ Feature: Show the homepage of an event
 
   Scenario: Show the homepage of 'Les rendez-vous Carnot 2016' in French
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And the response status code should be 200
     Then I should see "Les rendez-vous CARNOT 2016"
     Then I should see "LES RENDEZ-VOUS"
 
   Scenario: Show the homepage of 'Les rendez-vous Carnot 2016' in English
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en/"
+    And the response status code should be 200
     Then I should see "Les rendez-vous Carnot 2016"
     Then I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation."
