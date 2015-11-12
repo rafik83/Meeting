@@ -4,12 +4,12 @@ Feature: Update a sheet block
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml                   |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml                    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/NomenclatureActivities.yml  |
-      | User.yml                                                                 |
-      | Sheet.yml                                                                |
-      | Participant.yml                                                          |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
+      | User.yml                                                      |
+      | Sheet.yml                                                     |
+      | Participant.yml                                               |
 
   Scenario: I can set my company informations
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
