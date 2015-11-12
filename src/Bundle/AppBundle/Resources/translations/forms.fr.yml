@@ -134,3 +134,6 @@ form:
 
 country:
     placeholder: --- Sélectionner un pays ---
+
+nomenclature:
+    placeholder: --- Sélectionner un item  ---

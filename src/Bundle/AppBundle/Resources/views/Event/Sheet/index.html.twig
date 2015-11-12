@@ -11,8 +11,9 @@
         {% for participantView in participantViews %}
             <div class="col-md-4">
                 {% include 'VimeetAppBundle:Event/Sheet:participant.html.twig' with {
-                    'template'               : sheet.type.participantTemplate,
-                    'participant'            : participantView,
+                    'sheetDataView': sheetDataView,
+                    'template': sheetDataView.type.participantTemplate,
+                    'participant': participantView,
                     'participant_delete_form': participant_delete_forms is not empty and participant_delete_forms[participantView.id] is defined ? participant_delete_forms[participantView.id] : null
                 } %}
             </div>
@@ -25,7 +26,7 @@
                         <tr>
                             <td class="text-center">
                                 <a href="{{ path('event_sheet_add_participant', {
-                                    'id': sheet.id,
+                                    'id': sheetDataView.id,
                                     'subdomain': app.request.attributes.get('subdomain')
                                 }) }}" class="btn btn-default">
                                     {{ 'event.sheet.block.add_participant.title'|trans }}
@@ -38,7 +39,7 @@
         {% endif %}
         {% if buttonPartipant.canBuyParticipant %}
             <a href="{{ path('event_sheet_buy_participant', {
-                'id': sheet.id,
+                'id': sheetDataView.id,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-default">
                 {{ 'event.sheet.block.buy_participant.title'|trans }}
@@ -47,19 +48,18 @@
     </div>
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {
-        'sheet' : sheet,
-        'data'  : sheet.data,
-        'blocks': sheet.type.sheetTemplate,
-        'packageData': sheet.packageData,
-        'packageTemplate': sheet.type.packageTemplate,
+        'sheetDataView': sheetDataView,
+        'blocks': sheetDataView.type.sheetTemplate,
+        'packageData': sheetDataView.packageData,
+        'packageTemplate': sheetDataView.type.packageTemplate,
     } %}
 
-    {% if sheet.type.packageTemplate is not empty %}
+    {% if sheetDataView.type.packageTemplate is not empty %}
         <hr>
         <div class="text-center">
             <a href="{{ path('event_sheet_package_update_step', {
-                'id'       : sheet.id,
-                'step'     : sheet.type.packageTemplate|keys|first,
+                'id': sheetDataView.id,
+                'step': sheetDataView.type.packageTemplate|keys|first,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-primary">
                 {{ 'event.sheet.package.step.next'|trans }}

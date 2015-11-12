@@ -172,6 +172,16 @@ class Sheet
      *
      * @return array
      */
+    public function getTypeSheetTemplate()
+    {
+        return $this->getType()->getSheetTemplate();
+    }
+
+    /**
+     * Get type packageTemplate
+     *
+     * @return array
+     */
     public function getTypePackageTemplate()
     {
         return $this->getType()->getPackageTemplate();
