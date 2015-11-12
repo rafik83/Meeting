@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Create
@@ -24,6 +25,11 @@ class Create
      * @var Event
      */
     public $event;
+
+    /**
+     * @var Template
+     */
+    public $template;
 
     /**
      * @var array

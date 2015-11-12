@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,6 +26,9 @@ class CreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('template', new TemplateChoiceType(), [
+                'placeholder' => '',
+            ])
             ->add('translations', 'collection', [
                 'type'  => new TranslationType(),
                 'label' => false,

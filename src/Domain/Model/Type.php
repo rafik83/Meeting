@@ -273,4 +273,16 @@ class Type implements WhoInterface
     {
         return $this->categories;
     }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate(Template $template)
+    {
+        $this->participantTemplate = $template->getParticipant();
+        $this->sheetTemplate       = $template->getSheet();
+        $this->packageTemplate     = $template->getPackage();
+        $this->previewTemplate     = $template->getPreview();
+        $this->viewTemplate        = $template->getView();
+    }
 }

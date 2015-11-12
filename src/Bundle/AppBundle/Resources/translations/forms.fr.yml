@@ -121,14 +121,16 @@ form:
             submit:
                 label: Enregistrer
     type_create:
-         children:
-             translations:
-                 prototype:
-                     children:
-                         title:
-                             label: Titre
-             submit:
-                 label: Enregistrer
+        children:
+            template:
+                label: Template
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            submit:
+                label: Enregistrer
 
 country:
     placeholder: --- Sélectionner un pays ---

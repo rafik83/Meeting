@@ -35,6 +35,7 @@ class CreateHandler
     public function handle(Create $create)
     {
         $type = new Type($create->event);
+        $type->setTemplate($create->template);
 
         foreach ($create->translations as $locale => $translation) {
             $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));

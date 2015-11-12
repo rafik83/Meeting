@@ -67,7 +67,7 @@ class TypeController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Type:update.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/Type:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

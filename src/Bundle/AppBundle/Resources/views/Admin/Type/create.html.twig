@@ -3,6 +3,7 @@
 {% block content %}
     {{ form_start(form) }}
         {{ form_errors(form) }}
+        {{ form_row(form.template) }}
         {{ form_row(form.translations) }}
         <div class="text-right">
             <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
