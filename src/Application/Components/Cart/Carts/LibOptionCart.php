@@ -20,10 +20,13 @@ class LibOptionCart implements LibCartInterface
     {
         $options = [];
 
-        if (isset($dataValue['value']) && $dataValue['value'] !== false) {
-            $options['label']     = $template['label'][$locale];
-            $options['unitPrice'] = $template['unitPrice'];
+        if ([] !== $template
+            && isset($dataValue['value'])
+            && $dataValue['value'] !== false
+        ) {
+            $options['label']     = isset($template['label'][$locale]) ? $template['label'][$locale] : null;
             $options['quantity']  = isset($dataValue['quantity']) && $dataValue['quantity'] !== null ? $dataValue['quantity'] : 1;
+            $options['unitPrice'] = isset($template['unitPrice']) ? $template['unitPrice'] : null;
             $options['total']     = $options['quantity'] * $options['unitPrice'];
         }
 

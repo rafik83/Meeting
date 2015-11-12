@@ -20,10 +20,13 @@ class LibUploadWithChoicesCart implements LibCartInterface
     {
         $options = [];
 
-        if(isset($dataValue['value']['value']) && !isset($template['choices'][$dataValue['value']['value']]['placeholder'])) {
+        if([] !== $template
+            && isset($dataValue['value']['value'])
+            && !isset($template['choices'][$dataValue['value']['value']]['placeholder'])
+        ) {
             $options['label']     = $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']['value']]['label'][$locale];
             $options['quantity']  = isset($dataValue['value']['quantity']) ? $dataValue['value']['quantity'] : 1;
-            $options['unitPrice'] = $template['choices'][$dataValue['value']['value']]['unitPrice'];
+            $options['unitPrice'] = isset($template['choices'][$dataValue['value']['value']]['unitPrice']) ? $template['choices'][$dataValue['value']['value']]['unitPrice'] : null;
             $options['total']     = $options['quantity'] * $options['unitPrice'];
         }
 

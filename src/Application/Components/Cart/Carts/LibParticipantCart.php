@@ -19,13 +19,14 @@ class LibParticipantCart implements LibCartInterface
     {
         $options = [];
 
-        if (isset($dataValue)
+        if ([] !== $template
+            && isset($dataValue)
             && isset($dataValue['participant'])
             && $dataValue['participant'] === true
         ) {
-            $options['label']     = $template['label'][$locale];
+            $options['label']     = isset($template['label'][$locale]) ? $template['label'][$locale] : null;
             $options['quantity']  = isset($dataValue['participant_bought']) && $dataValue['participant_bought'] !== null ? $dataValue['participant_bought'] : 0;
-            $options['unitPrice'] = $template['unitPrice'];
+            $options['unitPrice'] = isset($template['unitPrice']) ? $template['unitPrice'] : null;
             $options['total']     = $options['quantity'] * $options['unitPrice'];
         }
 

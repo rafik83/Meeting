@@ -20,10 +20,13 @@ class LibChoiceWithDescriptionCart implements LibCartInterface
     {
         $options = [];
 
-        if (isset($dataValue) && isset($dataValue['value'])) {
+        if ([] !== $template
+            && isset($dataValue)
+            && isset($dataValue['value'])
+        ) {
             $options['label']     = $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']]['label'][$locale];
             $options['quantity']  = isset($template['choices'][$dataValue['value']]['quantity']) ? $template['choices'][$dataValue['value']]['quantity'] : 1;
-            $options['unitPrice'] = $template['choices'][$dataValue['value']]['unitPrice'];
+            $options['unitPrice'] = isset($template['choices'][$dataValue['value']]['unitPrice']) ? $template['choices'][$dataValue['value']]['unitPrice'] : null;
             $options['total']     = $options['quantity'] * $options['unitPrice'];
         }
 

@@ -19,10 +19,13 @@ class LibPlanningCart implements LibCartInterface
     {
         $options = [];
 
-        if (isset($dataValue['planning']) && $dataValue['planning'] === true) {
-            $options['label']     = $template['label'][$locale];
+        if ([] !== $template
+            && isset($dataValue['planning'])
+            && $dataValue['planning'] === true
+        ) {
+            $options['label']     = isset($template['label'][$locale]) ? $template['label'][$locale] : null;
             $options['quantity']  = isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null ? $dataValue['planning_bought'] : 0;
-            $options['unitPrice'] = $template['unitPrice'];
+            $options['unitPrice'] = isset($template['unitPrice']) ? $template['unitPrice'] : null;
             $options['total']     = $options['quantity'] * $options['unitPrice'];
         }
 

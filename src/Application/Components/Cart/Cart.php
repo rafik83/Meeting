@@ -49,6 +49,9 @@ class Cart
 
                     if (isset($this->cartLibs[$template['type']]) && [] !== $dataValue) {
                         $options = $this->cartLibs[$template['type']]->prepare($template, $dataValue, $locale);
+                        if ($template['type'] === 'upload_with_choices') {
+                            var_dump($template, $dataValue, $options);die();
+                        }
                     }
                 }
 
