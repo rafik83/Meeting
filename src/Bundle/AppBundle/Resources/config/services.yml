@@ -76,6 +76,12 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
         tags:
             - { name: form.type, alias: lib_email }
+    vimeet_app.form_type_library.nomenclature_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\NomenclatureType
+        arguments:
+            - @vimeet_infrastructure.repository.nomenclature_item_repository
+        tags:
+            - { name: form.type, alias: lib_nomenclature }
 
     #
     # Event Listener
@@ -87,3 +93,14 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    #
+    # Twig extension
+    #
+    vimeet_app.twig_extension:
+        class: Proximum\Vimeet\Bundle\AppBundle\Twig\AppExtension
+        public: false
+        arguments:
+            - @sonata.intl.templating.helper.locale
+        tags:
+            - { name: twig.extension }
