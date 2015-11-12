@@ -1,9 +1,11 @@
 Proximum\Vimeet\Domain\Model\Template:
-    template_participant_exposant:
+    #
+    # Exhibitor
+    #
+    template_exhibitor:
         __construct: false
-        title: Participant exposant
-        type: participant
-        data:
+        title: Exposant
+        participant:
             563caf1d9b1cb:
                 type: lib_text
                 required: true
@@ -32,11 +34,7 @@ Proximum\Vimeet\Domain\Model\Template:
                 label:
                     fr: "Fonction"
                     en: "Position"
-    template_sheet_exposant:
-        __construct: false
-        title: Fiche exposant
-        type: sheet
-        data:
+        sheet:
             563cae3691916:
                 title:
                     fr: "Logo"
@@ -60,11 +58,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Offers"
                 template:
                     563cb11d08df1: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
-    template_package_exposant:
-        __construct: false
-        title: Forfait exposant
-        type: package
-        data:
+        package:
             563cae7496da1:
                 title:
                     fr: "Forfait de participation"
@@ -319,11 +313,20 @@ Proximum\Vimeet\Domain\Model\Template:
                             fr: ""
                         unitPrice: 2600
                         type: "lib_option"
-    template_participant_visiteur:
+        preview: >
+            <div>
+                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
+                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
+            </div>
+        view: ""
+
+    #
+    # Visitor
+    #
+    template_visitor:
         __construct: false
-        title: Participant visiteur
-        type: participant
-        data:
+        title: Visiteur
+        participant:
             563cafaae8f29:
                 type: "lib_text"
                 required: true
@@ -352,11 +355,7 @@ Proximum\Vimeet\Domain\Model\Template:
                 label:
                     fr: "Fonction"
                     en: "Position"
-    template_sheet_visiteur:
-        __construct: false
-        title: Fiche visiteur
-        type: sheet
-        data:
+        sheet:
             563cb00c629d8:
                 title: { "fr": "Société", "en": "Company" }
                 template:
@@ -368,8 +367,10 @@ Proximum\Vimeet\Domain\Model\Template:
                 title: { "fr": "Besoins", "en": "Needs" }
                 template:
                     563cb03f9a509: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
-    template_package_visiteur:
-        __construct: false
-        title: Forfait visiteur
-        type: package
-        data: []
+        package: []
+        preview: >
+            <div>
+                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
+                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
+            </div>
+        view: ""

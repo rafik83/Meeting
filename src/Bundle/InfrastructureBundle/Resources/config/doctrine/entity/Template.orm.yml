@@ -9,7 +9,13 @@ Proximum\Vimeet\Domain\Model\Template:
     fields:
         title:
             type: string
-        type:
-            type: string
-        data:
+        participant:
             type: json_array
+        sheet:
+            type: json_array
+        package:
+            type: json_array
+        preview:
+            type: string
+        view:
+            type: string

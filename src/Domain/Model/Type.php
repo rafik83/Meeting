@@ -73,6 +73,11 @@ class Type implements WhoInterface
     private $previewTemplate = '';
 
     /**
+     * @var string
+     */
+    private $viewTemplate = '';
+
+    /**
      * @var ArrayCollection
      */
     private $categories;
@@ -247,6 +252,16 @@ class Type implements WhoInterface
     public function getPreviewTemplate()
     {
         return $this->previewTemplate;
+    }
+
+    /**
+     * Get viewTemplate
+     *
+     * @return string
+     */
+    public function getViewTemplate()
+    {
+        return $this->viewTemplate;
     }
 
     /**

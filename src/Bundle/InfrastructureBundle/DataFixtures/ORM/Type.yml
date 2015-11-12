@@ -5,14 +5,10 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: @template_participant_exposant->data
-        sheetTemplate: @template_sheet_exposant->data
-        packageTemplate: @template_package_exposant->data
-        previewTemplate:  >
-            <div>
-                <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
-            </div>
+        participantTemplate: @template_exhibitor->participant
+        sheetTemplate: @template_exhibitor->sheet
+        packageTemplate: @template_exhibitor->package
+        previewTemplate: @template_exhibitor->preview
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -20,14 +16,10 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: @template_participant_exposant->data
-        sheetTemplate: @template_sheet_exposant->data
-        packageTemplate: @template_package_exposant->data
-        previewTemplate:  >
-            <div>
-                <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
-            </div>
+        participantTemplate: @template_exhibitor->participant
+        sheetTemplate: @template_exhibitor->sheet
+        packageTemplate: @template_exhibitor->package
+        previewTemplate: @template_exhibitor->preview
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -35,14 +27,11 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: @template_participant_visiteur->data
-        sheetTemplate: @template_sheet_visiteur->data
-        packageTemplate: @template_package_visiteur->data
-        previewTemplate: >
-            <div>
-                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
-            </div>
+        participantTemplate: @template_visitor->participant
+        sheetTemplate: @template_visitor->sheet
+        packageTemplate: @template_visitor->package
+        previewTemplate: @template_visitor->preview
+        viewTemplate: @template_visitor->view
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -50,14 +39,11 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: @template_participant_visiteur->data
-        sheetTemplate: @template_sheet_visiteur->data
-        packageTemplate: @template_package_visiteur->data
-        previewTemplate: >
-            <div>
-                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
-            </div>
+        participantTemplate: @template_visitor->participant
+        sheetTemplate: @template_visitor->sheet
+        packageTemplate: @template_visitor->package
+        previewTemplate: @template_visitor->preview
+        viewTemplate: @template_visitor->view
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_type_exposant_fr:
