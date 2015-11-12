@@ -19,15 +19,35 @@ class ChoiceType extends AbstractLocalizedType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $template = $options['template'];
-        $locale   = $options['locale'];
-        $choices  = [];
+        $template  = $options['template'];
+        $locale    = $options['locale'];
+        $choices   = [];
+        $optgroups = false;
 
         foreach ($template['choices'] as $key => $choice) {
-            $choices[$key] = $choice['label'][$locale];
+            // choice with optgroups
+            if (isset($choice['items']) && is_array($choice['items'])) {
+                $optgroups = true;
+                $items = [];
+
+                foreach ($choice['items'] as $keyItem => $item) {
+                    $items[$keyItem] = $item['label'][$locale];
+                }
+
+                asort($items);
+
+                // label is the optgroup
+                $choices[$choice['label'][$locale]] = $items;
+            } else {
+                $choices[$key] = $choice['label'][$locale];
+            }
         }
 
-        asort($choices);
+        if ($optgroups) {
+            ksort($choices);
+        } else {
+            asort($choices);
+        }
 
         $builder->add('value', 'choice', [
             'choices'     => $choices,
