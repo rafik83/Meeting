@@ -88,6 +88,10 @@ class TypeController extends Controller
      */
     public function updateAction(Request $request, Event $event, Type $type)
     {
+        if ($event !== $type->getEvent()) {
+            throw $this->createNotFoundException('Type not found.');
+        }
+
         $update = new Update($type);
         $form   = $this->createForm(new UpdateType(), $update, [
             'action' => $this->generateUrl('admin_type_update', ['id' => $event->getId(), 'type_id' => $type->getId()]),
