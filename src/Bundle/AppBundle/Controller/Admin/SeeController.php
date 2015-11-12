@@ -58,6 +58,36 @@ class SeeController extends Controller
      *   options={"id" = "see_id"}
      * )
      *
+     * @param Request $request
+     * @param Event   $event
+     * @param See     $see
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request, Event $event, See $see)
+    {
+        $form = $this->createForm(new WhoSeeWhoType(), [], []);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+            return $this->redirectToRoute('admin_see_update', ['id' => $event->getId(), 'see_id' => $see->getId()]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/See:update.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
+            'see'   => $see,
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "see",
+     *   class="Proximum\Vimeet\Domain\Model\See",
+     *   options={"id" = "see_id"}
+     * )
+     *
      * @param Event $event
      * @param See   $see
      *
