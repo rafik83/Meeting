@@ -1,8 +1,16 @@
-# Activité économique
 Proximum\Vimeet\Domain\Model\Nomenclature:
     nomenclature_activity:
         event: @event_rdv_carnot_2016
         label: Activité économique de l'organisme
+    nomenclature_size:
+        event: @event_rdv_carnot_2016
+        label: Taille de l'organisme
+    nomenclature_turnover:
+        event: @event_rdv_carnot_2016
+        label: Chiffre d'affaire de l'organisme
+    nomenclature_type:
+        event: @event_rdv_carnot_2016
+        label: Type de l'organisme
 
 Proximum\Vimeet\Domain\Model\NomenclatureTranslation:
     nomenclature_activity_fr:
@@ -13,10 +21,40 @@ Proximum\Vimeet\Domain\Model\NomenclatureTranslation:
         title: Economic activity
         nomenclature: @nomenclature_activity
         locale: en
+    nomenclature_size_fr:
+        title: Taille de l'organisme
+        nomenclature: @nomenclature_size
+        locale: fr
+    nomenclature_size_en:
+        title: Size of the activity
+        nomenclature: @nomenclature_size
+        locale: en
+    nomenclature_turnover_fr:
+        title: Chiffre d'affaire de l'organisme
+        nomenclature: @nomenclature_turnover
+        locale: fr
+    nomenclature_turnover_en:
+        title: Turnover of the activity
+        nomenclature: @nomenclature_turnover
+        locale: en
+    nomenclature_type_fr:
+        title: Type de l'organisme
+        nomenclature: @nomenclature_type
+        locale: fr
+    nomenclature_type_en:
+        title: Type of company
+        nomenclature: @nomenclature_type
+        locale: en
 
 Proximum\Vimeet\Domain\Model\NomenclatureItem:
     nomenclature_{1..21}:
         nomenclature: @nomenclature_activity
+    nomenclature_{22..27}:
+        nomenclature: @nomenclature_size
+    nomenclature_{28..32}:
+        nomenclature: @nomenclature_turnover
+    nomenclature_{33..40}:
+        nomenclature: @nomenclature_type
 
 Proximum\Vimeet\Domain\Model\NomenclatureItemTranslation:
     nomenclature_1_fr:
@@ -106,4 +144,80 @@ Proximum\Vimeet\Domain\Model\NomenclatureItemTranslation:
     nomenclature_21_fr:
         title: ACTIVITÉS EXTRA-TERRITORIALES
         nomenclatureItem: @nomenclature_21
+        locale: fr
+    nomenclature_22_fr:
+        title: '0-9'
+        nomenclatureItem: @nomenclature_22
+        locale: fr
+    nomenclature_23_fr:
+        title: '10-99'
+        nomenclatureItem: @nomenclature_23
+        locale: fr
+    nomenclature_24_fr:
+        title: '100-250'
+        nomenclatureItem: @nomenclature_24
+        locale: fr
+    nomenclature_25_fr:
+        title: '251-499'
+        nomenclatureItem: @nomenclature_25
+        locale: fr
+    nomenclature_26_fr:
+        title: '500-5000'
+        nomenclatureItem: @nomenclature_26
+        locale: fr
+    nomenclature_27_fr:
+        title: '>5000'
+        nomenclatureItem: @nomenclature_27
+        locale: fr
+    nomenclature_28_fr:
+        title: <2M€
+        nomenclatureItem: @nomenclature_28
+        locale: fr
+    nomenclature_29_fr:
+        title: 2-10M€
+        nomenclatureItem: @nomenclature_29
+        locale: fr
+    nomenclature_30_fr:
+        title: 10-50M€
+        nomenclatureItem: @nomenclature_30
+        locale: fr
+    nomenclature_31_fr:
+        title: 50-1500M€
+        nomenclatureItem: @nomenclature_31
+        locale: fr
+    nomenclature_32_fr:
+        title: >1500M€
+        nomenclatureItem: @nomenclature_32
+        locale: fr
+    nomenclature_33_fr:
+        title: SARL
+        nomenclatureItem: @nomenclature_33
+        locale: fr
+    nomenclature_34_fr:
+        title: EURL
+        nomenclatureItem: @nomenclature_34
+        locale: fr
+    nomenclature_35_fr:
+        title: SELARL
+        nomenclatureItem: @nomenclature_35
+        locale: fr
+    nomenclature_36_fr:
+        title: SA
+        nomenclatureItem: @nomenclature_36
+        locale: fr
+    nomenclature_37_fr:
+        title: SAS
+        nomenclatureItem: @nomenclature_37
+        locale: fr
+    nomenclature_38_fr:
+        title: SASU
+        nomenclatureItem: @nomenclature_38
+        locale: fr
+    nomenclature_39_fr:
+        title: SNC
+        nomenclatureItem: @nomenclature_39
+        locale: fr
+    nomenclature_40_fr:
+        title: SCP
+        nomenclatureItem: @nomenclature_40
         locale: fr
