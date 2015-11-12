@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
-
 class LibChoiceWithDescriptionCart implements LibCartInterface
 {
     /**

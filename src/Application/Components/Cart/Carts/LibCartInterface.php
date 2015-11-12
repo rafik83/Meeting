@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 interface LibCartInterface
 {
     /**
-     * @param array $template
-     * @param array $dataValue
-     * @param $locale
+     * @param array  $template
+     * @param array  $dataValue
+     * @param string $locale
      *
      * @return array
      */
