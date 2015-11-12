@@ -2,5 +2,14 @@
 
 {% block content %}
     <h1>{{ event.title }}</h1>
-    {{ form(form) }}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {% for key, child in form if key not in ['submit']%}
+            {{ form_row(child) }}
+        {% endfor %}
+        <div class="text-right">
+            <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour à la liste</a>
+            {{ form_rest(form) }}
+        </div>
+    {{ form_end(form) }}
 {% endblock %}
