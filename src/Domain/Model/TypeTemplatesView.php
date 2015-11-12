@@ -33,10 +33,10 @@ class TypeTemplatesView
     public $packageTemplate;
 
     /**
-     * @param integer $id
-     * @param string  $participantTemplate
-     * @param string  $sheetTemplate
-     * @param string  $packageTemplate
+     * @param int    $id
+     * @param string $participantTemplate
+     * @param string $sheetTemplate
+     * @param string $packageTemplate
      */
     public function __construct($id, $participantTemplate, $sheetTemplate, $packageTemplate)
     {

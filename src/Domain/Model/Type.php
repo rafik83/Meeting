@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Type de participation"
  */
-class Type
+class Type implements WhoInterface
 {
     /**
      * @var int
@@ -73,11 +73,17 @@ class Type
     private $previewTemplate;
 
     /**
+     * @var ArrayCollection
+     */
+    private $categories;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->translations = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
     }
 
     /**
@@ -238,5 +244,15 @@ class Type
     public function getPreviewTemplate()
     {
         return $this->previewTemplate;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

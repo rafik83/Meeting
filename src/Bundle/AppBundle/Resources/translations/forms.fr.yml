@@ -100,6 +100,14 @@ form:
                             label: Description
             submit:
                 label: Enregistrer
+    who_see_who:
+        children:
+            seer:
+                label: Qui
+            seeable:
+                label: Voit
+            submit:
+                label: Ajouter
     planning:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
 country:

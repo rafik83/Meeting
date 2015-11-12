@@ -23,8 +23,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
             - @doctrine.orm.entity_manager
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.repository.category_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.repository.see_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SeeRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.nomenclature_item_repository:

@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * "Categorie de participant"
  */
-class Category
+class Category implements WhoInterface
 {
     /**
      * @var int
@@ -21,9 +23,14 @@ class Category
     private $id;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
-    private $title;
+    private $translations;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $types;
 
     /**
      * @var array
@@ -36,6 +43,15 @@ class Category
     private $event;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->types        = new ArrayCollection();
+        $this->translations = new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -46,13 +62,23 @@ class Category
     }
 
     /**
-     * Get title
+     * Get types
      *
-     * @return string
+     * @return ArrayCollection
      */
-    public function getTitle()
+    public function getTypes()
     {
-        return $this->title;
+        return $this->types;
+    }
+
+    /**
+     * Get translations
+     *
+     * @return ArrayCollection
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 
     /**

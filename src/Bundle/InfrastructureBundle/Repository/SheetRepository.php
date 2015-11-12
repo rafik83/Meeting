@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class SheetRepository implements SheetRepositoryInterface
 {
@@ -22,11 +24,20 @@ class SheetRepository implements SheetRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var TypeRepositoryInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $typeRepository;
+
+    /**
+     * SheetRepository constructor.
+     *
+     * @param EntityManager           $entityManager
+     * @param TypeRepositoryInterface $typeRepository
+     */
+    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -49,7 +60,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsIdByUserAndEvent($user, $event, $locale)
+    public function getSheetViewsByUserAndEvent($user, $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -86,19 +97,11 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function search(array $filters)
+    public function search($category, $user)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from('Entity:Sheet', 'sheet');
-
-        if (isset($filters['type'])) {
-            $queryBuilder
-                ->andWhere('sheet.type IN (:type)')
-                ->setParameter('type', $filters['type']);
-        }
+        $queryBuilder = new SearchQueryBuilder($this->entityManager);
+        $queryBuilder->withCategory($category);
+        $queryBuilder->withTypes($this->typeRepository->getSeeableTypeIdsByUser($user));
 
         return $queryBuilder->getQuery()->getResult();
     }

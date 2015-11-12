@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -21,26 +23,72 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var TypeRepositoryInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $typeRepository;
+
+    /**
+     * @param EntityManager           $entityManager
+     * @param TypeRepositoryInterface $typeRepository
+     */
+    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getCategoryViewsByEvent($event)
+    public function getCategoryViewsByEventAndUser($event, $user, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, category.title)')
+            ->select('DISTINCT NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
+            ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->join('category.types', 'type', 'WITH', 'type IN (:seeableType)')
+            ->setParameter('seeableType', $this->typeRepository->getSeeableTypeIdsByUser($user))
+            ->where('category.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoriesByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category')
             ->from('Entity:Category', 'category')
             ->where('category.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoryViewById($id, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
+            ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('category.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

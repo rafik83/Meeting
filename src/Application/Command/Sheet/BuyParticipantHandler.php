@@ -94,7 +94,7 @@ class BuyParticipantHandler extends BaseHandler
                 if ($block['type'] === 'lib_participant') {
                     $packageData[$templateKey][$blockKey]['participant']        = true;
                     $packageData[$templateKey][$blockKey]['participant_bought'] = isset($packageData[$templateKey][$blockKey]['participant_bought']) ? $packageData[$templateKey][$blockKey]['participant_bought'] + 1 : 1;
-                    $shouldUpdate = true;
+                    $shouldUpdate                                               = true;
                 }
 
                 //Add the planning if option taken
