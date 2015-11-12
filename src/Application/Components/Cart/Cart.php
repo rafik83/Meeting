@@ -45,9 +45,9 @@ class Cart
             foreach ($block['template'] as $templateKey => $template) {
                 if (isset($template['type'])) {
                     $options   = [];
-                    $dataValue = isset($packageData[$blockKey][$templateKey]) ? $packageData[$blockKey][$templateKey] : null;
+                    $dataValue = isset($packageData[$blockKey][$templateKey]) ? $packageData[$blockKey][$templateKey] : [];
 
-                    if (isset($this->cartLibs[$template['type']])) {
+                    if (isset($this->cartLibs[$template['type']]) && [] !== $dataValue) {
                         $options = $this->cartLibs[$template['type']]->prepare($template, $dataValue, $locale);
                     }
                 }
