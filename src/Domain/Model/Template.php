@@ -20,6 +20,11 @@ class Template
     /**
      * @var string
      */
+    private $title;
+
+    /**
+     * @var string
+     */
     private $type;
 
     /**
@@ -30,13 +35,15 @@ class Template
     /**
      * Template constructor.
      *
+     * @param string $title
      * @param string $type
      * @param array  $data
      */
-    public function __construct($type, array $data)
+    public function __construct($title, $type, array $data)
     {
-        $this->type = $type;
-        $this->data = $data;
+        $this->title = $title;
+        $this->type  = $type;
+        $this->data  = $data;
     }
 
     /**
@@ -47,6 +54,26 @@ class Template
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

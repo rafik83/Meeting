@@ -1,6 +1,7 @@
 Proximum\Vimeet\Domain\Model\Template:
     template_participant_exposant:
         __construct: false
+        title: Participant exposant
         type: participant
         data:
             563caf1d9b1cb:
@@ -33,6 +34,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Position"
     template_sheet_exposant:
         __construct: false
+        title: Fiche exposant
         type: sheet
         data:
             563cae3691916:
@@ -60,6 +62,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     563cb11d08df1: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
     template_package_exposant:
         __construct: false
+        title: Forfait exposant
         type: package
         data:
             563cae7496da1:
@@ -318,6 +321,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         type: "lib_option"
     template_participant_visiteur:
         __construct: false
+        title: Participant visiteur
         type: participant
         data:
             563cafaae8f29:
@@ -350,6 +354,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Position"
     template_sheet_visiteur:
         __construct: false
+        title: Fiche visiteur
         type: sheet
         data:
             563cb00c629d8:
@@ -365,5 +370,6 @@ Proximum\Vimeet\Domain\Model\Template:
                     563cb03f9a509: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
     template_package_visiteur:
         __construct: false
+        title: Forfait visiteur
         type: package
         data: []

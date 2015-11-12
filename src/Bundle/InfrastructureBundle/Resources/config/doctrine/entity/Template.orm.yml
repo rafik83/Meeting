@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Template:
             generator:
                 strategy: AUTO
     fields:
+        title:
+            type: string
         type:
             type: string
         data:
