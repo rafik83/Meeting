@@ -1,0 +1,24 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Evénement</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for type in types %}
+            <tr>
+                <td>{{ type.title }}</td>
+                <td>{{ type.eventTitle }}</td>
+                <td>
+                    <a href="{{ path('admin_type_update', { 'id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

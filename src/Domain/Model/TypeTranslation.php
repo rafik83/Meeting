@@ -63,4 +63,16 @@ class TypeTranslation
     {
         return $this->title;
     }
+
+    /**
+     * @param string $title
+     *
+     * @return TypeTranslation
+     */
+    public function update($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
 }

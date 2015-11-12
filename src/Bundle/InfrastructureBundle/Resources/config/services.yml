@@ -11,6 +11,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - @doctrine.orm.entity_manager
+            - @knp_paginator
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
@@ -99,6 +100,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - @vimeet_infrastructure.repository.event_repository
+    vimeet_infrastructure.vimeet.application.command.type.update_handler:
+        class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
 
     #
     # Security

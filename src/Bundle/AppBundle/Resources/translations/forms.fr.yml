@@ -110,5 +110,15 @@ form:
                 label: Ajouter
     planning:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
+
+    type_update:
+        children:
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            submit:
+                label: Enregistrer
 country:
     placeholder: --- Sélectionner un pays ---
