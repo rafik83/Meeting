@@ -42,7 +42,7 @@ class HomeController extends BaseController
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsIdByUserAndEvent($this->getUser()->getId(), $eventView->id, $request->getLocale());
+                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventView->id, $request->getLocale());
         } else {
             $sheets = [];
         }

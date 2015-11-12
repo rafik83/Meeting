@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
@@ -117,5 +119,87 @@ class TypeRepository implements TypeRepositoryInterface
         $type = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $type ? $type->getParticipantTemplate() : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSeeableTypeIdsByUser($user)
+    {
+        return $this->seeableTypeBySees($this->seesBySheets($this->sheetByUser($user)));
+    }
+
+    /**
+     * @param User|int $user
+     *
+     * @return array
+     */
+    private function sheetByUser($user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * @param array $sheets
+     *
+     * @return array
+     */
+    private function seesBySheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('see.id')
+            ->from('Entity:See', 'see', 'see.id')
+            ->leftJoin('see.seerCategory', 'seerCategory')
+            ->leftJoin('seerCategory.types', 'seerCategoryType')
+            ->leftJoin('see.seerType', 'seerType')
+            ->join('Entity:Sheet', 'sheet', 'WITH', '(sheet.type = seerCategoryType OR sheet.type = seerType) AND sheet IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * @param array $sees
+     *
+     * @return array
+     */
+    private function seeableTypeBySees(array $sees)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('DISTINCT seeableType.id')
+            ->from('Entity:Type', 'seeableType', 'seeableType.id')
+            ->leftJoin('seeableType.categories', 'seeableCategory')
+            ->join('Entity:See', 'see', 'WITH', '(see.seeableType = seeableType OR see.seeableCategory = seeableCategory) AND see IN (:sees)')
+            ->setParameter('sees', $sees);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 }

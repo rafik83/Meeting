@@ -41,7 +41,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
             $builder->add('quantity', new QuantityType(), [
                 'min'   => $template['quantity']['min'],
                 'max'   => $template['quantity']['max'],
-                'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1
+                'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1,
             ]);
         }
     }

@@ -149,9 +149,10 @@ event_catalog:
     defaults: { _controller: VimeetAppBundle:Event/Catalog:categories }
 
 event_catalog_category:
-    path: /catalog/{id}
+    path: /catalog/{categoryView}
     host: "{subdomain}.%domain%"
     requirements:
+        categoryView: \d+
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Catalog:category }

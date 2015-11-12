@@ -10,15 +10,34 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\CategoryView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface CategoryRepositoryInterface
 {
     /**
      * @param Event|int $event
+     * @param User|int  $user
+     * @param string    $locale
      *
      * @return CategoryView[]
      */
-    public function getCategoryViewsByEvent($event);
+    public function getCategoryViewsByEventAndUser($event, $user, $locale);
+
+    /**
+     * @param Event $event
+     *
+     * @return Category[]
+     */
+    public function getCategoriesByEvent(Event $event);
+
+    /**
+     * @param int    $id
+     * @param string $locale
+     *
+     * @return CategoryView
+     */
+    public function getCategoryViewById($id, $locale);
 }

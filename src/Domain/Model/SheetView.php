@@ -23,6 +23,8 @@ class SheetView
     public $typeTitle;
 
     /**
+     * SheetView constructor.
+     *
      * @param int    $id
      * @param string $typeTitle
      */

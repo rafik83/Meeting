@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\See:
+    type:  entity
+    table: see
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        seerType:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+        seerCategory:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+        seeableType:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+        seeableCategory:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category

@@ -15,11 +15,28 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: participant_type_view_param_converter }
+    vimeet_app.param_converter.category_view_param_converter:
+        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\CategoryViewParamConverter
+        arguments:
+            - @vimeet_infrastructure.repository.category_repository
+        tags:
+            - { name: request.param_converter, priority: 2, converter: category_view_param_converter }
     vimeet_app.service.participant_manager:
         class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
 
     #
     # Form type
+    #
+    vimeet_app.form_type.who_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType
+        arguments:
+            - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
+        tags:
+            - { name: form.type, alias: who }
+
+    #
+    # Library
     #
     vimeet_app.form_type_library.choice_with_description:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
