@@ -35,7 +35,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('admin_event_who_see_who_delete', { 'id': event.id, 'see_id': see.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('admin_see_delete', { 'id': event.id, 'see_id': see.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -12,15 +12,19 @@ admin_event_update:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Event:update }
 
-admin_event_who_see_who:
+#
+# See
+#
+
+admin_see_list:
     path: /event/{id}/who-see-who
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/Event:whoSeeWho }
+    defaults: { _controller: VimeetAppBundle:Admin/See:list }
 
-admin_event_who_see_who_delete:
+admin_see_delete:
     path: /event/{id}/who-see-who/{see_id}/delete
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/Event:deleteSee }
+    defaults: { _controller: VimeetAppBundle:Admin/See:delete }
 
 #
 # Type
