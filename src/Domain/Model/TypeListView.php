@@ -12,12 +12,28 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class TypeListView
 {
+    /**
+     * @var int
+     */
     public $id;
 
+    /**
+     * @var string
+     */
     public $title;
 
+    /**
+     * @var string
+     */
     public $eventTitle;
 
+    /**
+     * TypeListView constructor.
+     *
+     * @param int    $id
+     * @param string $title
+     * @param string $eventTitle
+     */
     public function __construct($id, $title, $eventTitle)
     {
         $this->id         = $id;
