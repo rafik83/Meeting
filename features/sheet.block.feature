@@ -13,10 +13,12 @@ Feature: Update a sheet block
 
   Scenario: I can set my company informations
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
     And I press "form.login.children.submit.label"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/update_block/563cae566af03"
+    And the response status code should be 200
     And I fill in the following:
       | Nom                                         | CompanySAS             |
       | Adresse                                     | 1 rue de Clery, Paris  |
@@ -32,5 +34,6 @@ Feature: Update a sheet block
       # Type de structure
       | update_sheet_block_data_5641f59e537b9_value | 34                     |
     And I press "form.update_sheet_block.children.submit.label"
-    Then I should see "Pays"
+    Then the response status code should be 200
+    And I should see "Pays"
     And I should see "France"
