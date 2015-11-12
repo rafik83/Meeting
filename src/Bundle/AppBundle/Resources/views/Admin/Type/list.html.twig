@@ -24,6 +24,7 @@
         {% endfor %}
         </tbody>
     </table>
+    {{ knp_pagination_render(types) }}
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>
