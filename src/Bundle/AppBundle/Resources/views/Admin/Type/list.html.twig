@@ -1,12 +1,15 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
+    <h2>Types de participation</h2>
     <table class="table">
         <thead>
         <tr>
             <th>Titre</th>
             <th>Evénement</th>
-            <th>Action</th>
+            <th>
+                <a href="{{ path('admin_type_create', { 'id': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -15,7 +18,7 @@
                 <td>{{ type.title }}</td>
                 <td>{{ type.eventTitle }}</td>
                 <td>
-                    <a href="{{ path('admin_type_update', { 'id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_type_update', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                 </td>
             </tr>
         {% endfor %}

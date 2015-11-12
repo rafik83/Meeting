@@ -30,5 +30,7 @@ flash:
             update:
                 success: L'événement a bien été mis à jour
         type:
+            create:
+                success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour

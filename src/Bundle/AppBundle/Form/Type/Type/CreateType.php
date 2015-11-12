@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class CreateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -38,8 +38,8 @@ class UpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Type\Update',
-            'intention'  => 'type_update',
+            'data_class' => 'Proximum\Vimeet\Application\Command\Type\Create',
+            'intention'  => 'type_create',
         ]);
     }
 
@@ -58,6 +58,6 @@ class UpdateType extends AbstractType
      */
     public function getName()
     {
-        return 'type_update';
+        return 'type_create';
     }
 }

@@ -66,6 +66,10 @@ class TypeRepository implements TypeRepositoryInterface
     {
         $this->entityManager->persist($type);
         $this->entityManager->flush($type);
+
+        foreach ($type->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
@@ -73,11 +77,11 @@ class TypeRepository implements TypeRepositoryInterface
      */
     public function set(Type $type)
     {
+        $this->entityManager->flush($type);
+
         foreach ($type->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
-
-        $this->entityManager->flush($type);
     }
 
     /**

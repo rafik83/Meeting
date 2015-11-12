@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Type:
     type_exposant:
+        __construct: ["@event_rdv_carnot_2016"]
         position: 0
-        event: @event_rdv_carnot_2016
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
@@ -15,11 +15,11 @@ Proximum\Vimeet\Domain\Model\Type:
             </div>
 
     type_investisseur:
+        __construct: ["@event_rdv_carnot_2016"]
         position: 1
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        event: @event_rdv_carnot_2016
         participantTemplate: @template_participant_exposant->data
         sheetTemplate: @template_sheet_exposant->data
         packageTemplate: @template_package_exposant->data
@@ -30,11 +30,11 @@ Proximum\Vimeet\Domain\Model\Type:
             </div>
 
     type_visiteur:
+        __construct: ["@event_rdv_carnot_2016"]
         position: 2
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        event: @event_rdv_carnot_2016
         participantTemplate: @template_participant_visiteur->data
         sheetTemplate: @template_sheet_visiteur->data
         packageTemplate: @template_package_visiteur->data
@@ -45,11 +45,11 @@ Proximum\Vimeet\Domain\Model\Type:
             </div>
 
     type_visiteur_visio:
+        __construct: ["@event_rdv_carnot_2016"]
         position: 3
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        event: @event_rdv_carnot_2016
         participantTemplate: @template_participant_visiteur->data
         sheetTemplate: @template_sheet_visiteur->data
         packageTemplate: @template_package_visiteur->data
@@ -61,34 +61,18 @@ Proximum\Vimeet\Domain\Model\Type:
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     exposant_type_exposant_fr:
-        title: Exposant
-        type: @type_exposant
-        locale: fr
+        __construct: [@type_exposant, fr, "Exposant"]
     exposant_type_exposant_en:
-        title: Exhibitor
-        type: @type_exposant
-        locale: en
+        __construct: [@type_exposant, en, "Exhibitor"]
     exposant_type_investisseur_fr:
-        title: Investisseur
-        type: @type_investisseur
-        locale: fr
+        __construct: [@type_investisseur, fr, "Investisseur"]
     exposant_type_investisseur_en:
-        title: Investor
-        type: @type_investisseur
-        locale: en
+        __construct: [@type_investisseur, en, "Investor"]
     exposant_type_visiteur_fr:
-        title: Visiteur
-        type: @type_visiteur
-        locale: fr
+        __construct: [@type_visiteur, fr, "Visiteur"]
     exposant_type_visiteur_en:
-        title: Visitor
-        type: @type_visiteur
-        locale: en
+        __construct: [@type_visiteur, en, "Visitor"]
     exposant_type_visiteur_visio_fr:
-        title: Visiteur Visio
-        type: @type_visiteur_visio
-        locale: fr
+        __construct: [@type_visiteur_visio, fr, "Visio"]
     exposant_type_visiteur_visio_en:
-        title: Visitor Visio
-        type: @type_visiteur_visio
-        locale: en
+        __construct: [@type_visiteur_visio, en, "Visio"]

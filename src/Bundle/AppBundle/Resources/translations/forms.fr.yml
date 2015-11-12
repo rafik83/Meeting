@@ -120,5 +120,15 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
+    type_create:
+         children:
+             translations:
+                 prototype:
+                     children:
+                         title:
+                             label: Titre
+             submit:
+                 label: Enregistrer
+
 country:
     placeholder: --- Sélectionner un pays ---

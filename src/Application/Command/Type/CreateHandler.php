@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
-class UpdateHandler
+class CreateHandler
 {
     /**
      * @var TypeRepositoryInterface
@@ -28,16 +30,18 @@ class UpdateHandler
     }
 
     /**
-     * @param Update $update
+     * @param Create $create
      */
-    public function handle(Update $update)
+    public function handle(Create $create)
     {
-        $type = $update->type;
+        $type = new Type($create->event);
 
-        foreach ($update->translations as $locale => $translation) {
-            $type->getTranslations()->get($locale)->update($translation['title']);
+        foreach ($create->translations as $locale => $translation) {
+            $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
         }
 
-        $this->typeRepository->set($type);
+        $this->typeRepository->add($type);
+
+        $create->type = $type;
     }
 }

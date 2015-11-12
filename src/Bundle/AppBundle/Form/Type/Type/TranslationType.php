@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UpdateTranslationType extends AbstractType
+class TranslationType extends AbstractType
 {
     /**
      * {@inheritdoc}

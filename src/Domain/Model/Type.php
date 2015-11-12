@@ -25,7 +25,7 @@ class Type implements WhoInterface
     /**
      * @var int
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @var Event
@@ -40,37 +40,37 @@ class Type implements WhoInterface
     /**
      * @var string
      */
-    private $participantTemplate;
+    private $participantTemplate = [];
 
     /**
      * @var string
      */
-    private $sheetTemplate;
+    private $sheetTemplate = [];
 
     /**
      * @var string
      */
-    private $packageTemplate;
+    private $packageTemplate = [];
 
     /**
      * @var int
      */
-    private $maxParticipant;
+    private $maxParticipant = 1;
 
     /**
      * @var int
      */
-    private $freeParticipant;
+    private $freeParticipant = 1;
 
     /**
      * @var int
      */
-    private $maxPlanning;
+    private $maxPlanning = 1;
 
     /**
      * @var string
      */
-    private $previewTemplate;
+    private $previewTemplate = '';
 
     /**
      * @var ArrayCollection
@@ -78,10 +78,13 @@ class Type implements WhoInterface
     private $categories;
 
     /**
-     * Constructor
+     * Type constructor.
+     *
+     * @param Event $event
      */
-    public function __construct()
+    public function __construct(Event $event)
     {
+        $this->event        = $event;
         $this->translations = new ArrayCollection();
         $this->categories   = new ArrayCollection();
     }

@@ -33,6 +33,21 @@ class TypeTranslation
     private $title;
 
     /**
+     * TypeTranslation constructor.
+     *
+     * @param Type   $type
+     * @param string $locale
+     * @param string $title
+     */
+    public function __construct(Type $type, $locale, $title)
+    {
+        $this->type   = $type;
+        $this->locale = $locale;
+        $this->title  = $title;
+    }
+
+
+    /**
      * @return int
      */
     public function getId()
