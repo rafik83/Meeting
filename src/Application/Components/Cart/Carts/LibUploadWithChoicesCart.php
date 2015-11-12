@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
+
 class LibUploadWithChoicesCart implements LibCartInterface
 {
     /**
@@ -17,18 +19,19 @@ class LibUploadWithChoicesCart implements LibCartInterface
      */
     public function prepare(array $template, array $dataValue, $locale)
     {
-        $options = [];
+        $cartRow = null;
 
         if([] !== $template
             && isset($dataValue['value']['value'])
             && !isset($template['choices'][$dataValue['value']['value']]['placeholder'])
         ) {
-            $options['label']     = $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']['value']]['label'][$locale];
-            $options['quantity']  = isset($dataValue['value']['quantity']) ? $dataValue['value']['quantity'] : 1;
-            $options['unitPrice'] = isset($template['choices'][$dataValue['value']['value']]['unitPrice']) ? $template['choices'][$dataValue['value']['value']]['unitPrice'] : null;
-            $options['total']     = $options['quantity'] * $options['unitPrice'];
+            $cartRow = new CartRow(
+                $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']['value']]['label'][$locale],
+                isset($dataValue['value']['quantity']) ? $dataValue['value']['quantity'] : 1,
+                isset($template['choices'][$dataValue['value']['value']]['unitPrice']) ? $template['choices'][$dataValue['value']['value']]['unitPrice'] : null
+            );
         }
 
-        return $options;
+        return $cartRow;
     }
 }

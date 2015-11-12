@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
+
 interface LibCartInterface
 {
     /**
@@ -17,7 +19,7 @@ interface LibCartInterface
      * @param array  $dataValue
      * @param string $locale
      *
-     * @return array
+     * @return CartRow|null
      */
     public function prepare(array $template, array $dataValue, $locale);
 }

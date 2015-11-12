@@ -10,64 +10,59 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart;
 
-use Proximum\Vimeet\Application\Components\Cart\Carts\LibCartInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Cart
 {
     /**
-     * @var array
+     * @var int
      */
-    private $cartLibs = [];
+    private $total;
 
-    public function registerCart($name, LibCartInterface $cart)
+    /**
+     * @var ArrayCollection
+     */
+    private $cartSteps;
+
+    /**
+     * @param int $total
+     */
+    public function __construct($total)
     {
-        $this->cartLibs[$name] = $cart;
+        $this->total     = $total;
+        $this->cartSteps = new ArrayCollection();
     }
 
     /**
-     * @param array $packageTemplate
-     * @param array $packageData
-     * @param $locale
-     *
-     * @return array
+     * @param CartStep $cartStep
      */
-    public function cartBuilder(array $packageTemplate, array $packageData, $locale)
+    public function addCartStep(CartStep $cartStep)
     {
-        $cart  = [];
-        $total = 0;
+        $this->cartSteps->add($cartStep);
+        $this->addToTotal($cartStep->getSubTotal());
+    }
 
-        foreach ($packageTemplate as $blockKey => $block) {
-            $data            = [];
-            $data['title']   = $block['title'][$locale];
-            $data['options'] = [];
-            $subTotal        = 0;
+    /**
+     * @param int $total
+     */
+    public function addToTotal($total)
+    {
+        $this->total += $total;
+    }
 
-            foreach ($block['template'] as $templateKey => $template) {
-                if (isset($template['type'])) {
-                    $options   = [];
-                    $dataValue = isset($packageData[$blockKey][$templateKey]) ? $packageData[$blockKey][$templateKey] : [];
+    /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
 
-                    if (isset($this->cartLibs[$template['type']]) && [] !== $dataValue) {
-                        $options = $this->cartLibs[$template['type']]->prepare($template, $dataValue, $locale);
-                    }
-                }
-
-                if (isset($options['total'])) {
-                    $total += $options['total'];
-                    $subTotal += $options['total'];
-                }
-
-                if ($options !== []) {
-                    array_push($data['options'], $options);
-                }
-            }
-
-            $data['subTotal'] = $subTotal;
-            array_push($cart, $data);
-        }
-
-        $cart['total'] = $total;
-
-        return $cart;
+    /**
+     * @return ArrayCollection
+     */
+    public function getCartSteps()
+    {
+        return $this->cartSteps;
     }
 }

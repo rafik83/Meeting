@@ -10,11 +10,11 @@
 
 namespace Tests\Application\Components\Cart\Carts;
 
-use Proximum\Vimeet\Application\Components\Cart\Cart;
+use Proximum\Vimeet\Application\Components\Cart\CartBuilder;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testCartBuilderWithEmptyTemplateAndData()
     {
@@ -26,7 +26,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             'total' => 0,
         ];
 
-        $cart       = new Cart();
+        $cart       = new CartBuilder();
         $cartResult = $cart->cartBuilder($template, $dataValue, $locale);
 
         if ($result !== $cartResult) {
@@ -250,7 +250,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         ];
 
         $locale = 'fr';
-        $cart   = new Cart();
+        $cart   = new CartBuilder();
 
         $libChoiceWithDescription = $this->prophesize(LibChoiceWithDescriptionCart::class);
         $libChoiceWithDescription

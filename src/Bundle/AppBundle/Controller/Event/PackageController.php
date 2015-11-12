@@ -86,7 +86,7 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart')->cartBuilder($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,

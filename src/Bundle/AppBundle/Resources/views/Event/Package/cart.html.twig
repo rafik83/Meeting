@@ -12,18 +12,18 @@
             <th class="text-right">{{ 'event.sheet.cart.column.total'|trans }}</th>
         </thead>
         <tbody>
-        {% for step in cart  %}
-            {% if step.options is defined and step.options|length > 0 %}
+        {% for step in cart.cartSteps  %}
+            {% if step.cartRows is defined and step.cartRows|length > 0 %}
                 <tr class="active">
                     <td colspan="3">{{ step.title }}</td>
                     <td class="text-right">{{ step.subTotal|number_format_currency('EUR') }}</td>
                 </tr>
-                {% for line in step.options %}
+                {% for row in step.cartRows %}
                     <tr>
-                        <td>{{ line.label }}</td>
-                        <td class="text-right">{{ line.unitPrice|number_format_currency('EUR') }}</td>
-                        <td class="text-right">{{ line.quantity }}</td>
-                        <td class="text-right">{{ line.total|number_format_currency('EUR') }}</td>
+                        <td>{{ row.title }}</td>
+                        <td class="text-right">{{ row.unitPrice|number_format_currency('EUR') }}</td>
+                        <td class="text-right">{{ row.quantity }}</td>
+                        <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}

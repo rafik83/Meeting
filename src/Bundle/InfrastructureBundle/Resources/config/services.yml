@@ -122,8 +122,8 @@ services:
     #
     # Components
     #
-    vimeet_infrastructure.application.components.cart.cart:
-        class: Proximum\Vimeet\Application\Components\Cart\Cart
+    vimeet_infrastructure.application.components.cart.cart_builder:
+        class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
 
     #
     # Carts components

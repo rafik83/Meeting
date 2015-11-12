@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
+use Proximum\Vimeet\Application\Components\Cart\CartRow;
+
 class LibPlanningCart implements LibCartInterface
 {
     /**
@@ -17,18 +19,19 @@ class LibPlanningCart implements LibCartInterface
      */
     public function prepare(array $template, array $dataValue, $locale)
     {
-        $options = [];
+        $cartRow = null;
 
         if ([] !== $template
             && isset($dataValue['planning'])
             && $dataValue['planning'] === true
         ) {
-            $options['label']     = isset($template['label'][$locale]) ? $template['label'][$locale] : null;
-            $options['quantity']  = isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null ? $dataValue['planning_bought'] : 0;
-            $options['unitPrice'] = isset($template['unitPrice']) ? $template['unitPrice'] : null;
-            $options['total']     = $options['quantity'] * $options['unitPrice'];
+            $cartRow = new CartRow(
+                isset($template['label'][$locale]) ? $template['label'][$locale] : null,
+                isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null ? $dataValue['planning_bought'] : 0,
+                isset($template['unitPrice']) ? $template['unitPrice'] : null
+            );
         }
 
-        return $options;
+        return $cartRow;
     }
 }
