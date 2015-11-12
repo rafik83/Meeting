@@ -27,6 +27,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.nomenclature_item_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -138,3 +142,11 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
         tags:
             - {name: cart, cart: upload_with_choices}
+
+    #
+    # Security
+    #
+    vimeet_infrastructure.application.components.sheet.sheet:
+        class: Proximum\Vimeet\Application\Components\Sheet\Sheet
+        arguments:
+            - @vimeet_infrastructure.repository.nomenclature_item_repository

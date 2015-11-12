@@ -1,0 +1,109 @@
+# Activité économique
+Proximum\Vimeet\Domain\Model\Nomenclature:
+    nomenclature_activity:
+        event: @event_rdv_carnot_2016
+        label: Activité économique de l'organisme
+
+Proximum\Vimeet\Domain\Model\NomenclatureTranslation:
+    nomenclature_activity_fr:
+        title: Activité économique
+        nomenclature: @nomenclature_activity
+        locale: fr
+    nomenclature_activity_en:
+        title: Economic activity
+        nomenclature: @nomenclature_activity
+        locale: en
+
+Proximum\Vimeet\Domain\Model\NomenclatureItem:
+    nomenclature_{1..21}:
+        nomenclature: @nomenclature_activity
+
+Proximum\Vimeet\Domain\Model\NomenclatureItemTranslation:
+    nomenclature_1_fr:
+        title: AGRICULTURE, SYLVICULTURE ET PÊCHE
+        nomenclatureItem: @nomenclature_1
+        locale: fr
+    nomenclature_1_en:
+        title: AGRICULTURE, FORESTRY AND FISHING
+        nomenclatureItem: @nomenclature_1
+        locale: en
+    nomenclature_2_fr:
+        title: INDUSTRIES EXTRACTIVES
+        nomenclatureItem: @nomenclature_2
+        locale: fr
+    nomenclature_3_fr:
+        title: INDUSTRIE MANUFACTURIÈRE
+        nomenclatureItem: @nomenclature_3
+        locale: fr
+    nomenclature_4_fr:
+        title: PRDN & DISTR. ÉLEC. GAZ VAP. & AIR COND.
+        nomenclatureItem: @nomenclature_4
+        locale: fr
+    nomenclature_5_fr:
+        title: GESTION EAU, DÉCHETS & DÉPOLLUTION
+        nomenclatureItem: @nomenclature_5
+        locale: fr
+    nomenclature_6_fr:
+        title: CONSTRUCTION
+        nomenclatureItem: @nomenclature_6
+        locale: fr
+    nomenclature_7_fr:
+        title: COMMERCE ; RÉPAR. AUTOMOBILE & MOTOCYCLE
+        nomenclatureItem: @nomenclature_7
+        locale: fr
+    nomenclature_8_fr:
+        title: TRANSPORTS ET ENTREPOSAGE
+        nomenclatureItem: @nomenclature_8
+        locale: fr
+    nomenclature_9_fr:
+        title: HÉBERGEMENT ET RESTAURATION
+        nomenclatureItem: @nomenclature_9
+        locale: fr
+    nomenclature_10_fr:
+        title: INFORMATION ET COMMUNICATION
+        nomenclatureItem: @nomenclature_10
+        locale: fr
+    nomenclature_11_fr:
+        title: ACTIVITÉS FINANCIÈRES ET D'ASSURANCE
+        nomenclatureItem: @nomenclature_11
+        locale: fr
+    nomenclature_12_fr:
+        title: ACTIVITÉS IMMOBILIÈRES
+        nomenclatureItem: @nomenclature_12
+        locale: fr
+    nomenclature_13_fr:
+        title: ACT. SPÉCIALISÉE, SCIENTIFIQ. & TECHNIQ.
+        nomenclatureItem: @nomenclature_13
+        locale: fr
+    nomenclature_14_fr:
+        title: ACTIVITÉS DE SCE ADMINISTR. & DE SOUTIEN
+        nomenclatureItem: @nomenclature_14
+        locale: fr
+    nomenclature_15_fr:
+        title: ADMINISTRATION PUBLIQUE
+        nomenclatureItem: @nomenclature_15
+        locale: fr
+    nomenclature_16_fr:
+        title: ENSEIGNEMENT
+        nomenclatureItem: @nomenclature_16
+        locale: fr
+    nomenclature_17_fr:
+        title: SANTÉ HUMAINE ET ACTION SOCIALE
+        nomenclatureItem: @nomenclature_17
+        locale: fr
+    nomenclature_18_fr:
+        title: ARTS, SPECTACLES & ACTIVITÉS RÉCRÉATIVES
+        nomenclatureItem: @nomenclature_18
+        locale: fr
+    nomenclature_19_fr:
+        title: AUTRES ACTIVITÉS DE SERVICES
+        nomenclatureItem: @nomenclature_19
+        locale: fr
+    nomenclature_20_fr:
+        title: ACT. MÉNAGES: EMPL., PROD. PR US. PROPRE
+        nomenclatureItem: @nomenclature_20
+        locale: fr
+    nomenclature_21_fr:
+        title: ACTIVITÉS EXTRA-TERRITORIALES
+        nomenclatureItem: @nomenclature_21
+        locale: fr

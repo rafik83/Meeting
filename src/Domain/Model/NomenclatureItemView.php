@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class SheetView
+class NomenclatureItemView
 {
     /**
      * @var int
@@ -20,15 +20,22 @@ class SheetView
     /**
      * @var string
      */
-    public $typeTitle;
+    public $title;
+
+    /**
+     * @var string
+     */
+    public $locale;
 
     /**
      * @param int    $id
-     * @param string $typeTitle
+     * @param string $title
+     * @param string $locale
      */
-    public function __construct($id, $typeTitle)
+    public function __construct($id, $title, $locale)
     {
-        $this->id        = $id;
-        $this->typeTitle = $typeTitle;
+        $this->id     = $id;
+        $this->title  = $title;
+        $this->locale = $locale;
     }
 }
