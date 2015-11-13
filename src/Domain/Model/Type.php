@@ -25,7 +25,7 @@ class Type implements WhoInterface
     /**
      * @var int
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @var Event
@@ -40,37 +40,42 @@ class Type implements WhoInterface
     /**
      * @var string
      */
-    private $participantTemplate;
+    private $participantTemplate = [];
 
     /**
      * @var string
      */
-    private $sheetTemplate;
+    private $sheetTemplate = [];
 
     /**
      * @var string
      */
-    private $packageTemplate;
+    private $packageTemplate = [];
 
     /**
      * @var int
      */
-    private $maxParticipant;
+    private $maxParticipant = 4;
 
     /**
      * @var int
      */
-    private $freeParticipant;
+    private $freeParticipant = 1;
 
     /**
      * @var int
      */
-    private $maxPlanning;
+    private $maxPlanning = 4;
 
     /**
      * @var string
      */
-    private $previewTemplate;
+    private $previewTemplate = '';
+
+    /**
+     * @var string
+     */
+    private $viewTemplate = '';
 
     /**
      * @var ArrayCollection
@@ -78,10 +83,13 @@ class Type implements WhoInterface
     private $categories;
 
     /**
-     * Constructor
+     * Type constructor.
+     *
+     * @param Event $event
      */
-    public function __construct()
+    public function __construct(Event $event)
     {
+        $this->event        = $event;
         $this->translations = new ArrayCollection();
         $this->categories   = new ArrayCollection();
     }
@@ -247,6 +255,16 @@ class Type implements WhoInterface
     }
 
     /**
+     * Get viewTemplate
+     *
+     * @return string
+     */
+    public function getViewTemplate()
+    {
+        return $this->viewTemplate;
+    }
+
+    /**
      * Get categories
      *
      * @return ArrayCollection
@@ -254,5 +272,17 @@ class Type implements WhoInterface
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate(Template $template)
+    {
+        $this->participantTemplate = $template->getParticipant();
+        $this->sheetTemplate       = $template->getSheet();
+        $this->packageTemplate     = $template->getPackage();
+        $this->previewTemplate     = $template->getPreview();
+        $this->viewTemplate        = $template->getView();
     }
 }

@@ -26,7 +26,7 @@ class BuyParticipantHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWhenUserNotExists()
     {
         $event = new Event();
-        $type  = new Type();
+        $type  = new Type($event);
         $type->setParticipantTemplate([
             'foobar' => [
                 'required' => true,

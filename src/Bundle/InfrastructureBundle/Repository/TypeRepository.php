@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -23,11 +25,63 @@ class TypeRepository implements TypeRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var PaginatorInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $paginator;
+
+    /**
+     * @param EntityManager      $entityManager
+     * @param PaginatorInterface $paginator
+     */
+    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
     {
         $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($page, $limit, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeListView(type.id, translation.title, event.title)')
+            ->from('Entity:Type', 'type')
+            ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->join('type.event', 'event')
+            ->setParameter('locale', $locale);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, [
+            'defaultSortFieldName' => 'type.id',
+            'defaultSortDirection' => 'ASC',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Type $type)
+    {
+        $this->entityManager->persist($type);
+        $this->entityManager->flush($type);
+
+        foreach ($type->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Type $type)
+    {
+        $this->entityManager->flush($type);
+
+        foreach ($type->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
