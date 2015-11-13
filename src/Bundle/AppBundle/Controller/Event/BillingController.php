@@ -68,4 +68,25 @@ class BillingController extends BaseController
             'form'      => $form->createView(),
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @param EventView $eventView
+     * @param Sheet $sheet
+     *
+     * @return Response
+     */
+    public function proFormaAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+
+        return $this->render('VimeetAppBundle:Event/Billing:proForma.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'cart'      => $cart,
+        ]);
+    }
 }

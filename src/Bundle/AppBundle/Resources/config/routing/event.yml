@@ -86,6 +86,14 @@ event_sheet_package_cart:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Package:cart }
 
+event_sheet_package_pro_forma:
+    path: /sheet/{id}/pro_forma
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Billing:proForma }
+
 event_sheet_billing:
     path: /sheet/{id}/billing
     host: "{subdomain}.%domain%"

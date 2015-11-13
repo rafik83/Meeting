@@ -30,7 +30,7 @@
         {% endfor %}
         {% if cart.total is defined %}
             <tr class="info">
-                <th colspan="4" >{{ 'event.sheet.cart.label.totalPrice'|trans }}</th>
+                <th colspan="4">{{ 'event.sheet.cart.label.totalPrice'|trans }}</th>
                 <th class="text-right">{{ cart.total|number_format_currency('EUR') }}</th>
             </tr>
         {% endif %}
