@@ -53,16 +53,14 @@ class AppExtension extends \Twig_Extension
                 $choices = $fieldTemplate['choices'];
 
                 foreach ($choices as $key => $choice) {
-                    if (isset($choices[$value]['label'])) {
+                    if (isset($choices[$value]['label'][$locale])) {
                         return $choices[$value]['label'][$locale];
-                    } elseif (isset($choices[$key]['items'])) {
-                        if (isset($choices[$key]['items'][$value])) {
-                            return $choices[$key]['items'][$value]['label'][$locale];
-                        }
+                    } elseif (isset($choices[$key]['items'])
+                        && isset($choices[$key]['items'][$value]['label'][$locale])
+                    ) {
+                        return $choices[$key]['items'][$value]['label'][$locale];
                     }
                 }
-
-                return;
             }
         }
 
