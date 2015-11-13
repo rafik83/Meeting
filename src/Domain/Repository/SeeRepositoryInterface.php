@@ -28,7 +28,7 @@ interface SeeRepositoryInterface
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      *
-     * @return See
+     * @return See|null
      */
     public function getByEventSeerAndSeeable(Event $event, WhoInterface $seer, WhoInterface $seeable);
 

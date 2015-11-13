@@ -100,6 +100,16 @@ class SeeRepository implements SeeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(See $see)
+    {
+        $this->entityManager->flush($see);
+
+        return $see;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(See $see)
     {
         $this->entityManager->remove($see);

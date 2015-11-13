@@ -39,13 +39,9 @@ class SeeController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('admin_who_see_who_dont_see_what', [
-                'id'          => $event->getId(),
-                'seerType'    => $form->get('seer')->getData()->getIdentifier(),
-                'seerId'      => $form->get('seer')->getData()->getId(),
-                'seeableType' => $form->get('seeable')->getData()->getIdentifier(),
-                'seeableId'   => $form->get('seeable')->getData()->getId(),
-            ]);
+            $see = $this->findOrCreateSee($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
+
+            return $this->redirect($this->generateWhatUrl($see));
         }
 
         $sees = $this->get('vimeet_infrastructure.repository.see_repository')->getByEvent($event);
@@ -69,26 +65,20 @@ class SeeController extends Controller
      */
     public function whatAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
     {
-        $seer    = $this->findWho($seerType, $seerId);
+        $seer = $this->findWho($seerType, $seerId);
+        $this->notFoundUnless($seer, 'Seer not found.');
+
         $seeable = $this->findWho($seeableType, $seeableId);
+        $this->notFoundUnless($seeable, 'Seeable not found.');
 
-        if (!$seer) {
-            throw $this->createNotFoundException('Seer not found.');
-        }
+        $see = $this->findSee($event, $seer, $seeable);
+        $this->notFoundUnless($see, 'See not found.');
 
-        if (!$seeable) {
-            throw $this->createNotFoundException('Seeable not found.');
-        }
-
-        $see  = $this->findOrCreateSee($event, $seer, $seeable);
         $form = $this->createWhatForm($see, $request->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
-            if (!$see->getId()) {
-                $this->getDoctrine()->getManager()->persist($see);
-            }
-            $this->getDoctrine()->getManager()->flush($see);
+            $this->get('vimeet_infrastructure.repository.see_repository')->set($see);
+            $this->addFlash('succes', 'admin.event.who_see_what.success');
 
             return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
         }
@@ -129,14 +119,26 @@ class SeeController extends Controller
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      *
+     * @return See|null
+     */
+    private function findSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    {
+        return $this
+            ->get('vimeet_infrastructure.repository.see_repository')
+            ->getByEventSeerAndSeeable($event, $seer, $seeable);
+    }
+
+    /**
+     * @param Event        $event
+     * @param WhoInterface $seer
+     * @param WhoInterface $seeable
+     *
      * @return See
      */
     private function findOrCreateSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
-        $respository = $this->get('vimeet_infrastructure.repository.see_repository');
-
-        return $respository->getByEventSeerAndSeeable($event, $seer, $seeable) ? :
-            $respository->add(new See($event, $seer, $seeable, []));
+        return $this->findSee($event, $seer, $seeable) ? :
+            $this->get('vimeet_infrastructure.repository.see_repository')->add(new See($event, $seer, $seeable, []));
     }
 
     /**
@@ -162,13 +164,7 @@ class SeeController extends Controller
     private function createWhatForm(See $see, $locale)
     {
         $form = $this->createForm(new WhatType(), $see->getWhat(), [
-            'action' => $this->generateUrl( 'admin_who_see_who_dont_see_what', [
-                'id'          => $see->getEvent()->getId(),
-                'seerType'    => $see->getSeer()->getIdentifier(),
-                'seerId'      => $see->getSeer()->getId(),
-                'seeableType' => $see->getSeeable()->getIdentifier(),
-                'seeableId'   => $see->getSeeable()->getId(),
-            ]),
+            'action' => $this->generateWhatUrl($see),
             'method' => 'POST',
             'who'    => $see->getSeeable(),
             'locale' => $locale,
@@ -176,5 +172,32 @@ class SeeController extends Controller
         $form->add('submit', 'submit');
 
         return $form;
+    }
+
+    /**
+     * @param See $see
+     *
+     * @return string
+     */
+    private function generateWhatUrl(See $see)
+    {
+        return $this->generateUrl('admin_who_see_who_dont_see_what', [
+            'id'          => $see->getEvent()->getId(),
+            'seerType'    => $see->getSeer()->getIdentifier(),
+            'seerId'      => $see->getSeer()->getId(),
+            'seeableType' => $see->getSeeable()->getIdentifier(),
+            'seeableId'   => $see->getSeeable()->getId(),
+        ]);
+    }
+
+    /**
+     * @param mixed  $condition
+     * @param string $message
+     */
+    private function notFoundUnless($condition, $message = 'Not found.')
+    {
+        if (!$condition) {
+            throw $this->createNotFoundException($message);
+        }
     }
 }
