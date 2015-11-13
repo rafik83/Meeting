@@ -6,6 +6,9 @@ Proximum\Vimeet\Domain\Model\See:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        what:
+            type: json_array
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

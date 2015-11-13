@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -68,26 +69,27 @@ class SeeController extends Controller
         $seer    = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seerType)))->find($seerId);
         $seeable = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seeableType)))->find($seeableId);
 
-        $see = new See($event, $seer, $seeable);
-
-        $form = $this->createForm(new WhoSeeWhatType(), $see, [
+        $form = $this->createForm(new WhatType(), [], [
             'method' => 'POST',
-            'who'    => $see->getSeeableType() ? : $see->getSeeableCategory(),
+            'who'    => $seeable,
             'locale' => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
 
-            var_dump($see->what);die();
+            $see = new See($event, $seer, $seeable, $form->getData());
+            $this->getDoctrine()->getManager()->persist($see);
+            $this->getDoctrine()->getManager()->flush($see);
 
             return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/See:update.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
-            'see'   => $see,
+            'form'    => $form->createView(),
+            'event'   => $event,
+            'seer'    => $seer,
+            'seeable' => $seeable,
         ]);
     }
 

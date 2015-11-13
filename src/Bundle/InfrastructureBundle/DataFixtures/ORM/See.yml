@@ -1,23 +1,23 @@
 Proximum\Vimeet\Domain\Model\See:
     see_1:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_exposant]
+        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_exposant, []]
     see_2:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur]
+        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur, []]
     see_3:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur_visio]
+        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur_visio, []]
     see_4:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_investisseur]
+        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_investisseur, []]
     see_5:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_exposant]
+        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_exposant, []]
     see_6:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur]
+        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur, []]
     see_7:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur_visio]
+        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur_visio, []]
     see_8:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_investisseur]
+        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_investisseur, []]
     see_9:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_exposant]
+        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_exposant, []]
     see_10:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur]
+        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur, []]
     see_11:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur_visio]
+        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur_visio, []]

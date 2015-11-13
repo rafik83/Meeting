@@ -42,16 +42,23 @@ class See
      */
     private $seeableCategory;
 
-    public $what;
+    /**
+     * @var array
+     */
+    private $what;
 
     /**
+     * See constructor.
+     *
      * @param Event        $event
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
+     * @param array        $what
      */
-    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what)
     {
         $this->event = $event;
+        $this->what  = $what;
 
         if ($seer instanceof Type) {
             $this->seerType = $seer;
@@ -128,5 +135,15 @@ class See
     public function getSeeableCategory()
     {
         return $this->seeableCategory;
+    }
+
+    /**
+     * Get what
+     *
+     * @return array
+     */
+    public function getWhat()
+    {
+        return $this->what;
     }
 }
