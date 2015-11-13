@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\See;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -66,7 +68,12 @@ class SeeController extends Controller
      */
     public function updateAction(Request $request, Event $event, See $see)
     {
-        $form = $this->createForm(new WhoSeeWhoType(), [], []);
+        $form = $this->createForm(new WhoSeeWhatType(), [], [
+            'action'  => $this->generateUrl('admin_see_update', ['id' => $event->getId(), 'see_id' => $see->getId()]),
+            'method'  => 'POST',
+            'event'   => $event,
+            'seeable' => $see->getSeeableType() ? : $see->getSeeableCategory(),
+        ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
