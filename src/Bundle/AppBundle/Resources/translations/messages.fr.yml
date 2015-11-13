@@ -55,6 +55,7 @@ event:
                 boughtNumber: '{0}|{1} Vous avez déjà ajouté %count% participant sur votre fiche|]1,Inf[ Vous avez déjà ajouté %count% participants sur votre fiche'
         billing:
             title: Facturation
+            proForma: Visualiser la pro-forma
         cart:
             title: Récapitulatif de votre panier
             column:
