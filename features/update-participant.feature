@@ -21,6 +21,6 @@ Feature: Update self participant sheet
       | Nom       | Jean        |
       | Prénom    | Dupond      |
       | Téléphone | 0611111111  |
-      | fonction  | position4   |
+      | Fonction  | position4   |
     And I press "form.participant_update.children.submit.label"
     Then I should see "flash.sheet.update_participant.success"
