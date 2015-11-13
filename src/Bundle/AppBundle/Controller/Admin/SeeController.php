@@ -133,9 +133,10 @@ class SeeController extends Controller
      */
     private function findOrCreateSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
-        return $this
-            ->get('vimeet_infrastructure.repository.see_repository')
-            ->getByEventSeerAndSeeable($event, $seer, $seeable) ? : new See($event, $seer, $seeable, []);
+        $respository = $this->get('vimeet_infrastructure.repository.see_repository');
+
+        return $respository->getByEventSeerAndSeeable($event, $seer, $seeable) ? :
+            $respository->add(new See($event, $seer, $seeable, []));
     }
 
     /**

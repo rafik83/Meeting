@@ -34,6 +34,8 @@ interface SeeRepositoryInterface
 
     /**
      * @param See $see
+     *
+     * @return See
      */
     public function add(See $see);
 

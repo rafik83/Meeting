@@ -93,6 +93,8 @@ class SeeRepository implements SeeRepositoryInterface
     {
         $this->entityManager->persist($see);
         $this->entityManager->flush($see);
+
+        return $see;
     }
 
     /**
