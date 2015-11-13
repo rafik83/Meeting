@@ -133,3 +133,5 @@ services:
     #
     vimeet_infrastructure.application.components.sheet.sheet:
         class: Proximum\Vimeet\Application\Components\Sheet\Sheet
+        arguments:
+            - @vimeet_infrastructure.repository.participant_repository

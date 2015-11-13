@@ -50,13 +50,25 @@ class SheetDataView
     public $billingData;
 
     /**
-     * @param int         $id
-     * @param Event       $event
-     * @param Type        $type
-     * @param ArrayAccess $participants
-     * @param array       $data
-     * @param array       $packageData
-     * @param array       $billingData
+     * @var ParticipantView[]
+     */
+    public $participantViews;
+
+    /**
+     * @var Participant
+     */
+    public $currentUserParticipant;
+
+    /**
+     * @param int               $id
+     * @param Event             $event
+     * @param Type              $type
+     * @param ArrayAccess       $participants
+     * @param array             $data
+     * @param array             $packageData
+     * @param array             $billingData
+     * @param ParticipantView[] $participantViews
+     * @param Participant       $currentUserParticipant
      */
     public function __construct(
         $id,
@@ -65,14 +77,18 @@ class SheetDataView
         ArrayAccess $participants,
         array $data,
         array $packageData,
-        array $billingData
+        array $billingData,
+        array $participantViews,
+        Participant $currentUserParticipant
     ) {
-        $this->id           = $id;
-        $this->event        = $event;
-        $this->type         = $type;
-        $this->participants = $participants;
-        $this->data         = $data;
-        $this->packageData  = $packageData;
-        $this->billingData  = $billingData;
+        $this->id                     = $id;
+        $this->event                  = $event;
+        $this->type                   = $type;
+        $this->participants           = $participants;
+        $this->data                   = $data;
+        $this->packageData            = $packageData;
+        $this->billingData            = $billingData;
+        $this->participantViews       = $participantViews;
+        $this->currentUserParticipant = $currentUserParticipant;
     }
 }
