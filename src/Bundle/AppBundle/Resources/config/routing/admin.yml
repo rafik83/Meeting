@@ -29,7 +29,7 @@ admin_see_update:
 admin_who_see_who_dont_see_what:
     path: /event/{id}/{seerType}/{seerId}/see/{seeableType}/{seeableId}/dont-see
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/See:update }
+    defaults: { _controller: VimeetAppBundle:Admin/See:what }
     requirements:
         seerType: category|type
         seerId: \d+

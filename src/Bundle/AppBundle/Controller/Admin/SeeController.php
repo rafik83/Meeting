@@ -66,7 +66,7 @@ class SeeController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
+    public function whatAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
     {
         $seer    = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seerType)))->find($seerId);
         $seeable = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seeableType)))->find($seeableId);
@@ -87,7 +87,7 @@ class SeeController extends Controller
             return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/See:update.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/See:what.html.twig', [
             'form'    => $form->createView(),
             'event'   => $event,
             'seer'    => $seer,
