@@ -120,6 +120,36 @@ services:
             - @vimeet_infrastructure.security.user_password_encoder
 
     #
+    # Components
+    #
+    vimeet_infrastructure.application.components.cart.cart_builder:
+        class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+
+    #
+    # Carts components
+    #
+    vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart
+        tags:
+            - {name: cart, cart: choice_with_description}
+    vimeet_infrastructure.application.components.cart.carts.lib_option_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart
+        tags:
+            - {name: cart, cart: lib_option}
+    vimeet_infrastructure.application.components.cart.carts.lib_participant_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibParticipantCart
+        tags:
+            - {name: cart, cart: lib_participant}
+    vimeet_infrastructure.application.components.cart.carts.lib_planning_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
+        tags:
+            - {name: cart, cart: lib_planning}
+    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
+        tags:
+            - {name: cart, cart: upload_with_choices}
+
+    #
     # Security
     #
     vimeet_infrastructure.application.components.sheet.sheet:

@@ -75,6 +75,27 @@ class PackageController extends BaseController
     }
 
     /**
+     * @param Request $request
+     * @param EventView $eventView
+     * @param Sheet $sheet
+     *
+     * @return Response
+     */
+    public function cartAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+
+        return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'cart'      => $cart,
+        ]);
+    }
+
+    /**
      * @param Sheet $sheet
      * @param int   $step
      *
@@ -117,7 +138,7 @@ class PackageController extends BaseController
 
         $this->addFlash('success', 'flash.package.final_step.success');
 
-        return $this->generateUrl('event_sheet_billing', [
+        return $this->generateUrl('event_sheet_package_cart', [
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
