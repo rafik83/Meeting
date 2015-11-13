@@ -18,8 +18,6 @@ class WhatType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = (new WhatBuilder($options['who'], $options['locale']))->buildChoices();
-
         $builder
             ->add('participant', new WhatSheetType(), [
                 'template' => $options['who']->getParticipantTemplate(),

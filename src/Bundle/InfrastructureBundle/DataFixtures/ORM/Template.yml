@@ -36,14 +36,14 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Position"
         sheet:
             563cae3691916:
-                title:
+                label:
                     fr: "Logo"
                     en: "Brand"
                 linkTo:
                     template: "packageTemplate"
                     index: 56407fa453f4e
             563cae566af03:
-                title:
+                label:
                     fr: "Société"
                     en: "Company"
                 template:
@@ -57,14 +57,14 @@ Proximum\Vimeet\Domain\Model\Template:
                     5641f59737211: { "type": "lib_nomenclature", "id": @nomenclature_turnover->id, "required": false, "private": false, "label": { "fr": "Chiffre d'affaire", "en": "Turnover" } }
                     5641f59e537b9: { "type": "lib_nomenclature", "id": @nomenclature_type->id, "required": false, "private": false, "label": { "fr": "Type de structure", "en": "Type" } }
             563cae5f48ce2:
-                title:
+                label:
                     fr: "Offres"
                     en: "Offers"
                 template:
                     563cb11d08df1: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
         package:
             563cae7496da1:
-                title:
+                label:
                     fr: "Forfait de participation"
                     en: "Participation package"
                 description:
@@ -132,7 +132,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     en: "Description sponsoring"
                                 unitPrice: 11000
             563cae9c37ff6:
-                title:
+                label:
                     fr: "Augmenter le nombre de participants sur votre fiche"
                     en: "Traduction en anglais"
                 description:
@@ -160,7 +160,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         type: "lib_planning"
                         unitPrice: 550
             56407fa453f4e:
-                title:
+                label:
                     fr: "Options proposées pour optimiser votre participation"
                     en: "Options to optimize your participation:"
                 description:
@@ -280,7 +280,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 1
                             max: 5
             563caee826357:
-                title:
+                label:
                     en: "Options supplémentaires"
                     fr: "Options supplémentaires"
                 description:
@@ -361,14 +361,14 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Position"
         sheet:
             563cb00c629d8:
-                title: { "fr": "Société", "en": "Company" }
+                label: { "fr": "Société", "en": "Company" }
                 template:
                     563cb02125c23: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
                     563cb02932fc8: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
                     563cb02fc1df1: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
                     563cb0364f1c6: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             563cb014e2784:
-                title: { "fr": "Besoins", "en": "Needs" }
+                label: { "fr": "Besoins", "en": "Needs" }
                 template:
                     563cb03f9a509: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
         package: []

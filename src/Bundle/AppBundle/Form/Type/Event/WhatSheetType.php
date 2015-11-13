@@ -29,7 +29,7 @@ class WhatSheetType extends AbstractType
                     ->add($name, new WhatSheetType(), [
                         'template' => $step['template'],
                         'locale'   => $options['locale'],
-                        'label'    => isset($step['title']) ? $step['title'][$options['locale']] : $step['label'][$options['locale']],
+                        'label'    => $step['label'][$options['locale']],
                     ])
                 ;
 
@@ -37,7 +37,7 @@ class WhatSheetType extends AbstractType
 
                 $builder
                     ->add($name, 'checkbox', [
-                        'label'    => isset($step['title']) ? $step['title'][$options['locale']] : $step['label'][$options['locale']],
+                        'label'    => $step['label'][$options['locale']],
                         'required' => false,
                     ])
                 ;

@@ -5,7 +5,7 @@
 {% block title eventView.title %}
 
 {% block content %}
-    <h2>{{ stepPackageTemplate['title'][app.request.locale]|default }}</h2>
+    <h2>{{ stepPackageTemplate['label'][app.request.locale]|default }}</h2>
     <p>{{ stepPackageTemplate['description'][app.request.locale]|default }}</p>
     <hr>
 
