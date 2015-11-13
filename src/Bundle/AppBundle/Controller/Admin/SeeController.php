@@ -54,31 +54,34 @@ class SeeController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "see",
-     *   class="Proximum\Vimeet\Domain\Model\See",
-     *   options={"id" = "see_id"}
-     * )
-     *
      * @param Request $request
      * @param Event   $event
-     * @param See     $see
+     * @param string  $seerType
+     * @param int     $seerId
+     * @param string  $seeableType
+     * @param int     $seeableId
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, Event $event, See $see)
+    public function updateAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
     {
-        $form = $this->createForm(new WhoSeeWhatType(), [], [
-            'action'  => $this->generateUrl('admin_see_update', ['id' => $event->getId(), 'see_id' => $see->getId()]),
-            'method'  => 'POST',
-            'event'   => $event,
-            'seeable' => $see->getSeeableType() ? : $see->getSeeableCategory(),
+        $seer    = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seerType)))->find($seerId);
+        $seeable = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seeableType)))->find($seeableId);
+
+        $see = new See($event, $seer, $seeable);
+
+        $form = $this->createForm(new WhoSeeWhatType(), $see, [
+            'method' => 'POST',
+            'who'    => $see->getSeeableType() ? : $see->getSeeableCategory(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
 
-            return $this->redirectToRoute('admin_see_update', ['id' => $event->getId(), 'see_id' => $see->getId()]);
+            var_dump($see->what);die();
+
+            return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/See:update.html.twig', [

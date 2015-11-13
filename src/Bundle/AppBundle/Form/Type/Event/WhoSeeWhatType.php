@@ -22,8 +22,9 @@ class WhoSeeWhatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fields', new WhatType(), [
-                'seeable' => $options['seeable'],
+            ->add('what', new WhatType(), [
+                'who'    => $options['who'],
+                'locale' => $options['locale'],
             ])
         ;
     }
@@ -33,7 +34,7 @@ class WhoSeeWhatType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'seeable']);
+        $resolver->setRequired(['who', 'locale']);
     }
 
     /**

@@ -11,33 +11,38 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WhatType extends AbstractType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $choices = (new WhatBuilder($options['who'], $options['locale']))->buildChoices();
+
+        $builder
+            ->add('participant', new WhatSheetType(), [
+                'template' => $options['who']->getParticipantTemplate(),
+                'locale'   => $options['locale'],
+            ])
+            ->add('sheet', new WhatSheetType(), [
+                'template' => $options['who']->getSheetTemplate(),
+                'locale'   => $options['locale'],
+            ])
+        ;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices' => function (Options $options) {
-                return ['titi', 'toto', 'tata'];
-            },
             'multiple' => true,
             'expanded' => true,
         ]);
 
-        $resolver->setRequired(['seeable']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return 'choice';
+        $resolver->setRequired(['who', 'locale']);
     }
 
     /**

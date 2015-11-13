@@ -42,6 +42,8 @@ class See
      */
     private $seeableCategory;
 
+    public $what;
+
     /**
      * @param Event        $event
      * @param WhoInterface $seer
