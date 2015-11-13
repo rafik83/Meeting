@@ -285,4 +285,12 @@ class Type implements WhoInterface
         $this->previewTemplate     = $template->getPreview();
         $this->viewTemplate        = $template->getView();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'type';
+    }
 }

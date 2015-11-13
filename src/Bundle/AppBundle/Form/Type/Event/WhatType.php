@@ -19,6 +19,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WhatType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $participantTemplate = $this->getParticipantTemplate($options['who']);
@@ -54,7 +57,7 @@ class WhatType extends AbstractType
      */
     public function getName()
     {
-        return 'what';
+        return 'dont_see_what';
     }
 
     /**

@@ -39,10 +39,13 @@ class SeeController extends Controller
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $see = new See($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
-            $this->get('vimeet_infrastructure.repository.see_repository')->add($see);
-
-            return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
+            return $this->redirectToRoute('admin_who_see_who_dont_see_what', [
+                'id'          => $event->getId(),
+                'seerType'    => $form->get('seer')->getData()->getIdentifier(),
+                'seerId'      => $form->get('seer')->getData()->getId(),
+                'seeableType' => $form->get('seeable')->getData()->getIdentifier(),
+                'seeableId'   => $form->get('seeable')->getData()->getId(),
+            ]);
         }
 
         $sees = $this->get('vimeet_infrastructure.repository.see_repository')->getByEvent($event);

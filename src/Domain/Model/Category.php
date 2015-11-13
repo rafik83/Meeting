@@ -100,4 +100,12 @@ class Category implements WhoInterface
     {
         return $this->event;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'category';
+    }
 }
