@@ -42,6 +42,6 @@ class WhoSeeWhatType extends AbstractType
      */
     public function getName()
     {
-        return 'who_see_who';
+        return 'dont_see_what';
     }
 }

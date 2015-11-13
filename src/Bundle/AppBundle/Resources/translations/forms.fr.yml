@@ -132,6 +132,18 @@ form:
             submit:
                 label: Enregistrer
 
+    dont_see_what:
+        children:
+            what:
+                label: Ne voit pas quoi
+                children:
+                    participant:
+                        label: Participant
+                    sheet:
+                        label: Fiche
+            submit:
+                label: Enregistrer
+
 country:
     placeholder: --- Sélectionner un pays ---
 
