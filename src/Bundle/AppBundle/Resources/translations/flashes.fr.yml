@@ -29,6 +29,8 @@ flash:
         event:
             update:
                 success: L'événement a bien été mis à jour
+            who_see_what:
+                success: La règle a bien été mis à jour
         type:
             create:
                 success: Le type a bien été créé
