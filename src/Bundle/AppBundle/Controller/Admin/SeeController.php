@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\See;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -159,7 +160,7 @@ class SeeController extends Controller
      * @param See    $see
      * @param string $locale
      *
-     * @return \Symfony\Component\Form\Form
+     * @return Form
      */
     private function createWhatForm(See $see, $locale)
     {
