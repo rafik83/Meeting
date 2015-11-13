@@ -55,7 +55,7 @@ class Type implements WhoInterface
     /**
      * @var int
      */
-    private $maxParticipant = 1;
+    private $maxParticipant = 4;
 
     /**
      * @var int
@@ -65,7 +65,7 @@ class Type implements WhoInterface
     /**
      * @var int
      */
-    private $maxPlanning = 1;
+    private $maxPlanning = 4;
 
     /**
      * @var string
