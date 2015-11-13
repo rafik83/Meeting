@@ -57,6 +57,11 @@ class WhatType extends AbstractType
         return 'what';
     }
 
+    /**
+     * @param WhoInterface $who
+     *
+     * @return array
+     */
     private function getParticipantTemplate(WhoInterface $who)
     {
         if ($who instanceof Type) {
@@ -64,12 +69,19 @@ class WhatType extends AbstractType
         }
 
         if ($who instanceof Category) {
-            return [];
+            return $this->templatesIntersectRecursive(array_map(function (Type $type) {
+                return $type->getParticipantTemplate();
+            }, $who->getTypes()->toArray()));
         }
 
         throw new \InvalidArgumentException();
     }
 
+    /**
+     * @param WhoInterface $who
+     *
+     * @return array
+     */
     private function getSheetTemplate(WhoInterface $who)
     {
         if ($who instanceof Type) {
@@ -77,9 +89,50 @@ class WhatType extends AbstractType
         }
 
         if ($who instanceof Category) {
-            return [];
+            return $this->templatesIntersectRecursive(array_map(function (Type $type) {
+                return $type->getSheetTemplate();
+            }, $who->getTypes()->toArray()));
         }
 
         throw new \InvalidArgumentException();
+    }
+
+    /**
+     * @param array $templates
+     *
+     * @return array
+     */
+    private function templatesIntersectRecursive(array $templates)
+    {
+        $intersect = null;
+
+        foreach ($templates as $template) {
+            $intersect = ($intersect === null ? $template : $this->arrayIntersectRecursive($intersect, $template));
+        }
+
+        return $intersect ? : [];
+    }
+
+    /**
+     * @param array $one
+     * @param array $another
+     *
+     * @return array
+     */
+    private function arrayIntersectRecursive(array $one, array $another)
+    {
+        $intersect = [];
+
+        foreach ($one as $key => $value) {
+            if (isset($another[$key])) {
+                if (is_array($value) && $another[$key]) {
+                    $intersect[$key] = $this->arrayIntersectRecursive($value, $another[$key]);
+                } elseif ($value === $another[$key]) {
+                    $intersect[$key] = $value;
+                }
+            }
+        }
+
+        return $intersect;
     }
 }
