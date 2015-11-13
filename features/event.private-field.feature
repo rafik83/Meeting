@@ -8,7 +8,7 @@ Feature: Test to hide private field
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | OneSheetSeveralParticipants.yml                        |
 
   Scenario: I can not see private field
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

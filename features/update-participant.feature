@@ -8,7 +8,7 @@ Feature: Update self participant sheet
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | OneSheetSeveralParticipants.yml                        |
 
   Scenario: I can go to the participant sheet and update it
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

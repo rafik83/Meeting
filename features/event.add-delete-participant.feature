@@ -8,7 +8,7 @@ Feature: Add and delete participant
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | OneSheetSeveralParticipants.yml                        |
 
   Scenario: I can delete a participant as an owner
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

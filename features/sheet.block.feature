@@ -8,7 +8,7 @@ Feature: Update a sheet block
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | OneSheetSeveralParticipants.yml                        |
 
   Scenario: I can set my company informations
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

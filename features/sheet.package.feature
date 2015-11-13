@@ -8,7 +8,7 @@ Feature: Choose a package
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
       | User.yml                                               |
       | Sheet.yml                                              |
-      | Participant.yml                                        |
+      | OneSheetOneParticipant.yml                             |
 
   Scenario: I can choose the Silver package
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
