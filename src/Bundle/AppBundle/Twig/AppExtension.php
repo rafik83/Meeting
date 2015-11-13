@@ -55,10 +55,10 @@ class AppExtension extends \Twig_Extension
                 foreach ($choices as $key => $choice) {
                     if (isset($choices[$value]['label'][$locale])) {
                         return $choices[$value]['label'][$locale];
-                    } elseif (isset($choices[$key]['items'])
-                        && isset($choices[$key]['items'][$value]['label'][$locale])
+                    } elseif (isset($choices[$key]['choices'])
+                        && isset($choices[$key]['choices'][$value]['label'][$locale])
                     ) {
-                        return $choices[$key]['items'][$value]['label'][$locale];
+                        return $choices[$key]['choices'][$value]['label'][$locale];
                     }
                 }
             }

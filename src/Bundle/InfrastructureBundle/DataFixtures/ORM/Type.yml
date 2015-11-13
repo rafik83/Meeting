@@ -37,7 +37,7 @@ Proximum\Vimeet\Domain\Model\Type:
                 choices:
                     domainPositionCommerciale:
                         label: { "fr": "Commerciale/Vente", "en": "Commerciale/Vente" }
-                        items:
+                        choices:
                             position4: { label: { "fr": "Assistant commercial", "en": "Assistant commercial" } }
                             position5: { label: { "fr": "Assistant export", "en": "Assistant export" } }
                             position6: { label: { "fr": "Télévendeur / Téléprospecteur", "en": "Télévendeur / Téléprospecteur" } }
@@ -55,19 +55,19 @@ Proximum\Vimeet\Domain\Model\Type:
                             position18: { label: { "fr": "Directeur commercial", "en": "Directeur commercial" } }
                     domainPositionCommunication:
                         label: { "fr": "Communication", "en": "Communication" }
-                        items:
+                        choices:
                             position19: { label: { "fr": "Chargé de communication", "en": "Chargé de communication" } }
                             position20: { label: { "fr": "Directeur de la communication", "en": "Directeur de la communication" } }
                     domainPositionDirection:
                         label: { "fr": "Direction", "en": "Direction" }
-                        items:
+                        choices:
                             position21: { label: { "fr": "Directeur général adjoint", "en": "Directeur général adjoint" } }
                             position22: { label: { "fr": "Directeur d'une division", "en": "Directeur d'une division" } }
                             position23: { label: { "fr": "Directeur général", "en": "Directeur général" } }
                             position24: { label: { "fr": "Président-directeur général / Chef d'entreprise", "en": "Président-directeur général / Chef d'entreprise" } }
                     domainPositionInformatique:
                         label: { "fr": "Informatique", "en": "Informatique" }
-                        items:
+                        choices:
                             position25: { label: { "fr": "Technicien support clients", "en": "Technicien support clients" } }
                             position26: { label: { "fr": "Technicien micro-informatique", "en": "Technicien micro-informatique" } }
                             position27: { label: { "fr": "Administrateur de base de données", "en": "Administrateur de base de données" } }
@@ -84,13 +84,13 @@ Proximum\Vimeet\Domain\Model\Type:
                             position38: { label: { "fr": "Directeur des systèmes d'information / directeur informatique", "en": "Directeur des systèmes d'information / directeur informatique" } }
                     domainPositionMarketing:
                         label: { "fr": "Marketing", "en": "Marketing" }
-                        items:
+                        choices:
                             position39: { label: { "fr": "Assistant marketing / Assistant chef de produits", "en": "Assistant marketing / Assistant chef de produits" } }
                             position40: { label: { "fr": "Chef de produits", "en": "Chef de produits" } }
                             position41: { label: { "fr": "Directeur marketing / Responsable marketing", "en": "Directeur marketing / Responsable marketing" } }
                     domainPositionRecherche:
                         label: { "fr": "Recherche/Etudes et Laboratoire", "en": "Recherche/Etudes et Laboratoire" }
-                        items:
+                        choices:
                             position66: { label: { "fr": "Agent de laboratoire", "en": "Agent de laboratoire" } }
                             position67: { label: { "fr": "Technicien de laboratoire", "en": "Technicien de laboratoire" } }
                             position68: { label: { "fr": "Responsable de laboratoire", "en": "Responsable de laboratoire" } }
@@ -487,20 +487,20 @@ Proximum\Vimeet\Domain\Model\Type:
                 choices:
                     domainPositionAchat:
                         label: { "fr": "Achat", "en": "Achat" }
-                        items:
+                        choices:
                             position1: { label: { "fr": "Assistant achats", "en": "Assistant achats" } }
                             position2: { label: { "fr": "Acheteur", "en": "Acheteur" } }
                             position3: { label: { "fr": "Directeur des achats / Responsable achats", "en": "Directeur des achats / Responsable achats" } }
                     domainPositionDirection:
                         label: { "fr": "Direction", "en": "Direction" }
-                        items:
+                        choices:
                             position21: { label: { "fr": "Directeur général adjoint", "en": "Directeur général adjoint" } }
                             position22: { label: { "fr": "Directeur d'une division", "en": "Directeur d'une division" } }
                             position23: { label: { "fr": "Directeur général", "en": "Directeur général" } }
                             position24: { label: { "fr": "Président-directeur général / Chef d'entreprise", "en": "Président-directeur général / Chef d'entreprise" } }
                     domainPositionInformatique:
                         label: { "fr": "Informatique", "en": "Informatique" }
-                        items:
+                        choices:
                             position25: { label: { "fr": "Technicien support clients", "en": "Technicien support clients" } }
                             position26: { label: { "fr": "Technicien micro-informatique", "en": "Technicien micro-informatique" } }
                             position27: { label: { "fr": "Administrateur de base de données", "en": "Administrateur de base de données" } }
@@ -517,20 +517,20 @@ Proximum\Vimeet\Domain\Model\Type:
                             position38: { label: { "fr": "Directeur des systèmes d'information / directeur informatique", "en": "Directeur des systèmes d'information / directeur informatique" } }
                     domainPositionMarketing:
                         label: { "fr": "Marketing", "en": "Marketing" }
-                        items:
+                        choices:
                             position39: { label: { "fr": "Assistant marketing / Assistant chef de produits", "en": "Assistant marketing / Assistant chef de produits" } }
                             position40: { label: { "fr": "Chef de produits", "en": "Chef de produits" } }
                             position41: { label: { "fr": "Directeur marketing / Responsable marketing", "en": "Directeur marketing / Responsable marketing" } }
                     domainPositionMethode:
                         label: { "fr": "Méthode", "en": "Méthode" }
-                        items:
+                        choices:
                             position42: { label: { "fr": "Technicien méthodes", "en": "Technicien méthodes" } }
                             position43: { label: { "fr": "Ingénieur méthodes", "en": "Ingénieur méthodes" } }
                             position44: { label: { "fr": "Responsable méthodes", "en": "Responsable méthodes" } }
                             position45: { label: { "fr": "Directeur industriel", "en": "Directeur industriel" } }
                     domainPositionProduction:
                         label: { "fr": "Production", "en": "Production" }
-                        items:
+                        choices:
                             position46: { label: { "fr": "Conducteur de machine", "en": "Conducteur de machine" } }
                             position47: { label: { "fr": "Opérateur de conditionnement", "en": "Opérateur de conditionnement" } }
                             position48: { label: { "fr": "Ouvrier spécialisé", "en": "Ouvrier spécialisé" } }
@@ -548,7 +548,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             position60: { label: { "fr": "Directeur d'usine", "en": "Directeur d'usine" } }
                     domainPositionQse:
                         label: { "fr": "Qualité/Sécurité/Environement", "en": "Qualité/Sécurité/Environement" }
-                        items:
+                        choices:
                             position61: { label: { "fr": "Agent contrôle qualité", "en": "Agent contrôle qualité" } }
                             position62: { label: { "fr": "Technicien qualité", "en": "Technicien qualité" } }
                             position63: { label: { "fr": "Responsable qualité / Ingénieur qualité", "en": "Responsable qualité / Ingénieur qualité" } }
@@ -556,7 +556,7 @@ Proximum\Vimeet\Domain\Model\Type:
                             position65: { label: { "fr": "Directeur qualité", "en": "Directeur qualité" } }
                     domainPositionRecherche:
                         label: { "fr": "Recherche/Etudes et Laboratoire", "en": "Recherche/Etudes et Laboratoire" }
-                        items:
+                        choices:
                             position66: { label: { "fr": "Agent de laboratoire", "en": "Agent de laboratoire" } }
                             position67: { label: { "fr": "Technicien de laboratoire", "en": "Technicien de laboratoire" } }
                             position68: { label: { "fr": "Responsable de laboratoire", "en": "Responsable de laboratoire" } }
@@ -605,7 +605,7 @@ Proximum\Vimeet\Domain\Model\Type:
                 choices:
                     domainPositionInformatique:
                         label: { "fr": "Informatique", "en": "Informatique" }
-                        items:
+                        choices:
                             position25: { label: { "fr": "Technicien support clients", "en": "Technicien support clients" } }
                             position26: { label: { "fr": "Technicien micro-informatique", "en": "Technicien micro-informatique" } }
                             position27: { label: { "fr": "Administrateur de base de données", "en": "Administrateur de base de données" } }
@@ -622,14 +622,14 @@ Proximum\Vimeet\Domain\Model\Type:
                             position38: { label: { "fr": "Directeur des systèmes d'information / directeur informatique", "en": "Directeur des systèmes d'information / directeur informatique" } }
                     domainPositionMethode:
                         label: { "fr": "Méthode", "en": "Méthode" }
-                        items:
+                        choices:
                             position42: { label: { "fr": "Technicien méthodes", "en": "Technicien méthodes" } }
                             position43: { label: { "fr": "Ingénieur méthodes", "en": "Ingénieur méthodes" } }
                             position44: { label: { "fr": "Responsable méthodes", "en": "Responsable méthodes" } }
                             position45: { label: { "fr": "Directeur industriel", "en": "Directeur industriel" } }
                     domainPositionQse:
                         label: { "fr": "Qualité/Sécurité/Environement", "en": "Qualité/Sécurité/Environement" }
-                        items:
+                        choices:
                             position61: { label: { "fr": "Agent contrôle qualité", "en": "Agent contrôle qualité" } }
                             position62: { label: { "fr": "Technicien qualité", "en": "Technicien qualité" } }
                             position63: { label: { "fr": "Responsable qualité / Ingénieur qualité", "en": "Responsable qualité / Ingénieur qualité" } }
