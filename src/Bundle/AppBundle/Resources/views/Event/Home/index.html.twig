@@ -6,11 +6,20 @@
     <p>{{ eventView.description }}</p>
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') and sheets is not empty %}
-        {% for sheet in sheets %}
-            <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
-                {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
-            </a>
-        {% endfor %}
+        <ul>
+            <li>
+                <a href="{{ path('event_catalog', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                    {{ 'event.link.see_catalog'|trans() }}
+                </a>
+            </li>
+            {% for sheet in sheets %}
+                <li>
+                    <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                        {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
         <ul>
             {% for type in types %}

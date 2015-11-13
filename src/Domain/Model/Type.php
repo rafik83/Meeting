@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Type de participation"
  */
-class Type
+class Type implements WhoInterface
 {
     /**
      * @var int
@@ -25,7 +25,7 @@ class Type
     /**
      * @var int
      */
-    private $position;
+    private $position = 0;
 
     /**
      * @var Event
@@ -40,44 +40,58 @@ class Type
     /**
      * @var string
      */
-    private $participantTemplate;
+    private $participantTemplate = [];
 
     /**
      * @var string
      */
-    private $sheetTemplate;
+    private $sheetTemplate = [];
 
     /**
      * @var string
      */
-    private $packageTemplate;
+    private $packageTemplate = [];
 
     /**
      * @var int
      */
-    private $maxParticipant;
+    private $maxParticipant = 4;
 
     /**
      * @var int
      */
-    private $freeParticipant;
+    private $freeParticipant = 1;
 
     /**
      * @var int
      */
-    private $maxPlanning;
+    private $maxPlanning = 4;
 
     /**
      * @var string
      */
-    private $previewTemplate;
+    private $previewTemplate = '';
 
     /**
-     * Constructor
+     * @var string
      */
-    public function __construct()
+    private $viewTemplate = '';
+
+    /**
+     * @var ArrayCollection
+     */
+    private $categories;
+
+    /**
+     * Type constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
     {
+        $this->event        = $event;
         $this->translations = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
     }
 
     /**
@@ -238,5 +252,37 @@ class Type
     public function getPreviewTemplate()
     {
         return $this->previewTemplate;
+    }
+
+    /**
+     * Get viewTemplate
+     *
+     * @return string
+     */
+    public function getViewTemplate()
+    {
+        return $this->viewTemplate;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate(Template $template)
+    {
+        $this->participantTemplate = $template->getParticipant();
+        $this->sheetTemplate       = $template->getSheet();
+        $this->packageTemplate     = $template->getPackage();
+        $this->previewTemplate     = $template->getPreview();
+        $this->viewTemplate        = $template->getView();
     }
 }

@@ -8,7 +8,7 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
                 strategy: AUTO
     fields:
         title:
-            type: text
+            type: string
         locale:
             type: string
     manyToOne:

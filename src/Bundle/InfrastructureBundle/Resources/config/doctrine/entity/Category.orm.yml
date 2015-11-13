@@ -7,10 +7,17 @@ Proximum\Vimeet\Domain\Model\Category:
             generator:
                 strategy: AUTO
     fields:
-        title:
-            type: string
         filters:
             type: json_array
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\CategoryTranslation
+            mappedBy: category
+            indexBy: locale
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            inversedBy: categories
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

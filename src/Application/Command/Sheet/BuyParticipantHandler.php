@@ -89,15 +89,14 @@ class BuyParticipantHandler extends BaseHandler
 
         foreach ($packageTemplate as $templateKey => $template) {
             foreach ($template['template'] as $blockKey => $block) {
-
-                //Add +1 on the bought participant option
+                // Add +1 on the bought participant option
                 if ($block['type'] === 'lib_participant') {
                     $packageData[$templateKey][$blockKey]['participant']        = true;
                     $packageData[$templateKey][$blockKey]['participant_bought'] = isset($packageData[$templateKey][$blockKey]['participant_bought']) ? $packageData[$templateKey][$blockKey]['participant_bought'] + 1 : 1;
-                    $shouldUpdate = true;
+                    $shouldUpdate                                               = true;
                 }
 
-                //Add the planning if option taken
+                // Add the planning if option taken
                 if ($block['type'] === 'lib_planning') {
                     if ($buyParticipant->participantBuyOption['planning'] === true) {
                         $packageData[$templateKey][$blockKey]['planning']        = true;

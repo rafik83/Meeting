@@ -9,6 +9,7 @@ Feature: Change password
 
   Scenario: Change the password successfully
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I fill in the following:
       |form.login.children.username.label |test@test.com |
       |form.login.children.password.label |p@ssw0rd      |
@@ -24,6 +25,7 @@ Feature: Change password
 
   Scenario: Change the password failed
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I fill in the following:
       |form.login.children.username.label |test@test.com |
       |form.login.children.password.label |p@ssw0rd      |

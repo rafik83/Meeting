@@ -11,6 +11,10 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeRepository implements TypeRepositoryInterface
@@ -21,11 +25,63 @@ class TypeRepository implements TypeRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var PaginatorInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $paginator;
+
+    /**
+     * @param EntityManager      $entityManager
+     * @param PaginatorInterface $paginator
+     */
+    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
     {
         $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($page, $limit, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\Model\TypeListView(type.id, translation.title, event.title)')
+            ->from('Entity:Type', 'type')
+            ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->join('type.event', 'event')
+            ->setParameter('locale', $locale);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, [
+            'defaultSortFieldName' => 'type.id',
+            'defaultSortDirection' => 'ASC',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Type $type)
+    {
+        $this->entityManager->persist($type);
+        $this->entityManager->flush($type);
+
+        foreach ($type->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Type $type)
+    {
+        $this->entityManager->flush($type);
+
+        foreach ($type->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
@@ -117,5 +173,87 @@ class TypeRepository implements TypeRepositoryInterface
         $type = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $type ? $type->getParticipantTemplate() : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSeeableTypeIdsByUser($user)
+    {
+        return $this->seeableTypeBySees($this->seesBySheets($this->sheetByUser($user)));
+    }
+
+    /**
+     * @param User|int $user
+     *
+     * @return array
+     */
+    private function sheetByUser($user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * @param array $sheets
+     *
+     * @return array
+     */
+    private function seesBySheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('see.id')
+            ->from('Entity:See', 'see', 'see.id')
+            ->leftJoin('see.seerCategory', 'seerCategory')
+            ->leftJoin('seerCategory.types', 'seerCategoryType')
+            ->leftJoin('see.seerType', 'seerType')
+            ->join('Entity:Sheet', 'sheet', 'WITH', '(sheet.type = seerCategoryType OR sheet.type = seerType) AND sheet IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * @param array $sees
+     *
+     * @return array
+     */
+    private function seeableTypeBySees(array $sees)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('DISTINCT seeableType.id')
+            ->from('Entity:Type', 'seeableType', 'seeableType.id')
+            ->leftJoin('seeableType.categories', 'seeableCategory')
+            ->join('Entity:See', 'see', 'WITH', '(see.seeableType = seeableType OR see.seeableCategory = seeableCategory) AND see IN (:sees)')
+            ->setParameter('sees', $sees);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 }

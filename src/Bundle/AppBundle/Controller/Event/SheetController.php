@@ -319,7 +319,7 @@ class SheetController extends BaseController
 
     /**
      * @param Request $request
-     * @param Sheet $sheet
+     * @param Sheet   $sheet
      * @param $userParticipant
      * @param $participantViews
      *
@@ -375,7 +375,7 @@ class SheetController extends BaseController
         $planningPrice      = $participantManager->getPlanningPrice($sheet);
 
         $buyParticipant = new BuyParticipant($sheet, $request->getLocale());
-        $form = $this->createForm(new BuyParticipantType(), $buyParticipant, [
+        $form           = $this->createForm(new BuyParticipantType(), $buyParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);

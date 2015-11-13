@@ -36,7 +36,7 @@ class BuyParticipant
     public $owner;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $participantBuyOption;
 

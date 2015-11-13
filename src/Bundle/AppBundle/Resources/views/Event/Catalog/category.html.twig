@@ -1,7 +1,7 @@
 {% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
 {% block content %}
-    <h2>Catalogue "{{ category.title }}"</h2>
+    <h2>Catalogue "{{ categoryView.title }}"</h2>
 
     {% for sheet in sheets %}
         {{ include(template_from_string(sheet.type.previewTemplate), { 'sheet': sheet }) }}

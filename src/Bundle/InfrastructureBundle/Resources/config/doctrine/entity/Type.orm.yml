@@ -23,10 +23,18 @@ Proximum\Vimeet\Domain\Model\Type:
             type: integer
         previewTemplate:
             type: text
+        viewTemplate:
+            type: text
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
             mappedBy: type
+            indexBy: locale
+            cascade: ["persist"]
+    manyToMany:
+        categories:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+            mappedBy: types
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

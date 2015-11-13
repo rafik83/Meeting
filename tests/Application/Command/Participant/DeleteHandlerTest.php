@@ -29,7 +29,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
-        $type         = new Type();
+        $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
         $participant1 = new Participant($sheet, $user1, [], true);
         $participant2 = new Participant($sheet, $user2, [], false);
@@ -54,7 +54,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
-        $type         = new Type();
+        $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
         $participant2 = new Participant($sheet, $user2, [], false);
         $sheet->getParticipants()->add($participant2);
@@ -74,7 +74,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
-        $type         = new Type();
+        $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
         $participant1 = new Participant($sheet, $user1, [], true);
         $participant2 = new Participant($sheet, $user2, [], false);
@@ -97,7 +97,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
-        $type         = new Type();
+        $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
         $participant1 = new Participant($sheet, $user1, [], false);
         $participant2 = new Participant($sheet, $user2, [], false);

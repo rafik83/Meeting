@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\CategoryTranslation:
+    type:  entity
+    table: category_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        locale:
+            type: string
+    manyToOne:
+        category:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+            inversedBy: translations

@@ -11,6 +11,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - @doctrine.orm.entity_manager
+            - @knp_paginator
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
@@ -23,8 +24,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
             - @doctrine.orm.entity_manager
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.repository.category_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.repository.see_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SeeRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.nomenclature_item_repository:
@@ -97,6 +104,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - @vimeet_infrastructure.repository.event_repository
+    vimeet_infrastructure.vimeet.application.command.type.update_handler:
+        class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.type.create_handler:
+        class: Proximum\Vimeet\Application\Command\Type\CreateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
 
     #
     # Security

@@ -1,0 +1,47 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>Ajouter une règle</h2>
+
+    {{ form(form) }}
+
+    <h2>Liste des règles</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Qui</th>
+                <th>Voit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for see in sees %}
+                <tr>
+                    <td>
+                        {% if see.seerType %}
+                            Type {{ see.seerType.translations.get(app.request.locale).title }}
+                        {% elseif see.seerCategory %}
+                            Catégorie {{ see.seerCategory.translations.get(app.request.locale).title }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if see.seeableType %}
+                            Type {{ see.seeableType.translations.get(app.request.locale).title }}
+                        {% elseif see.seeableCategory %}
+                            Catégorie {{ see.seeableCategory.translations.get(app.request.locale).title }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_event_who_see_who_delete', { 'id': event.id, 'see_id': see.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+{% endblock %}

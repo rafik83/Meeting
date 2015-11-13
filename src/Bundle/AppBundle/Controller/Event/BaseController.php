@@ -46,7 +46,7 @@ class BaseController extends Controller
     }
 
     /**
-     * @param Form $form
+     * @param Form  $form
      * @param array $template
      * @param array $data
      * @param $formData

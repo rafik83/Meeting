@@ -30,10 +30,10 @@ class PackageController extends BaseController
      * @param Sheet     $sheet
      * @param int       $step
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
+     * @return RedirectResponse|Response
+     *
      */
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
@@ -62,7 +62,8 @@ class PackageController extends BaseController
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
-                    $form->get('packageData'));
+                    $form->get('packageData')
+                );
             }
         }
 
@@ -137,7 +138,7 @@ class PackageController extends BaseController
             }
         }
 
-        return null;
+        return;
     }
 
     /**

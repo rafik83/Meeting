@@ -4,42 +4,52 @@ Feature: Register and login user
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml  |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml     |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
 
   Scenario: Register an user
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And the response status code should be 200
     Then I follow "Exposant"
     And I fill in "form.register.children.email.label" with "test@test.com"
     And I fill in "form.register.children.password.children.first.label" with "p@ssw0rd"
     And I fill in "form.register.children.password.children.second.label" with "p@ssw0rd"
     And I press "form.register.children.submit.label"
+    And the response status code should be 200
     Then I should see "flash.event.register.success"
 
   Scenario: User already exists
     When the fixtures "User.yml" are loaded
     And I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And the response status code should be 200
     Then I follow "Exposant"
     And I fill in "form.register.children.email.label" with "test@test.com"
     And I fill in "form.register.children.password.children.first.label" with "p@ssw0rd"
     And I fill in "form.register.children.password.children.second.label" with "p@ssw0rd"
     And I press "form.register.children.submit.label"
+    And the response status code should be 200
     Then I should see "register.email_already_exists"
 
   Scenario: Login successful
     When the fixtures "User.yml" are loaded
     And I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
     And I press "form.login.children.submit.label"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And the response status code should be 200
     And I should see "login.logged_as"
 
   Scenario: Login failed
     When the fixtures "User.yml" are loaded
     And I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "whatever-wrong-password"
     And I press "form.login.children.submit.label"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
     And I should see "Invalid credentials."
