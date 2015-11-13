@@ -21,11 +21,6 @@ admin_see_list:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/See:list }
 
-admin_see_update:
-    path: /event/{id}/who-see-who/{see_id}/update
-    methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/See:update }
-
 admin_who_see_who_dont_see_what:
     path: /event/{id}/{seerType}/{seerId}/see/{seeableType}/{seeableId}/dont-see
     methods: [GET, POST]
