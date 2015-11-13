@@ -35,7 +35,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('admin_who_see_who_dont_see_what', { 'id': event.id, 'seerType': see.seer.identifier, 'seerId': see.seer.id, 'seeableType': see.seeable.identifier, 'seeableId': see.seeable.id }) }}" class="btn btn-primary btn-sm">Ne voit pas quoi</a>
+                        <a href="{{ path('admin_who_see_who_dont_see_what', { 'id': event.id, 'seerIdentifier': see.seer.identifier, 'seerId': see.seer.id, 'seeableIdentifier': see.seeable.identifier, 'seeableId': see.seeable.id }) }}" class="btn btn-primary btn-sm">Ne voit pas quoi</a>
                         <a href="{{ path('admin_see_delete', { 'id': event.id, 'see_id': see.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>

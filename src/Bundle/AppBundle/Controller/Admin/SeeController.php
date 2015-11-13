@@ -57,19 +57,19 @@ class SeeController extends Controller
     /**
      * @param Request $request
      * @param Event   $event
-     * @param string  $seerType
+     * @param string  $seerIdentifier
      * @param int     $seerId
-     * @param string  $seeableType
+     * @param string  $seeableIdentifier
      * @param int     $seeableId
      *
      * @return RedirectResponse|Response
      */
-    public function whatAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
+    public function whatAction(Request $request, Event $event, $seerIdentifier, $seerId, $seeableIdentifier, $seeableId)
     {
-        $seer = $this->findWho($seerType, $seerId);
+        $seer = $this->findWho($seerIdentifier, $seerId);
         $this->notFoundUnless($seer, 'Seer not found.');
 
-        $seeable = $this->findWho($seeableType, $seeableId);
+        $seeable = $this->findWho($seeableIdentifier, $seeableId);
         $this->notFoundUnless($seeable, 'Seeable not found.');
 
         $see = $this->findSee($event, $seer, $seeable);
@@ -78,8 +78,9 @@ class SeeController extends Controller
         $form = $this->createWhatForm($see, $request->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $see->setWhat($form->getData());
             $this->get('vimeet_infrastructure.repository.see_repository')->set($see);
-            $this->addFlash('succes', 'admin.event.who_see_what.success');
+            $this->addFlash('success', 'admin.event.who_see_what.success');
 
             return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
         }
@@ -183,11 +184,11 @@ class SeeController extends Controller
     private function generateWhatUrl(See $see)
     {
         return $this->generateUrl('admin_who_see_who_dont_see_what', [
-            'id'          => $see->getEvent()->getId(),
-            'seerType'    => $see->getSeer()->getIdentifier(),
-            'seerId'      => $see->getSeer()->getId(),
-            'seeableType' => $see->getSeeable()->getIdentifier(),
-            'seeableId'   => $see->getSeeable()->getId(),
+            'id'                => $see->getEvent()->getId(),
+            'seerIdentifier'    => $see->getSeer()->getIdentifier(),
+            'seerId'            => $see->getSeer()->getId(),
+            'seeableIdentifier' => $see->getSeeable()->getIdentifier(),
+            'seeableId'         => $see->getSeeable()->getId(),
         ]);
     }
 

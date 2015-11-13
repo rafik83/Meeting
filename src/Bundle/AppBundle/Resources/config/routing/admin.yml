@@ -22,13 +22,13 @@ admin_see_list:
     defaults: { _controller: VimeetAppBundle:Admin/See:list }
 
 admin_who_see_who_dont_see_what:
-    path: /event/{id}/{seerType}/{seerId}/see/{seeableType}/{seeableId}/dont-see
+    path: /event/{id}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/See:what }
     requirements:
-        seerType: category|type
+        seerIdentifier: category|type
         seerId: \d+
-        seeableType: category|type
+        seeableIdentifier: category|type
         seeableId: \d+
 
 admin_see_delete:
