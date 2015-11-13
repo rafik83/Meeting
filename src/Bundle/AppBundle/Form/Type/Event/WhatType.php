@@ -19,11 +19,11 @@ class WhatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participant', new WhatSheetType(), [
+            ->add('participant', new WhatCheckboxesType(), [
                 'template' => $options['who']->getParticipantTemplate(),
                 'locale'   => $options['locale'],
             ])
-            ->add('sheet', new WhatSheetType(), [
+            ->add('sheet', new WhatCheckboxesType(), [
                 'template' => $options['who']->getSheetTemplate(),
                 'locale'   => $options['locale'],
             ])

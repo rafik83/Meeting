@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WhatSheetType extends AbstractType
+class WhatCheckboxesType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ class WhatSheetType extends AbstractType
             if (isset($step['template'])) {
 
                 $builder
-                    ->add($name, new WhatSheetType(), [
+                    ->add($name, new WhatCheckboxesType(), [
                         'template' => $step['template'],
                         'locale'   => $options['locale'],
                         'label'    => $step['label'][$options['locale']],
