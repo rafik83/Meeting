@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\WhoInterface;
 
 interface SeeRepositoryInterface
 {
@@ -21,6 +22,15 @@ interface SeeRepositoryInterface
      * @return See[]
      */
     public function getByEvent(Event $event);
+
+    /**
+     * @param Event        $event
+     * @param WhoInterface $seer
+     * @param WhoInterface $seeable
+     *
+     * @return See
+     */
+    public function getByEventSeerAndSeeable(Event $event, WhoInterface $seer, WhoInterface $seeable);
 
     /**
      * @param See $see

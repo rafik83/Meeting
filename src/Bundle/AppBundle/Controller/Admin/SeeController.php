@@ -14,6 +14,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,20 +69,25 @@ class SeeController extends Controller
      */
     public function whatAction(Request $request, Event $event, $seerType, $seerId, $seeableType, $seeableId)
     {
-        $seer    = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seerType)))->find($seerId);
-        $seeable = $this->getDoctrine()->getRepository(sprintf('Entity:%s', ucfirst($seeableType)))->find($seeableId);
+        $seer    = $this->findWho($seerType, $seerId);
+        $seeable = $this->findWho($seeableType, $seeableId);
 
-        $form = $this->createForm(new WhatType(), [], [
-            'method' => 'POST',
-            'who'    => $seeable,
-            'locale' => $request->getLocale(),
-        ]);
-        $form->add('submit', 'submit');
+        if (!$seer) {
+            throw $this->createNotFoundException('Seer not found.');
+        }
+
+        if (!$seeable) {
+            throw $this->createNotFoundException('Seeable not found.');
+        }
+
+        $see  = $this->findOrCreateSee($event, $seer, $seeable);
+        $form = $this->createWhatForm($see, $request->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
 
-            $see = new See($event, $seer, $seeable, $form->getData());
-            $this->getDoctrine()->getManager()->persist($see);
+            if (!$see->getId()) {
+                $this->getDoctrine()->getManager()->persist($see);
+            }
             $this->getDoctrine()->getManager()->flush($see);
 
             return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
@@ -116,5 +122,58 @@ class SeeController extends Controller
         $this->get('vimeet_infrastructure.repository.see_repository')->remove($see);
 
         return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
+    }
+
+    /**
+     * @param Event        $event
+     * @param WhoInterface $seer
+     * @param WhoInterface $seeable
+     *
+     * @return See
+     */
+    private function findOrCreateSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    {
+        return $this
+            ->get('vimeet_infrastructure.repository.see_repository')
+            ->getByEventSeerAndSeeable($event, $seer, $seeable) ? : new See($event, $seer, $seeable, []);
+    }
+
+    /**
+     * @param $identifier
+     * @param $id
+     *
+     * @return WhoInterface
+     */
+    private function findWho($identifier, $id)
+    {
+        return $this
+            ->getDoctrine()
+            ->getRepository(sprintf('Entity:%s', ucfirst($identifier)))
+            ->find($id);
+    }
+
+    /**
+     * @param See    $see
+     * @param string $locale
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    private function createWhatForm(See $see, $locale)
+    {
+        $form = $this->createForm(new WhatType(), $see->getWhat(), [
+            'action' => $this->generateUrl( 'admin_who_see_who_dont_see_what', [
+                'id'          => $see->getEvent()->getId(),
+                'seerType'    => $see->getSeer()->getIdentifier(),
+                'seerId'      => $see->getSeer()->getId(),
+                'seeableType' => $see->getSeeable()->getIdentifier(),
+                'seeableId'   => $see->getSeeable()->getId(),
+            ]),
+            'method' => 'POST',
+            'who'    => $see->getSeeable(),
+            'locale' => $locale,
+        ]);
+        $form->add('submit', 'submit');
+
+        return $form;
     }
 }

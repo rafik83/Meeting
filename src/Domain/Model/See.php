@@ -146,4 +146,34 @@ class See
     {
         return $this->what;
     }
+
+    /**
+     * Set what
+     *
+     * @param array $what
+     *
+     * @return See
+     */
+    public function setWhat(array $what)
+    {
+        $this->what = $what;
+
+        return $this;
+    }
+
+    /**
+     * @return WhoInterface
+     */
+    public function getSeer()
+    {
+        return $this->seerCategory ? : $this->seerType;
+    }
+
+    /**
+     * @return WhoInterface
+     */
+    public function getSeeable()
+    {
+        return $this->seeableCategory ? : $this->seeableType;
+    }
 }
