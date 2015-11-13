@@ -6,7 +6,7 @@
     <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
     <table class="table table-condensed">
         <thead>
-            <th>{{ 'event.sheet.cart.column.product'|trans }}</th>
+            <th colspan="2">{{ 'event.sheet.cart.column.product'|trans }}</th>
             <th class="text-right">{{ 'event.sheet.cart.column.unitPrice'|trans }}</th>
             <th class="text-right">{{ 'event.sheet.cart.column.quantity'|trans }}</th>
             <th class="text-right">{{ 'event.sheet.cart.column.total'|trans }}</th>
@@ -15,11 +15,11 @@
         {% for step in cart.cartSteps  %}
             {% if step.cartRows is defined and step.cartRows|length > 0 %}
                 <tr class="active">
-                    <td colspan="3">{{ step.title }}</td>
-                    <td class="text-right">{{ step.subTotal|number_format_currency('EUR') }}</td>
+                    <th colspan="5">{{ step.title }}</th>
                 </tr>
                 {% for row in step.cartRows %}
                     <tr>
+                        <td>&nbsp;</td>
                         <td>{{ row.title }}</td>
                         <td class="text-right">{{ row.unitPrice|number_format_currency('EUR') }}</td>
                         <td class="text-right">{{ row.quantity }}</td>
@@ -30,8 +30,8 @@
         {% endfor %}
         {% if cart.total is defined %}
             <tr class="info">
-                <td colspan="3" >{{ 'event.sheet.cart.label.totalPrice'|trans }}</td>
-                <td class="text-right">{{ cart.total|number_format_currency('EUR') }}</td>
+                <th colspan="4" >{{ 'event.sheet.cart.label.totalPrice'|trans }}</th>
+                <th class="text-right">{{ cart.total|number_format_currency('EUR') }}</th>
             </tr>
         {% endif %}
         </tbody>

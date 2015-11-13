@@ -63,5 +63,5 @@ event:
                 quantity: Quantité
                 total: Total
             label:
-                totalPrice: Prix total de votre panier
-                billingStep: Passez à l'étape de facturation
+                totalPrice: Total
+                billingStep: Passer à l'étape de facturation
