@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\See;
