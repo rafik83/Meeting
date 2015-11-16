@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TypeFieldController extends Controller
+class TypeFormTemplateController extends Controller
 {
     /**
      * @ParamConverter(
@@ -34,9 +34,14 @@ class TypeFieldController extends Controller
      */
     public function listAction(Request $request, Event $event, Type $type)
     {
-        return $this->render('VimeetAppBundle:Admin/TypeField:list.html.twig', [
+        $typeView = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getTypeViewById($type->getId(), $request->getLocale());
+
+        return $this->render('VimeetAppBundle:Admin/TypeFormTemplate:list.html.twig', [
             'event'    => $event,
-            'template' => $type->getSheetTemplate(),
+            'typeView' => $typeView,
+            'type'     => $type,
         ]);
     }
 }
