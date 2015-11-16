@@ -89,6 +89,35 @@ class SeeRepository implements SeeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getBySeerTypeAndSeeableType(Type $seer, Type $seeable)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder();
+
+        $queryBuilder
+            ->select('see')
+            ->from('Entity:See', 'see')
+            ->where($queryBuilder->expr()->orX(
+                'see.seerType = :seerType',
+                'see.seerCategory IN (:seerCategories)'
+            ))
+            ->setParameter('seerType', $seer)
+            ->setParameter('seerCategories', $seer->getCategories())
+            ->andWhere($queryBuilder->expr()->orX(
+                'see.seeableType = :seeableType',
+                'see.seeableCategory IN (:seeableCategories)'
+            ))
+            ->setParameter('seeableType', $seeable)
+            ->setParameter('seeableCategories', $seeable->getCategories());
+
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(See $see)
     {
         $this->entityManager->persist($see);

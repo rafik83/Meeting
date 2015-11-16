@@ -256,4 +256,21 @@ class TypeRepository implements TypeRepositoryInterface
 
         return array_keys($queryBuilder->getQuery()->getResult());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesByUser(User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
