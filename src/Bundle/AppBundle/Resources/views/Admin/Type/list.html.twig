@@ -19,6 +19,7 @@
                 <td>{{ type.eventTitle }}</td>
                 <td>
                     <a href="{{ path('admin_type_update', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_type_fields_list', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-default btn-sm">Champs</a>
                 </td>
             </tr>
         {% endfor %}

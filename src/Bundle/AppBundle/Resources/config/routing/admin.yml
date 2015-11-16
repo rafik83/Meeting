@@ -47,3 +47,11 @@ admin_type_update:
         type_id: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Type:update }
+
+admin_type_fields_list:
+    path: /event/{id}/type/{type_id}/fields
+    requirements:
+        id: \d+
+        type_id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/TypeField:list }

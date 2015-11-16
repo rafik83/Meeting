@@ -1,0 +1,54 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Requis</th>
+            <th>Privé</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for blocks in template %}
+            {% if blocks['template'] is defined %}
+                <tr>
+                    <th colspan="5" class="info">
+                        {{ blocks['title'][app.request.locale] }}
+                    </th>
+                </tr>
+                {% for field in blocks['template'] %}
+                    <tr>
+                        <td>{{ field['label'][app.request.locale] }}</td>
+                        <td>{{ field['type'] }}</td>
+                        <td>{{ field['required'] is defined and field['required'] ? '&#10003;' : '' }}</td>
+                        <td>{{ field['private'] is defined and field['private'] ? '&#10003;' : '' }}</td>
+                        <td>
+                            {% if field['type'] == 'lib_choice' %}
+                                <ul>
+                                {% for choice in field['choices'] %}
+                                    {% if choice['choices'] is defined %}
+                                        <li>
+                                            {{ choice['label'][app.request.locale] }}
+                                            <ul>
+                                            {% for item in choice['choices'] %}
+                                                <li>{{ item['label'][app.request.locale] }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% else %}
+                                        <li>{{ choice['label'][app.request.locale] }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
