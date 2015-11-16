@@ -33,7 +33,7 @@ class CartStep
     {
         $this->title    = $title;
         $this->subTotal = $subTotal;
-        $this->cartRows = new ArrayCollection();
+        $this->cartRows = [];
     }
 
     /**
