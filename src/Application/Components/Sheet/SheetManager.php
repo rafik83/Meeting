@@ -74,6 +74,28 @@ class SheetManager
     }
 
     /**
+     * @param User   $user
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return SheetDataView
+     */
+    public function getSheetDataViewByUser(User $user, Sheet $sheet, $locale)
+    {
+        $this->applyVisibility($user, $sheet);
+
+        return new SheetDataView(
+            $sheet->getId(),
+            $sheet->getEvent(),
+            $sheet->getType(),
+            $sheet->getParticipants(),
+            $this->getData($sheet, $locale),
+            [],
+            []
+        );
+    }
+
+    /**
      * @param Sheet  $sheet
      * @param string $locale
      *
@@ -105,10 +127,10 @@ class SheetManager
     /**
      * Get data seeable by $user
      *
-     * @param Sheet $sheet
      * @param User  $user
+     * @param Sheet $sheet
      */
-    public function apply(Sheet $sheet, User $user)
+    private function applyVisibility(User $user, Sheet $sheet)
     {
         $applier = new Applier();
         $applier->apply($this->getSeeToApply($sheet, $user), $sheet, new SetNullStrategy());
