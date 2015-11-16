@@ -1,3 +1,7 @@
+#
+# Event home
+#
+
 event:
     path: /
     host: "{subdomain}.%domain%"
@@ -5,6 +9,10 @@ event:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Home:index }
+
+#
+# Register
+#
 
 event_register:
     path: /register/{typeView}
@@ -14,6 +22,10 @@ event_register:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
+#
+# Join event
+#
+
 event_participate:
     path: /participate/{typeView}
     host: "{subdomain}.%domain%"
@@ -21,6 +33,10 @@ event_participate:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:participate }
+
+#
+# Sheet
+#
 
 event_sheet:
     path: /sheet/{id}
@@ -94,6 +110,10 @@ event_sheet_package_payment_mode:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Package:paymentMode }
 
+#
+# Authentication
+#
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"
@@ -131,6 +151,10 @@ event_change_password:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ChangePassword:changePassword }
+
+#
+# Catalog
+#
 
 event_catalog:
     path: /catalog
