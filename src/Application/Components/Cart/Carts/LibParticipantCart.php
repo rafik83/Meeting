@@ -25,6 +25,8 @@ class LibParticipantCart implements LibCartInterface
             && isset($dataValue)
             && isset($dataValue['participant'])
             && $dataValue['participant'] === true
+            && isset($dataValue['participant_bought'])
+            && $dataValue['participant_bought'] !== 0
         ) {
             $cartRow = new CartRow(
                 isset($template['label'][$locale]) ? $template['label'][$locale] : null,
