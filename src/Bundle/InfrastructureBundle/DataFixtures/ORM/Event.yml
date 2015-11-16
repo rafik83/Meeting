@@ -5,19 +5,19 @@ Proximum\Vimeet\Domain\Model\Event:
         locales: [fr, en]
         fallback: fr
         organiserName: PROXIMUM
-        paymentAddress: >
+        paymentAddress: |+
             855 Avenue Roger Salengro
             92370 CHAVILLE - FRANCE
         organiserEmail: accounts@proximumgroup.com
-        bankInfo: >
+        bankInfo: |+
             HSBC Issy les Moulineaux
             IBAN: FR76 3005 6006 4306 4332 4153 439
             SWIFT (BIC): CCFRFRPP
-        legalInformation: >
+        legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
         vat: 20
-        elementToJoinWithInvoice: >
+        elementToJoinWithInvoice: |+
             - Numéro de la Facture
             - Nom de l'événement
             - Montant net à payer

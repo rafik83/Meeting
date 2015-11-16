@@ -21,7 +21,7 @@ event:
     link:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
-        go_back_to_sheet: Retournez à la fiche
+        go_back_to_sheet: Retourner à la fiche
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté

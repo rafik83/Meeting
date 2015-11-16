@@ -374,13 +374,13 @@ Proximum\Vimeet\Domain\Model\Template:
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
+                    <h2>Panier</h2>
                     <table class="table table-condensed">
                         <thead>
-                            <th colspan="2">{{ 'event.sheet.cart.column.product'|trans }}</th>
-                            <th class="text-right">{{ 'event.sheet.cart.column.unitPrice'|trans }}</th>
-                            <th class="text-right">{{ 'event.sheet.cart.column.quantity'|trans }}</th>
-                            <th class="text-right">{{ 'event.sheet.cart.column.total'|trans }}</th>
+                            <th colspan="2">Produit</th>
+                            <th class="text-right">Prix unitaire</th>
+                            <th class="text-right">Quantité</th>
+                            <th class="text-right">Total</th>
                         </thead>
                         <tbody>
                         {% for step in cart.cartSteps  %}
@@ -401,7 +401,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         {% endfor %}
                         {% if cart.total is defined %}
                             <tr class="info">
-                                <th colspan="4">{{ 'event.sheet.cart.label.totalPrice'|trans }}</th>
+                                <th colspan="4">Total</th>
                                 <th class="text-right">{{ cart.total|number_format_currency('EUR') }}</th>
                             </tr>
                             <tr>
@@ -433,11 +433,18 @@ Proximum\Vimeet\Domain\Model\Template:
                     </div>
                     <div class="col-md-4 col-md-offset-4">
                         <h2>Elements à joindre à votre paiement</h2>
-                        {{ sheet.type.event.elementToJoinWithInvoice }}
+                        {{ sheet.type.event.elementToJoinWithInvoice|nl2br }}
                     </div>
                     <div class="col-md-4 col-md-offset-4">
                         <h2>Référence pro-forma:</h2>
                         <p>Date: {{ 'now'|date('d/m/Y') }}</p>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <h2>Condition de paiement</h2>
+                        <p>
+                            - acompte de 50% à l'inscription<br>
+                            - solde avant 23/10/2015
+                        </p>
                     </div>
                 </div>
             </div>
