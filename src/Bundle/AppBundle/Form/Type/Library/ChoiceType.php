@@ -58,22 +58,30 @@ class ChoiceType extends AbstractLocalizedType
         $optgroups = false;
 
         foreach ($template['choices'] as $key => $choice) {
+            if (!isset($choice['label'][$locale])) {
+                continue;
+            }
+
             // choice with optgroups
             if (isset($choice['choices']) && is_array($choice['choices'])) {
                 $optgroups = true;
-                $items = [];
+                $items     = [];
 
                 foreach ($choice['choices'] as $keyItem => $item) {
-                    $items[$keyItem] = $item['label'][$locale];
+                    if (isset($item['label'][$locale])) {
+                        $items[$keyItem] = $item['label'][$locale];
+                    }
                 }
 
                 asort($items);
 
                 // label is the optgroup
                 $choices[$choice['label'][$locale]] = $items;
-            } else {
-                $choices[$key] = $choice['label'][$locale];
+
+                continue;
             }
+
+            $choices[$key] = $choice['label'][$locale];
         }
 
         if ($optgroups) {
