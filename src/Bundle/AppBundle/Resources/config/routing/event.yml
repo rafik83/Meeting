@@ -115,7 +115,7 @@ event_sheet_package_final_billing_step:
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
-    methods:  [GET, POST]
+    methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Billing:finalBillingStep }
 
 event_login:
