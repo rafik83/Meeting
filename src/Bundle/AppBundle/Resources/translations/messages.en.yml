@@ -52,3 +52,15 @@ event:
                 quantity: Quantity
         participant:
             boughtNumber: '{0}|{1} You have already added %count% participant on your sheet|]1,Inf[ You have already added %count% participants on your sheet'
+        billing:
+            title: Billing
+        cart:
+            title: Your cart
+            column:
+                product: Product
+                unitPrice: Unit Price
+                quantity: Quantity
+                total: Total
+            label:
+                totalPrice: Total price of your cart
+                billingStep: Go to the billing step
