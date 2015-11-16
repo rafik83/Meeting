@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -57,7 +58,16 @@ class PackageController extends BaseController
                 return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
             } catch (BoughtParticipantAlreadyAddedException $exception) {
                 $packageTemplate = $sheet->getTypePackageTemplate();
-                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm(
+                $this->addErrorOnForm(
+                    $exception,
+                    $form,
+                    $packageTemplate[$step],
+                    $updateStep->packageData,
+                    $form->get('packageData'));
+            } catch (ForgotToAddQuantityException $exception) {
+                $packageTemplate = $sheet->getTypePackageTemplate();
+                $this->addErrorOnForm(
+                    $exception,
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
