@@ -87,7 +87,7 @@ class BillingController extends BaseController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->addFlash('success', 'flash.package.payment_mode.success');
 
-            // Go to the sheet
+            // Go to the final billing step
             return $this->redirectToRoute('event_sheet_package_final_billing_step', [
                 'subdomain' => $request->attributes->get('subdomain'),
                 'id'        => $sheet->getId(),
