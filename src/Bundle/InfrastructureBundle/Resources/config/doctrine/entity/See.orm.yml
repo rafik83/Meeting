@@ -1,6 +1,23 @@
 Proximum\Vimeet\Domain\Model\See:
     type:  entity
     table: see
+    uniqueConstraints:
+        unique_idx_1:
+            columns:
+                - seer_type_id
+                - seeable_type_id
+        unique_idx_2:
+            columns:
+                - seer_type_id
+                - seeable_category_id
+        unique_idx_3:
+            columns:
+                - seer_category_id
+                - seeable_type_id
+        unique_idx_4:
+            columns:
+                - seer_category_id
+                - seeable_category_id
     id:
         id:
             type: integer
