@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Type\Create:
+    properties:
+        template:
+            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~

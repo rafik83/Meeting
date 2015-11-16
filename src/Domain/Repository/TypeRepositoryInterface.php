@@ -12,12 +12,32 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\TypeListView;
 use Proximum\Vimeet\Domain\Model\TypeTemplatesView;
 use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface TypeRepositoryInterface
 {
+    /**
+     * @param int    $page
+     * @param int    $limit
+     * @param string $locale
+     *
+     * @return TypeListView[]
+     */
+    public function paginate($page, $limit, $locale);
+
+    /**
+     * @param Type $type
+     */
+    public function add(Type $type);
+
+    /**
+     * @param Type $type
+     */
+    public function set(Type $type);
+
     /**
      * @param int    $eventId
      * @param string $locale

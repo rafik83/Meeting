@@ -1,0 +1,382 @@
+Proximum\Vimeet\Domain\Model\Template:
+    #
+    # Exhibitor
+    #
+    template_exhibitor:
+        __construct: false
+        title: Exposant
+        participant:
+            563caf1d9b1cb:
+                type: lib_text
+                required: true
+                private: false
+                label:
+                    fr: "Nom"
+                    en: "Lastname"
+            563caf2746398:
+                type: lib_text
+                required: true
+                private: false
+                label:
+                    fr: "Prénom"
+                    en: "Firstname"
+            563caf2f0ddbd:
+                type: lib_text
+                required: true
+                private: true
+                label:
+                    fr: "Téléphone"
+                    en: "Phone"
+            563caf34eed69:
+                type: lib_text
+                required: true
+                private: false
+                label:
+                    fr: "Fonction"
+                    en: "Position"
+        sheet:
+            563cae3691916:
+                title:
+                    fr: "Logo"
+                    en: "Brand"
+                linkTo:
+                    template: "packageTemplate"
+                    index: 56407fa453f4e
+            563cae566af03:
+                title:
+                    fr: "Société"
+                    en: "Company"
+                template:
+                    563cb103926e6: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
+                    563cb10a524c5: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    563ccd1fe3a81: { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
+                    563cb10fcc9fe: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    563cb115bbeb9: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    563cb1036EB88: { "type": "lib_nomenclature", "id": @nomenclature_activity->id, "required": true, "private": false, "label": { "fr": "Activité", "en": "Activity" } }
+                    5641f581998c1: { "type": "lib_nomenclature", "id": @nomenclature_size->id, "required": false, "private": false, "label": { "fr": "Taille", "en": "Size" } }
+                    5641f59737211: { "type": "lib_nomenclature", "id": @nomenclature_turnover->id, "required": false, "private": false, "label": { "fr": "Chiffre d'affaire", "en": "Turnover" } }
+                    5641f59e537b9: { "type": "lib_nomenclature", "id": @nomenclature_type->id, "required": false, "private": false, "label": { "fr": "Type de structure", "en": "Type" } }
+            563cae5f48ce2:
+                title:
+                    fr: "Offres"
+                    en: "Offers"
+                template:
+                    563cb11d08df1: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
+        package:
+            563cae7496da1:
+                title:
+                    fr: "Forfait de participation"
+                    en: "Participation package"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    563cae8a5072d:
+                        label:
+                            fr: "Forfait"
+                            en: "Package"
+                        description:
+                            fr: "Description forfait fr"
+                            en: "Description package en"
+                        type: "choice_with_description"
+                        required: true
+                        choices:
+                            563cb1257722e:
+                                label:
+                                    fr: "Formule Exposant"
+                                    en: "Exhibitors package"
+                                description:
+                                    fr: >
+                                        Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
+                                           - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
+                                           - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
+                                           - L’ouverture de votre « Espace Client » sur notre site internet.
+                                           - L’assistance logistique de notre équipe avant et pendant le salon.
+                                           - Un planning de rendez-vous préprogrammés sur 2 jours.
+                                           - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
+                                           - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
+                                           - L’accès à la pause café permanente propice au contact informel.
+                                           - Une invitation au cocktail inaugural.
+                                    en: "Description Exhibitors"
+                                unitPrice: 2190
+                            563cb12b41909:
+                                label:
+                                    fr: "Formule Découverte"
+                                    en: "Discovery formula"
+                                description:
+                                    fr: "Description forfait Découverte"
+                                    en: "Description Discovery"
+                                unitPrice: 1090
+                            563cb13a4d3de:
+                                label:
+                                    fr: "Forfait Silver"
+                                    en: "Silver formula"
+                                description:
+                                    fr: "Description forfait  Silver"
+                                    en: "Description Silver"
+                                unitPrice: 3990
+                            563cb1546dd70:
+                                label:
+                                    fr: "Forfait Gold"
+                                    en: "Gold formula"
+                                description:
+                                    fr: "Description forfait  Gold"
+                                    en: "Description Gold"
+                                unitPrice: 5990
+                            563cb15fbf353:
+                                label:
+                                    fr: "Formule de sponsoring des CONFERENCES"
+                                    en: "Sponsoring formula for CONFERENCES"
+                                description:
+                                    fr: "Description forfait  sponsoring"
+                                    en: "Description sponsoring"
+                                unitPrice: 11000
+            563cae9c37ff6:
+                title:
+                    fr: "Augmenter le nombre de participants sur votre fiche"
+                    en: "Traduction en anglais"
+                description:
+                    fr: "description en fr"
+                    en: "description en en"
+                template:
+                    56407f8b58f6b:
+                        label:
+                            fr: "Ajouter des participants"
+                            en: "Add participants"
+                        description:
+                            fr: "Vous pouvez ajouter des participants à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
+                        required: false
+                        type: "lib_participant"
+                        unitPrice: 400
+                    56407f9b2a1a3:
+                        label:
+                            fr: "Ajouter des plannings"
+                            en: "Add plannings"
+                        description:
+                            fr: "Vous pouvez ajouter des plannings à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
+                        required: false
+                        type: "lib_planning"
+                        unitPrice: 550
+            56407fa453f4e:
+                title:
+                    fr: "Options proposées pour optimiser votre participation"
+                    en: "Options to optimize your participation:"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    563caea37f864:
+                        label:
+                            fr: "Votre logo"
+                            en: "Your logo"
+                        description:
+                            fr: "Description en français"
+                            en: "Description in english"
+                        type: "upload_with_choices"
+                        required: true
+                        choices:
+                            563cb173969ba:
+                                label:
+                                    fr: "L’insertion de votre logo sur le catalogue en ligne"
+                                    en: "Your logo on the catalog"
+                                description: { "fr": "", "en": "" }
+                                unitPrice: 59
+                            563cb17add8da:
+                                label:
+                                    fr: "Je ne prends pas"
+                                    en: "I do not take"
+                                description: { "fr": "", "en": "" }
+                                placeholder: true
+                                unitPrice: 0
+                    563caeb152464:
+                        type: "lib_text"
+                        required: false
+                        label:
+                            fr: "Lien sur le logo vers votre site internet"
+                            en: "Link on the brand"
+                        description: { "fr": "", "en": "" }
+                    563caeb98d3af:
+                        label:
+                            fr: "Pack Pub"
+                            en: "Ads banner"
+                        description:
+                            fr: "Publicité + logo sur votre fiche de présentation en ligne."
+                            en: "Description in english"
+                        type: "upload_with_choices"
+                        required: true
+                        choices:
+                            563caf7c2b89a:
+                                label:
+                                    fr: "Formule 1"
+                                    en: "Formula 1"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 199
+                            563caf825cacd:
+                                label:
+                                    fr: "Formule 2"
+                                    en: "Formula 2"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 249
+                            563caf89040a4:
+                                label:
+                                    fr: "Formule 3"
+                                    en: "Formula 3"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                unitPrice: 399
+                            563caf8ec8348:
+                                label:
+                                    fr: "Je ne prends pas"
+                                    en: "I do not take"
+                                description:
+                                    fr: ""
+                                    en: ""
+                                placeholder: true
+                                unitPrice: 0
+                    563caec361723:
+                        type: "lib_text"
+                        required: false
+                        label:
+                            fr: "Lien sur la bannière pub vers votre site internet"
+                            en: "Link on the ads banner"
+                        description:
+                            fr: "Module équipé de 4m² supplémentaires"
+                            en: "Additional equipped booth of 4 sqm"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 3990
+                        quantity:
+                            min: 1
+                            max: 5
+                    563caecd66d86:
+                        label:
+                            fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
+                            en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
+                        description:
+                            fr: "Quantité min 3, quantité max 3"
+                            en: "Quantité min 3, quantité max 3"
+                        type: "lib_option"
+                        unitPrice: 5990
+                        quantity:
+                            min: 3
+                            max: 3
+                    563caedade41a:
+                        label:
+                            fr: "Option payant avec sélection de quantité"
+                            en: "Option payant avec sélection de quantité"
+                        description:
+                            fr: "Quantité min 1, quantité max 5"
+                            en: "Quantité min 1, quantité max 5"
+                        type: "lib_option"
+                        unitPrice: 11000
+                        quantity:
+                            min: 1
+                            max: 5
+            563caee826357:
+                title:
+                    en: "Options supplémentaires"
+                    fr: "Options supplémentaires"
+                description:
+                    en: "ceci est une description"
+                    fr: "ceci est une description"
+                template:
+                    563caef76f49e:
+                        label:
+                            fr: "Wifi sur place"
+                            en: "Wifi sur place"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 0
+                    563caefd7879f:
+                        label:
+                            fr: "traduction de votre fiche de présentation"
+                            en: "traduction de votre fiche de présentation"
+                        description:
+                            en: ""
+                            fr: ""
+                        unitPrice: 95
+                        type: "lib_option"
+                        quantity:
+                            min: 1
+                            max: 5
+                    563caf044d656:
+                        label:
+                            fr: "Insertion de votre brochure dans les pochettes d’accueil"
+                            en: "Insertion de votre brochure dans les pochettes d’accueil"
+                        description:
+                            en: ""
+                            fr: ""
+                        unitPrice: 2600
+                        type: "lib_option"
+        preview: >
+            <div>
+                <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
+                <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
+            </div>
+        view: ""
+
+    #
+    # Visitor
+    #
+    template_visitor:
+        __construct: false
+        title: Visiteur
+        participant:
+            563cafaae8f29:
+                type: "lib_text"
+                required: true
+                private: false
+                label:
+                    fr: "Nom"
+                    en: "Lastname"
+            563cafb123e5e:
+                type: "lib_text"
+                required: true
+                private: false
+                label:
+                    fr: "Prénom"
+                    en: "Firstname"
+            563cafb7037b4:
+                type: "lib_text"
+                required: true
+                private: true
+                label:
+                    fr: "Téléphone"
+                    en: "Phone"
+            563cafbcc4f38:
+                type: "lib_text"
+                required: true
+                private: false
+                label:
+                    fr: "Fonction"
+                    en: "Position"
+        sheet:
+            563cb00c629d8:
+                title: { "fr": "Société", "en": "Company" }
+                template:
+                    563cb02125c23: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
+                    563cb02932fc8: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    563cb02fc1df1: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    563cb0364f1c6: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+            563cb014e2784:
+                title: { "fr": "Besoins", "en": "Needs" }
+                template:
+                    563cb03f9a509: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
+        package: []
+        preview: >
+            <div>
+                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
+                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
+            </div>
+        view: ""

@@ -1,3 +1,7 @@
+#
+# Event
+#
+
 admin_event_list:
     path: /event
     methods: [GET]
@@ -17,3 +21,29 @@ admin_event_who_see_who_delete:
     path: /event/{id}/who-see-who/{see_id}/delete
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Event:deleteSee }
+
+#
+# Type
+#
+
+admin_type_list:
+    path: /event/{id}/type
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Type:list }
+
+admin_type_create:
+    path: /event/{id}/type/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Type:create }
+
+admin_type_update:
+    path: /event/{id}/type/{type_id}/update
+    requirements:
+        id: \d+
+        type_id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Type:update }
