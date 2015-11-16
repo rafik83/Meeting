@@ -260,7 +260,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypesByUser(User $user)
+    public function getTypesByUser(Event $event, User $user)
     {
         $queryBuilder = $this
             ->entityManager
@@ -269,7 +269,9 @@ class TypeRepository implements TypeRepositoryInterface
             ->from('Entity:Type', 'type')
             ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

@@ -144,9 +144,11 @@ class SheetManager
      */
     private function getSeeToApply(Sheet $sheet, User $user)
     {
-        $types = $this->typeRepository->getTypesByUser($user);
-        $sees  = [];
+        // Get types of sheet the user the user have for this event
+        $types = $this->typeRepository->getTypesByUser($sheet->getEvent(), $user);
 
+        // Get related rules
+        $sees = [];
         foreach ($types as $type) {
             $sees[] = $this->seeRepository->getBySeerTypeAndSeeableType($type, $sheet->getType());
         }

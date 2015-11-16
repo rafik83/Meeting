@@ -90,9 +90,10 @@ interface TypeRepositoryInterface
     public function getSeeableTypeIdsByUser($user);
 
     /**
-     * @param User $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return Type[]
      */
-    public function getTypesByUser(User $user);
+    public function getTypesByUser(Event $event, User $user);
 }
