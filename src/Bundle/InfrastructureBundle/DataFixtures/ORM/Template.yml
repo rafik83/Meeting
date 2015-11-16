@@ -238,6 +238,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                 description:
                                     fr: ""
                                     en: ""
+                                placeholder: true
                                 unitPrice: 0
                                 placeholder: true
                     563caec361723:
