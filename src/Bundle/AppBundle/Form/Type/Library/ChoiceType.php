@@ -22,10 +22,10 @@ class ChoiceType extends AbstractLocalizedType
     {
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefaults([
-           'placeholder' => 'choice.placeholder',
-           'choices' => function (Options $options) {
-               return $this->getChoices($options);
-           }
+            'placeholder' => 'choice.placeholder',
+            'choices'     => function (Options $options) {
+                return $this->getChoices($options);
+            }
         ]);
     }
 
@@ -46,7 +46,7 @@ class ChoiceType extends AbstractLocalizedType
     }
 
     /**
-     * @param $options
+     * @param array $options
      *
      * @return array
      */
