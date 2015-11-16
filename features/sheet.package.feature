@@ -62,6 +62,10 @@ Feature: Choose a package
     And I select the quantity "2" for the checkbox "traduction de votre fiche de présentation"
     And I check "Wifi sur place"
     And I press "form.update_sheet_package_step.children.submit.label"
-    Then I should see "flash.package.final_step.success"
+    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/cart"
+    And the response status code should be 200
+    And I should see "flash.package.final_step.success"
+    And I should see "event.sheet.cart.label.totalPrice"
+    And I follow "event.sheet.cart.label.billingStep"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/billing"
     And the response status code should be 200
