@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -159,34 +158,5 @@ class PackageController extends BaseController
         }
 
         return;
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
-    {
-        $form = $this->createForm(new ChoosePaymentModeType());
-        $form->add('submit', 'submit');
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'flash.package.payment_mode.success');
-
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
-        }
-
-        return $this->render('VimeetAppBundle:Event/Package:paymentMode.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
-            'sheet'     => $sheet,
-        ]);
     }
 }

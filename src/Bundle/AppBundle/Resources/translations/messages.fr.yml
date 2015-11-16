@@ -21,6 +21,7 @@ event:
     link:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
+        go_back_to_sheet: Retournez à la fiche
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté
@@ -56,6 +57,11 @@ event:
         billing:
             title: Facturation
             proForma: Visualiser la pro-forma
+        payment:
+            title: Mode de paiement
+            description: Choisissez votre mode de paiement
+        finalStepBilling:
+            title: Finalisation de votre commande
         cart:
             title: Récapitulatif de votre panier
             column:
