@@ -22,10 +22,10 @@ class ChoiceType extends AbstractLocalizedType
     {
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefaults([
-           'placeholder' => 'choice.placeholder',
-           'choices' => function (Options $options) {
-               return $this->getChoices($options);
-           }
+            'placeholder' => 'choice.placeholder',
+            'choices'     => function (Options $options) {
+                return $this->getChoices($options);
+            }
         ]);
     }
 
@@ -46,7 +46,7 @@ class ChoiceType extends AbstractLocalizedType
     }
 
     /**
-     * @param $options
+     * @param array $options
      *
      * @return array
      */
@@ -58,22 +58,30 @@ class ChoiceType extends AbstractLocalizedType
         $optgroups = false;
 
         foreach ($template['choices'] as $key => $choice) {
+            if (!isset($choice['label'][$locale])) {
+                continue;
+            }
+
             // choice with optgroups
             if (isset($choice['choices']) && is_array($choice['choices'])) {
                 $optgroups = true;
-                $items = [];
+                $items     = [];
 
                 foreach ($choice['choices'] as $keyItem => $item) {
-                    $items[$keyItem] = $item['label'][$locale];
+                    if (isset($item['label'][$locale])) {
+                        $items[$keyItem] = $item['label'][$locale];
+                    }
                 }
 
                 asort($items);
 
                 // label is the optgroup
                 $choices[$choice['label'][$locale]] = $items;
-            } else {
-                $choices[$key] = $choice['label'][$locale];
+
+                continue;
             }
+
+            $choices[$key] = $choice['label'][$locale];
         }
 
         if ($optgroups) {
