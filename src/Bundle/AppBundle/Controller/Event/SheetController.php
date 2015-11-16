@@ -70,7 +70,7 @@ class SheetController extends BaseController
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
         $sheetDataView = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet')
+            ->get('vimeet_infrastructure.application.components.sheet.manager')
             ->getSheetDataView($sheet, $request->getLocale());
 
         $participantManager = $this->get('vimeet_app.service.participant_manager');
