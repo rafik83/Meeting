@@ -38,7 +38,7 @@ class Cart
      */
     public function addCartStep(CartStep $cartStep)
     {
-        $this->cartSteps->add($cartStep);
+        array_push($this->cartSteps, $cartStep);
         $this->addToTotal($cartStep->getSubTotal());
     }
 
