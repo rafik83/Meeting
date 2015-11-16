@@ -413,7 +413,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             <tr>
                                 <th colspan="2"></th>
                                 <th colspan="2">Total TTC</th>
-                                <th>{{ ((cart.total * (100 + sheet.type.event.vat)) / 100)|number_format_currency('EUR') }}</th>
+                                <th class="text-right">{{ ((cart.total * (100 + sheet.type.event.vat)) / 100)|number_format_currency('EUR') }}</th>
                             </tr>
                         {% endif %}
                         </tbody>
