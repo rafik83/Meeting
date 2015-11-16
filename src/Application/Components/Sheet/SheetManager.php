@@ -125,7 +125,7 @@ class SheetManager
     }
 
     /**
-     * Get data seeable by $user
+     * Applay see rules to sheet data
      *
      * @param User  $user
      * @param Sheet $sheet
@@ -137,6 +137,8 @@ class SheetManager
     }
 
     /**
+     * Get the most prioritary see rule to apply
+     *
      * @param Sheet $sheet
      * @param User  $user
      *
@@ -150,8 +152,12 @@ class SheetManager
         // Get related rules
         $sees = [];
         foreach ($types as $type) {
-            $sees[] = $this->seeRepository->getBySeerTypeAndSeeableType($type, $sheet->getType());
+            $sees = array_merge($sees, $this->seeRepository->getBySeerTypeAndSeeableType($type, $sheet->getType()));
         }
+
+        usort($sees, function (See $one, See $another) {
+            return $one < $another ? -1  : $one > $another ? 1 : 0;
+        });
 
         return $sees[0];
     }

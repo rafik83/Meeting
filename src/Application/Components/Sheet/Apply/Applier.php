@@ -23,10 +23,12 @@ class Applier
      */
     public function apply(See $see, Sheet $sheet, StrategyInterface $strategy)
     {
-        $sheet->setData($strategy->apply($sheet->getData(), $see->getWhat()['sheet']));
+        $what = array_merge(['sheet' => [], 'participant' => []], $see->getWhat());
+
+        $sheet->setData($strategy->apply($sheet->getData(), $what['sheet']));
 
         foreach ($sheet->getParticipants() as $participant) {
-            $participant->setData($strategy->apply($sheet->getData(), $see->getWhat()['participant']));
+            $participant->setData($strategy->apply($sheet->getData(), $what['participant']));
         }
     }
 }
