@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class Cart
 {
     /**
