@@ -24,6 +24,8 @@ class LibPlanningCart implements LibCartInterface
         if ([] !== $template
             && isset($dataValue['planning'])
             && $dataValue['planning'] === true
+            && isset($dataValue['planning_bought'])
+            && $dataValue['planning_bought'] !== 0
         ) {
             $cartRow = new CartRow(
                 isset($template['label'][$locale]) ? $template['label'][$locale] : null,

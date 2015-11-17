@@ -102,6 +102,14 @@ event_sheet_package_cart:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Package:cart }
 
+event_sheet_billing_pro_forma:
+    path: /sheet/{id}/pro_forma
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Billing:proForma }
+
 event_sheet_billing:
     path: /sheet/{id}/billing
     host: "{subdomain}.%domain%"
@@ -116,7 +124,15 @@ event_sheet_package_payment_mode:
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Package:paymentMode }
+    defaults: { _controller: VimeetAppBundle:Event/Billing:paymentMode }
+
+event_sheet_package_final_billing_step:
+    path: /sheet/{id}/final
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Billing:finalBillingStep }
 
 #
 # Authentication

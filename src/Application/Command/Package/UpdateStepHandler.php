@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateStepHandler
@@ -31,6 +32,7 @@ class UpdateStepHandler
     /**
      * @param UpdateStep $updateStep
      *
+     * @throws ForgotToAddQuantityException
      * @throws BoughtParticipantAlreadyAddedException
      */
     public function handle(UpdateStep $updateStep)
@@ -41,7 +43,7 @@ class UpdateStepHandler
             if (isset($element['participant'])) {
                 if ($element['participant']) {
                     if (!isset($updateStep->packageData[$elementKey]['participant_bought'])) {
-                        $updateStep->packageData[$elementKey]['participant_bought'] = 0;
+                        throw new ForgotToAddQuantityException();
                     }
 
                     if (!isset($packageData[$updateStep->step][$elementKey]['participant_bought'])) {
@@ -56,6 +58,11 @@ class UpdateStepHandler
                     if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant()) {
                         throw new BoughtParticipantAlreadyAddedException();
                     }
+                }
+            }
+            elseif (isset($element['planning']) && $element['planning']) {
+                if (!isset($updateStep->packageData[$elementKey]['planning_bought'])) {
+                    throw new ForgotToAddQuantityException();
                 }
             }
         }

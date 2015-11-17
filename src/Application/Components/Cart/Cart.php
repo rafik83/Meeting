@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class Cart
 {
     /**
@@ -30,7 +28,7 @@ class Cart
     public function __construct($total)
     {
         $this->total     = $total;
-        $this->cartSteps = new ArrayCollection();
+        $this->cartSteps = [];
     }
 
     /**
@@ -38,7 +36,7 @@ class Cart
      */
     public function addCartStep(CartStep $cartStep)
     {
-        $this->cartSteps->add($cartStep);
+        array_push($this->cartSteps, $cartStep);
         $this->addToTotal($cartStep->getSubTotal());
     }
 
