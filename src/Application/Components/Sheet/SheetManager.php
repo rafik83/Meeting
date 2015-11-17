@@ -16,16 +16,16 @@ use Proximum\Vimeet\Domain\Model\See;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetDataView;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\NomenclatureItemRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SeeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class SheetManager
 {
     /**
-     * @var NomenclatureItemRepositoryInterface
+     * @var ParticipantRepositoryInterface
      */
-    private $nomenclatureItemRepository;
+    private $participantRepository;
 
     /**
      * @var SeeRepositoryInterface
@@ -40,88 +40,52 @@ class SheetManager
     /**
      * SheetManager constructor.
      *
-     * @param NomenclatureItemRepositoryInterface $nomenclatureItemRepository
-     * @param SeeRepositoryInterface              $seeRepository
-     * @param TypeRepositoryInterface             $typeRepository
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param SeeRepositoryInterface         $seeRepository
+     * @param TypeRepositoryInterface        $typeRepository
      */
     public function __construct(
-        NomenclatureItemRepositoryInterface $nomenclatureItemRepository,
+        ParticipantRepositoryInterface $participantRepository,
         SeeRepositoryInterface $seeRepository,
         TypeRepositoryInterface $typeRepository
     ) {
-        $this->nomenclatureItemRepository = $nomenclatureItemRepository;
+        $this->participantRepository = $participantRepository;
         $this->seeRepository              = $seeRepository;
         $this->typeRepository             = $typeRepository;
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet $sheet
+     * @param User       $user
      *
      * @return SheetDataView
      */
-    public function getSheetDataView(Sheet $sheet, $locale)
+    public function getSheetDataView(Sheet $sheet, User $user)
     {
         return new SheetDataView(
             $sheet->getId(),
             $sheet->getEvent(),
             $sheet->getType(),
             $sheet->getParticipants(),
-            $this->getData($sheet, $locale),
+            $sheet->getData(),
             $sheet->getPackageData(),
-            $sheet->getBillingData()
+            $sheet->getBillingData(),
+            $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
+            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet)
         );
     }
 
     /**
      * @param User   $user
      * @param Sheet  $sheet
-     * @param string $locale
      *
      * @return SheetDataView
      */
-    public function getSheetDataViewByUser(User $user, Sheet $sheet, $locale)
+    public function getSheetDataViewByUser(User $user, Sheet $sheet)
     {
         $this->applyVisibility($user, $sheet);
 
-        return new SheetDataView(
-            $sheet->getId(),
-            $sheet->getEvent(),
-            $sheet->getType(),
-            $sheet->getParticipants(),
-            $this->getData($sheet, $locale),
-            [],
-            []
-        );
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return mixed
-     */
-    private function getData(Sheet $sheet, $locale)
-    {
-        $sheetTemplate = $sheet->getTypeSheetTemplate();
-        $data          = $sheet->getData();
-
-        foreach ($sheetTemplate as $keyBlock => $block) {
-            if (isset($block['template'])) {
-                foreach ($block['template'] as $keyField => $field) {
-                    if (isset($field['type'])
-                        && 'lib_nomenclature' === $field['type']
-                        && isset($data[$keyBlock][$keyField]['value'])
-                    ) {
-                        $data[$keyBlock][$keyField]['label'] = $this
-                            ->nomenclatureItemRepository
-                            ->getNomenclatureItemLabelById($data[$keyBlock][$keyField]['value'], $locale);
-                    }
-                }
-            }
-        }
-
-        return $data;
+        return $this->getSheetDataView($sheet, $user);
     }
 
     /**

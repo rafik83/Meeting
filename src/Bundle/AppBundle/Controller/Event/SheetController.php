@@ -61,37 +61,25 @@ class SheetController extends BaseController
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
 
-        $participantViews = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantViewsBySheet($sheet->getId());
-
-        $userParticipant = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
-
         $sheetDataView = $this
             ->get('vimeet_infrastructure.application.components.sheet.manager')
-            ->getSheetDataView($sheet, $request->getLocale());
+            ->getSheetDataView($sheet, $this->getUser());
 
-        $participantManager = $this->get('vimeet_app.service.participant_manager');
-
-        $buttonParticipant['canBuyParticipant'] = $participantManager->canBuyParticipant($sheet);
-        $buttonParticipant['addParticipant']    = $participantManager->availableAddParticipant($sheet);
+        $buttonParticipant = $this->get('vimeet_app.service.participant_manager')->canBuyOrAddParticipant($sheet);
 
         $participantDeleteForms = $this->addDeleteParticipantForm(
             $request,
             $sheet,
-            $userParticipant,
-            $participantViews
+            $sheetDataView->currentUserParticipant,
+            $sheetDataView->participantViews
         );
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheetDataView'            => $sheetDataView,
-            'participantViews'         => $participantViews,
             'participant_delete_forms' => $participantDeleteForms,
-            'buttonPartipant'          => $buttonParticipant,
+            'buttonParticipant'        => $buttonParticipant,
         ]);
     }
 
@@ -108,7 +96,7 @@ class SheetController extends BaseController
 
         $participantManager = $this->get('vimeet_app.service.participant_manager');
 
-        if ($participantManager->availableAddParticipant($sheet) <= 0) {
+        if ($participantManager->canAddParticipant($sheet) <= 0) {
             throw new AccessDeniedException('You can not add a new participant');
         }
 

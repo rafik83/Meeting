@@ -4,13 +4,12 @@ Feature: Test to hide private field
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
-      | User.yml                                                      |
-      | Sheet.yml                                                     |
-      | Participant.yml                                               |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | User.yml                                                  |
+      | Sheet.yml                                                 |
+      | OneSheetSeveralParticipants.yml                           |
 
   Scenario: I can not see private field
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

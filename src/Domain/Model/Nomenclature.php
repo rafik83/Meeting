@@ -23,11 +23,6 @@ class Nomenclature
     private $id;
 
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
      * @var string
      */
     private $label;
@@ -53,14 +48,6 @@ class Nomenclature
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
     }
 
     /**

@@ -164,6 +164,6 @@ services:
     vimeet_infrastructure.application.components.sheet.manager:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
-            - @vimeet_infrastructure.repository.nomenclature_item_repository
+            - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.repository.see_repository
             - @vimeet_infrastructure.repository.type_repository
