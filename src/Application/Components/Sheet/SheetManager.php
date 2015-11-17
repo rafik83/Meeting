@@ -136,8 +136,8 @@ class SheetManager
         });
 
         // Update cache
-        $this->cache[$sheet->getType()->getId()] = $rules[0];
+        $this->cache[$sheet->getType()->getId()] = isset($rules[0]) ? $rules[0] : null;
 
-        return $rules[0];
+        return $this->cache[$sheet->getType()->getId()];
     }
 }
