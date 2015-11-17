@@ -23,7 +23,7 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
-        position: 2
+        position: 3
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
@@ -35,7 +35,7 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
-        position: 3
+        position: 4
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1

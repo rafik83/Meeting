@@ -4,13 +4,12 @@ Feature: Add and delete participant
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
-      | User.yml                                                      |
-      | Sheet.yml                                                     |
-      | Participant.yml                                               |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | User.yml                                                  |
+      | Sheet.yml                                                 |
+      | OneSheetSeveralParticipants.yml                           |
 
   Scenario: I can delete a participant as an owner
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -59,11 +58,11 @@ Feature: Add and delete participant
     Then I follow "event.sheet.block.buy_participant.title"
     And the response status code should be 200
     And I fill in the following:
-    |form.buy_participant.children.participantData.children.email.label |test-3@test.fr |
-    |Nom                                                                |Le Tester      |
-    |Prénom                                                             |Test           |
-    |Téléphone                                                          |0101010101     |
-    |Fonction                                                           |Operator       |
+    | form.buy_participant.children.participantData.children.email.label | test-3@test.fr |
+    | Nom                                                                | Le Tester      |
+    | Prénom                                                             | Test           |
+    | Téléphone                                                          | 0101010101     |
+    | Fonction                                                           | position4      |
     Then I press "form.buy_participant.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And the response status code should be 200
@@ -86,11 +85,11 @@ Feature: Add and delete participant
     Then I follow "event.sheet.block.buy_participant.title"
     And the response status code should be 200
     And I fill in the following:
-      |form.buy_participant.children.participantData.children.email.label |test-4@test.fr |
-      |Nom                                                                |Blablabla      |
-      |Prénom                                                             |               |
-      |Téléphone                                                          |0202020202     |
-      |Fonction                                                           |Decorator      |
+      | form.buy_participant.children.participantData.children.email.label | test-4@test.fr |
+      | Nom                                                                | Blablabla      |
+      | Prénom                                                             |                |
+      | Téléphone                                                          | 0202020202     |
+      | Fonction                                                           | position4      |
     Then I press "form.buy_participant.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/buy_participant"
     And the response status code should be 200

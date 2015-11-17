@@ -4,4 +4,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_1
         sheet: @sheet_1
         owner: true
-        data: ["Dutest","Jean","0909090909","Developer"]
+        data:
+            563caf1d9b1cb: "Dutest"
+            563caf2746398: "Jean"
+            563caf2f0ddbd: "0909090909"

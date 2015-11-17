@@ -135,5 +135,5 @@ form:
 country:
     placeholder: --- Sélectionner un pays ---
 
-nomenclature:
+choice:
     placeholder: --- Sélectionner un item  ---
