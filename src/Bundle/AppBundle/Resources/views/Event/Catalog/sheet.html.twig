@@ -7,7 +7,7 @@
             {% for key,value in block %}
                 <tr>
                     <th>{{ sheet.template[id]['template'][key]['label'][app.request.locale] }}</th>
-                    <td>{{ value }}</td>
+                    <td>{{ value|format_data(sheet.template[id]['template'][key], app.request.locale) }}</td>
                 </tr>
             {% endfor %}
         </table>
