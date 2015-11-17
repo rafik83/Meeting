@@ -132,7 +132,8 @@ class SheetManager
 
         // Sort rules by priority
         usort($rules, function (Rule $one, Rule $another) {
-            return $one < $another ? -1  : $one > $another ? 1 : 0;
+            return $one->getPriority() < $another->getPriority() ?
+                1  : $one->getPriority() > $another->getPriority() ? -1 : 0;
         });
 
         // Update cache
