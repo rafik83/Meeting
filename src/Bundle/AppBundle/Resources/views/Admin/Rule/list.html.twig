@@ -36,7 +36,10 @@
                     </td>
                     <td>
                         <a href="{{ path('admin_who_see_who_dont_see_what', { 'id': event.id, 'seerIdentifier': rule.seer.identifier, 'seerId': rule.seer.id, 'seeableIdentifier': rule.seeable.identifier, 'seeableId': rule.seeable.id }) }}" class="btn btn-primary btn-sm">Ne voit pas quoi</a>
-                        <a href="{{ path('admin_rule_delete', { 'id': event.id, 'rule_id': rule.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                        <form action="{{ path('admin_rule_delete', { 'id': event.id, 'rule_id': rule.id }) }}" method="POST" style="display: inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

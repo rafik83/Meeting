@@ -33,7 +33,7 @@ admin_who_see_who_dont_see_what:
 
 admin_rule_delete:
     path: /event/{id}/who-see-who/{rule_id}/delete
-    methods: [GET, POST]
+    methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Rule:delete }
 
 #
