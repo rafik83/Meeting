@@ -15,12 +15,12 @@
         {% for step in cart.cartSteps  %}
             {% if step.cartRows is defined and step.cartRows|length > 0 %}
                 <tr class="active">
-                    <th colspan="5">{{ step.title }}</th>
+                    <th colspan="5">{{ step.label }}</th>
                 </tr>
                 {% for row in step.cartRows %}
                     <tr>
                         <td>&nbsp;</td>
-                        <td>{{ row.title }}</td>
+                        <td>{{ row.label }}</td>
                         <td class="text-right">{{ row.unitPrice|number_format_currency('EUR') }}</td>
                         <td class="text-right">{{ row.quantity }}</td>
                         <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>

@@ -20,7 +20,7 @@
             <th>Contenu</th>
             <th>Action</th>
         </tr>
-        {% include 'VimeetAppBundle:Admin/TypeFormTemplate:row.html.twig' with {
+        {% include 'VimeetAppBundle:Admin/TypeForm:row.html.twig' with {
             template: type.participantTemplate
         } %}
 
@@ -45,14 +45,11 @@
             {% for blocks in template['template'] %}
                 <tr>
                     <th colspan="6" class="info">
-                        {{ blocks['title'][app.request.locale] is defined
-                        ? blocks['title'][app.request.locale]
-                        : blocks['label'][app.request.locale]
-                        }}
+                        {{ blocks['label'][app.request.locale] }}
                     </th>
                 </tr>
 
-                {% include 'VimeetAppBundle:Admin/TypeFormTemplate:row.html.twig' with {
+                {% include 'VimeetAppBundle:Admin/TypeForm:row.html.twig' with {
                     template: blocks['template'] is defined ? blocks['template'] : null,
                     linkTo: blocks['linkTo'] is defined ? blocks['linkTo'] : null
                 } %}

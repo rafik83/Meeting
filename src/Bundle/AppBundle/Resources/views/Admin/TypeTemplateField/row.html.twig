@@ -1,12 +1,18 @@
 {% if template is not null %}
-    {% for field in template %}
+    {% for key, field in template %}
         <tr>
             <td>{{ field['label'][app.request.locale] }}</td>
             <td>{{ ('template.field.type.' ~ field['type'])|trans }}</td>
             <td>{{ field['required'] is defined ? field['required']|boolean_tick : '' }}</td>
             <td>{{ field['private'] is defined ? field['private']|boolean_tick : '' }}</td>
             <td>{{ field['type'] == 'lib_choice' ? field['choices']|choices_list(app.request.locale) : '' }}</td>
-            <td><a href="#" class="btn btn-primary btn-sm">Modifier</a></td>
+            <td>
+                <a href="{{ path('admin_type_form_field_update', {
+                    'id': event.id,
+                    'type_id': type.id,
+                    'key': key
+                }) }}" class="btn btn-default btn-sm">Modifier</a>
+            </td>
         </tr>
     {% endfor %}
 {% endif %}
@@ -20,10 +26,11 @@
 
     {% if template[linkTo['index']] is defined %}
         <tr>
-            <td colspan="6">
+            <td colspan="5">
                 Lien vers "{{ linkTo['template'] }}"
-                / "{{ template[linkTo['index']]['title'][app.request.locale] }}"
+                / "{{ template[linkTo['index']]['label'][app.request.locale] }}"
             </td>
+            <td></td>
         </tr>
     {% endif %}
 {% endif %}

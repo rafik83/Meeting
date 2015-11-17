@@ -1,6 +1,6 @@
 {% for i, block in blocks %}
     <h3>
-        {{ block['title'][app.request.locale] }}
+        {{ block['label'][app.request.locale] }}
 
         {% if block.linkTo is defined and 'packageTemplate' == block.linkTo['template'] %}
             <a href="{{ path('event_sheet_package_update_step', {
