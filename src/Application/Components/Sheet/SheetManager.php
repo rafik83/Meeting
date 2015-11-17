@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Apply\Applier;
-use Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy\SetNullStrategy;
+use Proximum\Vimeet\Application\Components\Rule\Applier;
+use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetCatalogView;

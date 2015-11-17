@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy;
+namespace Proximum\Vimeet\Application\Components\Rule\Strategy;
 
 abstract class AbstractRecursiveStrategy implements StrategyInterface
 {

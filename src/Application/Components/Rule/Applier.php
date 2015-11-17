@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet\Apply;
+namespace Proximum\Vimeet\Application\Components\Rule;
 
-use Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy\StrategyInterface;
+use Proximum\Vimeet\Application\Components\Rule\Strategy\StrategyInterface;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
