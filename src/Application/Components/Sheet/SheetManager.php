@@ -89,7 +89,7 @@ class SheetManager
      */
     public function getSheetDataViewByUser(User $user, Sheet $sheet)
     {
-        $this->applyVisibility($user, $sheet);
+        $this->applyRule($user, $sheet);
 
         return new SheetCatalogView($sheet->getId(), $sheet->getData(), $sheet->getType()->getSheetTemplate());
     }
@@ -100,7 +100,7 @@ class SheetManager
      * @param User  $user
      * @param Sheet $sheet
      */
-    public function applyVisibility(User $user, Sheet $sheet)
+    public function applyRule(User $user, Sheet $sheet)
     {
         $applier = new Applier();
         $applier->apply($this->getRuleToApply($sheet, $user), $sheet, new SetNullStrategy());

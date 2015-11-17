@@ -60,7 +60,7 @@ class CatalogController extends Controller
         array_walk($sheets, function (Sheet &$sheet) {
             $this
                 ->get('vimeet_infrastructure.application.components.sheet.manager')
-                ->applyVisibility($this->getUser(), $sheet);
+                ->applyRule($this->getUser(), $sheet);
         });
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
