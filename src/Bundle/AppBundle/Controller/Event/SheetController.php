@@ -306,14 +306,14 @@ class SheetController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param Sheet   $sheet
-     * @param $userParticipant
-     * @param $participantViews
+     * @param Request     $request
+     * @param Sheet       $sheet
+     * @param Participant $userParticipant
+     * @param array       $participantViews
      *
      * @return array
      */
-    private function addDeleteParticipantForm(Request$request, Sheet $sheet, $userParticipant, $participantViews)
+    private function addDeleteParticipantForm(Request $request, Sheet $sheet, Participant $userParticipant, array $participantViews)
     {
         $participantDeleteForms = [];
 
