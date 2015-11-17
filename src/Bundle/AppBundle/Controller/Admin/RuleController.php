@@ -80,7 +80,7 @@ class RuleController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
             $this->get('vimeet_infrastructure.repository.rule_repository')->set($rule);
-            $this->addFlash('success', 'admin.event.who_see_what.success');
+            $this->addFlash('success', 'flash.admin.event.who_see_what.success');
 
             return $this->redirectToRoute('admin_rule_list', ['id' => $event->getId()]);
         }
