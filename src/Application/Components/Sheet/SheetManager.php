@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Apply\Applier;
 use Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\See;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\SheetCatalogView;
 use Proximum\Vimeet\Domain\Model\SheetDataView;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -79,13 +80,13 @@ class SheetManager
      * @param User   $user
      * @param Sheet  $sheet
      *
-     * @return SheetDataView
+     * @return SheetCatalogView
      */
     public function getSheetDataViewByUser(User $user, Sheet $sheet)
     {
         $this->applyVisibility($user, $sheet);
 
-        return $this->getSheetDataView($sheet, $user);
+        return new SheetCatalogView($sheet->getId(), $sheet->getData(), $sheet->getType()->getSheetTemplate());
     }
 
     /**

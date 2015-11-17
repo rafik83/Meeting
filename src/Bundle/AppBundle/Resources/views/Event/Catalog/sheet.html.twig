@@ -1,14 +1,16 @@
 {% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
 {% block content %}
-    {% for block in sheet.data %}
+    {% for id,block in sheet.data %}
+        <h2>{{ sheet.template[id]['label'][app.request.locale] }}</h2>
         <table class="table">
             {% for key,value in block %}
                 <tr>
-                    <th>{{ key }}</th>
+                    <th>{{ sheet.template[id]['template'][key]['label'][app.request.locale] }}</th>
                     <td>{{ value }}</td>
                 </tr>
             {% endfor %}
         </table>
     {% endfor %}
+    <a href="{{ path('event_catalog_category', { 'categoryView': categoryView.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-text">&larr; Retour au catalogue</a>
 {% endblock %}
