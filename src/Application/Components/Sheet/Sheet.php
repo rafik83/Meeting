@@ -12,16 +12,31 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet as SheetModel;
 use Proximum\Vimeet\Domain\Model\SheetDataView;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class Sheet
 {
     /**
+     * @var ParticipantRepositoryInterface
+     */
+    private $participantRepository;
+
+    /**
+     * @param ParticipantRepositoryInterface $participantRepository
+     */
+    public function __construct(ParticipantRepositoryInterface $participantRepository)
+    {
+        $this->participantRepository = $participantRepository;
+    }
+
+    /**
      * @param SheetModel $sheet
-     * @param string     $locale
+     * @param User       $user
      *
      * @return SheetDataView
      */
-    public function getSheetDataView(SheetModel $sheet, $locale)
+    public function getSheetDataView(SheetModel $sheet, User $user)
     {
         return new SheetDataView(
             $sheet->getId(),
@@ -30,7 +45,9 @@ class Sheet
             $sheet->getParticipants(),
             $sheet->getData(),
             $sheet->getPackageData(),
-            $sheet->getBillingData()
+            $sheet->getBillingData(),
+            $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
+            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet)
         );
     }
 }

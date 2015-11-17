@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -64,7 +65,7 @@ interface ParticipantRepositoryInterface
     /**
      * @param int $sheetId
      *
-     * @return array
+     * @return ParticipantView[]
      */
     public function getParticipantViewsBySheet($sheetId);
 }

@@ -21,9 +21,20 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
 
+    type_congressiste:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 1
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: @template_exhibitor->participant
+        sheetTemplate: @template_exhibitor->sheet
+        packageTemplate: @template_exhibitor->package
+        previewTemplate: @template_exhibitor->preview
+
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
-        position: 3
+        position: 2
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
@@ -35,7 +46,7 @@ Proximum\Vimeet\Domain\Model\Type:
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
-        position: 4
+        position: 3
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1

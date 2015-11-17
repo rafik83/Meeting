@@ -8,7 +8,7 @@
     <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
 
     <div class="row">
-        {% for participantView in participantViews %}
+        {% for participantView in sheetDataView.participantViews %}
             <div class="col-md-4">
                 {% include 'VimeetAppBundle:Event/Sheet:participant.html.twig' with {
                     'sheetDataView': sheetDataView,
@@ -19,8 +19,8 @@
             </div>
         {% endfor %}
 
-        {% if buttonPartipant.addParticipant >= 1 %}
-            {% for i in 1..buttonPartipant.addParticipant %}
+        {% if buttonParticipant.canAddParticipant >= 1 %}
+            {% for i in 1..buttonParticipant.canAddParticipant %}
                 <div class="col-md-4">
                     <table class="table table-bordered table-condensed" style="height: 160px;">
                         <tr>
@@ -37,7 +37,7 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if buttonPartipant.canBuyParticipant %}
+        {% if buttonParticipant.canBuyParticipant %}
             <a href="{{ path('event_sheet_buy_participant', {
                 'id': sheetDataView.id,
                 'subdomain': app.request.attributes.get('subdomain')
