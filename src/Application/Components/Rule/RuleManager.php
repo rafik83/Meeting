@@ -101,7 +101,7 @@ class RuleManager
 
         // Appy rule on participants data
         foreach ($sheet->getParticipants() as $participant) {
-            $participant->setData($strategy->apply($sheet->getData(), $what['participant']));
+            $participant->setData($strategy->apply($participant->getData(), $what['participant']));
         }
     }
 }
