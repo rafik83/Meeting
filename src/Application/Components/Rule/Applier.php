@@ -25,8 +25,10 @@ class Applier
     {
         $what = array_merge(['sheet' => [], 'participant' => []], $rule->getWhat());
 
+        // Apply rule on sheet data
         $sheet->setData($strategy->apply($sheet->getData(), $what['sheet']));
 
+        // Appy rule on participants data
         foreach ($sheet->getParticipants() as $participant) {
             $participant->setData($strategy->apply($sheet->getData(), $what['participant']));
         }
