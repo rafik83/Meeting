@@ -11,16 +11,16 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 
-interface SeeRepositoryInterface
+interface RuleRepositoryInterface
 {
     /**
      * @param Event $event
      *
-     * @return See[]
+     * @return Rule[]
      */
     public function getByEvent(Event $event);
 
@@ -29,7 +29,7 @@ interface SeeRepositoryInterface
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      *
-     * @return See|null
+     * @return Rule|null
      */
     public function getByEventSeerAndSeeable(Event $event, WhoInterface $seer, WhoInterface $seeable);
 
@@ -37,19 +37,19 @@ interface SeeRepositoryInterface
      * @param Type $seer
      * @param Type $seeable
      *
-     * @return See[]
+     * @return Rule[]
      */
     public function getBySeerTypeAndSeeableType(Type $seer, Type $seeable);
 
     /**
-     * @param See $see
+     * @param Rule $rule
      *
-     * @return See
+     * @return Rule
      */
-    public function add(See $see);
+    public function add(Rule $rule);
 
     /**
-     * @param See $see
+     * @param Rule $rule
      */
-    public function remove(See $see);
+    public function remove(Rule $rule);
 }

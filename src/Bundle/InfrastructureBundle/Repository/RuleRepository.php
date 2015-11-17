@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
-use Proximum\Vimeet\Domain\Repository\SeeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
-class SeeRepository implements SeeRepositoryInterface
+class RuleRepository implements RuleRepositoryInterface
 {
     /**
      * @var EntityManager
@@ -41,9 +41,9 @@ class SeeRepository implements SeeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('see')
-            ->from('Entity:See', 'see')
-            ->where('see.event = :event')
+            ->select('rule')
+            ->from('Entity:Rule', 'rule')
+            ->where('rule.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -57,29 +57,29 @@ class SeeRepository implements SeeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('see')
-            ->from('Entity:See', 'see')
-            ->where('see.event = :event')
+            ->select('rule')
+            ->from('Entity:Rule', 'rule')
+            ->where('rule.event = :event')
             ->setParameter('event', $event)
             ->setMaxResults(1);
 
         if ($seer instanceof Type) {
             $queryBuilder
-                ->andWhere('see.seerType = :seerType')
+                ->andWhere('rule.seerType = :seerType')
                 ->setParameter('seerType', $seer);
         } elseif ($seer instanceof Category) {
             $queryBuilder
-                ->andWhere('see.seerCategory = :seerCategory')
+                ->andWhere('rule.seerCategory = :seerCategory')
                 ->setParameter('seerCategory', $seer);
         }
 
         if ($seeable instanceof Type) {
             $queryBuilder
-                ->andWhere('see.seeableType = :seeableType')
+                ->andWhere('rule.seeableType = :seeableType')
                 ->setParameter('seeableType', $seeable);
         } elseif ($seeable instanceof Category) {
             $queryBuilder
-                ->andWhere('see.seeableCategory = :seeableCategory')
+                ->andWhere('rule.seeableCategory = :seeableCategory')
                 ->setParameter('seeableCategory', $seeable);
         }
 
@@ -96,17 +96,17 @@ class SeeRepository implements SeeRepositoryInterface
             ->createQueryBuilder();
 
         $queryBuilder
-            ->select('see')
-            ->from('Entity:See', 'see')
+            ->select('rule')
+            ->from('Entity:Rule', 'rule')
             ->where($queryBuilder->expr()->orX(
-                'see.seerType = :seerType',
-                'see.seerCategory IN (:seerCategories)'
+                'rule.seerType = :seerType',
+                'rule.seerCategory IN (:seerCategories)'
             ))
             ->setParameter('seerType', $seer)
             ->setParameter('seerCategories', $seer->getCategories())
             ->andWhere($queryBuilder->expr()->orX(
-                'see.seeableType = :seeableType',
-                'see.seeableCategory IN (:seeableCategories)'
+                'rule.seeableType = :seeableType',
+                'rule.seeableCategory IN (:seeableCategories)'
             ))
             ->setParameter('seeableType', $seeable)
             ->setParameter('seeableCategories', $seeable->getCategories());
@@ -118,30 +118,30 @@ class SeeRepository implements SeeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(See $see)
+    public function add(Rule $rule)
     {
-        $this->entityManager->persist($see);
-        $this->entityManager->flush($see);
+        $this->entityManager->persist($rule);
+        $this->entityManager->flush($rule);
 
-        return $see;
+        return $rule;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set(See $see)
+    public function set(Rule $rule)
     {
-        $this->entityManager->flush($see);
+        $this->entityManager->flush($rule);
 
-        return $see;
+        return $rule;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove(See $see)
+    public function remove(Rule $rule)
     {
-        $this->entityManager->remove($see);
-        $this->entityManager->flush($see);
+        $this->entityManager->remove($rule);
+        $this->entityManager->flush($rule);
     }
 }

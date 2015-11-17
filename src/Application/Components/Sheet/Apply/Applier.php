@@ -11,19 +11,19 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Apply;
 
 use Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy\StrategyInterface;
-use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Applier
 {
     /**
-     * @param See               $see
+     * @param Rule              $rule
      * @param Sheet             $sheet
      * @param StrategyInterface $strategy
      */
-    public function apply(See $see, Sheet $sheet, StrategyInterface $strategy)
+    public function apply(Rule $rule, Sheet $sheet, StrategyInterface $strategy)
     {
-        $what = array_merge(['sheet' => [], 'participant' => []], $see->getWhat());
+        $what = array_merge(['sheet' => [], 'participant' => []], $rule->getWhat());
 
         $sheet->setData($strategy->apply($sheet->getData(), $what['sheet']));
 

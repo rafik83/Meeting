@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class SeeController extends Controller
+class RuleController extends Controller
 {
     /**
      * @param Request $request
@@ -33,24 +33,24 @@ class SeeController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $form = $this->createForm(new WhoSeeWhoType(), [], [
-            'action' => $this->generateUrl('admin_see_list', ['id' => $event->getId()]),
+            'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $see = $this->findOrCreateSee($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
+            $rule = $this->findOrCreateRule($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
 
-            return $this->redirect($this->generateWhatUrl($see));
+            return $this->redirect($this->generateWhatUrl($rule));
         }
 
-        $sees = $this->get('vimeet_infrastructure.repository.see_repository')->getByEvent($event);
+        $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
 
-        return $this->render('VimeetAppBundle:Admin/See:list.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/Rule:list.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
-            'sees'  => $sees,
+            'rules'  => $rules,
         ]);
     }
 
@@ -72,20 +72,20 @@ class SeeController extends Controller
         $seeable = $this->findWho($seeableIdentifier, $seeableId);
         $this->notFoundUnless($seeable, 'Seeable not found.');
 
-        $see = $this->findSee($event, $seer, $seeable);
-        $this->notFoundUnless($see, 'See not found.');
+        $rule = $this->findRule($event, $seer, $seeable);
+        $this->notFoundUnless($rule, 'Rule not found.');
 
-        $form = $this->createWhatForm($see, $request->getLocale());
+        $form = $this->createWhatForm($rule, $request->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $see->setWhat($form->getData());
-            $this->get('vimeet_infrastructure.repository.see_repository')->set($see);
+            $rule->setWhat($form->getData());
+            $this->get('vimeet_infrastructure.repository.rule_repository')->set($rule);
             $this->addFlash('success', 'admin.event.who_see_what.success');
 
-            return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
+            return $this->redirectToRoute('admin_rule_list', ['id' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/See:what.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/Rule:what.html.twig', [
             'form'    => $form->createView(),
             'event'   => $event,
             'seer'    => $seer,
@@ -95,25 +95,25 @@ class SeeController extends Controller
 
     /**
      * @ParamConverter(
-     *   "see",
-     *   class="Proximum\Vimeet\Domain\Model\See",
-     *   options={"id" = "see_id"}
+     *   "rule",
+     *   class="Proximum\Vimeet\Domain\Model\Rule",
+     *   options={"id" = "rule_id"}
      * )
      *
      * @param Event $event
-     * @param See   $see
+     * @param Rule  $rule
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Event $event, See $see)
+    public function deleteAction(Event $event, Rule $rule)
     {
-        if ($see->getEvent() !== $event) {
-            throw $this->createNotFoundException('See not found');
+        if ($rule->getEvent() !== $event) {
+            throw $this->createNotFoundException('Rule not found');
         }
 
-        $this->get('vimeet_infrastructure.repository.see_repository')->remove($see);
+        $this->get('vimeet_infrastructure.repository.rule_repository')->remove($rule);
 
-        return $this->redirectToRoute('admin_see_list', ['id' => $event->getId()]);
+        return $this->redirectToRoute('admin_rule_list', ['id' => $event->getId()]);
     }
 
     /**
@@ -121,12 +121,12 @@ class SeeController extends Controller
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      *
-     * @return See|null
+     * @return Rule|null
      */
-    private function findSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    private function findRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
         return $this
-            ->get('vimeet_infrastructure.repository.see_repository')
+            ->get('vimeet_infrastructure.repository.rule_repository')
             ->getByEventSeerAndSeeable($event, $seer, $seeable);
     }
 
@@ -135,12 +135,12 @@ class SeeController extends Controller
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      *
-     * @return See
+     * @return Rule
      */
-    private function findOrCreateSee(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
-        return $this->findSee($event, $seer, $seeable) ? :
-            $this->get('vimeet_infrastructure.repository.see_repository')->add(new See($event, $seer, $seeable, []));
+        return $this->findRule($event, $seer, $seeable) ? :
+            $this->get('vimeet_infrastructure.repository.rule_repository')->add(new Rule($event, $seer, $seeable, []));
     }
 
     /**
@@ -158,17 +158,17 @@ class SeeController extends Controller
     }
 
     /**
-     * @param See    $see
+     * @param Rule    $rule
      * @param string $locale
      *
      * @return Form
      */
-    private function createWhatForm(See $see, $locale)
+    private function createWhatForm(Rule $rule, $locale)
     {
-        $form = $this->createForm(new WhatType(), $see->getWhat(), [
-            'action' => $this->generateWhatUrl($see),
+        $form = $this->createForm(new WhatType(), $rule->getWhat(), [
+            'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
-            'who'    => $see->getSeeable(),
+            'who'    => $rule->getSeeable(),
             'locale' => $locale,
         ]);
         $form->add('submit', 'submit');
@@ -177,18 +177,18 @@ class SeeController extends Controller
     }
 
     /**
-     * @param See $see
+     * @param Rule $rule
      *
      * @return string
      */
-    private function generateWhatUrl(See $see)
+    private function generateWhatUrl(Rule $rule)
     {
         return $this->generateUrl('admin_who_see_who_dont_see_what', [
-            'id'                => $see->getEvent()->getId(),
-            'seerIdentifier'    => $see->getSeer()->getIdentifier(),
-            'seerId'            => $see->getSeer()->getId(),
-            'seeableIdentifier' => $see->getSeeable()->getIdentifier(),
-            'seeableId'         => $see->getSeeable()->getId(),
+            'id'                => $rule->getEvent()->getId(),
+            'seerIdentifier'    => $rule->getSeer()->getIdentifier(),
+            'seerId'            => $rule->getSeer()->getId(),
+            'seeableIdentifier' => $rule->getSeeable()->getIdentifier(),
+            'seeableId'         => $rule->getSeeable()->getId(),
         ]);
     }
 

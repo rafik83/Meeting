@@ -13,28 +13,28 @@ admin_event_update:
     defaults: { _controller: VimeetAppBundle:Admin/Event:update }
 
 #
-# See
+# Rule
 #
 
-admin_see_list:
+admin_rule_list:
     path: /event/{id}/who-see-who
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/See:list }
+    defaults: { _controller: VimeetAppBundle:Admin/Rule:list }
 
 admin_who_see_who_dont_see_what:
     path: /event/{id}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/See:what }
+    defaults: { _controller: VimeetAppBundle:Admin/Rule:what }
     requirements:
         seerIdentifier: category|type
         seerId: \d+
         seeableIdentifier: category|type
         seeableId: \d+
 
-admin_see_delete:
-    path: /event/{id}/who-see-who/{see_id}/delete
+admin_rule_delete:
+    path: /event/{id}/who-see-who/{rule_id}/delete
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Admin/See:delete }
+    defaults: { _controller: VimeetAppBundle:Admin/Rule:delete }
 
 #
 # Type

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class See
+class Rule
 {
     /**
      * @var int
@@ -48,7 +48,7 @@ class See
     private $what;
 
     /**
-     * See constructor.
+     * Rule constructor.
      *
      * @param Event        $event
      * @param WhoInterface $seer
@@ -152,7 +152,7 @@ class See
      *
      * @param array $what
      *
-     * @return See
+     * @return Rule
      */
     public function setWhat(array $what)
     {

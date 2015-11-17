@@ -1,23 +1,23 @@
-Proximum\Vimeet\Domain\Model\See:
-    see_1:
+Proximum\Vimeet\Domain\Model\Rule:
+    rule_1:
         __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_exposant, []]
-    see_2:
+    rule_2:
         __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur, []]
-    see_3:
+    rule_3:
         __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur_visio, []]
-    see_4:
+    rule_4:
         __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_investisseur, []]
-    see_5:
+    rule_5:
         __construct: [@event_rdv_carnot_2016, @type_exposant, @type_exposant, []]
-    see_6:
+    rule_6:
         __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur, []]
-    see_7:
+    rule_7:
         __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur_visio, []]
-    see_8:
+    rule_8:
         __construct: [@event_rdv_carnot_2016, @type_exposant, @type_investisseur, []]
-    see_9:
+    rule_9:
         __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_exposant, []]
-    see_10:
+    rule_10:
         __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur, []]
-    see_11:
+    rule_11:
         __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur_visio, []]

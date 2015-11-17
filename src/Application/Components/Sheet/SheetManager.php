@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Apply\Applier;
 use Proximum\Vimeet\Application\Components\Sheet\Apply\Strategy\SetNullStrategy;
-use Proximum\Vimeet\Domain\Model\See;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetCatalogView;
 use Proximum\Vimeet\Domain\Model\SheetDataView;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SeeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class SheetManager
@@ -29,9 +29,9 @@ class SheetManager
     private $participantRepository;
 
     /**
-     * @var SeeRepositoryInterface
+     * @var RuleRepositoryInterface
      */
-    private $seeRepository;
+    private $ruleRepository;
 
     /**
      * @var TypeRepositoryInterface
@@ -47,17 +47,17 @@ class SheetManager
      * SheetManager constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param SeeRepositoryInterface         $seeRepository
+     * @param RuleRepositoryInterface        $ruleRepository
      * @param TypeRepositoryInterface        $typeRepository
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
-        SeeRepositoryInterface $seeRepository,
+        RuleRepositoryInterface $ruleRepository,
         TypeRepositoryInterface $typeRepository
     ) {
         $this->participantRepository = $participantRepository;
-        $this->seeRepository              = $seeRepository;
-        $this->typeRepository             = $typeRepository;
+        $this->ruleRepository        = $ruleRepository;
+        $this->typeRepository        = $typeRepository;
     }
 
     /**
@@ -95,7 +95,7 @@ class SheetManager
     }
 
     /**
-     * Applay see rules to sheet data
+     * Applay rule rules to sheet data
      *
      * @param User  $user
      * @param Sheet $sheet
@@ -103,18 +103,18 @@ class SheetManager
     public function applyVisibility(User $user, Sheet $sheet)
     {
         $applier = new Applier();
-        $applier->apply($this->getSeeToApply($sheet, $user), $sheet, new SetNullStrategy());
+        $applier->apply($this->getRuleToApply($sheet, $user), $sheet, new SetNullStrategy());
     }
 
     /**
-     * Get the most prioritary see rule to apply
+     * Get the most prioritary rule rule to apply
      *
      * @param Sheet $sheet
      * @param User  $user
      *
-     * @return See
+     * @return Rule
      */
-    public function getSeeToApply(Sheet $sheet, User $user)
+    public function getRuleToApply(Sheet $sheet, User $user)
     {
         // Check cache
         if (isset($this->cache[$sheet->getType()->getId()])) {
@@ -125,19 +125,19 @@ class SheetManager
         $types = $this->typeRepository->getTypesByUser($sheet->getEvent(), $user);
 
         // Get related rules
-        $sees = [];
+        $rules = [];
         foreach ($types as $type) {
-            $sees = array_merge($sees, $this->seeRepository->getBySeerTypeAndSeeableType($type, $sheet->getType()));
+            $rules = array_merge($rules, $this->ruleRepository->getBySeerTypeAndSeeableType($type, $sheet->getType()));
         }
 
         // Sort rules by priority
-        usort($sees, function (See $one, See $another) {
+        usort($rules, function (Rule $one, Rule $another) {
             return $one < $another ? -1  : $one > $another ? 1 : 0;
         });
 
         // Update cache
-        $this->cache[$sheet->getType()->getId()] = $sees[0];
+        $this->cache[$sheet->getType()->getId()] = $rules[0];
 
-        return $sees[0];
+        return $rules[0];
     }
 }

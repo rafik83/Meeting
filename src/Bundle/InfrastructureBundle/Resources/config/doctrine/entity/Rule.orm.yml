@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\See:
+Proximum\Vimeet\Domain\Model\Rule:
     type:  entity
-    table: see
+    table: rule
     uniqueConstraints:
         unique_idx_1:
             columns:
