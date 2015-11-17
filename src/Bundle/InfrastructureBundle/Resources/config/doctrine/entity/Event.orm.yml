@@ -17,6 +17,20 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         billingTemplate:
             type: json_array
+        organiserName:
+            type: string
+        paymentAddress:
+            type: string
+        organiserEmail:
+            type: string
+        bankInfo:
+            type: string
+        legalInformation:
+            type: string
+        vat:
+            type: integer
+        elementToJoinWithInvoice:
+            type: string
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation

@@ -48,6 +48,11 @@ class Template
     private $view;
 
     /**
+     * @var string
+     */
+    private $proForma;
+
+    /**
      * Template constructor.
      *
      * @param string $title
@@ -135,5 +140,13 @@ class Template
     public function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProForma()
+    {
+        return $this->proForma;
     }
 }

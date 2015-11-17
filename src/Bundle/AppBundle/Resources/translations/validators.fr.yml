@@ -7,6 +7,7 @@ validators:
         mismatch: La ressaisie du mot de passe ne correspond pas
     currentPassword: Le mot de passe actuel n'est pas correct
     option:
+        quantityMustBeAdded: Vous devez ajouter une quantité si vous sélectionnez cette option
         participant:
             optionCanNotBeUnselected: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
             alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
