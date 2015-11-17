@@ -8,22 +8,11 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: "Dutest"
             563caf2746398: "Jean"
             563caf2f0ddbd: "0909090909"
-            563caf34eed69: "Developer"
     participant_2:
         __construct: false
         user: @user_2
         sheet: @sheet_1
         owner: false
-        data:
-            563caf1d9b1cb: "Super"
-            563caf2746398: "Test"
-            563caf2f0ddbd: "08080808"
-            563caf34eed69: "SuperPersonne"
-    participant_3:
-        __construct: false
-        user: @user_3
-        sheet: @sheet_2
-        owner: true
         data:
             563caf1d9b1cb: "Super"
             563caf2746398: "Test"

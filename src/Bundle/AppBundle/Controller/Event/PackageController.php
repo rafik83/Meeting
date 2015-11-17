@@ -71,7 +71,8 @@ class PackageController extends BaseController
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
-                    $form->get('packageData'));
+                    $form->get('packageData')
+                );
             }
         }
 

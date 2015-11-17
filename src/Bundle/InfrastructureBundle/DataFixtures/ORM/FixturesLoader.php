@@ -39,6 +39,8 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Category.yml',
             __DIR__ . '/Sheet.yml',
             __DIR__ . '/See.yml',
+            __DIR__ . '/User.yml',
+            __DIR__ . '/Participant.yml',
         ];
 
         $options = [

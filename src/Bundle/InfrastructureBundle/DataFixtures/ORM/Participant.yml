@@ -1,0 +1,10 @@
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_test:
+        __construct: false
+        user: @user_test
+        sheet: @sheet_test
+        owner: true
+        data:
+            563caf1d9b1cb: "DUPOND"
+            563caf2746398: "Jean"
+            563caf2f0ddbd: "0909090909"

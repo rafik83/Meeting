@@ -12,68 +12,42 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet as SheetModel;
 use Proximum\Vimeet\Domain\Model\SheetDataView;
-use Proximum\Vimeet\Domain\Repository\NomenclatureItemRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class Sheet
 {
     /**
-     * @var NomenclatureItemRepositoryInterface
+     * @var ParticipantRepositoryInterface
      */
-    private $nomenclatureItemRepository;
+    private $participantRepository;
 
     /**
-     * @param NomenclatureItemRepositoryInterface $nomenclatureItemRepository
+     * @param ParticipantRepositoryInterface $participantRepository
      */
-    public function __construct(NomenclatureItemRepositoryInterface $nomenclatureItemRepository)
+    public function __construct(ParticipantRepositoryInterface $participantRepository)
     {
-        $this->nomenclatureItemRepository = $nomenclatureItemRepository;
+        $this->participantRepository = $participantRepository;
     }
 
     /**
      * @param SheetModel $sheet
-     * @param string     $locale
+     * @param User       $user
      *
-     * @return SheetView
+     * @return SheetDataView
      */
-    public function getSheetDataView(SheetModel $sheet, $locale)
+    public function getSheetDataView(SheetModel $sheet, User $user)
     {
         return new SheetDataView(
             $sheet->getId(),
             $sheet->getEvent(),
             $sheet->getType(),
             $sheet->getParticipants(),
-            $this->getData($sheet, $locale),
+            $sheet->getData(),
             $sheet->getPackageData(),
-            $sheet->getBillingData()
+            $sheet->getBillingData(),
+            $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
+            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet)
         );
-    }
-
-    /**
-     * @param SheetModel $sheet
-     * @param string     $locale
-     *
-     * @return mixed
-     */
-    private function getData(SheetModel $sheet, $locale)
-    {
-        $sheetTemplate = $sheet->getTypeSheetTemplate();
-        $data          = $sheet->getData();
-
-        foreach ($sheetTemplate as $keyBlock => $block) {
-            if (isset($block['template'])) {
-                foreach ($block['template'] as $keyField => $field) {
-                    if (isset($field['type'])
-                        && 'lib_nomenclature' === $field['type']
-                        && isset($data[$keyBlock][$keyField]['value'])
-                    ) {
-                        $data[$keyBlock][$keyField]['label'] = $this
-                            ->nomenclatureItemRepository
-                            ->getNomenclatureItemLabelById($data[$keyBlock][$keyField]['value'], $locale);
-                    }
-                }
-            }
-        }
-
-        return $data;
     }
 }

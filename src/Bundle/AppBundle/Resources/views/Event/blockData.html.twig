@@ -5,7 +5,7 @@
                 <th class="col-md-3">{{ field['label'][app.request.locale]|default }}</th>
                 <td class="col-md-9">
                     {% if data[key] is defined and template[key] is defined %}
-                        {{ data[key]|default|format_data(template[key])|nl2br }}
+                        {{ data[key]|default|format_data(template[key], app.request.locale)|nl2br }}
                     {% else %}
                         ...
                     {% endif %}

@@ -23,6 +23,17 @@ Proximum\Vimeet\Domain\Model\Type:
         previewTemplate: @template_exhibitor->preview
         proFormaTemplate: @template_exhibitor->proForma
 
+    type_congressiste:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 1
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: @template_exhibitor->participant
+        sheetTemplate: @template_exhibitor->sheet
+        packageTemplate: @template_exhibitor->package
+        previewTemplate: @template_exhibitor->preview
+
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
         position: 2

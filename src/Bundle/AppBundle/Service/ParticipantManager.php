@@ -17,6 +17,75 @@ class ParticipantManager
     /**
      * @param Sheet $sheet
      *
+     * @return bool
+     */
+    public function canBuyParticipant(Sheet $sheet)
+    {
+        return !($this->getRemainingPossibleParticipant($sheet) === 0
+            || $this->getRemainingPossibleParticipant($sheet) < 0
+            || $this->getRemainingPossibleParticipantToBuy($sheet) === 0
+            || $this->getRemainingPossibleParticipantToBuy($sheet) < 0
+        );
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function canAddParticipant(Sheet $sheet)
+    {
+        if ($this->getRemainingPossibleParticipant($sheet) === 0) {
+            return 0;
+        }
+
+        return $this->getBoughtParticipant($sheet)
+        + $sheet->getType()->getFreeParticipant()
+        - count($sheet->getParticipants());
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    public function canBuyOrAddParticipant(Sheet $sheet)
+    {
+        return [
+            'canBuyParticipant' => $this->canBuyParticipant($sheet),
+            'canAddParticipant' => $this->canAddParticipant($sheet),
+        ];
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function getBuyQuantityParticipant(Sheet $sheet)
+    {
+        $max  = $sheet->getType()->getMaxParticipant();
+        $free = $sheet->getType()->getFreeParticipant();
+
+        return intval($max - $free);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function getAddedBoughtParticipant(Sheet $sheet)
+    {
+        $freeParticipant = $sheet->getType()->getFreeParticipant();
+        $participants    = count($sheet->getParticipants());
+
+        return $participants - $freeParticipant;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
      * @return int
      */
     public function getBoughtParticipant(Sheet $sheet)
@@ -26,17 +95,18 @@ class ParticipantManager
 
         foreach ($typePackageTemplate as $blockKey => $block) {
             foreach ($block['template'] as $elementKey => $element) {
-                if ($element['type'] === 'lib_participant') {
+                if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
                     if (isset($packageData[$blockKey][$elementKey]['participant_bought'])
                         && isset($packageData[$blockKey][$elementKey]['participant'])
-                        && true === $packageData[$blockKey][$elementKey]['participant']) {
+                        && true === $packageData[$blockKey][$elementKey]['participant']
+                    ) {
                         return intval($packageData[$blockKey][$elementKey]['participant_bought']);
-                    } else {
-                        return 0;
                     }
                 }
             }
         }
+
+        return 0;
     }
 
     /**
@@ -58,57 +128,12 @@ class ParticipantManager
      *
      * @return int
      */
-    public function getBuyQuantityParticipant(Sheet $sheet)
-    {
-        $max    = $sheet->getType()->getMaxParticipant();
-        $free   = $sheet->getType()->getFreeParticipant();
-
-        return intval($max - $free);
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return int
-     */
     public function getRemainingPossibleParticipant(Sheet $sheet)
     {
         $max   = $sheet->getType()->getMaxParticipant();
         $added = count($sheet->getParticipants());
 
         return $max - $added;
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    public function canBuyParticipant(Sheet $sheet)
-    {
-        if ($this->getRemainingPossibleParticipant($sheet) === 0 || $this->getRemainingPossibleParticipant($sheet) < 0) {
-            return false;
-        }
-
-        if ($this->getRemainingPossibleParticipantToBuy($sheet) === 0 || $this->getRemainingPossibleParticipantToBuy($sheet) < 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return int
-     */
-    public function availableAddParticipant(Sheet $sheet)
-    {
-        if ($this->getRemainingPossibleParticipant($sheet) === 0) {
-            return 0;
-        }
-
-        return $this->getBoughtParticipant($sheet) + $sheet->getType()->getFreeParticipant() - count($sheet->getParticipants());
     }
 
     /**
@@ -128,7 +153,7 @@ class ParticipantManager
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -148,14 +173,6 @@ class ParticipantManager
             }
         }
 
-        return;
-    }
-
-    public function getAddedBoughtParticipant(Sheet $sheet)
-    {
-        $freeParticipant = $sheet->getType()->getFreeParticipant();
-        $participants    = count($sheet->getParticipants());
-
-        return $participants - $freeParticipant;
+        return null;
     }
 }

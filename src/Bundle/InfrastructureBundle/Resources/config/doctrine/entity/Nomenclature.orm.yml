@@ -13,6 +13,3 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\NomenclatureTranslation
             mappedBy: nomenclature
-    manyToOne:
-        event:
-            targetEntity: Proximum\Vimeet\Domain\Model\Event

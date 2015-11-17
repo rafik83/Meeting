@@ -1,15 +1,11 @@
 Proximum\Vimeet\Domain\Model\Nomenclature:
     nomenclature_activity:
-        event: @event_rdv_carnot_2016
         label: Activité économique de l'organisme
     nomenclature_size:
-        event: @event_rdv_carnot_2016
         label: Taille de l'organisme
     nomenclature_turnover:
-        event: @event_rdv_carnot_2016
         label: Chiffre d'affaire de l'organisme
     nomenclature_type:
-        event: @event_rdv_carnot_2016
         label: Type de l'organisme
 
 Proximum\Vimeet\Domain\Model\NomenclatureTranslation:
