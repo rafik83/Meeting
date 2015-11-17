@@ -84,6 +84,14 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $rule = $this
+            ->get('vimeet_infrastructure.application.components.sheet.manager')
+            ->getRuleToApply($sheet, $this->getUser());
+
+        if (!$rule) {
+            throw $this->createNotFoundException();
+        }
+
         $sheetView = $this
             ->get('vimeet_infrastructure.application.components.sheet.manager')
             ->getSheetDataViewByUser($this->getUser(), $sheet);
