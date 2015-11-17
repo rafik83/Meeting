@@ -79,6 +79,12 @@ class SheetManager
         // Apply rule
         $this->ruleManager->apply($rule, $sheet, new SetNullStrategy());
 
-        return new SheetCatalogView($sheet->getId(), $sheet->getData(), $sheet->getType()->getSheetTemplate());
+        return new SheetCatalogView(
+            $sheet->getId(),
+            $sheet->getData(),
+            $sheet->getType()->getSheetTemplate(),
+            $sheet->getType()->getParticipantTemplate(),
+            $sheet->getParticipants()->toArray()
+        );
     }
 }
