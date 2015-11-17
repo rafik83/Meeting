@@ -10,16 +10,17 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\Type\FieldUpdate;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\FieldUpdateType;
+use Proximum\Vimeet\Application\Command\TypeTemplateField\Update;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TypeFormController extends Controller
+class TypeTemplateFieldController extends Controller
 {
     /**
      * @ParamConverter(
@@ -40,7 +41,7 @@ class TypeFormController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Admin/TypeForm:list.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
             'event'    => $event,
             'typeView' => $typeView,
             'type'     => $type,
@@ -57,33 +58,44 @@ class TypeFormController extends Controller
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
+     * @param string  $template
      * @param string  $key
      *
-     * @return Response
+     * @return Response|RedirectResponse
+     *
+     * @throws \Exception
      */
-    public function fieldUpdateAction(Request $request, Event $event, Type $type, $key)
+    public function fieldUpdateAction(Request $request, Event $event, Type $type, $template, $key)
     {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
-        $fieldUpdate = new FieldUpdate($type, $key);
+        $update = new Update($type, $template, $key);
 
-        $form   = $this->createForm(new FieldUpdateType(), $fieldUpdate, [
+        $form   = $this->createForm(new UpdateType(), $update, [
             'method' => 'POST',
         ]);
-
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            dump($fieldUpdate);
-            exit;
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler')
+                ->handle($update);
+
+            $this->addFlash('success', 'flash.admin.type_template_field.update.success');
+
+            return $this->redirectToRoute('admin_type_template_field_list', [
+                'id'      => $event->getId(),
+                'type_id' => $type->getId(),
+            ]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/TypeForm:fieldUpdate.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:update.html.twig', [
             'event'    => $event,
             'typeView' => $typeView,
             'type'     => $type,
+            'update'   => $update,
             'form'     => $form->createView(),
         ]);
     }

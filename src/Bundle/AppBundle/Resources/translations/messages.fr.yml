@@ -67,6 +67,10 @@ event:
                 billingStep: Passer à l'étape de facturation
 
 template:
+    name:
+        participantTemplate: Template formulaire fiche participant
+        sheetTemplate: Template formulaire fiche de participation
+        packageTemplate: Template formulaire forfait
     field:
         type:
             lib_country: Pays

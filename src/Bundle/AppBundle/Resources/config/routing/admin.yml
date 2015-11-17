@@ -48,10 +48,20 @@ admin_type_update:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Type:update }
 
-admin_type_form_template_list:
+admin_type_template_field_list:
     path: /event/{id}/type/{type_id}/form
     requirements:
         id: \d+
         type_id: \d+
     methods: [GET]
-    defaults: { _controller: VimeetAppBundle:Admin/TypeFormTemplate:list }
+    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:list }
+
+admin_type_template_field_update:
+    path: /event/{id}/type/{type_id}/form/field/update/{template}/{key}
+    requirements:
+        id: \d+
+        type_id: \d+
+        template: \w+
+        key: \w+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldUpdate }

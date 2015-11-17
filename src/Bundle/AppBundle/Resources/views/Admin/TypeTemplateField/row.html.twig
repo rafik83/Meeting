@@ -1,4 +1,13 @@
 {% if template is not null %}
+    <tr>
+        <th>Libellé</th>
+        <th>Type de champ</th>
+        <th>Requis</th>
+        <th>Privé</th>
+        <th>Contenu</th>
+        <th>Action</th>
+    </tr>
+
     {% for key, field in template %}
         <tr>
             <td>{{ field['label'][app.request.locale] }}</td>
@@ -7,17 +16,17 @@
             <td>{{ field['private'] is defined ? field['private']|boolean_tick : '' }}</td>
             <td>{{ field['type'] == 'lib_choice' ? field['choices']|choices_list(app.request.locale) : '' }}</td>
             <td>
-                <a href="{{ path('admin_type_form_field_update', {
-                    'id': event.id,
-                    'type_id': type.id,
-                    'key': key
+                <a href="{{ path('admin_type_template_field_update', {
+                    id: event.id,
+                    type_id: type.id,
+                    template: templateName,
+                    key: key
                 }) }}" class="btn btn-default btn-sm">Modifier</a>
             </td>
         </tr>
     {% endfor %}
-{% endif %}
 
-{% if linkTo is defined and linkTo is not null %}
+{% elseif linkTo is defined and linkTo is not null %}
     {% set template = null %}
 
     {% if 'packageTemplate' == linkTo['template'] %}
@@ -33,4 +42,8 @@
             <td></td>
         </tr>
     {% endif %}
+{% else %}
+    <tr>
+        <td colspan="6">Aucun champ</td>
+    </tr>
 {% endif %}

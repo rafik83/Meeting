@@ -285,4 +285,16 @@ class Type implements WhoInterface
         $this->previewTemplate     = $template->getPreview();
         $this->viewTemplate        = $template->getView();
     }
+
+    /**
+     * @return array
+     */
+    public function getTemplates()
+    {
+        return [
+            'participantTemplate' => $this->getParticipantTemplate(),
+            'sheetTemplate'       => $this->getSheetTemplate(),
+            'packageTemplate'     => $this->getPackageTemplate(),
+        ];
+    }
 }

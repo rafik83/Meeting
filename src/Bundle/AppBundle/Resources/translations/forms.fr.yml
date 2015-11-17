@@ -132,6 +132,17 @@ form:
             submit:
                 label: Enregistrer
 
+    type_template_field_update:
+        children:
+            label:
+                label: Libellé
+            required:
+                label: Obligatoire
+            private:
+                label: Privé
+            submit:
+                label: Enregistrer
+
 country:
     placeholder: --- Sélectionner un pays ---
 
