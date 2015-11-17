@@ -57,6 +57,12 @@ class CatalogController extends Controller
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->search($categoryView->id, $this->getUser());
 
+        array_walk($sheets, function (Sheet &$sheet) {
+            $this
+                ->get('vimeet_infrastructure.application.components.sheet.manager')
+                ->applyVisibility($this->getUser(), $sheet);
+        });
+
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
             'eventView'    => $eventView,
             'categoryView' => $categoryView,
@@ -80,7 +86,7 @@ class CatalogController extends Controller
 
         $sheetView = $this
             ->get('vimeet_infrastructure.application.components.sheet.manager')
-            ->getSheetDataViewByUser($this->getUser(), $sheet, $request->getLocale());
+            ->getSheetDataViewByUser($this->getUser(), $sheet);
 
         return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
             'eventView'    => $eventView,

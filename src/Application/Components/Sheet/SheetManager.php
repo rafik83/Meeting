@@ -39,6 +39,11 @@ class SheetManager
     private $typeRepository;
 
     /**
+     * @var array
+     */
+    private $cache;
+
+    /**
      * SheetManager constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
@@ -95,7 +100,7 @@ class SheetManager
      * @param User  $user
      * @param Sheet $sheet
      */
-    private function applyVisibility(User $user, Sheet $sheet)
+    public function applyVisibility(User $user, Sheet $sheet)
     {
         $applier = new Applier();
         $applier->apply($this->getSeeToApply($sheet, $user), $sheet, new SetNullStrategy());
@@ -111,6 +116,10 @@ class SheetManager
      */
     private function getSeeToApply(Sheet $sheet, User $user)
     {
+        if (isset($this->cache[$sheet->getType()->getId()])) {
+            return $this->cache[$sheet->getType()->getId()];
+        }
+
         // Get types of sheet the user the user have for this event
         $types = $this->typeRepository->getTypesByUser($sheet->getEvent(), $user);
 
@@ -123,6 +132,8 @@ class SheetManager
         usort($sees, function (See $one, See $another) {
             return $one < $another ? -1  : $one > $another ? 1 : 0;
         });
+
+        $this->cache[$sheet->getType()->getId()] = $sees[0];
 
         return $sees[0];
     }

@@ -24,10 +24,11 @@ class SearchQueryBuilder extends QueryBuilder
         parent::__construct($em);
 
         $this
-            ->select('sheet')
+            ->select('sheet, type, category, participant')
             ->from('Entity:Sheet', 'sheet')
             ->join('sheet.type', 'type')
-            ->join('type.categories', 'category');
+            ->leftJoin('type.categories', 'category')
+            ->leftJoin('sheet.participants', 'participant');
     }
 
     /**
