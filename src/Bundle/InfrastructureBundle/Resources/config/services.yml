@@ -159,11 +159,19 @@ services:
             - {name: cart, cart: upload_with_choices}
 
     #
-    # Security
+    # Sheet Component
     #
     vimeet_infrastructure.application.components.sheet.manager:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
+            - @vimeet_infrastructure.application.components.rule.manager
+
+    #
+    # Rule Component
+    #
+    vimeet_infrastructure.application.components.rule.manager:
+        class: Proximum\Vimeet\Application\Components\Rule\RuleManager
+        arguments:
             - @vimeet_infrastructure.repository.rule_repository
             - @vimeet_infrastructure.repository.type_repository
