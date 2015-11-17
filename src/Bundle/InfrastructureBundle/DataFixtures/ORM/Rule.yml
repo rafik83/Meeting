@@ -1,23 +1,11 @@
 Proximum\Vimeet\Domain\Model\Rule:
     rule_1:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_exposant, []]
+        __construct: [@event_rdv_carnot_2016, @category_visiteur, @category_visiteur, []]
     rule_2:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur, []]
+        __construct: [@event_rdv_carnot_2016, @category_visiteur, @category_exposant, []]
     rule_3:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_visiteur_visio, []]
+        __construct: [@event_rdv_carnot_2016, @category_exposant, @category_visiteur, {"participant":{"563cb0568a3bb":true,"563cb05cb81ec":true,"563cb062b89a9":true,"563cb06a1a441":true},"sheet":{"563cb00c629d8":{"563cb02125c23":false,"563cb02932fc8":true,"563cb02fc1df1":true,"563cb0364f1c6":false},"563cb014e2784":{"563cb03f9a509":false}}}]
     rule_4:
-        __construct: [@event_rdv_carnot_2016, @type_visiteur, @type_investisseur, []]
+        __construct: [@event_rdv_carnot_2016, @type_investisseur, @category_visiteur, []]
     rule_5:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_exposant, []]
-    rule_6:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur, []]
-    rule_7:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_visiteur_visio, []]
-    rule_8:
-        __construct: [@event_rdv_carnot_2016, @type_exposant, @type_investisseur, []]
-    rule_9:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_exposant, []]
-    rule_10:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur, []]
-    rule_11:
-        __construct: [@event_rdv_carnot_2016, @type_investisseur, @type_visiteur_visio, []]
+        __construct: [@event_rdv_carnot_2016, @category_exposant, @category_exposant, []]
