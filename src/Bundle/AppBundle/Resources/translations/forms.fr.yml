@@ -45,6 +45,22 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    forgotten_password:
+        children:
+            email:
+                label: Entrez votre email
+            submit:
+                label: Envoyez
+    new_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyez
     add_participant:
         children:
             email:

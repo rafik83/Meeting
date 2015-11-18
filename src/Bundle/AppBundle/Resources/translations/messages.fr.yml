@@ -17,6 +17,12 @@ change_password:
 register:
     email_already_exists: Un compte associé à cette adresse mail existe déjà
 
+reset_password:
+    title: Demande de nouveau mot de passe
+
+new_password:
+    title: Créer un nouveau mot de passe
+
 event:
     link:
         see_my_sheet: Voir ma fiche %type%
