@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
-
-use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\EventDispatcher\Event;
 
