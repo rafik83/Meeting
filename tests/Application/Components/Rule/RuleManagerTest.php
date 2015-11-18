@@ -11,6 +11,7 @@
 namespace Tests\Application\Components\Rule;
 
 use Proximum\Vimeet\Application\Components\Rule\RuleManager;
+use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -70,7 +71,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
 
-        $manager = new RuleManager($ruleRepository->reveal(), $typeRepository->reveal());
+        $manager = new RuleManager($ruleRepository->reveal(), $typeRepository->reveal(), new RuleSorter());
 
         $manager->apply($rule, $sheet, new SetNullStrategy());
 
@@ -101,7 +102,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $ruleRepository->getBySeerTypeAndSeeableType($types[0], $sheet->getType())->shouldBeCalled()->willReturn($rules);
 
-        $manager = new RuleManager($ruleRepository->reveal(), $typeRepository->reveal());
+        $manager = new RuleManager($ruleRepository->reveal(), $typeRepository->reveal(), new RuleSorter());
 
         $rule = $manager->getRule($sheet, $user);
 

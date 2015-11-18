@@ -31,19 +31,30 @@ class RuleManager
     private $typeRepository;
 
     /**
+     * @var RuleSorter
+     */
+    private $ruleSorter;
+
+    /**
      * @var array
      */
     private $cache;
 
     /**
-     * SheetManager constructor.
+     * RuleManager constructor.
      *
      * @param RuleRepositoryInterface $ruleRepository
      * @param TypeRepositoryInterface $typeRepository
+     * @param RuleSorter              $ruleSorter
      */
-    public function __construct(RuleRepositoryInterface $ruleRepository, TypeRepositoryInterface $typeRepository) {
+    public function __construct(
+        RuleRepositoryInterface $ruleRepository,
+        TypeRepositoryInterface $typeRepository,
+        RuleSorter $ruleSorter
+    ) {
         $this->ruleRepository = $ruleRepository;
         $this->typeRepository = $typeRepository;
+        $this->ruleSorter     = $ruleSorter;
     }
 
     /**
@@ -72,10 +83,7 @@ class RuleManager
         }
 
         // Sort rules by priority
-        usort($rules, function (Rule $one, Rule $another) {
-            return $one->getPriority() < $another->getPriority() ?
-                1  : $one->getPriority() > $another->getPriority() ? -1 : 0;
-        });
+        $this->ruleSorter->sort($rules);
 
         if (!isset($rules[0])) {
             throw new NoRuleFoundException('No rule found.');

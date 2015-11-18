@@ -170,8 +170,11 @@ services:
     #
     # Rule Component
     #
+    vimeet_infrastructure.vimeet.application.components.rule.rule_sorter:
+        class: Proximum\Vimeet\Application\Components\Rule\RuleSorter
     vimeet_infrastructure.application.components.rule.manager:
         class: Proximum\Vimeet\Application\Components\Rule\RuleManager
         arguments:
             - @vimeet_infrastructure.repository.rule_repository
             - @vimeet_infrastructure.repository.type_repository
+            - @vimeet_infrastructure.vimeet.application.components.rule.rule_sorter

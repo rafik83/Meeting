@@ -176,12 +176,4 @@ class Rule
     {
         return $this->seeableCategory ? : $this->seeableType;
     }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return $this->seeableType ? ($this->seerType ? 1 : 2) : ($this->seeableType ? 3 : 4);
-    }
 }
