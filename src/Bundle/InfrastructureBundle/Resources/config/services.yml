@@ -38,6 +38,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.forgotten_password_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -112,6 +116,19 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.user.forgotten_password_token_handler:
+        class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordTokenHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.repository.forgotten_password_token_repository
+            - @vimeet_infrastructure.event.event_dispatcher
+    vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.adapter.encoder_adapter
+            - @vimeet_infrastructure.adapter.salt_generator
+            - @vimeet_infrastructure.repository.forgotten_password_token_repository
 
     #
     # Security
@@ -165,3 +182,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Sheet
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
+
+    #
+    # Event
+    #
+    vimeet_infrastructure.event.event_dispatcher:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Event\EventDispatcher
+        arguments: [ @event_dispatcher ]

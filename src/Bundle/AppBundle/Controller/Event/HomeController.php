@@ -19,12 +19,10 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\TypeView;
-use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class HomeController extends BaseController
@@ -170,17 +168,6 @@ class HomeController extends BaseController
             'eventView' => $eventView,
             'typeView'  => $typeView,
         ]);
-    }
-
-    /**
-     * Authenticate user
-     *
-     * @param User $user
-     */
-    private function authenticate(User $user)
-    {
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
     }
 
     /**

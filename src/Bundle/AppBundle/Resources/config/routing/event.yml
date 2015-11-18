@@ -14,6 +14,22 @@ event_register:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
+event_forgotten_password:
+    path: /forgotten_password
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:forgottenPassword }
+
+event_create_new_password:
+    path: /reset_password/{token}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
+
 event_participate:
     path: /participate/{typeView}
     host: "{subdomain}.%domain%"
