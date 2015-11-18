@@ -14,6 +14,7 @@ use DateTime;
 use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
+use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Domain\Model\EventView;
@@ -33,7 +34,12 @@ class ForgottenPasswordController extends BaseController
      */
     public function forgottenPasswordAction(Request $request, EventView $eventView)
     {
-        $subdomain         = $request->attributes->get('subdomain');
+        $subdomain = $request->attributes->get('subdomain');
+
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
+        }
+
         $forgottenPassword = new ForgottenPassword($eventView, $request->getLocale());
 
         $form = $this->createForm(new ForgottenPasswordType(), $forgottenPassword, [
@@ -43,13 +49,20 @@ class ForgottenPasswordController extends BaseController
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.user.forgotten_password_token_handler')->handle($forgottenPassword);
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.user.forgotten_password_token_handler')->handle($forgottenPassword);
 
-            $this->addFlash('success', 'flash.reset_password_token.success');
+                $this->addFlash('success', 'flash.reset_password_token.success');
 
-            return $this->redirectToRoute('event', [
-                'subdomain' => $subdomain,
-            ]);
+                return $this->redirectToRoute('event', [
+                    'subdomain' => $subdomain,
+                ]);
+            } catch (EmailDoesNotExistException $exception) {
+                $this->addGivenErrorOnGivenField(
+                    $this->get('translator')->trans('validators.emailDoesNotExist', [], 'validators'),
+                    $form->get('email')
+                );
+            }
         }
 
         return $this->render('VimeetAppBundle:Event/ResetPassword:request_token.html.twig', [
