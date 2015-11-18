@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class RuleManagerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testApplySetNull()
     {
         $data = [
