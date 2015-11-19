@@ -54,6 +54,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $filesystem->remove($spoolDir);
     }
 
+    public function getLinkFromA($string)
+    {
+        preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
+
+        return $result[2][0];
+    }
+
     /**
      * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent to "(?P<email>[^"]+)"$/
      */
@@ -117,9 +124,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $message->getBody(), $result);
+                $result = $this->getLinkFromA($message->getBody());
 
-                if (substr($result[2][0], 0, strlen($contain)) === $contain) {
+                if (substr($result, 0, strlen($contain)) === $contain) {
                     return;
                 }
             }
@@ -149,11 +156,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $message->getBody(), $result);
-                $destination = $result[2][0];
+                $result = $this->getLinkFromA($message->getBody());
 
-                if (substr($destination, 0, strlen($link)) === $link) {
-                    $this->visitPath($destination);
+                if (substr($result, 0, strlen($link)) === $link) {
+                    $this->visitPath($result);
                     return;
                 }
             }
