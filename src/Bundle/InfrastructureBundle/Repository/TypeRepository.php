@@ -196,7 +196,7 @@ class TypeRepository implements TypeRepositoryInterface
      */
     public function getSeeableTypeIdsByUser($user)
     {
-        return $this->seeableTypeBySees($this->seesBySheets($this->sheetByUser($user)));
+        return $this->seeableTypeByRules($this->rulesBySheets($this->sheetByUser($user)));
     }
 
     /**
@@ -222,16 +222,16 @@ class TypeRepository implements TypeRepositoryInterface
      *
      * @return array
      */
-    private function seesBySheets(array $sheets)
+    private function rulesBySheets(array $sheets)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('see.id')
-            ->from('Entity:See', 'see', 'see.id')
-            ->leftJoin('see.seerCategory', 'seerCategory')
+            ->select('rule.id')
+            ->from('Entity:Rule', 'rule', 'rule.id')
+            ->leftJoin('rule.seerCategory', 'seerCategory')
             ->leftJoin('seerCategory.types', 'seerCategoryType')
-            ->leftJoin('see.seerType', 'seerType')
+            ->leftJoin('rule.seerType', 'seerType')
             ->join('Entity:Sheet', 'sheet', 'WITH', '(sheet.type = seerCategoryType OR sheet.type = seerType) AND sheet IN (:sheets)')
             ->setParameter('sheets', $sheets);
 
@@ -239,11 +239,11 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param array $sees
+     * @param array $rules
      *
      * @return array
      */
-    private function seeableTypeBySees(array $sees)
+    private function seeableTypeByRules(array $rules)
     {
         $queryBuilder = $this
             ->entityManager
@@ -251,9 +251,28 @@ class TypeRepository implements TypeRepositoryInterface
             ->select('DISTINCT seeableType.id')
             ->from('Entity:Type', 'seeableType', 'seeableType.id')
             ->leftJoin('seeableType.categories', 'seeableCategory')
-            ->join('Entity:See', 'see', 'WITH', '(see.seeableType = seeableType OR see.seeableCategory = seeableCategory) AND see IN (:sees)')
-            ->setParameter('sees', $sees);
+            ->join('Entity:Rule', 'rule', 'WITH', '(rule.seeableType = seeableType OR rule.seeableCategory = seeableCategory) AND rule IN (:rules)')
+            ->setParameter('rules', $rules);
 
         return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesByUser(Event $event, User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user)
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

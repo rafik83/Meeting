@@ -43,10 +43,13 @@ class Category implements WhoInterface
     private $event;
 
     /**
-     * Constructor
+     * Category constructor.
+     *
+     * @param Event $event
      */
-    public function __construct()
+    public function __construct(Event $event)
     {
+        $this->event        = $event;
         $this->types        = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -99,5 +102,13 @@ class Category implements WhoInterface
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'category';
     }
 }

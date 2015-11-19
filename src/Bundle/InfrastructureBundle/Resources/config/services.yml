@@ -30,8 +30,8 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @vimeet_infrastructure.repository.type_repository
-    vimeet_infrastructure.repository.see_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SeeRepository
+    vimeet_infrastructure.repository.rule_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\RuleRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.nomenclature_item_repository:
@@ -159,9 +159,22 @@ services:
             - {name: cart, cart: upload_with_choices}
 
     #
-    # Security
+    # Sheet Component
     #
-    vimeet_infrastructure.application.components.sheet.sheet:
-        class: Proximum\Vimeet\Application\Components\Sheet\Sheet
+    vimeet_infrastructure.application.components.sheet.manager:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
+            - @vimeet_infrastructure.application.components.rule.manager
+
+    #
+    # Rule Component
+    #
+    vimeet_infrastructure.vimeet.application.components.rule.rule_sorter:
+        class: Proximum\Vimeet\Application\Components\Rule\RuleSorter
+    vimeet_infrastructure.application.components.rule.manager:
+        class: Proximum\Vimeet\Application\Components\Rule\RuleManager
+        arguments:
+            - @vimeet_infrastructure.repository.rule_repository
+            - @vimeet_infrastructure.repository.type_repository
+            - @vimeet_infrastructure.vimeet.application.components.rule.rule_sorter

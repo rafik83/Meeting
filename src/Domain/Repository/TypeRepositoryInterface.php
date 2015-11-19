@@ -75,6 +75,11 @@ interface TypeRepositoryInterface
      */
     public function getParticipantTemplate($typeId);
 
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
     public function getTypesByEvent(Event $event);
 
     /**
@@ -83,4 +88,12 @@ interface TypeRepositoryInterface
      * @return array
      */
     public function getSeeableTypeIdsByUser($user);
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return Type[]
+     */
+    public function getTypesByUser(Event $event, User $user);
 }

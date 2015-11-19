@@ -72,3 +72,8 @@ event:
             label:
                 totalPrice: Total
                 billingStep: Passer à l'étape de facturation
+who:
+    see_who_but_dont_see: %seer% voit %seeable% mais ne voit pas :
+    the:
+        category: la catégory
+        type: le type

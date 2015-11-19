@@ -62,7 +62,7 @@ class SheetController extends BaseController
             ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
 
         $sheetDataView = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet')
+            ->get('vimeet_infrastructure.application.components.sheet.manager')
             ->getSheetDataView($sheet, $this->getUser());
 
         $buttonParticipant = $this->get('vimeet_app.service.participant_manager')->canBuyOrAddParticipant($sheet);
@@ -306,14 +306,14 @@ class SheetController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param Sheet   $sheet
-     * @param $userParticipant
-     * @param $participantViews
+     * @param Request     $request
+     * @param Sheet       $sheet
+     * @param Participant $userParticipant
+     * @param array       $participantViews
      *
      * @return array
      */
-    private function addDeleteParticipantForm(Request$request, Sheet $sheet, $userParticipant, $participantViews)
+    private function addDeleteParticipantForm(Request $request, Sheet $sheet, Participant $userParticipant, array $participantViews)
     {
         $participantDeleteForms = [];
 

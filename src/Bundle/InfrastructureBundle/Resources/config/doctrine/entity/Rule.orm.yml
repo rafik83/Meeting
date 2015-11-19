@@ -1,0 +1,39 @@
+Proximum\Vimeet\Domain\Model\Rule:
+    type:  entity
+    table: rule
+    uniqueConstraints:
+        unique_idx_1:
+            columns:
+                - seer_type_id
+                - seeable_type_id
+        unique_idx_2:
+            columns:
+                - seer_type_id
+                - seeable_category_id
+        unique_idx_3:
+            columns:
+                - seer_category_id
+                - seeable_type_id
+        unique_idx_4:
+            columns:
+                - seer_category_id
+                - seeable_category_id
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        what:
+            type: json_array
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        seerType:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+        seerCategory:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+        seeableType:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+        seeableCategory:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
