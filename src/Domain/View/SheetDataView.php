@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
-use ArrayAccess;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class SheetDataView
 {
@@ -30,7 +32,7 @@ class SheetDataView
     public $type;
 
     /**
-     * @var ArrayAccess
+     * @var \ArrayAccess
      */
     public $participants;
 
@@ -63,7 +65,7 @@ class SheetDataView
      * @param int               $id
      * @param Event             $event
      * @param Type              $type
-     * @param ArrayAccess       $participants
+     * @param \ArrayAccess      $participants
      * @param array             $data
      * @param array             $packageData
      * @param array             $billingData
@@ -74,7 +76,7 @@ class SheetDataView
         $id,
         Event $event,
         Type $type,
-        ArrayAccess $participants,
+        \ArrayAccess $participants,
         array $data,
         array $packageData,
         array $billingData,
