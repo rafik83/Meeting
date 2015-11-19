@@ -1,0 +1,78 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Components\Rule;
+
+use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
+use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Rule;
+use Proximum\Vimeet\Domain\Model\Type;
+
+class RuleSorterTest extends \PHPUnit_Framework_TestCase
+{
+    public static function provideRules()
+    {
+        $event = new Event();
+
+        return [
+            [
+                [
+                    new Rule($event, new Category($event), new Category($event), []),
+                    new Rule($event, new Type($event), new Type($event), []),
+                ],
+                [
+                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Category($event), new Category($event), []),
+                ],
+            ],
+            [
+                [
+                    new Rule($event, new Category($event), new Category($event), []),
+                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Type($event), new Category($event), []),
+                ],
+                [
+                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Type($event), new Category($event), []),
+                    new Rule($event, new Category($event), new Category($event), []),
+                ],
+            ],
+            [
+                [
+                    new Rule($event, new Category($event), new Category($event), []),
+                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Category($event), new Type($event), []),
+                    new Rule($event, new Type($event), new Category($event), []),
+                ],
+                [
+                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Category($event), new Type($event), []),
+                    new Rule($event, new Type($event), new Category($event), []),
+                    new Rule($event, new Category($event), new Category($event), []),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideRules
+     *
+     * @param array $rules
+     * @param array $expected
+     */
+    public function testSort(array $rules, array $expected)
+    {
+        $sorter = new RuleSorter();
+        $sorter->sort($rules);
+
+        $this->assertEquals($expected, $rules);
+    }
+}

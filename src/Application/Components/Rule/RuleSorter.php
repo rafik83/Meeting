@@ -23,7 +23,23 @@ class RuleSorter
      */
     private function priority(Rule $rule)
     {
-        return $rule->getSeeableType() ? ($rule->getSeerType() ? 1 : 2) : ($rule->getSeeableType() ? 3 : 4);
+        if ($rule->getSeerType() && $rule->getSeeableType()) {
+            return 1;
+        }
+
+        if ($rule->getSeerCategory() && $rule->getSeeableType()) {
+            return 2;
+        }
+
+        if ($rule->getSeerType() && $rule->getSeeableCategory()) {
+            return 3;
+        }
+
+        if ($rule->getSeerCategory() && $rule->getSeeableCategory()) {
+            return 4;
+        }
+
+        return 5;
     }
 
     /**
@@ -37,7 +53,7 @@ class RuleSorter
             $onePriority     = $this->priority($one);
             $anotherPriority = $this->priority($another);
 
-            return $onePriority < $anotherPriority ? 1  : $onePriority > $anotherPriority ? -1 : 0;
+            return $onePriority < $anotherPriority ? -1  : ($onePriority > $anotherPriority ? 1 : 0);
         });
     }
 }
