@@ -12,3 +12,7 @@ Proximum\Vimeet\Domain\Model\Schedule:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        meetingSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+            mappedBy: schedule

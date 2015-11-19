@@ -14,3 +14,4 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
     manyToOne:
         schedule:
             targetEntity: Proximum\Vimeet\Domain\Model\Schedule
+            inversedBy: meetingSlots

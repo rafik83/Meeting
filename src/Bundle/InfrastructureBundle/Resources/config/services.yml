@@ -38,6 +38,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.schedule_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
