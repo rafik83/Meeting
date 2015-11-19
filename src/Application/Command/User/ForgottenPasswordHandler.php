@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
 use Proximum\Vimeet\Application\Event\ApplicationEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
