@@ -32,4 +32,17 @@ class Provider
     {
         return $this->domain;
     }
+
+    /**
+     * @param string $datetime
+     * @param string $inputTimezone
+     * @param string $outputTimezone
+     *
+     * @return \DateTime
+     */
+    public function date($datetime, $inputTimezone, $outputTimezone)
+    {
+        return (new \DateTime($datetime, new \DateTimeZone($inputTimezone)))
+            ->setTimezone(new \DateTimeZone($outputTimezone));
+    }
 }
