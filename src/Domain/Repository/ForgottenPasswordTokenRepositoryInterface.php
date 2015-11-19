@@ -20,7 +20,6 @@ interface ForgottenPasswordTokenRepositoryInterface
      */
     public function create(ForgottenPasswordToken $forgottenPasswordToken);
 
-
     /**
      * @param User $user
      */

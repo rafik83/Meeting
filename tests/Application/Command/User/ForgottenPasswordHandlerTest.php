@@ -33,18 +33,13 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 
         $dateTime               = new DateTime();
         $user                   = new User('test@test.fr', 'test', 'test', 'fr');
-        $forgottenPasswordToken = new ForgottenPasswordToken(
-            $user,
-            'token',
-            $dateTime
-        );
-        $event = new ResetPasswordEvent(
+        $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', $dateTime);
+        $event                  = new ResetPasswordEvent(
             $user,
             $command->eventView,
             $forgottenPasswordToken,
             $command->locale
         );
-
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail($command->email)->shouldBeCalled()->willReturn($user);

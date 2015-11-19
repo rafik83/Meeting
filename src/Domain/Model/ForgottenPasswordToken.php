@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateInterval;
 use DateTime;
 
 class ForgottenPasswordToken

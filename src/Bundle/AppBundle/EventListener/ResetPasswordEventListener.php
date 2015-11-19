@@ -42,7 +42,7 @@ class ResetPasswordEventListener
     {
         $message = \Swift_Message::newInstance()
             ->setSubject(sprintf('[%s] Reset password', $resetPasswordEvent->getApplicationEvent()->getEventView()->title))
-            ->setFrom('vimeet@proximumgroup.com')
+            ->setFrom('vimeet@vimeet.proximum.elao.ninja')
             ->setTo($resetPasswordEvent->getApplicationEvent()->getUser()->getEmail())
             ->setBody(
                 $this->templating->render(
