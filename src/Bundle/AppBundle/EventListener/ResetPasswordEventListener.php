@@ -54,6 +54,7 @@ class ResetPasswordEventListener
                 )
             )
             ->setContentType('text/html');
+        $message->getHeaders()->addTextHeader('X-Message-ID', 'forgot_password');
 
         $this->mailer->send($message);
     }
