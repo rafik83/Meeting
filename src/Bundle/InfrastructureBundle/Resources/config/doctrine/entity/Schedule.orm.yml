@@ -16,3 +16,6 @@ Proximum\Vimeet\Domain\Model\Schedule:
         meetingSlots:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
             mappedBy: schedule
+        happenings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            mappedBy: schedule

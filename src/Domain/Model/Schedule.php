@@ -35,6 +35,11 @@ class Schedule
     private $meetingSlots;
 
     /**
+     * @var ArrayCollection
+     */
+    private $happenings;
+
+    /**
      * Schedule constructor.
      *
      * @param Event     $event
@@ -45,6 +50,7 @@ class Schedule
         $this->event        = $event;
         $this->date         = $date;
         $this->meetingSlots = new ArrayCollection();
+        $this->happenings   = new ArrayCollection();
     }
 
     /**
@@ -85,5 +91,15 @@ class Schedule
     public function getMeetingSlots()
     {
         return $this->meetingSlots;
+    }
+
+    /**
+     * Get happenings
+     *
+     * @return ArrayCollection
+     */
+    public function getHappenings()
+    {
+        return $this->happenings;
     }
 }

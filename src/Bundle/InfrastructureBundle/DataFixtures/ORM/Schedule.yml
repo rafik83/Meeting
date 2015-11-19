@@ -61,3 +61,138 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
         __construct: [@schedule_day_two, "<date('2016-10-19 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_14:
         __construct: [@schedule_day_two, "<date('2016-10-19 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:55:00', 'Europe/Paris', 'UTC')>"]
+
+Proximum\Vimeet\Domain\Model\Happening:
+    happening_day_one_1:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>
+        title: PME : comment tirer profit des programmes européens
+        description: Présentation des différents programmes européens et des structures d'accompagnement
+    happening_day_one_2:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
+        title: Intensification des procédés au service de la chimie durable
+        description: L'illustration par quelques exemples industriels: bio-solvants et procédés séparatifs
+    happening_day_one_3:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>
+        title: La robotique collaborative : application en polissage
+        description: ""
+    happening_day_one_4:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>
+        title: Les grands enjeux de la filière électronique
+        description: Perspectives des industries électrotechnologiques présentées par la FIEEC
+    happening_day_one_5:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>
+        title: Remise du Prix FIEEC de la Recherche appliquée
+        description: Animée par Jacques MAROUANI, ElectroniqueS
+    happening_day_one_6:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 14:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>
+        title: De jeunes chercheurs dans les entreprises : les doctorants CIFRE
+        description: ""
+    happening_day_one_7:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>
+        title: Matériaux fonctionnels - Revêtements et traitements de surface
+        description: Fonctionnaliser les surfaces pour améliorer le comportement en service des matériaux
+    happening_day_one_8:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>
+        title: La médecine personnalisée
+        description: Le traitement à la carte en cancérologie : espoir ou réalité ?
+    happening_day_one_9:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>
+        title: Climat et risques hydrologiques
+        description: Gestion des risques en domaine montagneux : de la recherche à l’application
+    happening_day_one_10:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 17:50:00', 'Europe/Paris', 'UTC')>
+        title: Table ronde : Peut-on innover dans l’Ecosystème français ?
+        description: ""
+    happening_day_one_11:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>
+        title: Séance inaugurale
+        description: ""
+    happening_day_two_12:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>
+        title: Ile de France : les appuis aux entreprises innovantes
+        description: ""
+    happening_day_two_1:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>
+        title: Matériaux architecturés pour les véhicules
+        description: Allégement et traitement vibroacoustique
+    happening_day_two_2:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>
+        title: Des PME mieux armées en Propriété Intellectuelle
+        description: ""
+    happening_day_two_3:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>
+        title: Méthodes pour l’efficacité énergétique des procédés industriels
+        description: Perspectives des industries électrotechnologiques présentées par la FIEEC
+    happening_day_two_4:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>
+        title: Remise du Prix FIEEC de la Recherche appliquée
+        description: De l’audit avancé à l’innovation technologique
+    happening_day_two_5:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 14:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>
+        title: Radiocommunications M2M, sûreté de connexion
+        description: Déploiements de réseaux sans-fil en environnements difficiles et pour applications critiques
+    happening_day_two_6:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>
+        title: Innover en s'ouvrant à l'international
+        description: ""
+    happening_day_two_7:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>
+        title: Clôture
+        description: ""
