@@ -35,12 +35,16 @@ class ForgottenPasswordToken
      */
     private $expireDate;
 
-    public function __construct(User $user)
+    /**
+     * @param User   $user
+     * @param string $token
+     * @param string $expireDate
+     */
+    public function __construct(User $user, $token, $expireDate)
     {
         $this->user       = $user;
-        $this->token      = sha1(uniqid().$user->getId().uniqid());
-        $expireDate       = new DateTime();
-        $this->expireDate = $expireDate->add(new DateInterval('P1D'));
+        $this->token      = $token;
+        $this->expireDate = $expireDate;
     }
 
     /**

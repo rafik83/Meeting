@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\ApplicationEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
@@ -17,8 +18,13 @@ use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class ForgottenPasswordTokenHandler
+class ForgottenPasswordHandler
 {
+    /**
+     * @var ForgottenPasswordTokenGenerator
+     */
+    private $forgottenPasswordTokenGenerator;
+
     /**
      * @var UserRepositoryInterface
      */
@@ -34,14 +40,22 @@ class ForgottenPasswordTokenHandler
      */
     private $applicationEventDispatcher;
 
+    /**
+     * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
+     * @param UserRepositoryInterface                   $userRepository
+     * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
+     * @param ApplicationEventDispatcherInterface       $applicationEventDispatcher
+     */
     public function __construct(
+        ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
         UserRepositoryInterface $userRepository,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository,
         ApplicationEventDispatcherInterface $applicationEventDispatcher
     ) {
-        $this->userRepository = $userRepository;
-        $this->forgottenPasswordRepository = $forgottenPasswordTokenRepository;
-        $this->applicationEventDispatcher = $applicationEventDispatcher;
+        $this->forgottenPasswordTokenGenerator = $forgottenPasswordTokenGenerator;
+        $this->userRepository                  = $userRepository;
+        $this->forgottenPasswordRepository     = $forgottenPasswordTokenRepository;
+        $this->applicationEventDispatcher      = $applicationEventDispatcher;
     }
 
     /**
@@ -57,7 +71,7 @@ class ForgottenPasswordTokenHandler
             throw new EmailDoesNotExistException();
         }
 
-        $forgottenPasswordToken = new ForgottenPasswordToken($user);
+        $forgottenPasswordToken = $this->forgottenPasswordTokenGenerator->generate($user);
 
         $this->forgottenPasswordRepository->deleteAllForUser($user);
         $this->forgottenPasswordRepository->create($forgottenPasswordToken);

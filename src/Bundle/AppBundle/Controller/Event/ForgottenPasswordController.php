@@ -50,7 +50,7 @@ class ForgottenPasswordController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.user.forgotten_password_token_handler')->handle($forgottenPassword);
+                $this->get('vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler')->handle($forgottenPassword);
 
                 $this->addFlash('success', 'flash.reset_password_token.success');
 

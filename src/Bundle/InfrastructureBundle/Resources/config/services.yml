@@ -116,9 +116,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.type_repository
-    vimeet_infrastructure.vimeet.application.command.user.forgotten_password_token_handler:
-        class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordTokenHandler
+    vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:
+            - @vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator
             - @vimeet_infrastructure.repository.user_repository
             - @vimeet_infrastructure.repository.forgotten_password_token_repository
             - @vimeet_infrastructure.event.event_dispatcher
@@ -202,3 +203,17 @@ services:
             - @vimeet_infrastructure.repository.rule_repository
             - @vimeet_infrastructure.repository.type_repository
             - @vimeet_infrastructure.vimeet.application.components.rule.rule_sorter
+
+    #
+    # Token component
+    #
+    vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
+        arguments:
+            - @datetime
+
+    #
+    # DateTime
+    #
+    datetime:
+        class: DateTimeImmutable
