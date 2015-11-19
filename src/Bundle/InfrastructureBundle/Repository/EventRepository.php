@@ -87,7 +87,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\EventView(event.id, event.title, translations.description, translations.locale, event.locales, event.domain)')
+            ->select('NEW Proximum\Vimeet\Domain\Model\EventView(event.id, event.title, translations.description, translations.locale, event.locales)')
             ->from('Entity:Event', 'event')
             ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)

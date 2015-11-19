@@ -38,25 +38,18 @@ class EventView
     public $locales;
 
     /**
-     * @var string
-     */
-    public $subdomain;
-
-    /**
      * @param int    $id
      * @param string $title
      * @param string $description
      * @param string $locale
      * @param array  $locales
-     * @param string $subdomain
      */
-    public function __construct($id, $title, $description, $locale, array $locales, $subdomain)
+    public function __construct($id, $title, $description, $locale, array $locales)
     {
         $this->id          = $id;
         $this->title       = $title;
         $this->description = $description;
         $this->locale      = $locale;
         $this->locales     = $locales;
-        $this->subdomain   = $subdomain;
     }
 }
