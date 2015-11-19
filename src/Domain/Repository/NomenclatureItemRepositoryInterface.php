@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\NomenclatureItemView;
+use Proximum\Vimeet\Domain\View\NomenclatureItemView;
 
 interface NomenclatureItemRepositoryInterface
 {

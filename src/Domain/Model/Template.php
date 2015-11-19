@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+/**
+ * "Template"
+ */
 class Template
 {
     /**

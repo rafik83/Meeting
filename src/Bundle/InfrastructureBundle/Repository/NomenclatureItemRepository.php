@@ -36,7 +36,7 @@ class NomenclatureItemRepository implements NomenclatureItemRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\NomenclatureItemView(nomenclatureItem.id, translations.title, translations.locale)')
+            ->select('NEW Proximum\Vimeet\Domain\View\NomenclatureItemView(nomenclatureItem.id, translations.title, translations.locale)')
             ->from('Entity:NomenclatureItem', 'nomenclatureItem')
             ->join('nomenclatureItem.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
@@ -70,7 +70,7 @@ class NomenclatureItemRepository implements NomenclatureItemRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\NomenclatureItemView(nomenclatureItem.id, translations.title, translations.locale)')
+            ->select('NEW Proximum\Vimeet\Domain\View\NomenclatureItemView(nomenclatureItem.id, translations.title, translations.locale)')
             ->from('Entity:NomenclatureItem', 'nomenclatureItem')
             ->join('nomenclatureItem.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)

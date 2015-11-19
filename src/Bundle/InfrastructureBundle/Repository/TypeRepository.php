@@ -47,7 +47,7 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\TypeListView(type.id, translation.title, event.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title, event.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->join('type.event', 'event')
@@ -92,7 +92,7 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
@@ -111,7 +111,7 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\TypeView(type.id, translations.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
@@ -130,7 +130,7 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\TypeTemplatesView(type.id, type.participantTemplate, type.sheetTemplate, type.packageTemplate)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeTemplatesView(type.id, type.participantTemplate, type.sheetTemplate, type.packageTemplate)')
             ->from('Entity:Type', 'type')
             ->where('type.id = :typeId')
             ->setParameter('typeId', $typeId)

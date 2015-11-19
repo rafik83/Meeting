@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 use Proximum\Vimeet\Application\Components\Rule\RuleManager;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\SheetCatalogView;
-use Proximum\Vimeet\Domain\Model\SheetDataView;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\SheetCatalogView;
+use Proximum\Vimeet\Domain\View\SheetDataView;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class SheetManager
