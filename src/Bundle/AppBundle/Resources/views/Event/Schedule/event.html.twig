@@ -7,7 +7,11 @@
         <h2>{{ schedule.date|date('d/m/Y') }}</h2>
         <ul>
             {% for slot in schedule.slots %}
-                <li>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</li>
+                {% if slot.begin == slot.end %}
+                    <li>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</li>
+                {% else %}
+                    <li>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</li>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endfor %}

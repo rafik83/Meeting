@@ -24,17 +24,21 @@ class ScheduleController extends Controller
         $scheduleViews = [];
 
         foreach ($schedules as $schedule) {
-            $meetingSlots = [];
+            $slots = [];
 
             foreach ($schedule->getMeetingSlots() as $meetingSlot) {
-                $meetingSlots[] = new ScheduleSlotView('RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
+                $slots[] = new ScheduleSlotView('Pas de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
             }
 
             foreach ($schedule->getHappenings() as $happening) {
-                $meetingSlots[] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
+                $slots[] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
             }
 
-            $scheduleViews[] = new ScheduleView($schedule->getDate(), $meetingSlots);
+            usort($slots, function (ScheduleSlotView $one, ScheduleSlotView $another) {
+                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
+            });
+
+            $scheduleViews[] = new ScheduleView($schedule->getDate(), $slots);
         }
 
         return $this->render('VimeetAppBundle:Event/Schedule:event.html.twig', [
