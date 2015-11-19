@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-
 use Proximum\Vimeet\Domain\Model\User;
 
 class NewPassword

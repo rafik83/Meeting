@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\User;
 
-
 class EmailDoesNotExistException extends ForgottenPasswordException
 {
-
 }
