@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\EventListView;
-use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\View\EventListView;
+use Proximum\Vimeet\Domain\View\EventView;
 
 interface EventRepositoryInterface
 {

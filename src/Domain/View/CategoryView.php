@@ -8,24 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\View;
 
-class TypeView
+class CategoryView
 {
-    /**
-     * @var int
-     */
     public $id;
 
-    /**
-     * @var string
-     */
     public $title;
 
-    /**
-     * @param int    $id
-     * @param string $title
-     */
     public function __construct($id, $title)
     {
         $this->id    = $id;

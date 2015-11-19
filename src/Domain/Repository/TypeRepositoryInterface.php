@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\TypeListView;
-use Proximum\Vimeet\Domain\Model\TypeTemplatesView;
-use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\TypeListView;
+use Proximum\Vimeet\Domain\View\TypeTemplatesView;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 interface TypeRepositoryInterface
 {
