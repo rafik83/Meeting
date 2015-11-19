@@ -40,6 +40,8 @@ twig:
     form:
         resources:
             - "ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig"
+    date:
+        timezone: Europe/Paris
 
 # Doctrine Configuration
 doctrine:
