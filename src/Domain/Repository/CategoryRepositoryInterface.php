@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\CategoryView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\CategoryView;
 
 interface CategoryRepositoryInterface
 {

@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+/**
+ * "Règle"
+ */
 class Rule
 {
     /**

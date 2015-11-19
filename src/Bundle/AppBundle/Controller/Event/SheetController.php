@@ -26,10 +26,10 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BuyParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
-use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
+use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
