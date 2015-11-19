@@ -143,6 +143,23 @@ form:
             submit:
                 label: Enregistrer
 
+    type_template_field_update_lib_choice:
+        children:
+            label:
+                label: Libellé
+            required:
+                label: Obligatoire
+            private:
+                label: Privé
+            choices:
+                label: Choix
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    label: Libellé du choix
+            submit:
+                label: Enregistrer
+
 country:
     placeholder: --- Sélectionner un pays ---
 

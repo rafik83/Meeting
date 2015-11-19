@@ -1,12 +1,36 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
+{% form_theme form _self %}
+
 {% block title 'Modifier un champ' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+{% endblock %}
 
 {% block content %}
     <h1><a href="{{ path('admin_type_list', { id: event.id }) }}">{{ event.title }}</a></h1>
     <h2><a href="{{ path('admin_type_template_field_list', { 'id': event.id, 'type_id': type.id }) }}">{{ typeView.title }}</a></h2>
     <h3>{{ ('template.name.' ~ update.templateName)|trans }}</h3>
     <hr>
-
     {{ form(form) }}
+{% endblock %}
+
+{% block _type_template_field_update_lib_choice_choices_row %}
+    {{ form_label(form) }}
+    <div class="well">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _type_template_field_update_lib_choice_label_row %}
+    {{ form_label(form) }}
+    <div class="row">
+        {% for labelTranslation in form %}
+            <div class="col-md-6">
+                {{ form_row(labelTranslation) }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

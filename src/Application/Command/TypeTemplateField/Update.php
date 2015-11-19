@@ -20,6 +20,11 @@ class Update
     public $type;
 
     /**
+     * @var array|null
+     */
+    public $field;
+
+    /**
      * @var string
      */
     public $fieldType;
@@ -61,7 +66,7 @@ class Update
         $this->type         = $type;
         $this->templateName = $templateName;
         $this->key          = $key;
-        $field              = null;
+        $this->field        = null;
 
         $templates = $type->getTemplates();
 
@@ -69,19 +74,19 @@ class Update
             throw new \Exception("Template $templateName invalid");
         }
 
-        $template = $templates[$templateName];
-        $field    = $this->getArrayByKey($key, $template);
+        $template    = $templates[$templateName];
+        $this->field = $this->getArrayByKey($key, $template);
 
-        if (null === $field) {
+        if (null === $this->field) {
             throw new \Exception("Field key not found in template $templateName");
         }
 
-        $this->fieldType = $field['type'];
-        $this->required  = isset($field['required']) ? $field['required'] : false;
-        $this->private   = isset($field['private']) ? $field['private'] : false;
+        $this->fieldType = $this->field['type'];
+        $this->required  = isset($this->field['required']) ? $this->field['required'] : false;
+        $this->private   = isset($this->field['private']) ? $this->field['private'] : false;
 
         foreach ($type->getEvent()->getLocales() as $locale) {
-            $this->label[$locale] = isset($field['label'][$locale]) ? $field['label'][$locale] : '';
+            $this->label[$locale] = isset($this->field['label'][$locale]) ? $this->field['label'][$locale] : '';
         }
     }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Update;
+use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -71,10 +72,11 @@ class TypeTemplateFieldController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
-        $update = new Update($type, $template, $key);
+        $update = new UpdateChoice($type, $template, $key);
 
-        $form   = $this->createForm(new UpdateType(), $update, [
-            'method' => 'POST',
+        $form   = $this->createForm('type_template_field_update_lib_choice', $update, [
+            'method'  => 'POST',
+            'locales' => $event->getLocales(),
         ]);
         $form->add('submit', 'submit');
 
