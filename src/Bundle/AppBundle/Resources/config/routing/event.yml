@@ -1,3 +1,7 @@
+#
+# Event home
+#
+
 event:
     path: /
     host: "{subdomain}.%domain%"
@@ -6,6 +10,10 @@ event:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Home:index }
 
+#
+# Register
+#
+
 event_register:
     path: /register/{typeView}
     host: "{subdomain}.%domain%"
@@ -13,6 +21,10 @@ event_register:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
+
+#
+# Forgot password
+#
 
 event_forgotten_password:
     path: /forgotten_password
@@ -30,6 +42,10 @@ event_create_new_password:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
 
+#
+# Join event
+#
+
 event_participate:
     path: /participate/{typeView}
     host: "{subdomain}.%domain%"
@@ -37,6 +53,10 @@ event_participate:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:participate }
+
+#
+# Sheet
+#
 
 event_sheet:
     path: /sheet/{id}
@@ -134,6 +154,10 @@ event_sheet_package_final_billing_step:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Billing:finalBillingStep }
 
+#
+# Authentication
+#
+
 event_login:
     path: /login
     host: "{subdomain}.%domain%"
@@ -172,6 +196,10 @@ event_change_password:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ChangePassword:changePassword }
 
+#
+# Catalog
+#
+
 event_catalog:
     path: /catalog
     host: "{subdomain}.%domain%"
@@ -188,3 +216,12 @@ event_catalog_category:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Catalog:category }
+
+event_catalog_sheet:
+    path: /catalog/{categoryView}/sheet/{id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        categoryView: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Catalog:sheet }

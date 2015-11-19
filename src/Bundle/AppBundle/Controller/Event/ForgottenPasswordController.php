@@ -17,7 +17,7 @@ use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
-use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\RedirectResponse;

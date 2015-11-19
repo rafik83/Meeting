@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\TypeListView;
-use Proximum\Vimeet\Domain\Model\TypeTemplatesView;
-use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\TypeListView;
+use Proximum\Vimeet\Domain\View\TypeTemplatesView;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 interface TypeRepositoryInterface
 {
@@ -75,6 +75,11 @@ interface TypeRepositoryInterface
      */
     public function getParticipantTemplate($typeId);
 
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
     public function getTypesByEvent(Event $event);
 
     /**
@@ -83,4 +88,12 @@ interface TypeRepositoryInterface
      * @return array
      */
     public function getSeeableTypeIdsByUser($user);
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return Type[]
+     */
+    public function getTypesByUser(Event $event, User $user);
 }

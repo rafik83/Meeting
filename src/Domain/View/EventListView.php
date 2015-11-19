@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\View;
 
-class SheetView
+class EventListView
 {
     /**
      * @var int
@@ -20,17 +20,15 @@ class SheetView
     /**
      * @var string
      */
-    public $typeTitle;
+    public $title;
 
     /**
-     * SheetView constructor.
-     *
      * @param int    $id
-     * @param string $typeTitle
+     * @param string $title
      */
-    public function __construct($id, $typeTitle)
+    public function __construct($id, $title)
     {
-        $this->id        = $id;
-        $this->typeTitle = $typeTitle;
+        $this->id    = $id;
+        $this->title = $title;
     }
 }

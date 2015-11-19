@@ -1,0 +1,11 @@
+Proximum\Vimeet\Domain\Model\Rule:
+    rule_1:
+        __construct: [@event_rdv_carnot_2016, @category_visiteur, @category_visiteur, []]
+    rule_2:
+        __construct: [@event_rdv_carnot_2016, @category_visiteur, @category_exposant, []]
+    rule_3:
+        __construct: [@event_rdv_carnot_2016, @category_exposant, @category_visiteur, {"participant":{"563cb0568a3bb":true,"563cb05cb81ec":true,"563cb062b89a9":true,"563cb06a1a441":false},"sheet":{"563cb00c629d8":{"563cb02125c23":false,"563cb02932fc8":true,"563cb02fc1df1":true,"563cb0364f1c6":false},"563cb014e2784":{"563cb03f9a509":false}}}]
+    rule_4:
+        __construct: [@event_rdv_carnot_2016, @type_investisseur, @category_visiteur, []]
+    rule_5:
+        __construct: [@event_rdv_carnot_2016, @category_exposant, @category_exposant, []]

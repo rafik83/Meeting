@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Domain\View\EventView;
 
 class ForgottenPassword
 {

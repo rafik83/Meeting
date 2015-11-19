@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\ParamConverter;
 
-use Proximum\Vimeet\Domain\Model\TypeView;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;

@@ -83,7 +83,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\ParticipantView(participant.id, participant.data, user.id, user.email, participant.owner)')
+            ->select('NEW Proximum\Vimeet\Domain\View\ParticipantView(participant.id, participant.data, user.id, user.email, participant.owner)')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user')
             ->where('participant.sheet = :sheetId')
