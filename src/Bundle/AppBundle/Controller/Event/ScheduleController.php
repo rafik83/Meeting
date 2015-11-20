@@ -42,20 +42,30 @@ class ScheduleController extends Controller
         foreach ($schedules as $schedule) {
             $slots = [];
 
-            foreach ($schedule->getMeetingSlots() as $meetingSlot) {
-                $slots[] = new ScheduleSlotView('Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
+            $meetingSlots = $schedule->getMeetingSlots();
+            foreach ($meetingSlots as $meetingSlot) {
+                $slots['meetingSlots'][] = new ScheduleSlotView('Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
             }
 
-            foreach ($schedule->getHappenings() as $happening) {
-                $slots[] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
+            usort($slots['meetingSlots'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
+                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
+            });
+
+            $happenings = $schedule->getHappenings();
+            foreach ($happenings as $happening) {
+                $slots['happening'][] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
             }
+
+            usort($slots['happening'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
+                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
+            });
 
             $unavailabilities = $this->get('vimeet_infrastructure.repository.unavailability_repository')->findByScheduleSheetAndUser($schedule, $sheet, $this->getUser());
             foreach ($unavailabilities as $unavailability) {
-                $slots[] = new ScheduleSlotView('Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
+                $slots['unavailability'][] = new ScheduleSlotView('Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
             }
 
-            usort($slots, function (ScheduleSlotView $one, ScheduleSlotView $another) {
+            usort($slots['unavailability'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
                 return $one->begin->getTimestamp() - $another->begin->getTimestamp();
             });
 
