@@ -9,7 +9,12 @@
         <ul>
             <li>
                 <a href="{{ path('event_catalog', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
-                    {{ 'event.link.see_catalog'|trans() }}
+                    {{ 'event.link.see_catalog'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('event_schedule', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                    {{ 'event.link.see_schedule'|trans }}
                 </a>
             </li>
             {% for sheet in sheets %}

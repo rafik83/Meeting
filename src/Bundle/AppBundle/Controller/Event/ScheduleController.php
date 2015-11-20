@@ -37,7 +37,7 @@ class ScheduleController extends Controller
             $slots = [];
 
             foreach ($schedule->getMeetingSlots() as $meetingSlot) {
-                $slots[] = new ScheduleSlotView('Pas de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
+                $slots[] = new ScheduleSlotView('Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
             }
 
             foreach ($schedule->getHappenings() as $happening) {
