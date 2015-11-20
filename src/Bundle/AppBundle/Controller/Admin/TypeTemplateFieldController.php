@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\TypeTemplateField\Update;
 use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
