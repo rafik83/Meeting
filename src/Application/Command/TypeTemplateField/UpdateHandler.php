@@ -29,11 +29,17 @@ class UpdateHandler
 
     /**
      * @param Update $update
+     *
+     * @throws \Exception
      */
     public function handle(Update $update)
     {
         $templateSetter = 'set' . ucfirst($update->templateName);
         $templateGetter = 'get' . ucfirst($update->templateName);
+
+        if (!method_exists($update->type, $templateSetter) || !method_exists($update->type, $templateGetter)) {
+            throw new \Exception(sprintf('Methods %s or %s not exists', $templateSetter, $templateGetter));
+        }
 
         $currentTemplate = $update->type->$templateGetter();
 

@@ -27,26 +27,8 @@ class ChoiceLabelTranslationsType extends AbstractType
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, 'text', [
                 'label'  => Intl::getLocaleBundle()->getLocaleName($locale),
-                //'mapped' => true,
             ]);
         }
-
-        /*
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
-            $data = $event->getData();
-            dump($data);
-
-            $form = $event->getForm();
-
-
-            foreach ($options['locales'] as $locale) {
-                $form->add($locale, 'text', [
-                    'label' => Intl::getLocaleBundle()->getLocaleName($locale),
-                    'data' => $data->label[$locale],
-                ]);
-            }
-        });
-        */
     }
 
     /**
