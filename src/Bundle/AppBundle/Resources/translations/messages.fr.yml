@@ -4,6 +4,7 @@ login:
     title: Connexion
     link: Connexion
     logged_as: Bonjour %email%
+    forgotPassword: J'ai oublié mon mot de passe
 
 logout:
     title: Déconnecter
@@ -16,6 +17,12 @@ change_password:
 
 register:
     email_already_exists: Un compte associé à cette adresse mail existe déjà
+
+reset_password:
+    title: Demande de nouveau mot de passe
+
+new_password:
+    title: Créer un nouveau mot de passe
 
 event:
     link:
