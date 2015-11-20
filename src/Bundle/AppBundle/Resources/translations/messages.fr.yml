@@ -21,6 +21,7 @@ event:
     link:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
+        see_schedule: Voir mon agenda
         go_back_to_sheet: Retourner à la fiche
     sheet:
         participant:
