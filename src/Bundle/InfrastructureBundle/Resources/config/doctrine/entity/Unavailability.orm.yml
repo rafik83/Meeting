@@ -14,4 +14,5 @@ Proximum\Vimeet\Domain\Model\Unavailability:
     manyToOne:
         schedule:
             targetEntity: Proximum\Vimeet\Domain\Model\Schedule
-            inversedBy: unavailabilities
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant

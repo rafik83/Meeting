@@ -23,6 +23,11 @@ class Unavailability
     private $schedule;
 
     /**
+     * @var Participant
+     */
+    private $participant;
+
+    /**
      * @var \DateTime
      */
     private $begin;
@@ -42,9 +47,10 @@ class Unavailability
      */
     public function __construct(Schedule $schedule, Participant $participant, \DateTime $begin, \DateTime $end)
     {
-        $this->schedule = $schedule;
-        $this->begin    = $begin;
-        $this->end      = $end;
+        $this->schedule    = $schedule;
+        $this->participant = $participant;
+        $this->begin       = $begin;
+        $this->end         = $end;
     }
 
     /**
@@ -65,6 +71,16 @@ class Unavailability
     public function getSchedule()
     {
         return $this->schedule;
+    }
+
+    /**
+     * Get participant
+     *
+     * @return Participant
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
     }
 
     /**
