@@ -140,6 +140,13 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>
         title: Séance inaugurale
         description: ""
+    happening_day_one_12:
+        __construct: false
+        schedule: @schedule_day_one
+        begin: <date('2016-10-18 12:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-18 13:30:00', 'Europe/Paris', 'UTC')>
+        title: Pause déjeunée
+        description: ""
     happening_day_two_1:
         __construct: false
         schedule: @schedule_day_two
@@ -195,4 +202,11 @@ Proximum\Vimeet\Domain\Model\Happening:
         begin: <date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>
         end: <date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>
         title: Clôture
+        description: ""
+    happening_day_two_9:
+        __construct: false
+        schedule: @schedule_day_two
+        begin: <date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>
+        end: <date('2016-10-19 13:30:00', 'Europe/Paris', 'UTC')>
+        title: Pause déjeunée
         description: ""
