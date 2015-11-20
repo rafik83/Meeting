@@ -54,6 +54,11 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $filesystem->remove($spoolDir);
     }
 
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
     public function getLinkFromA($string)
     {
         preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
