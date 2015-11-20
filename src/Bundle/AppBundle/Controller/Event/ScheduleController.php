@@ -50,6 +50,11 @@ class ScheduleController extends Controller
                 $slots[] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
             }
 
+            $unavailabilities = $this->get('vimeet_infrastructure.repository.unavailability_repository')->findByScheduleSheetAndUser($schedule, $sheet, $this->getUser());
+            foreach ($unavailabilities as $unavailability) {
+                $slots[] = new ScheduleSlotView('Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
+            }
+
             usort($slots, function (ScheduleSlotView $one, ScheduleSlotView $another) {
                 return $one->begin->getTimestamp() - $another->begin->getTimestamp();
             });
