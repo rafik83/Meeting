@@ -3,6 +3,7 @@
 {% block title eventView.title %}
 
 {% block content %}
+    <a href="{{ path('event_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
     {% for schedule in scheduleViews %}
         <h2>{{ schedule.date|date('d/m/Y') }}</h2>
         <ul>
