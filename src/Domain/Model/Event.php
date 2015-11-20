@@ -109,6 +109,16 @@ class Event
     }
 
     /**
+     * Set locales
+     *
+     * @param array $locales
+     */
+    public function setLocales(array $locales)
+    {
+        $this->locales = $locales;
+    }
+
+    /**
      * Get fallback
      *
      * @return string
