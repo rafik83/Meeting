@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
+use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,6 +35,20 @@ class AddUnavailabilityType extends AbstractType
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
+            ->add('participants', 'entity', [
+                'class' => Participant::class,
+                'query_builder' => function (EntityRepository $entityRepository) use ($options) {
+                    return $entityRepository
+                        ->createQueryBuilder('participant')
+                        ->where('participant.sheet = :sheet')
+                        ->setParameter('sheet', $options['sheet']);
+                },
+                'choice_label' => function (Participant $participant) {
+                    return $participant->getId();
+                },
+                'multiple'   => true,
+                'expanded'   => true,
+            ])
         ;
     }
 
@@ -41,6 +57,10 @@ class AddUnavailabilityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired([
+            'sheet'
+        ]);
+
         $resolver->setDefaults([
             'data_class' => AddUnavailability::class,
             'intention'  => 'add_unavailability',

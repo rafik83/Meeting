@@ -12,15 +12,15 @@
                     {{ 'event.link.see_catalog'|trans }}
                 </a>
             </li>
-            <li>
-                <a href="{{ path('event_schedule', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
-                    {{ 'event.link.see_schedule'|trans }}
-                </a>
-            </li>
             {% for sheet in sheets %}
                 <li>
                     <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
                         {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('event_sheet_schedule', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                        {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
                     </a>
                 </li>
             {% endfor %}

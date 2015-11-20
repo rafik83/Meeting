@@ -210,18 +210,21 @@ event_catalog_sheet:
 # Schedule
 #
 
-event_schedule:
-    path: /schedule
+event_sheet_schedule:
+    path: /sheet/{id}/schedule
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
 
-event_schedule_add_unavailability:
-    path: /schedule/{id}/add-unavailability
+event_sheet_schedule_add_unavailability:
+    path: /sheet/{id}/schedule/{schedule_id}/add-unavailability
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
