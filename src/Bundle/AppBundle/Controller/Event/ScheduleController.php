@@ -29,6 +29,8 @@ class ScheduleController extends Controller
      */
     public function displayAction(EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $schedules = $this->get('vimeet_infrastructure.repository.schedule_repository')->findByEvent($eventView->id);
 
         $scheduleViews = [];
@@ -70,6 +72,8 @@ class ScheduleController extends Controller
      */
     public function addUnavailabilityAction(Request $request, EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $command = new AddUnavailability();
         $form    = $this->createForm(new AddUnavailabilityType(), $command, [
             'action' => $this->generateUrl('event_schedule_add_unavailability', ['subdomain' => $request->attributes->get('subdomain')]),
