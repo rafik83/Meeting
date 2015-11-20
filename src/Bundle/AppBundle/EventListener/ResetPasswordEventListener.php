@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Event\ApplicationWrappedEvent;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 class ResetPasswordEventListener
 {
@@ -36,9 +36,9 @@ class ResetPasswordEventListener
     }
 
     /**
-     * @param Event $resetPasswordEvent
+     * @param ApplicationWrappedEvent $resetPasswordEvent
      */
-    public function sendToken(Event $resetPasswordEvent)
+    public function sendToken(ApplicationWrappedEvent $resetPasswordEvent)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject(sprintf('[%s] Reset password', $resetPasswordEvent->getApplicationEvent()->getEventView()->title))
