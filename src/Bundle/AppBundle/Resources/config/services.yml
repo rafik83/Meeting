@@ -103,6 +103,13 @@ services:
             - @vimeet_infrastructure.repository.event_repository
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+    vimeet_app.reset_password_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ResetPasswordEventListener
+        arguments:
+            - @mailer
+            - @templating.engine.twig
+        tags:
+            - { name: kernel.event_listener, event: 'reset_password', method: sendToken }
 
     #
     # Twig extension

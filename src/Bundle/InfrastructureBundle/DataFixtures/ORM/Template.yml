@@ -313,6 +313,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     fr: "Je ne prends pas"
                                     en: "I do not take"
                                 description: { "fr": "", "en": "" }
+                                placeholder: true
                                 unitPrice: 0
                     563caeb152464:
                         type: "lib_text"
@@ -362,7 +363,9 @@ Proximum\Vimeet\Domain\Model\Template:
                                 description:
                                     fr: ""
                                     en: ""
+                                placeholder: true
                                 unitPrice: 0
+                                placeholder: true
                     563caec361723:
                         type: "lib_text"
                         required: false
@@ -448,6 +451,131 @@ Proximum\Vimeet\Domain\Model\Template:
                 <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
             </div>
         view: ""
+        proForma: >
+            <!DOCTYPE html>
+            <html lang="{{ app.request.locale }}">
+            <head>
+                <meta charset="UTF-8" />
+                <title>Pro-forma: {{ eventView.title }}</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+                <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+                <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+            </head>
+            <body>
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="col-md-7">
+                        <h2>Evénement: {{ eventView.title }}</h2>
+                    </div>
+                    <div class="col-md-5">
+                        <h2>Informations destinataire:</h2>
+                        {% if sheet.billingData['5645e534daa0b'] is defined %}
+                            <p>{{ sheet.billingData['5645e534daa0b'] }}</p>
+                        {% endif %}
+                        {% if sheet.billingData['5645e4242d3df'] is defined %}
+                            <p>{{ sheet.billingData['5645e4242d3df'] }}</p>
+                        {% endif %}
+                        {% if sheet.billingData['5645e534daa0b'] is defined
+                            and sheet.billingData['5645e5f35a9e0'] is defined
+                            and sheet.billingData['5645e6067f46a'] is defined
+                            and sheet.billingData['5645e5fd8f6a7'] is defined
+                        %}
+                            <p>
+                                {{ sheet.billingData['5645e534daa0b'] }}<br>
+                                {{ sheet.billingData['5645e5f35a9e0'] }} {{ sheet.billingData['5645e6067f46a'] }}<br>
+                                {{ sheet.billingData['5645e5fd8f6a7']|country }}
+                            </p>
+                        {% endif %}
+                        {% if sheet.billingData['5645e610e0e1b'] is defined %}
+                            <p>{{ sheet.type.event.billingTemplate['5645e610e0e1b']['label'][app.request.locale] }}: {{ sheet.billingData['5645e610e0e1b'] }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h2>Liste des participants</h2>
+                    <div>
+                        {% for participant in sheet.participants %}
+                            {% if participant.data['563caf2746398'] is defined and participant.data['563caf1d9b1cb'] is defined %}
+                                <p>{{ participant.data['563caf2746398'] }} {{ participant.data['563caf1d9b1cb'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <h2>Panier</h2>
+                    <table class="table table-condensed">
+                        <thead>
+                            <th colspan="2">Produit</th>
+                            <th class="text-right">Prix unitaire</th>
+                            <th class="text-right">Quantité</th>
+                            <th class="text-right">Total</th>
+                        </thead>
+                        <tbody>
+                        {% for step in cart.cartSteps  %}
+                            {% if step.cartRows is defined and step.cartRows|length > 0 %}
+                                <tr class="active">
+                                    <th colspan="5">{{ step.title }}</th>
+                                </tr>
+                                {% for row in step.cartRows %}
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>{{ row.title }}</td>
+                                        <td class="text-right">{{ row.unitPrice|number_format_currency('EUR') }}</td>
+                                        <td class="text-right">{{ row.quantity }}</td>
+                                        <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if cart.total is defined %}
+                            <tr class="info">
+                                <th colspan="4">Total</th>
+                                <th class="text-right">{{ cart.total|number_format_currency('EUR') }}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2"></th>
+                                <th colspan="2">TVA</th>
+                                <th class="text-right">{{ sheet.type.event.vat }}%</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2"></th>
+                                <th colspan="2">Total TTC</th>
+                                <th class="text-right">{{ ((cart.total * (100 + sheet.type.event.vat)) / 100)|number_format_currency('EUR') }}</th>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h2>Informations expéditeur</h2>
+                        <p>{{ sheet.type.event.organiserName }}</p>
+                        <p>{{ sheet.type.event.paymentAddress|nl2br  }}</p>
+                        <p>Mail: {{ sheet.type.event.organiserEmail }}</p>
+                        <p>
+                            Coordonnées bancaires:<br>
+                            {{ sheet.type.event.bankInfo|nl2br }}
+                        </p>
+                        <p>{{ sheet.type.event.legalInformation|nl2br }}</p>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <h2>Elements à joindre à votre paiement</h2>
+                        {{ sheet.type.event.elementToJoinWithInvoice|nl2br }}
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <h2>Référence pro-forma:</h2>
+                        <p>Date: {{ 'now'|date('d/m/Y') }}</p>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <h2>Condition de paiement</h2>
+                        <p>
+                            - acompte de 50% à l'inscription<br>
+                            - solde avant 23/10/2015
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </body>
+            </html>
 
     #
     # Visitor
@@ -542,3 +670,4 @@ Proximum\Vimeet\Domain\Model\Template:
                 <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
             </div>
         view: ""
+        proForma: ""

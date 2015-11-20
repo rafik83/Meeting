@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
+use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
-use Proximum\Vimeet\Domain\Model\EventView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +58,16 @@ class PackageController extends BaseController
                 return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
             } catch (BoughtParticipantAlreadyAddedException $exception) {
                 $packageTemplate = $sheet->getTypePackageTemplate();
-                $this->addBoughtParticipantCanNotBeUncheckedErrorOnForm(
+                $this->addErrorOnForm(
+                    $exception,
+                    $form,
+                    $packageTemplate[$step],
+                    $updateStep->packageData,
+                    $form->get('packageData'));
+            } catch (ForgotToAddQuantityException $exception) {
+                $packageTemplate = $sheet->getTypePackageTemplate();
+                $this->addErrorOnForm(
+                    $exception,
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
@@ -160,33 +169,5 @@ class PackageController extends BaseController
         }
 
         return;
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
-    {
-        $form = $this->createForm(new ChoosePaymentModeType());
-        $form->add('submit', 'submit');
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'flash.package.payment_mode.success');
-
-            // Go to the sheet
-            return $this->redirectToRoute('event_sheet', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
-        }
-
-        return $this->render('VimeetAppBundle:Event/Package:paymentMode.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
-        ]);
     }
 }

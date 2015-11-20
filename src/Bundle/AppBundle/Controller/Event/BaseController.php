@@ -10,10 +10,15 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
+use Proximum\Vimeet\Application\Exception\Package\PackageException;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
@@ -46,36 +51,65 @@ class BaseController extends Controller
     }
 
     /**
-     * @param Form  $form
-     * @param array $template
-     * @param array $data
+     * @param PackageException $exception
+     * @param Form             $form
+     * @param array            $template
+     * @param array            $data
      * @param $formData
      *
      * @return Form
      */
-    protected function addBoughtParticipantCanNotBeUncheckedErrorOnForm(Form $form, array $template, array $data, $formData)
+    protected function addErrorOnForm(PackageException $exception, Form $form, array $template, array $data, $formData)
     {
-        foreach ($data as $key => $value) {
-            if (isset($template['template'][$key])
-                && isset($value['participant'])
-                && $value['participant'] === false
-            ) {
-                $error = new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
-                );
-                $formData->get($key)->addError($error);
-            } elseif (isset($template['template'][$key])
-                && isset($value['participant'])
-                && $value['participant'] === true
-            ) {
-                $error = new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
-                );
-                $formData->get($key)->addError($error);
+        if ($exception instanceof BoughtParticipantAlreadyAddedException) {
+            foreach ($data as $key => $value) {
+                if (isset($template['template'][$key])
+                    && isset($value['participant'])
+                    && $value['participant'] === false
+                ) {
+                    $error = new FormError(
+                        $this
+                            ->get('translator')
+                            ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
+                    );
+                    $formData->get($key)->addError($error);
+                } elseif (isset($template['template'][$key])
+                    && isset($value['participant'])
+                    && $value['participant'] === true
+                ) {
+                    $error = new FormError(
+                        $this
+                            ->get('translator')
+                            ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
+                    );
+                    $formData->get($key)->addError($error);
+                }
+            }
+        } elseif ($exception instanceof ForgotToAddQuantityException) {
+            foreach ($data as $key => $value) {
+                if (isset($template['template'][$key])
+                    && isset($value['participant'])
+                    && $value['participant'] === true
+                    && (!isset($value['participant_bought']) || (isset($value['participant_bought']) && $value['participant_bought'] === 0))
+                ) {
+                    $error = new FormError(
+                        $this
+                            ->get('translator')
+                            ->trans('validators.option.quantityMustBeAdded', [], 'validators')
+                    );
+                    $formData->get($key)->get('participant')->addError($error);
+                } elseif (isset($template['template'][$key])
+                    && isset($value['planning'])
+                    && $value['planning'] === true
+                    && (!isset($value['planning_bought']) || (isset($value['planning_bought']) && $value['planning_bought'] === 0))
+                ) {
+                    $error = new FormError(
+                        $this
+                            ->get('translator')
+                            ->trans('validators.option.quantityMustBeAdded', [], 'validators')
+                    );
+                    $formData->get($key)->get('planning')->addError($error);
+                }
             }
         }
 
@@ -110,5 +144,16 @@ class BaseController extends Controller
     {
         $error = new FormError($error);
         $field->addError($error);
+    }
+
+    /**
+     * Authenticate user
+     *
+     * @param User $user
+     */
+    protected function authenticate(User $user)
+    {
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
     }
 }

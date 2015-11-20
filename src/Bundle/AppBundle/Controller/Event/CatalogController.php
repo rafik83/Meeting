@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use Proximum\Vimeet\Domain\Model\CategoryView;
-use Proximum\Vimeet\Domain\Model\EventView;
+use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
+use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,10 +59,48 @@ class CatalogController extends Controller
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->search($categoryView->id, $this->getUser());
 
+        array_walk($sheets, function (Sheet &$sheet) {
+            $rule = $this
+                ->get('vimeet_infrastructure.application.components.rule.manager')
+                ->getRule($sheet, $this->getUser());
+
+            $this
+                ->get('vimeet_infrastructure.application.components.rule.manager')
+                ->apply($rule, $sheet, new SetNullStrategy());
+        });
+
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
             'eventView'    => $eventView,
             'categoryView' => $categoryView,
             'sheets'       => $sheets,
         ]);
+    }
+
+    /**
+     * Display a sheet
+     *
+     * @param EventView    $eventView
+     * @param CategoryView $categoryView
+     * @param Sheet        $sheet
+     *
+     * @return Response
+     */
+    public function sheetAction(EventView $eventView, CategoryView $categoryView, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        try {
+            $sheetView = $this
+                ->get('vimeet_infrastructure.application.components.sheet.manager')
+                ->getSheetDataViewByUser($this->getUser(), $sheet);
+
+            return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
+                'eventView'    => $eventView,
+                'categoryView' => $categoryView,
+                'sheet'        => $sheetView,
+            ]);
+        } catch (NoRuleFoundException $exception) {
+            throw $this->createNotFoundException($exception->getMessage(), $exception);
+        }
     }
 }

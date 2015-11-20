@@ -1,0 +1,63 @@
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_3:
+        __construct: false
+        user: @user_3
+        sheet: @sheet_2
+        owner: true
+        data:
+            563caf1d9b1cb: "Super"
+            563caf2746398: "Test"
+            563caf2f0ddbd: "08080808"
+            563caf34eed69: "SuperPersonne"
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_2:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_exposant
+        packageData:
+            "563cae7496da1":
+                "563cae8a5072d":
+                    "value": "563cb15fbf353"
+            "563cae9c37ff6":
+                "56407f8b58f6b":
+                    "participant": true
+                    "participant_bought": 1
+                "56407f9b2a1a3":
+                    "planning": true
+                    "planning_bought": 2
+            "56407fa453f4e":
+                "563caea37f864":
+                    "file": null
+                    "value":
+                        "value": "563cb173969ba"
+                "563caeb152464": null
+                "563caeb98d3af":
+                    "file": null
+                    "value":
+                        "value": "563caf7c2b89a"
+                "563caec361723": null
+                "563caecd66d86":
+                    "value": true
+                    "quantity": 3
+                "563caedade41a":
+                    "value": false
+                    "quantity": 1
+            "563caee826357":
+                "563caef76f49e":
+                    "value": false
+                "563caefd7879f":
+                    "value": true
+                    "quantity": 1
+                "563caf044d656":
+                    "value": false
+        billingData:
+            "5645e4242d3df": "test"
+            "5645e47e7e499": "test"
+            "5645e52f445d1": "test@test.fr"
+            "5645e534daa0b": "test"
+            "5645e54061ff2": "test"
+            "5645e5f35a9e0": "test"
+            "5645e6067f46a": "test"
+            "5645e5fd8f6a7": "FR"
+            "5645e610e0e1b": "test"

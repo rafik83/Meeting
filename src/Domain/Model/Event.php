@@ -53,6 +53,41 @@ class Event
     private $billingTemplate;
 
     /**
+     * @var string
+     */
+    private $organiserName;
+
+    /**
+     * @var string
+     */
+    private $paymentAddress;
+
+    /**
+     * @var string
+     */
+    private $organiserEmail;
+
+    /**
+     * @var string
+     */
+    private $bankInfo;
+
+    /**
+     * @var string
+     */
+    private $legalInformation;
+
+    /**
+     * @var int
+     */
+    private $vat;
+
+    /**
+     * @var string
+     */
+    private $elementToJoinWithInvoice;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -166,5 +201,61 @@ class Event
         $this->title    = $title;
         $this->locales  = $locales;
         $this->fallback = $fallback;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganiserName()
+    {
+        return $this->organiserName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentAddress()
+    {
+        return $this->paymentAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganiserEmail()
+    {
+        return $this->organiserEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankInfo()
+    {
+        return $this->bankInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLegalInformation()
+    {
+        return $this->legalInformation;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getElementToJoinWithInvoice()
+    {
+        return $this->elementToJoinWithInvoice;
     }
 }

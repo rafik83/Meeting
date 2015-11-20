@@ -12,5 +12,13 @@ namespace Proximum\Vimeet\Domain\Model;
 
 interface WhoInterface
 {
+    /**
+     * @return integer
+     */
     public function getId();
+
+    /**
+     * @return string
+     */
+    public function getIdentifier();
 }

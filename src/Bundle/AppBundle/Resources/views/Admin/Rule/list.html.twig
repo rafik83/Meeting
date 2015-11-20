@@ -1,0 +1,51 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>Ajouter une règle</h2>
+
+    {{ form(form) }}
+
+    <h2>Liste des règles</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Qui</th>
+                <th>Voit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in rules %}
+                <tr>
+                    <td>
+                        {% if rule.seerType %}
+                            Type {{ rule.seerType.translations.get(app.request.locale).title }}
+                        {% elseif rule.seerCategory %}
+                            Catégorie {{ rule.seerCategory.translations.get(app.request.locale).title }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rule.seeableType %}
+                            Type {{ rule.seeableType.translations.get(app.request.locale).title }}
+                        {% elseif rule.seeableCategory %}
+                            Catégorie {{ rule.seeableCategory.translations.get(app.request.locale).title }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_who_see_who_dont_see_what', { 'id': event.id, 'seerIdentifier': rule.seer.identifier, 'seerId': rule.seer.id, 'seeableIdentifier': rule.seeable.identifier, 'seeableId': rule.seeable.id }) }}" class="btn btn-primary btn-sm">Ne voit pas quoi</a>
+                        <form action="{{ path('admin_rule_delete', { 'id': event.id, 'rule_id': rule.id }) }}" method="POST" style="display: inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+{% endblock %}

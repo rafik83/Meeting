@@ -83,6 +83,11 @@ class Type implements WhoInterface
     private $categories;
 
     /**
+     * @var string
+     */
+    private $proFormaTemplate = '';
+
+    /**
      * Type constructor.
      *
      * @param Event $event
@@ -275,6 +280,14 @@ class Type implements WhoInterface
     }
 
     /**
+     * @return string
+     */
+    public function getProFormaTemplate()
+    {
+        return $this->proFormaTemplate;
+    }
+
+    /**
      * @param Template $template
      */
     public function setTemplate(Template $template)
@@ -284,6 +297,15 @@ class Type implements WhoInterface
         $this->packageTemplate     = $template->getPackage();
         $this->previewTemplate     = $template->getPreview();
         $this->viewTemplate        = $template->getView();
+        $this->proFormaTemplate    = $template->getProForma();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return 'type';
     }
 
     /**

@@ -25,6 +25,8 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         viewTemplate:
             type: text
+        proFormaTemplate:
+            type: text
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation

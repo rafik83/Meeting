@@ -6,6 +6,8 @@ flash:
             success: Your participate entry has been saved
     change_password:
         success: Your password has been updated
+    reset_password:
+        success: A mail was sent to explain the process to change your password
     sheet:
         add_participant:
             success: The participant has been added

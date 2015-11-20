@@ -14,7 +14,7 @@
                     <td>{{ event.title }}</td>
                     <td>
                         <a href="{{ path('admin_event_update', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="{{ path('admin_event_who_see_who', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Qui voit qui</a>
+                        <a href="{{ path('admin_rule_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Qui voit qui</a>
                         <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Types</a></td>
                 </tr>
             {% endfor %}

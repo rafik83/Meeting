@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+/**
+ * "Template"
+ */
 class Template
 {
     /**
@@ -46,6 +49,11 @@ class Template
      * @var string
      */
     private $view;
+
+    /**
+     * @var string
+     */
+    private $proForma;
 
     /**
      * Template constructor.
@@ -135,5 +143,13 @@ class Template
     public function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProForma()
+    {
+        return $this->proForma;
     }
 }

@@ -45,7 +45,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('DISTINCT NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
+            ->select('DISTINCT NEW Proximum\Vimeet\Domain\View\CategoryView(category.id, translation.title)')
             ->from('Entity:Category', 'category')
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->setParameter('locale', $locale)
@@ -81,7 +81,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\Model\CategoryView(category.id, translation.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\CategoryView(category.id, translation.title)')
             ->from('Entity:Category', 'category')
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->setParameter('locale', $locale)

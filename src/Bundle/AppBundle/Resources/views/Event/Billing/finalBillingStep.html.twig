@@ -1,0 +1,17 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <h2>{{ 'event.sheet.finalStepBilling.title'|trans }}</h2>
+    <a href="{{ path('event_sheet_billing_pro_forma', {
+        'id'       : sheet.id,
+        'subdomain': app.request.attributes.get('subdomain')
+    }) }}" target="_blank" class="btn btn-info">{{ 'event.sheet.billing.proForma'|trans }}</a>
+    <hr>
+    <a href="{{ path('event_sheet', {
+        'id'       : sheet.id,
+        'subdomain': app.request.attributes.get('subdomain')
+    }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+
+{% endblock %}

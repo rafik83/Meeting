@@ -6,6 +6,10 @@ flash:
             success: Votre fiche de participation a été sauvegardée
     change_password:
         success: Votre mot de passe a été changé
+    new_password:
+        success: Votre mot de passe a été changé
+    reset_password_token:
+        success: Un mail vous a été envoyé avec la procédure pour créer un nouveau mot de passe
     sheet:
         add_participant:
             success: Le participant a bien été ajouté
@@ -29,6 +33,8 @@ flash:
         event:
             update:
                 success: L'événement a bien été mis à jour
+            who_see_what:
+                success: La règle a bien été mis à jour
         type:
             create:
                 success: Le type a bien été créé
