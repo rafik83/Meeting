@@ -121,6 +121,27 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When I wait until I see :something
+     */
+    public function iWaitUntilISee($something)
+    {
+        if (!$this->getSession()->wait(1000, sprintf('$("#%s").length', $something))) {
+            throw new \Exception(sprintf('%s not found', $something));
+        }
+    }
+
+    /**
+     * @Then I go to :url and I wait until the page is ready
+     */
+    public function iGoToAndWaitUntilPageIsReady($url)
+    {
+        $this->visit($url);
+
+        $this->getSession()->maximizeWindow();
+        $this->getSession()->wait(5000, 'document.readyState === "complete"');
+    }
+
+    /**
      * This step help to debug tests
      *
      * @When I dump the page
