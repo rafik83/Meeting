@@ -17,6 +17,8 @@ use Proximum\Vimeet\Domain\View\ScheduleSlotView;
 use Proximum\Vimeet\Domain\View\ScheduleView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleController extends Controller
 {
@@ -59,6 +61,12 @@ class ScheduleController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     *
+     * @return RedirectResponse|Response
      */
     public function addUnavailabilityAction(Request $request, EventView $eventView)
     {
