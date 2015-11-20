@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class UnavailabilityRepository implements UnavailabilityRepositoryInterface
@@ -26,5 +27,14 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param Unavailability $unavailability
+     */
+    public function add(Unavailability $unavailability)
+    {
+        $this->entityManager->persist($unavailability);
+        $this->entityManager->flush($unavailability);
     }
 }

@@ -24,12 +24,14 @@ class AddUnavailabilityType extends AbstractType
     {
         $builder
             ->add('from', 'time', [
-                'input'  => 'datetime',
-                'widget' => 'choice',
+                'input'         => 'datetime',
+                'widget'        => 'choice',
+                'view_timezone' => 'Europe/Paris',
             ])
             ->add('to', 'time', [
-                'input'  => 'datetime',
-                'widget' => 'choice',
+                'input'         => 'datetime',
+                'widget'        => 'choice',
+                'view_timezone' => 'Europe/Paris',
             ])
         ;
     }

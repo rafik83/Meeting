@@ -219,7 +219,7 @@ event_schedule:
     defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
 
 event_schedule_add_unavailability:
-    path: /schedule/add-unavailability
+    path: /schedule/{id}/add-unavailability
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"

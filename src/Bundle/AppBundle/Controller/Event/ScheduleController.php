@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
+use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\ScheduleSlotView;
 use Proximum\Vimeet\Domain\View\ScheduleView;
@@ -50,7 +51,7 @@ class ScheduleController extends Controller
                 return $one->begin->getTimestamp() - $another->begin->getTimestamp();
             });
 
-            $scheduleViews[] = new ScheduleView($schedule->getDate(), $slots);
+            $scheduleViews[] = new ScheduleView($schedule->getId(), $schedule->getDate(), $slots);
         }
 
         return $this->render('VimeetAppBundle:Event/Schedule:display.html.twig', [
@@ -60,23 +61,22 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    /**
      * @param Request   $request
      * @param EventView $eventView
+     * @param Schedule  $schedule
      *
      * @return RedirectResponse|Response
      */
-    public function addUnavailabilityAction(Request $request, EventView $eventView)
+    public function addUnavailabilityAction(Request $request, EventView $eventView, Schedule $schedule)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $command = new AddUnavailability();
+        $command = new AddUnavailability($schedule);
         $form    = $this->createForm(new AddUnavailabilityType(), $command, [
-            'action' => $this->generateUrl('event_schedule_add_unavailability', ['subdomain' => $request->attributes->get('subdomain')]),
+            'action' => $this->generateUrl('event_schedule_add_unavailability', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $schedule->getId(),
+            ]),
             'method' => 'POST',
         ]);
         $form->add('submit', 'submit');
@@ -92,6 +92,7 @@ class ScheduleController extends Controller
 
         return $this->render('VimeetAppBundle:Event/Schedule:addUnavailability.html.twig', [
             'eventView' => $eventView,
+            'schedule'  => $schedule,
             'form'      => $form->createView(),
         ]);
     }

@@ -10,13 +10,40 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Domain\Model\Schedule;
+use Proximum\Vimeet\Domain\Model\Participant;
+
 class AddUnavailability
 {
+    /**
+     * @var Schedule
+     */
     public $schedule;
 
-    public $participants;
+    /**
+     * @var Participant[]
+     */
+    public $participants = [];
 
+    /**
+     * @var \DateTime
+     */
     public $from;
 
+    /**
+     * @var \DateTime
+     */
     public $to;
+
+    /**
+     * AddUnavailability constructor.
+     *
+     * @param Schedule $schedule
+     */
+    public function __construct(Schedule $schedule)
+    {
+        $this->schedule = $schedule;
+        $this->from     = clone $schedule->getDate();
+        $this->to       = clone $schedule->getDate();
+    }
 }

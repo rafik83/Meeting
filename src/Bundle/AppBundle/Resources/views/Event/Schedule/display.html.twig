@@ -3,9 +3,11 @@
 {% block title eventView.title %}
 
 {% block content %}
-    <a href="{{ path('event_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
     {% for schedule in scheduleViews %}
         <h2>{{ schedule.date|date('d/m/Y') }}</h2>
+        <p>
+            <a href="{{ path('event_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': schedule.id }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
+        </p>
         <ul>
             {% for slot in schedule.slots %}
                 {% if slot.begin == slot.end %}

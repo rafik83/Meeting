@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class AddUnavailabilityHandler
@@ -34,6 +35,15 @@ class AddUnavailabilityHandler
      */
     public function handle(AddUnavailability $addUnavailability)
     {
+        foreach ($addUnavailability->participants as $participant) {
+            $unavailability = new Unavailability(
+                $addUnavailability->schedule,
+                $participant,
+                $addUnavailability->from,
+                $addUnavailability->to
+            );
 
+            $this->unavailabilityRepository->add($unavailability);
+        }
     }
 }
