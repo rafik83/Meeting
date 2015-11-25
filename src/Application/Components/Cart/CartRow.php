@@ -15,7 +15,7 @@ class CartRow
     /**
      * @var string
      */
-    private $title;
+    private $label;
 
     /**
      * @var int
@@ -32,9 +32,9 @@ class CartRow
      */
     private $subTotal;
 
-    public function __construct($title, $quantity, $unitPrice)
+    public function __construct($label, $quantity, $unitPrice)
     {
-        $this->title     = $title;
+        $this->label     = $label;
         $this->quantity  = $quantity;
         $this->unitPrice = $unitPrice;
         $this->subTotal  = $quantity * $unitPrice;
@@ -43,9 +43,9 @@ class CartRow
     /**
      * @return string
      */
-    public function getTitle()
+    public function getLabel()
     {
-        return $this->title;
+        return $this->label;
     }
 
     /**

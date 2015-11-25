@@ -1,0 +1,14 @@
+{% if template is not null %}
+    {% include 'VimeetAppBundle:Admin/TypeTemplateField:field.html.twig' with {
+        event: event,
+        type: type,
+        template: template,
+        templateName: templateName
+    } %}
+{% elseif linkTo is defined and linkTo is not null %}
+    {% include 'VimeetAppBundle:Admin/TypeTemplateField:linkTo.html.twig' with { type: type, linkTo: linkTo } %}
+{% else %}
+    <tr>
+        <td colspan="6">Aucun champ</td>
+    </tr>
+{% endif %}

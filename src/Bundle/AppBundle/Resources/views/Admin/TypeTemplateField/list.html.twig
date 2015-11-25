@@ -1,0 +1,48 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block title 'Formulaire type de participation' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_type_list', { id: event.id }) }}">{{ event.title }}</a></h1>
+    <h2>{{ typeView.title }}</h2>
+
+    <ul>
+        {% for templateName, template in type.templates %}
+            <li><a href="#{{ templateName }}">{{ ('template.name.' ~ templateName)|trans }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <table class="table table-striped table-hover">
+        {% for templateName, template in type.templates %}
+            <tr>
+                <th colspan="6">
+                    <h3 id="{{ templateName }}">{{ ('template.name.' ~ templateName)|trans }}</h3>
+                </th>
+            </tr>
+
+            {% for blocks in template %}
+                {% if not (blocks['template'] is not defined and blocks['linkTo'] is not defined) %}
+                    <tr>
+                        <th colspan="6" class="info">
+                            {{ blocks['label'][app.request.locale] }}
+                        </th>
+                    </tr>
+                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
+                        templateName: templateName,
+                        template: blocks['template'] is defined ? blocks['template'] : null,
+                        linkTo: blocks['linkTo'] is defined ? blocks['linkTo'] : null
+                    } %}
+                {% elseif loop.first %}
+                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
+                        templateName: templateName,
+                        template: template
+                    } %}
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucun champ</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}
