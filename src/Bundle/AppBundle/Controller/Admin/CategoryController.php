@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\UpdateType;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -51,9 +49,9 @@ class CategoryController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form   = $this->createForm(new CreateType(), $create, [
-            'action' => $this->generateUrl('admin_category_create', ['id' => $event->getId()]),
+        $form   = $this->createForm('category', $create, [
             'method' => 'POST',
+            'event'  => $event,
         ]);
         $form->add('submit', 'submit');
 
@@ -92,8 +90,9 @@ class CategoryController extends Controller
         }
 
         $update = new Update($category);
-        $form   = $this->createForm(new UpdateType(), $update, [
+        $form   = $this->createForm('category', $update, [
             'method' => 'POST',
+            'event'  => $event,
         ]);
         $form->add('submit', 'submit');
 

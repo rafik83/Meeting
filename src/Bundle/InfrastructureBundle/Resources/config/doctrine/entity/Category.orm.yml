@@ -19,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Category:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
             inversedBy: categories
+            cascade: ["persist"]
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

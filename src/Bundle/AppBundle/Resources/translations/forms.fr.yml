@@ -147,22 +147,15 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
-    category_update:
+    category:
         children:
             translations:
                 prototype:
                     children:
                         title:
                             label: Titre
-            submit:
-                label: Enregistrer
-    category_create:
-        children:
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
+            types:
+                label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
     dont_see_what:

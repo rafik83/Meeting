@@ -57,6 +57,10 @@ class CategoryRepository implements CategoryRepositoryInterface
         $this->entityManager->persist($category);
         $this->entityManager->flush($category);
 
+        foreach ($category->getTypes() as $type) {
+            $this->entityManager->flush($type);
+        }
+
         foreach ($category->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
@@ -68,6 +72,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function set(Category $category)
     {
         $this->entityManager->flush($category);
+
+        foreach ($category->getTypes() as $type) {
+            $this->entityManager->flush($type);
+        }
 
         foreach ($category->getTranslations() as $translation) {
             $this->entityManager->flush($translation);

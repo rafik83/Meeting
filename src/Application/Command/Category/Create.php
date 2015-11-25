@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Category;
 
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Template;
 
 class Create
 {
@@ -27,14 +26,14 @@ class Create
     public $event;
 
     /**
-     * @var Template
+     * @var array
      */
-    public $template;
+    public $translations = [];
 
     /**
      * @var array
      */
-    public $translations = [];
+    public $types = [];
 
     /**
      * Create constructor.

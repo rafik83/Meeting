@@ -121,10 +121,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
             - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.vimeet.application.command.category.create_handler:
         class: Proximum\Vimeet\Application\Command\Category\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:

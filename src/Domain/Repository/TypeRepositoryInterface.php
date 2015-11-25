@@ -79,7 +79,7 @@ interface TypeRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return array
+     * @return Type[]
      */
     public function getTypesByEvent(Event $event);
 
