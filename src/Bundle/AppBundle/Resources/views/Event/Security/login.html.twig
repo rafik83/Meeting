@@ -12,6 +12,7 @@
             {% endif %}
 
             {{ form(form) }}
+            <a href="{{ path('event_forgotten_password', {'subdomain': app.request.attributes.get('subdomain')}) }}">{{ 'login.forgotPassword'|trans }}</a>
         </div>
     </div>
 {% endblock %}
