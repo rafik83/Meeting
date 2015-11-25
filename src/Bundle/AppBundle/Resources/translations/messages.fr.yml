@@ -29,6 +29,7 @@ event:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
         see_schedule: Voir mon agenda
+        see_meeting_request: Voir mes demandes de rendez-vous
         go_back_to_sheet: Retourner à la fiche
     sheet:
         participant:
@@ -80,6 +81,23 @@ event:
             label:
                 totalPrice: Total
                 billingStep: Passer à l'étape de facturation
+    meeting:
+        listRequest:
+            title: Liste de vos demandes de rendez-vous
+            state: Status
+            to: A destination de
+            participants: Les participants
+            createdAt: Envoyé le
+        request:
+            state:
+                from:
+                    sent: Envoyé
+                    approved: Accepté
+                    refused: Refusé
+                to:
+                    sent: Reçu
+                    approved: Accepté
+                    refused: Refusé
 
 template:
     name:
