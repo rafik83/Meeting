@@ -69,7 +69,7 @@ class SheetInfoGuesser
 
         $ownerInfo = $this->guessOwnerInfo($sheet);
 
-        if ($ownerInfo === '') {
+        if (empty($ownerInfo)) {
             return sprintf('#%s', $sheet->getId());
         } else {
             return $ownerInfo;
