@@ -56,12 +56,11 @@ class SheetInfoGuesser
         foreach ($sheetTemplate as $blockKey => $block) {
             if (isset($block['template'])){
                 foreach ($block['template'] as $templateKey => $template) {
-                    if (isset($template['type'])) {
-                        if ($template['type'] === 'lib_organisation') {
-                            if (isset($sheetData[$blockKey][$templateKey])) {
-                                return $sheetData[$blockKey][$templateKey];
-                            }
-                        }
+                    if (isset($template['type'])
+                        && $template['type'] === 'lib_organisation'
+                        && isset($sheetData[$blockKey][$templateKey])
+                    ) {
+                        return $sheetData[$blockKey][$templateKey];
                     }
                 }
             }

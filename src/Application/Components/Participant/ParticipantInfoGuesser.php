@@ -25,10 +25,8 @@ class ParticipantInfoGuesser
         $participantData     = $participant->getData();
 
         foreach ($participantTemplate as $fieldKey => $field) {
-            if ($field['type'] === 'lib_last_name') {
-                if (isset($participantData[$fieldKey])) {
-                    return $participantData[$fieldKey];
-                }
+            if ($field['type'] === 'lib_last_name' && isset($participantData[$fieldKey])) {
+                return $participantData[$fieldKey];
             }
         }
 
@@ -46,10 +44,8 @@ class ParticipantInfoGuesser
         $participantData     = $participant->getData();
 
         foreach ($participantTemplate as $fieldKey => $field) {
-            if ($field['type'] === 'lib_first_name') {
-                if (isset($participantData[$fieldKey])) {
-                    return $participantData[$fieldKey];
-                }
+            if ($field['type'] === 'lib_first_name' && isset($participantData[$fieldKey])) {
+                return $participantData[$fieldKey];
             }
         }
 
