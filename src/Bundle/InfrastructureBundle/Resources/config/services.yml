@@ -184,6 +184,10 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+    vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #
     # Event
