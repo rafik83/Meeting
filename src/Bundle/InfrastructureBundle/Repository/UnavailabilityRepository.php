@@ -44,6 +44,15 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Unavailability $unavailability)
+    {
+        $this->entityManager->remove($unavailability);
+        $this->entityManager->flush($unavailability);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByScheduleSheetAndUser(Schedule $schedule, Sheet $sheet, User $user)
     {
         $queryBuilder = $this
@@ -56,6 +65,34 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->setParameter('user', $user)
             ->where('unavailability.schedule = :schedule')
             ->setParameter('schedule', $schedule);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOverlapUnavailabilities(Unavailability $unavailability)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder();
+
+        $queryBuilder
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->where('unavailability.participant = :participant')
+            ->setParameter('participant', $unavailability->getParticipant())
+            ->andWhere('unavailability.schedule = :schedule')
+            ->setParameter('schedule', $unavailability->getSchedule())
+            ->andWhere($queryBuilder->expr()->orX(
+                'unavailability.begin BETWEEN :begin AND :end',
+                'unavailability.end BETWEEN :begin AND :end',
+                ':begin BETWEEN unavailability.begin AND unavailability.end',
+                ':end BETWEEN unavailability.begin AND unavailability.end'
+            ))
+            ->setParameter('begin', $unavailability->getBegin())
+            ->setParameter('end', $unavailability->getEnd());
 
         return $queryBuilder->getQuery()->getResult();
     }

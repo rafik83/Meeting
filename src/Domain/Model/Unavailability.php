@@ -94,6 +94,20 @@ class Unavailability
     }
 
     /**
+     * Set begin
+     *
+     * @param \DateTime $begin
+     *
+     * @return Unavailability
+     */
+    public function setBegin($begin)
+    {
+        $this->begin = $begin;
+
+        return $this;
+    }
+
+    /**
      * Get end
      *
      * @return \DateTime
@@ -101,5 +115,19 @@ class Unavailability
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Set end
+     *
+     * @param \DateTime $end
+     *
+     * @return Unavailability
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+
+        return $this;
     }
 }

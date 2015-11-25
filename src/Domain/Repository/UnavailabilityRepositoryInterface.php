@@ -23,6 +23,11 @@ interface UnavailabilityRepositoryInterface
     public function add(Unavailability $unavailability);
 
     /**
+     * @param Unavailability $unavailability
+     */
+    public function remove(Unavailability $unavailability);
+
+    /**
      * @param Schedule $schedule
      * @param Sheet    $sheet
      * @param User     $user
@@ -30,4 +35,11 @@ interface UnavailabilityRepositoryInterface
      * @return Unavailability[]
      */
     public function findByScheduleSheetAndUser(Schedule $schedule, Sheet $sheet, User $user);
+
+    /**
+     * @param Unavailability $unavailability
+     *
+     * @return Unavailability[]
+     */
+    public function getOverlapUnavailabilities(Unavailability $unavailability);
 }
