@@ -80,6 +80,14 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
         tags:
             - { name: form.type, alias: lib_choice }
+    vimeet_app.form_type_library.last_name_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType
+        tags:
+            - { name: form.type, alias: lib_last_name }
+    vimeet_app.form_type_library.first_name_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType
+        tags:
+            - { name: form.type, alias: lib_first_name }
 
     #
     # Event Listener
