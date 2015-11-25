@@ -3,6 +3,8 @@
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Defines application features from the specific context.
@@ -28,6 +30,147 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function setKernel(\Symfony\Component\HttpKernel\KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getSpoolDir()
+    {
+        return $this->kernel->getContainer()->getParameter('swiftmailer.spool.default.file.path');
+    }
+
+    /**
+     * We need to purge the spool between each scenario
+     *
+     * @BeforeScenario
+     */
+    public function purgeSpool()
+    {
+        $spoolDir = $this->getSpoolDir();
+
+        $filesystem = new Filesystem();
+
+        $filesystem->remove($spoolDir);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function getLinkFromA($string)
+    {
+        preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
+
+        return $result[2][0];
+    }
+
+    /**
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent to "(?P<email>[^"]+)"$/
+     */
+    public function theMailShouldBeSentTo($type, $email)
+    {
+        $spoolDir = $this->getSpoolDir();
+
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($spoolDir)) {
+            $finder = new Finder();
+
+            // find every files inside the spool dir except hidden files
+            $finder
+                ->in($spoolDir)
+                ->ignoreDotFiles(true)
+                ->files();
+
+            foreach ($finder as $file) {
+                $message = unserialize(file_get_contents($file));
+
+                // check the recipients
+                $recipients = array_keys($message->getTo());
+                if (!in_array($email, $recipients)) {
+                    continue;
+                }
+
+                // check if this is the correct message type
+                $headers = $message->getHeaders();
+                if ($headers->has('X-Message-ID')) {
+                    $messageId = $headers->get('X-Message-ID')->getValue();
+
+                    if ($messageId == $type) {
+                        return;
+                    }
+                }
+            }
+        }
+
+        throw new \Exception(sprintf("The \"%s\" was not sent", $type));
+    }
+
+    /**
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should contain the link "(?P<email>[^"]+)"$/
+     */
+    public function theMailShouldContainTheLink($type, $contain)
+    {
+        $spoolDir = $this->getSpoolDir();
+
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($spoolDir)) {
+            $finder = new Finder();
+
+            // find every files inside the spool dir except hidden files
+            $finder
+                ->in($spoolDir)
+                ->ignoreDotFiles(true)
+                ->files();
+
+            foreach ($finder as $file) {
+                $message = unserialize(file_get_contents($file));
+
+                $result = $this->getLinkFromA($message->getBody());
+
+                if (substr($result, 0, strlen($contain)) === $contain) {
+                    return;
+                }
+            }
+        }
+
+        throw new \Exception(sprintf("The \"%s\" mail does not contain it", $type));
+    }
+
+    /**
+     * @Given I follow the :link link in the :type mail
+     */
+    public function iFollowTheLinkInTheMail($link, $type)
+    {
+        $spoolDir = $this->getSpoolDir();
+
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($spoolDir)) {
+            $finder = new Finder();
+
+            // find every files inside the spool dir except hidden files
+            $finder
+                ->in($spoolDir)
+                ->ignoreDotFiles(true)
+                ->files();
+
+            foreach ($finder as $file) {
+                $message = unserialize(file_get_contents($file));
+
+                $result = $this->getLinkFromA($message->getBody());
+
+                if (substr($result, 0, strlen($link)) === $link) {
+                    $this->visitPath($result);
+                    return;
+                }
+            }
+        }
+
+        throw new \Exception(sprintf("The \"%s\" mail does not contain the link", $type));
     }
 
     /**
@@ -118,6 +261,27 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         }
 
         throw new \Exception('Element not found');
+    }
+
+    /**
+     * @When I wait until I see :something
+     */
+    public function iWaitUntilISee($something)
+    {
+        if (!$this->getSession()->wait(1000, sprintf('$("#%s").length', $something))) {
+            throw new \Exception(sprintf('%s not found', $something));
+        }
+    }
+
+    /**
+     * @Then I go to :url and I wait until the page is ready
+     */
+    public function iGoToAndWaitUntilPageIsReady($url)
+    {
+        $this->visit($url);
+
+        $this->getSession()->maximizeWindow();
+        $this->getSession()->wait(5000, 'document.readyState === "complete"');
     }
 
     /**

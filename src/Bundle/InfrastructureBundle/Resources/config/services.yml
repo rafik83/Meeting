@@ -42,6 +42,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.forgotten_password_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -116,6 +120,24 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
+        arguments:
+            - @vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.repository.forgotten_password_token_repository
+            - @vimeet_infrastructure.event.event_dispatcher
+    vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
+        arguments:
+            - @vimeet_infrastructure.repository.user_repository
+            - @vimeet_infrastructure.adapter.encoder_adapter
+            - @vimeet_infrastructure.adapter.salt_generator
+            - @vimeet_infrastructure.repository.forgotten_password_token_repository
 
     #
     # Security
@@ -170,6 +192,17 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+    vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+
+    #
+    # Event
+    #
+    vimeet_infrastructure.event.event_dispatcher:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Event\EventDispatcher
+        arguments: [ @event_dispatcher ]
 
     #
     # Rule Component
@@ -182,3 +215,23 @@ services:
             - @vimeet_infrastructure.repository.rule_repository
             - @vimeet_infrastructure.repository.type_repository
             - @vimeet_infrastructure.vimeet.application.components.rule.rule_sorter
+
+    #
+    # Token component
+    #
+    vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
+        arguments:
+            - @datetime
+
+    #
+    # Participant component
+    #
+    vimeet_infrastructure.application.components.sheet.participant_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
+
+    #
+    # DateTime
+    #
+    datetime:
+        class: DateTimeImmutable

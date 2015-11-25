@@ -45,6 +45,22 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    forgotten_password:
+        children:
+            email:
+                label: Entrez votre email
+            submit:
+                label: Envoyez
+    new_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyez
     add_participant:
         children:
             email:
@@ -131,7 +147,32 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
-
+    type_template_field_update:
+        children:
+            label:
+                label: Libellé
+            required:
+                label: Obligatoire
+            private:
+                label: Privé
+            submit:
+                label: Enregistrer
+    type_template_field_update_lib_choice:
+        children:
+            label:
+                label: Libellé
+            required:
+                label: Obligatoire
+            private:
+                label: Privé
+            choices:
+                label: Choix
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    label: Libellé du choix
+            submit:
+                label: Enregistrer
     dont_see_what:
         children:
             participant:

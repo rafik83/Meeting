@@ -37,7 +37,7 @@ class CartBuilder
 
         foreach ($packageTemplate as $blockKey => $block) {
             $cartStep = new CartStep(
-                isset($block['title'][$locale]) ? $block['title'][$locale] : '',
+                isset($block['label'][$locale]) ? $block['label'][$locale] : '',
                 0
             );
 
