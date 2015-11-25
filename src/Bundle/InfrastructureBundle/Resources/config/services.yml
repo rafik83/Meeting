@@ -188,6 +188,10 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+    vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #
     # Event
@@ -215,6 +219,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
         arguments:
             - @datetime
+
+    #
+    # Participant component
+    #
+    vimeet_infrastructure.application.components.sheet.participant_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
 
     #
     # DateTime
