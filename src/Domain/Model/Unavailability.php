@@ -94,20 +94,6 @@ class Unavailability
     }
 
     /**
-     * Set begin
-     *
-     * @param \DateTime $begin
-     *
-     * @return Unavailability
-     */
-    public function setBegin($begin)
-    {
-        $this->begin = $begin;
-
-        return $this;
-    }
-
-    /**
      * Get end
      *
      * @return \DateTime
@@ -117,17 +103,14 @@ class Unavailability
         return $this->end;
     }
 
-    /**
-     * Set end
-     *
-     * @param \DateTime $end
-     *
-     * @return Unavailability
-     */
-    public function setEnd($end)
+    public function merge(Unavailability $unavailability)
     {
-        $this->end = $end;
+        if ($unavailability->getBegin() < $this->getBegin()) {
+            $this->begin = $unavailability->getBegin();
+        }
 
-        return $this;
+        if ($unavailability->getEnd() > $this->getEnd()) {
+            $this->end = $unavailability->getEnd();
+        }
     }
 }

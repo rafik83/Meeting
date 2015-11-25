@@ -69,14 +69,7 @@ class AddUnavailabilityHandler
         $overlapUnavailabilities = $this->unavailabilityRepository->getOverlapUnavailabilities($unavailability);
 
         foreach ($overlapUnavailabilities as $overlapUnavailability) {
-            if ($overlapUnavailability->getBegin() < $unavailability->getBegin()) {
-                $unavailability->setBegin($overlapUnavailability->getBegin());
-            }
-
-            if ($overlapUnavailability->getEnd() > $unavailability->getEnd()) {
-                $unavailability->setEnd($overlapUnavailability->getEnd());
-            }
-
+            $unavailability->merge($overlapUnavailability);
             $this->unavailabilityRepository->remove($overlapUnavailability);
         }
     }
