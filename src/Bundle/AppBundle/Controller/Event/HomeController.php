@@ -159,7 +159,7 @@ class HomeController extends BaseController
                     'id'        => $participate->sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form);
+                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form->get('data'));
             }
         }
 

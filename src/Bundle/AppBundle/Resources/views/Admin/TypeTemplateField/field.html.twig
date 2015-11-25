@@ -1,0 +1,18 @@
+<tr>
+    <th>Libellé</th>
+    <th>Type de champ</th>
+    <th>Requis</th>
+    <th>Privé</th>
+    <th>Contenu</th>
+    <th>Action</th>
+</tr>
+
+{% for key, field in template %}
+    {% include 'VimeetAppBundle:Admin/TypeTemplateField:fieldRow.html.twig' with {
+        event: event,
+        type: type,
+        templateName: templateName,
+        field: field,
+        key: key
+    } %}
+{% endfor %}

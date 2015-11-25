@@ -15,7 +15,7 @@ class CartStep
     /**
      * @var string
      */
-    private $title;
+    private $label;
 
     /**
      * @var int
@@ -27,9 +27,9 @@ class CartStep
      */
     private $cartRows;
 
-    public function __construct($title, $subTotal)
+    public function __construct($label, $subTotal)
     {
-        $this->title    = $title;
+        $this->label    = $label;
         $this->subTotal = $subTotal;
         $this->cartRows = [];
     }
@@ -54,9 +54,9 @@ class CartStep
     /**
      * @return string
      */
-    public function getTitle()
+    public function getLabel()
     {
-        return $this->title;
+        return $this->label;
     }
 
     /**

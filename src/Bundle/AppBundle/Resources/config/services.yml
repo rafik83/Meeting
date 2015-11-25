@@ -36,6 +36,18 @@ services:
             - { name: form.type, alias: who }
 
     #
+    # Admin library form type
+    #
+    vimeet_app.form_type_admin.type_template_field_update:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType
+        tags:
+            - { name: form.type, alias: type_template_field_update }
+    vimeet_app.form_type_admin.type_template_field_update_lib_choice:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateChoiceType
+        tags:
+            - { name: form.type, alias: type_template_field_update_lib_choice }
+
+    #
     # Library
     #
     vimeet_app.form_type_library.choice_with_description:
@@ -80,6 +92,18 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
         tags:
             - { name: form.type, alias: lib_choice }
+    vimeet_app.form_type_library.last_name_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType
+        tags:
+            - { name: form.type, alias: lib_last_name }
+    vimeet_app.form_type_library.first_name_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType
+        tags:
+            - { name: form.type, alias: lib_first_name }
+    vimeet_app.form_type_library.organisation_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType
+        tags:
+            - { name: form.type, alias: lib_organisation }
 
     #
     # Event Listener

@@ -28,6 +28,7 @@ event:
     link:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
+        see_schedule: Voir mon agenda
         go_back_to_sheet: Retourner à la fiche
     sheet:
         participant:
@@ -79,8 +80,26 @@ event:
             label:
                 totalPrice: Total
                 billingStep: Passer à l'étape de facturation
+
+template:
+    name:
+        participantTemplate: Template formulaire fiche participant
+        sheetTemplate: Template formulaire fiche de participation
+        packageTemplate: Template formulaire forfait
+    field:
+        type:
+            lib_country: Pays
+            lib_text: Texte
+            lib_choice: Choix
+            lib_textarea: Zone de texte
+            lib_participant: Ajout de participant
+            lib_planning: Ajout de planning
+            lib_option: Options
+            upload_with_choices: Upload avec options
+            choice_with_description: Choix avec description
+
 who:
     see_who_but_dont_see: %seer% voit %seeable% mais ne voit pas :
     the:
-        category: la catégory
+        category: la catégorie
         type: le type

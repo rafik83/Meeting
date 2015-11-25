@@ -40,3 +40,6 @@ flash:
                 success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour
+        type_template_field:
+            update:
+                success: Le champ a bien été mis à jour
