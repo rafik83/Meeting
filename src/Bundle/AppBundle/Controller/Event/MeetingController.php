@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MeetingController extends BaseController
