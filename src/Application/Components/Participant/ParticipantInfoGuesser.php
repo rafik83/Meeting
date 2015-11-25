@@ -31,6 +31,8 @@ class ParticipantInfoGuesser
                 }
             }
         }
+
+        return '';
     }
 
     /**
@@ -50,6 +52,8 @@ class ParticipantInfoGuesser
                 }
             }
         }
+
+        return '';
     }
 
     /**
