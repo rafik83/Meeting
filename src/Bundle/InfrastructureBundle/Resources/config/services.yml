@@ -213,6 +213,12 @@ services:
             - @datetime
 
     #
+    # Participant component
+    #
+    vimeet_infrastructure.application.components.sheet.participant_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
+
+    #
     # DateTime
     #
     datetime:
