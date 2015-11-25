@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -28,13 +30,68 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $typeRepository;
 
     /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    /**
      * @param EntityManager           $entityManager
+     * @param PaginatorInterface      $paginator
      * @param TypeRepositoryInterface $typeRepository
      */
-    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        PaginatorInterface $paginator,
+        TypeRepositoryInterface $typeRepository
+    ) {
         $this->entityManager  = $entityManager;
+        $this->paginator      = $paginator;
         $this->typeRepository = $typeRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Category $category)
+    {
+        $this->entityManager->persist($category);
+        $this->entityManager->flush($category);
+
+        foreach ($category->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Category $category)
+    {
+        $this->entityManager->flush($category);
+
+        foreach ($category->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($page, $limit, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\CategoryListView(category.id, translation.title)')
+            ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->join('category.event', 'event')
+            ->setParameter('locale', $locale);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, [
+            'defaultSortFieldName' => 'category.id',
+            'defaultSortDirection' => 'ASC',
+        ]);
     }
 
     /**

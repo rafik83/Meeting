@@ -18,6 +18,25 @@ use Proximum\Vimeet\Domain\View\CategoryView;
 interface CategoryRepositoryInterface
 {
     /**
+     * @param int    $page
+     * @param int    $limit
+     * @param string $locale
+     *
+     * @return CategoryListView[]
+     */
+    public function paginate($page, $limit, $locale);
+
+    /**
+     * @param Category $category
+     */
+    public function set(Category $category);
+
+    /**
+     * @param Category $category
+     */
+    public function add(Category $category);
+
+    /**
      * @param Event|int $event
      * @param User|int  $user
      * @param string    $locale

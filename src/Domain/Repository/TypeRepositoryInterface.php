@@ -22,11 +22,12 @@ interface TypeRepositoryInterface
     /**
      * @param int    $page
      * @param int    $limit
+     * @param int    $eventId
      * @param string $locale
      *
      * @return TypeListView[]
      */
-    public function paginate($page, $limit, $locale);
+    public function paginate($page, $limit, $eventId, $locale);
 
     /**
      * @param Type $type

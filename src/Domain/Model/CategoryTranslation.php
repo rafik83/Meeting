@@ -33,6 +33,20 @@ class CategoryTranslation
     private $title;
 
     /**
+     * CategoryTranslation constructor
+     *
+     * @param Category $category
+     * @param string   $locale
+     * @param string   $title
+     */
+    public function __construct(Category $category, $locale, $title)
+    {
+        $this->category = $category;
+        $this->locale   = $locale;
+        $this->title    = $title;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -62,5 +76,17 @@ class CategoryTranslation
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return CategoryTranslation
+     */
+    public function update($title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

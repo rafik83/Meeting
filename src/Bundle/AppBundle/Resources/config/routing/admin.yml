@@ -61,3 +61,29 @@ admin_type_update:
         type_id: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Type:update }
+
+#
+# Category
+#
+
+admin_category_list:
+    path: /event/{id}/category
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Category:list }
+
+admin_category_create:
+    path: /event/{id}/category/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Category:create }
+
+admin_category_update:
+    path: /event/{id}/category/{category_id}/update
+    requirements:
+        id: \d+
+        type_id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Category:update }

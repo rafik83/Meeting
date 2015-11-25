@@ -23,21 +23,14 @@ class TypeListView
     public $title;
 
     /**
-     * @var string
-     */
-    public $eventTitle;
-
-    /**
      * TypeListView constructor.
      *
      * @param int    $id
      * @param string $title
-     * @param string $eventTitle
      */
-    public function __construct($id, $title, $eventTitle)
+    public function __construct($id, $title)
     {
-        $this->id         = $id;
-        $this->title      = $title;
-        $this->eventTitle = $eventTitle;
+        $this->id    = $id;
+        $this->title = $title;
     }
 }

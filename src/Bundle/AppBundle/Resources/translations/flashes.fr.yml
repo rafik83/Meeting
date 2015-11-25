@@ -40,3 +40,8 @@ flash:
                 success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour
+        category:
+            create:
+                success: La catégorie a bien été créé
+            update:
+                success: La catégorie a bien été mis à jour

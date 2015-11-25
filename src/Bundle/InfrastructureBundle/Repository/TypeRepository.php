@@ -42,16 +42,17 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, $locale)
+    public function paginate($page, $limit, $eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title, event.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->join('type.event', 'event')
-            ->setParameter('locale', $locale);
+            ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
+            ->setParameter('locale', $locale)
+            ->setParameter('eventId', $eventId);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, [
             'defaultSortFieldName' => 'type.id',

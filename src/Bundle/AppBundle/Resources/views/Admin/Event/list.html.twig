@@ -15,7 +15,9 @@
                     <td>
                         <a href="{{ path('admin_event_update', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                         <a href="{{ path('admin_rule_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Qui voit qui</a>
-                        <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Types</a></td>
+                        <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Types</a>
+                        <a href="{{ path('admin_category_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Catégories</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
