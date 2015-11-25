@@ -39,6 +39,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.schedule_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
+        arguments:
+            - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.forgotten_password_token_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
         arguments:
@@ -127,6 +131,10 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.category_repository
             - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:
@@ -195,6 +203,10 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+    vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #
     # Event
@@ -222,6 +234,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
         arguments:
             - @datetime
+
+    #
+    # Participant component
+    #
+    vimeet_infrastructure.application.components.sheet.participant_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
 
     #
     # DateTime

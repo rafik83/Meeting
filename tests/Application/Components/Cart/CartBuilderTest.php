@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Cart\Carts;
+namespace Tests\Application\Components\Cart;
 
 use Proximum\Vimeet\Application\Components\Cart\Cart;
 use Proximum\Vimeet\Application\Components\Cart\CartBuilder;
@@ -34,7 +34,7 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $template = [
             '563cae7496da1' => [
-                'title'       => [
+                'label'       => [
                     'fr' => 'Forfait de participation',
                     'en' => 'Participation package',
                 ],
