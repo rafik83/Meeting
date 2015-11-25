@@ -103,6 +103,9 @@ class Unavailability
         return $this->end;
     }
 
+    /**
+     * @param Unavailability $unavailability
+     */
     public function merge(Unavailability $unavailability)
     {
         if ($unavailability->getBegin() < $this->getBegin()) {
