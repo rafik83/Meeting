@@ -229,7 +229,6 @@ event_catalog_sheet:
 #
 # Schedule
 #
-
 event_schedule:
     path: /schedule
     host: "{subdomain}.%domain%"
@@ -237,3 +236,15 @@ event_schedule:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:event }
+
+#
+# Meeting
+#
+event_meeting_list_request:
+    path: /sheet/{id}/meeting/request
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:listRequest }
