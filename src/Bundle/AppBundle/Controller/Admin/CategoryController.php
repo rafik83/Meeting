@@ -32,7 +32,7 @@ class CategoryController extends Controller
     {
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
-            ->paginate($request->query->get('page', 1), 20, $request->getLocale());
+            ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Category:list.html.twig', [
             'event'      => $event,

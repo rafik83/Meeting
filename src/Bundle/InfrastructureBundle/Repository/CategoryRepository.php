@@ -85,7 +85,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, $locale)
+    public function paginate($page, $limit, $eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -93,8 +93,9 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->select('NEW Proximum\Vimeet\Domain\View\CategoryListView(category.id, translation.title)')
             ->from('Entity:Category', 'category')
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->join('category.event', 'event')
-            ->setParameter('locale', $locale);
+            ->join('category.event', 'event', 'WITH', 'event.id = :eventId')
+            ->setParameter('locale', $locale)
+            ->setParameter('eventId', $eventId);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, [
             'defaultSortFieldName' => 'category.id',
