@@ -40,7 +40,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from('Entity:Meeting\Request', 'request')
             ->where('request.from = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameter('sheet', $sheet)
+            ->orderBy('request.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
