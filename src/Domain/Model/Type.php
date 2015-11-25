@@ -307,4 +307,16 @@ class Type implements WhoInterface
     {
         return 'type';
     }
+
+    /**
+     * @return array
+     */
+    public function getTemplates()
+    {
+        return [
+            'participantTemplate' => $this->getParticipantTemplate(),
+            'sheetTemplate'       => $this->getSheetTemplate(),
+            'packageTemplate'     => $this->getPackageTemplate(),
+        ];
+    }
 }

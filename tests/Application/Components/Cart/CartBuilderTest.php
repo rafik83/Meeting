@@ -34,7 +34,7 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $template = [
             '563cae7496da1' => [
-                'title'       => [
+                'label'       => [
                     'fr' => 'Forfait de participation',
                     'en' => 'Participation package',
                 ],

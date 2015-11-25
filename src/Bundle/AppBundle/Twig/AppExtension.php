@@ -33,7 +33,9 @@ class AppExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('format_data', array($this, 'formatData')),
+            new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
+            new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
         );
     }
 
@@ -65,6 +67,49 @@ class AppExtension extends \Twig_Extension
         }
 
         return $value;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public function booleanTick($value)
+    {
+        if (true === $value) {
+            return '&#10003;';
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array  $choices
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function choicesList($choices, $locale)
+    {
+        if (!count($choices)) {
+            return [];
+        }
+
+        foreach ($choices as $choice) {
+            if (isset($choice['choices']) && isset($choice['label'][$locale])) {
+                $items[] = sprintf(
+                    "%s%s",
+                    $choice['label'][$locale],
+                    $this->choicesList($choice['choices'], $locale)
+                );
+            } elseif (isset($choice['label'][$locale])) {
+                $items[] = $choice['label'][$locale];
+            }
+        }
+
+        asort($items);
+
+        return sprintf("<ul><li>%s</li></ul>", implode('</li><li>', $items));
     }
 
     /**
