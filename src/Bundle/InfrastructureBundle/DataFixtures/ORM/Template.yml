@@ -7,14 +7,14 @@ Proximum\Vimeet\Domain\Model\Template:
         title: Exposant
         participant:
             563caf1d9b1cb:
-                type: lib_text
+                type: lib_last_name
                 required: true
                 private: false
                 label:
                     fr: "Nom"
                     en: "Lastname"
             563caf2746398:
-                type: lib_text
+                type: lib_first_name
                 required: true
                 private: false
                 label:
@@ -584,8 +584,8 @@ Proximum\Vimeet\Domain\Model\Template:
         __construct: false
         title: Visiteur
         participant:
-            563cb0568a3bb: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            563cb05cb81ec: { "type": "lib_text", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb0568a3bb: { "type": "lib_last_name", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "lib_first_name", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
             563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
             563cb06a1a441:
                 type: lib_choice
