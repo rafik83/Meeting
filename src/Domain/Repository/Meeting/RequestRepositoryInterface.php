@@ -21,4 +21,11 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getPropositionReceivedBySheet(Sheet $sheet);
 }

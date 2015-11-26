@@ -35,5 +35,36 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
             563caf2f0ddbd: "0609090909"
-
+    participant_random_1:
+        __construct: false
+        user: @user_random_1
+        sheet: @sheet_exposant2
+        owner: false
+        data:
+            563caf1d9b1cb: <firstName()>
+            563caf2746398: <lastName()>
+    participant_random_2:
+        __construct: false
+        user: @user_random_1
+        sheet: @sheet_exposant2
+        owner: false
+        data:
+            563caf1d9b1cb: <firstName()>
+            563caf2746398: <lastName()>
+    participant_random_3:
+        __construct: false
+        user: @user_random_1
+        sheet: @sheet_exposant4
+        owner: false
+        data:
+            563caf1d9b1cb: <firstName()>
+            563caf2746398: <lastName()>
+    participant_random_4:
+        __construct: false
+        user: @user_random_1
+        sheet: @sheet_exposant5
+        owner: false
+        data:
+            563caf1d9b1cb: <firstName()>
+            563caf2746398: <lastName()>
 
