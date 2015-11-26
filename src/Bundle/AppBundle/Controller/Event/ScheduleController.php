@@ -40,7 +40,11 @@ class ScheduleController extends Controller
         $scheduleViews = [];
 
         foreach ($schedules as $schedule) {
-            $slots = [];
+            $slots = [
+                'meetingSlots'   => [],
+                'happening'      => [],
+                'unavailability' => [],
+            ];
 
             $meetingSlots = $schedule->getMeetingSlots();
             foreach ($meetingSlots as $meetingSlot) {

@@ -35,17 +35,8 @@ class AddUnavailabilityType extends AbstractType
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
-            ->add('participants', 'entity', [
-                'class' => Participant::class,
-                'query_builder' => function (EntityRepository $entityRepository) use ($options) {
-                    return $entityRepository
-                        ->createQueryBuilder('participant')
-                        ->where('participant.sheet = :sheet')
-                        ->setParameter('sheet', $options['sheet']);
-                },
-                'choice_label' => function (Participant $participant) {
-                    return $participant->getId();
-                },
+            ->add('participants', 'participant_choice', [
+                'sheet'      => $options['sheet'],
                 'multiple'   => true,
                 'expanded'   => true,
             ])
