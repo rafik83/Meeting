@@ -25,6 +25,11 @@ interface UnavailabilityRepositoryInterface
     /**
      * @param Unavailability $unavailability
      */
+    public function set(Unavailability $unavailability);
+
+    /**
+     * @param Unavailability $unavailability
+     */
     public function remove(Unavailability $unavailability);
 
     /**

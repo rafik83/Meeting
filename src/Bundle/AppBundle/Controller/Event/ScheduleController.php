@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
+use Proximum\Vimeet\Application\Command\Unavailability\Remove;
+use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\ScheduleSlotView;
 use Proximum\Vimeet\Domain\View\ScheduleView;
@@ -48,7 +52,7 @@ class ScheduleController extends Controller
 
             $meetingSlots = $schedule->getMeetingSlots();
             foreach ($meetingSlots as $meetingSlot) {
-                $slots['meetingSlots'][] = new ScheduleSlotView('Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
+                $slots['meetingSlots'][] = new ScheduleSlotView($meetingSlot->getId(), 'Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
             }
 
             usort($slots['meetingSlots'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
@@ -57,7 +61,7 @@ class ScheduleController extends Controller
 
             $happenings = $schedule->getHappenings();
             foreach ($happenings as $happening) {
-                $slots['happening'][] = new ScheduleSlotView($happening->getTitle(), $happening->getBegin(), $happening->getEnd());
+                $slots['happening'][] = new ScheduleSlotView($happening->getId(), $happening->getTitle(), $happening->getBegin(), $happening->getEnd());
             }
 
             usort($slots['happening'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
@@ -66,7 +70,7 @@ class ScheduleController extends Controller
 
             $unavailabilities = $this->get('vimeet_infrastructure.repository.unavailability_repository')->findByScheduleSheetAndUser($schedule, $sheet, $this->getUser());
             foreach ($unavailabilities as $unavailability) {
-                $slots['unavailability'][] = new ScheduleSlotView('Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
+                $slots['unavailability'][] = new ScheduleSlotView($unavailability->getId(), 'Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
             }
 
             usort($slots['unavailability'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
@@ -127,6 +131,102 @@ class ScheduleController extends Controller
             'eventView' => $eventView,
             'schedule'  => $schedule,
             'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "unavailability",
+     *   class="Proximum\Vimeet\Domain\Model\Unavailability",
+     *   options={"id" = "unavailability_id"}
+     * )
+     *
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
+     * @param Schedule       $schedule
+     * @param Unavailability $unavailability
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Unavailability $unavailability)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($unavailability->getSchedule() !== $schedule) {
+            $this->createNotFoundException('Unavailability not found.');
+        }
+
+        $command = new Update($unavailability);
+        $form    = $this->createForm(new UpdateUnavailabilityType(), $command, [
+            'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
+                'subdomain'         => $request->attributes->get('subdomain'),
+                'id'                => $sheet->getId(),
+                'schedule_id'       => $schedule->getId(),
+                'unavailability_id' => $unavailability->getId(),
+            ])
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.update_handler')->handle($command);
+            $this->addFlash('success', 'flash.event.schedule.unavailability.udpate.success');
+
+            return $this->redirectToRoute('event_sheet_schedule', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event/Schedule:updateUnavailability.html.twig', [
+            'eventView' => $eventView,
+            'schedule'  => $schedule,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "unavailability",
+     *   class="Proximum\Vimeet\Domain\Model\Unavailability",
+     *   options={"id" = "unavailability_id"}
+     * )
+     *
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
+     * @param Schedule       $schedule
+     * @param Unavailability $unavailability
+     *
+     * @return RedirectResponse|Response
+     */
+    public function removeUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Unavailability $unavailability)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($unavailability->getSchedule() !== $schedule) {
+            $this->createNotFoundException('Unavailability not found.');
+        }
+
+        $command = new Remove($unavailability);
+        $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler')->handle($command);
+        $this->addFlash('success', 'flash.event.schedule.unavailability.remove.success');
+
+        return $this->redirectToRoute('event_sheet_schedule', [
+            'subdomain' => $request->attributes->get('subdomain'),
+            'id'        => $sheet->getId(),
         ]);
     }
 }

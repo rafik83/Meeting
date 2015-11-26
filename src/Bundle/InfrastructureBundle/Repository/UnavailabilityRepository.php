@@ -44,6 +44,14 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Unavailability $unavailability)
+    {
+        $this->entityManager->flush($unavailability);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(Unavailability $unavailability)
     {
         $this->entityManager->remove($unavailability);

@@ -10,7 +10,7 @@
         </p>
 
         <div class="row">
-            {% for column in schedule.slots %}
+            {% for type, column in schedule.slots %}
                 <div class="col-md-{{ 12 / schedule.slots|length }}">
                     {% for slot in column|default([]) %}
                         <div style="border-top:1px solid #333;">
@@ -18,6 +18,13 @@
                                 <p>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
                             {% else %}
                                 <p>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
+                            {% endif %}
+                            {% if type == 'unavailability' %}
+                                    <a href="{{ path('event_sheet_schedule_update_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" class="btn btn-primary btn-xs">Modifier</a>
+                                    <form action="{{ path('event_sheet_schedule_remove_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" method="POST" style="display: inline">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn btn-danger btn-xs">Supprimer</button>
+                                    </form>
                             {% endif %}
                         </div>
                     {% endfor %}
