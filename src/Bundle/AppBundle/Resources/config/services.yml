@@ -34,7 +34,6 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: form.type, alias: who }
-
     vimeet_app.form_type.category_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryType
         arguments:
