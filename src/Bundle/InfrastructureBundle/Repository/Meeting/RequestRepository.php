@@ -45,4 +45,21 @@ class RequestRepository implements RequestRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from('Entity:Meeting\Request', 'request')
+            ->where('request.to = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->orderBy('request.createdAt', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
