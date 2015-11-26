@@ -176,7 +176,7 @@ class ScheduleController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.update_handler')->handle($command);
-            $this->addFlash('success', 'flash.event.schedule.unavailability.udpate.success');
+            $this->addFlash('success', 'flash.event.schedule.unavailability.update.success');
 
             return $this->redirectToRoute('event_sheet_schedule', [
                 'subdomain' => $request->attributes->get('subdomain'),
