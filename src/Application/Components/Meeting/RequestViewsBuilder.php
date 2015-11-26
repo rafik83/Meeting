@@ -53,7 +53,6 @@ class RequestViewsBuilder
     public function generate($requests)
     {
         foreach ($requests as $request) {
-
             $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFrom());
             $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
 

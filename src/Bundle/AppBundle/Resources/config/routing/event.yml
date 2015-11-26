@@ -248,6 +248,7 @@ event_meeting_list_request:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:listRequest }
+
 event_meeting_list_proposition:
     path: /sheet/{id}/meeting/proposition
     host: "{subdomain}.%domain%"

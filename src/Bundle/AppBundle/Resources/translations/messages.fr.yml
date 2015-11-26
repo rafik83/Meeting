@@ -85,13 +85,13 @@ event:
     meeting:
         listRequest:
             title: Liste de vos demandes de rendez-vous
-            state: Status
+            state: Statut
             to: A destination de
             participants: Les participants
             createdAt: Envoyé le
         listProposition:
             title: Liste de vos propositions de rendez-vous
-            state: Status
+            state: Statut
             from: Venant de
             participants: Les participants
             createdAt: Reçu le
