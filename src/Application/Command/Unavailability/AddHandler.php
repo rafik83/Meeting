@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
-class AddUnavailabilityHandler
+class AddHandler
 {
     /**
      * @var UnavailabilityRepositoryInterface
@@ -32,9 +32,9 @@ class AddUnavailabilityHandler
     }
 
     /**
-     * @param AddUnavailability $addUnavailability
+     * @param Add $addUnavailability
      */
-    public function handle(AddUnavailability $addUnavailability)
+    public function handle(Add $addUnavailability)
     {
         foreach ($addUnavailability->participants as $participant) {
             $unavailability = $this->createUnavailability($addUnavailability, $participant);
@@ -44,12 +44,12 @@ class AddUnavailabilityHandler
     }
 
     /**
-     * @param AddUnavailability $addUnavailability
+     * @param Add $addUnavailability
      * @param Participant       $participant
      *
      * @return Unavailability
      */
-    private function createUnavailability(AddUnavailability $addUnavailability, Participant $participant)
+    private function createUnavailability(Add $addUnavailability, Participant $participant)
     {
         $unavailability = new Unavailability(
             $addUnavailability->schedule,

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
+use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
@@ -105,7 +105,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $command = new AddUnavailability($schedule);
+        $command = new Add($schedule);
         $form    = $this->createForm(new AddUnavailabilityType(), $command, [
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', [
                 'subdomain'   => $request->attributes->get('subdomain'),
@@ -119,7 +119,7 @@ class ScheduleController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler')->handle($command);
-            $this->addFlash('success', 'flash.event.schedule.add_unavailability.success');
+            $this->addFlash('success', 'flash.event.schedule.unavailability.add.success');
 
             return $this->redirectToRoute('event_sheet_schedule', [
                 'subdomain' => $request->attributes->get('subdomain'),

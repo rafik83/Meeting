@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
-use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
+use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -51,7 +51,7 @@ class AddUnavailabilityType extends AbstractType
         ]);
 
         $resolver->setDefaults([
-            'data_class' => AddUnavailability::class,
+            'data_class' => Add::class,
             'intention'  => 'add_unavailability',
         ]);
     }

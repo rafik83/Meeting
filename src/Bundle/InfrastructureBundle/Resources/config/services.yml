@@ -125,7 +125,7 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
-        class: Proximum\Vimeet\Application\Command\Unavailability\AddUnavailabilityHandler
+        class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
         arguments:
             - @vimeet_infrastructure.repository.unavailability_repository
     vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:

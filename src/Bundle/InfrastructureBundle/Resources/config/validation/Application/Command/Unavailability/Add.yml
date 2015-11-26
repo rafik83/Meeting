@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability:
+Proximum\Vimeet\Application\Command\Unavailability\Add:
     constraints:
         - Expression:
             expression: "this.from < this.to"
