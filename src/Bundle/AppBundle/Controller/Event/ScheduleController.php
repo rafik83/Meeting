@@ -170,7 +170,8 @@ class ScheduleController extends Controller
                 'id'                => $sheet->getId(),
                 'schedule_id'       => $schedule->getId(),
                 'unavailability_id' => $unavailability->getId(),
-            ])
+            ]),
+            'method' => 'POST',
         ]);
         $form->add('submit', 'submit');
 
