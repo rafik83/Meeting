@@ -30,6 +30,7 @@ event:
         see_catalog: Voir le catalogue
         see_schedule: Voir mon agenda
         see_meeting_request: Voir mes demandes de rendez-vous
+        see_meeting_proposition: Voir mes propositions de rendez-vous
         go_back_to_sheet: Retourner à la fiche
     sheet:
         participant:
@@ -88,6 +89,12 @@ event:
             to: A destination de
             participants: Les participants
             createdAt: Envoyé le
+        listProposition:
+            title: Liste de vos propositions de rendez-vous
+            state: Status
+            from: Venant de
+            participants: Les participants
+            createdAt: Reçu le
         request:
             state:
                 from:
