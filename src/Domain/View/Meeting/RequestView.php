@@ -8,10 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\View;
+namespace Proximum\Vimeet\Domain\View\Meeting;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
 class RequestView
 {
