@@ -22,7 +22,7 @@ class RequestRepository implements RequestRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager      $entityManager
+     * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {
