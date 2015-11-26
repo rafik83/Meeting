@@ -42,8 +42,6 @@ class MeetingController extends BaseController
     }
 
     /**
-     * Sheet
-     *
      * @param EventView $eventView
      * @param Sheet     $sheet
      *
