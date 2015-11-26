@@ -181,6 +181,16 @@ form:
                 label: Fiche
             submit:
                 label: Enregistrer
+    add_unavailability:
+        children:
+            from:
+                label: De
+            to:
+                label: À
+            participants:
+                label: Participants concernés
+            submit:
+                label: Ajouter
 
 country:
     placeholder: --- Sélectionner un pays ---
