@@ -42,7 +42,7 @@ class RequestViewsBuilder
     {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->requestViews           = new ArrayCollection();
+        $this->requestViews           = [];
     }
 
     /**
@@ -60,18 +60,14 @@ class RequestViewsBuilder
             $requestView = new RequestView($sheetNameFrom, $sheetNameTo, $request->getState(), $request->getCreatedAt());
 
             foreach ($request->getFromParticipants() as $participant) {
-                $requestView->fromParticipants->add(
-                    new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant))
-                );
+                $requestView->fromParticipants[] = new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant));
             }
 
             foreach ($request->getToParticipants() as $participant) {
-                $requestView->toParticipants->add(
-                    new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant))
-                );
+                $requestView->toParticipants[] = new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant));
             }
 
-            $this->requestViews->add($requestView);
+            $this->requestViews[] = $requestView;
         }
 
         return $this->requestViews;
