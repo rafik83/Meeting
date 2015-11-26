@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class UpdateHandler
@@ -37,6 +38,22 @@ class UpdateHandler
         $unavailability = $update->unavailability;
         $unavailability->update($update->from, $update->to);
 
+        $this->mergeOverlapUnavailabilities($unavailability);
         $this->unavailabilityRepository->set($unavailability);
+    }
+
+    /**
+     * @param Unavailability $unavailability
+     */
+    private function mergeOverlapUnavailabilities(Unavailability $unavailability)
+    {
+        // Here clone is required because of a bug in phophecy making test impossible
+        // See https://github.com/phpspec/prophecy/issues/75
+        $overlapUnavailabilities = $this->unavailabilityRepository->getOverlapUnavailabilities(clone $unavailability);
+
+        foreach ($overlapUnavailabilities as $overlapUnavailability) {
+            $unavailability->merge($overlapUnavailability);
+            $this->unavailabilityRepository->remove($overlapUnavailability);
+        }
     }
 }
