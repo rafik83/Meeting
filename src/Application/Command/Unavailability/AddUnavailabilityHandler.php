@@ -62,11 +62,13 @@ class AddUnavailabilityHandler
     }
 
     /**
-     * @param $unavailability
+     * @param Unavailability $unavailability
      */
     private function mergeOverlapUnavailabilities(Unavailability $unavailability)
     {
-        $overlapUnavailabilities = $this->unavailabilityRepository->getOverlapUnavailabilities($unavailability);
+        // Here clone is required because of a bug in phophecy making test impossible
+        // See https://github.com/phpspec/prophecy/issues/75
+        $overlapUnavailabilities = $this->unavailabilityRepository->getOverlapUnavailabilities(clone $unavailability);
 
         foreach ($overlapUnavailabilities as $overlapUnavailability) {
             $unavailability->merge($overlapUnavailability);
