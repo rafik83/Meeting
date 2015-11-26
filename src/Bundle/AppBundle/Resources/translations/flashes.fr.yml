@@ -4,6 +4,9 @@ flash:
             success: Votre compte a bien été créé
         participation:
             success: Votre fiche de participation a été sauvegardée
+        schedule:
+            add_unavailability:
+                success: Votre indisponibilité a bien été ajouté
     change_password:
         success: Votre mot de passe a été changé
     new_password:
