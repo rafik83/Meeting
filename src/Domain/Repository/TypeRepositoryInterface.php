@@ -84,6 +84,14 @@ interface TypeRepositoryInterface
     public function getTypesByEvent(Event $event);
 
     /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Type[] indexed by Type::id
+     */
+    public function getTypesTitleByEventAndLocale(Event $event, $locale);
+
+    /**
      * @param User|int $user
      *
      * @return array

@@ -44,31 +44,25 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $category = $update->category;
-
-        $types      = [];
+        $category   = $update->category;
         $eventTypes = $this->typeRepository->getTypesByEvent($update->event);
-
-        foreach ($eventTypes as $type) {
-            $types[$type->getId()] = $type;
-        }
 
         foreach ($update->translations as $locale => $translation) {
             $category->getTranslations()->get($locale)->update($translation['title']);
         }
 
-        // add Type
+        // Add Type
         foreach ($update->types as $typeId) {
-            if (!isset($types[$typeId])) {
+            if (!isset($eventTypes[$typeId])) {
                 throw new \Exception('Type id not found for this event');
             }
 
-            if (!$category->getTypes()->contains($types[$typeId])) {
-                 $category->getTypes()->add($types[$typeId]);
+            if (!$category->getTypes()->contains($eventTypes[$typeId])) {
+                 $category->getTypes()->add($eventTypes[$typeId]);
             }
         }
 
-        // remove Type
+        // Remove Type
         foreach ($category->getTypes() as $type) {
             if (!in_array($type->getId(), $update->types)) {
                 $category->getTypes()->removeElement($type);

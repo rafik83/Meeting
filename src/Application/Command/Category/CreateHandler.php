@@ -41,14 +41,8 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $category = new Category($create->event);
-
-        $types      = [];
+        $category   = new Category($create->event);
         $eventTypes = $this->typeRepository->getTypesByEvent($create->event);
-
-        foreach ($eventTypes as $type) {
-            $types[$type->getId()] = $type;
-        }
 
         foreach ($create->translations as $locale => $translation) {
             $category->getTranslations()->set(
@@ -58,11 +52,11 @@ class CreateHandler
         }
 
         foreach ($create->types as $typeId) {
-            if (!isset($types[$typeId])) {
+            if (!isset($eventTypes[$typeId])) {
                 throw new \Exception('Type id not found for this event');
             }
 
-            $category->getTypes()->set($typeId, $types[$typeId]);
+            $category->getTypes()->set($typeId, $eventTypes[$typeId]);
         }
 
         $this->categoryRepository->add($category);

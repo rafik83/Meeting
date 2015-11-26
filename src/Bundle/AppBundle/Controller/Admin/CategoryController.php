@@ -52,6 +52,7 @@ class CategoryController extends Controller
         $form   = $this->createForm('category', $create, [
             'method' => 'POST',
             'event'  => $event,
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 
@@ -93,6 +94,7 @@ class CategoryController extends Controller
         $form   = $this->createForm('category', $update, [
             'method' => 'POST',
             'event'  => $event,
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', 'submit');
 

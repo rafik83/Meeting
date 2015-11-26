@@ -185,11 +185,34 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
+            ->from('Entity:Type', 'type', 'type.id')
             ->where('type.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesTitleByEventAndLocale(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id, translations.title')
+            ->from('Entity:Type', 'type', 'type.id')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->where('type.event = :event')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return array_map(
+            function ($type) {
+                return $type['title'];
+            },
+            $queryBuilder->getQuery()->getResult()
+        );
     }
 
     /**

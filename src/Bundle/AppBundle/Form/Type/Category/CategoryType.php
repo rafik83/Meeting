@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,7 +44,10 @@ class CategoryType extends AbstractType
                 'label' => false,
             ])
             ->add('types', 'choice', [
-                'choices' => $this->getEventTypes($options['event']),
+                'choices'  => $this->typeRepository->getTypesTitleByEventAndLocale(
+                    $options['event'],
+                    $options['locale']
+                ),
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -67,7 +69,7 @@ class CategoryType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
     }
 
     /**
@@ -76,22 +78,5 @@ class CategoryType extends AbstractType
     public function getName()
     {
         return 'category';
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return array
-     */
-    private function getEventTypes(Event $event)
-    {
-        $types = [];
-        $eventTypes = $this->typeRepository->getTypesByEvent($event);
-
-        foreach ($eventTypes as $type) {
-            $types[$type->getId()] = $type->getTranslations()->get('fr')->getTitle();
-        }
-
-        return $types;
     }
 }
