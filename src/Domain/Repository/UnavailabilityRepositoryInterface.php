@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -31,6 +32,14 @@ interface UnavailabilityRepositoryInterface
      * @param Unavailability $unavailability
      */
     public function remove(Unavailability $unavailability);
+
+    /**
+     * @param Schedule    $schedule
+     * @param Participant $participant
+     *
+     * @return Unavailability[]
+     */
+    public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant);
 
     /**
      * @param Schedule $schedule
