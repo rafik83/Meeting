@@ -10,11 +10,15 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Command\Happening\Participate;
+use Proximum\Vimeet\Application\Command\Happening\Unparticipate;
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -185,6 +189,109 @@ class ScheduleController extends Controller
         $command = new Remove($unavailability);
         $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler')->handle($command);
         $this->addFlash('success', 'flash.event.schedule.unavailability.remove.success');
+
+        return $this->redirectToRoute('event_sheet_schedule', [
+            'subdomain' => $request->attributes->get('subdomain'),
+            'id'        => $sheet->getId(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "happening",
+     *   class="Proximum\Vimeet\Domain\Model\Happening",
+     *   options={"id" = "happening_id"}
+     * )
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param Schedule  $schedule
+     * @param Happening $happening
+     *
+     * @return RedirectResponse|Response
+     */
+    public function participateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening)
+    {
+        // Get user participant
+        $participant = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+
+        // Command and form
+        $command = new Participate($happening, [$participant]);
+        $form    = $this->createForm(new ParticipateHappeningType(), $command, [
+            'sheet' => $sheet,
+        ]);
+        $form->add('submit', 'submit');
+
+        // Handle form
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.components.happening.participate_handler')
+                ->handle($command);
+
+            $this->addFlash('success', 'flash.event.schedule.happening.participate.success');
+
+            return $this->redirectToRoute('event_sheet_schedule', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event/Schedule:participateHappening.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'schedule'  => $schedule,
+            'happening' => $happening,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "happening",
+     *   class="Proximum\Vimeet\Domain\Model\Happening",
+     *   options={"id" = "happening_id"}
+     * )
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param Schedule  $schedule
+     * @param Happening $happening
+     *
+     * @return RedirectResponse
+     */
+    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening)
+    {
+        // Get user participant
+        $participant = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+
+        if (!$participant) {
+            throw $this->createNotFoundException('Participant not found.');
+        }
+
+        // Unparticipate
+        $this
+            ->get('vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler')
+            ->handle(new Unparticipate($happening, $participant));
+
+        $this->addFlash('success', 'flash.event.schedule.happening.unparticipate.success');
 
         return $this->redirectToRoute('event_sheet_schedule', [
             'subdomain' => $request->attributes->get('subdomain'),

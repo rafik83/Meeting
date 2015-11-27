@@ -85,7 +85,8 @@ class ScheduleBuilder
                     $meetingSlot->getId(),
                     'Créneau de RdV',
                     $meetingSlot->getBegin(),
-                    $meetingSlot->getEnd()
+                    $meetingSlot->getEnd(),
+                    false
                 );
             }
 
@@ -96,7 +97,8 @@ class ScheduleBuilder
                     $happening->getId(),
                     $happening->getTitle(),
                     $happening->getBegin(),
-                    $happening->getEnd()
+                    $happening->getEnd(),
+                    false
                 );
             }
 
@@ -107,7 +109,8 @@ class ScheduleBuilder
                     $unavailability->getId(),
                     'Indisponible',
                     $unavailability->getBegin(),
-                    $unavailability->getEnd()
+                    $unavailability->getEnd(),
+                    false
                 );
             }
 

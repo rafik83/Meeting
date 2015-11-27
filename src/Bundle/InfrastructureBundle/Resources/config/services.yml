@@ -54,6 +54,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.happening_participation_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -158,6 +162,14 @@ services:
             - @vimeet_infrastructure.adapter.encoder_adapter
             - @vimeet_infrastructure.adapter.salt_generator
             - @vimeet_infrastructure.repository.forgotten_password_token_repository
+    vimeet_infrastructure.vimeet.application.components.happening.participate_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.happening_participation_repository
+    vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\UnparticipateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.happening_participation_repository
 
     #
     # Security

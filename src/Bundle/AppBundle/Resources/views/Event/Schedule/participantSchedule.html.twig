@@ -15,9 +15,9 @@
                 {% for slot in column|default([]) %}
                     <div style="border-top:1px solid #333;">
                         {% if slot.begin == slot.end %}
-                            <p>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
+                            <p{% if slot.active %} style="font-weight: bold;"{% endif %}>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
                         {% else %}
-                            <p>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
+                            <p{% if slot.active %} style="font-weight: bold;"{% endif %}>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
                         {% endif %}
                         {% if type == 'unavailabilities' %}
                             <a href="{{ path('event_sheet_schedule_update_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" class="btn btn-primary btn-xs">Modifier</a>
@@ -25,6 +25,14 @@
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit" class="btn btn-danger btn-xs">Supprimer</button>
                             </form>
+                        {% elseif type == 'happenings' %}
+                            {% if slot.active %}
+                                <form action="{{ path('event_sheet_schedule_unparticipate_happening', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'happening_id': slot.id }) }}" method="POST" style="display: inline">
+                                    <button type="submit" class="btn btn-danger btn-xs">Je ne participe pas</button>
+                                </form>
+                            {% else %}
+                                <a href="{{ path('event_sheet_schedule_participate_happening', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'happening_id': slot.id }) }}" class="btn btn-primary btn-xs">Je participe</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}
