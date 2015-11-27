@@ -50,6 +50,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.meeting.request_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
+        arguments:
+            - @doctrine.orm.entity_manager
 
     #
     # Fixture providers
@@ -254,6 +258,15 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.schedule_repository
             - @vimeet_infrastructure.repository.unavailability_repository
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+
+    #
+    # Meeting Component
+    #
+    vimeet_infrastructure.application.components.meeting.request_views_builder:
+        class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.sheet_info_guesser
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #

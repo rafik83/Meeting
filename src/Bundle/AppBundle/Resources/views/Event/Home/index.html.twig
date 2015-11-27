@@ -17,6 +17,18 @@
                     <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
                         {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
                     </a>
+                    <ul>
+                        <li>
+                            <a href="{{ path('event_meeting_list_request', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                                {{ 'event.link.see_meeting_request'|trans() }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('event_meeting_list_proposition', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                                {{ 'event.link.see_meeting_proposition'|trans() }}
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="{{ path('event_sheet_schedule', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
