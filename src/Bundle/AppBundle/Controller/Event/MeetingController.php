@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
@@ -86,7 +87,7 @@ class MeetingController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $createRequest = new CreateRequest($from, $to);
+        $createRequest = new CreateRequest($from, $to, new DateTime);
         $form          = $this->createForm('meeting_request_create', $createRequest, [
             'sheet' => $from
         ]);
