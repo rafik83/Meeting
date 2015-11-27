@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use DateTime;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -31,8 +32,9 @@ class CreateRequest
 
     public function __construct(Sheet $from, Sheet $to)
     {
-        $this->from  = $from;
-        $this->to    = $to;
-        $this->state = Request::STATE_SENT;
+        $this->from      = $from;
+        $this->to        = $to;
+        $this->state     = Request::STATE_SENT;
+        $this->createdAt = new DateTime;
     }
 }
