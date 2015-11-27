@@ -51,4 +51,12 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function search($category, $user);
+
+    /**
+     * @param User  $user
+     * @param array $types
+     *
+     * @return Sheet[]
+     */
+    public function getUserSheetsByTypes(User $user, array $types);
 }
