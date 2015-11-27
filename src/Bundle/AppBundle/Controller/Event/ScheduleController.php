@@ -56,6 +56,7 @@ class ScheduleController extends Controller
 
         $participantSchedule = [
             'participant' => $participant,
+            'name'        => $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant),
             'schedules'   => [],
         ];
 
