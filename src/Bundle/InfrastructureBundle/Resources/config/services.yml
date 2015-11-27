@@ -142,6 +142,11 @@ services:
             - @vimeet_infrastructure.adapter.encoder_adapter
             - @vimeet_infrastructure.adapter.salt_generator
             - @vimeet_infrastructure.repository.forgotten_password_token_repository
+    vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
+        arguments:
+            - @vimeet_infrastructure.repository.participant_repository
+            - @vimeet_infrastructure.repository.meeting.request_repository
 
     #
     # Security
@@ -196,6 +201,9 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+            - @vimeet_infrastructure.repository.type_repository
+            - @vimeet_infrastructure.repository.sheet_repository
+            - @vimeet_infrastructure.repository.meeting.request_repository
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:

@@ -12,11 +12,16 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Rule\RuleManager;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\SheetCatalogView;
 use Proximum\Vimeet\Domain\View\SheetDataView;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SheetManager
 {
@@ -31,17 +36,36 @@ class SheetManager
     private $ruleManager;
 
     /**
+     * @var TypeRepositoryInterface
+     */
+    private $typeRepository;
+
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $requestRepository;
+
+    /**
      * SheetManager constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
      * @param RuleManager                    $ruleManager
+     * @param TypeRepositoryInterface        $typeRepository
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param RequestRepositoryInterface     $requestRepository
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
-        RuleManager $ruleManager
+        RuleManager $ruleManager,
+        TypeRepositoryInterface $typeRepository,
+        SheetRepositoryInterface $sheetRepository,
+        RequestRepositoryInterface $requestRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->ruleManager           = $ruleManager;
+        $this->typeRepository        = $typeRepository;
+        $this->sheetRepository       = $sheetRepository;
+        $this->requestRepository     = $requestRepository;
     }
 
     /**
@@ -86,5 +110,74 @@ class SheetManager
             $sheet->getType()->getParticipantTemplate(),
             $sheet->getParticipants()->toArray()
         );
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     *
+     * @return Sheet[]
+     */
+    public function getUserSheetsThatCanSeeTheGivenSheet(User $user, Sheet $sheet)
+    {
+        $typesThatCanSee = $this->typeRepository->getSeeableTypeIdsBySheet($sheet);
+        $typesForUser    = $this->typeRepository->getAllTypesByUser($user);
+
+        $userTypeThatCanSeeTheSheet = [];
+        array_flip($typesThatCanSee);
+
+        foreach ($typesForUser as $type) {
+            if (isset($typesThatCanSee[$type->getId()])) {
+                $userTypeThatCanSeeTheSheet[] = $type;
+            }
+        }
+
+        $sheets = $this->sheetRepository->getUserSheetsByTypes($user, $userTypeThatCanSeeTheSheet);
+
+        $sheets = array_filter($sheets, function ($sheetOfUser) use ($sheet) {
+            if ($sheetOfUser === $sheet) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return $this->getSheetsWithoutMeetingRequestForTheGivenSheet($sheet, $sheets);
+    }
+
+    /**
+     * @param Sheet $to
+     * @param Sheet $from
+     *
+     * @throws AccessDeniedException
+     */
+    public function isAllowedToRequestMeeting(Sheet $to, Sheet $from)
+    {
+        if (empty($this->getSheetsWithoutMeetingRequestForTheGivenSheet($to, [$from]))) {
+            throw new AccessDeniedException('You are not allowed to request a meeting with this sheet');
+        }
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
+     */
+    private function getSheetsWithoutMeetingRequestForTheGivenSheet(Sheet $sheet, array $sheets)
+    {
+        $allowedSheets = $sheets;
+
+        foreach ($sheets as $givenSheetKey => $givenSheet) {
+            $requests = $this->requestRepository->getAllRequestBySheet($givenSheet);
+
+            foreach ($requests as $request) {
+                if (($request->getTo() === $sheet || $request->getFrom() === $sheet) && $request->getState() !== Request::STATE_REFUSED) {
+                    unset($allowedSheets[$givenSheetKey]);
+                }
+            }
+        }
+
+        return $allowedSheets;
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -94,10 +95,15 @@ class CatalogController extends Controller
                 ->get('vimeet_infrastructure.application.components.sheet.manager')
                 ->getSheetDataViewByUser($this->getUser(), $sheet);
 
+            $sheetAllowedForMeetingRequest = $this
+                ->get('vimeet_infrastructure.application.components.sheet.manager')
+                ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
+
             return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
-                'eventView'    => $eventView,
-                'categoryView' => $categoryView,
-                'sheet'        => $sheetView,
+                'eventView'                     => $eventView,
+                'categoryView'                  => $categoryView,
+                'sheet'                         => $sheetView,
+                'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,
             ]);
         } catch (NoRuleFoundException $exception) {
             throw $this->createNotFoundException($exception->getMessage(), $exception);

@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MeetingController extends BaseController
@@ -63,6 +66,52 @@ class MeetingController extends BaseController
             'eventView'         => $eventView,
             'sheet'             => $sheet,
             'proposition_views' => $propositionViews,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView    $eventView
+     * @param CategoryView $categoryView
+     * @param Sheet        $to
+     * @param Sheet        $from
+     *
+     * @return Response
+     */
+    public function createRequestAction(Request $request, EventView $eventView, CategoryView $categoryView, Sheet $to, Sheet $from)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($from->getParticipants());
+        $this->get('vimeet_infrastructure.application.components.sheet.manager')->isAllowedToRequestMeeting($to, $from);
+
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
+
+        $createRequest = new CreateRequest($from, $to);
+        $form          = $this->createForm('meeting_request_create', $createRequest, [
+            'sheet' => $from
+        ]);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler')
+                ->handle($createRequest);
+
+            $this->addFlash('success', 'flash.meeting_request.create.success');
+
+            return $this->redirectToRoute('event_catalog_category', [
+                'subdomain'    => $request->attributes->get('subdomain'),
+                'categoryView' => $categoryView->id,
+            ]);
+        }
+        $fromName = $sheetInfoGuesser->guessSheetInfo($from);
+        $toName   = $sheetInfoGuesser->guessSheetInfo($to);
+
+        return $this->render('VimeetAppBundle:Event/Meeting:createRequest.html.twig', [
+            'eventView' => $eventView,
+            'fromName'  => $fromName,
+            'toName'    => $toName,
+            'form'      => $form->createView(),
         ]);
     }
 }
