@@ -26,12 +26,16 @@ class CreateRequestHandler
     public function __construct(
         RequestRepositoryInterface $requestRepository
     ) {
-        $this->requestRepository     = $requestRepository;
+        $this->requestRepository = $requestRepository;
     }
 
+    /**
+     * @param CreateRequest $createRequest
+     */
     public function handle(CreateRequest $createRequest)
     {
         $fromParticipants = [];
+
         if (!empty($createRequest->fromParticipants)) {
             foreach ($createRequest->fromParticipants as $fromParticipant) {
                 foreach ($createRequest->from->getParticipants() as $sheetParticipant) {
