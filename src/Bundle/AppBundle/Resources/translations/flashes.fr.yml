@@ -22,6 +22,9 @@ flash:
             success: Les informations ont bien été enregistrées
         update_billing:
             success: Les informations de facturation ont bien été enregistrées
+    meeting_request:
+        create:
+            success: Votre demande de rendez-vous a bien été transmise
     package:
         update_step:
             success: Les informations ont bien été enregistrées

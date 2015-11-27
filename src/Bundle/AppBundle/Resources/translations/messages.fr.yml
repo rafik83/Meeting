@@ -94,6 +94,7 @@ event:
             state: Statut
             from: Venant de
             participants: Les participants
+            description: Description
             createdAt: Reçu le
         request:
             state:
@@ -105,6 +106,12 @@ event:
                     sent: Reçu
                     approved: Accepté
                     refused: Refusé
+        createRequest:
+            title: Demande de rendez-vous
+            destination: Pour %toName% avec la fiche %fromName%
+    catalog:
+        sheet:
+            meetingRequest: Demandez un rendez-vous
 
 template:
     name:
