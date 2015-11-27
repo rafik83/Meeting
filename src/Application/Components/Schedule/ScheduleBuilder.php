@@ -1,0 +1,148 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Schedule;
+
+use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\ScheduleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\View\ScheduleSlotView;
+
+class ScheduleBuilder
+{
+    /**
+     * @var ScheduleRepositoryInterface
+     */
+    private $scheduleRepository;
+
+    /**
+     * @var UnavailabilityRepositoryInterface
+     */
+    private $unavailabilityRepository;
+
+    /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
+     * ScheduleBuilder constructor.
+     *
+     * @param ScheduleRepositoryInterface       $scheduleRepository
+     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
+     * @param ParticipantInfoGuesser            $participantInfoGuesser
+     */
+    public function __construct(
+        ScheduleRepositoryInterface $scheduleRepository,
+        UnavailabilityRepositoryInterface $unavailabilityRepository,
+        ParticipantInfoGuesser $participantInfoGuesser
+    ) {
+        $this->scheduleRepository       = $scheduleRepository;
+        $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->participantInfoGuesser   = $participantInfoGuesser;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return array
+     */
+    public function buildForPartcipant(Participant $participant)
+    {
+        $schedules = $this->scheduleRepository->findByEvent($participant->getSheet()->getEvent());
+
+        $participantSchedule = [
+            'participant' => $participant,
+            'name'        => $this->participantInfoGuesser->guessParticipantInfo($participant),
+            'schedules'   => [],
+        ];
+
+        foreach ($schedules as $i => $schedule) {
+
+            $participantSchedule['schedules'][$i] = [
+                'id'      => $schedule->getId(),
+                'date'    => $schedule->getDate(),
+                'columns' => [
+                    'meetingSlots'   => [],
+                    'happenings'      => [],
+                    'unavailabilities' => [],
+                ],
+            ];
+
+            // Meeting slots
+            $meetingSlots = $schedule->getMeetingSlots();
+            foreach ($meetingSlots as $meetingSlot) {
+                $participantSchedule['schedules'][$i]['columns']['meetingSlots'][] = new ScheduleSlotView(
+                    $meetingSlot->getId(),
+                    'Créneau de RdV',
+                    $meetingSlot->getBegin(),
+                    $meetingSlot->getEnd()
+                );
+            }
+
+            // Happening
+            $happenings = $schedule->getHappenings();
+            foreach ($happenings as $happening) {
+                $participantSchedule['schedules'][$i]['columns']['happenings'][] = new ScheduleSlotView(
+                    $happening->getId(),
+                    $happening->getTitle(),
+                    $happening->getBegin(),
+                    $happening->getEnd()
+                );
+            }
+
+            // Unavailabilities
+            $unavailabilities = $this->unavailabilityRepository->findByScheduleAndParticipant($schedule, $participant);
+            foreach ($unavailabilities as $unavailability) {
+                $participantSchedule['schedules'][$i]['columns']['unavailabilities'][] = new ScheduleSlotView(
+                    $unavailability->getId(),
+                    'Indisponible',
+                    $unavailability->getBegin(),
+                    $unavailability->getEnd()
+                );
+            }
+
+            // Sort
+            $this->sort($participantSchedule['schedules'][$i]['columns']['meetingSlots']);
+            $this->sort($participantSchedule['schedules'][$i]['columns']['happenings']);
+            $this->sort($participantSchedule['schedules'][$i]['columns']['unavailabilities']);
+        }
+
+        return $participantSchedule;
+    }
+
+    /**
+     * @param array $slots
+     */
+    private function sort(array &$slots)
+    {
+        usort($slots, function (ScheduleSlotView $one, ScheduleSlotView $another) {
+            return $one->begin->getTimestamp() - $another->begin->getTimestamp();
+        });
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    public function buildForSheet(Sheet $sheet)
+    {
+        $participantSchedules = [];
+
+        foreach ($sheet->getParticipants() as $participant) {
+            $participantSchedules[] = $this->buildForPartcipant($participant);
+        }
+
+        return $participantSchedules;
+    }
+}

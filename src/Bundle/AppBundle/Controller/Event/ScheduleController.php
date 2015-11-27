@@ -15,12 +15,10 @@ use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\View\EventView;
-use Proximum\Vimeet\Domain\View\ScheduleSlotView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,79 +37,15 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $participantSchedules = $this->getParticipantsSchedulesBySheet($sheet);
+        $participantSchedules = $this
+            ->get('proximum.vimeet.application.components.schedule.schedule_builder')
+            ->buildForSheet($sheet);
 
         return $this->render('VimeetAppBundle:Event/Schedule:display.html.twig', [
             'eventView'            => $eventView,
             'participantSchedules' => $participantSchedules,
             'sheet'                => $sheet,
         ]);
-    }
-
-    private function getParticipantSchedule(Participant $participant)
-    {
-        $schedules = $this
-            ->get('vimeet_infrastructure.repository.schedule_repository')
-            ->findByEvent($participant->getSheet()->getEvent());
-
-        $participantSchedule = [
-            'participant' => $participant,
-            'name'        => $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant),
-            'schedules'   => [],
-        ];
-
-        foreach ($schedules as $i => $schedule) {
-
-            $participantSchedule['schedules'][$i] = [
-                'id'      => $schedule->getId(),
-                'date'    => $schedule->getDate(),
-                'columns' => [
-                    'meetingSlots'   => [],
-                    'happenings'      => [],
-                    'unavailabilities' => [],
-                ],
-            ];
-
-            // Meeting slots
-            $meetingSlots = $schedule->getMeetingSlots();
-            foreach ($meetingSlots as $meetingSlot) {
-                $participantSchedule['schedules'][$i]['columns']['meetingSlots'][] = new ScheduleSlotView($meetingSlot->getId(), 'Créneau de RdV', $meetingSlot->getBegin(), $meetingSlot->getEnd());
-            }
-            usort($participantSchedule['schedules'][$i]['columns']['meetingSlots'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
-                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
-            });
-
-            // Happening
-            $happenings = $schedule->getHappenings();
-            foreach ($happenings as $happening) {
-                $participantSchedule['schedules'][$i]['columns']['happenings'][] = new ScheduleSlotView($happening->getId(), $happening->getTitle(), $happening->getBegin(), $happening->getEnd());
-            }
-            usort($participantSchedule['schedules'][$i]['columns']['happenings'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
-                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
-            });
-
-            // Unavailabilities
-            $unavailabilities = $this->get('vimeet_infrastructure.repository.unavailability_repository')->findByScheduleAndParticipant($schedule, $participant);
-            foreach ($unavailabilities as $unavailability) {
-                $participantSchedule['schedules'][$i]['columns']['unavailabilities'][] = new ScheduleSlotView($unavailability->getId(), 'Indisponible', $unavailability->getBegin(), $unavailability->getEnd());
-            }
-            usort($participantSchedule['schedules'][$i]['columns']['unavailabilities'], function (ScheduleSlotView $one, ScheduleSlotView $another) {
-                return $one->begin->getTimestamp() - $another->begin->getTimestamp();
-            });
-        }
-
-        return $participantSchedule;
-    }
-
-    private function getParticipantsSchedulesBySheet(Sheet $sheet)
-    {
-        $participantSchedules = [];
-
-        foreach ($sheet->getParticipants() as $participant) {
-            $participantSchedules[] = $this->getParticipantSchedule($participant);
-        }
-
-        return $participantSchedules;
     }
 
     /**

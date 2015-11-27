@@ -247,6 +247,16 @@ services:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
 
     #
+    # Schedule component
+    #
+    proximum.vimeet.application.components.schedule.schedule_builder:
+        class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
+        arguments:
+            - @vimeet_infrastructure.repository.schedule_repository
+            - @vimeet_infrastructure.repository.unavailability_repository
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+
+    #
     # DateTime
     #
     datetime:
