@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Sheet;

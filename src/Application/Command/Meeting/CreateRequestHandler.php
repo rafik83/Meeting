@@ -12,29 +12,20 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class CreateRequestHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
-    private $participantRepository;
-
     /**
      * @var RequestRepositoryInterface
      */
     private $requestRepository;
 
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
      * @param RequestRepositoryInterface $requestRepository
      */
     public function __construct(
-        ParticipantRepositoryInterface $participantRepository,
         RequestRepositoryInterface $requestRepository
     ) {
-        $this->participantRepository = $participantRepository;
         $this->requestRepository     = $requestRepository;
     }
 
