@@ -37,8 +37,7 @@ class RequestType extends AbstractType
     {
         $participants = [];
 
-        foreach($options['sheet']->getParticipants() as $participant)
-        {
+        foreach ($options['sheet']->getParticipants() as $participant) {
             $participants[$participant->getId()] = $this->participantInfoGuesser->guessParticipantInfo($participant);
         }
 
@@ -50,7 +49,7 @@ class RequestType extends AbstractType
                 'required' => false,
             ])
             ->add('description', 'textarea', [
-                'required' => true,
+                'required' => false,
             ]);
     }
 
