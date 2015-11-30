@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -44,10 +45,36 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Unavailability $unavailability)
+    {
+        $this->entityManager->flush($unavailability);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(Unavailability $unavailability)
     {
         $this->entityManager->remove($unavailability);
         $this->entityManager->flush($unavailability);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->where('unavailability.participant = :participant')
+            ->setParameter('participant', $participant)
+            ->andWhere('unavailability.schedule = :schedule')
+            ->setParameter('schedule', $schedule);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -93,6 +120,12 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ))
             ->setParameter('begin', $unavailability->getBegin())
             ->setParameter('end', $unavailability->getEnd());
+
+        if ($unavailability->getId()) {
+            $queryBuilder
+                ->andWhere('unavailability.id != :id')
+                ->setParameter('id', $unavailability->getId());
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

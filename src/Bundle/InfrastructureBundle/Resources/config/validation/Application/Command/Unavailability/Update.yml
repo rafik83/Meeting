@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability:
+Proximum\Vimeet\Application\Command\Unavailability\Update:
     constraints:
         - Expression:
             expression: "this.from < this.to"
@@ -10,9 +10,3 @@ Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability:
         to:
             - NotBlank: ~
             - DateTime: ~
-        participants:
-            - NotBlank: ~
-            - Count:
-                min: 1
-            - All:
-                - Type: { type: object }

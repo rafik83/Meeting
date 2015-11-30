@@ -240,7 +240,7 @@ event_sheet_schedule:
     defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
 
 event_sheet_schedule_add_unavailability:
-    path: /sheet/{id}/schedule/{schedule_id}/add-unavailability
+    path: /sheet/{id}/schedule/{schedule_id}/unavailability/add
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
@@ -248,6 +248,28 @@ event_sheet_schedule_add_unavailability:
         schedule_id: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
+
+event_sheet_schedule_update_unavailability:
+    path: /sheet/{id}/schedule/{schedule_id}/unavailability/{unavailability_id}/update
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        unavailability_id: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:updateUnavailability }
+
+event_sheet_schedule_remove_unavailability:
+    path: /sheet/{id}/schedule/{schedule_id}/unavailability/{unavailability_id}/remove
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        unavailability_id: \d+
+    methods:  [DELETE]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:removeUnavailability }
 
 #
 # Meeting

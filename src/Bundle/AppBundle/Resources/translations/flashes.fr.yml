@@ -5,8 +5,13 @@ flash:
         participation:
             success: Votre fiche de participation a été sauvegardée
         schedule:
-            add_unavailability:
-                success: Votre indisponibilité a bien été ajouté
+            unavailability:
+                add:
+                    success: Votre indisponibilité a bien été ajoutée
+                update:
+                    success: L'indisponibilité a bien été mise à jour
+                remove:
+                    success: L'indisponibilité a bien été supprimée
     change_password:
         success: Votre mot de passe a été changé
     new_password:

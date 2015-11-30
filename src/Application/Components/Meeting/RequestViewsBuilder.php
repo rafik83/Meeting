@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;

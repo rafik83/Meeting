@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Unavailability;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class AddUnavailability
+class Add
 {
     /**
      * @var Schedule

@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
-use Proximum\Vimeet\Application\Command\Unavailability\Add;
+use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddUnavailabilityType extends AbstractType
+class UpdateUnavailabilityType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -33,11 +33,6 @@ class AddUnavailabilityType extends AbstractType
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
-            ->add('participants', 'participant_choice', [
-                'sheet'      => $options['sheet'],
-                'multiple'   => true,
-                'expanded'   => true,
-            ])
         ;
     }
 
@@ -46,13 +41,9 @@ class AddUnavailabilityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
-            'sheet'
-        ]);
-
         $resolver->setDefaults([
-            'data_class' => Add::class,
-            'intention'  => 'add_unavailability',
+            'data_class' => Update::class,
+            'intention'  => 'update_unavailability',
         ]);
     }
 
@@ -61,6 +52,6 @@ class AddUnavailabilityType extends AbstractType
      */
     public function getName()
     {
-        return 'add_unavailability';
+        return 'update_unavailability';
     }
 }

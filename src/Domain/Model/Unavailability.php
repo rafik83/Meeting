@@ -116,4 +116,14 @@ class Unavailability
             $this->end = $unavailability->getEnd();
         }
     }
+
+    /**
+     * @param \DateTime $begin
+     * @param \DateTime $end
+     */
+    public function update(\DateTime $begin, \DateTime $end)
+    {
+        $this->begin = $begin;
+        $this->end   = $end;
+    }
 }
