@@ -1,0 +1,18 @@
+Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability:
+    constraints:
+        - Expression:
+            expression: "this.from < this.to"
+            message: "validators.constraint.daterange"
+    properties:
+        from:
+            - NotBlank: ~
+            - DateTime: ~
+        to:
+            - NotBlank: ~
+            - DateTime: ~
+        participants:
+            - NotBlank: ~
+            - Count:
+                min: 1
+            - All:
+                - Type: { type: object }

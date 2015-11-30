@@ -12,4 +12,5 @@ validators:
         participant:
             optionCanNotBeUnselected: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
             alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
-
+    constraint:
+        daterange: L'heure de début doit être antérieure à l'heure de fin
