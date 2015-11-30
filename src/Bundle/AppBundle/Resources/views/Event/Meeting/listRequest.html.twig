@@ -9,6 +9,7 @@
             <th>{{ 'event.meeting.listRequest.state'|trans }}</th>
             <th>{{ 'event.meeting.listRequest.to'|trans }}</th>
             <th>{{ 'event.meeting.listRequest.participants'|trans }}</th>
+            <th>{{ 'event.meeting.listRequest.informations'|trans }}</th>
             <th>{{ 'event.meeting.listRequest.createdAt'|trans }}</th>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
                             {{ participantNameView.participantName }}<br>
                         {% endfor %}
                     </td>
+                    <td>{{ request_view.refuseMessage|nl2br }}</td>
                     <td>{{ request_view.createdAt|date('Y-m-d') }}</td>
                 </tr>
             {% endfor %}

@@ -40,7 +40,12 @@
                         'subdomain': app.request.attributes.get('subdomain'),
                         'id': sheet.id,
                         'meetingRequest': proposition_view.id
-                    }) }}">{{ 'event.meeting.listProposition.accept'|trans() }}</a>
+                    }) }}" class="btn-xs alert-success">{{ 'event.meeting.listProposition.accept'|trans() }}</a>
+                    <a href="{{ path('event_meeting_request_refused', {
+                        'subdomain': app.request.attributes.get('subdomain'),
+                        'id': sheet.id,
+                        'meetingRequest': proposition_view.id
+                    }) }}" class="btn-xs alert-danger">{{ 'event.meeting.listProposition.refuse'|trans() }}</a>
                     {% endif %}
                 </td>
             </tr>
