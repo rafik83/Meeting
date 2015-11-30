@@ -135,11 +135,7 @@ class SheetManager
         $sheets = $this->sheetRepository->getUserSheetsByTypes($user, $userTypeThatCanSeeTheSheet);
 
         $sheets = array_filter($sheets, function ($sheetOfUser) use ($sheet) {
-            if ($sheetOfUser === $sheet) {
-                return false;
-            } else {
-                return true;
-            }
+            return $sheetOfUser == $sheet ? false : true;
         });
 
         return $this->getSheetsWithoutMeetingRequestForTheGivenSheet($sheet, $sheets);

@@ -111,7 +111,7 @@ event:
             destination: Pour %toName% avec la fiche %fromName%
     catalog:
         sheet:
-            meetingRequest: Demandez un rendez-vous
+            meetingRequest: Demander un rendez-vous
         category:
             seeSheet: Voir la fiche
 
