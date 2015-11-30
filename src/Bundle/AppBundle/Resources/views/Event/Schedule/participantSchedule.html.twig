@@ -2,7 +2,7 @@
 
 {% for schedule in participantSchedule.schedules %}
 
-    <h3>{{ schedule['date']|date('d/m/Y') }}</h3>
+    <h3>{{ schedule.date|date('d/m/Y') }}</h3>
 
     <p>
         <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
@@ -10,7 +10,7 @@
 
     <div class="row">
 
-        {% for type, column in schedule['columns'] %}
+        {% for type, column in schedule.columns %}
             <div class="col-md-{{ 12 / schedule|length }}">
                 {% for slot in column|default([]) %}
                     <div style="border-top:1px solid #333;">
