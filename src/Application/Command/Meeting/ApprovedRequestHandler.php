@@ -27,7 +27,6 @@ class ApprovedRequestHandler
         $this->requestRepository = $requestRepository;
     }
 
-
     /**
      * @param ApprovedRequest $approvedRequest
      */
