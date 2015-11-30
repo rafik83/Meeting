@@ -67,7 +67,6 @@ class ScheduleBuilder
         ];
 
         foreach ($schedules as $i => $schedule) {
-
             $participantSchedule['schedules'][$i] = [
                 'id'      => $schedule->getId(),
                 'date'    => $schedule->getDate(),
