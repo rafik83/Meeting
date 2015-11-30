@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
 
+use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,9 +25,17 @@ class ParticipateHappeningType extends AbstractType
     {
         $builder
             ->add('participants', 'participant_choice', [
-                'sheet'      => $options['sheet'],
-                'multiple'   => true,
-                'expanded'   => true,
+                'sheet'         => $options['sheet'],
+                'multiple'      => true,
+                'expanded'      => true,
+                'query_builder' => function (EntityRepository $entityRepository) use ($options) {
+                    return $entityRepository
+                        ->createQueryBuilder('participant')
+                        ->where('participant.sheet = :sheet')
+                        ->setParameter('sheet', $options['sheet'])
+                        ->andWhere('NOT EXISTS (SELECT ph.id FROM Entity:HappeningParticipation ph WHERE ph.happening = :happening AND ph.participant = participant)')
+                        ->setParameter('happening', $options['happening']);
+                },
             ])
         ;
     }
@@ -36,7 +45,8 @@ class ParticipateHappeningType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-            'sheet'
+            'sheet',
+            'happening',
         ]);
 
         $resolver->setDefaults([

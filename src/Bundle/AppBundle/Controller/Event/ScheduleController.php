@@ -227,7 +227,8 @@ class ScheduleController extends Controller
         // Command and form
         $command = new Participate($happening, [$participant]);
         $form    = $this->createForm(new ParticipateHappeningType(), $command, [
-            'sheet' => $sheet,
+            'sheet'     => $sheet,
+            'happening' => $happening,
         ]);
         $form->add('submit', 'submit');
 
