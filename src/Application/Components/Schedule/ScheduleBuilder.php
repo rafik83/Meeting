@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Schedule;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScheduleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\ScheduleSlotView;
@@ -30,6 +31,11 @@ class ScheduleBuilder
     private $unavailabilityRepository;
 
     /**
+     * @var HappeningRepositoryInterface
+     */
+    private $happeningRepository;
+
+    /**
      * @var ParticipantInfoGuesser
      */
     private $participantInfoGuesser;
@@ -37,18 +43,21 @@ class ScheduleBuilder
     /**
      * ScheduleBuilder constructor.
      *
-     * @param ScheduleRepositoryInterface       $scheduleRepository
-     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
-     * @param ParticipantInfoGuesser            $participantInfoGuesser
+     * @param ScheduleRepositoryInterface               $scheduleRepository
+     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
+     * @param HappeningRepositoryInterface $happeningRepository
+     * @param ParticipantInfoGuesser                    $participantInfoGuesser
      */
     public function __construct(
         ScheduleRepositoryInterface $scheduleRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
+        HappeningRepositoryInterface $happeningRepository,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->scheduleRepository       = $scheduleRepository;
-        $this->unavailabilityRepository = $unavailabilityRepository;
-        $this->participantInfoGuesser   = $participantInfoGuesser;
+        $this->scheduleRepository               = $scheduleRepository;
+        $this->unavailabilityRepository         = $unavailabilityRepository;
+        $this->happeningRepository = $happeningRepository;
+        $this->participantInfoGuesser           = $participantInfoGuesser;
     }
 
     /**
@@ -91,13 +100,14 @@ class ScheduleBuilder
 
             // Happening
             $happenings = $schedule->getHappenings();
+            $participations = $this->happeningRepository->findByScheduleAndParticipant($schedule, $participant);
             foreach ($happenings as $happening) {
                 $participantSchedule['schedules'][$i]['columns']['happening'][] = new ScheduleSlotView(
                     $happening->getId(),
                     $happening->getTitle(),
                     $happening->getBegin(),
                     $happening->getEnd(),
-                    false
+                    in_array($happening, $participations)
                 );
             }
 

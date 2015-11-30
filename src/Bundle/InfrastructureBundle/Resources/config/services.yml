@@ -54,6 +54,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.happening_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
+        arguments:
+            - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
@@ -270,6 +274,7 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.schedule_repository
             - @vimeet_infrastructure.repository.unavailability_repository
+            - @vimeet_infrastructure.repository.happening_repository
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #

@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
-use Proximum\Vimeet\Domain\Repository\HappeneningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class UnparticipateHandler
 {
     /**
-     * @var HappeneningParticipationRepositoryInterface
+     * @var HappeningParticipationRepositoryInterface
      */
     private $happeneningParticipationRepository;
 
     /**
      * ParticipateHandler constructor.
      *
-     * @param HappeneningParticipationRepositoryInterface $happeneningParticipationRepository
+     * @param HappeningParticipationRepositoryInterface $happeneningParticipationRepository
      */
-    public function __construct(HappeneningParticipationRepositoryInterface $happeneningParticipationRepository)
+    public function __construct(HappeningParticipationRepositoryInterface $happeneningParticipationRepository)
     {
         $this->happeneningParticipationRepository = $happeneningParticipationRepository;
     }

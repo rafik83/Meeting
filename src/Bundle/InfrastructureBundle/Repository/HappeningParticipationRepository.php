@@ -14,9 +14,10 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Repository\HappeneningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Schedule;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
-class HappeningParticipationRepository implements HappeneningParticipationRepositoryInterface
+class HappeningParticipationRepository implements HappeningParticipationRepositoryInterface
 {
     /**
      * @var EntityManager
@@ -66,5 +67,24 @@ class HappeningParticipationRepository implements HappeneningParticipationReposi
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.schedule = :schedule')
+            ->setParameter('schedule', $schedule)
+            ->where('participation.participant = :participant')
+            ->setParameter('participant', $participant)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
