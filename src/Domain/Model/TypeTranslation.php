@@ -46,7 +46,6 @@ class TypeTranslation
         $this->title  = $title;
     }
 
-
     /**
      * @return int
      */

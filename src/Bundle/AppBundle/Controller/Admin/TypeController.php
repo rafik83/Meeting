@@ -34,7 +34,7 @@ class TypeController extends Controller
     {
         $types = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->paginate($request->query->get('page', 1), 20, $request->getLocale());
+            ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Type:list.html.twig', [
             'event' => $event,
@@ -61,9 +61,8 @@ class TypeController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.type.create_handler')->handle($create);
             $this->addFlash('success', 'flash.admin.type.create.success');
 
-            return $this->redirectToRoute('admin_type_update', [
-                'id'      => $event->getId(),
-                'type_id' => $create->type->getId(),
+            return $this->redirectToRoute('admin_type_list', [
+                'id' => $event->getId(),
             ]);
         }
 
@@ -103,9 +102,8 @@ class TypeController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.type.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.type.update.success');
 
-            return $this->redirectToRoute('admin_type_update', [
-                'id'      => $event->getId(),
-                'type_id' => $type->getId(),
+            return $this->redirectToRoute('admin_type_list', [
+                'id' => $event->getId(),
             ]);
         }
 

@@ -10,18 +10,10 @@ Proximum\Vimeet\Domain\Model\Category:
 
 Proximum\Vimeet\Domain\Model\CategoryTranslation:
     category_exposant_fr:
-        category: @category_exposant
-        title: Exposant
-        locale: fr
+        __construct: [@category_exposant, "fr", "Exposant"]
     category_exposant_en:
-        category: @category_exposant
-        title: Exhibitor
-        locale: en
+        __construct: [@category_exposant, "en", "Exposant"]
     category_visiteur_fr:
-        category: @category_visiteur
-        title: Visiteur
-        locale: fr
+        __construct: [@category_visiteur, "fr", "Visiteur"]
     category_visiteur_en:
-        category: @category_visiteur
-        title: Visitor
-        locale: en
+        __construct: [@category_visiteur, "en", "Visitor"]
