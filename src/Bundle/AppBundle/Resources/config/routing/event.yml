@@ -299,8 +299,20 @@ event_sheet_schedule_unparticipate_happening:
         id: \d+
         schedule_id: \d+
         happening_id: \d+
+        participant_id: \d+
     methods:  [POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
+
+event_sheet_schedule_meeting:
+    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        meeting_id: \d+
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:meeting }
 
 #
 # Meeting
