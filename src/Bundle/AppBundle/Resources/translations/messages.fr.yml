@@ -112,6 +112,8 @@ event:
     catalog:
         sheet:
             meetingRequest: Demandez un rendez-vous
+        category:
+            seeSheet: Voir la fiche
 
 template:
     name:

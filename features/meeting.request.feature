@@ -7,8 +7,11 @@ Feature: Meeting Request / Proposition
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
       | User.yml                                                  |
       | Sheet.yml                                                 |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Sheet.yml    |
       | OneSheetSeveralParticipants.yml                           |
 
   Scenario: I can see my meeting request
@@ -32,3 +35,35 @@ Feature: Meeting Request / Proposition
     And I follow "event.link.see_meeting_proposition"
     Then the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/proposition"
+
+  Scenario: I can request someone for a rendez-vous
+    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
+    And the response status code should be 200
+    And I fill in "form.login.children.username.label" with "test@test.com"
+    And I fill in "form.login.children.password.label" with "p@ssw0rd"
+    And I press "form.login.children.submit.label"
+    Then the response status code should be 200
+    And I follow "event.link.see_catalog"
+    Then the response status code should be 200
+    And I follow "Exposant"
+    Then the response status code should be 200
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1"
+    And I should see "event.catalog.category.seeSheet"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1/sheet/2"
+    And I should see "event.catalog.sheet.meetingRequest"
+    Then I follow "event.catalog.sheet.meetingRequest"
+    And the response status code should be 200
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1/sheet/2/meeting/request/from/1"
+    And I check "Dutest Jean"
+    And I fill in the following:
+    | form.meeting_request_create.children.description.label | This is a test |
+    And I press "form.meeting_request_create.children.submit.label"
+    And the response status code should be 200
+    And I should see "flash.meeting_request.create.success"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request"
+    And the response status code should be 200
+    And I should see "event.meeting.request.state.from.sent"
+    And I should see "Elao"
+    And I should see "Dutest Jean"
+
+
