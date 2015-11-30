@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class RefusedRequestType extends AbstractType
+class RefuseRequestType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -31,6 +31,6 @@ class RefusedRequestType extends AbstractType
      */
     public function getName()
     {
-        return 'meeting_request_refused';
+        return 'meeting_request_refuse';
     }
 }

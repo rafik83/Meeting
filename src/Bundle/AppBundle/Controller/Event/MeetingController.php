@@ -147,7 +147,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $approveRequest = new ApproveRequest($meetingRequest);
-        $form           = $this->createForm('meeting_request_approved', $approveRequest, [
+        $form           = $this->createForm('meeting_request_approve', $approveRequest, [
             'sheet' => $meetingRequest->getTo()
         ]);
         $form->add('submit', 'submit');
@@ -196,7 +196,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $refuseRequest = new RefuseRequest($meetingRequest);
-        $form          = $this->createForm('meeting_request_refused', $refuseRequest);
+        $form          = $this->createForm('meeting_request_refuse', $refuseRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
