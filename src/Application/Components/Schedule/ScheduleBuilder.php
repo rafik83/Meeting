@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScheduleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -37,6 +38,11 @@ class ScheduleBuilder
     private $happeningRepository;
 
     /**
+     * @var HappeningParticipationRepositoryInterface
+     */
+    private $happeningParticipationRepository;
+
+    /**
      * @var ParticipantInfoGuesser
      */
     private $participantInfoGuesser;
@@ -46,18 +52,21 @@ class ScheduleBuilder
      *
      * @param ScheduleRepositoryInterface               $scheduleRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
-     * @param HappeningRepositoryInterface $happeningRepository
+     * @param HappeningRepositoryInterface              $happeningRepository
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param ParticipantInfoGuesser                    $participantInfoGuesser
      */
     public function __construct(
         ScheduleRepositoryInterface $scheduleRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         HappeningRepositoryInterface $happeningRepository,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->scheduleRepository               = $scheduleRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->happeningRepository = $happeningRepository;
+        $this->happeningRepository              = $happeningRepository;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->participantInfoGuesser           = $participantInfoGuesser;
     }
 
@@ -160,6 +169,18 @@ class ScheduleBuilder
                 'Indisponible',
                 $unavailability->getBegin(),
                 $unavailability->getEnd(),
+                true
+            );
+        }
+
+        $blockingHappeningParticipations = $this->happeningParticipationRepository->findBlockingByScheduleAndParticipant($schedule, $participant);
+
+        foreach ($blockingHappeningParticipations as $blockingHappeningParticipation) {
+            $slots[] = new ScheduleSlotView(
+                $blockingHappeningParticipation->getId(),
+                $blockingHappeningParticipation->getHappening()->getTitle(),
+                $blockingHappeningParticipation->getHappening()->getBegin(),
+                $blockingHappeningParticipation->getHappening()->getEnd(),
                 false
             );
         }

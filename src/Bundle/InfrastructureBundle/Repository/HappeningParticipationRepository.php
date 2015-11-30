@@ -87,4 +87,23 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBlockingByScheduleAndParticipant(Schedule $schedule, Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.schedule = :schedule AND happening.blocking = TRUE')
+            ->setParameter('schedule', $schedule)
+            ->where('participation.participant = :participant')
+            ->setParameter('participant', $participant)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

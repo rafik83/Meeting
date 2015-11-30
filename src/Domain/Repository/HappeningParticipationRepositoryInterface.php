@@ -42,4 +42,12 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation[]
      */
     public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant);
+
+    /**
+     * @param Schedule    $schedule
+     * @param Participant $participant
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findBlockingByScheduleAndParticipant(Schedule $schedule, Participant $participant);
 }
