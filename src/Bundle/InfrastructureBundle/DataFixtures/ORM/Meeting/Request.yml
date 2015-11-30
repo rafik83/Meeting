@@ -1,0 +1,47 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_request1:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        fromParticipants: [@participant_test, @participant_test_2]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_request2:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        fromParticipants: [@participant_test]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_request3:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_request4:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_request5:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        fromParticipants: [@participant_test]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_request6:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_test
+        to (unique): @sheet_exposant<biasedNumberBetween($min = 1, $max = 20, $function = 'sqrt')>
+        fromParticipants: [@participant_test, @participant_test_2, @participant_test_3, @participant_test_4]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>

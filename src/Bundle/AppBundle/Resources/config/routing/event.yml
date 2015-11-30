@@ -248,3 +248,24 @@ event_sheet_schedule_add_unavailability:
         schedule_id: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
+
+#
+# Meeting
+#
+event_meeting_list_request:
+    path: /sheet/{id}/meeting/request
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:listRequest }
+
+event_meeting_list_proposition:
+    path: /sheet/{id}/meeting/proposition
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:listProposition }

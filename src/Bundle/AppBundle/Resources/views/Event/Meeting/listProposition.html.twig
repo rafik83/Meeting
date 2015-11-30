@@ -1,0 +1,33 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title 'event.meeting.listProposition.title'|trans %}
+
+{% block content %}
+    <h2>{{ 'event.meeting.listProposition.title'|trans }}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <th>{{ 'event.meeting.listProposition.state'|trans }}</th>
+            <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
+            <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
+            <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
+        </thead>
+        <tbody>
+        {% set state = { approved: 'success', sent: 'info', refused: 'danger' } %}
+        {% for proposition_view in proposition_views %}
+            <tr>
+                <td>
+                    <span class="btn-xs alert-{{ state[proposition_view.state] }}">
+                        {{ ('event.meeting.request.state.to.' ~ proposition_view.state)|trans }}
+                    </span>
+                </td>
+                <td>{{ proposition_view.sheetNameFrom }}</td>
+                <td>{% for participantNameView in proposition_view.fromParticipants %}
+                        {{ participantNameView.participantName }}<br>
+                    {% endfor %}
+                </td>
+                <td>{{ proposition_view.createdAt|date('Y-m-d') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
