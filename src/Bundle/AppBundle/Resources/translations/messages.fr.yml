@@ -105,6 +105,14 @@ event:
                     sent: Reçu
                     approved: Accepté
                     refused: Refusé
+    schedule:
+        columns:
+            meeting:
+                title: Rendez-vous
+            happening:
+                title: Sous-événements
+            unavailability:
+                title: Indisponibilités
 
 template:
     name:

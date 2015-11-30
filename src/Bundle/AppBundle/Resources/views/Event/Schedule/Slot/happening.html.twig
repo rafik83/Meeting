@@ -6,8 +6,8 @@
 
 {% if slot.active %}
     <form action="{{ path('event_sheet_schedule_unparticipate_happening', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'happening_id': slot.id, 'participant_id': participant.id }) }}" method="POST" style="display: inline">
-        <button type="submit" class="btn btn-danger btn-xs">Je ne participe pas</button>
+        <button type="submit" class="btn btn-danger btn-xs">Ne pas participer</button>
     </form>
 {% else %}
-    <a href="{{ path('event_sheet_schedule_participate_happening', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'happening_id': slot.id }) }}" class="btn btn-primary btn-xs">Je participe</a>
+    <a href="{{ path('event_sheet_schedule_participate_happening', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'happening_id': slot.id }) }}" class="btn btn-primary btn-xs">Participer</a>
 {% endif %}

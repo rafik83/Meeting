@@ -112,7 +112,7 @@ class ScheduleBuilder
         foreach ($schedule->getMeetingSlots() as $meetingSlot) {
             $slots[] = new ScheduleSlotView(
                 $meetingSlot->getId(),
-                'Créneau de RdV',
+                'Vide',
                 $meetingSlot->getBegin(),
                 $meetingSlot->getEnd(),
                 false
