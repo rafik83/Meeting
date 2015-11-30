@@ -23,9 +23,8 @@ class CreateRequestHandler
     /**
      * @param RequestRepositoryInterface $requestRepository
      */
-    public function __construct(
-        RequestRepositoryInterface $requestRepository
-    ) {
+    public function __construct(RequestRepositoryInterface $requestRepository)
+    {
         $this->requestRepository = $requestRepository;
     }
 
@@ -46,7 +45,13 @@ class CreateRequestHandler
             }
         }
 
-        $request = new Request($createRequest->from, $fromParticipants, $createRequest->to, $createRequest->description, $createRequest->createdAt);
+        $request = new Request(
+            $createRequest->from,
+            $fromParticipants,
+            $createRequest->to,
+            $createRequest->description,
+            $createRequest->createdAt
+        );
         $this->requestRepository->add($request);
     }
 }
