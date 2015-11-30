@@ -15,7 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ApprovedRequestType extends AbstractType
+class ApproveRequestType extends AbstractType
 {
     /**
      * @var ParticipantInfoGuesser
@@ -63,6 +63,6 @@ class ApprovedRequestType extends AbstractType
      */
     public function getName()
     {
-        return 'meeting_request_approved';
+        return 'meeting_request_approve';
     }
 }
