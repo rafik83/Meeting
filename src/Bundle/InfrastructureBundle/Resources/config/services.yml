@@ -42,6 +42,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
         arguments:
             - @doctrine.orm.entity_manager
+    vimeet_infrastructure.repository.unavailability_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UnavailabilityRepository
+        arguments:
+            - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.forgotten_password_token_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
         arguments:
@@ -124,6 +128,18 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
+        arguments:
+            - @vimeet_infrastructure.repository.unavailability_repository
+    vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.unavailability_repository
+    vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
+        arguments:
+            - @vimeet_infrastructure.repository.unavailability_repository
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
         arguments:
@@ -240,6 +256,16 @@ services:
     #
     vimeet_infrastructure.application.components.sheet.participant_info_guesser:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
+
+    #
+    # Schedule component
+    #
+    proximum.vimeet.application.components.schedule.schedule_builder:
+        class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
+        arguments:
+            - @vimeet_infrastructure.repository.schedule_repository
+            - @vimeet_infrastructure.repository.unavailability_repository
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
 
     #
     # Meeting Component

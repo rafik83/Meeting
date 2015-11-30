@@ -28,7 +28,7 @@ event:
     link:
         see_my_sheet: Voir ma fiche %type%
         see_catalog: Voir le catalogue
-        see_schedule: Voir mon agenda
+        see_schedule: Voir mon agenda %type%
         see_meeting_request: Voir mes demandes de rendez-vous
         see_meeting_proposition: Voir mes propositions de rendez-vous
         go_back_to_sheet: Retourner à la fiche

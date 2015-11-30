@@ -189,6 +189,24 @@ form:
                 label: Motiver votre demande
             submit:
                 label: Envoyer
+    add_unavailability:
+        children:
+            from:
+                label: De
+            to:
+                label: À
+            participants:
+                label: Participants concernés
+            submit:
+                label: Ajouter
+    update_unavailability:
+        children:
+            from:
+                label: De
+            to:
+                label: À
+            submit:
+                label: Modifier
 
 country:
     placeholder: --- Sélectionner un pays ---

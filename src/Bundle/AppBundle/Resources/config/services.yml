@@ -1,8 +1,26 @@
 services:
-    vimeet_app.form_extension.translation_domain_extension:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
-        tags:
-            - { name: form.type_extension, alias: form }
+
+    #
+    # Controllers
+    #
+    controller.event.schedule.display:
+        class: Proximum\Vimeet\Bundle\AppBundle\Controller\Event\Schedule\DisplayController
+        arguments:
+            - @vimeet_infrastructure.repository.schedule_repository
+    controller.event.schedule.add_unavailability:
+        class: Proximum\Vimeet\Bundle\AppBundle\Controller\Event\Schedule\AddUnavailabilityController
+        arguments:
+            - @vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler
+
+    #
+    # Services
+    #
+    vimeet_app.service.participant_manager:
+        class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
+
+    #
+    # Params converters
+    #
     vimeet_app.param_converter.event_domain_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventViewDomainParamConverter
         arguments:
@@ -21,8 +39,14 @@ services:
             - @vimeet_infrastructure.repository.category_repository
         tags:
             - { name: request.param_converter, priority: 2, converter: category_view_param_converter }
-    vimeet_app.service.participant_manager:
-        class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
+
+    #
+    # Form extension
+    #
+    vimeet_app.form_extension.translation_domain_extension:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
+        tags:
+            - { name: form.type_extension, alias: form }
 
     #
     # Form type
@@ -39,6 +63,12 @@ services:
         arguments: [ @vimeet_infrastructure.application.components.sheet.participant_info_guesser ]
         tags:
             - { name: form.type, alias: meeting_request_create }
+    proximum_vimeet__app.form_type_participant.participant_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+        tags:
+            - { name: form.type, alias: participant_choice }
 
     #
     # Admin library form type
