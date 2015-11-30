@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 interface RequestRepositoryInterface
 {
     /**
+     * @param Request $request
+     */
+    public function add(Request $request);
+
+    /**
      * @param Sheet $sheet
      *
      * @return Request[]
@@ -28,4 +33,11 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getAllRequestBySheet(Sheet $sheet);
 }
