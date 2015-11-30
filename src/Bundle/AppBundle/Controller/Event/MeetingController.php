@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MeetingController extends BaseController
 {
@@ -140,6 +141,7 @@ class MeetingController extends BaseController
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($meetingRequest->getTo()->getParticipants());
+        $this->isAllowedToUpdateMeetingRequest($meetingRequest);
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
@@ -170,5 +172,17 @@ class MeetingController extends BaseController
             'toName'    => $toName,
             'form'      => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param MeetingRequest $meetingRequest
+     *
+     * @throws AccessDeniedException
+     */
+    private function isAllowedToUpdateMeetingRequest(MeetingRequest $meetingRequest)
+    {
+        if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT) {
+            throw new AccessDeniedException('You can not access this meeting request');
+        }
     }
 }
