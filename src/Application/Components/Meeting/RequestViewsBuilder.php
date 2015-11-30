@@ -55,14 +55,25 @@ class RequestViewsBuilder
             $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFrom());
             $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
 
-            $requestView = new RequestView($sheetNameFrom, $sheetNameTo, $request->getState(), $request->getDescription(), $request->getCreatedAt());
+            $requestView = new RequestView(
+                $request->getId(),
+                $sheetNameFrom,
+                $sheetNameTo,
+                $request->getState(),
+                $request->getDescription(),
+                $request->getCreatedAt()
+            );
 
             foreach ($request->getFromParticipants() as $participant) {
-                $requestView->fromParticipants[] = new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant));
+                $requestView->fromParticipants[] = new ParticipantNameView(
+                    $this->participantInfoGuesser->guessParticipantInfo($participant)
+                );
             }
 
             foreach ($request->getToParticipants() as $participant) {
-                $requestView->toParticipants[] = new ParticipantNameView($this->participantInfoGuesser->guessParticipantInfo($participant));
+                $requestView->toParticipants[] = new ParticipantNameView(
+                    $this->participantInfoGuesser->guessParticipantInfo($participant)
+                );
             }
 
             $this->requestViews[] = $requestView;

@@ -17,6 +17,10 @@ use Proximum\Vimeet\Domain\View\ParticipantNameView;
 class RequestView
 {
     /**
+     * @var int
+     */
+    public $id;
+    /**
      * @var string
      */
     public $sheetNameFrom;
@@ -52,14 +56,16 @@ class RequestView
     public $description;
 
     /**
+     * @param int      $id
      * @param string   $sheetNameFrom
      * @param string   $sheetNameTo
      * @param string   $state
      * @param string   $description
      * @param DateTime $createdAt
      */
-    public function __construct($sheetNameFrom, $sheetNameTo, $state, $description, $createdAt)
+    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, $createdAt)
     {
+        $this->id               = $id;
         $this->sheetNameFrom    = $sheetNameFrom;
         $this->sheetNameTo      = $sheetNameTo;
         $this->state            = $state;

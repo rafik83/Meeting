@@ -42,6 +42,14 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Request $request)
+    {
+        $this->entityManager->flush($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
