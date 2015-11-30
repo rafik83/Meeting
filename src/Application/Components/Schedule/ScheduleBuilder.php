@@ -56,7 +56,7 @@ class ScheduleBuilder
      *
      * @return array
      */
-    public function buildForPartcipant(Participant $participant)
+    public function buildForParticipant(Participant $participant)
     {
         $schedules = $this->scheduleRepository->findByEvent($participant->getSheet()->getEvent());
 
@@ -140,7 +140,7 @@ class ScheduleBuilder
         $participantSchedules = [];
 
         foreach ($sheet->getParticipants() as $participant) {
-            $participantSchedules[] = $this->buildForPartcipant($participant);
+            $participantSchedules[] = $this->buildForParticipant($participant);
         }
 
         return $participantSchedules;
