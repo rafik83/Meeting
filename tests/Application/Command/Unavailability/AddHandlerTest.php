@@ -10,8 +10,8 @@
 
 namespace Tests\Application\Command\Unavailability;
 
-use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailability;
-use Proximum\Vimeet\Application\Command\Unavailability\AddUnavailabilityHandler;
+use Proximum\Vimeet\Application\Command\Unavailability\Add;
+use Proximum\Vimeet\Application\Command\Unavailability\AddHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
@@ -31,7 +31,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true);
         $schedule              = new Schedule($event, new \DateTime('2015-11-25 12:00:00'));
-        $command               = new AddUnavailability($schedule);
+        $command               = new Add($schedule);
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
@@ -47,7 +47,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository->getOverlapUnavailabilities($expectedUnavailability)->shouldBeCalled()->willReturn([]);
         $unavailabilityRepository->add($expectedUnavailability)->shouldBeCalled();
 
-        $handler = new AddUnavailabilityHandler($unavailabilityRepository->reveal());
+        $handler = new AddHandler($unavailabilityRepository->reveal());
         $handler->handle($command);
     }
 
@@ -59,7 +59,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true);
         $schedule              = new Schedule($event, new \DateTime('2015-11-25 12:00:00'));
-        $command               = new AddUnavailability($schedule);
+        $command               = new Add($schedule);
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
@@ -98,7 +98,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository->remove($unavailability2)->shouldBeCalled();
         $unavailabilityRepository->add($mergedUnavailability)->shouldBeCalled();
 
-        $handler = new AddUnavailabilityHandler($unavailabilityRepository->reveal());
+        $handler = new AddHandler($unavailabilityRepository->reveal());
         $handler->handle($command);
     }
 }
