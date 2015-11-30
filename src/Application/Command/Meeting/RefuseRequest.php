@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class RefusedRequest
+class RefuseRequest
 {
     /**
      * @var Request

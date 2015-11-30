@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use DateTime;
-use Proximum\Vimeet\Application\Command\Meeting\ApprovedRequest;
+use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
-use Proximum\Vimeet\Application\Command\Meeting\RefusedRequest;
+use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
@@ -146,16 +146,16 @@ class MeetingController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $approvedRequest = new ApprovedRequest($meetingRequest);
-        $form            = $this->createForm('meeting_request_approved', $approvedRequest, [
+        $approveRequest = new ApproveRequest($meetingRequest);
+        $form           = $this->createForm('meeting_request_approved', $approveRequest, [
             'sheet' => $meetingRequest->getTo()
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.meeting.approved_request_handler')
-                ->handle($approvedRequest);
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler')
+                ->handle($approveRequest);
 
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
@@ -195,14 +195,14 @@ class MeetingController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $refusedRequest = new RefusedRequest($meetingRequest);
-        $form           = $this->createForm('meeting_request_refused', $refusedRequest);
+        $refuseRequest = new RefuseRequest($meetingRequest);
+        $form          = $this->createForm('meeting_request_refused', $refuseRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.meeting.refused_request_handler')
-                ->handle($refusedRequest);
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler')
+                ->handle($refuseRequest);
 
             $this->addFlash('success', 'flash.meeting_request.refused.success');
 

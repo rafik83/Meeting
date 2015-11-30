@@ -173,12 +173,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - @vimeet_infrastructure.repository.meeting.request_repository
-    vimeet_infrastructure.vimeet.application.command.meeting.approved_request_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\ApprovedRequestHandler
+    vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
             - @vimeet_infrastructure.repository.meeting.request_repository
-    vimeet_infrastructure.vimeet.application.command.meeting.refused_request_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\RefusedRequestHandler
+    vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler
         arguments:
             - @vimeet_infrastructure.repository.meeting.request_repository
 

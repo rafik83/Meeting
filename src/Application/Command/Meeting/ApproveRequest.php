@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class ApprovedRequest
+class ApproveRequest
 {
     /**
      * @var Request
