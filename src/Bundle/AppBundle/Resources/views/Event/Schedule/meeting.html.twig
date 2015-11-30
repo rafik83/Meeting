@@ -1,0 +1,35 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <table class="table">
+        <caption>
+            {{ meeting.meetingSlot.schedule.date|date('d/m/Y') }}
+            de {{ meeting.meetingSlot.begin|date('H:i') }}
+            à {{ meeting.meetingSlot.end|date('H:i') }}
+        </caption>
+        <tr>
+            <th>Fiches</th>
+            <td>{{ from }}</td>
+            <td>{{ to }}</td>
+        </tr>
+        <tr>
+            <th>Participants</th>
+            <td>
+                <ul>
+                    {% for participant in fromParticipants %}
+                        <li>{{ participant }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for participant in toParticipants %}
+                        <li>{{ participant }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
