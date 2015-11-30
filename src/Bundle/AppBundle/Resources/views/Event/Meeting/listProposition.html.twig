@@ -9,8 +9,10 @@
             <th>{{ 'event.meeting.listProposition.state'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
+            <th>{{ 'event.meeting.listProposition.yourParticipants'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.description'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
+            <th>Actions</th>
         </thead>
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger' } %}
@@ -26,8 +28,21 @@
                         {{ participantNameView.participantName }}<br>
                     {% endfor %}
                 </td>
+                <td>{% for participantNameView in proposition_view.toParticipants %}
+                        {{ participantNameView.participantName }}<br>
+                    {% endfor %}
+                </td>
                 <td>{{ proposition_view.description }}</td>
                 <td>{{ proposition_view.createdAt|date('Y-m-d') }}</td>
+                <td>
+                    {% if proposition_view.state == 'sent' %}
+                    <a href="{{ path('event_meeting_request_approved', {
+                        'subdomain': app.request.attributes.get('subdomain'),
+                        'id': sheet.id,
+                        'meetingRequest': proposition_view.id
+                    }) }}">{{ 'event.meeting.listProposition.accept'|trans() }}</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
