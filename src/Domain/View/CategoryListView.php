@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
-class TypeListView
+class CategoryListView
 {
     /**
      * @var int
@@ -23,14 +23,17 @@ class TypeListView
     public $title;
 
     /**
-     * TypeListView constructor.
-     *
+     * @var array
+     */
+    public $types;
+
+    /**
      * @param int    $id
      * @param string $title
      */
     public function __construct($id, $title)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        $this->id         = $id;
+        $this->title      = $title;
     }
 }

@@ -147,6 +147,17 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
+    category:
+        children:
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            types:
+                label: Sélectionner les types de participation
+            submit:
+                label: Enregistrer
     type_template_field_update:
         children:
             label:

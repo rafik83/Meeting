@@ -43,16 +43,17 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, $locale)
+    public function paginate($page, $limit, $eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title, event.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->join('type.event', 'event')
-            ->setParameter('locale', $locale);
+            ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
+            ->setParameter('locale', $locale)
+            ->setParameter('eventId', $eventId);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, [
             'defaultSortFieldName' => 'type.id',
@@ -185,11 +186,34 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
+            ->from('Entity:Type', 'type', 'type.id')
             ->where('type.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesTitleByEventAndLocale(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id, translations.title')
+            ->from('Entity:Type', 'type', 'type.id')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->where('type.event = :event')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return array_map(
+            function ($type) {
+                return $type['title'];
+            },
+            $queryBuilder->getQuery()->getResult()
+        );
     }
 
     /**

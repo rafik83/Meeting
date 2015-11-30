@@ -13,10 +13,31 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\CategoryListView;
 use Proximum\Vimeet\Domain\View\CategoryView;
 
 interface CategoryRepositoryInterface
 {
+    /**
+     * @param int    $page
+     * @param int    $limit
+     * @param int    $eventId
+     * @param string $locale
+     *
+     * @return CategoryListView[]
+     */
+    public function paginate($page, $limit, $eventId, $locale);
+
+    /**
+     * @param Category $category
+     */
+    public function set(Category $category);
+
+    /**
+     * @param Category $category
+     */
+    public function add(Category $category);
+
     /**
      * @param Event|int $event
      * @param User|int  $user
