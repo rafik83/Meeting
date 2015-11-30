@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 interface HappeneningParticipationRepositoryInterface
 {
@@ -18,4 +20,17 @@ interface HappeneningParticipationRepositoryInterface
      * @param HappeningParticipation $happeningParticipation
      */
     public function add(HappeningParticipation $happeningParticipation);
+
+    /**
+     * @param HappeningParticipation $happeningParticipation
+     */
+    public function remove(HappeningParticipation $happeningParticipation);
+
+    /**
+     * @param Happening   $happening
+     * @param Participant $participant
+     *
+     * @return HappeningParticipation
+     */
+    public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
 }

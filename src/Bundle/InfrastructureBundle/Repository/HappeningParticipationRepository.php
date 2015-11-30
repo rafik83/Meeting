@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\HappeneningParticipationRepositoryInterface;
 
 class HappeningParticipationRepository implements HappeneningParticipationRepositoryInterface
@@ -36,5 +38,33 @@ class HappeningParticipationRepository implements HappeneningParticipationReposi
     {
         $this->entityManager->persist($happeningParticipation);
         $this->entityManager->flush($happeningParticipation);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(HappeningParticipation $happeningParticipation)
+    {
+        $this->entityManager->remove($happeningParticipation);
+        $this->entityManager->flush($happeningParticipation);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByHappeningAndParticipant(Happening $happening, Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening = :happening')
+            ->setParameter('happening', $happening)
+            ->andWhere('participation.participant = :participant')
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

@@ -34,5 +34,12 @@ class UnparticipateHandler
      */
     public function handle(Unparticipate $unparticipate)
     {
+        $happeningParticipation = $this
+            ->happeneningParticipationRepository
+            ->findByHappeningAndParticipant($unparticipate->happening, $unparticipate->participant);
+
+        if ($happeningParticipation) {
+            $this->happeneningParticipationRepository->remove($happeningParticipation);
+        }
     }
 }
