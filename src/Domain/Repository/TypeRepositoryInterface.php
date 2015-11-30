@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\TypeListView;
@@ -22,11 +23,12 @@ interface TypeRepositoryInterface
     /**
      * @param int    $page
      * @param int    $limit
+     * @param int    $eventId
      * @param string $locale
      *
      * @return TypeListView[]
      */
-    public function paginate($page, $limit, $locale);
+    public function paginate($page, $limit, $eventId, $locale);
 
     /**
      * @param Type $type
@@ -78,9 +80,17 @@ interface TypeRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return array
+     * @return Type[]
      */
     public function getTypesByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Type[] indexed by Type::id
+     */
+    public function getTypesTitleByEventAndLocale(Event $event, $locale);
 
     /**
      * @param User|int $user
@@ -90,10 +100,24 @@ interface TypeRepositoryInterface
     public function getSeeableTypeIdsByUser($user);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    public function getSeeableTypeIdsBySheet(Sheet $sheet);
+
+    /**
      * @param Event $event
      * @param User  $user
      *
      * @return Type[]
      */
     public function getTypesByUser(Event $event, User $user);
+
+    /**
+     * @param User  $user
+     *
+     * @return Type[]
+     */
+    public function getAllTypesByUser(User $user);
 }

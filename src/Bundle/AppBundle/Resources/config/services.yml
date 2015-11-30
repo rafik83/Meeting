@@ -58,12 +58,23 @@ services:
             - @vimeet_infrastructure.repository.type_repository
         tags:
             - { name: form.type, alias: who }
-    proximum_vimeet__app.form_type_participant.participant_choice_type:
+    vimeet_app.form_type_meeting.request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType
+        arguments: [ @vimeet_infrastructure.application.components.sheet.participant_info_guesser ]
+        tags:
+            - { name: form.type, alias: meeting_request_create }
+    vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
             - { name: form.type, alias: participant_choice }
+    vimeet_app.form_type.category_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryType
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
+        tags:
+            - { name: form.type, alias: category }
 
     #
     # Admin library form type

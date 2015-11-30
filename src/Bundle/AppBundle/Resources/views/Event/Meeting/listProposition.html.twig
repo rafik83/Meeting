@@ -9,6 +9,7 @@
             <th>{{ 'event.meeting.listProposition.state'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
+            <th>{{ 'event.meeting.listProposition.description'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
                         {{ participantNameView.participantName }}<br>
                     {% endfor %}
                 </td>
+                <td>{{ proposition_view.description }}</td>
                 <td>{{ proposition_view.createdAt|date('Y-m-d') }}</td>
             </tr>
         {% endfor %}

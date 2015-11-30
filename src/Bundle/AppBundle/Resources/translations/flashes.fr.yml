@@ -30,6 +30,9 @@ flash:
             success: Les informations ont bien été enregistrées
         update_billing:
             success: Les informations de facturation ont bien été enregistrées
+    meeting_request:
+        create:
+            success: Votre demande de rendez-vous a bien été transmise
     package:
         update_step:
             success: Les informations ont bien été enregistrées
@@ -48,6 +51,11 @@ flash:
                 success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour
+        category:
+            create:
+                success: La catégorie a bien été créée
+            update:
+                success: La catégorie a bien été mise à jour
         type_template_field:
             update:
                 success: Le champ a bien été mis à jour

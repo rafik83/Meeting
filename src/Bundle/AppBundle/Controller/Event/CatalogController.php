@@ -94,10 +94,15 @@ class CatalogController extends Controller
                 ->get('vimeet_infrastructure.application.components.sheet.manager')
                 ->getSheetDataViewByUser($this->getUser(), $sheet);
 
+            $sheetAllowedForMeetingRequest = $this
+                ->get('vimeet_infrastructure.application.components.sheet.manager')
+                ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
+
             return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
-                'eventView'    => $eventView,
-                'categoryView' => $categoryView,
-                'sheet'        => $sheetView,
+                'eventView'                     => $eventView,
+                'categoryView'                  => $categoryView,
+                'sheet'                         => $sheetView,
+                'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,
             ]);
         } catch (NoRuleFoundException $exception) {
             throw $this->createNotFoundException($exception->getMessage(), $exception);

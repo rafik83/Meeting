@@ -12,6 +12,12 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @knp_paginator
+    vimeet_infrastructure.repository.category_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @knp_paginator
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
@@ -22,11 +28,6 @@ services:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @vimeet_infrastructure.repository.type_repository
-    vimeet_infrastructure.repository.category_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
             - @doctrine.orm.entity_manager
             - @vimeet_infrastructure.repository.type_repository
@@ -136,6 +137,16 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.category.update_handler:
+        class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
+    vimeet_infrastructure.vimeet.application.command.category.create_handler:
+        class: Proximum\Vimeet\Application\Command\Category\CreateHandler
+        arguments:
+            - @vimeet_infrastructure.repository.category_repository
+            - @vimeet_infrastructure.repository.type_repository
     vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
         arguments:
@@ -174,6 +185,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UnparticipateHandler
         arguments:
             - @vimeet_infrastructure.repository.happening_participation_repository
+    vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
+        arguments:
+            - @vimeet_infrastructure.repository.meeting.request_repository
 
     #
     # Security
@@ -228,6 +243,9 @@ services:
         arguments:
             - @vimeet_infrastructure.repository.participant_repository
             - @vimeet_infrastructure.application.components.rule.manager
+            - @vimeet_infrastructure.repository.type_repository
+            - @vimeet_infrastructure.repository.sheet_repository
+            - @vimeet_infrastructure.repository.meeting.request_repository
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:

@@ -147,6 +147,17 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
+    category:
+        children:
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            types:
+                label: Sélectionner les types de participation
+            submit:
+                label: Enregistrer
     type_template_field_update:
         children:
             label:
@@ -181,6 +192,14 @@ form:
                 label: Fiche
             submit:
                 label: Enregistrer
+    meeting_request_create:
+        children:
+            fromParticipants:
+                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
+            description:
+                label: Motiver votre demande
+            submit:
+                label: Envoyer
     add_unavailability:
         children:
             from:

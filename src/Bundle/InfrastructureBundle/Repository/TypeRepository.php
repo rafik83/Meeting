@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -42,16 +43,17 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, $locale)
+    public function paginate($page, $limit, $eventId, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title, event.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title)')
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->join('type.event', 'event')
-            ->setParameter('locale', $locale);
+            ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
+            ->setParameter('locale', $locale)
+            ->setParameter('eventId', $eventId);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, [
             'defaultSortFieldName' => 'type.id',
@@ -184,7 +186,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
+            ->from('Entity:Type', 'type', 'type.id')
             ->where('type.event = :event')
             ->setParameter('event', $event);
 
@@ -194,9 +196,40 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getTypesTitleByEventAndLocale(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id, translations.title')
+            ->from('Entity:Type', 'type', 'type.id')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->where('type.event = :event')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return array_map(
+            function ($type) {
+                return $type['title'];
+            },
+            $queryBuilder->getQuery()->getResult()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSeeableTypeIdsByUser($user)
     {
         return $this->seeableTypeByRules($this->rulesBySheets($this->sheetByUser($user)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSeeableTypeIdsBySheet(Sheet $sheet)
+    {
+        return $this->seeableTypeByRules($this->rulesBySheets([$sheet]));
     }
 
     /**
@@ -272,6 +305,23 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('user', $user)
             ->where('type.event = :event')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllTypesByUser(User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from('Entity:Type', 'type')
+            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
     }

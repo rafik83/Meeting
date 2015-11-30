@@ -58,7 +58,7 @@ class RuleManager
     }
 
     /**
-     * Get the most prioritary rule rule to apply
+     * Get the most prioritary rule to apply
      *
      * @param Sheet $sheet
      * @param User  $user

@@ -1,6 +1,14 @@
 {% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
 {% block content %}
+    {% for sheetAllowed in sheetAllowedForMeetingRequest %}
+        <a href="{{ path('event_catalog_sheet_meeting_request', {
+            'categoryView': categoryView.id,
+            'subdomain': app.request.attributes.get('subdomain'),
+            'id': sheet.id,
+            'from': sheetAllowed.id
+        }) }}" class="btn btn-primary">{{ 'event.catalog.sheet.meetingRequest'|trans }}</a>
+    {% endfor %}
     {% for id,block in sheet.data %}
         <h2>{{ sheet.template[id]['label'][app.request.locale] }}</h2>
         <table class="table">

@@ -47,16 +47,23 @@ class RequestView
     public $createdAt;
 
     /**
+     * @var string
+     */
+    public $description;
+
+    /**
      * @param string   $sheetNameFrom
      * @param string   $sheetNameTo
      * @param string   $state
+     * @param string   $description
      * @param DateTime $createdAt
      */
-    public function __construct($sheetNameFrom, $sheetNameTo, $state, $createdAt)
+    public function __construct($sheetNameFrom, $sheetNameTo, $state, $description, $createdAt)
     {
         $this->sheetNameFrom    = $sheetNameFrom;
         $this->sheetNameTo      = $sheetNameTo;
         $this->state            = $state;
+        $this->description      = $description;
         $this->createdAt        = $createdAt;
         $this->fromParticipants = new ArrayCollection();
         $this->toParticipants   = new ArrayCollection();
