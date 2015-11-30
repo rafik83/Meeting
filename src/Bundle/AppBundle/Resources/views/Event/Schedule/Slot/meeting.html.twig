@@ -1,5 +1,12 @@
-{% if slot.begin == slot.end %}
-    <p{% if slot.active %} style="font-weight: bold;"{% endif %}>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
-{% else %}
-    <p{% if slot.active %} style="font-weight: bold;"{% endif %}>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
-{% endif %}
+<p{% if slot.active %} style="font-weight: bold;"{% endif %}>
+    {% if slot.begin == slot.end %}
+        À {{ slot.begin|date('H:i') }} :
+    {% else %}
+        De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} :
+    {% endif %}
+    {% if slot.active %}
+        <a href="{{ path('event_sheet_schedule_meeting', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'meeting_id': slot.id }) }}">{{ slot.title }}</a>
+    {% else %}
+        {{ slot.title }}
+    {% endif %}
+</p>

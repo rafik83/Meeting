@@ -19,6 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningTyp
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -298,5 +299,47 @@ class ScheduleController extends Controller
             'subdomain' => $request->attributes->get('subdomain'),
             'id'        => $sheet->getId(),
         ]);
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   options={"id" = "meeting_id"}
+     * )
+     *
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param Schedule  $schedule
+     * @param Meeting   $meeting
+     *
+     * @return Response
+     */
+    public function meetingAction(EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
+    {
+        $participantInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser');
+        $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
+
+        return $this->render('VimeetAppBundle:Event/Schedule:meeting.html.twig', [
+            'eventView'        => $eventView,
+            'sheet'            => $sheet,
+            'schedule'         => $schedule,
+            'meeting'          => $meeting,
+            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFrom()),
+            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getTo()),
+            'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
+                return $participantInfoGuesser->guessParticipantInfo($participant);
+            }, $meeting->getFromParticipants()->toArray()),
+            'toParticipants'   => array_map(function (Participant $participant) use ($participantInfoGuesser) {
+                return $participantInfoGuesser->guessParticipantInfo($participant);
+            }, $meeting->getToParticipants()->toArray()),
+        ]
+        );
     }
 }
