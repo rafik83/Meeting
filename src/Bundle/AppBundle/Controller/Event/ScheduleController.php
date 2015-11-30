@@ -19,6 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningTyp
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -268,25 +269,23 @@ class ScheduleController extends Controller
      *   options={"id" = "happening_id"}
      * )
      *
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     * @param Schedule  $schedule
-     * @param Happening $happening
+     * @ParamConverter(
+     *   "participant",
+     *   class="Proximum\Vimeet\Domain\Model\Participant",
+     *   options={"id" = "participant_id"}
+     * )
+     *
+     * @param Request     $request
+     * @param EventView   $eventView
+     * @param Sheet       $sheet
+     * @param Schedule    $schedule
+     * @param Happening   $happening
+     * @param Participant $participant
      *
      * @return RedirectResponse
      */
-    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening)
+    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening, Participant $participant)
     {
-        // Get user participant
-        $participant = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
-
-        if (!$participant) {
-            throw $this->createNotFoundException('Participant not found.');
-        }
-
         // Unparticipate
         $this
             ->get('vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler')

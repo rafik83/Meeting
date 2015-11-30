@@ -283,7 +283,7 @@ event_sheet_schedule_participate_happening:
     defaults: { _controller: VimeetAppBundle:Event/Schedule:participateHappening }
 
 event_sheet_schedule_unparticipate_happening:
-    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/unparticipate
+    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/unparticipate/{participant_id}
     host: "{subdomain}.%domain%"
     requirements:
         subdomain: "[a-zA-Z0-9\-]+"
