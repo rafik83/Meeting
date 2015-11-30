@@ -61,7 +61,8 @@ class RequestViewsBuilder
                 $sheetNameTo,
                 $request->getState(),
                 $request->getDescription(),
-                $request->getCreatedAt()
+                $request->getCreatedAt(),
+                $request->getRefuseMessage()
             );
 
             foreach ($request->getFromParticipants() as $participant) {
