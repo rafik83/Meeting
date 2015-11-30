@@ -98,6 +98,7 @@ event:
             description: Description
             createdAt: Reçu le
             accept: Accepter
+            actions: Actions
         request:
             state:
                 from:
