@@ -300,3 +300,13 @@ event_meeting_list_proposition:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:listProposition }
+
+event_meeting_request_approved:
+    path: /sheet/{id}/meeting/proposition/approved/{meetingRequest}
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        meetingRequest: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:approvedRequest }
