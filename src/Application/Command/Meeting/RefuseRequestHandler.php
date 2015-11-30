@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
-class RefusedRequestHandler
+class RefuseRequestHandler
 {
     /**
      * @var RequestRepositoryInterface
@@ -28,11 +28,11 @@ class RefusedRequestHandler
     }
 
     /**
-     * @param RefusedRequest $refusedRequest
+     * @param RefuseRequest $refuseRequest
      */
-    public function handle(RefusedRequest $refusedRequest)
+    public function handle(RefuseRequest $refuseRequest)
     {
-        $refusedRequest->request->setRefuseMessage($refusedRequest->refuseMessage);
-        $this->requestRepository->set($refusedRequest->request);
+        $refuseRequest->request->setRefuseMessage($refuseRequest->refuseMessage);
+        $this->requestRepository->set($refuseRequest->request);
     }
 }
