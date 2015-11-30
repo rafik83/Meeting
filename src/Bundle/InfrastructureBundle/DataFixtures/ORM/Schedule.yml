@@ -70,6 +70,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>
         title: PME : comment tirer profit des programmes européens
         description: Présentation des différents programmes européens et des structures d'accompagnement
+        blocking: true
     happening_day_one_2:
         __construct: false
         schedule: @schedule_day_one
@@ -77,6 +78,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
         title: Intensification des procédés au service de la chimie durable
         description: L'illustration par quelques exemples industriels: bio-solvants et procédés séparatifs
+        blocking: true
     happening_day_one_3:
         __construct: false
         schedule: @schedule_day_one
@@ -84,6 +86,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>
         title: La robotique collaborative : application en polissage
         description: ""
+        blocking: true
     happening_day_one_4:
         __construct: false
         schedule: @schedule_day_one
@@ -91,6 +94,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>
         title: Les grands enjeux de la filière électronique
         description: Perspectives des industries électrotechnologiques présentées par la FIEEC
+        blocking: true
     happening_day_one_5:
         __construct: false
         schedule: @schedule_day_one
@@ -98,6 +102,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>
         title: Remise du Prix FIEEC de la Recherche appliquée
         description: Animée par Jacques MAROUANI, ElectroniqueS
+        blocking: false
     happening_day_one_6:
         __construct: false
         schedule: @schedule_day_one
@@ -105,6 +110,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>
         title: De jeunes chercheurs dans les entreprises : les doctorants CIFRE
         description: ""
+        blocking: false
     happening_day_one_7:
         __construct: false
         schedule: @schedule_day_one
@@ -112,6 +118,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>
         title: Matériaux fonctionnels - Revêtements et traitements de surface
         description: Fonctionnaliser les surfaces pour améliorer le comportement en service des matériaux
+        blocking: false
     happening_day_one_8:
         __construct: false
         schedule: @schedule_day_one
@@ -119,6 +126,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>
         title: La médecine personnalisée
         description: Le traitement à la carte en cancérologie : espoir ou réalité ?
+        blocking: false
     happening_day_one_9:
         __construct: false
         schedule: @schedule_day_one
@@ -126,6 +134,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>
         title: Climat et risques hydrologiques
         description: Gestion des risques en domaine montagneux : de la recherche à l’application
+        blocking: false
     happening_day_one_10:
         __construct: false
         schedule: @schedule_day_one
@@ -133,6 +142,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 17:50:00', 'Europe/Paris', 'UTC')>
         title: Table ronde : Peut-on innover dans l’Ecosystème français ?
         description: ""
+        blocking: false
     happening_day_one_11:
         __construct: false
         schedule: @schedule_day_one
@@ -140,6 +150,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>
         title: Séance inaugurale
         description: ""
+        blocking: false
     happening_day_one_12:
         __construct: false
         schedule: @schedule_day_one
@@ -147,6 +158,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-18 13:30:00', 'Europe/Paris', 'UTC')>
         title: Pause déjeunée
         description: ""
+        blocking: false
     happening_day_two_1:
         __construct: false
         schedule: @schedule_day_two
@@ -154,6 +166,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>
         title: Ile de France : les appuis aux entreprises innovantes
         description: ""
+        blocking: false
     happening_day_two_2:
         __construct: false
         schedule: @schedule_day_two
@@ -161,6 +174,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>
         title: Matériaux architecturés pour les véhicules
         description: Allégement et traitement vibroacoustique
+        blocking: false
     happening_day_two_3:
         __construct: false
         schedule: @schedule_day_two
@@ -168,6 +182,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>
         title: Des PME mieux armées en Propriété Intellectuelle
         description: ""
+        blocking: false
     happening_day_two_4:
         __construct: false
         schedule: @schedule_day_two
@@ -175,6 +190,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>
         title: Méthodes pour l’efficacité énergétique des procédés industriels
         description: Perspectives des industries électrotechnologiques présentées par la FIEEC
+        blocking: false
     happening_day_two_5:
         __construct: false
         schedule: @schedule_day_two
@@ -182,6 +198,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>
         title: Remise du Prix FIEEC de la Recherche appliquée
         description: De l’audit avancé à l’innovation technologique
+        blocking: false
     happening_day_two_6:
         __construct: false
         schedule: @schedule_day_two
@@ -189,6 +206,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>
         title: Radiocommunications M2M, sûreté de connexion
         description: Déploiements de réseaux sans-fil en environnements difficiles et pour applications critiques
+        blocking: false
     happening_day_two_7:
         __construct: false
         schedule: @schedule_day_two
@@ -196,6 +214,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>
         title: Innover en s'ouvrant à l'international
         description: ""
+        blocking: false
     happening_day_two_8:
         __construct: false
         schedule: @schedule_day_two
@@ -203,6 +222,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>
         title: Clôture
         description: ""
+        blocking: false
     happening_day_two_9:
         __construct: false
         schedule: @schedule_day_two
@@ -210,3 +230,4 @@ Proximum\Vimeet\Domain\Model\Happening:
         end: <date('2016-10-19 13:30:00', 'Europe/Paris', 'UTC')>
         title: Pause déjeunée
         description: ""
+        blocking: false
