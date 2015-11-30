@@ -13,6 +13,11 @@ namespace Proximum\Vimeet\Domain\View;
 class ScheduleSlotView
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var string
      */
     public $title;
@@ -30,12 +35,14 @@ class ScheduleSlotView
     /**
      * ScheduleSlotView constructor.
      *
+     * @param int       $id
      * @param string    $title
      * @param \DateTime $begin
      * @param \DateTime $end
      */
-    public function __construct($title, \DateTime $begin, \DateTime $end)
+    public function __construct($id, $title, \DateTime $begin, \DateTime $end)
     {
+        $this->id    = $id;
         $this->title = $title;
         $this->begin = $begin;
         $this->end   = $end;

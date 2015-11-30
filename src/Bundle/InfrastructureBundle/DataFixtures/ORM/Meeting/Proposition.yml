@@ -1,0 +1,46 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_proposition1:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant1
+        to: @sheet_test
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_proposition2:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant2
+        to: @sheet_test
+        fromParticipants: [@participant_random_1, @participant_random_2]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_proposition3:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant3
+        to: @sheet_test
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_proposition4:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant4
+        to: @sheet_test
+        fromParticipants: [@participant_random_3]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_proposition5:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant5
+        to: @sheet_test
+        fromParticipants: [@participant_random_4]
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
+    meeting_proposition6:
+        __construct: false
+        description: <text(100)>
+        from: @sheet_exposant6
+        to: @sheet_test
+        state: <randomElement($array = array ('sent', 'approved', 'refused'))>
+        createdAt: <dateTimeBetween('-100 days', 'now')>
