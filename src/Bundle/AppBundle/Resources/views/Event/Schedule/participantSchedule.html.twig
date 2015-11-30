@@ -14,7 +14,7 @@
             <div class="col-md-{{ 12 / schedule|length }}">
                 {% for slot in column|default([]) %}
                     <div style="border-top:1px solid #333;">
-                        {{ include('VimeetAppBundle:Event/Schedule:slot.html.twig', { 'sheet': sheet, 'schedule': schedule, 'type': type, 'slot': slot }, false) }}
+                        {{ include('VimeetAppBundle:Event/Schedule:Slot/' ~ type ~ '.html.twig', { 'sheet': sheet, 'schedule': schedule, 'type': type, 'slot': slot }, false) }}
                     </div>
                 {% endfor %}
             </div>

@@ -80,7 +80,7 @@ class ScheduleBuilder
             // Meeting slots
             $meetingSlots = $schedule->getMeetingSlots();
             foreach ($meetingSlots as $meetingSlot) {
-                $participantSchedule['schedules'][$i]['columns']['meetingSlots'][] = new ScheduleSlotView(
+                $participantSchedule['schedules'][$i]['columns']['meeting'][] = new ScheduleSlotView(
                     $meetingSlot->getId(),
                     'Créneau de RdV',
                     $meetingSlot->getBegin(),
@@ -92,7 +92,7 @@ class ScheduleBuilder
             // Happening
             $happenings = $schedule->getHappenings();
             foreach ($happenings as $happening) {
-                $participantSchedule['schedules'][$i]['columns']['happenings'][] = new ScheduleSlotView(
+                $participantSchedule['schedules'][$i]['columns']['happening'][] = new ScheduleSlotView(
                     $happening->getId(),
                     $happening->getTitle(),
                     $happening->getBegin(),
@@ -104,7 +104,7 @@ class ScheduleBuilder
             // Unavailabilities
             $unavailabilities = $this->unavailabilityRepository->findByScheduleAndParticipant($schedule, $participant);
             foreach ($unavailabilities as $unavailability) {
-                $participantSchedule['schedules'][$i]['columns']['unavailabilities'][] = new ScheduleSlotView(
+                $participantSchedule['schedules'][$i]['columns']['unavailability'][] = new ScheduleSlotView(
                     $unavailability->getId(),
                     'Indisponible',
                     $unavailability->getBegin(),
