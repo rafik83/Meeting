@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Unavailability:
+    type:  entity
+    table: unavailability
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        begin:
+            type: datetime
+        end:
+            type: datetime
+    manyToOne:
+        schedule:
+            targetEntity: Proximum\Vimeet\Domain\Model\Schedule
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant

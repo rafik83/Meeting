@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Unavailability\Update:
+    constraints:
+        - Expression:
+            expression: "this.from < this.to"
+            message: "validators.constraint.daterange"
+    properties:
+        from:
+            - NotBlank: ~
+            - DateTime: ~
+        to:
+            - NotBlank: ~
+            - DateTime: ~

@@ -2,12 +2,13 @@
 
 {% block content %}
     <h1>{{ event.title }}</h1>
+    
     <h2>Types de participation</h2>
+
     <table class="table">
         <thead>
         <tr>
             <th>Titre</th>
-            <th>Evénement</th>
             <th>
                 <a href="{{ path('admin_type_create', { 'id': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
             </th>
@@ -17,7 +18,6 @@
         {% for type in types %}
             <tr>
                 <td>{{ type.title }}</td>
-                <td>{{ type.eventTitle }}</td>
                 <td>
                     <a href="{{ path('admin_type_update', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                     <a href="{{ path('admin_type_template_field_list', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>

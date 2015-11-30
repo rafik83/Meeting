@@ -14,10 +14,12 @@ Proximum\Vimeet\Domain\Model\Category:
             targetEntity: Proximum\Vimeet\Domain\Model\CategoryTranslation
             mappedBy: category
             indexBy: locale
+            cascade: ["persist"]
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
             inversedBy: categories
+            cascade: ["persist"]
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
