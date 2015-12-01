@@ -166,8 +166,8 @@ Feature: Meeting Request / Proposition
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition/refused/1"
     And I fill in the following:
-      | form.meeting_request_refuse.children.refuseMessage.label | Sorry I can't |
-    Then I press "form.meeting_request_refuse.children.submit.label"
+      | form.meeting_request_message.children.message.label | Sorry I can't |
+    Then I press "form.meeting_request_message.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition"
     And I should see "flash.meeting_request.refused.success"
     And I should see "event.meeting.request.state.to.refused"
