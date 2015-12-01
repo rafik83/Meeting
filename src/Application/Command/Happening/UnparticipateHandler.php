@@ -17,16 +17,16 @@ class UnparticipateHandler
     /**
      * @var HappeningParticipationRepositoryInterface
      */
-    private $happeneningParticipationRepository;
+    private $happeningParticipationRepository;
 
     /**
      * ParticipateHandler constructor.
      *
-     * @param HappeningParticipationRepositoryInterface $happeneningParticipationRepository
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      */
-    public function __construct(HappeningParticipationRepositoryInterface $happeneningParticipationRepository)
+    public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
     {
-        $this->happeneningParticipationRepository = $happeneningParticipationRepository;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     /**
@@ -35,11 +35,11 @@ class UnparticipateHandler
     public function handle(Unparticipate $unparticipate)
     {
         $happeningParticipation = $this
-            ->happeneningParticipationRepository
+            ->happeningParticipationRepository
             ->findByHappeningAndParticipant($unparticipate->happening, $unparticipate->participant);
 
         if ($happeningParticipation) {
-            $this->happeneningParticipationRepository->remove($happeningParticipation);
+            $this->happeningParticipationRepository->remove($happeningParticipation);
         }
     }
 }

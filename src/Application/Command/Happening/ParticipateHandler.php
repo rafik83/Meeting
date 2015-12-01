@@ -18,16 +18,16 @@ class ParticipateHandler
     /**
      * @var HappeningParticipationRepositoryInterface
      */
-    private $happeneningParticipationRepository;
+    private $happeningParticipationRepository;
 
     /**
      * ParticipateHandler constructor.
      *
-     * @param HappeningParticipationRepositoryInterface $happeneningParticipationRepository
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      */
-    public function __construct(HappeningParticipationRepositoryInterface $happeneningParticipationRepository)
+    public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
     {
-        $this->happeneningParticipationRepository = $happeneningParticipationRepository;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     /**
@@ -37,7 +37,7 @@ class ParticipateHandler
     {
         foreach ($participate->participants as $participant) {
             $happeningParticipation = new HappeningParticipation($participate->happening, $participant);
-            $this->happeneningParticipationRepository->add($happeningParticipation);
+            $this->happeningParticipationRepository->add($happeningParticipation);
         }
     }
 }
