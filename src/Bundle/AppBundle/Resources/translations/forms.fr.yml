@@ -206,10 +206,10 @@ form:
                 label: Choisir des participants pour ce rendez-vous
             submit:
                 label: Envoyer
-    meeting_request_refuse:
+    meeting_request_message:
         children:
-            refuseMessage:
-                label: Expliquer votre refus
+            message:
+                label: Expliquer pourquoi
             submit:
                 label: Envoyer
     add_unavailability:

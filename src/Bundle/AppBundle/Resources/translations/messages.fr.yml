@@ -90,6 +90,8 @@ event:
             participants: Les participants
             informations: Informations
             createdAt: Envoyé le
+            actions: Actions
+            cancel: Annuler
         listProposition:
             title: Liste de vos propositions de rendez-vous
             state: Statut
@@ -98,6 +100,7 @@ event:
             yourParticipants: Vos participants
             description: Description
             createdAt: Reçu le
+            informations: Informations
             accept: Accepter
             refuse: Refuser
             actions: Actions
@@ -107,18 +110,23 @@ event:
                     sent: Envoyé
                     approved: Accepté
                     refused: Refusé
+                    cancelled: Annulé
                 to:
                     sent: Reçu
                     approved: Accepté
                     refused: Refusé
+                    cancelled: Annulé
         createRequest:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
         approvedRequest:
-            title: Accepter la demande de rendez vous
+            title: Accepter la proposition de rendez vous
             label: De %fromName% pour %toName%
         refusedRequest:
-            title: Refuser la demande de rendez vous
+            title: Refuser la proposition de rendez vous
+            label: De %fromName% pour %toName%
+        cancelRequest:
+            title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
     catalog:
         sheet:
