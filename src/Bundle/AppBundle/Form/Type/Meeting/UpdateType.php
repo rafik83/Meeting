@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Update;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
