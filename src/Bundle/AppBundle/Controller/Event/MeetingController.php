@@ -167,7 +167,7 @@ class MeetingController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
 
-        return $this->render('VimeetAppBundle:Event/Meeting:approvedRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
