@@ -1,0 +1,5 @@
+{% if slot.begin == slot.end %}
+    <p{% if slot.active %} style="font-weight: bold;"{% endif %}>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
+{% else %}
+    <p{% if slot.active %} style="font-weight: bold;"{% endif %}>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
+{% endif %}

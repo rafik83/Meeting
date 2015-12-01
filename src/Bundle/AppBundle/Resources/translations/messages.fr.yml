@@ -109,6 +109,14 @@ event:
         createRequest:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
+    schedule:
+        columns:
+            meeting:
+                title: Rendez-vous
+            happening:
+                title: Sous-événements
+            unavailability:
+                title: Indisponibilités
     catalog:
         sheet:
             meetingRequest: Demander un rendez-vous

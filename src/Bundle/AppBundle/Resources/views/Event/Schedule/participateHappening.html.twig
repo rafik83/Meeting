@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+
+    {% if happening.blocking %}
+        <p class="alert alert-warning">Attention, cet événement est bloquant, si vous y participez vous ne pourrez pas obtenir de rendez vous entre {{ happening.begin|date('H:i') }} et {{ happening.end|date('H:i') }}</p>
+    {% endif %}
+
+    {{ form(form) }}
+{% endblock %}
