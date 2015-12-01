@@ -34,5 +34,8 @@ class CancelHandler
      */
     public function handle(Cancel $cancel)
     {
+        $cancel->meeting->cancel();
+
+        $this->meetingRepository->set($cancel->meeting);
     }
 }

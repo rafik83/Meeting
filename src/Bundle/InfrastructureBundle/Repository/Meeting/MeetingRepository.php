@@ -52,4 +52,12 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Meeting $meeting)
+    {
+        $this->entityManager->flush($meeting);
+    }
 }
