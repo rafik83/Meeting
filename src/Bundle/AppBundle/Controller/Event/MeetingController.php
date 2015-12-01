@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
+use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -191,12 +192,12 @@ class MeetingController extends BaseController
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($meetingRequest->getTo()->getParticipants());
-        $this->isAllowedToUpdateMeetingRequest($meetingRequest);
+        $this->isAllowedToUpdateMeetingRequest($meetingRequest, [MeetingRequest::STATE_SENT]);
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $refuseRequest = new RefuseRequest($meetingRequest);
-        $form          = $this->createForm('meeting_request_refuse', $refuseRequest);
+        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
+        $form          = $this->createForm('meeting_request_message', $refuseRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -215,6 +216,57 @@ class MeetingController extends BaseController
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
 
         return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
+            'eventView' => $eventView,
+            'fromName'  => $fromName,
+            'toName'    => $toName,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param EventView $eventView
+     * @param Sheet $sheet
+     * @param MeetingRequest $meetingRequest
+     *
+     * @return RedirectResponse|Response
+     */
+    public function cancelRequestAction(
+        Request $request,
+        EventView $eventView,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ) {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($meetingRequest->getFrom()->getParticipants());
+        if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
+            && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
+        ) {
+            throw new AccessDeniedException('You can not access this meeting request');
+        }
+
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
+
+        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
+        $form          = $this->createForm('meeting_request_message', $cancelRequest);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler')
+                ->handle($cancelRequest);
+
+            $this->addFlash('success', 'flash.meeting_request.canceled.success');
+
+            return $this->redirectToRoute('event_meeting_list_request', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
+        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+
+        return $this->render('VimeetAppBundle:Event/Meeting:cancelRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,

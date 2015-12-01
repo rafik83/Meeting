@@ -70,10 +70,10 @@ services:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
             - { name: form.type, alias: meeting_request_approve }
-    vimeet_app.form_type_meeting.refuse_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RefuseRequestType
+    vimeet_app.form_type_meeting.message_request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MessageRequestType
         tags:
-            - { name: form.type, alias: meeting_request_refuse }
+            - { name: form.type, alias: meeting_request_message }
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
