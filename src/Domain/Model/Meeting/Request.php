@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Meeting;
 
-use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -19,6 +21,7 @@ class Request
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
+    const STATE_CANCEL   = 'cancelled';
 
     /**
      * @var int
@@ -61,25 +64,31 @@ class Request
     private $createdAt;
 
     /**
-     * @var string
+     * @var Notification[]
      */
-    private $refuseMessage;
+    private $notifications;
 
     /**
-     * @param Sheet    $from
-     * @param array    $fromParticipants
-     * @param Sheet    $to
-     * @param string   $description
-     * @param DateTime $createdAt
+     * @param Sheet             $from
+     * @param array             $fromParticipants
+     * @param Sheet             $to
+     * @param string            $description
+     * @param DateTimeInterface $createdAt
      */
-    public function __construct(Sheet $from, array $fromParticipants, Sheet $to, $description, DateTime $createdAt)
-    {
+    public function __construct(
+        Sheet $from,
+        array $fromParticipants,
+        Sheet $to,
+        $description,
+        DateTimeInterface $createdAt
+    ) {
         $this->from             = $from;
         $this->fromParticipants = $fromParticipants;
         $this->to               = $to;
         $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->notifications    = new ArrayCollection();
     }
 
     /**
@@ -139,7 +148,7 @@ class Request
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -163,18 +172,26 @@ class Request
     }
 
     /**
-     * @return string
+     * @param Participant[] $fromParticipants
      */
-    public function getRefuseMessage()
+    public function setFromParticipants($fromParticipants)
     {
-        return $this->refuseMessage;
+        $this->fromParticipants = $fromParticipants;
     }
 
     /**
-     * @param string $refuseMessage
+     * @return Notification[]
      */
-    public function setRefuseMessage($refuseMessage)
+    public function getNotifications()
     {
-        $this->refuseMessage = $refuseMessage;
+        return $this->notifications;
+    }
+
+    /**
+     * @param Notification $notification
+     */
+    public function addNotifications(Notification $notification)
+    {
+        $this->notifications[] = $notification;
     }
 }

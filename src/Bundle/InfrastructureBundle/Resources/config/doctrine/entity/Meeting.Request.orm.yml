@@ -14,9 +14,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: string
         createdAt:
             type: datetime
-        refuseMessage:
-            type: text
-            nullable: true
     manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
@@ -31,3 +28,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             joinTable:
                 name: meeting_request_to_participants
+        notifications:
+            targetEntity: Proximum\Vimeet\Domain\Model\Notification
+            joinTable:
+                name: meeting_request_notifications
