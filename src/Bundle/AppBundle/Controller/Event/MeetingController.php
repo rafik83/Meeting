@@ -51,20 +51,19 @@ class MeetingController extends Controller
         $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('VimeetAppBundle:Event/Meeting:display.html.twig', [
-                'eventView'        => $eventView,
-                'sheet'            => $sheet,
-                'schedule'         => $schedule,
-                'meeting'          => $meeting,
-                'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFrom()),
-                'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getTo()),
-                'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
-                    return $participantInfoGuesser->guessParticipantInfo($participant);
-                }, $meeting->getFromParticipants()->toArray()),
-                'toParticipants'   => array_map(function (Participant $participant) use ($participantInfoGuesser) {
-                    return $participantInfoGuesser->guessParticipantInfo($participant);
-                }, $meeting->getToParticipants()->toArray()),
-            ]
-        );
+            'eventView'        => $eventView,
+            'sheet'            => $sheet,
+            'schedule'         => $schedule,
+            'meeting'          => $meeting,
+            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFrom()),
+            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getTo()),
+            'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
+                return $participantInfoGuesser->guessParticipantInfo($participant);
+            }, $meeting->getFromParticipants()->toArray()),
+            'toParticipants'   => array_map(function (Participant $participant) use ($participantInfoGuesser) {
+                return $participantInfoGuesser->guessParticipantInfo($participant);
+            }, $meeting->getToParticipants()->toArray()),
+        ]);
     }
 
     /**
