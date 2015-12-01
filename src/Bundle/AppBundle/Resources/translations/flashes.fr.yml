@@ -34,9 +34,11 @@ flash:
         create:
             success: Votre demande de rendez-vous a bien été transmise
         approved:
-            success: Vous avez bien validé la demande de rendez-vous
+            success: Vous avez bien validé la proposition de rendez-vous
         refused:
-            success: Vous avez bien refusé la demande de rendez-vous
+            success: Vous avez bien refusé la proposition de rendez-vous
+        cancelled:
+            success: Vous avez bien annulé la demande de rendez-vous
     package:
         update_step:
             success: Les informations ont bien été enregistrées

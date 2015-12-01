@@ -256,7 +256,7 @@ class MeetingController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler')
                 ->handle($cancelRequest);
 
-            $this->addFlash('success', 'flash.meeting_request.canceled.success');
+            $this->addFlash('success', 'flash.meeting_request.cancelled.success');
 
             return $this->redirectToRoute('event_meeting_list_request', [
                 'subdomain' => $request->attributes->get('subdomain'),
