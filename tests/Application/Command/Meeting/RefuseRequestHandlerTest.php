@@ -15,9 +15,13 @@ use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
 class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,20 +31,80 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $type      = new Type($event);
         $sheetTo   = new Sheet($event, $type, [], []);
         $sheetFrom = new Sheet($event, $type, [], []);
-        $dateTime  = new DateTime;
+        $dateTime  = new DateTime();
+        $user      = new User('test@test.fr', 'test', 'test', 'fr');
 
         $request         = new Request($sheetFrom, [], $sheetTo, 'test', $dateTime);
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, 'test', $dateTime);
         $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->setRefuseMessage('this is a test');
 
-        $refusedRequest = new RefuseRequest($request);
-        $refusedRequest->refuseMessage = 'this is a test';
+        $refusedRequest = new RefuseRequest($request, $user);
+        $refusedRequest->message = 'this is a test';
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $handler = new RefuseRequestHandler($requestRepository->reveal());
+        $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
+        $notificationRepository->add()->shouldNotBeCalled();
+
+        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
         $handler->handle($refusedRequest);
+    }
+
+    public function testHandleWithNotification()
+    {
+        $event     = new Event();
+        $type      = new Type($event);
+        $sheetTo   = new Sheet($event, $type, [], []);
+        $sheetFrom = new Sheet($event, $type, [], []);
+        $dateTime  = new DateTime();
+        $user      = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+
+        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.refuse');
+        $expectedNotification->setMessage('this is a test');
+
+        $request = new Request($sheetFrom, [], $sheetTo, 'test', $dateTime);
+        $request->setFromParticipants([$this->createParticipantMock($sheetFrom, $user2, 2)]);
+
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, 'test', $dateTime);
+        $expectedRequest->setFromParticipants([$this->createParticipantMock($sheetFrom, $user2, 2)]);
+        $expectedRequest->setState(Request::STATE_REFUSED);
+        $expectedRequest->addNotifications($expectedNotification);
+
+        $refusedRequest = new RefuseRequest($request, $user);
+        $refusedRequest->message = 'this is a test';
+
+
+        $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
+        $notificationRepository->add($expectedNotification)->shouldBeCalled();
+
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $handler->handle($refusedRequest);
+    }
+
+
+    /**
+     * @param Sheet $sheet
+     * @param User $user
+     * @param $id
+     *
+     * @return Participant
+     */
+    public function createParticipantMock(Sheet $sheet, User $user, $id)
+    {
+        $participant = new Participant($sheet, $user, [], false);
+        $reflection  = new \ReflectionClass(Participant::class);
+
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($participant, $id);
+
+        return $participant;
     }
 }
