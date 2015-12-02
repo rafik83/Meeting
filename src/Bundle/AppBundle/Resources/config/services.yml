@@ -60,14 +60,20 @@ services:
             - { name: form.type, alias: who }
     vimeet_app.form_type_meeting.request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType
-        arguments: [ @vimeet_infrastructure.application.components.sheet.participant_info_guesser ]
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
             - { name: form.type, alias: meeting_request_create }
-    vimeet_app.form_type_meeting.approved_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\ApprovedRequestType
-        arguments: [ @vimeet_infrastructure.application.components.sheet.participant_info_guesser ]
+    vimeet_app.form_type_meeting.approve_request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\ApproveRequestType
+        arguments:
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
-            - { name: form.type, alias: meeting_request_approved }
+            - { name: form.type, alias: meeting_request_approve }
+    vimeet_app.form_type_meeting.refuse_request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RefuseRequestType
+        tags:
+            - { name: form.type, alias: meeting_request_refuse }
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:

@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Participant;
 
-class ApprovedRequest
+class RefuseRequest
 {
     /**
      * @var Request
@@ -21,14 +20,16 @@ class ApprovedRequest
     public $request;
 
     /**
-     * @var Participant[]
+     * @var string
      */
-    public $toParticipants;
+    public $refuseMessage;
 
-
+    /**
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->request->setState(Request::STATE_APPROVED);
+        $this->request->setState(Request::STATE_REFUSED);
     }
 }

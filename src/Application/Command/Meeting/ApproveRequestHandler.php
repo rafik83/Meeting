@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
-class ApprovedRequestHandler
+class ApproveRequestHandler
 {
     /**
      * @var RequestRepositoryInterface
@@ -27,17 +27,16 @@ class ApprovedRequestHandler
         $this->requestRepository = $requestRepository;
     }
 
-
     /**
-     * @param ApprovedRequest $approvedRequest
+     * @param ApproveRequest $approveRequest
      */
-    public function handle(ApprovedRequest $approvedRequest)
+    public function handle(ApproveRequest $approveRequest)
     {
         $toParticipants = [];
 
-        if (!empty($approvedRequest->toParticipants)) {
-            foreach ($approvedRequest->toParticipants as $toParticipant) {
-                foreach ($approvedRequest->request->getTo()->getParticipants() as $sheetParticipant) {
+        if (!empty($approveRequest->toParticipants)) {
+            foreach ($approveRequest->toParticipants as $toParticipant) {
+                foreach ($approveRequest->request->getTo()->getParticipants() as $sheetParticipant) {
                     if ($sheetParticipant->getId() === $toParticipant) {
                         $toParticipants[] = $sheetParticipant;
                     }
@@ -45,7 +44,7 @@ class ApprovedRequestHandler
             }
         }
 
-        $approvedRequest->request->setToParticipants($toParticipants);
-        $this->requestRepository->set($approvedRequest->request);
+        $approveRequest->request->setToParticipants($toParticipants);
+        $this->requestRepository->set($approveRequest->request);
     }
 }

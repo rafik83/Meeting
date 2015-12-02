@@ -38,6 +38,10 @@ flash:
     meeting_request:
         create:
             success: Votre demande de rendez-vous a bien été transmise
+        approved:
+            success: Vous avez bien validé la demande de rendez-vous
+        refused:
+            success: Vous avez bien refusé la demande de rendez-vous
     package:
         update_step:
             success: Les informations ont bien été enregistrées

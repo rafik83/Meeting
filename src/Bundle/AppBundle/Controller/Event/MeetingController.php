@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use DateTime;
-use Proximum\Vimeet\Application\Command\Meeting\ApprovedRequest;
+use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
+use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
@@ -145,16 +146,16 @@ class MeetingController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $approvedRequest = new ApprovedRequest($meetingRequest);
-        $form          = $this->createForm('meeting_request_approved', $approvedRequest, [
+        $approveRequest = new ApproveRequest($meetingRequest);
+        $form           = $this->createForm('meeting_request_approve', $approveRequest, [
             'sheet' => $meetingRequest->getTo()
         ]);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.meeting.approved_request_handler')
-                ->handle($approvedRequest);
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler')
+                ->handle($approveRequest);
 
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
@@ -167,6 +168,53 @@ class MeetingController extends BaseController
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
 
         return $this->render('VimeetAppBundle:Event/Meeting:approvedRequest.html.twig', [
+            'eventView' => $eventView,
+            'fromName'  => $fromName,
+            'toName'    => $toName,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param EventView $eventView
+     * @param Sheet $sheet
+     * @param MeetingRequest $meetingRequest
+     *
+     * @return RedirectResponse|Response
+     */
+    public function refusedRequestAction(
+        Request $request,
+        EventView $eventView,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ) {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($meetingRequest->getTo()->getParticipants());
+        $this->isAllowedToUpdateMeetingRequest($meetingRequest);
+
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
+
+        $refuseRequest = new RefuseRequest($meetingRequest);
+        $form          = $this->createForm('meeting_request_refuse', $refuseRequest);
+        $form->add('submit', 'submit');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler')
+                ->handle($refuseRequest);
+
+            $this->addFlash('success', 'flash.meeting_request.refused.success');
+
+            return $this->redirectToRoute('event_meeting_list_proposition', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
+        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+
+        return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,

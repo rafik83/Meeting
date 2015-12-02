@@ -56,14 +56,20 @@ class RequestView
     public $description;
 
     /**
+     * @var string
+     */
+    public $refuseMessage;
+
+    /**
      * @param int      $id
      * @param string   $sheetNameFrom
      * @param string   $sheetNameTo
      * @param string   $state
      * @param string   $description
      * @param DateTime $createdAt
+     * @param string   $refuseMessage
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, $createdAt)
+    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, $createdAt, $refuseMessage)
     {
         $this->id               = $id;
         $this->sheetNameFrom    = $sheetNameFrom;
@@ -73,5 +79,6 @@ class RequestView
         $this->createdAt        = $createdAt;
         $this->fromParticipants = new ArrayCollection();
         $this->toParticipants   = new ArrayCollection();
+        $this->refuseMessage   = $refuseMessage;
     }
 }

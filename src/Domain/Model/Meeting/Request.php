@@ -61,6 +61,11 @@ class Request
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private $refuseMessage;
+
+    /**
      * @param Sheet    $from
      * @param array    $fromParticipants
      * @param Sheet    $to
@@ -155,5 +160,21 @@ class Request
     public function setToParticipants($toParticipants)
     {
         $this->toParticipants = $toParticipants;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefuseMessage()
+    {
+        return $this->refuseMessage;
+    }
+
+    /**
+     * @param string $refuseMessage
+     */
+    public function setRefuseMessage($refuseMessage)
+    {
+        $this->refuseMessage = $refuseMessage;
     }
 }

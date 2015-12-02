@@ -332,3 +332,13 @@ event_meeting_request_approved:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:approvedRequest }
+
+event_meeting_request_refused:
+    path: /sheet/{id}/meeting/proposition/refused/{meetingRequest}
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        meetingRequest: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:refusedRequest }
