@@ -200,6 +200,12 @@ form:
                 label: Motiver votre demande
             submit:
                 label: Envoyer
+    meeting_request_approved:
+        children:
+            toParticipants:
+                label: Choisir des participants pour ce rendez-vous
+            submit:
+                label: Envoyer
     add_unavailability:
         children:
             from:

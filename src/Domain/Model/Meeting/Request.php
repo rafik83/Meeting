@@ -140,4 +140,20 @@ class Request
     {
         return $this->createdAt;
     }
+
+    /**
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @param Participant[] $toParticipants
+     */
+    public function setToParticipants($toParticipants)
+    {
+        $this->toParticipants = $toParticipants;
+    }
 }
