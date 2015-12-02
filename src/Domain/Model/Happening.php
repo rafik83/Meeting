@@ -43,19 +43,28 @@ class Happening
     private $description;
 
     /**
-     * MeetingSlot constructor.
+     * @var string
+     */
+    private $blocking;
+
+    /**
+     * Happening constructor.
      *
      * @param Schedule  $schedule
      * @param \DateTime $begin
      * @param \DateTime $end
+     * @param string    $title
+     * @param string    $description
+     * @param bool      $blocking
      */
-    public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description)
+    public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
     {
         $this->schedule    = $schedule;
         $this->begin       = $begin;
         $this->end         = $end;
         $this->title       = $title;
         $this->description = $description;
+        $this->blocking    = $blocking;
     }
 
     /**
@@ -116,5 +125,15 @@ class Happening
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get blocking
+     *
+     * @return string
+     */
+    public function getBlocking()
+    {
+        return $this->blocking;
     }
 }

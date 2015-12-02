@@ -224,6 +224,12 @@ form:
                 label: À
             submit:
                 label: Modifier
+    participate_happening:
+        children:
+            participants:
+                label: Participants concernés
+            submit:
+                label: Participer
 
 country:
     placeholder: --- Sélectionner un pays ---

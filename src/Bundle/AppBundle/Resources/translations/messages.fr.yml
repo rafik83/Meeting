@@ -115,6 +115,14 @@ event:
         approvedRequest:
             title: Accepter la demande de rendez vous
             label: De %fromName% pour %toName%
+    schedule:
+        columns:
+            meeting:
+                title: Rendez-vous
+            happening:
+                title: Sous-événements
+            unavailability:
+                title: Indisponibilités
     catalog:
         sheet:
             meetingRequest: Demander un rendez-vous
