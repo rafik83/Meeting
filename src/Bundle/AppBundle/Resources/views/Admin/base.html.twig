@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Admin{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     {% endblock %}
@@ -10,7 +10,12 @@
 </head>
 <body>
     <div class="container" style="padding: 30px 0px;">
+        <a href="{{ path('admin_event_list') }}">
+            <span class="glyphicon glyphicon-home"></span> Admin
+        </a>
+
         {{ include('VimeetAppBundle::flashes.html.twig') }}
+
         {% block content %}{% endblock %}
     </div>
     {% block javascripts %}
