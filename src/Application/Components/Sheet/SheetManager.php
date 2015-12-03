@@ -124,7 +124,7 @@ class SheetManager
         $typesForUser    = $this->typeRepository->getAllTypesByUser($user);
 
         $userTypeThatCanSeeTheSheet = [];
-        array_flip($typesThatCanSee);
+        $typesThatCanSee = array_flip($typesThatCanSee);
 
         foreach ($typesForUser as $type) {
             if (isset($typesThatCanSee[$type->getId()])) {
@@ -168,7 +168,9 @@ class SheetManager
             $requests = $this->requestRepository->getAllRequestBySheet($givenSheet);
 
             foreach ($requests as $request) {
-                if (($request->getTo() === $sheet || $request->getFrom() === $sheet) && $request->getState() !== Request::STATE_REFUSED) {
+                if (($request->getTo() === $sheet || $request->getFrom() === $sheet)
+                    && $request->getState() !== Request::STATE_REFUSED
+                ) {
                     unset($allowedSheets[$givenSheetKey]);
                 }
             }
