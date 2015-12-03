@@ -12,6 +12,11 @@ flash:
                     success: L'indisponibilité a bien été mise à jour
                 remove:
                     success: L'indisponibilité a bien été supprimée
+            happening:
+                participate:
+                    success: Vous participez désormais à cet événement.
+                unparticipate:
+                    success: Vous ne participez plus à cet événement.
     change_password:
         success: Votre mot de passe a été changé
     new_password:

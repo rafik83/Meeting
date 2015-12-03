@@ -224,6 +224,7 @@ class MeetingController extends BaseController
     }
 
     /**
+<<<<<<< HEAD
      * @param Request $request
      * @param EventView $eventView
      * @param Sheet $sheet
@@ -275,6 +276,8 @@ class MeetingController extends BaseController
     }
 
     /**
+=======
+>>>>>>> master
      * @param MeetingRequest $meetingRequest
      *
      * @throws AccessDeniedException

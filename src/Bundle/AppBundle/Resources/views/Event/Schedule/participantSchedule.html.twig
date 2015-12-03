@@ -2,7 +2,7 @@
 
 {% for schedule in participantSchedule.schedules %}
 
-    <h3>{{ schedule['date']|date('d/m/Y') }}</h3>
+    <h3>{{ schedule.date|date('d/m/Y') }}</h3>
 
     <p>
         <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
@@ -10,22 +10,12 @@
 
     <div class="row">
 
-        {% for type, column in schedule['columns'] %}
+        {% for type, column in schedule.columns %}
             <div class="col-md-{{ 12 / schedule|length }}">
+                <h4>{{ ('event.schedule.columns.' ~ type ~ '.title')|trans }}</h4>
                 {% for slot in column|default([]) %}
                     <div style="border-top:1px solid #333;">
-                        {% if slot.begin == slot.end %}
-                            <p>À {{ slot.begin|date('H:i') }} : {{ slot.title }}</p>
-                        {% else %}
-                            <p>De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} : {{ slot.title }}</p>
-                        {% endif %}
-                        {% if type == 'unavailabilities' %}
-                            <a href="{{ path('event_sheet_schedule_update_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" class="btn btn-primary btn-xs">Modifier</a>
-                            <form action="{{ path('event_sheet_schedule_remove_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" method="POST" style="display: inline">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-xs">Supprimer</button>
-                            </form>
-                        {% endif %}
+                        {{ include('VimeetAppBundle:Event/Schedule:Slot/' ~ type ~ '.html.twig', { 'sheet': sheet, 'schedule': schedule, 'participant': participantSchedule.participant, 'type': type, 'slot': slot }, false) }}
                     </div>
                 {% endfor %}
             </div>

@@ -280,6 +280,28 @@ event_sheet_schedule_remove_unavailability:
     methods:  [DELETE]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:removeUnavailability }
 
+event_sheet_schedule_participate_happening:
+    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/participate
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        happening_id: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:participateHappening }
+
+event_sheet_schedule_unparticipate_happening:
+    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/unparticipate/{participant_id}
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        happening_id: \d+
+    methods:  [POST]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
+
 #
 # Meeting
 #
@@ -320,7 +342,6 @@ event_meeting_request_refused:
         subdomain: "[a-zA-Z0-9\-]+"
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:refusedRequest }
-
 
 event_meeting_request_cancel:
     path: /sheet/{id}/meeting/request/cancel/{meetingRequest}

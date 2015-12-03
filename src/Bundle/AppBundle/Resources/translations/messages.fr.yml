@@ -128,6 +128,17 @@ event:
         cancelRequest:
             title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
+        refusedRequest:
+            title: Refuser la demande de rendez vous
+            label: De %fromName% pour %toName%
+    schedule:
+        columns:
+            meeting:
+                title: Rendez-vous
+            happening:
+                title: Sous-événements
+            unavailability:
+                title: Indisponibilités
     catalog:
         sheet:
             meetingRequest: Demander un rendez-vous

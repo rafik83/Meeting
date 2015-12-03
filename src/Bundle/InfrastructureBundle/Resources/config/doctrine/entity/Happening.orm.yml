@@ -15,6 +15,8 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: string
         description:
             type: string
+        blocking:
+            type: boolean
     manyToOne:
         schedule:
             targetEntity: Proximum\Vimeet\Domain\Model\Schedule

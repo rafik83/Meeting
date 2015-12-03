@@ -124,7 +124,7 @@ class SheetManager
         $typesForUser    = $this->typeRepository->getAllTypesByUser($user);
 
         $userTypeThatCanSeeTheSheet = [];
-        array_flip($typesThatCanSee);
+        $typesThatCanSee = array_flip($typesThatCanSee);
 
         foreach ($typesForUser as $type) {
             if (isset($typesThatCanSee[$type->getId()])) {
