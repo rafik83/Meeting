@@ -55,18 +55,36 @@ class CancelRequestHandler
     {
         $cancelRequest->request->setState(Request::STATE_CANCEL);
 
-        foreach ($cancelRequest->request->getToParticipants() as $participant) {
-            $notification = new Notification(
-                $cancelRequest->emitter,
-                $participant->getUser(),
-                $this->createdAt,
-                'meeting_request.cancel'
-            );
-            $notification->setMessage($cancelRequest->message);
+        if (!$cancelRequest->request->hasToParticipants()) {
+            foreach ($cancelRequest->request->getTo()->getParticipants() as $participant) {
+                if ($participant->isOwner()) {
+                    $notification = new Notification(
+                        $cancelRequest->emitter,
+                        $participant->getUser(),
+                        $this->createdAt,
+                        'meeting_request.cancel'
+                    );
+                    $notification->setMessage($cancelRequest->message);
 
-            $this->notificationRepository->add($notification);
-            $cancelRequest->request->addNotifications($notification);
+                    $this->notificationRepository->add($notification);
+                    $cancelRequest->request->addNotifications($notification);
+                }
+            }
+        } else {
+            foreach ($cancelRequest->request->getToParticipants() as $participant) {
+                $notification = new Notification(
+                    $cancelRequest->emitter,
+                    $participant->getUser(),
+                    $this->createdAt,
+                    'meeting_request.cancel'
+                );
+                $notification->setMessage($cancelRequest->message);
+
+                $this->notificationRepository->add($notification);
+                $cancelRequest->request->addNotifications($notification);
+            }
         }
+
 
         $this->requestRepository->set($cancelRequest->request);
     }

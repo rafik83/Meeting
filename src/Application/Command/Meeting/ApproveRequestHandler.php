@@ -32,19 +32,16 @@ class ApproveRequestHandler
      */
     public function handle(ApproveRequest $approveRequest)
     {
-        $toParticipants = [];
-
         if (!empty($approveRequest->toParticipants)) {
             foreach ($approveRequest->toParticipants as $toParticipant) {
                 foreach ($approveRequest->request->getTo()->getParticipants() as $sheetParticipant) {
                     if ($sheetParticipant->getId() === $toParticipant) {
-                        $toParticipants[] = $sheetParticipant;
+                        $approveRequest->request->addToParticipant($sheetParticipant);
                     }
                 }
             }
         }
 
-        $approveRequest->request->setToParticipants($toParticipants);
         $this->requestRepository->set($approveRequest->request);
     }
 }

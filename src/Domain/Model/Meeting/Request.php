@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Request
 {
@@ -59,7 +60,7 @@ class Request
     private $state;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     private $createdAt;
 
@@ -69,25 +70,36 @@ class Request
     private $notifications;
 
     /**
+     * @var User
+     */
+    private $creator;
+
+    /**
      * @param Sheet             $from
      * @param array             $fromParticipants
      * @param Sheet             $to
+     * @param array             $toParticipants
      * @param string            $description
      * @param DateTimeInterface $createdAt
+     * @param User              $creator
      */
     public function __construct(
         Sheet $from,
         array $fromParticipants,
         Sheet $to,
+        array $toParticipants,
         $description,
-        DateTimeInterface $createdAt
+        DateTimeInterface $createdAt,
+        User $creator
     ) {
         $this->from             = $from;
-        $this->fromParticipants = $fromParticipants;
+        $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->to               = $to;
+        $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->creator          = $creator;
         $this->notifications    = new ArrayCollection();
     }
 
@@ -164,19 +176,19 @@ class Request
     }
 
     /**
-     * @param Participant[] $toParticipants
+     * @param Participant $toParticipant
      */
-    public function setToParticipants($toParticipants)
+    public function addToParticipant(Participant $toParticipant)
     {
-        $this->toParticipants = $toParticipants;
+        $this->toParticipants->add($toParticipant);
     }
 
     /**
-     * @param Participant[] $fromParticipants
+     * @param Participant $fromParticipant
      */
-    public function setFromParticipants($fromParticipants)
+    public function addFromParticipant(Participant $fromParticipant)
     {
-        $this->fromParticipants = $fromParticipants;
+        $this->fromParticipants->add($fromParticipant);
     }
 
     /**
@@ -193,5 +205,29 @@ class Request
     public function addNotifications(Notification $notification)
     {
         $this->notifications[] = $notification;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToParticipants()
+    {
+        return !$this->toParticipants->isEmpty();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFromParticipants()
+    {
+        return !$this->fromParticipants->isEmpty();
     }
 }

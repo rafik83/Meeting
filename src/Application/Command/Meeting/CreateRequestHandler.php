@@ -49,8 +49,10 @@ class CreateRequestHandler
             $createRequest->from,
             $fromParticipants,
             $createRequest->to,
+            [],
             $createRequest->description,
-            $createRequest->createdAt
+            $createRequest->createdAt,
+            $createRequest->creator
         );
         $this->requestRepository->add($request);
     }

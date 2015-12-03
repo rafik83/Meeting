@@ -55,10 +55,10 @@ class RefuseRequestHandler
     {
         $refuseRequest->request->setState(Request::STATE_REFUSED);
 
-        foreach ($refuseRequest->request->getFromParticipants() as $participant) {
+        if (!$refuseRequest->request->hasFromParticipants()) {
             $notification = new Notification(
                 $refuseRequest->emitter,
-                $participant->getUser(),
+                $refuseRequest->request->getCreator(),
                 $this->createdAt,
                 'meeting_request.refuse'
             );
@@ -66,6 +66,19 @@ class RefuseRequestHandler
 
             $this->notificationRepository->add($notification);
             $refuseRequest->request->addNotifications($notification);
+        } else {
+            foreach ($refuseRequest->request->getFromParticipants() as $participant) {
+                $notification = new Notification(
+                    $refuseRequest->emitter,
+                    $participant->getUser(),
+                    $this->createdAt,
+                    'meeting_request.refuse'
+                );
+                $notification->setMessage($refuseRequest->message);
+
+                $this->notificationRepository->add($notification);
+                $refuseRequest->request->addNotifications($notification);
+            }
         }
 
         $this->requestRepository->set($refuseRequest->request);
