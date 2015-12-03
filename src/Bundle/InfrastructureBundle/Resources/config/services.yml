@@ -55,17 +55,16 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - @doctrine.orm.entity_manager
-<<<<<<< HEAD
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
-=======
+        arguments:
+            - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:
             - @doctrine.orm.entity_manager
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
->>>>>>> master
         arguments:
             - @doctrine.orm.entity_manager
 
