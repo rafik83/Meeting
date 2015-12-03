@@ -43,6 +43,16 @@ Enable/Disable php xdebug
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
 * *openl10n*: http://openl10n-app.elao.ninja/ or http://openl10n.elao.ninja/
 
+### Mailtrap
+
+Pour consulter les emails, il faut se connecter sur: https://mailtrap.io/signin
+
+Avec les identifiants suivant:
+
+Email: `nicolas.dievart+mailtrap@elao.com`
+
+Mot de passe: `Uwg-ig(n0#CZh'`
+
 ### Fixtures
 
 User exhibitor: test@elao.com / p@ssw0rd
