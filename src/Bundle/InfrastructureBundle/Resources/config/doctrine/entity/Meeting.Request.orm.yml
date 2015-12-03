@@ -14,9 +14,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: string
         createdAt:
             type: datetime
-        refuseMessage:
-            type: text
-            nullable: true
     manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
