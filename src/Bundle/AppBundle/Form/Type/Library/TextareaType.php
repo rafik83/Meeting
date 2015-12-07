@@ -40,7 +40,7 @@ class TextareaType extends AbstractType
      */
     public function getParent()
     {
-        return 'textarea';
+        return \Symfony\Component\Form\Extension\Core\Type\TextareaType::class;
     }
 
     /**

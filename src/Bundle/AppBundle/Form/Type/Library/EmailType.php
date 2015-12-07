@@ -39,7 +39,7 @@ class EmailType extends AbstractType
      */
     public function getParent()
     {
-        return 'email';
+        return \Symfony\Component\Form\Extension\Core\Type\EmailType::class;
     }
 
     /**

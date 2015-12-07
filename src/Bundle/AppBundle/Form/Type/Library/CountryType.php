@@ -40,7 +40,7 @@ class CountryType extends AbstractType
      */
     public function getParent()
     {
-        return 'country';
+        return \Symfony\Component\Form\Extension\Core\Type\CountryType::class;
     }
 
     /**
