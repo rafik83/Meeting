@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
@@ -58,34 +59,34 @@ class CancelRequestHandler
         if (!$cancelRequest->request->hasToParticipants()) {
             foreach ($cancelRequest->request->getTo()->getParticipants() as $participant) {
                 if ($participant->isOwner()) {
-                    $notification = new Notification(
-                        $cancelRequest->emitter,
-                        $participant->getUser(),
-                        $this->createdAt,
-                        'meeting_request.cancel'
-                    );
-                    $notification->setMessage($cancelRequest->message);
-
-                    $this->notificationRepository->add($notification);
-                    $cancelRequest->request->addNotifications($notification);
+                    $this->notify($cancelRequest, $participant);
                 }
             }
         } else {
             foreach ($cancelRequest->request->getToParticipants() as $participant) {
-                $notification = new Notification(
-                    $cancelRequest->emitter,
-                    $participant->getUser(),
-                    $this->createdAt,
-                    'meeting_request.cancel'
-                );
-                $notification->setMessage($cancelRequest->message);
-
-                $this->notificationRepository->add($notification);
-                $cancelRequest->request->addNotifications($notification);
+                $this->notify($cancelRequest, $participant);
             }
         }
 
 
         $this->requestRepository->set($cancelRequest->request);
+    }
+
+    /**
+     * @param CancelRequest $cancelRequest
+     * @param Participant   $participant
+     */
+    private function notify(CancelRequest $cancelRequest, Participant $participant)
+    {
+        $notification = new Notification(
+            $cancelRequest->emitter,
+            $participant->getUser(),
+            $this->createdAt,
+            'meeting_request.cancel'
+        );
+        $notification->setMessage($cancelRequest->message);
+
+        $this->notificationRepository->add($notification);
+        $cancelRequest->request->addNotifications($notification);
     }
 }
