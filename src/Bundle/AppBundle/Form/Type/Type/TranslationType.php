@@ -24,12 +24,4 @@ class TranslationType extends AbstractType
             ->add('title', 'text')
         ;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_update_translation';
-    }
 }

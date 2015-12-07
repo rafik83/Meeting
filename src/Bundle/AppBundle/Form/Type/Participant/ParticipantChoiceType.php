@@ -65,12 +65,4 @@ class ParticipantChoiceType extends AbstractType
     {
         return EntityType::class;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant_choice';
-    }
 }

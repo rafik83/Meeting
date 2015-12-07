@@ -37,12 +37,4 @@ class PaymentModeType extends AbstractType
     {
         return ChoiceType::class;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'payment_mode';
-    }
 }

@@ -34,12 +34,4 @@ abstract class AbstractAddParticipantType extends AbstractParticipantType
     {
         parent::configureOptions($resolver);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'abstract_add_participant';
-    }
 }

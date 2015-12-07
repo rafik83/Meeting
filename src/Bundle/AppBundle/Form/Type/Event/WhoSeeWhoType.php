@@ -34,12 +34,4 @@ class WhoSeeWhoType extends AbstractType
     {
         $resolver->setRequired(['event']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'who_see_who';
-    }
 }

@@ -47,7 +47,7 @@ class FirstNameType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_first_name';
     }

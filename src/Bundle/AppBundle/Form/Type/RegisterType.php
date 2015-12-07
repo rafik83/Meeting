@@ -39,12 +39,4 @@ class RegisterType extends AbstractType
             'intention'  => 'register',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'register';
-    }
 }

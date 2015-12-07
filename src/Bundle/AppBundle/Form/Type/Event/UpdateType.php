@@ -62,12 +62,4 @@ class UpdateType extends AbstractType
             'data_class' => 'Proximum\Vimeet\Application\Command\Event\Update',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'event_update';
-    }
 }

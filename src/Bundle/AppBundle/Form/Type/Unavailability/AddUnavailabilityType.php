@@ -55,12 +55,4 @@ class AddUnavailabilityType extends AbstractType
             'intention'  => 'add_unavailability',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'add_unavailability';
-    }
 }

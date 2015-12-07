@@ -22,12 +22,4 @@ class ForgottenPasswordType  extends AbstractType
     {
         $builder->add('email', 'email');
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'forgotten_password';
-    }
 }

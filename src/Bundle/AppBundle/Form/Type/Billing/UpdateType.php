@@ -43,12 +43,4 @@ class UpdateType extends AbstractType
 
         $resolver->setRequired(['template', 'locale']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_sheet_billing';
-    }
 }

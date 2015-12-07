@@ -65,7 +65,7 @@ class ParticipantType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_participant';
     }

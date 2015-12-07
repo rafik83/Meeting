@@ -37,11 +37,4 @@ class LoginType extends AbstractType
             ]
         );
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'login';
-    }
 }

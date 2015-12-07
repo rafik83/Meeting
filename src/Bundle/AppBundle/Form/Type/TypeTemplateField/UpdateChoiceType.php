@@ -48,7 +48,7 @@ class UpdateChoiceType extends UpdateType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'type_template_field_update_lib_choice';
     }

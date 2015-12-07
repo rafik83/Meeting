@@ -36,12 +36,4 @@ class ChoiceLabelTranslationsType extends AbstractType
     {
         $resolver->setRequired(['locales']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_template_field_update_choice_label_translations';
-    }
 }

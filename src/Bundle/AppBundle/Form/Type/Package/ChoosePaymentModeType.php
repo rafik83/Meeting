@@ -28,12 +28,4 @@ class ChoosePaymentModeType extends AbstractType
             ])
         ;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'choose_payment_mode';
-    }
 }

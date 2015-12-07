@@ -40,7 +40,7 @@ class PlanningType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_planning';
     }

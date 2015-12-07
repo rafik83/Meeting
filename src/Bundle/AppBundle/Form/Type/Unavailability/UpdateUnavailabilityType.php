@@ -46,12 +46,4 @@ class UpdateUnavailabilityType extends AbstractType
             'intention'  => 'update_unavailability',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_unavailability';
-    }
 }

@@ -87,12 +87,4 @@ class WhoType extends AbstractType
     {
         return ChoiceType::class;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'who';
-    }
 }

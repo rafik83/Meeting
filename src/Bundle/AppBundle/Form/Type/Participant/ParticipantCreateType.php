@@ -26,12 +26,4 @@ class ParticipantCreateType extends AbstractParticipantType
             'intention'  => 'participant_create',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant_create';
-    }
 }

@@ -34,7 +34,7 @@ class UploadWithChoicesType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'upload_with_choices';
     }

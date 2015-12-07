@@ -57,12 +57,4 @@ class ApproveRequestType extends AbstractType
     {
         $resolver->setRequired(['sheet']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'meeting_request_approve';
-    }
 }

@@ -53,14 +53,6 @@ class WhatType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'dont_see_what';
-    }
-
-    /**
      * @param WhoInterface $who
      *
      * @return array

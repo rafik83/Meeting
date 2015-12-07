@@ -27,12 +27,4 @@ class NewPasswordType extends AbstractType
             ])
         ;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'new_password';
-    }
 }

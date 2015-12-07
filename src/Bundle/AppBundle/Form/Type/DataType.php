@@ -46,12 +46,4 @@ class DataType extends AbstractType
             'locale'   => ['string'],
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'data';
-    }
 }

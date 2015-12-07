@@ -39,12 +39,4 @@ class ChangePasswordType extends AbstractType
             'intention'  => 'change_password',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'change_password';
-    }
 }

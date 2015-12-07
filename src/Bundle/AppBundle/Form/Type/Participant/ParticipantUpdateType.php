@@ -26,12 +26,4 @@ class ParticipantUpdateType extends AbstractParticipantType
             'intention'  => 'participant_update',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant_update';
-    }
 }

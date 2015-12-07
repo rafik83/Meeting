@@ -40,7 +40,7 @@ class ChoiceType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_choice';
     }

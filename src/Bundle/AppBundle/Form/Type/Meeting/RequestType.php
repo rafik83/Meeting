@@ -60,12 +60,4 @@ class RequestType extends AbstractType
     {
         $resolver->setRequired(['sheet']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'meeting_request_create';
-    }
 }

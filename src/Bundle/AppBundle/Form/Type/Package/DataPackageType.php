@@ -45,12 +45,4 @@ class DataPackageType extends AbstractType
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'data_package';
-    }
 }

@@ -24,12 +24,4 @@ class UpdateTranslationType extends AbstractType
             ->add('description', 'textarea', ['required' => false])
         ;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'event_update_translation';
-    }
 }

@@ -56,12 +56,4 @@ class CreateType extends AbstractType
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_create';
-    }
 }

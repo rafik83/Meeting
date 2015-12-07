@@ -35,12 +35,4 @@ class AddParticipantType extends AbstractAddParticipantType
             'intention'  => 'add_participant',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'add_participant';
-    }
 }

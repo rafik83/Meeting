@@ -35,12 +35,4 @@ class DeleteParticipantType extends AbstractType
             'method'     => 'DELETE',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'delete_participant';
-    }
 }

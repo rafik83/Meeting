@@ -35,12 +35,4 @@ class TemplateChoiceType extends AbstractType
     {
         return EntityType::class;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'template_choice';
-    }
 }

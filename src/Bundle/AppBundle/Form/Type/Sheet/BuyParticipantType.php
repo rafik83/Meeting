@@ -48,12 +48,4 @@ class BuyParticipantType extends AbstractType
 
         $resolver->setRequired(['template', 'locale']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'buy_participant';
-    }
 }

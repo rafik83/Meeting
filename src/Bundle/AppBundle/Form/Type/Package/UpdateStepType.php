@@ -44,12 +44,4 @@ class UpdateStepType extends AbstractType
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_sheet_package_step';
-    }
 }

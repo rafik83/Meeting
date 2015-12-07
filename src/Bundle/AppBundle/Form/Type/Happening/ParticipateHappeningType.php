@@ -54,12 +54,4 @@ class ParticipateHappeningType extends AbstractType
             'intention'  => 'participate_happening',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participate_happening';
-    }
 }

@@ -25,12 +25,4 @@ class RefuseRequestType extends AbstractType
                 'required' => false,
             ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'meeting_request_refuse';
-    }
 }

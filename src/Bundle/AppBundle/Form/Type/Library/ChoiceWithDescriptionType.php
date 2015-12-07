@@ -49,7 +49,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'choice_with_description';
     }

@@ -71,12 +71,4 @@ class CategoryType extends AbstractType
     {
         $resolver->setRequired(['event', 'locale']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category';
-    }
 }

@@ -62,7 +62,7 @@ class UpdateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'type_template_field_update';
     }

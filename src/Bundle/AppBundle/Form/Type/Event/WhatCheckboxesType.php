@@ -53,12 +53,4 @@ class WhatCheckboxesType extends AbstractType
     {
         $resolver->setRequired(['template', 'locale']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'what_sheet';
-    }
 }
