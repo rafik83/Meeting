@@ -114,9 +114,14 @@ class Meeting
         return $this;
     }
 
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
     public function hasFromParticipant(Participant $participant)
     {
-
+        return $this->fromParticipants->contains($participant);
     }
 
     /**
@@ -157,6 +162,16 @@ class Meeting
         $this->toParticipants->removeElement($participant);
 
         return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasToParticipant(Participant $participant)
+    {
+        return $this->toParticipants->contains($participant);
     }
 
     /**

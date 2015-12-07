@@ -49,6 +49,8 @@ class MeetingController extends Controller
      */
     public function displayAction(EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $participantInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser');
         $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
@@ -91,6 +93,8 @@ class MeetingController extends Controller
      */
     public function cancelAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $cancel = new Cancel($meeting);
         $form   = $this->createForm(new CancelType(), $cancel);
 
@@ -136,6 +140,8 @@ class MeetingController extends Controller
      */
     public function updateAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $update = new Update($meeting, $sheet);
         $form   = $this->createForm(new UpdateType(), $update, ['submit' => true]);
 

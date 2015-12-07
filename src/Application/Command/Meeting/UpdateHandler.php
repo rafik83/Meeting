@@ -56,7 +56,7 @@ class UpdateHandler
         $notifications = [];
 
         // Remove removed participants
-        foreach ($update->meeting->getToParticipants() as $participant) {
+        foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
                 $notifications[] = $this->createRemovedParticipantNotification($participant);
@@ -65,8 +65,10 @@ class UpdateHandler
 
         // Add new participant
         foreach ($update->participants as $participant) {
-            $update->meeting->addFromParticipant($participant);
-            $notifications = $this->createAddedParticipantNotification($participant);
+            if (!$update->meeting->hasFromParticipant($participant)) {
+                $update->meeting->addFromParticipant($participant);
+                $notifications = $this->createAddedParticipantNotification($participant);
+            }
         }
 
         return $notifications;
@@ -86,8 +88,10 @@ class UpdateHandler
 
         // Add new participant
         foreach ($update->participants as $participant) {
-            $update->meeting->addToParticipant($participant);
-            $notifications = $this->createAddedParticipantNotification($participant);
+            if (!$update->meeting->hasFromParticipant($participant)) {
+                $update->meeting->addToParticipant($participant);
+                $notifications = $this->createAddedParticipantNotification($participant);
+            }
         }
 
         return $notifications;
