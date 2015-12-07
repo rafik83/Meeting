@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class MeetingController extends BaseController
+class MeetingRequestController extends BaseController
 {
     /**
      * @param EventView $eventView
