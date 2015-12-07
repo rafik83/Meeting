@@ -49,8 +49,8 @@ class Unavailability
     {
         $this->schedule    = $schedule;
         $this->participant = $participant;
-        $this->begin       = $begin;
-        $this->end         = $end;
+        $this->begin       = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->end         = $end->modify($this->schedule->getDate()->format('Y-m-d'));
     }
 
     /**
