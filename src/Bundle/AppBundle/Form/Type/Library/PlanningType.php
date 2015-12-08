@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class PlanningType extends AbstractLocalizedType
 {

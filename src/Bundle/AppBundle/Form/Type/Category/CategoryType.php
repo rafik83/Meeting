@@ -12,12 +12,13 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CategoryType extends AbstractType
 {
@@ -44,7 +45,7 @@ class CategoryType extends AbstractType
                 'type'  => TranslationType::class,
                 'label' => false,
             ])
-            ->add('types', 'choice', [
+            ->add('types', ChoiceType::class, [
                 'choices'  => $this->typeRepository->getTypesTitleByEventAndLocale(
                     $options['event'],
                     $options['locale']

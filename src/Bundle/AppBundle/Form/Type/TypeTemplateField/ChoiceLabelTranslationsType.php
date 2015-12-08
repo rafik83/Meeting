@@ -11,10 +11,10 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ChoiceLabelTranslationsType extends AbstractType
 {

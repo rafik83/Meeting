@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UpdateChoiceType extends UpdateType
 {

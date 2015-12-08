@@ -14,8 +14,8 @@ use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 class EventController extends Controller
 {

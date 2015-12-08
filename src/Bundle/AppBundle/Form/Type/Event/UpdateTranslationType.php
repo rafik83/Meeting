@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class UpdateTranslationType extends AbstractType
 {

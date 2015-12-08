@@ -15,15 +15,15 @@ use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ForgottenPasswordController extends BaseController
 {
