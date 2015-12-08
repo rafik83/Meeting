@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
+use Proximum\Vimeet\Application\Components\Library\Choice\ChoiceBuilder;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,6 +28,7 @@ class ChoiceType extends AbstractLocalizedType
                 return $this->getChoices($options);
             },
             'translation_domain' => false,
+            'choices_as_values' => true,
         ]);
     }
 
@@ -47,50 +49,18 @@ class ChoiceType extends AbstractLocalizedType
     }
 
     /**
-     * @param array $options
+     * @param \ArrayAccess $options
      *
      * @return array
      */
-    private function getChoices($options)
+    protected function getChoices(\ArrayAccess $options)
     {
-        $template  = $options['template'];
-        $locale    = $options['locale'];
-        $choices   = [];
-        $optgroups = false;
+        $choices = $options['template']['choices'];
+        $locale  = $options['locale'];
+        $builder = new ChoiceBuilder();
 
-        foreach ($template['choices'] as $key => $choice) {
-            if (!isset($choice['label'][$locale])) {
-                continue;
-            }
-
-            // choice with optgroups
-            if (isset($choice['choices']) && is_array($choice['choices'])) {
-                $optgroups = true;
-                $items     = [];
-
-                foreach ($choice['choices'] as $keyItem => $item) {
-                    if (isset($item['label'][$locale])) {
-                        $items[$keyItem] = $item['label'][$locale];
-                    }
-                }
-
-                asort($items);
-
-                // label is the optgroup
-                $choices[$choice['label'][$locale]] = $items;
-
-                continue;
-            }
-
-            $choices[$key] = $choice['label'][$locale];
-        }
-
-        if ($optgroups) {
-            ksort($choices);
-        } else {
-            asort($choices);
-        }
-
-        return $choices;
+        return $builder->areGroupedChoices($choices) ?
+            $builder->buildGroupedChoices($choices, $locale) :
+            $builder->buildChoices($choices, $locale);
     }
 }
