@@ -73,20 +73,22 @@ class ProductBuilder
 
         foreach ($template->getSteps() as $step) {
             foreach ($step->getProducts() as $product) {
-                if ($product->getOptionsIncludedIn() !== null) {
-                    foreach ($product->getOptionsIncludedIn() as $includedInkey => $includedIn) {
-                        $path = explode('.', $includedInkey);
-                        $includer = null;
+                if ($product->getOptionsIncludedIn() === null) {
+                    continue;
+                }
 
-                        if (count($path) === 3) {
-                            $includer = $template->getStep($path[0])->getProduct($path[1])->getChoice($path[2]);
-                        } else {
-                            $includer = $template->getStep($path[0])->getProduct($path[1]);
-                        }
+                foreach ($product->getOptionsIncludedIn() as $productThatIncludekey => $includedQuantity) {
+                    $path               = explode('.', $productThatIncludekey);
+                    $productThatInclude = null;
 
-                        if (null !== $includer) {
-                            $product->including($includer, $product, $includedIn);
-                        }
+                    if (count($path) === 3) {
+                        $productThatInclude = $template->getStep($path[0])->getProduct($path[1])->getChoice($path[2]);
+                    } else {
+                        $productThatInclude = $template->getStep($path[0])->getProduct($path[1]);
+                    }
+
+                    if (null !== $productThatInclude) {
+                        $product->including($productThatInclude, $product, $includedQuantity);
                     }
                 }
             }
