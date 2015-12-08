@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
@@ -23,6 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType;
 
 class MeetingController extends BaseController
 {
@@ -98,8 +98,8 @@ class MeetingController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $createRequest = new CreateRequest($from, $to, new DateTime);
-        $form          = $this->createForm('meeting_request_create', $createRequest, [
+        $createRequest = new CreateRequest($from, $to, new \DateTime());
+        $form          = $this->createForm(RequestType::class, $createRequest, [
             'sheet' => $from
         ]);
         $form->add('submit', SubmitType::class);
