@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Product\Products;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibParticipantProduct extends AbstractProduct
+class LibParticipantProduct extends AbstractRequiredDescriptionTypeUnitPriceOptions
 {
     /**
      * @var int
@@ -57,40 +57,6 @@ class LibParticipantProduct extends AbstractProduct
     public function getLabel($locale)
     {
         return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getDescription($locale)
-    {
-        return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return $this->options['required'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->options['type'];
-    }
-
-    /**
-     * @return float
-     */
-    public function getUnitPrice()
-    {
-        return $this->options['unitPrice'];
     }
 
     /**
