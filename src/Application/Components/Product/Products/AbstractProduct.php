@@ -58,7 +58,7 @@ abstract class AbstractProduct implements ProductInterface
      */
     public function including(ProductInterface $includer, ProductInterface $include, $quantity)
     {
-        $including = new Including($includer, $include, $quantity);
+        return new Including($includer, $include, $quantity);
     }
 
     /**
