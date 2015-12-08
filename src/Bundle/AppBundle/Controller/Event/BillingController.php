@@ -36,7 +36,7 @@ class BillingController extends BaseController
 
         $update = new Update($sheet, $sheet->getBillingData());
 
-        $form = $this->createForm(new UpdateType(), $update, [
+        $form = $this->createForm(UpdateType::class, $update, [
             'template' => $sheet->getEvent()->getBillingTemplate(),
             'locale'   => $request->getLocale(),
         ]);
@@ -81,7 +81,7 @@ class BillingController extends BaseController
      */
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        $form = $this->createForm(new ChoosePaymentModeType());
+        $form = $this->createForm(ChoosePaymentModeType::class);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

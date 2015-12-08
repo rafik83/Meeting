@@ -32,7 +32,7 @@ class RuleController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $form = $this->createForm(new WhoSeeWhoType(), [], [
+        $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
@@ -165,7 +165,7 @@ class RuleController extends Controller
      */
     private function createWhatForm(Rule $rule, $locale)
     {
-        $form = $this->createForm(new WhatType(), $rule->getWhat(), [
+        $form = $this->createForm(WhatType::class, $rule->getWhat(), [
             'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
             'who'    => $rule->getSeeable(),

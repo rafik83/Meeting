@@ -51,7 +51,7 @@ class TypeController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form   = $this->createForm(new CreateType(), $create, [
+        $form   = $this->createForm(CreateType::class, $create, [
             'action' => $this->generateUrl('admin_type_create', ['id' => $event->getId()]),
             'method' => 'POST',
         ]);
@@ -92,7 +92,7 @@ class TypeController extends Controller
         }
 
         $update = new Update($type);
-        $form   = $this->createForm(new UpdateType(), $update, [
+        $form   = $this->createForm(UpdateType::class, $update, [
             'action' => $this->generateUrl('admin_type_update', ['id' => $event->getId(), 'type_id' => $type->getId()]),
             'method' => 'POST',
         ]);

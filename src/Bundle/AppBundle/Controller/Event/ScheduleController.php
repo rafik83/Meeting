@@ -72,7 +72,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $command = new Add($schedule);
-        $form    = $this->createForm(new AddUnavailabilityType(), $command, [
+        $form    = $this->createForm(AddUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', [
                 'subdomain'   => $request->attributes->get('subdomain'),
                 'id'          => $sheet->getId(),
@@ -130,7 +130,7 @@ class ScheduleController extends Controller
         }
 
         $command = new Update($unavailability);
-        $form    = $this->createForm(new UpdateUnavailabilityType(), $command, [
+        $form    = $this->createForm(UpdateUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
                 'subdomain'         => $request->attributes->get('subdomain'),
                 'id'                => $sheet->getId(),
@@ -227,7 +227,7 @@ class ScheduleController extends Controller
 
         // Command and form
         $command = new Participate($happening, [$participant]);
-        $form    = $this->createForm(new ParticipateHappeningType(), $command, [
+        $form    = $this->createForm(ParticipateHappeningType::class, $command, [
             'sheet'     => $sheet,
             'happening' => $happening,
         ]);

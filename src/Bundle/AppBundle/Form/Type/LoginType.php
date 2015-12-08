@@ -23,18 +23,16 @@ class LoginType extends AbstractType
     {
         $builder
             ->add('username', 'email')
-            ->add('password', 'password');
+            ->add('password', 'password')
+            ->add('submit', 'submit');
     }
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'method' => 'POST',
-                'submit' => true,
-            ]
-        );
+        $resolver->setDefaults([
+            'method' => 'POST',
+        ]);
     }
 }

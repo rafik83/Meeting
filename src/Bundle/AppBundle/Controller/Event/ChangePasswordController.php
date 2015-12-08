@@ -34,7 +34,7 @@ class ChangePasswordController extends Controller
 
         $changePassword = new ChangePassword($this->getUser());
 
-        $form = $this->createForm(new ChangePasswordType(), $changePassword, [
+        $form = $this->createForm(ChangePasswordType::class, $changePassword, [
             'action' => $this->generateUrl('event_change_password', ['subdomain' => $subdomain]),
             'method' => 'POST',
         ]);

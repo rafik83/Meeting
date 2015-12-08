@@ -42,7 +42,7 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
         $updateStep = new UpdateStep($sheet, $step);
-        $form       = $this->createForm(new UpdateStepType(), $updateStep, [
+        $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,

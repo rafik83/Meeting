@@ -42,7 +42,7 @@ class ForgottenPasswordController extends BaseController
 
         $forgottenPassword = new ForgottenPassword($eventView, $request->getLocale());
 
-        $form = $this->createForm(new ForgottenPasswordType(), $forgottenPassword, [
+        $form = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
             'action' => $this->generateUrl('event_forgotten_password', ['subdomain' => $subdomain]),
             'method' => 'POST',
         ]);
@@ -93,7 +93,7 @@ class ForgottenPasswordController extends BaseController
         $subdomain   = $request->attributes->get('subdomain');
         $newPassword = new NewPassword($forgottenPasswordToken->getUser());
 
-        $form = $this->createForm(new NewPasswordType(), $newPassword, [
+        $form = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'subdomain' => $subdomain,
                 'token'     => $forgottenPasswordToken->getToken(),

@@ -79,7 +79,7 @@ class HomeController extends BaseController
         $register         = new Register();
         $register->locale = $request->getLocale();
 
-        $form = $this->createForm(new RegisterType(), $register, [
+        $form = $this->createForm(RegisterType::class, $register, [
             'action' => $this->generateUrl('event_register', [
                 'typeView'  => $typeView->id,
                 'subdomain' => $request->attributes->get('subdomain'),
@@ -131,7 +131,7 @@ class HomeController extends BaseController
 
         // Create participate form
         $create = new Create();
-        $form   = $this->createForm(new ParticipantCreateType(), $create, [
+        $form   = $this->createForm(ParticipantCreateType::class, $create, [
             'locale'   => $eventView->locale,
             'template' => $this
                 ->get('vimeet_infrastructure.repository.type_repository')
