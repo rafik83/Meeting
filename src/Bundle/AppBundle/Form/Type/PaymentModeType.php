@@ -24,8 +24,8 @@ class PaymentModeType extends AbstractType
         $resolver->setDefaults([
             'choice_as_value' => true,
             'choices'         => [
-                'cash'     => 'Paiement de la totalité',
-                'transfer' => 'Virement',
+                'Paiement de la totalité' => 'cash',
+                'Virement'                => 'transfer',
             ],
         ]);
     }

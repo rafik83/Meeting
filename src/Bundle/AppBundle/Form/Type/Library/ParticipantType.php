@@ -61,6 +61,7 @@ class ParticipantType extends AbstractLocalizedType
                 'choices'  => $this->getParticipantChoices($sheet),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
+                'choices_as_values' => true,
             ]);
     }
 

@@ -36,6 +36,7 @@ class PlanningType extends AbstractLocalizedType
                 'choices'  => array_combine($range, $range),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
+                'choices_as_values' => true,
             ]);
     }
 
