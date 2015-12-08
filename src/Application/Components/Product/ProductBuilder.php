@@ -22,20 +22,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ProductBuilder
 {
     /**
-     * @var array
-     */
-    private $productLibs = [];
-
-    /**
-     * @param string           $name
-     * @param ProductInterface $product
-     */
-    public function registerProduct($name, ProductInterface $product)
-    {
-        $this->productLibs[$name] = $product;
-    }
-
-    /**
      * @param Sheet $sheet
      *
      * @return Template
