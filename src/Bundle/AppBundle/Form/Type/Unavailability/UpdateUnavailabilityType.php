@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 
 class UpdateUnavailabilityType extends AbstractType
 {
@@ -23,12 +24,12 @@ class UpdateUnavailabilityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('from', 'time', [
+            ->add('from', TimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
-            ->add('to', 'time', [
+            ->add('to', TimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',

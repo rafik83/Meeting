@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class UpdateTranslationType extends AbstractType
 {
@@ -21,7 +22,7 @@ class UpdateTranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', 'textarea', ['required' => false])
+            ->add('description', TextareaType::class, ['required' => false])
         ;
     }
 }

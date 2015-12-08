@@ -23,7 +23,7 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('billingData', new DataType(), [
+            ->add('billingData', DataType::class, [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,

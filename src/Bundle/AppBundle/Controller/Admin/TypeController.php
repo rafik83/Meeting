@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TypeController extends Controller
 {
@@ -55,7 +56,7 @@ class TypeController extends Controller
             'action' => $this->generateUrl('admin_type_create', ['id' => $event->getId()]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.type.create_handler')->handle($create);
@@ -96,7 +97,7 @@ class TypeController extends Controller
             'action' => $this->generateUrl('admin_type_update', ['id' => $event->getId(), 'type_id' => $type->getId()]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.type.update_handler')->handle($update);

@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CreateType extends AbstractType
 {
@@ -26,11 +27,11 @@ class CreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('template', new TemplateChoiceType(), [
+            ->add('template', TemplateChoiceType::class, [
                 'placeholder' => '',
             ])
-            ->add('translations', 'collection', [
-                'type'  => new TranslationType(),
+            ->add('translations', CollectionType::class, [
+                'type'  => TranslationType::class,
                 'label' => false,
             ])
         ;

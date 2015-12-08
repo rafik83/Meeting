@@ -14,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ChoiceLabelTranslationsType extends AbstractType
 {
@@ -23,7 +24,7 @@ class ChoiceLabelTranslationsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['locales'] as $locale) {
-            $builder->add($locale, 'text', [
+            $builder->add($locale, TextType::class, [
                 'label'  => Intl::getLocaleBundle()->getLocaleName($locale),
             ]);
         }

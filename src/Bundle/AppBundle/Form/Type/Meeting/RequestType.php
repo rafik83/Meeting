@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class RequestType extends AbstractType
 {
@@ -42,13 +44,13 @@ class RequestType extends AbstractType
         }
 
         $builder
-            ->add('fromParticipants', 'choice', [
+            ->add('fromParticipants', ChoiceType::class, [
                 'choices'  => $participants,
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,
             ])
-            ->add('description', 'textarea', [
+            ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
     }

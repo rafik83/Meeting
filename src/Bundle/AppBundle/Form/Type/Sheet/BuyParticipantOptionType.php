@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class BuyParticipantOptionType extends AbstractType
 {
@@ -22,7 +23,7 @@ class BuyParticipantOptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('planning', 'checkbox', [
+            ->add('planning', CheckboxType::class, [
                 'label'    => 'form.planning.add_with_participant',
                 'required' => false,
             ])

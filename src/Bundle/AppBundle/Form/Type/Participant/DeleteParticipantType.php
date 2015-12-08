@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DeleteParticipantType extends AbstractType
 {
@@ -21,7 +22,7 @@ class DeleteParticipantType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
     /**

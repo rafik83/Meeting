@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class HomeController extends BaseController
 {
@@ -86,7 +87,7 @@ class HomeController extends BaseController
             ]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -137,7 +138,7 @@ class HomeController extends BaseController
                 ->get('vimeet_infrastructure.repository.type_repository')
                 ->getParticipantTemplate($typeView->id),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);

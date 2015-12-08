@@ -16,6 +16,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UpdateType extends AbstractType
 {
@@ -27,16 +30,16 @@ class UpdateType extends AbstractType
         $prefered = ['fr', 'en', 'es', 'de', 'it', 'zh'];
 
         $builder
-            ->add('title', 'text')
-            ->add('locales', 'locale', [
+            ->add('title', TextType::class)
+            ->add('locales', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $prefered,
             ])
-            ->add('fallback', 'locale', [
+            ->add('fallback', LocaleType::class, [
                 'preferred_choices' => $prefered,
             ])
-            ->add('translations', 'collection', [
-                'type'  => new UpdateTranslationType(),
+            ->add('translations', CollectionType::class, [
+                'type'  => UpdateTranslationType::class,
                 'label' => false,
             ])
         ;

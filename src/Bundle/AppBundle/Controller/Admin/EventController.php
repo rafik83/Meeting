@@ -15,6 +15,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EventController extends Controller
 {
@@ -38,7 +39,7 @@ class EventController extends Controller
             'method'  => 'POST',
             'action'  => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handle($update);

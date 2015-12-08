@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ForgottenPasswordController extends BaseController
 {
@@ -46,7 +47,7 @@ class ForgottenPasswordController extends BaseController
             'action' => $this->generateUrl('event_forgotten_password', ['subdomain' => $subdomain]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -100,7 +101,7 @@ class ForgottenPasswordController extends BaseController
             ]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.user.new_password_handler')->handle($newPassword);

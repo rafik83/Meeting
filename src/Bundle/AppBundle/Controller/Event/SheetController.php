@@ -35,6 +35,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class SheetController extends BaseController
 {
@@ -105,7 +106,7 @@ class SheetController extends BaseController
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -175,7 +176,7 @@ class SheetController extends BaseController
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -231,7 +232,7 @@ class SheetController extends BaseController
             'template' => $sheetTemplate[$block]['template'],
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -367,7 +368,7 @@ class SheetController extends BaseController
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {

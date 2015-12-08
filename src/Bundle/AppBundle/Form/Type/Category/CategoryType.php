@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CategoryType extends AbstractType
 {
@@ -39,8 +40,8 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('translations', 'collection', [
-                'type'  => new TranslationType(),
+            ->add('translations', CollectionType::class, [
+                'type'  => TranslationType::class,
                 'label' => false,
             ])
             ->add('types', 'choice', [

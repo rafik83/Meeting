@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MeetingController extends BaseController
 {
@@ -101,7 +102,7 @@ class MeetingController extends BaseController
         $form          = $this->createForm('meeting_request_create', $createRequest, [
             'sheet' => $from
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -150,7 +151,7 @@ class MeetingController extends BaseController
         $form           = $this->createForm('meeting_request_approve', $approveRequest, [
             'sheet' => $meetingRequest->getTo()
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -197,7 +198,7 @@ class MeetingController extends BaseController
 
         $refuseRequest = new RefuseRequest($meetingRequest);
         $form          = $this->createForm('meeting_request_refuse', $refuseRequest);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this

@@ -22,7 +22,7 @@ class ChoosePaymentModeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('mode', new PaymentModeType(), [
+            ->add('mode', PaymentModeType::class, [
                 'expanded' => true,
                 'label'    => false,
             ])

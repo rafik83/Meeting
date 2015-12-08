@@ -16,6 +16,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class UpdateType extends AbstractType
 {
@@ -25,13 +27,13 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', 'collection', [
+            ->add('label', CollectionType::class, [
                 'type' => 'text',
             ])
-            ->add('required', 'checkbox', [
+            ->add('required', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('private', 'checkbox', [
+            ->add('private', CheckboxType::class, [
                 'required' => false,
             ])
         ;

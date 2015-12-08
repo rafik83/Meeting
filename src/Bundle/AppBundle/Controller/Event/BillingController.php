@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BillingController extends BaseController
 {
@@ -40,7 +41,7 @@ class BillingController extends BaseController
             'template' => $sheet->getEvent()->getBillingTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -82,7 +83,7 @@ class BillingController extends BaseController
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $form = $this->createForm(ChoosePaymentModeType::class);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->addFlash('success', 'flash.package.payment_mode.success');

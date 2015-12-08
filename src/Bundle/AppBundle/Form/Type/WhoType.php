@@ -75,7 +75,7 @@ class WhoType extends AbstractType
                     return sprintf('category:%s', $choice->getId());
                 }
 
-                return;
+                return '';
             },
         ]);
     }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UpdateChoiceType extends UpdateType
 {
@@ -23,8 +24,8 @@ class UpdateChoiceType extends UpdateType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('choices', 'collection', [
-                'type'         => new ChoiceType(),
+            ->add('choices', CollectionType::class, [
+                'type'         => ChoiceType::class,
                 'options'      => ['locales' => $options['locales']],
                 'allow_add'    => true,
                 'allow_delete' => true,

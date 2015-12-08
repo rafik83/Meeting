@@ -28,11 +28,11 @@ class WhatType extends AbstractType
         $sheetTemplate       = $this->getSheetTemplate($options['who']);
 
         $builder
-            ->add('participant', new WhatCheckboxesType(), [
+            ->add('participant', WhatCheckboxesType::class, [
                 'template' => $participantTemplate,
                 'locale'   => $options['locale'],
             ])
-            ->add('sheet', new WhatCheckboxesType(), [
+            ->add('sheet', WhatCheckboxesType::class, [
                 'template' => $sheetTemplate,
                 'locale'   => $options['locale'],
             ])

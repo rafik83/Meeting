@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ApproveRequestType extends AbstractType
 {
@@ -42,7 +43,7 @@ class ApproveRequestType extends AbstractType
         }
 
         $builder
-            ->add('toParticipants', 'choice', [
+            ->add('toParticipants', ChoiceType::class, [
                 'choices'  => $participants,
                 'expanded' => true,
                 'multiple' => true,

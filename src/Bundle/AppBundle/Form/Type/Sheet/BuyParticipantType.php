@@ -22,12 +22,12 @@ class BuyParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participantData', new BuyAddParticipantType(), [
+            ->add('participantData', BuyAddParticipantType::class, [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,
             ])
-            ->add('participantBuyOption', new BuyParticipantOptionType(), [
+            ->add('participantBuyOption', BuyParticipantOptionType::class, [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'required' => false,
