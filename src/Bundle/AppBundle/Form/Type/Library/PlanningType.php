@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class PlanningType extends AbstractLocalizedType
 {
@@ -26,11 +28,11 @@ class PlanningType extends AbstractLocalizedType
         $range = range(1, $sheet->getType()->getMaxPlanning(), 1);
 
         $builder
-            ->add('planning', 'checkbox', [
+            ->add('planning', CheckboxType::class, [
                 'label'    => $template['label'][$locale],
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
-            ->add('planning_bought', 'choice', [
+            ->add('planning_bought', ChoiceType::class, [
                 'choices'  => array_combine($range, $range),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,

@@ -30,7 +30,8 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
 
         $builder
             ->add('value', ChoiceType::class, [
-                'choices'  => $choices,
+                'choices_as_values' => true,
+                'choices'  => array_flip($choices),
                 'expanded' => true,
                 'required' => isset($template['required']) ? $template['required'] : true,
             ]);

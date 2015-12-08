@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ParticipantType extends AbstractLocalizedType
 {
@@ -51,11 +53,11 @@ class ParticipantType extends AbstractLocalizedType
         $sheet    = $options['sheet'];
 
         $builder
-            ->add('participant', 'checkbox', [
+            ->add('participant', CheckboxType::class, [
                 'label'    => $template['label'][$locale],
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
-            ->add('participant_bought', 'choice', [
+            ->add('participant_bought', ChoiceType::class, [
                 'choices'  => $this->getParticipantChoices($sheet),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
