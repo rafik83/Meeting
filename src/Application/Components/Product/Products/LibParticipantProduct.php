@@ -17,12 +17,24 @@ class LibParticipantProduct extends AbstractProduct
     /**
      * @var int
      */
-    private $maxParticipant = 0;
+    private $maxParticipant;
 
     /**
      * @var int
      */
-    private $freeParticipant = 0;
+    private $freeParticipant;
+
+    /**
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        parent::__construct($key);
+
+        $this->maxParticipant  = 0;
+        $this->freeParticipant = 0;
+
+    }
 
     /**
      * {@inheritdoc}

@@ -17,7 +17,17 @@ class LibPlanningProduct extends AbstractProduct
     /**
      * @var int
      */
-    private $maxPlanning = 0;
+    private $maxPlanning;
+
+    /**
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        parent::__construct($key);
+
+        $this->maxPlanning  = 0;
+    }
 
     /**
      * {@inheritdoc}
