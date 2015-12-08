@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LibChoiceProduct extends AbstractProduct
 {
     /**
-     * @var ProductInterface[]
+     * @var ProductInterface
      */
     private $choiceParent;
 
@@ -62,10 +62,18 @@ class LibChoiceProduct extends AbstractProduct
     }
 
     /**
-     * @param LibChoiceWithDescriptionProduct $product
+     * @param ProductInterface $product
      */
-    public function setChoiceParent(LibChoiceWithDescriptionProduct $product)
+    public function setChoiceParent(ProductInterface $product)
     {
         $this->choiceParent = $product;
+    }
+
+    /**
+     * @return ProductInterface
+     */
+    public function getChoiceParent()
+    {
+        return $this->choiceParent;
     }
 }
