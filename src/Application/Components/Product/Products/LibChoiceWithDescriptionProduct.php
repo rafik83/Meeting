@@ -70,36 +70,6 @@ class LibChoiceWithDescriptionProduct extends AbstractProduct
     }
 
     /**
-     * @return float|null
-     */
-    public function getQuantityMin()
-    {
-        return isset($this->options['quantity'])
-        && isset($this->options['quantity']['min'])
-            ? $this->options['quantity']['min'] : null;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getQuantityMax()
-    {
-        return isset($this->options['quantity'])
-        && isset($this->options['quantity']['max'])
-            ? $this->options['quantity']['max'] : null;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getQuantityRange()
-    {
-        return isset($this->options['quantity'])
-        && isset($this->options['quantity']['range'])
-            ? $this->options['quantity']['range'] : 1;
-    }
-
-    /**
      * @return float
      */
     public function getUnitPrice()
