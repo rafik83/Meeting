@@ -44,7 +44,7 @@ class UpdateUnavailabilityType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Update::class,
-            'intention'  => 'update_unavailability',
+            'csrf_token_id'  => 'update_unavailability',
         ]);
     }
 }

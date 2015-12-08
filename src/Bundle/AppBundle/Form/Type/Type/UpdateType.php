@@ -40,7 +40,7 @@ class UpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Type\Update',
-            'intention'  => 'type_update',
+            'csrf_token_id'  => 'type_update',
         ]);
     }
 

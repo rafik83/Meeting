@@ -46,7 +46,7 @@ class UpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\Update',
-            'intention'  => 'type_template_field_update',
+            'csrf_token_id'  => 'type_template_field_update',
         ]);
     }
 

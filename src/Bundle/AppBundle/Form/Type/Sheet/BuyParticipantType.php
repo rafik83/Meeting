@@ -43,7 +43,7 @@ class BuyParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\BuyParticipant',
-            'intention'  => 'buy_participant',
+            'csrf_token_id'  => 'buy_participant',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

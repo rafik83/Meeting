@@ -53,7 +53,7 @@ class AddUnavailabilityType extends AbstractType
 
         $resolver->setDefaults([
             'data_class' => Add::class,
-            'intention'  => 'add_unavailability',
+            'csrf_token_id'  => 'add_unavailability',
         ]);
     }
 }

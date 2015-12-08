@@ -38,7 +38,7 @@ class UpdateStepType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
-            'intention'  => 'update_sheet_package_step',
+            'csrf_token_id'  => 'update_sheet_package_step',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

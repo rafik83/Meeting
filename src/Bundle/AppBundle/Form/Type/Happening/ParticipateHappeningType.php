@@ -51,7 +51,7 @@ class ParticipateHappeningType extends AbstractType
 
         $resolver->setDefaults([
             'data_class' => Participate::class,
-            'intention'  => 'participate_happening',
+            'csrf_token_id'  => 'participate_happening',
         ]);
     }
 }

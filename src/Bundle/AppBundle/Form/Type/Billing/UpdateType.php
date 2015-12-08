@@ -38,7 +38,7 @@ class UpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Billing\Update',
-            'intention'  => 'update_sheet_billing',
+            'csrf_token_id'  => 'update_sheet_billing',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

@@ -40,7 +40,7 @@ class UpdateChoiceType extends UpdateType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice',
-            'intention'  => 'type_template_field_update_lib_choice',
+            'csrf_token_id'  => 'type_template_field_update_lib_choice',
         ]);
 
         $resolver->setRequired(['locales']);

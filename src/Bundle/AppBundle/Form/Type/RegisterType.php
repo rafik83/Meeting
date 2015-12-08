@@ -39,7 +39,7 @@ class RegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'intention'  => 'register',
+            'csrf_token_id'  => 'register',
         ]);
     }
 }

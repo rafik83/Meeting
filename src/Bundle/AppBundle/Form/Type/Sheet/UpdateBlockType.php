@@ -38,7 +38,7 @@ class UpdateBlockType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\UpdateBlock',
-            'intention'  => 'update_sheet_block',
+            'csrf_token_id'  => 'update_sheet_block',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

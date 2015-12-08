@@ -44,7 +44,7 @@ class CreateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Type\Create',
-            'intention'  => 'type_create',
+            'csrf_token_id'  => 'type_create',
         ]);
     }
 
