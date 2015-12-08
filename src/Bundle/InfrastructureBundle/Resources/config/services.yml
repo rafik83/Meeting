@@ -218,6 +218,8 @@ services:
     #
     vimeet_infrastructure.application.components.cart.cart_builder:
         class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+    vimeet_infrastructure.application.components.product.product_builder:
+        class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
 
     #
     # Carts components
