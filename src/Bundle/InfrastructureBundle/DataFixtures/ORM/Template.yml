@@ -289,96 +289,219 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Options proposées pour optimiser votre participation"
                     en: "Options to optimize your participation:"
                 description:
-                    fr: "Description de l'étape en français"
-                    en: "Step Description in english"
+                    fr: "Publicité et prommotion"
+                    en: "Publicité et prommotion en anglais"
                 template:
-                    563caea37f864:
+                    56615a0ab3f9f:
                         label:
-                            fr: "Votre logo"
-                            en: "Your logo"
+                            fr: "Affichage logo sur site événement et supports de communication"
+                            en: "Affichage logo sur site événement et supports de communication en anglais"
                         description:
-                            fr: "Description en français"
-                            en: "Description in english"
-                        type: "upload_with_choices"
-                        required: true
-                        choices:
-                            563cb173969ba:
-                                label:
-                                    fr: "L’insertion de votre logo sur le catalogue en ligne"
-                                    en: "Your logo on the catalog"
-                                description: { "fr": "", "en": "" }
-                                unitPrice: 59
-                            563cb17add8da:
-                                label:
-                                    fr: "Je ne prends pas"
-                                    en: "I do not take"
-                                description: { "fr": "", "en": "" }
-                                placeholder: true
-                                unitPrice: 0
-                    563caeb152464:
-                        type: "lib_text"
-                        required: false
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 200
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bcdb140f:
                         label:
-                            fr: "Lien sur le logo vers votre site internet"
-                            en: "Link on the brand"
-                        description: { "fr": "", "en": "" }
-                    563caeb98d3af:
-                        label:
-                            fr: "Pack Pub"
-                            en: "Ads banner"
+                            fr: "Page pub sur la fiche"
+                            en: "Page pub sur la fiche en anglais"
                         description:
-                            fr: "Publicité + logo sur votre fiche de présentation en ligne."
-                            en: "Description in english"
-                        type: "upload_with_choices"
-                        required: true
-                        choices:
-                            563caf7c2b89a:
-                                label:
-                                    fr: "Formule 1"
-                                    en: "Formula 1"
-                                description:
-                                    fr: ""
-                                    en: ""
-                                unitPrice: 199
-                            563caf825cacd:
-                                label:
-                                    fr: "Formule 2"
-                                    en: "Formula 2"
-                                description:
-                                    fr: ""
-                                    en: ""
-                                unitPrice: 249
-                            563caf89040a4:
-                                label:
-                                    fr: "Formule 3"
-                                    en: "Formula 3"
-                                description:
-                                    fr: ""
-                                    en: ""
-                                unitPrice: 399
-                            563caf8ec8348:
-                                label:
-                                    fr: "Je ne prends pas"
-                                    en: "I do not take"
-                                description:
-                                    fr: ""
-                                    en: ""
-                                placeholder: true
-                                unitPrice: 0
-                                placeholder: true
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 300
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bf2bb41b:
+                        label:
+                            fr: "Pub dans pochette accueil"
+                            en: "Pub dans pochette accueil en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 400
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bfe852a0:
+                        label:
+                            fr: "Logo dans les emails promotionnels de l'événement"
+                            en: "Logo dans les emails promotionnels de l'événement en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 450
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615c2dc5e91:
+                        label:
+                            fr: "Logo sur le programme des conférences"
+                            en: "Logo sur le programme des conférences en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 1200
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+            56615ef1b3b7d:
+                label:
+                    fr: "Stands et équipements"
+                    en: "Stands et équipements en anglais:"
+                description:
+                    fr: "Description: Stands et équipements"
+                    en: "Description: Stands et équipements en anglais"
+                template:
+                    56615fbd30518:
+                        label:
+                            fr: "Stand 4m²"
+                            en: "Stand 4m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 200
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: ~
+                    56615feba09a4:
+                        label:
+                            fr: "Stand 6m²"
+                            en: "Stand 6m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 300
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                    56615ff492a29:
+                        label:
+                            fr: "Stand 10m²"
+                            en: "Stand 10m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 375
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                    56616023b335e:
+                        label:
+                            fr: "Bannière"
+                            en: "Bannière"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 250
+                        quantity:
+                            min: 0
+                            max: 1
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56616046619b6:
+                        label:
+                            fr: "Rail pour spot éléctrique"
+                            en: "Rail pour spot éléctrique"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 120
+                        quantity:
+                            min: 0
+                            max: 4
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+                    5661605ccbc61:
+                        label:
+                            fr: "Table"
+                            en: "Table"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 50
+                        quantity:
+                            min: 0
+                            max: 3
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+                    5661606674b6d:
+                        label:
+                            fr: "Chaise"
+                            en: "Chaise"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 40
+                        quantity:
+                            min: 0
+                            max: 8
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 4
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 4
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 6
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 6
+                    566160678d9cb:
+                        label:
+                            fr: "Prise éléctrique"
+                            en: "Prise éléctrique"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 30
+                        quantity:
+                            min: 0
+                            max: 4
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+            5666eb32401d6:
+                label:
+                    fr: "Options supplémentaires"
+                    en: "Options supplémentaires en anglais:"
+                description:
+                    fr: "Description step 3 en fr"
+                    en: "Description step 3 en en"
+                template:
                     563caec361723:
-                        type: "lib_text"
-                        required: false
                         label:
                             fr: "Lien sur la bannière pub vers votre site internet"
                             en: "Link on the ads banner"
                         description:
                             fr: "Module équipé de 4m² supplémentaires"
                             en: "Additional equipped booth of 4 sqm"
-                        description:
-                            fr: ""
-                            en: ""
                         type: "lib_option"
+                        required: false
                         unitPrice: 3990
                         quantity:
                             min: 1
