@@ -17,12 +17,12 @@ class Including
     /**
      * @var ProductInterface
      */
-    private $includer;
+    private $productThatInclude;
 
     /**
      * @var ProductInterface
      */
-    private $include;
+    private $productIncluded;
 
     /**
      * @var float
@@ -30,34 +30,34 @@ class Including
     private $quantity;
 
     /**
-     * @param ProductInterface $includer
-     * @param ProductInterface $include
+     * @param ProductInterface $productThatInclude
+     * @param ProductInterface $productIncluded
      * @param float            $quantity
      */
-    public function __construct(ProductInterface $includer, ProductInterface $include, $quantity)
+    public function __construct(ProductInterface $productThatInclude, ProductInterface $productIncluded, $quantity)
     {
-        $this->includer = $includer;
-        $this->include  = $include;
+        $this->productThatInclude = $productThatInclude;
+        $this->productIncluded    = $productIncluded;
         $this->quantity = $quantity;
 
-        $includer->addInclude($this);
-        $include->addIncludedIn($this);
+        $productThatInclude->addInclude($this);
+        $productIncluded->addIncludedIn($this);
     }
 
     /**
      * @return ProductInterface
      */
-    public function getIncluder()
+    public function getProductThatInclude()
     {
-        return $this->includer;
+        return $this->productThatInclude;
     }
 
     /**
      * @return ProductInterface
      */
-    public function getInclude()
+    public function getProductIncluded()
     {
-        return $this->include;
+        return $this->productIncluded;
     }
 
     /**
