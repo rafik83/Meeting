@@ -7,28 +7,28 @@ Proximum\Vimeet\Domain\Model\Template:
         title: Exposant
         participant:
             563caf1d9b1cb:
-                type: lib_last_name
+                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType
                 required: true
                 private: false
                 label:
                     fr: "Nom"
                     en: "Lastname"
             563caf2746398:
-                type: lib_first_name
+                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType
                 required: true
                 private: false
                 label:
                     fr: "Prénom"
                     en: "Firstname"
             563caf2f0ddbd:
-                type: lib_text
+                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
                 required: true
                 private: true
                 label:
                     fr: "Téléphone"
                     en: "Phone"
             563caf34eed69:
-                type: lib_choice
+                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
                 required: true
                 private: false
                 label:
@@ -114,13 +114,13 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Société"
                     en: "Company"
                 template:
-                    563cb103926e6: { "type": "lib_organisation", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
-                    563cb10a524c5: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    563ccd1fe3a81: { "type": "lib_country", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
-                    563cb10fcc9fe: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    563cb115bbeb9: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    563cb103926e6: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
+                    563cb10a524c5: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    563ccd1fe3a81: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType", "required": true, "private": false, "label": { "fr": "Pays", "en": "Country" } }
+                    563cb10fcc9fe: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    563cb115bbeb9: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
                     563cb1036EB88:
-                        type: "lib_choice"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType"
                         label: { "fr": "Activité", "en": "Activity" }
                         required": true
                         private: false
@@ -147,7 +147,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             activity20: { label: { "fr": "ACT. MÉNAGES: EMPL., PROD. PR US. PROPRE", "en": "ACT. MÉNAGES: EMPL., PROD. PR US. PROPRE" } }
                             activity21: { label: { "fr": "ACTIVITÉS EXTRA-TERRITORIALES", "en": "ACTIVITÉS EXTRA-TERRITORIALES" } }
                     5641f581998c1:
-                        type: "lib_choice"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType"
                         label: { "fr": "Taille", "en": "Size" }
                         required": false
                         private: false
@@ -158,7 +158,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             size4: { label: { "fr": "ETI (250-4999)", "en": "ETI (250-4999)" } }
                             size5: { label: { "fr": "Grande entreprise/Groupes", "en": "Big company / Group" } }
                     5641f59737211:
-                        type: "lib_choice"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType"
                         label: { "fr": "Chiffre d'affaire", "en": "Turnover" }
                         required": false
                         private: false
@@ -170,7 +170,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             turnover5: { label: { "fr": "50-1500 M€", "en": "50-1500 M€" } }
                             turnover6: { label: { "fr": ">1500 M€", "en": ">1500 M€" } }
                     5641f59e537b9:
-                        type: "lib_choice"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType"
                         label: { "fr": "Statut juridique", "en": "Status" }
                         required": false
                         private: false
@@ -186,7 +186,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Offres"
                     en: "Offers"
                 template:
-                    563cb11d08df1: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
+                    563cb11d08df1: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextTypearea", "required": false, "private": false, "label": { "fr": "Mes offres", "en": "My offers" } }
         package:
             563cae7496da1:
                 label:
@@ -203,7 +203,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Description forfait fr"
                             en: "Description package en"
-                        type: "choice_with_description"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType"
                         required: true
                         choices:
                             563cb1257722e:
@@ -272,7 +272,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             fr: "Vous pouvez ajouter des participants à votre fiche"
                             en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
                         required: false
-                        type: "lib_participant"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType"
                         unitPrice: 400
                     56407f9b2a1a3:
                         label:
@@ -282,7 +282,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             fr: "Vous pouvez ajouter des plannings à votre fiche"
                             en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
                         required: false
-                        type: "lib_planning"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType"
                         unitPrice: 550
             56407fa453f4e:
                 label:
@@ -299,7 +299,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Description en français"
                             en: "Description in english"
-                        type: "upload_with_choices"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType"
                         required: true
                         choices:
                             563cb173969ba:
@@ -316,7 +316,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                 placeholder: true
                                 unitPrice: 0
                     563caeb152464:
-                        type: "lib_text"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType"
                         required: false
                         label:
                             fr: "Lien sur le logo vers votre site internet"
@@ -329,7 +329,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Publicité + logo sur votre fiche de présentation en ligne."
                             en: "Description in english"
-                        type: "upload_with_choices"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType"
                         required: true
                         choices:
                             563caf7c2b89a:
@@ -367,7 +367,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                 unitPrice: 0
                                 placeholder: true
                     563caec361723:
-                        type: "lib_text"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType"
                         required: false
                         label:
                             fr: "Lien sur la bannière pub vers votre site internet"
@@ -378,7 +378,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: ""
                             en: ""
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
                         unitPrice: 3990
                         quantity:
                             min: 1
@@ -390,7 +390,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Quantité min 3, quantité max 3"
                             en: "Quantité min 3, quantité max 3"
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
                         unitPrice: 5990
                         quantity:
                             min: 3
@@ -402,7 +402,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Quantité min 1, quantité max 5"
                             en: "Quantité min 1, quantité max 5"
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
                         unitPrice: 11000
                         quantity:
                             min: 1
@@ -422,7 +422,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: ""
                             en: ""
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
                         unitPrice: 0
                     563caefd7879f:
                         label:
@@ -432,7 +432,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             en: ""
                             fr: ""
                         unitPrice: 95
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
                         quantity:
                             min: 1
                             max: 5
@@ -444,7 +444,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             en: ""
                             fr: ""
                         unitPrice: 2600
-                        type: "lib_option"
+                        type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType"
         preview: >
             <div>
                 <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
@@ -584,11 +584,11 @@ Proximum\Vimeet\Domain\Model\Template:
         __construct: false
         title: Visiteur
         participant:
-            563cb0568a3bb: { "type": "lib_last_name", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
-            563cb05cb81ec: { "type": "lib_first_name", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
-            563cb062b89a9: { "type": "lib_text", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
+            563cb0568a3bb: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType", "required": true, "private": false, "label": { "fr": "Nom", "en": "Lastname" } }
+            563cb05cb81ec: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType", "required": true, "private": false, "label": { "fr": "Prénom", "en": "Firstname" } }
+            563cb062b89a9: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": true, "private": true, "label": { "fr": "Téléphone", "en": "Phone" } }
             563cb06a1a441:
-                type: lib_choice
+                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
                 required: true
                 private: false
                 label:
@@ -655,14 +655,14 @@ Proximum\Vimeet\Domain\Model\Template:
             563cb00c629d8:
                 label: { "fr": "Société", "en": "Company" }
                 template:
-                    563cb02125c23: { "type": "lib_organisation", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
-                    563cb02932fc8: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
-                    563cb02fc1df1: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
-                    563cb0364f1c6: { "type": "lib_text", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
+                    563cb02125c23: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType", "required": true, "private": false, "label": { "fr": "Nom de l'organisme", "en": "Name" } }
+                    563cb02932fc8: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Adresse", "en": "Address" } }
+                    563cb02fc1df1: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Site web", "en": "Website" } }
+                    563cb0364f1c6: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType", "required": false, "private": false, "label": { "fr": "Descriptif", "en": "Description" } }
             563cb014e2784:
                 label: { "fr": "Besoins", "en": "Needs" }
                 template:
-                    563cb03f9a509: { "type": "lib_textarea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
+                    563cb03f9a509: { "type": "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextTypearea", "required": false, "private": false, "label": { "fr": "Mes besoins", "en": "My needs" } }
         package: []
         preview: >
             <div>

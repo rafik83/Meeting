@@ -105,15 +105,15 @@ services:
     vimeet_app.form_type_library.choice_with_description:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:
-            - { name: form.type, alias: choice_with_description }
+            - { name: form.type }
     vimeet_app.form_type_library.upload_with_choices_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType
         tags:
-            - { name: form.type, alias: upload_with_choices }
+            - { name: form.type }
     vimeet_app.form_type_library.text_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
         tags:
-            - { name: form.type, alias: lib_text }
+            - { name: form.type }
     vimeet_app.form_type_library.textarea_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType
         tags:
@@ -121,21 +121,21 @@ services:
     vimeet_app.form_type_library.option_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
-            - { name: form.type, alias: lib_option }
+            - { name: form.type }
     vimeet_app.form_type_library.participant_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType
         tags:
-            - { name: form.type, alias: lib_participant }
+            - { name: form.type }
         arguments:
             - @vimeet_app.service.participant_manager
     vimeet_app.form_type_library.planning_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType
         tags:
-            - { name: form.type, alias: lib_planning }
+            - { name: form.type }
     vimeet_app.form_type_library.country_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType
         tags:
-            - { name: form.type, alias: lib_country }
+            - { name: form.type }
     vimeet_app.form_type_library.email_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
         tags:
@@ -143,19 +143,19 @@ services:
     vimeet_app.form_type_library.choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
         tags:
-            - { name: form.type, alias: lib_choice }
+            - { name: form.type }
     vimeet_app.form_type_library.last_name_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType
         tags:
-            - { name: form.type, alias: lib_last_name }
+            - { name: form.type }
     vimeet_app.form_type_library.first_name_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType
         tags:
-            - { name: form.type, alias: lib_first_name }
+            - { name: form.type }
     vimeet_app.form_type_library.organisation_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType
         tags:
-            - { name: form.type, alias: lib_organisation }
+            - { name: form.type }
 
     #
     # Event Listener
