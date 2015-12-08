@@ -25,7 +25,8 @@ class ChoiceType extends AbstractLocalizedType
             'placeholder' => 'choice.placeholder',
             'choices'     => function (Options $options) {
                 return $this->getChoices($options);
-            }
+            },
+            'translation_domain' => false,
         ]);
     }
 
