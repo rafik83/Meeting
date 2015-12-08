@@ -186,7 +186,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Offres"
                     en: "Offers"
                 template:
-                    563cb11d08df1: { type: "Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextAreaType", required: false, private: false, label: { fr: "Mes offres", en: "My offers" } }
+                    563cb11d08df1: { type: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType', required: false, private: false, label: { fr: "Mes offres", en: "My offers" } }
         package:
             563cae7496da1:
                 label:
@@ -662,7 +662,7 @@ Proximum\Vimeet\Domain\Model\Template:
             563cb014e2784:
                 label: { fr: "Besoins", en: "Needs" }
                 template:
-                    563cb03f9a509: { type: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextAreaType', required: false, private: false, label: { fr: "Mes besoins", en: "My needs" } }
+                    563cb03f9a509: { type: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType', required: false, private: false, label: { fr: "Mes besoins", en: "My needs" } }
         package: []
         preview: >
             <div>
