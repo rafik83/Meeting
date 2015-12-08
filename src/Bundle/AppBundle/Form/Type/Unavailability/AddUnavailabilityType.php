@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
 
 class AddUnavailabilityType extends AbstractType
 {
@@ -34,7 +35,7 @@ class AddUnavailabilityType extends AbstractType
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
-            ->add('participants', 'participant_choice', [
+            ->add('participants', ParticipantChoiceType::class, [
                 'sheet'      => $options['sheet'],
                 'multiple'   => true,
                 'expanded'   => true,

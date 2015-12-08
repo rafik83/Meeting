@@ -57,35 +57,35 @@ services:
             - @vimeet_infrastructure.repository.category_repository
             - @vimeet_infrastructure.repository.type_repository
         tags:
-            - { name: form.type, alias: who }
+            - { name: form.type }
     vimeet_app.form_type_meeting.request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType
         arguments:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
-            - { name: form.type, alias: meeting_request_create }
+            - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\ApproveRequestType
         arguments:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
-            - { name: form.type, alias: meeting_request_approve }
+            - { name: form.type }
     vimeet_app.form_type_meeting.refuse_request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RefuseRequestType
         tags:
-            - { name: form.type, alias: meeting_request_refuse }
+            - { name: form.type }
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
-            - { name: form.type, alias: participant_choice }
+            - { name: form.type }
     vimeet_app.form_type.category_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryType
         arguments:
             - @vimeet_infrastructure.repository.type_repository
         tags:
-            - { name: form.type, alias: category }
+            - { name: form.type }
 
     #
     # Admin library form type
@@ -93,11 +93,11 @@ services:
     vimeet_app.form_type_admin.type_template_field_update:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType
         tags:
-            - { name: form.type, alias: type_template_field_update }
+            - { name: form.type }
     vimeet_app.form_type_admin.type_template_field_update_lib_choice:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateChoiceType
         tags:
-            - { name: form.type, alias: type_template_field_update_lib_choice }
+            - { name: form.type }
 
     #
     # Library
@@ -117,7 +117,7 @@ services:
     vimeet_app.form_type_library.textarea_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType
         tags:
-            - { name: form.type, alias: lib_textarea }
+            - { name: form.type }
     vimeet_app.form_type_library.option_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
         tags:
@@ -139,7 +139,7 @@ services:
     vimeet_app.form_type_library.email_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
         tags:
-            - { name: form.type, alias: lib_email }
+            - { name: form.type }
     vimeet_app.form_type_library.choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
         tags:
