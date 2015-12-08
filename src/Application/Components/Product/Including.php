@@ -38,7 +38,7 @@ class Including
     {
         $this->productThatInclude = $productThatInclude;
         $this->productIncluded    = $productIncluded;
-        $this->quantity = $quantity;
+        $this->quantity           = $quantity;
 
         $productThatInclude->addInclude($this);
         $productIncluded->addIncludedIn($this);

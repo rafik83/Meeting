@@ -26,7 +26,7 @@ class LibPlanningProduct extends AbstractProduct
     {
         parent::__construct($key);
 
-        $this->maxPlanning  = 0;
+        $this->maxPlanning = 0;
     }
 
     /**
