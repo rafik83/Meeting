@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class TypeTemplateFieldUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}

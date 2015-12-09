@@ -93,7 +93,7 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
-    update:
+    billing_update:
         children:
             submit:
                 label: Enregistrer

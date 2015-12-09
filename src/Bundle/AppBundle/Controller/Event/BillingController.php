@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Billing\Update;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Billing\UpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Billing\BillingUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -37,7 +37,7 @@ class BillingController extends BaseController
 
         $update = new Update($sheet, $sheet->getBillingData());
 
-        $form = $this->createForm(UpdateType::class, $update, [
+        $form = $this->createForm(BillingUpdateType::class, $update, [
             'template' => $sheet->getEvent()->getBillingTemplate(),
             'locale'   => $request->getLocale(),
         ]);
