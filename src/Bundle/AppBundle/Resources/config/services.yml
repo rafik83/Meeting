@@ -1,18 +1,6 @@
 services:
 
     #
-    # Controllers
-    #
-    controller.event.schedule.display:
-        class: Proximum\Vimeet\Bundle\AppBundle\Controller\Event\Schedule\DisplayController
-        arguments:
-            - @vimeet_infrastructure.repository.schedule_repository
-    controller.event.schedule.add_unavailability:
-        class: Proximum\Vimeet\Bundle\AppBundle\Controller\Event\Schedule\AddUnavailabilityController
-        arguments:
-            - @vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler
-
-    #
     # Services
     #
     vimeet_app.service.participant_manager:
