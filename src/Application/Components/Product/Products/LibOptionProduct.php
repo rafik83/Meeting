@@ -24,7 +24,6 @@ class LibOptionProduct extends AbstractProduct
         $optionsResolver->setRequired(['label', 'type', 'unitPrice']);
         $optionsResolver->setDefined([
             'quantity',
-            'required',
             'description',
         ]);
     }

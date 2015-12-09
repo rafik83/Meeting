@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Product\Products;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibPlanningProduct extends AbstractRequiredDescriptionTypeUnitPriceOptions
+class LibPlanningProduct extends AbstractDescriptionTypeUnitPriceOptions
 {
     /**
      * @var int

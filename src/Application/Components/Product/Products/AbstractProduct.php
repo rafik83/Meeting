@@ -56,6 +56,7 @@ abstract class AbstractProduct implements ProductInterface
     {
         $optionsResolver->setDefined([
             'includedIn',
+            'required',
         ]);
     }
 
@@ -132,6 +133,16 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasQuantity()
+    {
+        return $this->getQuantityMin() !== null
+            && $this->getQuantityMax() !== null
+            && $this->getQuantityMin() <= $this->getQuantityMax();
+    }
+
+    /**
      * @return float|null
      */
     public function getQuantityMin()
@@ -162,6 +173,32 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
+     * @param array $packageData
+     * @return float
+     */
+    public function getRemainingQuantityMax(array $packageData)
+    {
+        if ($this->hasQuantity() === false) {
+            return 0;
+        }
+
+        $quantity   = 0;
+        $includings = $this->getIncludingFromPurchase($packageData);
+
+        foreach ($includings as $including) {
+            if ($including->getQuantity() === null) {
+                return 0;
+            } else {
+                $quantity += $including->getQuantity();
+            }
+        }
+
+        return ($this->getQuantityMax() - $quantity) > 0
+            && ($this->getQuantityMax() - $quantity) >= $this->getQuantityMin()
+            ? $this->getQuantityMax() - $quantity : 0;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setStep(Step $step)
@@ -175,6 +212,14 @@ abstract class AbstractProduct implements ProductInterface
     public function getStep()
     {
         return $this->step;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequired()
+    {
+        return isset($this->options['required']) ? $this->options['required'] : false;
     }
 
     /**
@@ -221,6 +266,8 @@ abstract class AbstractProduct implements ProductInterface
             return null;
         }
 
+        // This use case is working for LibChoiceWithDescriptionProduct and LibOptionProduct
+        // It doesn't take into account LibParticipant and LibPlanning
         if ($productToCheck instanceof LibChoiceWithDescriptionProduct) {
             if (isset($productData['value'])) {
                 $productChoice = $productToCheck->getChoice($productData['value']);
@@ -233,9 +280,11 @@ abstract class AbstractProduct implements ProductInterface
                 }
             }
         } else {
-            foreach ($product->getIncludedIn() as $includedIn) {
-                if ($productToCheck === $includedIn->getProductThatInclude()) {
-                    return $includedIn;
+            if (isset($productData['value'])) {
+                foreach ($product->getIncludedIn() as $includedIn) {
+                    if ($productToCheck === $includedIn->getProductThatInclude() && false !== $productData['value']) {
+                        return $includedIn;
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Product\Products;
 
-abstract class AbstractRequiredDescriptionTypeUnitPriceOptions extends AbstractProduct
+abstract class AbstractDescriptionTypeUnitPriceOptions extends AbstractProduct
 {
     /**
      * @param string $locale
@@ -20,14 +20,6 @@ abstract class AbstractRequiredDescriptionTypeUnitPriceOptions extends AbstractP
     public function getDescription($locale)
     {
         return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return $this->options['required'];
     }
 
     /**
