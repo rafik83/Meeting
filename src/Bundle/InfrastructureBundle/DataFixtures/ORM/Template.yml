@@ -274,6 +274,8 @@ Proximum\Vimeet\Domain\Model\Template:
                         required: false
                         type: "lib_participant"
                         unitPrice: 400
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
                     56407f9b2a1a3:
                         label:
                             fr: "Ajouter des plannings"
@@ -284,6 +286,8 @@ Proximum\Vimeet\Domain\Model\Template:
                         required: false
                         type: "lib_planning"
                         unitPrice: 550
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
             56407fa453f4e:
                 label:
                     fr: "Options proposées pour optimiser votre participation"
