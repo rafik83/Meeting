@@ -48,28 +48,50 @@
         <th class="col-md-2">{{ 'event.sheet.package.column.label'|trans }}</th>
         <th class="col-md-7">{{ 'event.sheet.package.column.description'|trans }}</th>
         <th class="col-md-1">{{ 'event.sheet.package.column.unitPrice'|trans }}</th>
-        {% if template['quantity'] is defined %}
+        {% if form.quantity is defined %}
             <th class="col-md-1">{{ 'event.sheet.package.column.quantity'|trans }}</th>
         {% endif %}
     </thead>
 {% endblock %}
 
 {% block lib_option_row %}
+    {% set multiple_row = false %}
+    {% if is_included is defined and is_included == true and quantity_allowed is defined and quantity_allowed != 0 and quantity_included is defined and quantity_included is not null %}
+        {% set multiple_row = true %}
+    {% endif %}
     {{ form_errors(form) }}
     <table class="table table-condensed">
         {{ block('thead') }}
         <tbody>
             <tr>
-                <td>
+                <td {% if multiple_row == true %}rowspan="2"{% endif %}>
                     {{ form_widget(form.value) }}&nbsp;{{ form_label(form.value) }}
                 </td>
-                <td>
+                <td {% if multiple_row == true %}rowspan="2"{% endif %}>
                     {{ template['description'][locale] }}
                 </td>
                 <td>
-                    {{ template['unitPrice']|number_format_currency('EUR') }}
+                    {% if is_included is defined and is_included == true and form.quantity is not defined %}
+                        {{ 'event.sheet.package.include'|trans }}
+                    {% elseif is_included is defined and is_included == true %}
+                        {{ 0|number_format_currency('EUR') }}
+                    {% else %}
+                        {{ template['unitPrice']|number_format_currency('EUR') }}
+                    {% endif %}
                 </td>
-                {% if template['quantity'] is defined %}
+                {% if form.quantity is defined and multiple_row %}
+                        <td>
+                            {% if quantity_allowed is defined and quantity_allowed != 0 and quantity_included is defined and quantity_included is not null %}
+                                {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
+                            {% else %}
+                                {{ 'event.sheet.package.include'|trans }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ template['unitPrice']|number_format_currency('EUR') }}</td>
+                        <td>{{ block('quantity') }}</td>
+                {% elseif form.quantity is defined %}
                     <td>
                         {{ block('quantity') }}
                     </td>
