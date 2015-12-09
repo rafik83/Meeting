@@ -24,7 +24,7 @@ Feature: Choose a package
     Then the response status code should be 200
     And I should see "Forfait de participation"
     When I check the "Forfait Silver" radio
-    And I press "form.update_sheet_package_step.children.submit.label"
+    And I press "form.update_step.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.package.update_step.success"
 
@@ -41,26 +41,26 @@ Feature: Choose a package
     And the response status code should be 200
     And I should see "Forfait de participation"
     When I check the "Forfait Silver" radio
-    And I press "form.update_sheet_package_step.children.submit.label"
+    And I press "form.update_step.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.package.update_step.success"
     And I check "Ajouter des participants"
     And I select the quantity "2" for the checkbox "Ajouter des participants"
-    And I press "form.update_sheet_package_step.children.submit.label"
+    And I press "form.update_step.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.package.update_step.success"
     And I check the "Je ne prends pas" radio
     And I check the "Formule 3" radio
     And I check "Option payant avec sélection de quantité"
     And I select the quantity "2" for the checkbox "Option payant avec sélection de quantité"
-    And I press "form.update_sheet_package_step.children.submit.label"
+    And I press "form.update_step.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.package.update_step.success"
     And I check "traduction de votre fiche de présentation"
     And I check "Insertion de votre brochure dans les pochettes d’accueil"
     And I select the quantity "2" for the checkbox "traduction de votre fiche de présentation"
     And I check "Wifi sur place"
-    And I press "form.update_sheet_package_step.children.submit.label"
+    And I press "form.update_step.children.submit.label"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/cart"
     And the response status code should be 200
     And I should see "flash.package.final_step.success"

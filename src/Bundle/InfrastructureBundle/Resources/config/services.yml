@@ -5,64 +5,64 @@ services:
     vimeet_infrastructure.repository.event_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
-            - @doctrine.orm.entity_manager
-            - @knp_paginator
+            - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
     vimeet_infrastructure.repository.type_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
-            - @doctrine.orm.entity_manager
-            - @knp_paginator
+            - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
     vimeet_infrastructure.repository.category_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
-            - @doctrine.orm.entity_manager
-            - @knp_paginator
-            - @vimeet_infrastructure.repository.type_repository
+            - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.participant_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ParticipantRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
-            - @doctrine.orm.entity_manager
-            - @vimeet_infrastructure.repository.type_repository
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.rule_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\RuleRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.nomenclature_item_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.schedule_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.unavailability_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UnavailabilityRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.forgotten_password_token_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.request_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
-            - @doctrine.orm.entity_manager
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -80,130 +80,130 @@ services:
     vimeet_infrastructure.application.command.user.register_handler:
         class: Proximum\Vimeet\Application\Command\User\RegisterHandler
         arguments:
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.adapter.encoder_adapter
-            - @vimeet_infrastructure.adapter.salt_generator
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     vimeet_infrastructure.application.command.user.change_password:
         class: Proximum\Vimeet\Application\Command\User\ChangePasswordHandler
         arguments:
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.adapter.encoder_adapter
-            - @vimeet_infrastructure.adapter.salt_generator
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     vimeet_infrastructure.application.command.user.participate_handler:
         class: Proximum\Vimeet\Application\Command\User\ParticipateHandler
         arguments:
-            - @vimeet_infrastructure.repository.sheet_repository
-            - @vimeet_infrastructure.repository.participant_repository
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
     vimeet_infrastructure.vimeet.application.command.participant.update_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.participant_repository
+            - '@vimeet_infrastructure.repository.participant_repository'
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.repository.participant_repository
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
-            - @vimeet_infrastructure.repository.sheet_repository
+            - '@vimeet_infrastructure.repository.sheet_repository'
     vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BuyParticipantHandler
         arguments:
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.repository.participant_repository
-            - @vimeet_infrastructure.repository.sheet_repository
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
-            - @vimeet_infrastructure.repository.participant_repository
+            - '@vimeet_infrastructure.repository.participant_repository'
     vimeet_infrastructure.vimeet.application.command.package.update_step_handler:
         class: Proximum\Vimeet\Application\Command\Package\UpdateStepHandler
         arguments:
-            - @vimeet_infrastructure.repository.sheet_repository
+            - '@vimeet_infrastructure.repository.sheet_repository'
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.sheet_repository
+            - '@vimeet_infrastructure.repository.sheet_repository'
     vimeet_infrastructure.vimeet.application.command.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.event_repository
+            - '@vimeet_infrastructure.repository.event_repository'
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.type.create_handler:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.category_repository
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.category.create_handler:
         class: Proximum\Vimeet\Application\Command\Category\CreateHandler
         arguments:
-            - @vimeet_infrastructure.repository.category_repository
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
         arguments:
-            - @vimeet_infrastructure.repository.unavailability_repository
+            - '@vimeet_infrastructure.repository.unavailability_repository'
     vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.unavailability_repository
+            - '@vimeet_infrastructure.repository.unavailability_repository'
     vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
-            - @vimeet_infrastructure.repository.unavailability_repository
+            - '@vimeet_infrastructure.repository.unavailability_repository'
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:
-            - @vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.repository.forgotten_password_token_repository
-            - @vimeet_infrastructure.event.event_dispatcher
+            - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
+            - '@vimeet_infrastructure.event.event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
-            - @vimeet_infrastructure.repository.user_repository
-            - @vimeet_infrastructure.adapter.encoder_adapter
-            - @vimeet_infrastructure.adapter.salt_generator
-            - @vimeet_infrastructure.repository.forgotten_password_token_repository
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
     vimeet_infrastructure.vimeet.application.components.happening.participate_handler:
         class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
         arguments:
-            - @vimeet_infrastructure.repository.happening_participation_repository
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
     vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
         class: Proximum\Vimeet\Application\Command\Happening\UnparticipateHandler
         arguments:
-            - @vimeet_infrastructure.repository.happening_participation_repository
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
-            - @vimeet_infrastructure.repository.meeting.request_repository
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
-            - @vimeet_infrastructure.repository.meeting.request_repository
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler
         arguments:
-            - @vimeet_infrastructure.repository.meeting.request_repository
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # Security
     #
     vimeet_infrastructure.security.user_password_encoder:
         class: Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
-        factory: ["@security.encoder_factory", getEncoder]
+        factory: ['@security.encoder_factory', 'getEncoder']
         arguments:
             - Proximum\Vimeet\Domain\Model\User
     vimeet_infrastructure.adapter.salt_generator:
@@ -211,7 +211,7 @@ services:
     vimeet_infrastructure.adapter.encoder_adapter:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:
-            - @vimeet_infrastructure.security.user_password_encoder
+            - '@vimeet_infrastructure.security.user_password_encoder'
 
     #
     # Components
@@ -227,23 +227,23 @@ services:
     vimeet_infrastructure.application.components.cart.carts.lib_choice_with_description_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart
         tags:
-            - {name: cart, cart: choice_with_description}
+            - { name: cart, cart: choice_with_description }
     vimeet_infrastructure.application.components.cart.carts.lib_option_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart
         tags:
-            - {name: cart, cart: lib_option}
+            - { name: cart, cart: lib_option }
     vimeet_infrastructure.application.components.cart.carts.lib_participant_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibParticipantCart
         tags:
-            - {name: cart, cart: lib_participant}
+            - { name: cart, cart: lib_participant }
     vimeet_infrastructure.application.components.cart.carts.lib_planning_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
         tags:
-            - {name: cart, cart: lib_planning}
+            - { name: cart, cart: lib_planning }
     vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
         tags:
-            - {name: cart, cart: upload_with_choices}
+            - { name: cart, cart: upload_with_choices }
 
     #
     # Sheet Component
@@ -251,22 +251,23 @@ services:
     vimeet_infrastructure.application.components.sheet.manager:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
-            - @vimeet_infrastructure.repository.participant_repository
-            - @vimeet_infrastructure.application.components.rule.manager
-            - @vimeet_infrastructure.repository.type_repository
-            - @vimeet_infrastructure.repository.sheet_repository
-            - @vimeet_infrastructure.repository.meeting.request_repository
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.rule.manager'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
     #
     # Event
     #
     vimeet_infrastructure.event.event_dispatcher:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Event\EventDispatcher
-        arguments: [ @event_dispatcher ]
+        arguments:
+            - '@event_dispatcher'
 
     #
     # Rule Component
@@ -276,9 +277,9 @@ services:
     vimeet_infrastructure.application.components.rule.manager:
         class: Proximum\Vimeet\Application\Components\Rule\RuleManager
         arguments:
-            - @vimeet_infrastructure.repository.rule_repository
-            - @vimeet_infrastructure.repository.type_repository
-            - @vimeet_infrastructure.vimeet.application.components.rule.rule_sorter
+            - '@vimeet_infrastructure.repository.rule_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.vimeet.application.components.rule.rule_sorter'
 
     #
     # Token component
@@ -286,7 +287,7 @@ services:
     vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
         arguments:
-            - @datetime
+            - '@datetime'
 
     #
     # Participant component
@@ -300,11 +301,11 @@ services:
     proximum.vimeet.application.components.schedule.schedule_builder:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
-            - @vimeet_infrastructure.repository.schedule_repository
-            - @vimeet_infrastructure.repository.unavailability_repository
-            - @vimeet_infrastructure.repository.happening_repository
-            - @vimeet_infrastructure.repository.happening_participation_repository
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.repository.schedule_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
     #
     # Meeting Component
@@ -312,8 +313,8 @@ services:
     vimeet_infrastructure.application.components.meeting.request_views_builder:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
         arguments:
-            - @vimeet_infrastructure.application.components.sheet.sheet_info_guesser
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
     #
     # DateTime

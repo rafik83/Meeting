@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
@@ -75,7 +75,7 @@ class OptionType extends AbstractLocalizedType
             }
         }
 
-        $builder->add('value', CheckboxType::class, [
+        $builder->add('value', CoreCheckboxType::class, [
             'label'    => $template['label'][$locale],
             'required' => $product !== null ? $product->getRequired() : false,
             'attr'     => [

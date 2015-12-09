@@ -1,6 +1,6 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
-{% form_theme form _self %}
+{% form_theme form 'VimeetAppBundle:Admin/TypeTemplateField:theme.html.twig' %}
 
 {% block title 'Modifier un champ' %}
 
@@ -15,22 +15,4 @@
     <h3>{{ ('template.name.' ~ update.templateName)|trans }}</h3>
     <hr>
     {{ form(form) }}
-{% endblock %}
-
-{% block _type_template_field_update_lib_choice_choices_row %}
-    {{ form_label(form) }}
-    <div class="well">
-        {{ form_widget(form) }}
-    </div>
-{% endblock %}
-
-{% block _type_template_field_update_lib_choice_label_row %}
-    {{ form_label(form) }}
-    <div class="row">
-        {% for labelTranslation in form %}
-            <div class="col-md-6">
-                {{ form_row(labelTranslation) }}
-            </div>
-        {% endfor %}
-    </div>
 {% endblock %}
