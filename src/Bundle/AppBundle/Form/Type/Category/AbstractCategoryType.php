@@ -46,12 +46,13 @@ class AbstractCategoryType extends AbstractType
                 'label' => false,
             ])
             ->add('types', ChoiceType::class, [
-                'choices'  => $this->typeRepository->getTypesTitleByEventAndLocale(
+                'choices'  => array_flip($this->typeRepository->getTypesTitleByEventAndLocale(
                     $options['event'],
                     $options['locale']
-                ),
+                )),
                 'expanded' => true,
                 'multiple' => true,
+                'choices_as_values' => true,
             ])
         ;
     }
