@@ -22,7 +22,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType;
 
 class MeetingController extends BaseController
 {
@@ -99,7 +101,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $createRequest = new CreateRequest($from, $to, new \DateTime());
-        $form          = $this->createForm(RequestType::class, $createRequest, [
+        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'sheet' => $from
         ]);
         $form->add('submit', SubmitType::class);
@@ -148,7 +150,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $approveRequest = new ApproveRequest($meetingRequest);
-        $form           = $this->createForm('meeting_request_approve', $approveRequest, [
+        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'sheet' => $meetingRequest->getTo()
         ]);
         $form->add('submit', SubmitType::class);
@@ -197,7 +199,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $refuseRequest = new RefuseRequest($meetingRequest);
-        $form          = $this->createForm('meeting_request_refuse', $refuseRequest);
+        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
