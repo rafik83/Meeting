@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType as CoreChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ChoiceWithDescriptionType extends AbstractLocalizedType
@@ -29,7 +29,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
         }
 
         $builder
-            ->add('value', ChoiceType::class, [
+            ->add('value', CoreChoiceType::class, [
                 'choices_as_values' => true,
                 'choices'  => array_flip($choices),
                 'expanded' => true,
