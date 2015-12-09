@@ -79,7 +79,7 @@ form:
                 label: Coordonnées du participant
             submit:
                 label: Envoyer
-    update_sheet_block:
+    update_block:
         children:
             data:
                 label: Modifier les informations
@@ -89,11 +89,11 @@ form:
         children:
             submit:
                 label: Supprimer
-    update_sheet_package_step:
+    update_step:
         children:
             submit:
                 label: Valider et aller à la suite
-    update_sheet_billing:
+    update:
         children:
             submit:
                 label: Enregistrer
@@ -236,9 +236,3 @@ form:
                 label: Participants concernés
             submit:
                 label: Participer
-
-country:
-    placeholder: --- Sélectionner un pays ---
-
-choice:
-    placeholder: --- Sélectionner un item  ---
