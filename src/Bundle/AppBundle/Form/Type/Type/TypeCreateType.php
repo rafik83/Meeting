@@ -31,7 +31,7 @@ class TypeCreateType extends AbstractType
                 'placeholder' => '',
             ])
             ->add('translations', CollectionType::class, [
-                'type'  => TypeTranslationType::class,
+                'entry_type'  => TypeTranslationType::class,
                 'label' => false,
             ])
         ;

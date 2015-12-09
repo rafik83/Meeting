@@ -39,7 +39,7 @@ class EventUpdateType extends AbstractType
                 'preferred_choices' => $prefered,
             ])
             ->add('translations', CollectionType::class, [
-                'type'  => EventUpdateTranslationType::class,
+                'entry_type'  => EventUpdateTranslationType::class,
                 'label' => false,
             ])
         ;

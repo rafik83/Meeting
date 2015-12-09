@@ -42,7 +42,7 @@ class AbstractCategoryType extends AbstractType
     {
         $builder
             ->add('translations', CollectionType::class, [
-                'type'  => CategoryTranslationType::class,
+                'entry_type'  => CategoryTranslationType::class,
                 'label' => false,
             ])
             ->add('types', ChoiceType::class, [

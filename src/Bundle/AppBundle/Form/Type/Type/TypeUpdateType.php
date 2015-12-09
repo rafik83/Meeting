@@ -27,7 +27,7 @@ class TypeUpdateType extends AbstractType
     {
         $builder
             ->add('translations', CollectionType::class, [
-                'type'  => TypeTranslationType::class,
+                'entry_type'  => TypeTranslationType::class,
                 'label' => false,
             ])
         ;

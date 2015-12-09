@@ -25,7 +25,7 @@ class UpdateChoiceType extends UpdateType
 
         $builder
             ->add('choices', CollectionType::class, [
-                'type'         => ChoiceType::class,
+                'entry_type'         => ChoiceType::class,
                 'options'      => ['locales' => $options['locales']],
                 'allow_add'    => true,
                 'allow_delete' => true,

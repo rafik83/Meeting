@@ -28,7 +28,7 @@ class UpdateType extends AbstractType
     {
         $builder
             ->add('label', CollectionType::class, [
-                'type' => 'text',
+                'entry_type' => 'text',
             ])
             ->add('required', CheckboxType::class, [
                 'required' => false,
