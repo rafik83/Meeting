@@ -23,6 +23,7 @@ class Template
     public function addStep(Step $step)
     {
         $this->steps[] = $step;
+        $step->setTemplate($this);
     }
 
     /**

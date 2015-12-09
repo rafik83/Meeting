@@ -31,6 +31,11 @@ class Step
     public $products;
 
     /**
+     * @var Template
+     */
+    public $template;
+
+    /**
      * @param string $key
      */
     public function __construct($key)
@@ -44,6 +49,7 @@ class Step
     public function addProduct(ProductInterface $product)
     {
         $this->products[] = $product;
+        $product->setStep($this);
     }
 
     /**
@@ -131,5 +137,21 @@ class Step
         }
 
         return null;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate(Template $template)
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return Template $template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Product\Products;
 
 use Proximum\Vimeet\Application\Components\Product\Including;
+use Proximum\Vimeet\Application\Components\Product\Step;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractProduct implements ProductInterface
@@ -24,6 +25,11 @@ abstract class AbstractProduct implements ProductInterface
      * @var array
      */
     protected $options;
+
+    /**
+     * @var Step
+     */
+    protected $step;
 
     /**
      * @var Including[]
@@ -153,5 +159,87 @@ abstract class AbstractProduct implements ProductInterface
         return isset($this->options['quantity'])
         && isset($this->options['quantity']['range'])
             ? $this->options['quantity']['range'] : 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStep(Step $step)
+    {
+        $this->step = $step;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStep()
+    {
+        return $this->step;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIncludingFromPurchase(array $packageData)
+    {
+        if ($this->getIncludedIn() === null) {
+            return [];
+        }
+
+        $template   = $this->getStep()->getTemplate();
+        $includings = [];
+
+        if (!empty($packageData) && $template !== null) {
+            foreach ($packageData as $stepKey => $stepData) {
+                foreach ($stepData as $productKey => $productData) {
+                    $toInclude = $this->isIncludedIn(
+                        $this,
+                        $template->getStep($stepKey)->getProduct($productKey),
+                        $productData
+                    );
+
+                    if (!empty($toInclude)) {
+                        $includings[] = $toInclude;
+                    }
+                }
+            }
+        }
+
+        return $includings;
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param ProductInterface $productToCheck
+     * @param array            $productData
+     *
+     * @return null|Including
+     */
+    private function isIncludedIn(ProductInterface $product, ProductInterface $productToCheck, array $productData)
+    {
+        if ($product->getIncludedIn() === null) {
+            return null;
+        }
+
+        if ($productToCheck instanceof LibChoiceWithDescriptionProduct) {
+            if (isset($productData['value'])) {
+                $productChoice = $productToCheck->getChoice($productData['value']);
+                if ($productChoice !== null) {
+                    foreach ($product->getIncludedIn() as $includedIn) {
+                        if ($productChoice === $includedIn->getProductThatInclude()) {
+                            return $includedIn;
+                        }
+                    }
+                }
+            }
+        } else {
+            foreach ($product->getIncludedIn() as $includedIn) {
+                if ($productToCheck === $includedIn->getProductThatInclude()) {
+                    return $includedIn;
+                }
+            }
+        }
+
+        return null;
     }
 }
