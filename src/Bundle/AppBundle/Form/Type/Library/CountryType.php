@@ -33,6 +33,7 @@ class CountryType extends AbstractType
     {
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefaults(['placeholder' => 'country.placeholder']);
+        $resolver->setDefined(['sheet']);
     }
 
     /**

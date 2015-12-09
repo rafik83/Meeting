@@ -32,6 +32,7 @@ class EmailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
+        $resolver->setDefined(['sheet']);
     }
 
     /**

@@ -23,55 +23,55 @@ Proximum\Vimeet\Domain\Model\Event:
             - Montant net à payer
         billingTemplate:
             5645e4242d3df:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: true
                 label:
                     fr: "Nom"
                     en: "Name"
             5645e47e7e499:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required": false
                 label:
                     fr: "Téléphone"
                     en: "Phone"
             5645e52f445d1:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
+                type: lib_email
                 required": true
                 label:
                     fr: "Email"
                     en: "Email"
             5645e534daa0b:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: true
                 label:
                     fr: "Raison sociale"
                     en: "Company"
             5645e54061ff2:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: true
                 label:
                     fr: "Adresse"
                     en: "Address"
             5645e5f35a9e0:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: true
                 label:
                     fr: "Code postal"
                     en: "Zip code"
             5645e6067f46a:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: true
                 label:
                     fr: "Ville"
                     en: "City"
             5645e5fd8f6a7:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType
+                type: lib_country
                 required: true
                 label:
                     fr: "Pays"
                     en: "Country"
             5645e610e0e1b:
-                type: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+                type: lib_text
                 required: false
                 label:
                     fr: "N° de TVA intracommunautaire"

@@ -21,7 +21,8 @@ class ChoiceType extends AbstractLocalizedType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['template', 'locale']);
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'placeholder' => 'choice.placeholder',
             'choices'     => function (Options $options) {
