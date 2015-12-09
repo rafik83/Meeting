@@ -28,7 +28,6 @@ class ChoiceType extends AbstractLocalizedType
             'choices'     => function (Options $options) {
                 return $this->getChoices($options);
             },
-            'translation_domain' => false,
             'choices_as_values' => true,
         ]);
     }
