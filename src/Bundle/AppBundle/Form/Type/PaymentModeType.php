@@ -22,7 +22,7 @@ class PaymentModeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choice_as_value' => true,
+            'choices_as_values' => true,
             'choices'         => [
                 'Paiement de la totalité' => 'cash',
                 'Virement'                => 'transfer',
