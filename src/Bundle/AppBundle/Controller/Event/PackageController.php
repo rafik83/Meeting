@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,12 +43,12 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
         $updateStep = new UpdateStep($sheet, $step);
-        $form       = $this->createForm(new UpdateStepType(), $updateStep, [
+        $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {

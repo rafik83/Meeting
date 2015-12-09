@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Event;
 
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\EventView;
 
 class ResetPasswordEvent extends ApplicationEvent
 {

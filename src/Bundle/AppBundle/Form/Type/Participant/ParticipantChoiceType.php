@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -62,14 +63,6 @@ class ParticipantChoiceType extends AbstractType
      */
     public function getParent()
     {
-        return 'entity';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant_choice';
+        return EntityType::class;
     }
 }

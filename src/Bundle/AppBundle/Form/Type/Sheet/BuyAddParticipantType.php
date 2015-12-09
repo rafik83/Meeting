@@ -14,11 +14,4 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AbstractAddParticipan
 
 class BuyAddParticipantType extends AbstractAddParticipantType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'buy_add_participant';
-    }
 }

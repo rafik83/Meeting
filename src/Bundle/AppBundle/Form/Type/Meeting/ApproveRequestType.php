@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -42,7 +43,7 @@ class ApproveRequestType extends AbstractType
         }
 
         $builder
-            ->add('toParticipants', 'choice', [
+            ->add('toParticipants', ChoiceType::class, [
                 'choices'  => $participants,
                 'expanded' => true,
                 'multiple' => true,
@@ -56,13 +57,5 @@ class ApproveRequestType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['sheet']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'meeting_request_approve';
     }
 }

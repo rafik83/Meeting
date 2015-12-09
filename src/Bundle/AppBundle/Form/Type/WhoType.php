@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -74,7 +75,7 @@ class WhoType extends AbstractType
                     return sprintf('category:%s', $choice->getId());
                 }
 
-                return;
+                return '';
             },
         ]);
     }
@@ -84,14 +85,6 @@ class WhoType extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'who';
+        return ChoiceType::class;
     }
 }

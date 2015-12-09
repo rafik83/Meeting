@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,6 +31,7 @@ class QuantityType extends AbstractType
 
                 return array_combine($range, $range);
             },
+            'choices_as_values' => true,
         ]);
     }
 
@@ -38,13 +40,13 @@ class QuantityType extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
+        return ChoiceType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'quantity';
     }

@@ -70,6 +70,9 @@ Proximum\Vimeet\Domain\Model\Event:
                 label:
                     fr: "Pays"
                     en: "Country"
+                placeholder:
+                    fr: "--- Sélectionner un pays  ---"
+                    en: "--- Sélectionner un pays  ---"
             5645e610e0e1b:
                 type: lib_text
                 required: false

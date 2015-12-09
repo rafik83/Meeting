@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TranslationType extends AbstractType
+class TypeTranslationType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -21,15 +22,7 @@ class TranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text')
+            ->add('title', TextType::class)
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_update_translation';
     }
 }

@@ -10,16 +10,17 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\DontSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RuleController extends Controller
@@ -32,12 +33,12 @@ class RuleController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $form = $this->createForm(new WhoSeeWhoType(), [], [
+        $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule = $this->findOrCreateRule($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
@@ -165,13 +166,13 @@ class RuleController extends Controller
      */
     private function createWhatForm(Rule $rule, $locale)
     {
-        $form = $this->createForm(new WhatType(), $rule->getWhat(), [
+        $form = $this->createForm(DontSeeWhatType::class, $rule->getWhat(), [
             'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
             'who'    => $rule->getSeeable(),
             'locale' => $locale,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         return $form;
     }

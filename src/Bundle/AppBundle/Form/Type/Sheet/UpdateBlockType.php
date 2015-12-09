@@ -23,7 +23,7 @@ class UpdateBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('data', new DataType(), [
+            ->add('data', DataType::class, [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,
@@ -38,17 +38,9 @@ class UpdateBlockType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\UpdateBlock',
-            'intention'  => 'update_sheet_block',
+            'csrf_token_id'  => 'update_sheet_block',
         ]);
 
         $resolver->setRequired(['template', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_sheet_block';
     }
 }

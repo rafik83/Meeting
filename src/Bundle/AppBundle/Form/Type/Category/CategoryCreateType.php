@@ -8,11 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Application\Command\Category\Create;
 
-class ParticipantCreateType extends AbstractParticipantType
+class CategoryCreateType extends AbstractCategoryType
 {
     /**
      * {@inheritdoc}
@@ -22,8 +23,7 @@ class ParticipantCreateType extends AbstractParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Create',
-            'csrf_token_id'  => 'participant_create',
+            'data_class' => Create::class,
         ]);
     }
 }

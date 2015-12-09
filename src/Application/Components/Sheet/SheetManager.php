@@ -16,11 +16,11 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\SheetCatalogView;
 use Proximum\Vimeet\Domain\View\SheetDataView;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SheetManager

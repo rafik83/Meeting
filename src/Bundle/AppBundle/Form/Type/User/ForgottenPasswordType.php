@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ForgottenPasswordType  extends AbstractType
@@ -20,14 +21,6 @@ class ForgottenPasswordType  extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('email', 'email');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'forgotten_password';
+        $builder->add('email', EmailType::class);
     }
 }

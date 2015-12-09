@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
 
 class ParticipateHappeningType extends AbstractType
 {
@@ -24,7 +25,7 @@ class ParticipateHappeningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participants', 'participant_choice', [
+            ->add('participants', ParticipantChoiceType::class, [
                 'sheet'         => $options['sheet'],
                 'multiple'      => true,
                 'expanded'      => true,
@@ -51,15 +52,7 @@ class ParticipateHappeningType extends AbstractType
 
         $resolver->setDefaults([
             'data_class' => Participate::class,
-            'intention'  => 'participate_happening',
+            'csrf_token_id'  => 'participate_happening',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participate_happening';
     }
 }

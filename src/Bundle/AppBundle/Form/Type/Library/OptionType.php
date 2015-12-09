@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class OptionType extends AbstractLocalizedType
@@ -22,7 +23,7 @@ class OptionType extends AbstractLocalizedType
         $template = $options['template'];
         $locale   = $options['locale'];
 
-        $builder->add('value', 'checkbox', [
+        $builder->add('value', CheckboxType::class, [
             'label'    => $template['label'][$locale],
             'required' => false,
         ]);
@@ -31,7 +32,7 @@ class OptionType extends AbstractLocalizedType
             && isset($template['quantity']['max'])
             && $template['quantity']['min'] <= $template['quantity']['max']
         ) {
-            $builder->add('quantity', new QuantityType(), [
+            $builder->add('quantity', QuantityType::class, [
                 'min'   => $template['quantity']['min'],
                 'max'   => $template['quantity']['max'],
                 'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1,
@@ -42,7 +43,7 @@ class OptionType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_option';
     }

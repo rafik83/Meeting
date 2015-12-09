@@ -40,13 +40,13 @@ class TextType extends AbstractType
      */
     public function getParent()
     {
-        return 'text';
+        return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_text';
     }

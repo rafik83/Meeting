@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -51,21 +53,22 @@ class ParticipantType extends AbstractLocalizedType
         $sheet    = $options['sheet'];
 
         $builder
-            ->add('participant', 'checkbox', [
+            ->add('participant', CheckboxType::class, [
                 'label'    => $template['label'][$locale],
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
-            ->add('participant_bought', 'choice', [
+            ->add('participant_bought', ChoiceType::class, [
                 'choices'  => $this->getParticipantChoices($sheet),
                 'label'    => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
+                'choices_as_values' => true,
             ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_participant';
     }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Proximum\Vimeet\Domain\Model\Template;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,14 +33,6 @@ class TemplateChoiceType extends AbstractType
      */
     public function getParent()
     {
-        return 'entity';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'template_choice';
+        return EntityType::class;
     }
 }

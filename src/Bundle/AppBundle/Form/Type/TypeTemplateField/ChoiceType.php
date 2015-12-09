@@ -22,7 +22,7 @@ class ChoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', new ChoiceLabelTranslationsType(), [
+            ->add('label', ChoiceLabelTranslationsType::class, [
                 'locales' => $options['locales'],
                 'label'   => false,
             ]);
@@ -34,13 +34,5 @@ class ChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['locales']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_template_field_update_choice';
     }
 }

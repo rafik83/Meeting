@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ChoiceWithDescriptionType extends AbstractLocalizedType
@@ -28,8 +29,9 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
         }
 
         $builder
-            ->add('value', 'choice', [
-                'choices'  => $choices,
+            ->add('value', ChoiceType::class, [
+                'choices_as_values' => true,
+                'choices'  => array_flip($choices),
                 'expanded' => true,
                 'required' => isset($template['required']) ? $template['required'] : true,
             ]);
@@ -38,7 +40,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
             && isset($template['quantity']['max'])
             && $template['quantity']['min'] <= $template['quantity']['max']
         ) {
-            $builder->add('quantity', new QuantityType(), [
+            $builder->add('quantity', QuantityType::class, [
                 'min'   => $template['quantity']['min'],
                 'max'   => $template['quantity']['max'],
                 'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1,
@@ -49,7 +51,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'choice_with_description';
     }

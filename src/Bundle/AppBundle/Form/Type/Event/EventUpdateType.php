@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class EventUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -27,16 +30,16 @@ class UpdateType extends AbstractType
         $prefered = ['fr', 'en', 'es', 'de', 'it', 'zh'];
 
         $builder
-            ->add('title', 'text')
-            ->add('locales', 'locale', [
+            ->add('title', TextType::class)
+            ->add('locales', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $prefered,
             ])
-            ->add('fallback', 'locale', [
+            ->add('fallback', LocaleType::class, [
                 'preferred_choices' => $prefered,
             ])
-            ->add('translations', 'collection', [
-                'type'  => new UpdateTranslationType(),
+            ->add('translations', CollectionType::class, [
+                'entry_type'  => EventUpdateTranslationType::class,
                 'label' => false,
             ])
         ;
@@ -61,13 +64,5 @@ class UpdateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Event\Update',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'event_update';
     }
 }

@@ -1951,7 +1951,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/8ab0b0ecefe6c2202c2d930480fbf2b88b3fc2cb",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/d4c23faa4c8223ce16caf526f45b1466cf5bda9e",
                 "reference": "8ab0b0ecefe6c2202c2d930480fbf2b88b3fc2cb",
                 "shasum": ""
             },
@@ -4296,16 +4296,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.0.10",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9104a4e2f6a3ebdc4eb036624949a1a2849373dd"
+                "reference": "119ddce28d6d724b09c43357c034e1fc6be645c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9104a4e2f6a3ebdc4eb036624949a1a2849373dd",
-                "reference": "9104a4e2f6a3ebdc4eb036624949a1a2849373dd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/119ddce28d6d724b09c43357c034e1fc6be645c5",
+                "reference": "119ddce28d6d724b09c43357c034e1fc6be645c5",
                 "shasum": ""
             },
             "require": {
@@ -4340,7 +4340,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0.x-dev"
+                    "dev-master": "5.1.x-dev"
                 }
             },
             "autoload": {
@@ -4366,7 +4366,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-11-30 08:33:35"
+            "time": "2015-12-07 15:40:57"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

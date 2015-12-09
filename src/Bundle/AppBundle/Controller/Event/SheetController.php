@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,11 +102,11 @@ class SheetController extends BaseController
         }
 
         $add  = new Add($sheet, $request->getLocale());
-        $form = $this->createForm(new AddParticipantType(), $add, [
+        $form = $this->createForm(AddParticipantType::class, $add, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -171,11 +172,11 @@ class SheetController extends BaseController
         }
 
         $updateParticipant = new Update($participant->getId(), $participant->getData());
-        $form              = $this->createForm(new ParticipantUpdateType(), $updateParticipant, [
+        $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -227,11 +228,11 @@ class SheetController extends BaseController
         }
 
         $updateBlock = new UpdateBlock($sheet, $block);
-        $form        = $this->createForm(new UpdateBlockType(), $updateBlock, [
+        $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
             'template' => $sheetTemplate[$block]['template'],
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -281,7 +282,7 @@ class SheetController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $delete = new Delete($sheet, $this->getUser(), $participant->getId());
-        $form   = $this->createForm(new DeleteParticipantType(), $delete);
+        $form   = $this->createForm(DeleteParticipantType::class, $delete);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -363,11 +364,11 @@ class SheetController extends BaseController
         $planningPrice      = $participantManager->getPlanningPrice($sheet);
 
         $buyParticipant = new BuyParticipant($sheet, $request->getLocale());
-        $form           = $this->createForm(new BuyParticipantType(), $buyParticipant, [
+        $form           = $this->createForm(BuyParticipantType::class, $buyParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {

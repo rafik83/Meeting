@@ -12,13 +12,15 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class AbstractCategoryType extends AbstractType
 {
     /**
      * @var TypeRepositoryInterface
@@ -39,17 +41,18 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('translations', 'collection', [
-                'type'  => new TranslationType(),
+            ->add('translations', CollectionType::class, [
+                'entry_type'  => CategoryTranslationType::class,
                 'label' => false,
             ])
-            ->add('types', 'choice', [
-                'choices'  => $this->typeRepository->getTypesTitleByEventAndLocale(
+            ->add('types', ChoiceType::class, [
+                'choices'  => array_flip($this->typeRepository->getTypesTitleByEventAndLocale(
                     $options['event'],
                     $options['locale']
-                ),
+                )),
                 'expanded' => true,
                 'multiple' => true,
+                'choices_as_values' => true,
             ])
         ;
     }
@@ -70,13 +73,5 @@ class CategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category';
     }
 }

@@ -39,9 +39,8 @@ class SecurityController extends Controller
 
         $user = ['username' => $authenticationUtils->getLastUsername()];
 
-        $form = $this->createForm(new LoginType(), $user, [
+        $form = $this->createForm(LoginType::class, $user, [
             'action' => $this->generateUrl('event_login_check', ['subdomain' => $subdomain]),
-            'method' => 'POST',
         ]);
 
         return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [

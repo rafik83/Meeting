@@ -16,9 +16,12 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType;
 
 class CategoryController extends Controller
 {
@@ -49,12 +52,12 @@ class CategoryController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form   = $this->createForm('category', $create, [
+        $form   = $this->createForm(CategoryCreateType::class, $create, [
             'method' => 'POST',
             'event'  => $event,
             'locale' => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.category.create_handler')->handle($create);
@@ -91,12 +94,12 @@ class CategoryController extends Controller
         }
 
         $update = new Update($category);
-        $form   = $this->createForm('category', $update, [
+        $form   = $this->createForm(CategoryUpdateType::class, $update, [
             'method' => 'POST',
             'event'  => $event,
             'locale' => $request->getLocale(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.category.update_handler')->handle($update);

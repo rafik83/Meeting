@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,7 +22,7 @@ class DeleteParticipantType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
     /**
@@ -31,16 +32,8 @@ class DeleteParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Delete',
-            'intention'  => 'delete_participant',
+            'csrf_token_id'  => 'delete_participant',
             'method'     => 'DELETE',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'delete_participant';
     }
 }
