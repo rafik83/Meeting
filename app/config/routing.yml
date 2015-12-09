@@ -1,5 +1,5 @@
 default:
-    pattern: /
+    path: /
     host: "%domain%"
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
