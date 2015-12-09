@@ -53,13 +53,13 @@ services:
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.approve_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\ApproveRequestType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
         arguments:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.refuse_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RefuseRequestType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_participant.participant_choice_type:
@@ -89,7 +89,7 @@ services:
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_admin.type_template_field_update_lib_choice:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateChoiceType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType
         tags:
             - { name: 'form.type' }
 

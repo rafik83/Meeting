@@ -324,7 +324,7 @@ class SheetController extends BaseController
                     $delete = new Delete($sheet, $this->getUser(), $participantView->id);
 
                     $participantDeleteForms[$participantView->id] = $this->createForm(
-                        new DeleteParticipantType(),
+                        DeleteParticipantType::class,
                         $delete,
                         [
                             'action' => $this->generateUrl(

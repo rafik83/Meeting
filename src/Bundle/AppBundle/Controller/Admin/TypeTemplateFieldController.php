@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType;
 
 class TypeTemplateFieldController extends Controller
 {
@@ -73,7 +74,7 @@ class TypeTemplateFieldController extends Controller
 
         $update = new UpdateChoice($type, $template, $key);
 
-        $form   = $this->createForm('type_template_field_update_lib_choice', $update, [
+        $form   = $this->createForm(TypeTemplateFieldUpdateLibChoiceType::class, $update, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
