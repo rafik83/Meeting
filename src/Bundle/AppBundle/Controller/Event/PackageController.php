@@ -42,11 +42,19 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create($sheet);
+        $stepObject = $template->getStep($step);
+
+        if ($stepObject === null) {
+            throw new NotFoundHttpException();
+        }
+
         $updateStep = new UpdateStep($sheet, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
+            'step'     => $stepObject,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -64,7 +72,8 @@ class PackageController extends BaseController
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
-                    $form->get('packageData'));
+                    $form->get('packageData')
+                );
             } catch (ForgotToAddQuantityException $exception) {
                 $packageTemplate = $sheet->getTypePackageTemplate();
                 $this->addErrorOnForm(
@@ -97,7 +106,13 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
+            ->create(
+                $sheet->getTypePackageTemplate(),
+                $sheet->getPackageData(),
+                $request->getLocale()
+            )
+        ;
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
