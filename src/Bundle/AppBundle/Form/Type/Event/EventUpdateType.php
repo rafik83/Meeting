@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class EventUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class UpdateType extends AbstractType
                 'preferred_choices' => $prefered,
             ])
             ->add('translations', CollectionType::class, [
-                'type'  => UpdateTranslationType::class,
+                'type'  => EventUpdateTranslationType::class,
                 'label' => false,
             ])
         ;

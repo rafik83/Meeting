@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class TypeUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class UpdateType extends AbstractType
     {
         $builder
             ->add('translations', CollectionType::class, [
-                'type'  => TranslationType::class,
+                'type'  => TypeTranslationType::class,
                 'label' => false,
             ])
         ;

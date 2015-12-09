@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\DontSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
@@ -166,7 +166,7 @@ class RuleController extends Controller
      */
     private function createWhatForm(Rule $rule, $locale)
     {
-        $form = $this->createForm(WhatType::class, $rule->getWhat(), [
+        $form = $this->createForm(DontSeeWhatType::class, $rule->getWhat(), [
             'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
             'who'    => $rule->getSeeable(),

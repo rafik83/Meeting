@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class AbstractCategoryType extends AbstractType
 {
     /**
      * @var TypeRepositoryInterface
@@ -42,7 +42,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('translations', CollectionType::class, [
-                'type'  => TranslationType::class,
+                'type'  => CategoryTranslationType::class,
                 'label' => false,
             ])
             ->add('types', ChoiceType::class, [

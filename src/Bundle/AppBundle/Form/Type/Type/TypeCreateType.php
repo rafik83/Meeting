@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AbstractType
+class TypeCreateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class CreateType extends AbstractType
                 'placeholder' => '',
             ])
             ->add('translations', CollectionType::class, [
-                'type'  => TranslationType::class,
+                'type'  => TypeTranslationType::class,
                 'label' => false,
             ])
         ;

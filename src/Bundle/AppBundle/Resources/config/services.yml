@@ -68,8 +68,14 @@ services:
             - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type.category_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryType
+    vimeet_app.form_type.category_create_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType
+        arguments:
+            - @vimeet_infrastructure.repository.type_repository
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type.category_update_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType
         arguments:
             - @vimeet_infrastructure.repository.type_repository
         tags:

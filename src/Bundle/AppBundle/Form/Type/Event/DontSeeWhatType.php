@@ -17,7 +17,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WhatType extends AbstractType
+class DontSeeWhatType extends AbstractType
 {
     /**
      * {@inheritdoc}

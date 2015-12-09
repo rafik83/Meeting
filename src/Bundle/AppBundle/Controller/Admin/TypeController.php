@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\CreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\UpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -52,7 +52,7 @@ class TypeController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form   = $this->createForm(CreateType::class, $create, [
+        $form   = $this->createForm(TypeCreateType::class, $create, [
             'action' => $this->generateUrl('admin_type_create', ['id' => $event->getId()]),
             'method' => 'POST',
         ]);
@@ -93,7 +93,7 @@ class TypeController extends Controller
         }
 
         $update = new Update($type);
-        $form   = $this->createForm(UpdateType::class, $update, [
+        $form   = $this->createForm(TypeUpdateType::class, $update, [
             'action' => $this->generateUrl('admin_type_update', ['id' => $event->getId(), 'type_id' => $type->getId()]),
             'method' => 'POST',
         ]);
