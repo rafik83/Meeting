@@ -24,11 +24,14 @@ class ChoiceType extends AbstractLocalizedType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'placeholder' => 'choice.placeholder',
+            'placeholder' => function (Options $options) {
+                return $options['template']['placeholder'][$options['locale']];
+            },
             'choices'     => function (Options $options) {
                 return $this->getChoices($options);
             },
             'choices_as_values' => true,
+            'translation_domain' => false,
         ]);
     }
 
