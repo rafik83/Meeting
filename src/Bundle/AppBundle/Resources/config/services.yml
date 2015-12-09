@@ -12,19 +12,19 @@ services:
     vimeet_app.param_converter.event_domain_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventViewDomainParamConverter
         arguments:
-            - @vimeet_infrastructure.repository.event_repository
+            - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'event_domain_param_converter' }
     vimeet_app.param_converter.participant_type_view_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\TypeViewParamConverter
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'participant_type_view_param_converter' }
     vimeet_app.param_converter.category_view_param_converter:
         class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\CategoryViewParamConverter
         arguments:
-            - @vimeet_infrastructure.repository.category_repository
+            - '@vimeet_infrastructure.repository.category_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
 
@@ -42,20 +42,20 @@ services:
     vimeet_app.form_type.who_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType
         arguments:
-            - @vimeet_infrastructure.repository.category_repository
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RequestType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType
         arguments:
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
         arguments:
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.refuse_request_type:
@@ -65,19 +65,19 @@ services:
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
-            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type.category_create_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type.category_update_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType
         arguments:
-            - @vimeet_infrastructure.repository.type_repository
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
 
@@ -85,7 +85,7 @@ services:
     # Admin library form type
     #
     vimeet_app.form_type_admin.type_template_field_update:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_admin.type_template_field_update_lib_choice:
@@ -140,7 +140,7 @@ services:
         tags:
             - { name: 'form.type' }
         arguments:
-            - @vimeet_app.service.participant_manager
+            - '@vimeet_app.service.participant_manager'
     vimeet_app.form_type_library.planning_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType
         tags:
@@ -176,15 +176,15 @@ services:
     vimeet_app.domain_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\DomainEventListener
         arguments:
-            - @router.default
-            - @vimeet_infrastructure.repository.event_repository
+            - '@router.default'
+            - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
     vimeet_app.reset_password_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ResetPasswordEventListener
         arguments:
-            - @mailer
-            - @templating.engine.twig
+            - '@mailer'
+            - '@templating.engine.twig'
         tags:
             - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
 
@@ -195,6 +195,6 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Twig\AppExtension
         public: false
         arguments:
-            - @sonata.intl.templating.helper.locale
+            - '@sonata.intl.templating.helper.locale'
         tags:
             - { name: 'twig.extension' }
