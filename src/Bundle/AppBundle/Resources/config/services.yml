@@ -89,7 +89,7 @@ services:
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_admin.type_template_field_update_lib_choice:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\UpdateChoiceType
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType
         tags:
             - { name: 'form.type' }
 
