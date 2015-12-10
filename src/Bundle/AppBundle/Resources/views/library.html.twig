@@ -55,10 +55,6 @@
 {% endblock %}
 
 {% block lib_option_row %}
-    {% set multiple_row = false %}
-    {% if is_included is defined and is_included == true and quantity_allowed is defined and quantity_allowed != 0 and quantity_included is defined and quantity_included is not null %}
-        {% set multiple_row = true %}
-    {% endif %}
     {{ form_errors(form) }}
     <table class="table table-condensed">
         {{ block('thead') }}
@@ -71,9 +67,9 @@
                     {{ template['description'][locale] }}
                 </td>
                 <td>
-                    {% if is_included is defined and is_included == true and form.quantity is not defined %}
+                    {% if is_included == true and form.quantity is not defined %}
                         {{ 'event.sheet.package.include'|trans }}
-                    {% elseif is_included is defined and is_included == true %}
+                    {% elseif is_included == true %}
                         {{ 0|number_format_currency('EUR') }}
                     {% else %}
                         {{ template['unitPrice']|number_format_currency('EUR') }}
@@ -81,7 +77,7 @@
                 </td>
                 {% if form.quantity is defined and multiple_row %}
                         <td>
-                            {% if quantity_allowed is defined and quantity_allowed != 0 and quantity_included is defined and quantity_included is not null %}
+                            {% if quantity_allowed != 0 and quantity_included is not null %}
                                 {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
                             {% else %}
                                 {{ 'event.sheet.package.include'|trans }}
