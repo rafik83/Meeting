@@ -77,11 +77,7 @@
                 </td>
                 {% if form.quantity is defined and multiple_row %}
                         <td>
-                            {% if quantity_allowed != 0 and quantity_included is not null %}
-                                {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
-                            {% else %}
-                                {{ 'event.sheet.package.include'|trans }}
-                            {% endif %}
+                            {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
                         </td>
                     </tr>
                     <tr>
