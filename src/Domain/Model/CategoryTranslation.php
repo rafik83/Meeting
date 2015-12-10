@@ -42,8 +42,8 @@ class CategoryTranslation
     public function __construct(Category $category, $locale, $title)
     {
         $this->category = $category;
-        $this->locale = $locale;
-        $this->title = $title;
+        $this->locale   = $locale;
+        $this->title    = $title;
     }
 
     /**

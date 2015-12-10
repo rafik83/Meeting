@@ -44,8 +44,8 @@ class RegisterHandler
         SaltGeneratorInterface $saltGenerator
     ) {
         $this->userRepository = $userRepository;
-        $this->encoder = $encoder;
-        $this->saltGenerator = $saltGenerator;
+        $this->encoder        = $encoder;
+        $this->saltGenerator  = $saltGenerator;
     }
 
     /**
@@ -59,9 +59,9 @@ class RegisterHandler
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $register->email));
         }
 
-        $salt = $this->saltGenerator->generate();
+        $salt     = $this->saltGenerator->generate();
         $password = $this->encoder->encode($register->password, $salt);
-        $user = new User($register->email, $salt, $password, $register->locale);
+        $user     = new User($register->email, $salt, $password, $register->locale);
 
         $this->userRepository->add($user);
 

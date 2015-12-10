@@ -49,9 +49,9 @@ class NewPasswordHandler
         SaltGeneratorInterface $saltGenerator,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordToken
     ) {
-        $this->userRepository = $userRepository;
-        $this->encoder = $encoder;
-        $this->saltGenerator = $saltGenerator;
+        $this->userRepository         = $userRepository;
+        $this->encoder                = $encoder;
+        $this->saltGenerator          = $saltGenerator;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
     }
 
@@ -60,8 +60,8 @@ class NewPasswordHandler
      */
     public function handle(NewPassword $newPassword)
     {
-        $user = $newPassword->user;
-        $salt = $this->saltGenerator->generate();
+        $user     = $newPassword->user;
+        $salt     = $this->saltGenerator->generate();
         $password = $this->encoder->encode($newPassword->password, $salt);
 
         $user->updatePassword($salt, $password);

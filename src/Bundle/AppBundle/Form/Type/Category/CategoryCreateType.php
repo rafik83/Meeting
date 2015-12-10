@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Category\Create;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryCreateType extends AbstractCategoryType
 {

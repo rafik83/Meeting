@@ -47,10 +47,10 @@ class Unavailability
      */
     public function __construct(Schedule $schedule, Participant $participant, \DateTime $begin, \DateTime $end)
     {
-        $this->schedule = $schedule;
+        $this->schedule    = $schedule;
         $this->participant = $participant;
-        $this->begin = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
-        $this->end = $end->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->begin       = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->end         = $end->modify($this->schedule->getDate()->format('Y-m-d'));
     }
 
     /**
@@ -124,6 +124,6 @@ class Unavailability
     public function update(\DateTime $begin, \DateTime $end)
     {
         $this->begin = $begin;
-        $this->end = $end;
+        $this->end   = $end;
     }
 }

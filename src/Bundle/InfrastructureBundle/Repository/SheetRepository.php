@@ -37,7 +37,7 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager  = $entityManager;
         $this->typeRepository = $typeRepository;
     }
 

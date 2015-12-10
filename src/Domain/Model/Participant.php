@@ -49,8 +49,8 @@ class Participant
     public function __construct(Sheet $sheet, User $user, array $data, $owner)
     {
         $this->sheet = $sheet;
-        $this->user = $user;
-        $this->data = $data;
+        $this->user  = $user;
+        $this->data  = $data;
         $this->owner = $owner;
     }
 

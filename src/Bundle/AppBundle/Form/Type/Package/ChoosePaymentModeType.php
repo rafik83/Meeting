@@ -24,7 +24,7 @@ class ChoosePaymentModeType extends AbstractType
         $builder
             ->add('mode', PaymentModeType::class, [
                 'expanded' => true,
-                'label' => false,
+                'label'    => false,
             ])
         ;
     }

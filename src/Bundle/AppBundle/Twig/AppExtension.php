@@ -32,11 +32,11 @@ class AppExtension extends \Twig_Extension
      */
     public function getFilters()
     {
-        return array(
+        return [
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
-        );
+        ];
     }
 
     /**

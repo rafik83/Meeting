@@ -32,7 +32,7 @@ class EventUpdateType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('locales', LocaleType::class, [
-                'multiple' => true,
+                'multiple'          => true,
                 'preferred_choices' => $prefered,
             ])
             ->add('fallback', LocaleType::class, [
@@ -40,7 +40,7 @@ class EventUpdateType extends AbstractType
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => EventUpdateTranslationType::class,
-                'label' => false,
+                'label'      => false,
             ])
         ;
     }

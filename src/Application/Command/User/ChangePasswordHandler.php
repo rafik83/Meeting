@@ -42,8 +42,8 @@ class ChangePasswordHandler
         SaltGeneratorInterface $saltGenerator
     ) {
         $this->userRepository = $userRepository;
-        $this->encoder = $encoder;
-        $this->saltGenerator = $saltGenerator;
+        $this->encoder        = $encoder;
+        $this->saltGenerator  = $saltGenerator;
     }
 
     /**
@@ -51,8 +51,8 @@ class ChangePasswordHandler
      */
     public function handle(ChangePassword $changePassword)
     {
-        $user = $changePassword->user;
-        $salt = $this->saltGenerator->generate();
+        $user     = $changePassword->user;
+        $salt     = $this->saltGenerator->generate();
         $password = $this->encoder->encode($changePassword->plainPassword, $salt);
 
         $user->updatePassword($salt, $password);

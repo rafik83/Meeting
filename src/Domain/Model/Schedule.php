@@ -47,10 +47,10 @@ class Schedule
      */
     public function __construct(Event $event, \DateTime $date)
     {
-        $this->event = $event;
-        $this->date = $date;
+        $this->event        = $event;
+        $this->date         = $date;
         $this->meetingSlots = new ArrayCollection();
-        $this->happenings = new ArrayCollection();
+        $this->happenings   = new ArrayCollection();
     }
 
     /**

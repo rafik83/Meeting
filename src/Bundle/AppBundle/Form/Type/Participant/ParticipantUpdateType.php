@@ -22,7 +22,7 @@ class ParticipantUpdateType extends AbstractParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Update',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\Participant\Update',
             'csrf_token_id' => 'participant_update',
         ]);
     }

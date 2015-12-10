@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Category\Update;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryUpdateType extends AbstractCategoryType
 {

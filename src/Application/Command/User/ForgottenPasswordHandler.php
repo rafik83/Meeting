@@ -52,9 +52,9 @@ class ForgottenPasswordHandler
         ApplicationEventDispatcherInterface $applicationEventDispatcher
     ) {
         $this->forgottenPasswordTokenGenerator = $forgottenPasswordTokenGenerator;
-        $this->userRepository = $userRepository;
-        $this->forgottenPasswordRepository = $forgottenPasswordTokenRepository;
-        $this->applicationEventDispatcher = $applicationEventDispatcher;
+        $this->userRepository                  = $userRepository;
+        $this->forgottenPasswordRepository     = $forgottenPasswordTokenRepository;
+        $this->applicationEventDispatcher      = $applicationEventDispatcher;
     }
 
     /**

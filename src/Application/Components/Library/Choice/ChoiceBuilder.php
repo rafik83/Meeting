@@ -41,9 +41,9 @@ class ChoiceBuilder
      * @param array  $choices
      * @param string $locale
      *
+     * @throws LanguageNotFoundException
      * @return array
      *
-     * @throws LanguageNotFoundException
      */
     public function buildGroupedChoices(array $choices, $locale)
     {
@@ -69,7 +69,7 @@ class ChoiceBuilder
      */
     public function areGroupedChoices(array $choices)
     {
-        $keys = array_keys($choices);
+        $keys  = array_keys($choices);
         $first = isset($keys[0]) ? $keys[0] : null;
 
         return $first !== null && isset($choices[$first]['choices']);

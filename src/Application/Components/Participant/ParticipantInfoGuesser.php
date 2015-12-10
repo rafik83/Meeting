@@ -22,7 +22,7 @@ class ParticipantInfoGuesser
     public function guessParticipantLastName(Participant $participant)
     {
         $participantTemplate = $participant->getSheet()->getType()->getParticipantTemplate();
-        $participantData = $participant->getData();
+        $participantData     = $participant->getData();
 
         foreach ($participantTemplate as $fieldKey => $field) {
             if ($field['type'] === 'lib_last_name' && isset($participantData[$fieldKey])) {
@@ -41,7 +41,7 @@ class ParticipantInfoGuesser
     public function guessParticipantFirstName(Participant $participant)
     {
         $participantTemplate = $participant->getSheet()->getType()->getParticipantTemplate();
-        $participantData = $participant->getData();
+        $participantData     = $participant->getData();
 
         foreach ($participantTemplate as $fieldKey => $field) {
             if ($field['type'] === 'lib_first_name' && isset($participantData[$fieldKey])) {
@@ -59,7 +59,7 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantInfo(Participant $participant)
     {
-        $string = trim($this->guessParticipantLastName($participant).' '.$this->guessParticipantFirstName($participant));
+        $string = trim($this->guessParticipantLastName($participant) . ' ' . $this->guessParticipantFirstName($participant));
 
         return empty($string) ? sprintf('#%d', $participant->getId()) : $string;
     }

@@ -33,7 +33,7 @@ class Unparticipate
      */
     public function __construct(Happening $happening, Participant $participant)
     {
-        $this->happening = $happening;
+        $this->happening   = $happening;
         $this->participant = $participant;
     }
 }

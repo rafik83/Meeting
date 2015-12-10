@@ -26,7 +26,7 @@ class LibChoiceWithDescriptionCart implements LibCartInterface
             && isset($dataValue['value'])
         ) {
             $cartRow = new CartRow(
-                $template['label'][$locale].' : '.$template['choices'][$dataValue['value']]['label'][$locale],
+                $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']]['label'][$locale],
                 isset($template['choices'][$dataValue['value']]['quantity']) ? $template['choices'][$dataValue['value']]['quantity'] : 1,
                 isset($template['choices'][$dataValue['value']]['unitPrice']) ? $template['choices'][$dataValue['value']]['unitPrice'] : null
             );

@@ -39,7 +39,7 @@ class AddHandler extends BaseHandler
         UserRepositoryInterface $userRepository,
         ParticipantRepositoryInterface $participantRepository
     ) {
-        $this->userRepository = $userRepository;
+        $this->userRepository        = $userRepository;
         $this->participantRepository = $participantRepository;
     }
 
