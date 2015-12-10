@@ -75,22 +75,26 @@
                         {{ template['unitPrice']|number_format_currency('EUR') }}
                     {% endif %}
                 </td>
-                {% if form.quantity is defined and multiple_row %}
-                        <td>
-                            {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ template['unitPrice']|number_format_currency('EUR') }}</td>
-                        <td>{{ block('quantity') }}</td>
-                {% elseif form.quantity is defined %}
-                    <td>
-                        {{ block('quantity') }}
-                    </td>
-                {% endif %}
+                {{ block('double_row_quantity') }}
             </tr>
         </tbody>
     </table>
+{% endblock %}
+
+{% block double_row_quantity %}
+    {% if form.quantity is defined and multiple_row %}
+        <td>
+            {{ 'event.sheet.package.includeQuantity'|transchoice(quantity_included, {'%count%': quantity_included}) }}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ template['unitPrice']|number_format_currency('EUR') }}</td>
+        <td>{{ block('quantity') }}</td>
+    {% elseif form.quantity is defined %}
+        <td>
+            {{ block('quantity') }}
+        </td>
+    {% endif %}
 {% endblock %}
 
 {% block lib_planning_row %}
