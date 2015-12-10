@@ -14,15 +14,16 @@ use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class CancelType extends AbstractType
+class MeetingCancelType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
     /**
@@ -39,7 +40,7 @@ class CancelType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'meeting_cancel';
     }

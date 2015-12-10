@@ -17,7 +17,7 @@ use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\CancelType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingCancelType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -369,7 +369,7 @@ class ScheduleController extends Controller
     public function cancelMeetingAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
     {
         $cancel = new Cancel($meeting);
-        $form   = $this->createForm(new CancelType(), $cancel);
+        $form   = $this->createForm(MeetingCancelType::class, $cancel);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler')->handle($cancel);
