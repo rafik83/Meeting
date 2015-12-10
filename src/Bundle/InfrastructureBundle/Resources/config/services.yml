@@ -240,10 +240,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
         tags:
             - { name: cart, cart: lib_planning }
-    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
-        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
-        tags:
-            - { name: cart, cart: upload_with_choices }
 
     #
     # Sheet Component
