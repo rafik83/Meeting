@@ -43,16 +43,6 @@ class LibPlanningProduct extends AbstractDescriptionTypeUnitPriceOptions
     }
 
     /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getLabel($locale)
-    {
-        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
-    }
-
-    /**
      * @param int $maxPlanning
      */
     public function setMaxPlaning($maxPlanning)

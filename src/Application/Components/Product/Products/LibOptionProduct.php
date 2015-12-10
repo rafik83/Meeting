@@ -33,16 +33,6 @@ class LibOptionProduct extends AbstractProduct
      *
      * @return string|null
      */
-    public function getLabel($locale)
-    {
-        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
     public function getDescription($locale)
     {
         return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;

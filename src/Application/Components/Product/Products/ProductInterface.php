@@ -22,6 +22,13 @@ interface ProductInterface
     public function configure(OptionsResolver $optionsResolver);
 
     /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getLabel($locale);
+
+    /**
      * @param ProductInterface $includer
      * @param ProductInterface $include
      * @param float            $quantity
@@ -39,6 +46,16 @@ interface ProductInterface
     public function addInclude(Including $including);
 
     /**
+     * @return Including[]
+     */
+    public function getIncludedIn();
+
+    /**
+     * @return Including[]
+     */
+    public function getInclude();
+
+    /**
      * @param Step $step
      */
     public function setStep(Step $step);
@@ -49,6 +66,8 @@ interface ProductInterface
     public function getStep();
 
     /**
+     * Get all the products bought where this product is include
+     *
      * @param array $packageData
      */
     public function getIncludingFromPurchase(array $packageData);

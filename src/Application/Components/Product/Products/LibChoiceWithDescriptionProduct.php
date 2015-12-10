@@ -26,21 +26,11 @@ class LibChoiceWithDescriptionProduct extends AbstractProduct
     {
         parent::configure($optionsResolver);
 
-        $optionsResolver->setRequired(['label', 'type', 'choices', 'required']);
+        $optionsResolver->setRequired(['type', 'choices', 'required']);
         $optionsResolver->setDefined([
             'quantity',
             'description',
         ]);
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getLabel($locale)
-    {
-        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
     }
 
     /**

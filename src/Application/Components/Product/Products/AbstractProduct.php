@@ -46,7 +46,9 @@ abstract class AbstractProduct implements ProductInterface
      */
     public function __construct($key)
     {
-        $this->key = $key;
+        $this->key        = $key;
+        $this->include    = [];
+        $this->includedIn = [];
     }
 
     /**
@@ -54,10 +56,19 @@ abstract class AbstractProduct implements ProductInterface
      */
     public function configure(OptionsResolver $optionsResolver)
     {
+        $optionsResolver->setRequired(['label']);
         $optionsResolver->setDefined([
             'includedIn',
             'required',
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel($locale)
+    {
+        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
     }
 
     /**
@@ -117,7 +128,7 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
-     * @return ProductInterface[]
+     * {@inheritdoc}
      */
     public function getIncludedIn()
     {
@@ -125,7 +136,7 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
-     * @return ProductInterface[]
+     * {@inheritdoc}
      */
     public function getInclude()
     {
@@ -254,6 +265,9 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
+     * Check if the given product is bought and included for a product
+     * and return it
+     *
      * @param ProductInterface $product
      * @param ProductInterface $productToCheck
      * @param array            $productData

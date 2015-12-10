@@ -50,16 +50,6 @@ class LibParticipantProduct extends AbstractDescriptionTypeUnitPriceOptions
     }
 
     /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getLabel($locale)
-    {
-        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
-    }
-
-    /**
      * @return int
      */
     public function getFreeParticipant()

@@ -26,7 +26,7 @@ class LibChoiceProduct extends AbstractProduct
     {
         parent::configure($optionsResolver);
 
-        $optionsResolver->setRequired(['label', 'unitPrice']);
+        $optionsResolver->setRequired(['unitPrice']);
         $optionsResolver->setDefined([
             'description',
             'includedIn',
