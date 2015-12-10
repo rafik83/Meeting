@@ -40,8 +40,8 @@ class UpdateBlock
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
         $blockTemplate = $sheetTemplate[$block]['template'];
-        $blockData = array_combine(array_keys($blockTemplate), array_fill(0, count($blockTemplate), null));
-        $sheetData = isset($sheet->getData()[$block]) ? $sheet->getData()[$block] : $blockData;
+        $blockData     = array_combine(array_keys($blockTemplate), array_fill(0, count($blockTemplate), null));
+        $sheetData     = isset($sheet->getData()[$block]) ? $sheet->getData()[$block] : $blockData;
 
         foreach ($blockData as $key => $value) {
             $this->data[$key] = isset($sheetData[$key]) ? $sheetData[$key] : null;

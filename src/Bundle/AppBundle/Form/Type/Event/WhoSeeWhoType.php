@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType;
 
 class WhoSeeWhoType extends AbstractType
 {

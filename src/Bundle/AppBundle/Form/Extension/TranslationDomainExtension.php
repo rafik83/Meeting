@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Set translation domain to "forms" in every form.

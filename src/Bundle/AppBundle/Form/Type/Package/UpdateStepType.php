@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 
 class UpdateStepType extends AbstractType
 {
@@ -39,7 +39,7 @@ class UpdateStepType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
             'csrf_token_id' => 'update_sheet_package_step',
         ]);
 

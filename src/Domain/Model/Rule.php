@@ -61,7 +61,7 @@ class Rule
     public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what)
     {
         $this->event = $event;
-        $this->what = $what;
+        $this->what  = $what;
 
         if ($seer instanceof Type) {
             $this->seerType = $seer;

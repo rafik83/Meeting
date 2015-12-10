@@ -51,8 +51,8 @@ class BuyParticipant
      */
     public function __construct(Sheet $sheet, $locale)
     {
-        $this->sheet = $sheet;
+        $this->sheet  = $sheet;
         $this->locale = $locale;
-        $this->owner = false;
+        $this->owner  = false;
     }
 }

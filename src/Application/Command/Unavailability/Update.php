@@ -37,7 +37,7 @@ class Update
     public function __construct(Unavailability $unavailability)
     {
         $this->unavailability = $unavailability;
-        $this->from = $unavailability->getBegin();
-        $this->to = $unavailability->getEnd();
+        $this->from           = $unavailability->getBegin();
+        $this->to             = $unavailability->getEnd();
     }
 }

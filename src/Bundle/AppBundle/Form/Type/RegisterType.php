@@ -27,7 +27,7 @@ class RegisterType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
+                'type'            => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;

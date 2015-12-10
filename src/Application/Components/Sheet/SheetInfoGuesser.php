@@ -51,7 +51,7 @@ class SheetInfoGuesser
     public function guessSheetInfo(Sheet $sheet)
     {
         $sheetTemplate = $sheet->getTypeSheetTemplate();
-        $sheetData = $sheet->getData();
+        $sheetData     = $sheet->getData();
 
         foreach ($sheetTemplate as $blockKey => $block) {
             if (isset($block['template'])) {

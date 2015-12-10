@@ -34,7 +34,7 @@ class EventRepository implements EventRepositoryInterface
     public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
     {
         $this->entityManager = $entityManager;
-        $this->paginator = $paginator;
+        $this->paginator     = $paginator;
     }
 
     /**

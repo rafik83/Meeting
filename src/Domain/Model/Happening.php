@@ -59,12 +59,12 @@ class Happening
      */
     public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
     {
-        $this->schedule = $schedule;
-        $this->begin = $begin;
-        $this->end = $end;
-        $this->title = $title;
+        $this->schedule    = $schedule;
+        $this->begin       = $begin;
+        $this->end         = $end;
+        $this->title       = $title;
         $this->description = $description;
-        $this->blocking = $blocking;
+        $this->blocking    = $blocking;
     }
 
     /**

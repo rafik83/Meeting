@@ -46,7 +46,7 @@ class TypeTemplateFieldUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\Update',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\TypeTemplateField\Update',
             'csrf_token_id' => 'type_template_field_update',
         ]);
     }
@@ -57,7 +57,7 @@ class TypeTemplateFieldUpdateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['label'] as $labelTranslation) {
-            $localeLabel = Intl::getLocaleBundle()->getLocaleName($labelTranslation->vars['name']);
+            $localeLabel                     = Intl::getLocaleBundle()->getLocaleName($labelTranslation->vars['name']);
             $labelTranslation->vars['label'] = ucfirst($localeLabel);
         }
     }

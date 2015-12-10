@@ -24,7 +24,7 @@ class FirstNameType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['template'] = $options['template'];
-        $view->vars['locale'] = $options['locale'];
+        $view->vars['locale']   = $options['locale'];
     }
 
     /**

@@ -67,12 +67,12 @@ class Template
      */
     public function __construct($title, array $participant, array $sheet, array $package, $preview, $view)
     {
-        $this->title = $title;
+        $this->title       = $title;
         $this->participant = $participant;
-        $this->sheet = $sheet;
-        $this->package = $package;
-        $this->preview = $preview;
-        $this->view = $view;
+        $this->sheet       = $sheet;
+        $this->package     = $package;
+        $this->preview     = $preview;
+        $this->view        = $view;
     }
 
     /**

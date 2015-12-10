@@ -25,7 +25,7 @@ class QuantityType extends AbstractType
         $resolver->setRequired(['min', 'max']);
         $resolver->setDefined(['sheet']);
         $resolver->setDefaults([
-            'range' => 1,
+            'range'   => 1,
             'choices' => function (Options $options) {
                 $range = range($options['min'], $options['max'], $options['range']);
 

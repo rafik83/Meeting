@@ -52,8 +52,8 @@ class HomeController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Home:index.html.twig', [
             'eventView' => $eventView,
-            'types' => $typeViews,
-            'sheets' => $sheets,
+            'types'     => $typeViews,
+            'sheets'    => $sheets,
         ]);
     }
 
@@ -71,18 +71,18 @@ class HomeController extends BaseController
         // Redirect to participate form if the user is already authenticated
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event_participate', [
-                'typeView' => $typeView->id,
+                'typeView'  => $typeView->id,
                 'subdomain' => $request->attributes->get('subdomain'),
             ]);
         }
 
         // Else, create the register form
-        $register = new Register();
+        $register         = new Register();
         $register->locale = $request->getLocale();
 
         $form = $this->createForm(RegisterType::class, $register, [
             'action' => $this->generateUrl('event_register', [
-                'typeView' => $typeView->id,
+                'typeView'  => $typeView->id,
                 'subdomain' => $request->attributes->get('subdomain'),
             ]),
             'method' => 'POST',
@@ -98,7 +98,7 @@ class HomeController extends BaseController
 
                 // Go to participate form
                 return $this->redirectToRoute('event_participate', [
-                    'typeView' => $typeView->id,
+                    'typeView'  => $typeView->id,
                     'subdomain' => $request->attributes->get('subdomain'),
                 ]);
             } catch (EmailAlreadyExistsException $exception) {
@@ -108,9 +108,9 @@ class HomeController extends BaseController
         }
 
         return $this->render('VimeetAppBundle:Event/Home:register.html.twig', [
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
             'eventView' => $eventView,
-            'typeView' => $typeView,
+            'typeView'  => $typeView,
         ]);
     }
 
@@ -132,8 +132,8 @@ class HomeController extends BaseController
 
         // Create participate form
         $create = new Create();
-        $form = $this->createForm(ParticipantCreateType::class, $create, [
-            'locale' => $eventView->locale,
+        $form   = $this->createForm(ParticipantCreateType::class, $create, [
+            'locale'   => $eventView->locale,
             'template' => $this
                 ->get('vimeet_infrastructure.repository.type_repository')
                 ->getParticipantTemplate($typeView->id),
@@ -142,7 +142,7 @@ class HomeController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-            $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
+            $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
             try {
                 // Create the participant
@@ -157,7 +157,7 @@ class HomeController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id' => $participate->sheet->getId(),
+                    'id'        => $participate->sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form->get('data'));
@@ -165,9 +165,9 @@ class HomeController extends BaseController
         }
 
         return $this->render('VimeetAppBundle:Event/Home:participate.html.twig', [
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
             'eventView' => $eventView,
-            'typeView' => $typeView,
+            'typeView'  => $typeView,
         ]);
     }
 

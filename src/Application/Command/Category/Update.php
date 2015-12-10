@@ -41,7 +41,7 @@ class Update
     public function __construct(Category $category)
     {
         $this->category = $category;
-        $this->event = $category->getEvent();
+        $this->event    = $category->getEvent();
 
         foreach ($category->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

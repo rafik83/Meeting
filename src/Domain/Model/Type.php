@@ -94,9 +94,9 @@ class Type implements WhoInterface
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event        = $event;
         $this->translations = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
     }
 
     /**
@@ -293,11 +293,11 @@ class Type implements WhoInterface
     public function setTemplate(Template $template)
     {
         $this->participantTemplate = $template->getParticipant();
-        $this->sheetTemplate = $template->getSheet();
-        $this->packageTemplate = $template->getPackage();
-        $this->previewTemplate = $template->getPreview();
-        $this->viewTemplate = $template->getView();
-        $this->proFormaTemplate = $template->getProForma();
+        $this->sheetTemplate       = $template->getSheet();
+        $this->packageTemplate     = $template->getPackage();
+        $this->previewTemplate     = $template->getPreview();
+        $this->viewTemplate        = $template->getView();
+        $this->proFormaTemplate    = $template->getProForma();
     }
 
     /**
@@ -315,8 +315,8 @@ class Type implements WhoInterface
     {
         return [
             'participantTemplate' => $this->getParticipantTemplate(),
-            'sheetTemplate' => $this->getSheetTemplate(),
-            'packageTemplate' => $this->getPackageTemplate(),
+            'sheetTemplate'       => $this->getSheetTemplate(),
+            'packageTemplate'     => $this->getPackageTemplate(),
         ];
     }
 }

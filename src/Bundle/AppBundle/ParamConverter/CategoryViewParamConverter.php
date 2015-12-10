@@ -37,7 +37,7 @@ class CategoryViewParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $id = $request->attributes->get('categoryView');
+        $id     = $request->attributes->get('categoryView');
         $locale = $request->getLocale();
 
         $category = $this->categoryRepository->getCategoryViewById($id, $locale);

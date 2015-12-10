@@ -42,6 +42,7 @@ class DataType extends AbstractType
         $step     = $options['step'];
         $product  = null;
 
+
         foreach ($template as $i => $field) {
             if (!isset($this->types[$field['type']])) {
                 throw new \RuntimeException('Type not found.');
@@ -59,6 +60,8 @@ class DataType extends AbstractType
                 'locale'   => $locale,
                 'sheet'    => $sheet,
                 'product'  => $product,
+
+
             ]);
         }
     }

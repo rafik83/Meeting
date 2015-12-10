@@ -42,8 +42,8 @@ class MeetingSlot
     public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end)
     {
         $this->schedule = $schedule;
-        $this->begin = $begin;
-        $this->end = $end;
+        $this->begin    = $begin;
+        $this->end      = $end;
     }
 
     /**

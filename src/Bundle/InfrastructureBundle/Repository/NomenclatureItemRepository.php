@@ -52,7 +52,7 @@ class NomenclatureItemRepository implements NomenclatureItemRepositoryInterface
      */
     public function getArrayOfNomenclatureItemsByNomenclatureId($nomenclatureId, $locale)
     {
-        $items = $this->getNomenclatureItemViewsByNomenclatureId($nomenclatureId, $locale);
+        $items      = $this->getNomenclatureItemViewsByNomenclatureId($nomenclatureId, $locale);
         $itemsArray = [];
 
         foreach ($items as $item) {

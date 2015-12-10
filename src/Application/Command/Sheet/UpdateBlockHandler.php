@@ -36,7 +36,7 @@ class UpdateBlockHandler extends BaseHandler
      */
     public function handle(UpdateBlock $updateBlock)
     {
-        $data = $updateBlock->sheet->getData();
+        $data                      = $updateBlock->sheet->getData();
         $data[$updateBlock->block] = $updateBlock->data;
 
         $sheetTemplate = $updateBlock->sheet->getType()->getSheetTemplate();

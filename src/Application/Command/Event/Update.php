@@ -44,10 +44,10 @@ class Update
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
-        $this->title = $event->getTitle();
-        $this->locales = $event->getLocales();
-        $this->fallback = $event->getFallback();
+        $this->event        = $event;
+        $this->title        = $event->getTitle();
+        $this->locales      = $event->getLocales();
+        $this->fallback     = $event->getFallback();
         $this->translations = [];
 
         foreach ($event->getTranslations() as $translation) {
