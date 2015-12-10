@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -28,7 +29,7 @@ class TypeTemplateFieldUpdateType extends AbstractType
     {
         $builder
             ->add('label', CollectionType::class, [
-                'entry_type' => 'text',
+                'entry_type' => TextType::class,
             ])
             ->add('required', CheckboxType::class, [
                 'required' => false,

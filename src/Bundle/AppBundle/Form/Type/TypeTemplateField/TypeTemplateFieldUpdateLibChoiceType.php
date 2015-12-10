@@ -25,8 +25,8 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
 
         $builder
             ->add('choices', CollectionType::class, [
-                'entry_type'         => ChoiceType::class,
-                'options'      => ['locales' => $options['locales']],
+                'entry_type'   => ChoiceType::class,
+                'entry_options' => ['locales' => $options['locales']],
                 'allow_add'    => true,
                 'allow_delete' => true,
             ])
