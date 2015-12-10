@@ -41,9 +41,9 @@ class TypeTranslation
      */
     public function __construct(Type $type, $locale, $title)
     {
-        $this->type   = $type;
+        $this->type = $type;
         $this->locale = $locale;
-        $this->title  = $title;
+        $this->title = $title;
     }
 
     /**

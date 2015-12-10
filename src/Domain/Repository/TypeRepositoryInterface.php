@@ -115,7 +115,7 @@ interface TypeRepositoryInterface
     public function getTypesByUser(Event $event, User $user);
 
     /**
-     * @param User  $user
+     * @param User $user
      *
      * @return Type[]
      */

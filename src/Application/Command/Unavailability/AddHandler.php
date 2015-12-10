@@ -44,8 +44,8 @@ class AddHandler
     }
 
     /**
-     * @param Add $addUnavailability
-     * @param Participant       $participant
+     * @param Add         $addUnavailability
+     * @param Participant $participant
      *
      * @return Unavailability
      */

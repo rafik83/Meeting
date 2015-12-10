@@ -147,7 +147,7 @@ class BaseController extends Controller
     }
 
     /**
-     * Authenticate user
+     * Authenticate user.
      *
      * @param User $user
      */

@@ -34,5 +34,5 @@ abstract class AbstractRecursiveStrategy implements StrategyInterface
      * @param array  $data
      * @param string $key
      */
-    abstract function doApply(&$data, $key);
+    abstract public function doApply(&$data, $key);
 }

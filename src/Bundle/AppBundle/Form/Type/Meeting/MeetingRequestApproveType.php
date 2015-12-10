@@ -40,14 +40,14 @@ class MeetingRequestApproveType extends AbstractType
     {
         $builder
             ->add('toParticipants', ChoiceType::class, [
-                'choices'  => $options['sheet']->getParticipants(),
+                'choices' => $options['sheet']->getParticipants(),
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,
                 'choices_as_values' => true,
                 'choice_label' => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
-                }
+                },
             ]);
     }
 

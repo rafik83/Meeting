@@ -23,11 +23,11 @@ class UploadWithChoicesType extends AbstractLocalizedType
         $builder
             ->add('file', FileType::class, [
                 'required' => false,
-                'label'    => false,
+                'label' => false,
             ])
             ->add('value', ChoiceWithDescriptionType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
                 'required' => isset($options['template']['required']) ? $options['template']['required'] : false,
             ]);
     }

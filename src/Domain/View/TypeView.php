@@ -28,7 +28,7 @@ class TypeView
      */
     public function __construct($id, $title)
     {
-        $this->id    = $id;
+        $this->id = $id;
         $this->title = $title;
     }
 }

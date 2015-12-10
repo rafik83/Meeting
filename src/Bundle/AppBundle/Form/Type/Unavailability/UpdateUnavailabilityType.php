@@ -25,13 +25,13 @@ class UpdateUnavailabilityType extends AbstractType
     {
         $builder
             ->add('from', TimeType::class, [
-                'input'         => 'datetime',
-                'widget'        => 'choice',
+                'input' => 'datetime',
+                'widget' => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
             ->add('to', TimeType::class, [
-                'input'         => 'datetime',
-                'widget'        => 'choice',
+                'input' => 'datetime',
+                'widget' => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
         ;
@@ -44,7 +44,7 @@ class UpdateUnavailabilityType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Update::class,
-            'csrf_token_id'  => 'update_unavailability',
+            'csrf_token_id' => 'update_unavailability',
         ]);
     }
 }

@@ -23,7 +23,7 @@ class ParticipantCreateType extends AbstractParticipantType
 
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Create',
-            'csrf_token_id'  => 'participant_create',
+            'csrf_token_id' => 'participant_create',
         ]);
     }
 }

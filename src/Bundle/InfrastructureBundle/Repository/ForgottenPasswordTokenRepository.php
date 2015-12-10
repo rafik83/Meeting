@@ -55,5 +55,4 @@ class ForgottenPasswordTokenRepository implements ForgottenPasswordTokenReposito
 
         $this->entityManager->flush();
     }
-
 }

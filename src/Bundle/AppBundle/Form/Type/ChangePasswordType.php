@@ -26,7 +26,7 @@ class ChangePasswordType extends AbstractType
         $builder
             ->add('currentPassword', PasswordType::class)
             ->add('plainPassword', RepeatedType::class, [
-                'type'            => PasswordType::class,
+                'type' => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;
@@ -38,7 +38,7 @@ class ChangePasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'csrf_token_id'  => 'change_password',
+            'csrf_token_id' => 'change_password',
         ]);
     }
 }

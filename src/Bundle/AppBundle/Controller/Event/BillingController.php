@@ -39,7 +39,7 @@ class BillingController extends BaseController
 
         $form = $this->createForm(BillingUpdateType::class, $update, [
             'template' => $sheet->getEvent()->getBillingTemplate(),
-            'locale'   => $request->getLocale(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -53,7 +53,7 @@ class BillingController extends BaseController
 
                 return $this->redirectToRoute('event_sheet_package_payment_mode', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
@@ -67,11 +67,10 @@ class BillingController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Billing:billing.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
+            'sheet' => $sheet,
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @param Request   $request
@@ -91,14 +90,14 @@ class BillingController extends BaseController
             // Go to the final billing step
             return $this->redirectToRoute('event_sheet_package_final_billing_step', [
                 'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
+                'id' => $sheet->getId(),
             ]);
         }
 
         return $this->render('VimeetAppBundle:Event/Billing:paymentMode.html.twig', [
             'eventView' => $eventView,
-            'form'      => $form->createView(),
-            'sheet'     => $sheet,
+            'form' => $form->createView(),
+            'sheet' => $sheet,
         ]);
     }
 
@@ -112,14 +111,14 @@ class BillingController extends BaseController
     {
         return $this->render('VimeetAppBundle:Event/Billing:finalBillingStep.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
+            'sheet' => $sheet,
         ]);
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Sheet     $sheet
      *
      * @return Response
      */
@@ -139,8 +138,8 @@ class BillingController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Billing:proForma.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'cart'      => $cart,
+            'sheet' => $sheet,
+            'cart' => $cart,
         ]);
     }
 }

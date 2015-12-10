@@ -38,7 +38,7 @@ class CategoryController extends Controller
             ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Category:list.html.twig', [
-            'event'      => $event,
+            'event' => $event,
             'categories' => $categories,
         ]);
     }
@@ -52,9 +52,9 @@ class CategoryController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form   = $this->createForm(CategoryCreateType::class, $create, [
+        $form = $this->createForm(CategoryCreateType::class, $create, [
             'method' => 'POST',
-            'event'  => $event,
+            'event' => $event,
             'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
@@ -70,7 +70,7 @@ class CategoryController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Category:create.html.twig', [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -94,9 +94,9 @@ class CategoryController extends Controller
         }
 
         $update = new Update($category);
-        $form   = $this->createForm(CategoryUpdateType::class, $update, [
+        $form = $this->createForm(CategoryUpdateType::class, $update, [
             'method' => 'POST',
-            'event'  => $event,
+            'event' => $event,
             'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
@@ -112,7 +112,7 @@ class CategoryController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Category:update.html.twig', [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }

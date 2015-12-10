@@ -46,10 +46,10 @@ class EventView
      */
     public function __construct($id, $title, $description, $locale, array $locales)
     {
-        $this->id          = $id;
-        $this->title       = $title;
+        $this->id = $id;
+        $this->title = $title;
         $this->description = $description;
-        $this->locale      = $locale;
-        $this->locales     = $locales;
+        $this->locale = $locale;
+        $this->locales = $locales;
     }
 }

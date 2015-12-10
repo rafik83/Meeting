@@ -39,9 +39,9 @@ class RequestViewsBuilder
      */
     public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
     {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->requestViews           = [];
+        $this->requestViews = [];
     }
 
     /**
@@ -53,7 +53,7 @@ class RequestViewsBuilder
     {
         foreach ($requests as $request) {
             $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFrom());
-            $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
+            $sheetNameTo = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
 
             $requestView = new RequestView(
                 $request->getId(),

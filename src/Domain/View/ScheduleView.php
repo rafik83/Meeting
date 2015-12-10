@@ -36,8 +36,8 @@ class ScheduleView
      */
     public function __construct($id, \DateTime $date, array $slots)
     {
-        $this->id    = $id;
-        $this->date  = $date;
+        $this->id = $id;
+        $this->date = $date;
         $this->slots = $slots;
     }
 }

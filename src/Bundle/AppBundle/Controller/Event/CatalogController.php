@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CatalogController extends Controller
 {
     /**
-     * Display catalog categories of an event
+     * Display catalog categories of an event.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -38,13 +38,13 @@ class CatalogController extends Controller
             ->getCategoryViewsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Catalog:categories.html.twig', [
-            'eventView'  => $eventView,
+            'eventView' => $eventView,
             'categories' => $categories,
         ]);
     }
 
     /**
-     * Display sheets matching category
+     * Display sheets matching category.
      *
      * @param EventView    $eventView
      * @param CategoryView $categoryView
@@ -55,7 +55,7 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheets  = $this
+        $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->search($categoryView->id, $this->getUser());
 
@@ -70,14 +70,14 @@ class CatalogController extends Controller
         });
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
-            'eventView'    => $eventView,
+            'eventView' => $eventView,
             'categoryView' => $categoryView,
-            'sheets'       => $sheets,
+            'sheets' => $sheets,
         ]);
     }
 
     /**
-     * Display a sheet
+     * Display a sheet.
      *
      * @param EventView    $eventView
      * @param CategoryView $categoryView
@@ -99,9 +99,9 @@ class CatalogController extends Controller
                 ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
 
             return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
-                'eventView'                     => $eventView,
-                'categoryView'                  => $categoryView,
-                'sheet'                         => $sheetView,
+                'eventView' => $eventView,
+                'categoryView' => $categoryView,
+                'sheet' => $sheetView,
                 'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,
             ]);
         } catch (NoRuleFoundException $exception) {

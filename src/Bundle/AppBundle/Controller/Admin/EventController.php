@@ -36,8 +36,8 @@ class EventController extends Controller
 
         $form = $this->createForm(EventUpdateType::class, $update, [
             'locales' => $event->getLocales(),
-            'method'  => 'POST',
-            'action'  => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
+            'method' => 'POST',
+            'action' => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -49,7 +49,7 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Event:update.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
         ]);
     }

@@ -64,7 +64,7 @@ class ParticipantManager
      */
     public function getBuyQuantityParticipant(Sheet $sheet)
     {
-        $max  = $sheet->getType()->getMaxParticipant();
+        $max = $sheet->getType()->getMaxParticipant();
         $free = $sheet->getType()->getFreeParticipant();
 
         return intval($max - $free);
@@ -78,7 +78,7 @@ class ParticipantManager
     public function getAddedBoughtParticipant(Sheet $sheet)
     {
         $freeParticipant = $sheet->getType()->getFreeParticipant();
-        $participants    = count($sheet->getParticipants());
+        $participants = count($sheet->getParticipants());
 
         return $participants - $freeParticipant;
     }
@@ -91,7 +91,7 @@ class ParticipantManager
     public function getBoughtParticipant(Sheet $sheet)
     {
         $typePackageTemplate = $sheet->getType()->getPackageTemplate();
-        $packageData         = $sheet->getPackageData();
+        $packageData = $sheet->getPackageData();
 
         foreach ($typePackageTemplate as $blockKey => $block) {
             foreach ($block['template'] as $elementKey => $element) {
@@ -116,8 +116,8 @@ class ParticipantManager
      */
     public function getRemainingPossibleParticipantToBuy(Sheet $sheet)
     {
-        $max    = $sheet->getType()->getMaxParticipant();
-        $free   = $sheet->getType()->getFreeParticipant();
+        $max = $sheet->getType()->getMaxParticipant();
+        $free = $sheet->getType()->getFreeParticipant();
         $bought = $this->getBoughtParticipant($sheet);
 
         return intval($max - ($bought + $free));
@@ -130,7 +130,7 @@ class ParticipantManager
      */
     public function getRemainingPossibleParticipant(Sheet $sheet)
     {
-        $max   = $sheet->getType()->getMaxParticipant();
+        $max = $sheet->getType()->getMaxParticipant();
         $added = count($sheet->getParticipants());
 
         return $max - $added;
@@ -153,7 +153,7 @@ class ParticipantManager
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -173,6 +173,6 @@ class ParticipantManager
             }
         }
 
-        return null;
+        return;
     }
 }

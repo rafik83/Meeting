@@ -28,7 +28,7 @@ class Update
      */
     public function __construct($id, array $data)
     {
-        $this->id   = $id;
+        $this->id = $id;
         $this->data = $data;
     }
 }

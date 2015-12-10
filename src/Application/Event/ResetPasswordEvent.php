@@ -44,10 +44,10 @@ class ResetPasswordEvent extends ApplicationEvent
      */
     public function __construct(User $user, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken, $locale)
     {
-        $this->user                   = $user;
-        $this->eventView              = $eventView;
+        $this->user = $user;
+        $this->eventView = $eventView;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
-        $this->locale                 = $locale;
+        $this->locale = $locale;
     }
 
     /**

@@ -24,7 +24,7 @@ class BuyParticipantOptionType extends AbstractType
     {
         $builder
             ->add('planning', CheckboxType::class, [
-                'label'    => 'form.planning.add_with_participant',
+                'label' => 'form.planning.add_with_participant',
                 'required' => false,
             ])
         ;

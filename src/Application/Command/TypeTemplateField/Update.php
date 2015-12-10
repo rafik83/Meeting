@@ -63,10 +63,10 @@ class Update
      */
     public function __construct(Type $type, $templateName, $key)
     {
-        $this->type         = $type;
+        $this->type = $type;
         $this->templateName = $templateName;
-        $this->key          = $key;
-        $this->field        = null;
+        $this->key = $key;
+        $this->field = null;
 
         $templates = $type->getTemplates();
 
@@ -74,7 +74,7 @@ class Update
             throw new \Exception("Template $templateName invalid");
         }
 
-        $template    = $templates[$templateName];
+        $template = $templates[$templateName];
         $this->field = $this->getArrayByKey($key, $template);
 
         if (null === $this->field) {
@@ -82,8 +82,8 @@ class Update
         }
 
         $this->fieldType = $this->field['type'];
-        $this->required  = isset($this->field['required']) ? $this->field['required'] : false;
-        $this->private   = isset($this->field['private']) ? $this->field['private'] : false;
+        $this->required = isset($this->field['required']) ? $this->field['required'] : false;
+        $this->private = isset($this->field['private']) ? $this->field['private'] : false;
 
         foreach ($type->getEvent()->getLocales() as $locale) {
             $this->label[$locale] = isset($this->field['label'][$locale]) ? $this->field['label'][$locale] : '';
@@ -96,10 +96,10 @@ class Update
     public function getFieldTemplate()
     {
         return [
-            'type'     => $this->fieldType,
-            'label'    => $this->label,
+            'type' => $this->fieldType,
+            'label' => $this->label,
             'required' => $this->required,
-            'private'  => $this->private,
+            'private' => $this->private,
         ];
     }
 
@@ -125,6 +125,6 @@ class Update
             }
         }
 
-        return null;
+        return;
     }
 }

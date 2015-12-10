@@ -33,7 +33,7 @@ class Participate
      */
     public function __construct(Happening $happening, array $participants)
     {
-        $this->happening    = $happening;
+        $this->happening = $happening;
         $this->participants = $participants;
     }
 }

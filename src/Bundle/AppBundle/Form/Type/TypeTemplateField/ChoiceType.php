@@ -24,8 +24,16 @@ class ChoiceType extends AbstractType
         $builder
             ->add('label', ChoiceLabelTranslationsType::class, [
                 'locales' => $options['locales'],
-                'label'   => false,
+                'label' => false,
             ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'type_template_field_update_choice';
     }
 
     /**

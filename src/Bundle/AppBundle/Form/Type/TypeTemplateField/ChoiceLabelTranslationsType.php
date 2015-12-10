@@ -25,7 +25,7 @@ class ChoiceLabelTranslationsType extends AbstractType
     {
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, TextType::class, [
-                'label'  => Intl::getLocaleBundle()->getLocaleName($locale),
+                'label' => Intl::getLocaleBundle()->getLocaleName($locale),
             ]);
         }
     }

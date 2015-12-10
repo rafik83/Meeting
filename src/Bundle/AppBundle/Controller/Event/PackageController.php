@@ -33,8 +33,8 @@ class PackageController extends BaseController
      *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     * @return RedirectResponse|Response
      *
+     * @return RedirectResponse|Response
      */
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
@@ -42,7 +42,9 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create($sheet);
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create(
+            $sheet
+        );
         $stepObject = $template->getStep($step);
 
         if ($stepObject === null) {
@@ -50,11 +52,12 @@ class PackageController extends BaseController
         }
 
         $updateStep = new UpdateStep($sheet, $step);
-        $form       = $this->createForm(UpdateStepType::class, $updateStep, [
+        $form = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
             'step'     => $stepObject,
+
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -95,9 +98,9 @@ class PackageController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Sheet     $sheet
      *
      * @return Response
      */

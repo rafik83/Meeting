@@ -25,16 +25,16 @@ class DontSeeWhatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $participantTemplate = $this->getParticipantTemplate($options['who']);
-        $sheetTemplate       = $this->getSheetTemplate($options['who']);
+        $sheetTemplate = $this->getSheetTemplate($options['who']);
 
         $builder
             ->add('participant', WhatCheckboxesType::class, [
                 'template' => $participantTemplate,
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
             ])
             ->add('sheet', WhatCheckboxesType::class, [
                 'template' => $sheetTemplate,
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
             ])
         ;
     }
@@ -105,7 +105,7 @@ class DontSeeWhatType extends AbstractType
             $intersect = ($intersect === null ? $template : $this->arrayIntersectRecursive($intersect, $template));
         }
 
-        return $intersect ? : [];
+        return $intersect ?: [];
     }
 
     /**

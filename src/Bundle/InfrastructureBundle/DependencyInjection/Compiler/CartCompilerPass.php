@@ -18,7 +18,7 @@ class CartCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $carts   = $container->findTaggedServiceIds('cart');
+        $carts = $container->findTaggedServiceIds('cart');
         $service = $container->getDefinition('vimeet_infrastructure.application.components.cart.cart_builder');
 
         foreach ($carts as $id => $tags) {

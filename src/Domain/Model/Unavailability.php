@@ -47,14 +47,14 @@ class Unavailability
      */
     public function __construct(Schedule $schedule, Participant $participant, \DateTime $begin, \DateTime $end)
     {
-        $this->schedule    = $schedule;
+        $this->schedule = $schedule;
         $this->participant = $participant;
-        $this->begin       = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
-        $this->end         = $end->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->begin = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->end = $end->modify($this->schedule->getDate()->format('Y-m-d'));
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -64,7 +64,7 @@ class Unavailability
     }
 
     /**
-     * Get schedule
+     * Get schedule.
      *
      * @return Schedule
      */
@@ -74,7 +74,7 @@ class Unavailability
     }
 
     /**
-     * Get participant
+     * Get participant.
      *
      * @return Participant
      */
@@ -84,7 +84,7 @@ class Unavailability
     }
 
     /**
-     * Get begin
+     * Get begin.
      *
      * @return \DateTime
      */
@@ -94,7 +94,7 @@ class Unavailability
     }
 
     /**
-     * Get end
+     * Get end.
      *
      * @return \DateTime
      */
@@ -124,6 +124,6 @@ class Unavailability
     public function update(\DateTime $begin, \DateTime $end)
     {
         $this->begin = $begin;
-        $this->end   = $end;
+        $this->end = $end;
     }
 }

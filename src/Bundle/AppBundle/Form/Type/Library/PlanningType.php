@@ -22,19 +22,19 @@ class PlanningType extends AbstractLocalizedType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
-        $locale   = $options['locale'];
-        $sheet    = $options['sheet'];
+        $locale = $options['locale'];
+        $sheet = $options['sheet'];
 
         $range = range(1, $sheet->getType()->getMaxPlanning(), 1);
 
         $builder
             ->add('planning', CoreCheckboxType::class, [
-                'label'    => $template['label'][$locale],
+                'label' => $template['label'][$locale],
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
             ->add('planning_bought', CoreChoiceType::class, [
-                'choices'  => array_combine($range, $range),
-                'label'    => false,
+                'choices' => array_combine($range, $range),
+                'label' => false,
                 'required' => isset($template['required']) ? $template['required'] : false,
                 'choices_as_values' => true,
             ]);

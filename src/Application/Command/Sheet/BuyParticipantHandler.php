@@ -47,9 +47,9 @@ class BuyParticipantHandler extends BaseHandler
         ParticipantRepositoryInterface $participantRepository,
         SheetRepositoryInterface $sheetRepository
     ) {
-        $this->userRepository        = $userRepository;
+        $this->userRepository = $userRepository;
         $this->participantRepository = $participantRepository;
-        $this->sheetRepository       = $sheetRepository;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -84,22 +84,22 @@ class BuyParticipantHandler extends BaseHandler
         }
 
         $packageTemplate = $buyParticipant->sheet->getTypePackageTemplate();
-        $packageData     = $buyParticipant->sheet->getPackageData();
-        $shouldUpdate    = false;
+        $packageData = $buyParticipant->sheet->getPackageData();
+        $shouldUpdate = false;
 
         foreach ($packageTemplate as $templateKey => $template) {
             foreach ($template['template'] as $blockKey => $block) {
                 // Add +1 on the bought participant option
                 if ($block['type'] === 'lib_participant') {
-                    $packageData[$templateKey][$blockKey]['participant']        = true;
+                    $packageData[$templateKey][$blockKey]['participant'] = true;
                     $packageData[$templateKey][$blockKey]['participant_bought'] = isset($packageData[$templateKey][$blockKey]['participant_bought']) ? $packageData[$templateKey][$blockKey]['participant_bought'] + 1 : 1;
-                    $shouldUpdate                                               = true;
+                    $shouldUpdate = true;
                 }
 
                 // Add the planning if option taken
                 if ($block['type'] === 'lib_planning') {
                     if ($buyParticipant->participantBuyOption['planning'] === true) {
-                        $packageData[$templateKey][$blockKey]['planning']        = true;
+                        $packageData[$templateKey][$blockKey]['planning'] = true;
                         $packageData[$templateKey][$blockKey]['planning_bought'] = isset($packageData[$templateKey][$blockKey]['planning_bought']) ? $packageData[$templateKey][$blockKey]['planning_bought'] + 1 : 1;
 
                         $shouldUpdate = true;

@@ -43,9 +43,9 @@ class TypeTemplateFieldController extends Controller
             ->getTypeViewById($type->getId(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
-            'event'    => $event,
+            'event' => $event,
             'typeView' => $typeView,
-            'type'     => $type,
+            'type' => $type,
         ]);
     }
 
@@ -74,8 +74,8 @@ class TypeTemplateFieldController extends Controller
 
         $update = new UpdateChoice($type, $template, $key);
 
-        $form   = $this->createForm(TypeTemplateFieldUpdateLibChoiceType::class, $update, [
-            'method'  => 'POST',
+        $form = $this->createForm(TypeTemplateFieldUpdateLibChoiceType::class, $update, [
+            'method' => 'POST',
             'locales' => $event->getLocales(),
         ]);
         $form->add('submit', SubmitType::class);
@@ -88,17 +88,17 @@ class TypeTemplateFieldController extends Controller
             $this->addFlash('success', 'flash.admin.type_template_field.update.success');
 
             return $this->redirectToRoute('admin_type_template_field_list', [
-                'id'      => $event->getId(),
+                'id' => $event->getId(),
                 'type_id' => $type->getId(),
             ]);
         }
 
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:update.html.twig', [
-            'event'    => $event,
+            'event' => $event,
             'typeView' => $typeView,
-            'type'     => $type,
-            'update'   => $update,
-            'form'     => $form->createView(),
+            'type' => $type,
+            'update' => $update,
+            'form' => $form->createView(),
         ]);
     }
 }
