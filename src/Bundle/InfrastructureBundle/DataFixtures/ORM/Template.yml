@@ -289,8 +289,6 @@ Proximum\Vimeet\Domain\Model\Template:
                         required: false
                         type: lib_participant
                         unitPrice: 400
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
                     56407f9b2a1a3:
                         label:
                             fr: "Ajouter des plannings"
@@ -301,8 +299,6 @@ Proximum\Vimeet\Domain\Model\Template:
                         required: false
                         type: lib_planning
                         unitPrice: 550
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
             56407fa453f4e:
                 label:
                     fr: "Options proposées pour optimiser votre participation"
@@ -664,6 +660,20 @@ Proximum\Vimeet\Domain\Model\Template:
                                         <td class="text-right">{{ row.quantity }}</td>
                                         <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
                                     </tr>
+                                    {% if row.include|length > 0 %}
+                                        {% for include in row.include %}
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>
+                                                    {{ include.label }}<br>
+                                                    > {{ 'event.sheet.cart.include'|transchoice(include.quantity, {'%count%': include.quantity, '%product%': row.label}) }}
+                                                </td>
+                                                <td class="text-right">{{ include.unitPrice|number_format_currency('EUR') }}</td>
+                                                <td class="text-right">{% if include.quantity == 0 %}1{% else %}{{ include.quantity }}{% endif %}</td>
+                                                <td class="text-right">{{ include.subtotal|number_format_currency('EUR') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
