@@ -48,7 +48,10 @@ class OptionType extends AbstractLocalizedType
 
             $view->vars['quantity_allowed'] = $product->getRemainingQuantityMax($sheet->getPackageData());
 
-            if ($view->vars['quantity_allowed'] != 0 and null != $view->vars['quantity_included']) {
+            if ($view->vars['quantity_allowed'] !== 0
+                && null !== $view->vars['quantity_included']
+                && true === $view->vars['is_included']
+            ) {
                 $view->vars['multiple_row'] = true;
             }
         }
