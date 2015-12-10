@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 /**
- * "Règle"
+ * "Règle".
  */
 class Rule
 {
@@ -61,7 +61,7 @@ class Rule
     public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what)
     {
         $this->event = $event;
-        $this->what  = $what;
+        $this->what = $what;
 
         if ($seer instanceof Type) {
             $this->seerType = $seer;
@@ -81,7 +81,7 @@ class Rule
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -91,7 +91,7 @@ class Rule
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return Event
      */
@@ -101,7 +101,7 @@ class Rule
     }
 
     /**
-     * Get seerType
+     * Get seerType.
      *
      * @return Type
      */
@@ -111,7 +111,7 @@ class Rule
     }
 
     /**
-     * Get seerCategory
+     * Get seerCategory.
      *
      * @return Category
      */
@@ -121,7 +121,7 @@ class Rule
     }
 
     /**
-     * Get seeableType
+     * Get seeableType.
      *
      * @return Type
      */
@@ -131,7 +131,7 @@ class Rule
     }
 
     /**
-     * Get seeableCategory
+     * Get seeableCategory.
      *
      * @return Category
      */
@@ -141,7 +141,7 @@ class Rule
     }
 
     /**
-     * Get what
+     * Get what.
      *
      * @return array
      */
@@ -151,7 +151,7 @@ class Rule
     }
 
     /**
-     * Set what
+     * Set what.
      *
      * @param array $what
      *
@@ -169,7 +169,7 @@ class Rule
      */
     public function getSeer()
     {
-        return $this->seerCategory ? : $this->seerType;
+        return $this->seerCategory ?: $this->seerType;
     }
 
     /**
@@ -177,6 +177,6 @@ class Rule
      */
     public function getSeeable()
     {
-        return $this->seeableCategory ? : $this->seeableType;
+        return $this->seeableCategory ?: $this->seeableType;
     }
 }

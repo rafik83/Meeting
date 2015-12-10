@@ -37,7 +37,7 @@ class TypeViewParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $id     = $request->attributes->get('typeView');
+        $id = $request->attributes->get('typeView');
         $locale = $request->getLocale();
 
         $type = $this->typeRepository->getTypeViewById($id, $locale);

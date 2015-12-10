@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Schedule;
 
 class Add
 {
@@ -43,7 +43,7 @@ class Add
     public function __construct(Schedule $schedule)
     {
         $this->schedule = $schedule;
-        $this->from     = clone $schedule->getDate();
-        $this->to       = clone $schedule->getDate();
+        $this->from = clone $schedule->getDate();
+        $this->to = clone $schedule->getDate();
     }
 }

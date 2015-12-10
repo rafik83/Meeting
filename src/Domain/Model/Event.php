@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * "Evènement"
+ * "Evènement".
  */
 class Event
 {
@@ -88,7 +88,7 @@ class Event
     private $elementToJoinWithInvoice;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -96,7 +96,7 @@ class Event
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -106,7 +106,7 @@ class Event
     }
 
     /**
-     * Get domain
+     * Get domain.
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class Event
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -134,7 +134,7 @@ class Event
     }
 
     /**
-     * Get locales
+     * Get locales.
      *
      * @return array
      */
@@ -144,7 +144,7 @@ class Event
     }
 
     /**
-     * Set locales
+     * Set locales.
      *
      * @param array $locales
      */
@@ -154,7 +154,7 @@ class Event
     }
 
     /**
-     * Get fallback
+     * Get fallback.
      *
      * @return string
      */
@@ -164,7 +164,7 @@ class Event
     }
 
     /**
-     * Has locale
+     * Has locale.
      *
      * @param $locale
      *
@@ -198,8 +198,8 @@ class Event
      */
     public function update($title, array $locales, $fallback)
     {
-        $this->title    = $title;
-        $this->locales  = $locales;
+        $this->title = $title;
+        $this->locales = $locales;
         $this->fallback = $fallback;
     }
 

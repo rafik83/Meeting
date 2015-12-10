@@ -34,8 +34,8 @@ class NomenclatureItemView
      */
     public function __construct($id, $title, $locale)
     {
-        $this->id     = $id;
-        $this->title  = $title;
+        $this->id = $id;
+        $this->title = $title;
         $this->locale = $locale;
     }
 }

@@ -29,7 +29,7 @@ Feature: Update a sheet block
       | Taille            | size3                  |
       | Chiffre d'affaire | turnover2              |
       | Statut juridique  | status1                |
-    And I press "form.update_sheet_block.children.submit.label"
+    And I press "form.update_block.children.submit.label"
     Then the response status code should be 200
     And I should see "Pays"
     And I should see "France"

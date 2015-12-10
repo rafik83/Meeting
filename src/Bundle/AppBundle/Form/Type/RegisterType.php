@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,9 +25,9 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email')
-            ->add('password', 'repeated', [
-                'type'            => 'password',
+            ->add('email', EmailType::class)
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;
@@ -36,15 +39,7 @@ class RegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'intention'  => 'register',
+            'csrf_token_id' => 'register',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'register';
     }
 }

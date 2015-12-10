@@ -11,13 +11,14 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class TypeUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,8 +26,8 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('translations', 'collection', [
-                'type'  => new TranslationType(),
+            ->add('translations', CollectionType::class, [
+                'entry_type' => TypeTranslationType::class,
                 'label' => false,
             ])
         ;
@@ -39,7 +40,7 @@ class UpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Type\Update',
-            'intention'  => 'type_update',
+            'csrf_token_id' => 'type_update',
         ]);
     }
 
@@ -51,13 +52,5 @@ class UpdateType extends AbstractType
         foreach ($view->children['translations'] as $translation) {
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'type_update';
     }
 }

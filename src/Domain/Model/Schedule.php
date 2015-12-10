@@ -47,14 +47,14 @@ class Schedule
      */
     public function __construct(Event $event, \DateTime $date)
     {
-        $this->event        = $event;
-        $this->date         = $date;
+        $this->event = $event;
+        $this->date = $date;
         $this->meetingSlots = new ArrayCollection();
-        $this->happenings   = new ArrayCollection();
+        $this->happenings = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return mixed
      */
@@ -64,7 +64,7 @@ class Schedule
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return mixed
      */
@@ -74,7 +74,7 @@ class Schedule
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -84,7 +84,7 @@ class Schedule
     }
 
     /**
-     * Get meetingSlots
+     * Get meetingSlots.
      *
      * @return ArrayCollection
      */
@@ -94,7 +94,7 @@ class Schedule
     }
 
     /**
-     * Get happenings
+     * Get happenings.
      *
      * @return ArrayCollection
      */

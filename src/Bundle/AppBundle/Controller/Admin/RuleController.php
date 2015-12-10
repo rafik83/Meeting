@@ -10,16 +10,17 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhatType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\DontSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RuleController extends Controller
@@ -32,12 +33,12 @@ class RuleController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $form = $this->createForm(new WhoSeeWhoType(), [], [
+        $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
             'method' => 'POST',
-            'event'  => $event,
+            'event' => $event,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule = $this->findOrCreateRule($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
@@ -48,9 +49,9 @@ class RuleController extends Controller
         $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
 
         return $this->render('VimeetAppBundle:Admin/Rule:list.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
-            'rules'  => $rules,
+            'rules' => $rules,
         ]);
     }
 
@@ -86,9 +87,9 @@ class RuleController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Rule:what.html.twig', [
-            'form'    => $form->createView(),
-            'event'   => $event,
-            'seer'    => $seer,
+            'form' => $form->createView(),
+            'event' => $event,
+            'seer' => $seer,
             'seeable' => $seeable,
         ]);
     }
@@ -139,7 +140,7 @@ class RuleController extends Controller
      */
     private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
-        return $this->findRule($event, $seer, $seeable) ? :
+        return $this->findRule($event, $seer, $seeable) ?:
             $this->get('vimeet_infrastructure.repository.rule_repository')->add(new Rule($event, $seer, $seeable, []));
     }
 
@@ -158,20 +159,20 @@ class RuleController extends Controller
     }
 
     /**
-     * @param Rule    $rule
+     * @param Rule   $rule
      * @param string $locale
      *
      * @return Form
      */
     private function createWhatForm(Rule $rule, $locale)
     {
-        $form = $this->createForm(new WhatType(), $rule->getWhat(), [
+        $form = $this->createForm(DontSeeWhatType::class, $rule->getWhat(), [
             'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
-            'who'    => $rule->getSeeable(),
+            'who' => $rule->getSeeable(),
             'locale' => $locale,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         return $form;
     }
@@ -184,11 +185,11 @@ class RuleController extends Controller
     private function generateWhatUrl(Rule $rule)
     {
         return $this->generateUrl('admin_who_see_who_dont_see_what', [
-            'id'                => $rule->getEvent()->getId(),
-            'seerIdentifier'    => $rule->getSeer()->getIdentifier(),
-            'seerId'            => $rule->getSeer()->getId(),
+            'id' => $rule->getEvent()->getId(),
+            'seerIdentifier' => $rule->getSeer()->getIdentifier(),
+            'seerId' => $rule->getSeer()->getId(),
             'seeableIdentifier' => $rule->getSeeable()->getIdentifier(),
-            'seeableId'         => $rule->getSeeable()->getId(),
+            'seeableId' => $rule->getSeeable()->getId(),
         ]);
     }
 

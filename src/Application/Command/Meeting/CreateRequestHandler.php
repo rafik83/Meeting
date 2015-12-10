@@ -33,25 +33,14 @@ class CreateRequestHandler
      */
     public function handle(CreateRequest $createRequest)
     {
-        $fromParticipants = [];
-
-        if (!empty($createRequest->fromParticipants)) {
-            foreach ($createRequest->fromParticipants as $fromParticipant) {
-                foreach ($createRequest->from->getParticipants() as $sheetParticipant) {
-                    if ($sheetParticipant->getId() === $fromParticipant) {
-                        $fromParticipants[] = $sheetParticipant;
-                    }
-                }
-            }
-        }
-
         $request = new Request(
             $createRequest->from,
-            $fromParticipants,
+            $createRequest->fromParticipants,
             $createRequest->to,
             $createRequest->description,
             $createRequest->createdAt
         );
+
         $this->requestRepository->add($request);
     }
 }

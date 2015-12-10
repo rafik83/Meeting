@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class UploadWithChoicesType extends AbstractLocalizedType
@@ -20,13 +21,13 @@ class UploadWithChoicesType extends AbstractLocalizedType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', 'file', [
+            ->add('file', FileType::class, [
                 'required' => false,
-                'label'    => false,
+                'label' => false,
             ])
-            ->add('value', 'choice_with_description', [
+            ->add('value', ChoiceWithDescriptionType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
                 'required' => isset($options['template']['required']) ? $options['template']['required'] : false,
             ]);
     }
@@ -34,7 +35,7 @@ class UploadWithChoicesType extends AbstractLocalizedType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'upload_with_choices';
     }

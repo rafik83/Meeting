@@ -8,12 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TranslationType extends AbstractType
+class EventUpdateTranslationType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -21,15 +22,7 @@ class TranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text')
+            ->add('description', TextareaType::class, ['required' => false])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category_translation';
     }
 }

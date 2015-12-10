@@ -23,7 +23,7 @@ class TextareaType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['template'] = $options['template'];
-        $view->vars['locale']   = $options['locale'];
+        $view->vars['locale'] = $options['locale'];
     }
 
     /**
@@ -40,13 +40,13 @@ class TextareaType extends AbstractType
      */
     public function getParent()
     {
-        return 'textarea';
+        return \Symfony\Component\Form\Extension\Core\Type\TextareaType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_textarea';
     }

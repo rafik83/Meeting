@@ -15,7 +15,7 @@ class SetNullStrategy extends AbstractRecursiveStrategy
     /**
      * {@inheritdoc}
      */
-    function doApply(&$data, $key)
+    public function doApply(&$data, $key)
     {
         $data[$key] = null;
     }

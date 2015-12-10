@@ -63,11 +63,11 @@ class ScheduleBuilder
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->scheduleRepository               = $scheduleRepository;
-        $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->happeningRepository              = $happeningRepository;
+        $this->scheduleRepository = $scheduleRepository;
+        $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->happeningRepository = $happeningRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->participantInfoGuesser           = $participantInfoGuesser;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -81,17 +81,17 @@ class ScheduleBuilder
 
         $participantSchedule = [
             'participant' => $participant,
-            'name'        => $this->participantInfoGuesser->guessParticipantInfo($participant),
-            'schedules'   => [],
+            'name' => $this->participantInfoGuesser->guessParticipantInfo($participant),
+            'schedules' => [],
         ];
 
         foreach ($schedules as $i => $schedule) {
             $participantSchedule['schedules'][$i] = [
-                'id'      => $schedule->getId(),
-                'date'    => $schedule->getDate(),
+                'id' => $schedule->getId(),
+                'date' => $schedule->getDate(),
                 'columns' => [
-                    'meeting'        => $this->buildMeetings($schedule),
-                    'happening'      => $this->buildHappenings($schedule, $participant),
+                    'meeting' => $this->buildMeetings($schedule),
+                    'happening' => $this->buildHappenings($schedule, $participant),
                     'unavailability' => $this->buildUnavailabilities($schedule, $participant),
                 ],
             ];
@@ -101,7 +101,7 @@ class ScheduleBuilder
     }
 
     /**
-     * @param Schedule    $schedule
+     * @param Schedule $schedule
      *
      * @return array
      */

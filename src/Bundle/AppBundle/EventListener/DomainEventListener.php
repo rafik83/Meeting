@@ -35,12 +35,12 @@ class DomainEventListener
      */
     public function __construct(RouterInterface $router, EventRepositoryInterface $eventRepository)
     {
-        $this->router          = $router;
+        $this->router = $router;
         $this->eventRepository = $eventRepository;
     }
 
     /**
-     * Redirect to event fallback locale
+     * Redirect to event fallback locale.
      *
      * @param GetResponseEvent $getResponseEvent
      */
@@ -51,7 +51,7 @@ class DomainEventListener
         }
 
         $request = $getResponseEvent->getRequest();
-        $event   = $this->eventRepository->getEventByDomain($request->getHost());
+        $event = $this->eventRepository->getEventByDomain($request->getHost());
 
         if (!$event) {
             return;

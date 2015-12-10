@@ -30,12 +30,12 @@ class CreateRequest
     /**
      * @var Participant[]
      */
-    public $fromParticipants;
+    public $fromParticipants = [];
 
     /**
      * @var Participant[]
      */
-    public $toParticipants;
+    public $toParticipants = [];
 
     /**
      * @var string
@@ -53,15 +53,15 @@ class CreateRequest
     public $createdAt;
 
     /**
-     * @param Sheet $from
-     * @param Sheet $to
+     * @param Sheet    $from
+     * @param Sheet    $to
      * @param DateTime $createdAt
      */
     public function __construct(Sheet $from, Sheet $to, DateTime $createdAt)
     {
-        $this->from      = $from;
-        $this->to        = $to;
-        $this->state     = Request::STATE_SENT;
+        $this->from = $from;
+        $this->to = $to;
+        $this->state = Request::STATE_SENT;
         $this->createdAt = $createdAt;
     }
 }

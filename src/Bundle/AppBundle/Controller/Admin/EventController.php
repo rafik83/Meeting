@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 class EventController extends Controller
@@ -33,12 +34,12 @@ class EventController extends Controller
     {
         $update = new Update($event);
 
-        $form = $this->createForm(new UpdateType(), $update, [
+        $form = $this->createForm(EventUpdateType::class, $update, [
             'locales' => $event->getLocales(),
-            'method'  => 'POST',
-            'action'  => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
+            'method' => 'POST',
+            'action' => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handle($update);
@@ -48,7 +49,7 @@ class EventController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Event:update.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
         ]);
     }

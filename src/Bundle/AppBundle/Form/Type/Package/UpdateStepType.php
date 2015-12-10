@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 
 class UpdateStepType extends AbstractType
 {
@@ -22,11 +23,11 @@ class UpdateStepType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('packageData', new DataPackageType(), [
+            ->add('packageData', DataType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'sheet'    => $options['sheet'],
-                'label'    => false,
+                'locale' => $options['locale'],
+                'sheet' => $options['sheet'],
+                'label' => false,
             ])
         ;
     }
@@ -38,18 +39,10 @@ class UpdateStepType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Package\UpdateStep',
-            'intention'  => 'update_sheet_package_step',
+            'csrf_token_id' => 'update_sheet_package_step',
         ]);
 
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_sheet_package_step';
     }
 }

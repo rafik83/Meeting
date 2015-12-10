@@ -35,12 +35,12 @@ class HappeningParticipation
      */
     public function __construct(Happening $happening, Participant $participant)
     {
-        $this->happening   = $happening;
+        $this->happening = $happening;
         $this->participant = $participant;
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -50,7 +50,7 @@ class HappeningParticipation
     }
 
     /**
-     * Get happening
+     * Get happening.
      *
      * @return Happening
      */
@@ -60,7 +60,7 @@ class HappeningParticipation
     }
 
     /**
-     * Get participant
+     * Get participant.
      *
      * @return Participant
      */

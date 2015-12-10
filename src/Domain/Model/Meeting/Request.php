@@ -16,9 +16,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Request
 {
-    const STATE_SENT     = 'sent';
+    const STATE_SENT = 'sent';
     const STATE_APPROVED = 'approved';
-    const STATE_REFUSED  = 'refused';
+    const STATE_REFUSED = 'refused';
 
     /**
      * @var int
@@ -74,12 +74,12 @@ class Request
      */
     public function __construct(Sheet $from, array $fromParticipants, Sheet $to, $description, DateTime $createdAt)
     {
-        $this->from             = $from;
+        $this->from = $from;
         $this->fromParticipants = $fromParticipants;
-        $this->to               = $to;
-        $this->description      = $description;
-        $this->state            = self::STATE_SENT;
-        $this->createdAt        = $createdAt;
+        $this->to = $to;
+        $this->description = $description;
+        $this->state = self::STATE_SENT;
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -155,11 +155,15 @@ class Request
     }
 
     /**
-     * @param Participant[] $toParticipants
+     * @param Participant $participant
+     *
+     * @return Request
      */
-    public function setToParticipants($toParticipants)
+    public function addToParticipant(Participant $participant)
     {
-        $this->toParticipants = $toParticipants;
+        $this->toParticipants[] = $participant;
+
+        return $this;
     }
 
     /**

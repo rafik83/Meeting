@@ -23,10 +23,10 @@ abstract class AbstractParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('data', new DataType(), [
+            ->add('data', DataType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'label'    => false,
+                'locale' => $options['locale'],
+                'label' => false,
             ])
         ;
     }

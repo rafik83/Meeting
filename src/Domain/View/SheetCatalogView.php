@@ -48,10 +48,10 @@ class SheetCatalogView
      */
     public function __construct($id, array $data, array $template, array $participantTemplate, array $participants)
     {
-        $this->id                  = $id;
-        $this->data                = $data;
-        $this->template            = $template;
+        $this->id = $id;
+        $this->data = $data;
+        $this->template = $template;
         $this->participantTemplate = $participantTemplate;
-        $this->participants        = $participants;
+        $this->participants = $participants;
     }
 }

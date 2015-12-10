@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,26 +25,17 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', 'email')
-            ->add('password', 'password');
+            ->add('username', EmailType::class)
+            ->add('password', PasswordType::class)
+            ->add('submit', SubmitType::class);
     }
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'method' => 'POST',
-                'submit' => true,
-            ]
-        );
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'login';
+        $resolver->setDefaults([
+            'method' => 'POST',
+        ]);
     }
 }

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CountryType extends AbstractType
@@ -23,7 +24,7 @@ class CountryType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['template'] = $options['template'];
-        $view->vars['locale']   = $options['locale'];
+        $view->vars['locale'] = $options['locale'];
     }
 
     /**
@@ -32,7 +33,13 @@ class CountryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
-        $resolver->setDefaults(['placeholder' => 'country.placeholder']);
+        $resolver->setDefaults([
+            'placeholder' => function (Options $options) {
+                return $options['template']['placeholder'][$options['locale']];
+            },
+            'translation_domain' => false,
+        ]);
+        $resolver->setDefined(['sheet']);
     }
 
     /**
@@ -40,13 +47,13 @@ class CountryType extends AbstractType
      */
     public function getParent()
     {
-        return 'country';
+        return \Symfony\Component\Form\Extension\Core\Type\CountryType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_country';
     }

@@ -59,8 +59,7 @@ class UpdateStepHandler
                         throw new BoughtParticipantAlreadyAddedException();
                     }
                 }
-            }
-            elseif (isset($element['planning']) && $element['planning']) {
+            } elseif (isset($element['planning']) && $element['planning']) {
                 if (!isset($updateStep->packageData[$elementKey]['planning_bought'])) {
                     throw new ForgotToAddQuantityException();
                 }

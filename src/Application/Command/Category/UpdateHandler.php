@@ -34,7 +34,7 @@ class UpdateHandler
         TypeRepositoryInterface $typeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->typeRepository     = $typeRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -44,7 +44,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $category   = $update->category;
+        $category = $update->category;
         $eventTypes = $this->typeRepository->getTypesByEvent($update->event);
 
         foreach ($update->translations as $locale => $translation) {
@@ -58,7 +58,7 @@ class UpdateHandler
             }
 
             if (!$category->getTypes()->contains($eventTypes[$typeId])) {
-                 $category->getTypes()->add($eventTypes[$typeId]);
+                $category->getTypes()->add($eventTypes[$typeId]);
             }
         }
 

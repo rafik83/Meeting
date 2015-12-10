@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * "Compte utilisateur"
+ * "Compte utilisateur".
  */
 class User implements UserInterface, EquatableInterface, \Serializable
 {
@@ -51,14 +51,14 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function __construct($email, $salt, $password, $locale)
     {
-        $this->email    = $email;
-        $this->salt     = $salt;
+        $this->email = $email;
+        $this->salt = $salt;
         $this->password = $password;
-        $this->locale   = $locale;
+        $this->locale = $locale;
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -68,7 +68,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -78,7 +78,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get locale
+     * Get locale.
      *
      * @return string
      */
@@ -167,7 +167,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function updatePassword($salt, $password)
     {
-        $this->salt     = $salt;
+        $this->salt = $salt;
         $this->password = $password;
     }
 }

@@ -8,48 +8,39 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class EventUpdateType extends AbstractType
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
-     * @param TypeRepositoryInterface $typeRepository
-     */
-    public function __construct(TypeRepositoryInterface $typeRepository)
-    {
-        $this->typeRepository = $typeRepository;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $prefered = ['fr', 'en', 'es', 'de', 'it', 'zh'];
+
         $builder
-            ->add('translations', 'collection', [
-                'type'  => new TranslationType(),
-                'label' => false,
-            ])
-            ->add('types', 'choice', [
-                'choices'  => $this->typeRepository->getTypesTitleByEventAndLocale(
-                    $options['event'],
-                    $options['locale']
-                ),
-                'expanded' => true,
+            ->add('title', TextType::class)
+            ->add('locales', LocaleType::class, [
                 'multiple' => true,
+                'preferred_choices' => $prefered,
+            ])
+            ->add('fallback', LocaleType::class, [
+                'preferred_choices' => $prefered,
+            ])
+            ->add('translations', CollectionType::class, [
+                'entry_type' => EventUpdateTranslationType::class,
+                'label' => false,
             ])
         ;
     }
@@ -69,14 +60,9 @@ class CategoryType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'category';
+        $resolver->setRequired(['locales']);
+        $resolver->setDefaults([
+            'data_class' => 'Proximum\Vimeet\Application\Command\Event\Update',
+        ]);
     }
 }

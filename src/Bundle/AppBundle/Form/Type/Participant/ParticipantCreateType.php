@@ -23,15 +23,7 @@ class ParticipantCreateType extends AbstractParticipantType
 
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Create',
-            'intention'  => 'participant_create',
+            'csrf_token_id' => 'participant_create',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'participant_create';
     }
 }

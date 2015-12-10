@@ -16,11 +16,11 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\SheetCatalogView;
 use Proximum\Vimeet\Domain\View\SheetDataView;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SheetManager
@@ -62,15 +62,15 @@ class SheetManager
         RequestRepositoryInterface $requestRepository
     ) {
         $this->participantRepository = $participantRepository;
-        $this->ruleManager           = $ruleManager;
-        $this->typeRepository        = $typeRepository;
-        $this->sheetRepository       = $sheetRepository;
-        $this->requestRepository     = $requestRepository;
+        $this->ruleManager = $ruleManager;
+        $this->typeRepository = $typeRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
      * @param Sheet $sheet
-     * @param User       $user
+     * @param User  $user
      *
      * @return SheetDataView
      */
@@ -90,8 +90,8 @@ class SheetManager
     }
 
     /**
-     * @param User   $user
-     * @param Sheet  $sheet
+     * @param User  $user
+     * @param Sheet $sheet
      *
      * @return SheetCatalogView
      */
@@ -121,7 +121,7 @@ class SheetManager
     public function getUserSheetsThatCanSeeTheGivenSheet(User $user, Sheet $sheet)
     {
         $typesThatCanSee = $this->typeRepository->getSeeableTypeIdsBySheet($sheet);
-        $typesForUser    = $this->typeRepository->getAllTypesByUser($user);
+        $typesForUser = $this->typeRepository->getAllTypesByUser($user);
 
         $userTypeThatCanSeeTheSheet = [];
         $typesThatCanSee = array_flip($typesThatCanSee);
@@ -155,7 +155,7 @@ class SheetManager
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet   $sheet
      * @param Sheet[] $sheets
      *
      * @return Sheet[]

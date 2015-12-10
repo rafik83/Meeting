@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,7 +42,7 @@ class WhoType extends AbstractType
         TypeRepositoryInterface $typeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->typeRepository     = $typeRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -54,11 +55,11 @@ class WhoType extends AbstractType
             'choices' => function (Options $options) {
                 return [
                     'Categorie' => $this->categoryRepository->getCategoriesByEvent($options['event']),
-                    'Type'      => $this->typeRepository->getTypesByEvent($options['event']),
+                    'Type' => $this->typeRepository->getTypesByEvent($options['event']),
                 ];
             },
             'choices_as_values' => true,
-            'choice_label'      => function ($choice) {
+            'choice_label' => function ($choice) {
                 if ($choice instanceof Type || $choice instanceof Category) {
                     return $choice->getTranslations()->get('fr')->getTitle();
                 }
@@ -74,7 +75,7 @@ class WhoType extends AbstractType
                     return sprintf('category:%s', $choice->getId());
                 }
 
-                return;
+                return '';
             },
         ]);
     }
@@ -84,14 +85,6 @@ class WhoType extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'who';
+        return ChoiceType::class;
     }
 }

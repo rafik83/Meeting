@@ -22,16 +22,16 @@ class BuyParticipantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participantData', new BuyAddParticipantType(), [
+            ->add('participantData', BuyAddParticipantType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'label'    => false,
+                'locale' => $options['locale'],
+                'label' => false,
             ])
-            ->add('participantBuyOption', new BuyParticipantOptionType(), [
+            ->add('participantBuyOption', BuyParticipantOptionType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
                 'required' => false,
-                'label'    => false,
+                'label' => false,
             ])
         ;
     }
@@ -43,17 +43,9 @@ class BuyParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\BuyParticipant',
-            'intention'  => 'buy_participant',
+            'csrf_token_id' => 'buy_participant',
         ]);
 
         $resolver->setRequired(['template', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'buy_participant';
     }
 }

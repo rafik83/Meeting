@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType as CoreChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,12 +25,13 @@ class QuantityType extends AbstractType
         $resolver->setRequired(['min', 'max']);
         $resolver->setDefined(['sheet']);
         $resolver->setDefaults([
-            'range'   => 1,
+            'range' => 1,
             'choices' => function (Options $options) {
                 $range = range($options['min'], $options['max'], $options['range']);
 
                 return array_combine($range, $range);
             },
+            'choices_as_values' => true,
         ]);
     }
 
@@ -38,13 +40,13 @@ class QuantityType extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
+        return CoreChoiceType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'quantity';
     }

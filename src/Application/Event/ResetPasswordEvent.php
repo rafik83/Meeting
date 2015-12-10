@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Event;
 
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\EventView;
 
 class ResetPasswordEvent extends ApplicationEvent
 {
@@ -44,10 +44,10 @@ class ResetPasswordEvent extends ApplicationEvent
      */
     public function __construct(User $user, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken, $locale)
     {
-        $this->user                   = $user;
-        $this->eventView              = $eventView;
+        $this->user = $user;
+        $this->eventView = $eventView;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
-        $this->locale                 = $locale;
+        $this->locale = $locale;
     }
 
     /**

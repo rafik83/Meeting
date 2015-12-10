@@ -34,10 +34,10 @@ class CartRow
 
     public function __construct($label, $quantity, $unitPrice)
     {
-        $this->label     = $label;
-        $this->quantity  = $quantity;
+        $this->label = $label;
+        $this->quantity = $quantity;
         $this->unitPrice = $unitPrice;
-        $this->subTotal  = $quantity * $unitPrice;
+        $this->subTotal = $quantity * $unitPrice;
     }
 
     /**

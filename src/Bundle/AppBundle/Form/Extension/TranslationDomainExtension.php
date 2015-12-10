@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 
 /**
  * Set translation domain to "forms" in every form.
@@ -33,6 +34,6 @@ class TranslationDomainExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return 'form';
+        return FormType::class;
     }
 }

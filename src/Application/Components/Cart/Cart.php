@@ -27,7 +27,7 @@ class Cart
      */
     public function __construct($total)
     {
-        $this->total     = $total;
+        $this->total = $total;
         $this->cartSteps = [];
     }
 

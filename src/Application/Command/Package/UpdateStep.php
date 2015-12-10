@@ -36,12 +36,12 @@ class UpdateStep
     public function __construct(Sheet $sheet, $step)
     {
         $this->sheet = $sheet;
-        $this->step  = $step;
+        $this->step = $step;
 
         $sheetTemplate = $sheet->getType()->getPackageTemplate();
-        $stepTemplate  = $sheetTemplate[$step]['template'];
-        $stepData      = array_combine(array_keys($stepTemplate), array_fill(0, count($stepTemplate), null));
-        $sheetData     = isset($sheet->getPackageData()[$step]) ? $sheet->getPackageData()[$step] : $stepData;
+        $stepTemplate = $sheetTemplate[$step]['template'];
+        $stepData = array_combine(array_keys($stepTemplate), array_fill(0, count($stepTemplate), null));
+        $sheetData = isset($sheet->getPackageData()[$step]) ? $sheet->getPackageData()[$step] : $stepData;
 
         foreach ($stepData as $key => $value) {
             $this->packageData[$key] = isset($sheetData[$key]) ? $sheetData[$key] : null;

@@ -17,20 +17,41 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DataType extends AbstractType
 {
     /**
+     * @var array
+     */
+    private $types;
+
+    /**
+     * DataType constructor.
+     *
+     * @param array $types
+     */
+    public function __construct(array $types)
+    {
+        $this->types = $types;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
-        $locale   = $options['locale'];
+        $locale = $options['locale'];
+        $sheet = $options['sheet'];
 
         foreach ($template as $i => $field) {
-            $builder->add($i, $field['type'], [
-                'label'    => $field['label'][$locale],
-                'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
+            if (!isset($this->types[$field['type']])) {
+                throw new \RuntimeException('Type not found.');
+            }
+
+            $builder->add($i, $this->types[$field['type']], [
+                'label' => $field['label'][$locale],
+                'help' => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === true,
                 'template' => $field,
-                'locale'   => $locale,
+                'locale' => $locale,
+                'sheet' => $sheet,
             ]);
         }
     }
@@ -41,17 +62,8 @@ class DataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
-        $resolver->setAllowedTypes([
-            'template' => ['array'],
-            'locale'   => ['string'],
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'data';
+        $resolver->setAllowedTypes('template', ['array']);
+        $resolver->setAllowedTypes('locale', ['string']);
+        $resolver->setDefaults(['sheet' => null]);
     }
 }

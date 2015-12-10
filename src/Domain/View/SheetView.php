@@ -30,7 +30,7 @@ class SheetView
      */
     public function __construct($id, $typeTitle)
     {
-        $this->id        = $id;
+        $this->id = $id;
         $this->typeTitle = $typeTitle;
     }
 }
