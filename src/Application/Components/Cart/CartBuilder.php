@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Cart;
 
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibCartInterface;
+use Proximum\Vimeet\Application\Components\Product\Template;
 
 class CartBuilder
 {
@@ -25,30 +26,44 @@ class CartBuilder
     }
 
     /**
-     * @param array $packageTemplate
-     * @param array $packageData
-     * @param $locale
+     * @param Template $template
+     * @param array    $productData
+     * @param string   $locale
      *
      * @return Cart
      */
-    public function create(array $packageTemplate, array $packageData, $locale)
+    public function generate(Template $template, array $productData, $locale)
     {
         $cart = new Cart(0);
 
-        foreach ($packageTemplate as $blockKey => $block) {
+        if (empty($productData)) {
+            return $cart;
+        }
+
+        foreach ($productData as $stepKey => $step) {
+            $stepObject = $template->getStep($stepKey);
             $cartStep = new CartStep(
-                isset($block['label'][$locale]) ? $block['label'][$locale] : '',
+                $stepObject->getLabel($locale),
                 0
             );
 
-            foreach ($block['template'] as $templateKey => $template) {
+            foreach ($step as $productKey => $product) {
                 $cartRow = null;
+                $productObject = $stepObject->getProduct($productKey);
 
-                if (isset($template['type'])) {
-                    $dataValue = isset($packageData[$blockKey][$templateKey]) ? $packageData[$blockKey][$templateKey] : [];
+                if (method_exists($productObject, 'getType')) {
+                    if (isset($this->cartLibs[$productObject->getType()]) && [] !== $product) {
+                        $cartRow = $this->cartLibs[$productObject->getType()]->prepare(
+                            $productObject,
+                            $product,
+                            $locale
+                        );
+                    }
+                }
 
-                    if (isset($this->cartLibs[$template['type']]) && [] !== $dataValue) {
-                        $cartRow = $this->cartLibs[$template['type']]->prepare($template, $dataValue, $locale);
+                if (null !== $cartRow && !empty($productObject->getInclude())) {
+                    foreach ($productObject->getInclude() as $including) {
+                        $this->addInclude($productObject, $including, $locale);
                     }
                 }
 
