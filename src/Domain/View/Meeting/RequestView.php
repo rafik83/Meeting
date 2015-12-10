@@ -71,14 +71,14 @@ class RequestView
      */
     public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, $createdAt, $refuseMessage)
     {
-        $this->id = $id;
-        $this->sheetNameFrom = $sheetNameFrom;
-        $this->sheetNameTo = $sheetNameTo;
-        $this->state = $state;
-        $this->description = $description;
-        $this->createdAt = $createdAt;
+        $this->id               = $id;
+        $this->sheetNameFrom    = $sheetNameFrom;
+        $this->sheetNameTo      = $sheetNameTo;
+        $this->state            = $state;
+        $this->description      = $description;
+        $this->createdAt        = $createdAt;
         $this->fromParticipants = new ArrayCollection();
-        $this->toParticipants = new ArrayCollection();
-        $this->refuseMessage = $refuseMessage;
+        $this->toParticipants   = new ArrayCollection();
+        $this->refuseMessage    = $refuseMessage;
     }
 }

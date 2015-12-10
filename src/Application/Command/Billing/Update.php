@@ -30,7 +30,7 @@ class Update
      */
     public function __construct(Sheet $sheet, array $billingData)
     {
-        $this->sheet = $sheet;
+        $this->sheet       = $sheet;
         $this->billingData = $billingData;
     }
 }

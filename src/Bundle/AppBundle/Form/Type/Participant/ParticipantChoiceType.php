@@ -41,7 +41,7 @@ class ParticipantChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class' => Participant::class,
+            'class'         => Participant::class,
             'query_builder' => function (Options $options) {
                 return function (EntityRepository $entityRepository) use ($options) {
                     return $entityRepository

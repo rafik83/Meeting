@@ -41,8 +41,8 @@ class ForgottenPasswordToken
      */
     public function __construct(User $user, $token, $expireDate)
     {
-        $this->user = $user;
-        $this->token = $token;
+        $this->user       = $user;
+        $this->token      = $token;
         $this->expireDate = $expireDate;
     }
 

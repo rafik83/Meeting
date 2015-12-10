@@ -60,10 +60,10 @@ class Sheet
      */
     public function __construct(Event $event, Type $type, array $data, array $packageData)
     {
-        $this->event = $event;
-        $this->type = $type;
-        $this->data = $data;
-        $this->packageData = $packageData;
+        $this->event        = $event;
+        $this->type         = $type;
+        $this->data         = $data;
+        $this->packageData  = $packageData;
         $this->participants = new ArrayCollection();
     }
 

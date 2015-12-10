@@ -51,10 +51,10 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function __construct($email, $salt, $password, $locale)
     {
-        $this->email = $email;
-        $this->salt = $salt;
+        $this->email    = $email;
+        $this->salt     = $salt;
         $this->password = $password;
-        $this->locale = $locale;
+        $this->locale   = $locale;
     }
 
     /**
@@ -167,7 +167,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function updatePassword($salt, $password)
     {
-        $this->salt = $salt;
+        $this->salt     = $salt;
         $this->password = $password;
     }
 }

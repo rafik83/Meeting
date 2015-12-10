@@ -31,7 +31,7 @@ class CreateHandler
         TypeRepositoryInterface $typeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->typeRepository = $typeRepository;
+        $this->typeRepository     = $typeRepository;
     }
 
     /**
@@ -41,7 +41,7 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $category = new Category($create->event);
+        $category   = new Category($create->event);
         $eventTypes = $this->typeRepository->getTypesByEvent($create->event);
 
         foreach ($create->translations as $locale => $translation) {

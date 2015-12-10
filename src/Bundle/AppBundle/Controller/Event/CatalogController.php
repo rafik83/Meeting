@@ -38,7 +38,7 @@ class CatalogController extends Controller
             ->getCategoryViewsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Catalog:categories.html.twig', [
-            'eventView' => $eventView,
+            'eventView'  => $eventView,
             'categories' => $categories,
         ]);
     }
@@ -70,9 +70,9 @@ class CatalogController extends Controller
         });
 
         return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
-            'eventView' => $eventView,
+            'eventView'    => $eventView,
             'categoryView' => $categoryView,
-            'sheets' => $sheets,
+            'sheets'       => $sheets,
         ]);
     }
 
@@ -99,9 +99,9 @@ class CatalogController extends Controller
                 ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
 
             return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
-                'eventView' => $eventView,
-                'categoryView' => $categoryView,
-                'sheet' => $sheetView,
+                'eventView'                     => $eventView,
+                'categoryView'                  => $categoryView,
+                'sheet'                         => $sheetView,
                 'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,
             ]);
         } catch (NoRuleFoundException $exception) {

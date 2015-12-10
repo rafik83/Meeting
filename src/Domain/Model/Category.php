@@ -49,8 +49,8 @@ class Category implements WhoInterface
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
-        $this->types = new ArrayCollection();
+        $this->event        = $event;
+        $this->types        = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 

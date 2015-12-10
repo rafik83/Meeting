@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
 
 class AddUnavailabilityType extends AbstractType
 {
@@ -26,17 +26,17 @@ class AddUnavailabilityType extends AbstractType
     {
         $builder
             ->add('from', TimeType::class, [
-                'input' => 'datetime',
-                'widget' => 'choice',
+                'input'         => 'datetime',
+                'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
             ->add('to', TimeType::class, [
-                'input' => 'datetime',
-                'widget' => 'choice',
+                'input'         => 'datetime',
+                'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
             ->add('participants', ParticipantChoiceType::class, [
-                'sheet' => $options['sheet'],
+                'sheet'    => $options['sheet'],
                 'multiple' => true,
                 'expanded' => true,
             ])
@@ -53,7 +53,7 @@ class AddUnavailabilityType extends AbstractType
         ]);
 
         $resolver->setDefaults([
-            'data_class' => Add::class,
+            'data_class'    => Add::class,
             'csrf_token_id' => 'add_unavailability',
         ]);
     }

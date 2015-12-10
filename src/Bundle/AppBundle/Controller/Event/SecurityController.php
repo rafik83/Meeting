@@ -45,8 +45,8 @@ class SecurityController extends Controller
 
         return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [
             'eventView' => $eventView,
-            'error' => $error,
-            'form' => $form->createView(),
+            'error'     => $error,
+            'form'      => $form->createView(),
         ]);
     }
 

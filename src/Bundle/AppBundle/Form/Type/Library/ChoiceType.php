@@ -30,7 +30,7 @@ class ChoiceType extends AbstractLocalizedType
             'choices' => function (Options $options) {
                 return $this->getChoices($options);
             },
-            'choices_as_values' => true,
+            'choices_as_values'  => true,
             'translation_domain' => false,
         ]);
     }
@@ -59,7 +59,7 @@ class ChoiceType extends AbstractLocalizedType
     protected function getChoices(\ArrayAccess $options)
     {
         $choices = $options['template']['choices'];
-        $locale = $options['locale'];
+        $locale  = $options['locale'];
         $builder = new ChoiceBuilder();
 
         return $builder->areGroupedChoices($choices) ?

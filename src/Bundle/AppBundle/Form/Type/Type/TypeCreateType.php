@@ -32,7 +32,7 @@ class TypeCreateType extends AbstractType
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TypeTranslationType::class,
-                'label' => false,
+                'label'      => false,
             ])
         ;
     }
@@ -43,7 +43,7 @@ class TypeCreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Type\Create',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\Type\Create',
             'csrf_token_id' => 'type_create',
         ]);
     }

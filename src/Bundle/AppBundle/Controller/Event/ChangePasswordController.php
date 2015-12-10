@@ -54,7 +54,7 @@ class ChangePasswordController extends Controller
 
         return $this->render('VimeetAppBundle:Event/ChangePassword:change_password.html.twig', [
             'eventView' => $eventView,
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
         ]);
     }
 }

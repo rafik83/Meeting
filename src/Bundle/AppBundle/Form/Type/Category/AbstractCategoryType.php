@@ -43,15 +43,15 @@ class AbstractCategoryType extends AbstractType
         $builder
             ->add('translations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
-                'label' => false,
+                'label'      => false,
             ])
             ->add('types', ChoiceType::class, [
                 'choices' => array_flip($this->typeRepository->getTypesTitleByEventAndLocale(
                     $options['event'],
                     $options['locale']
                 )),
-                'expanded' => true,
-                'multiple' => true,
+                'expanded'          => true,
+                'multiple'          => true,
                 'choices_as_values' => true,
             ])
         ;

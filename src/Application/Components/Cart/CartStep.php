@@ -29,7 +29,7 @@ class CartStep
 
     public function __construct($label, $subTotal)
     {
-        $this->label = $label;
+        $this->label    = $label;
         $this->subTotal = $subTotal;
         $this->cartRows = [];
     }

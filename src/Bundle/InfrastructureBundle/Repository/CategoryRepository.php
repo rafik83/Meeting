@@ -44,8 +44,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         PaginatorInterface $paginator,
         TypeRepositoryInterface $typeRepository
     ) {
-        $this->entityManager = $entityManager;
-        $this->paginator = $paginator;
+        $this->entityManager  = $entityManager;
+        $this->paginator      = $paginator;
         $this->typeRepository = $typeRepository;
     }
 

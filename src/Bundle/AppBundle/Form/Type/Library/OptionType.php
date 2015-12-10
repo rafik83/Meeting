@@ -21,10 +21,10 @@ class OptionType extends AbstractLocalizedType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
-        $locale = $options['locale'];
+        $locale   = $options['locale'];
 
         $builder->add('value', CoreCheckboxType::class, [
-            'label' => $template['label'][$locale],
+            'label'    => $template['label'][$locale],
             'required' => false,
         ]);
 
@@ -33,8 +33,8 @@ class OptionType extends AbstractLocalizedType
             && $template['quantity']['min'] <= $template['quantity']['max']
         ) {
             $builder->add('quantity', QuantityType::class, [
-                'min' => $template['quantity']['min'],
-                'max' => $template['quantity']['max'],
+                'min'   => $template['quantity']['min'],
+                'max'   => $template['quantity']['max'],
                 'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1,
             ]);
         }

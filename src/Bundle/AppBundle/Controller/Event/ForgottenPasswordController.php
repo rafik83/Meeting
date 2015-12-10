@@ -68,7 +68,7 @@ class ForgottenPasswordController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/ResetPassword:request_token.html.twig', [
             'eventView' => $eventView,
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
         ]);
     }
 
@@ -91,13 +91,13 @@ class ForgottenPasswordController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $subdomain = $request->attributes->get('subdomain');
+        $subdomain   = $request->attributes->get('subdomain');
         $newPassword = new NewPassword($forgottenPasswordToken->getUser());
 
         $form = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'subdomain' => $subdomain,
-                'token' => $forgottenPasswordToken->getToken(),
+                'token'     => $forgottenPasswordToken->getToken(),
             ]),
             'method' => 'POST',
         ]);
@@ -116,7 +116,7 @@ class ForgottenPasswordController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/ResetPassword:new_password.html.twig', [
             'eventView' => $eventView,
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
         ]);
     }
 }

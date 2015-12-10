@@ -27,14 +27,14 @@ class WhatCheckboxesType extends AbstractType
                 $builder
                     ->add($name, self::class, [
                         'template' => $step['template'],
-                        'locale' => $options['locale'],
-                        'label' => $step['label'][$options['locale']],
+                        'locale'   => $options['locale'],
+                        'label'    => $step['label'][$options['locale']],
                     ])
                 ;
             } else {
                 $builder
                     ->add($name, CheckboxType::class, [
-                        'label' => $step['label'][$options['locale']],
+                        'label'    => $step['label'][$options['locale']],
                         'required' => false,
                     ])
                 ;

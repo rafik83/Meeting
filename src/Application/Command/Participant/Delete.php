@@ -37,8 +37,8 @@ class Delete
      */
     public function __construct(Sheet $sheet, User $requester, $participantId)
     {
-        $this->sheet = $sheet;
-        $this->requester = $requester;
+        $this->sheet         = $sheet;
+        $this->requester     = $requester;
         $this->participantId = $participantId;
     }
 }

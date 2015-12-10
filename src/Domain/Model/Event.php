@@ -198,8 +198,8 @@ class Event
      */
     public function update($title, array $locales, $fallback)
     {
-        $this->title = $title;
-        $this->locales = $locales;
+        $this->title    = $title;
+        $this->locales  = $locales;
         $this->fallback = $fallback;
     }
 

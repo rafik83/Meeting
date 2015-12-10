@@ -59,9 +59,9 @@ class CreateRequest
      */
     public function __construct(Sheet $from, Sheet $to, DateTime $createdAt)
     {
-        $this->from = $from;
-        $this->to = $to;
-        $this->state = Request::STATE_SENT;
+        $this->from      = $from;
+        $this->to        = $to;
+        $this->state     = Request::STATE_SENT;
         $this->createdAt = $createdAt;
     }
 }

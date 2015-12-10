@@ -48,10 +48,10 @@ class ScheduleSlotView
      */
     public function __construct($id, $title, \DateTime $begin, \DateTime $end, $active)
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->begin = $begin;
-        $this->end = $end;
+        $this->id     = $id;
+        $this->title  = $title;
+        $this->begin  = $begin;
+        $this->end    = $end;
         $this->active = $active;
     }
 }
