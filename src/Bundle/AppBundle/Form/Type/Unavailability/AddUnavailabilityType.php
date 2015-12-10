@@ -26,19 +26,19 @@ class AddUnavailabilityType extends AbstractType
     {
         $builder
             ->add('from', TimeType::class, [
-                'input'         => 'datetime',
-                'widget'        => 'choice',
+                'input' => 'datetime',
+                'widget' => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
             ->add('to', TimeType::class, [
-                'input'         => 'datetime',
-                'widget'        => 'choice',
+                'input' => 'datetime',
+                'widget' => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
             ->add('participants', ParticipantChoiceType::class, [
-                'sheet'      => $options['sheet'],
-                'multiple'   => true,
-                'expanded'   => true,
+                'sheet' => $options['sheet'],
+                'multiple' => true,
+                'expanded' => true,
             ])
         ;
     }
@@ -49,12 +49,12 @@ class AddUnavailabilityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
-            'sheet'
+            'sheet',
         ]);
 
         $resolver->setDefaults([
             'data_class' => Add::class,
-            'csrf_token_id'  => 'add_unavailability',
+            'csrf_token_id' => 'add_unavailability',
         ]);
     }
 }

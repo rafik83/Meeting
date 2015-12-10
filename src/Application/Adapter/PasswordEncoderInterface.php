@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 interface PasswordEncoderInterface
 {
     /**
-     * Encode password
+     * Encode password.
      *
      * @param string $password
      * @param string $salt

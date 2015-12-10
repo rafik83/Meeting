@@ -25,9 +25,9 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
 
         $builder
             ->add('choices', CollectionType::class, [
-                'entry_type'   => ChoiceType::class,
+                'entry_type' => ChoiceType::class,
                 'entry_options' => ['locales' => $options['locales']],
-                'allow_add'    => true,
+                'allow_add' => true,
                 'allow_delete' => true,
             ])
         ;
@@ -40,7 +40,7 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice',
-            'csrf_token_id'  => 'type_template_field_update_lib_choice',
+            'csrf_token_id' => 'type_template_field_update_lib_choice',
         ]);
 
         $resolver->setRequired(['locales']);

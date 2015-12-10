@@ -111,7 +111,6 @@ class RuleRepository implements RuleRepositoryInterface
             ->setParameter('seeableType', $seeable)
             ->setParameter('seeableCategories', $seeable->getCategories());
 
-
         return $queryBuilder->getQuery()->getResult();
     }
 

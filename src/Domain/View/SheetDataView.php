@@ -83,14 +83,14 @@ class SheetDataView
         array $participantViews,
         Participant $currentUserParticipant
     ) {
-        $this->id                     = $id;
-        $this->event                  = $event;
-        $this->type                   = $type;
-        $this->participants           = $participants;
-        $this->data                   = $data;
-        $this->packageData            = $packageData;
-        $this->billingData            = $billingData;
-        $this->participantViews       = $participantViews;
+        $this->id = $id;
+        $this->event = $event;
+        $this->type = $type;
+        $this->participants = $participants;
+        $this->data = $data;
+        $this->packageData = $packageData;
+        $this->billingData = $billingData;
+        $this->participantViews = $participantViews;
         $this->currentUserParticipant = $currentUserParticipant;
     }
 }

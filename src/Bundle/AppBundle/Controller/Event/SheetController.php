@@ -40,7 +40,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class SheetController extends BaseController
 {
     /**
-     * Sheet
+     * Sheet.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -76,11 +76,11 @@ class SheetController extends BaseController
         );
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
-            'eventView'                => $eventView,
-            'typeView'                 => $typeView,
-            'sheetDataView'            => $sheetDataView,
+            'eventView' => $eventView,
+            'typeView' => $typeView,
+            'sheetDataView' => $sheetDataView,
             'participant_delete_forms' => $participantDeleteForms,
-            'buttonParticipant'        => $buttonParticipant,
+            'buttonParticipant' => $buttonParticipant,
         ]);
     }
 
@@ -101,10 +101,10 @@ class SheetController extends BaseController
             throw new AccessDeniedException('You can not add a new participant');
         }
 
-        $add  = new Add($sheet, $request->getLocale());
+        $add = new Add($sheet, $request->getLocale());
         $form = $this->createForm(AddParticipantType::class, $add, [
             'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale'   => $request->getLocale(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -116,7 +116,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (EmailCanNotBeNullException $exception) {
                 $this->addGivenErrorOnGivenField(
@@ -140,8 +140,8 @@ class SheetController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Sheet:addParticipant.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
+            'sheet' => $sheet,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -172,9 +172,9 @@ class SheetController extends BaseController
         }
 
         $updateParticipant = new Update($participant->getId(), $participant->getData());
-        $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
+        $form = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale'   => $request->getLocale(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -189,7 +189,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
@@ -203,8 +203,8 @@ class SheetController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Sheet:updateParticipant.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
+            'sheet' => $sheet,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -228,9 +228,9 @@ class SheetController extends BaseController
         }
 
         $updateBlock = new UpdateBlock($sheet, $block);
-        $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
+        $form = $this->createForm(UpdateBlockType::class, $updateBlock, [
             'template' => $sheetTemplate[$block]['template'],
-            'locale'   => $request->getLocale(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -245,7 +245,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
@@ -259,8 +259,8 @@ class SheetController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Sheet:updateBlock.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
+            'sheet' => $sheet,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -282,7 +282,7 @@ class SheetController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $delete = new Delete($sheet, $this->getUser(), $participant->getId());
-        $form   = $this->createForm(DeleteParticipantType::class, $delete);
+        $form = $this->createForm(DeleteParticipantType::class, $delete);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -302,7 +302,7 @@ class SheetController extends BaseController
         // Go to the sheet
         return $this->redirectToRoute('event_sheet', [
             'subdomain' => $request->attributes->get('subdomain'),
-            'id'        => $sheet->getId(),
+            'id' => $sheet->getId(),
         ]);
     }
 
@@ -330,8 +330,8 @@ class SheetController extends BaseController
                             'action' => $this->generateUrl(
                                 'event_sheet_delete_participant',
                                 [
-                                    'subdomain'      => $request->attributes->get('subdomain'),
-                                    'id'             => $sheet->getId(),
+                                    'subdomain' => $request->attributes->get('subdomain'),
+                                    'id' => $sheet->getId(),
                                     'participant_id' => $participantView->id,
                                 ]
                             ),
@@ -360,13 +360,13 @@ class SheetController extends BaseController
         }
 
         $participantManager = $this->get('vimeet_app.service.participant_manager');
-        $participantPrice   = $participantManager->getParticipantPrice($sheet);
-        $planningPrice      = $participantManager->getPlanningPrice($sheet);
+        $participantPrice = $participantManager->getParticipantPrice($sheet);
+        $planningPrice = $participantManager->getPlanningPrice($sheet);
 
         $buyParticipant = new BuyParticipant($sheet, $request->getLocale());
-        $form           = $this->createForm(BuyParticipantType::class, $buyParticipant, [
+        $form = $this->createForm(BuyParticipantType::class, $buyParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale'   => $request->getLocale(),
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -381,7 +381,7 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (EmailCanNotBeNullException $exception) {
                 $this->addGivenErrorOnGivenField(
@@ -404,11 +404,11 @@ class SheetController extends BaseController
         }
 
         return $this->render('VimeetAppBundle:Event/Sheet:buyParticipant.html.twig', [
-            'eventView'        => $eventView,
-            'sheet'            => $sheet,
-            'form'             => $form->createView(),
+            'eventView' => $eventView,
+            'sheet' => $sheet,
+            'form' => $form->createView(),
             'participantPrice' => $participantPrice,
-            'planningPrice'    => $planningPrice,
+            'planningPrice' => $planningPrice,
         ]);
     }
 }

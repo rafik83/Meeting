@@ -23,7 +23,7 @@ class TemplateChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class'        => Template::class,
+            'class' => Template::class,
             'choice_label' => 'title',
         ]);
     }

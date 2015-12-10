@@ -54,16 +54,17 @@ class RuleManager
     ) {
         $this->ruleRepository = $ruleRepository;
         $this->typeRepository = $typeRepository;
-        $this->ruleSorter     = $ruleSorter;
+        $this->ruleSorter = $ruleSorter;
     }
 
     /**
-     * Get the most prioritary rule to apply
+     * Get the most prioritary rule to apply.
      *
      * @param Sheet $sheet
      * @param User  $user
      *
      * @return Rule
+     *
      * @throws NoRuleFoundException
      */
     public function getRule(Sheet $sheet, User $user)

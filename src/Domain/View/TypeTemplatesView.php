@@ -40,9 +40,9 @@ class TypeTemplatesView
      */
     public function __construct($id, $participantTemplate, $sheetTemplate, $packageTemplate)
     {
-        $this->id                  = $id;
+        $this->id = $id;
         $this->participantTemplate = $participantTemplate;
-        $this->sheetTemplate       = $sheetTemplate;
-        $this->packageTemplate     = $packageTemplate;
+        $this->sheetTemplate = $sheetTemplate;
+        $this->packageTemplate = $packageTemplate;
     }
 }

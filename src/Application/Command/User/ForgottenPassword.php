@@ -36,7 +36,6 @@ class ForgottenPassword
     public function __construct(EventView $eventView, $locale)
     {
         $this->eventView = $eventView;
-        $this->locale    = $locale;
+        $this->locale = $locale;
     }
 }
-

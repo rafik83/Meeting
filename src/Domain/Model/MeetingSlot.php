@@ -42,12 +42,12 @@ class MeetingSlot
     public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end)
     {
         $this->schedule = $schedule;
-        $this->begin    = $begin;
-        $this->end      = $end;
+        $this->begin = $begin;
+        $this->end = $end;
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return mixed
      */
@@ -57,7 +57,7 @@ class MeetingSlot
     }
 
     /**
-     * Get schedule
+     * Get schedule.
      *
      * @return Schedule
      */
@@ -67,7 +67,7 @@ class MeetingSlot
     }
 
     /**
-     * Get begin
+     * Get begin.
      *
      * @return \DateTime
      */
@@ -77,7 +77,7 @@ class MeetingSlot
     }
 
     /**
-     * Get end
+     * Get end.
      *
      * @return \DateTime
      */

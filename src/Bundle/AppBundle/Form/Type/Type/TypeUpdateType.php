@@ -27,7 +27,7 @@ class TypeUpdateType extends AbstractType
     {
         $builder
             ->add('translations', CollectionType::class, [
-                'entry_type'  => TypeTranslationType::class,
+                'entry_type' => TypeTranslationType::class,
                 'label' => false,
             ])
         ;
@@ -40,7 +40,7 @@ class TypeUpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Type\Update',
-            'csrf_token_id'  => 'type_update',
+            'csrf_token_id' => 'type_update',
         ]);
     }
 

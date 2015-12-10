@@ -37,8 +37,8 @@ class DataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
-        $locale   = $options['locale'];
-        $sheet    = $options['sheet'];
+        $locale = $options['locale'];
+        $sheet = $options['sheet'];
 
         foreach ($template as $i => $field) {
             if (!isset($this->types[$field['type']])) {
@@ -46,12 +46,12 @@ class DataType extends AbstractType
             }
 
             $builder->add($i, $this->types[$field['type']], [
-                'label'    => $field['label'][$locale],
-                'help'     => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
+                'label' => $field['label'][$locale],
+                'help' => isset($field['private']) && $field['private'] === true ? 'form.field.private' : null,
                 'required' => isset($field['required']) && $field['required'] === true,
                 'template' => $field,
-                'locale'   => $locale,
-                'sheet'    => $sheet,
+                'locale' => $locale,
+                'sheet' => $sheet,
             ]);
         }
     }

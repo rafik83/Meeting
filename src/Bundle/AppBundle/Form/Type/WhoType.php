@@ -42,7 +42,7 @@ class WhoType extends AbstractType
         TypeRepositoryInterface $typeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->typeRepository     = $typeRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -55,11 +55,11 @@ class WhoType extends AbstractType
             'choices' => function (Options $options) {
                 return [
                     'Categorie' => $this->categoryRepository->getCategoriesByEvent($options['event']),
-                    'Type'      => $this->typeRepository->getTypesByEvent($options['event']),
+                    'Type' => $this->typeRepository->getTypesByEvent($options['event']),
                 ];
             },
             'choices_as_values' => true,
-            'choice_label'      => function ($choice) {
+            'choice_label' => function ($choice) {
                 if ($choice instanceof Type || $choice instanceof Category) {
                     return $choice->getTranslations()->get('fr')->getTitle();
                 }

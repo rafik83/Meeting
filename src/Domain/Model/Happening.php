@@ -59,16 +59,16 @@ class Happening
      */
     public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
     {
-        $this->schedule    = $schedule;
-        $this->begin       = $begin;
-        $this->end         = $end;
-        $this->title       = $title;
+        $this->schedule = $schedule;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->title = $title;
         $this->description = $description;
-        $this->blocking    = $blocking;
+        $this->blocking = $blocking;
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return mixed
      */
@@ -78,7 +78,7 @@ class Happening
     }
 
     /**
-     * Get schedule
+     * Get schedule.
      *
      * @return Schedule
      */
@@ -88,7 +88,7 @@ class Happening
     }
 
     /**
-     * Get begin
+     * Get begin.
      *
      * @return \DateTime
      */
@@ -98,7 +98,7 @@ class Happening
     }
 
     /**
-     * Get end
+     * Get end.
      *
      * @return \DateTime
      */
@@ -108,7 +108,7 @@ class Happening
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -118,7 +118,7 @@ class Happening
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -128,7 +128,7 @@ class Happening
     }
 
     /**
-     * Get blocking
+     * Get blocking.
      *
      * @return string
      */

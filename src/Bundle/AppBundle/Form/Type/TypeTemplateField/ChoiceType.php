@@ -24,7 +24,7 @@ class ChoiceType extends AbstractType
         $builder
             ->add('label', ChoiceLabelTranslationsType::class, [
                 'locales' => $options['locales'],
-                'label'   => false,
+                'label' => false,
             ]);
     }
 

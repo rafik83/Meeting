@@ -41,14 +41,14 @@ class MeetingRequestCreateType extends AbstractType
     {
         $builder
             ->add('fromParticipants', ChoiceType::class, [
-                'choices'           => $options['sheet']->getParticipants(),
+                'choices' => $options['sheet']->getParticipants(),
                 'choices_as_values' => true,
-                'choice_label'      => function (Participant $participant) {
+                'choice_label' => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
                 },
-                'expanded'          => true,
-                'multiple'          => true,
-                'required'          => false,
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,

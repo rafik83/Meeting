@@ -98,7 +98,7 @@ class AppExtension extends \Twig_Extension
         foreach ($choices as $choice) {
             if (isset($choice['choices']) && isset($choice['label'][$locale])) {
                 $items[] = sprintf(
-                    "%s%s",
+                    '%s%s',
                     $choice['label'][$locale],
                     $this->choicesList($choice['choices'], $locale)
                 );
@@ -109,7 +109,7 @@ class AppExtension extends \Twig_Extension
 
         asort($items);
 
-        return sprintf("<ul><li>%s</li></ul>", implode('</li><li>', $items));
+        return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $items));
     }
 
     /**

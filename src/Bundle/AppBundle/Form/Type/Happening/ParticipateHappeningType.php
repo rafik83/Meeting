@@ -26,9 +26,9 @@ class ParticipateHappeningType extends AbstractType
     {
         $builder
             ->add('participants', ParticipantChoiceType::class, [
-                'sheet'         => $options['sheet'],
-                'multiple'      => true,
-                'expanded'      => true,
+                'sheet' => $options['sheet'],
+                'multiple' => true,
+                'expanded' => true,
                 'query_builder' => function (EntityRepository $entityRepository) use ($options) {
                     return $entityRepository
                         ->createQueryBuilder('participant')
@@ -52,7 +52,7 @@ class ParticipateHappeningType extends AbstractType
 
         $resolver->setDefaults([
             'data_class' => Participate::class,
-            'csrf_token_id'  => 'participate_happening',
+            'csrf_token_id' => 'participate_happening',
         ]);
     }
 }

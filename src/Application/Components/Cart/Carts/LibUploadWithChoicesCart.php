@@ -21,12 +21,12 @@ class LibUploadWithChoicesCart implements LibCartInterface
     {
         $cartRow = null;
 
-        if([] !== $template
+        if ([] !== $template
             && isset($dataValue['value']['value'])
             && !isset($template['choices'][$dataValue['value']['value']]['placeholder'])
         ) {
             $cartRow = new CartRow(
-                $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']['value']]['label'][$locale],
+                $template['label'][$locale].' : '.$template['choices'][$dataValue['value']['value']]['label'][$locale],
                 isset($dataValue['value']['quantity']) ? $dataValue['value']['quantity'] : 1,
                 isset($template['choices'][$dataValue['value']['value']]['unitPrice']) ? $template['choices'][$dataValue['value']['value']]['unitPrice'] : null
             );

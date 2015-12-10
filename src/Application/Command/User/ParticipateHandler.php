@@ -37,7 +37,7 @@ class ParticipateHandler extends BaseHandler
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository
     ) {
-        $this->sheetRepository       = $sheetRepository;
+        $this->sheetRepository = $sheetRepository;
         $this->participantRepository = $participantRepository;
     }
 

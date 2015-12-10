@@ -25,8 +25,8 @@ class BillingUpdateType extends AbstractType
         $builder
             ->add('billingData', DataType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'label'    => false,
+                'locale' => $options['locale'],
+                'label' => false,
             ])
         ;
     }
@@ -38,7 +38,7 @@ class BillingUpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Billing\Update',
-            'csrf_token_id'  => 'update_sheet_billing',
+            'csrf_token_id' => 'update_sheet_billing',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

@@ -32,8 +32,8 @@ class DeleteParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Delete',
-            'csrf_token_id'  => 'delete_participant',
-            'method'     => 'DELETE',
+            'csrf_token_id' => 'delete_participant',
+            'method' => 'DELETE',
         ]);
     }
 }

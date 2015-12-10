@@ -26,12 +26,12 @@ class ResetPasswordEventListener
     private $templating;
 
     /**
-     * @param \Swift_Mailer    $mailer
+     * @param \Swift_Mailer   $mailer
      * @param EngineInterface $templating
      */
     public function __construct(\Swift_Mailer $mailer, EngineInterface $templating)
     {
-        $this->mailer     = $mailer;
+        $this->mailer = $mailer;
         $this->templating = $templating;
     }
 
@@ -48,7 +48,7 @@ class ResetPasswordEventListener
                 $this->templating->render(
                     'VimeetAppBundle:Mail:resetPassword.html.twig',
                     [
-                        'token'     => $resetPasswordEvent->getApplicationEvent()->getForgottenPasswordToken()->getToken(),
+                        'token' => $resetPasswordEvent->getApplicationEvent()->getForgottenPasswordToken()->getToken(),
                         'eventView' => $resetPasswordEvent->getApplicationEvent()->getEventView(),
                     ]
                 )

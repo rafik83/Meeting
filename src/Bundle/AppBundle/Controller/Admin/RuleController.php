@@ -36,7 +36,7 @@ class RuleController extends Controller
         $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
             'method' => 'POST',
-            'event'  => $event,
+            'event' => $event,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -49,9 +49,9 @@ class RuleController extends Controller
         $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
 
         return $this->render('VimeetAppBundle:Admin/Rule:list.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
-            'rules'  => $rules,
+            'rules' => $rules,
         ]);
     }
 
@@ -87,9 +87,9 @@ class RuleController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Rule:what.html.twig', [
-            'form'    => $form->createView(),
-            'event'   => $event,
-            'seer'    => $seer,
+            'form' => $form->createView(),
+            'event' => $event,
+            'seer' => $seer,
             'seeable' => $seeable,
         ]);
     }
@@ -140,7 +140,7 @@ class RuleController extends Controller
      */
     private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
-        return $this->findRule($event, $seer, $seeable) ? :
+        return $this->findRule($event, $seer, $seeable) ?:
             $this->get('vimeet_infrastructure.repository.rule_repository')->add(new Rule($event, $seer, $seeable, []));
     }
 
@@ -159,7 +159,7 @@ class RuleController extends Controller
     }
 
     /**
-     * @param Rule    $rule
+     * @param Rule   $rule
      * @param string $locale
      *
      * @return Form
@@ -169,7 +169,7 @@ class RuleController extends Controller
         $form = $this->createForm(DontSeeWhatType::class, $rule->getWhat(), [
             'action' => $this->generateWhatUrl($rule),
             'method' => 'POST',
-            'who'    => $rule->getSeeable(),
+            'who' => $rule->getSeeable(),
             'locale' => $locale,
         ]);
         $form->add('submit', SubmitType::class);
@@ -185,11 +185,11 @@ class RuleController extends Controller
     private function generateWhatUrl(Rule $rule)
     {
         return $this->generateUrl('admin_who_see_who_dont_see_what', [
-            'id'                => $rule->getEvent()->getId(),
-            'seerIdentifier'    => $rule->getSeer()->getIdentifier(),
-            'seerId'            => $rule->getSeer()->getId(),
+            'id' => $rule->getEvent()->getId(),
+            'seerIdentifier' => $rule->getSeer()->getIdentifier(),
+            'seerId' => $rule->getSeer()->getId(),
             'seeableIdentifier' => $rule->getSeeable()->getIdentifier(),
-            'seeableId'         => $rule->getSeeable()->getId(),
+            'seeableId' => $rule->getSeeable()->getId(),
         ]);
     }
 

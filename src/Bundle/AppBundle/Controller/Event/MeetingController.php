@@ -40,15 +40,15 @@ class MeetingController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingRequestRepository = $this->get('vimeet_infrastructure.repository.meeting.request_repository');
-        $meetingRequest           = $meetingRequestRepository->getRequestSentBySheet($sheet);
+        $meetingRequest = $meetingRequestRepository->getRequestSentBySheet($sheet);
 
         $requestViews = $this
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingRequest);
 
         return $this->render('VimeetAppBundle:Event/Meeting:listRequest.html.twig', [
-            'eventView'     => $eventView,
-            'sheet'         => $sheet,
+            'eventView' => $eventView,
+            'sheet' => $sheet,
             'request_views' => $requestViews,
         ]);
     }
@@ -65,21 +65,21 @@ class MeetingController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingRequestRepository = $this->get('vimeet_infrastructure.repository.meeting.request_repository');
-        $meetingProposition       = $meetingRequestRepository->getPropositionReceivedBySheet($sheet);
+        $meetingProposition = $meetingRequestRepository->getPropositionReceivedBySheet($sheet);
 
         $propositionViews = $this
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingProposition);
 
         return $this->render('VimeetAppBundle:Event/Meeting:listProposition.html.twig', [
-            'eventView'         => $eventView,
-            'sheet'             => $sheet,
+            'eventView' => $eventView,
+            'sheet' => $sheet,
             'proposition_views' => $propositionViews,
         ]);
     }
 
     /**
-     * @param Request   $request
+     * @param Request      $request
      * @param EventView    $eventView
      * @param CategoryView $categoryView
      * @param Sheet        $to
@@ -101,8 +101,8 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $createRequest = new CreateRequest($from, $to, new \DateTime());
-        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
-            'sheet' => $from
+        $form = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
+            'sheet' => $from,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -114,25 +114,25 @@ class MeetingController extends BaseController
             $this->addFlash('success', 'flash.meeting_request.create.success');
 
             return $this->redirectToRoute('event_catalog_category', [
-                'subdomain'    => $request->attributes->get('subdomain'),
+                'subdomain' => $request->attributes->get('subdomain'),
                 'categoryView' => $categoryView->id,
             ]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($from);
-        $toName   = $sheetInfoGuesser->guessSheetInfo($to);
+        $toName = $sheetInfoGuesser->guessSheetInfo($to);
 
         return $this->render('VimeetAppBundle:Event/Meeting:createRequest.html.twig', [
             'eventView' => $eventView,
-            'fromName'  => $fromName,
-            'toName'    => $toName,
-            'form'      => $form->createView(),
+            'fromName' => $fromName,
+            'toName' => $toName,
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
@@ -150,8 +150,8 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $approveRequest = new ApproveRequest($meetingRequest);
-        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
-            'sheet' => $meetingRequest->getTo()
+        $form = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
+            'sheet' => $meetingRequest->getTo(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -164,24 +164,24 @@ class MeetingController extends BaseController
 
             return $this->redirectToRoute('event_meeting_list_proposition', [
                 'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
+                'id' => $sheet->getId(),
             ]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
-        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+        $toName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
 
         return $this->render('VimeetAppBundle:Event/Meeting:approvedRequest.html.twig', [
             'eventView' => $eventView,
-            'fromName'  => $fromName,
-            'toName'    => $toName,
-            'form'      => $form->createView(),
+            'fromName' => $fromName,
+            'toName' => $toName,
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
@@ -199,7 +199,7 @@ class MeetingController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $refuseRequest = new RefuseRequest($meetingRequest);
-        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
+        $form = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -211,17 +211,17 @@ class MeetingController extends BaseController
 
             return $this->redirectToRoute('event_meeting_list_proposition', [
                 'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
+                'id' => $sheet->getId(),
             ]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
-        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+        $toName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
 
         return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
             'eventView' => $eventView,
-            'fromName'  => $fromName,
-            'toName'    => $toName,
-            'form'      => $form->createView(),
+            'fromName' => $fromName,
+            'toName' => $toName,
+            'form' => $form->createView(),
         ]);
     }
 

@@ -39,8 +39,8 @@ class EventTranslation
      */
     public function __construct(Event $event, $locale, $description)
     {
-        $this->event       = $event;
-        $this->locale      = $locale;
+        $this->event = $event;
+        $this->locale = $locale;
         $this->description = $description;
     }
 

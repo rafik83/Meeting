@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * "Type de participation"
+ * "Type de participation".
  */
 class Type implements WhoInterface
 {
@@ -94,9 +94,9 @@ class Type implements WhoInterface
      */
     public function __construct(Event $event)
     {
-        $this->event        = $event;
+        $this->event = $event;
         $this->translations = new ArrayCollection();
-        $this->categories   = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -132,7 +132,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get participantTemplate
+     * Get participantTemplate.
      *
      * @return array
      */
@@ -142,7 +142,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get sheetTemplate
+     * Get sheetTemplate.
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get packageTemplate
+     * Get packageTemplate.
      *
      * @return array
      */
@@ -250,7 +250,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get preview
+     * Get preview.
      *
      * @return mixed
      */
@@ -260,7 +260,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get viewTemplate
+     * Get viewTemplate.
      *
      * @return string
      */
@@ -270,7 +270,7 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get categories
+     * Get categories.
      *
      * @return ArrayCollection
      */
@@ -293,11 +293,11 @@ class Type implements WhoInterface
     public function setTemplate(Template $template)
     {
         $this->participantTemplate = $template->getParticipant();
-        $this->sheetTemplate       = $template->getSheet();
-        $this->packageTemplate     = $template->getPackage();
-        $this->previewTemplate     = $template->getPreview();
-        $this->viewTemplate        = $template->getView();
-        $this->proFormaTemplate    = $template->getProForma();
+        $this->sheetTemplate = $template->getSheet();
+        $this->packageTemplate = $template->getPackage();
+        $this->previewTemplate = $template->getPreview();
+        $this->viewTemplate = $template->getView();
+        $this->proFormaTemplate = $template->getProForma();
     }
 
     /**
@@ -315,8 +315,8 @@ class Type implements WhoInterface
     {
         return [
             'participantTemplate' => $this->getParticipantTemplate(),
-            'sheetTemplate'       => $this->getSheetTemplate(),
-            'packageTemplate'     => $this->getPackageTemplate(),
+            'sheetTemplate' => $this->getSheetTemplate(),
+            'packageTemplate' => $this->getPackageTemplate(),
         ];
     }
 }

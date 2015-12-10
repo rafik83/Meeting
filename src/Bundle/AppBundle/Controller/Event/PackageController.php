@@ -33,8 +33,8 @@ class PackageController extends BaseController
      *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     * @return RedirectResponse|Response
      *
+     * @return RedirectResponse|Response
      */
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
@@ -43,10 +43,10 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
         $updateStep = new UpdateStep($sheet, $step);
-        $form       = $this->createForm(UpdateStepType::class, $updateStep, [
+        $form = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
-            'locale'   => $request->getLocale(),
-            'sheet'    => $sheet,
+            'locale' => $request->getLocale(),
+            'sheet' => $sheet,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -78,17 +78,17 @@ class PackageController extends BaseController
         }
 
         return $this->render('VimeetAppBundle:Event/Package:updateStep.html.twig', [
-            'eventView'           => $eventView,
-            'sheet'               => $sheet,
+            'eventView' => $eventView,
+            'sheet' => $sheet,
             'stepPackageTemplate' => $sheet->getTypePackageTemplate()[$step],
-            'form'                => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Sheet     $sheet
      *
      * @return Response
      */
@@ -101,8 +101,8 @@ class PackageController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'cart'      => $cart,
+            'sheet' => $sheet,
+            'cart' => $cart,
         ]);
     }
 
@@ -130,7 +130,7 @@ class PackageController extends BaseController
      */
     private function urlAfterUpdateStep(Request $request, Sheet $sheet, $step)
     {
-        $redirectTo      = $request->get('redirect_to');
+        $redirectTo = $request->get('redirect_to');
         $packageTemplate = $sheet->getTypePackageTemplate();
 
         if (null !== $redirectTo) {
@@ -142,8 +142,8 @@ class PackageController extends BaseController
 
             return $this->generateUrl('event_sheet_package_update_step', [
                 'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-                'step'      => $nextStep,
+                'id' => $sheet->getId(),
+                'step' => $nextStep,
             ]);
         }
 
@@ -151,7 +151,7 @@ class PackageController extends BaseController
 
         return $this->generateUrl('event_sheet_package_cart', [
             'subdomain' => $request->attributes->get('subdomain'),
-            'id'        => $sheet->getId(),
+            'id' => $sheet->getId(),
         ]);
     }
 

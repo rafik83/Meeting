@@ -24,14 +24,14 @@ class BuyParticipantType extends AbstractType
         $builder
             ->add('participantData', BuyAddParticipantType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
-                'label'    => false,
+                'locale' => $options['locale'],
+                'label' => false,
             ])
             ->add('participantBuyOption', BuyParticipantOptionType::class, [
                 'template' => $options['template'],
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
                 'required' => false,
-                'label'    => false,
+                'label' => false,
             ])
         ;
     }
@@ -43,7 +43,7 @@ class BuyParticipantType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Proximum\Vimeet\Application\Command\Sheet\BuyParticipant',
-            'csrf_token_id'  => 'buy_participant',
+            'csrf_token_id' => 'buy_participant',
         ]);
 
         $resolver->setRequired(['template', 'locale']);

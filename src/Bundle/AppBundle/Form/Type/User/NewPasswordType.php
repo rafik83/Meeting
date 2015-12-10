@@ -24,7 +24,7 @@ class NewPasswordType extends AbstractType
     {
         $builder
             ->add('password', RepeatedType::class, [
-                'type'            => PasswordType::class,
+                'type' => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;

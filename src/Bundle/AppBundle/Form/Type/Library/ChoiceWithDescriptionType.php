@@ -21,8 +21,8 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $template = $options['template'];
-        $locale   = $options['locale'];
-        $choices  = [];
+        $locale = $options['locale'];
+        $choices = [];
 
         foreach ($template['choices'] as $key => $choice) {
             $choices[$key] = $choice['label'][$locale];
@@ -31,7 +31,7 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
         $builder
             ->add('value', CoreChoiceType::class, [
                 'choices_as_values' => true,
-                'choices'  => array_flip($choices),
+                'choices' => array_flip($choices),
                 'expanded' => true,
                 'required' => isset($template['required']) ? $template['required'] : true,
             ]);
@@ -41,8 +41,8 @@ class ChoiceWithDescriptionType extends AbstractLocalizedType
             && $template['quantity']['min'] <= $template['quantity']['max']
         ) {
             $builder->add('quantity', QuantityType::class, [
-                'min'   => $template['quantity']['min'],
-                'max'   => $template['quantity']['max'],
+                'min' => $template['quantity']['min'],
+                'max' => $template['quantity']['max'],
                 'range' => isset($template['quantity']['range']) ? $template['quantity']['range'] : 1,
             ]);
         }
