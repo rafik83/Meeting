@@ -16,6 +16,15 @@
     {{ form_end(form) }}
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input:disabled ~ span {
+            color: #ccc;
+        }
+    </style>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script>
