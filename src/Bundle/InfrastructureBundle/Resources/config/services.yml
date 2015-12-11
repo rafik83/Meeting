@@ -212,6 +212,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Security

@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\SlotUnvailableException;
 
 class PositionMeetingHandler
 {
@@ -27,15 +30,25 @@ class PositionMeetingHandler
     private $requestRepository;
 
     /**
+     * @var MeetingSlotRepositoryInterface
+     */
+    private $meetingSlotRepository;
+
+    /**
      * PositionMeetingHandler constructor.
      *
-     * @param MeetingRepositoryInterface $meetingRepository
-     * @param RequestRepositoryInterface $requestRepository
+     * @param MeetingRepositoryInterface     $meetingRepository
+     * @param RequestRepositoryInterface     $requestRepository
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      */
-    public function __construct(MeetingRepositoryInterface $meetingRepository, RequestRepositoryInterface $requestRepository)
-    {
-        $this->meetingRepository = $meetingRepository;
-        $this->requestRepository = $requestRepository;
+    public function __construct(
+        MeetingRepositoryInterface $meetingRepository,
+        RequestRepositoryInterface $requestRepository,
+        MeetingSlotRepositoryInterface $meetingSlotRepository
+    ) {
+        $this->meetingRepository     = $meetingRepository;
+        $this->requestRepository     = $requestRepository;
+        $this->meetingSlotRepository = $meetingSlotRepository;
     }
 
     /**
@@ -43,6 +56,8 @@ class PositionMeetingHandler
      */
     public function handle(PositionMeeting $positionMeeting)
     {
+        $this->checkAvailability($positionMeeting);
+
         // Create the meeting
         $meeting = new Meeting(
             $positionMeeting->slot,
@@ -58,5 +73,25 @@ class PositionMeetingHandler
         $positionMeeting->meetingRequest->setMeeting($meeting);
 
         $this->requestRepository->set($positionMeeting->meetingRequest);
+    }
+
+    /**
+     * @param PositionMeeting $positionMeeting
+     *
+     * @throws SlotUnvailableException
+     */
+    private function checkAvailability(PositionMeeting $positionMeeting)
+    {
+        $ids = array_map(function (Participant $participant) {
+            return $participant->getId();
+        }, array_merge($positionMeeting->fromParticipants, $positionMeeting->toParticipants));
+
+        $slots = $this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($ids);
+
+        if (!in_array($positionMeeting->slot->getId(), $slots)) {
+            throw new SlotUnvailableException(
+                sprintf('The slot %d is not available.', $positionMeeting->slot->getId())
+            );
+        }
     }
 }
