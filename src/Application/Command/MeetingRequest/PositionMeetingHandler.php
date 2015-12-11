@@ -42,6 +42,6 @@ class PositionMeetingHandler
         // Attach the meeting to the request
         $positionMeeting->meetingRequest->setMeeting($meeting);
 
-        $this->requestRepository->set($meeting);
+        $this->requestRepository->set($positionMeeting->meetingRequest);
     }
 }

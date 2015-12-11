@@ -69,6 +69,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.meeting_slot_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers

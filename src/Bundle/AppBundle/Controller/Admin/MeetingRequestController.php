@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,5 +72,16 @@ class MeetingRequestController extends Controller
             'meeting_request' => $meetingRequest,
             'form'            => $form->createView(),
         ]);
+    }
+
+    public function slotsAction(Request $request)
+    {
+        $participants = $request->query->get('participants', []);
+
+        $slots = $this
+            ->get('vimeet_infrastructure.repository.meeting_slot_repository')
+            ->findAvailableSlotIdByParticipantsIds($participants);
+
+        return new JsonResponse($slots);
     }
 }

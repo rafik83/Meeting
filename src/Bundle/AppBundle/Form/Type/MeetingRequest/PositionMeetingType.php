@@ -41,7 +41,10 @@ class PositionMeetingType extends AbstractType
                 'choices'           => $options['meeting_request']->getFrom()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
-                }
+                },
+                'choice_value'      => function (Participant $participant) {
+                    return $participant->getId();
+                },
             ])
             ->add('toParticipants', ChoiceType::class, [
                 'choices_as_values' => true,
@@ -50,7 +53,10 @@ class PositionMeetingType extends AbstractType
                 'choices'           => $options['meeting_request']->getTo()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
-                }
+                },
+                'choice_value'      => function (Participant $participant) {
+                    return $participant->getId();
+                },
             ])
             ->add('slot', EntityType::class, [
                 'class' => MeetingSlot::class,
@@ -70,7 +76,7 @@ class PositionMeetingType extends AbstractType
                     );
                 },
                 'choice_attr' => function (MeetingSlot $meetingSlot) {
-                    return ['data-id' => $meetingSlot->getId()];
+                    return ['data-id' => $meetingSlot->getId(), 'disabled' => 'disabled'];
                 },
             ]);
     }
