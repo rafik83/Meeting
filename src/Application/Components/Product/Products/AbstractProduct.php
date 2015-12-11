@@ -47,6 +47,7 @@ abstract class AbstractProduct implements ProductInterface
     public function __construct($key)
     {
         $this->key        = $key;
+        $this->options    = [];
         $this->include    = [];
         $this->includedIn = [];
     }

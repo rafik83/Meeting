@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
-use Proximum\Vimeet\Application\Components\Product\Including;
 use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 
 class LibChoiceWithDescriptionCart extends LibAbstractCart
