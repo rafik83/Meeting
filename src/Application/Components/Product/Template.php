@@ -17,6 +17,11 @@ class Template
      */
     private $steps;
 
+    public function __construct()
+    {
+        $this->steps = [];
+    }
+
     /**
      * @param Step $step
      */

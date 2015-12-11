@@ -44,7 +44,7 @@ class ProductBuilder
      */
     public function create(array $packageTemplate)
     {
-        $template        = new Template();
+        $template = new Template();
 
         foreach ($packageTemplate as $stepKey => $stepTemplate) {
             $step = new Step($stepKey);
@@ -54,30 +54,32 @@ class ProductBuilder
             $options = $resolver->resolve($stepTemplate);
             $step->setOptions($options);
 
-            foreach ($stepTemplate['template'] as $productKey => $productTemplate) {
-                if (isset($productTemplate['type'])) {
-                    $product = $this->factory($productTemplate['type'], $productKey);
+            if (isset($stepTemplate['template'])) {
+                foreach ($stepTemplate['template'] as $productKey => $productTemplate) {
+                    if (isset($productTemplate['type'])) {
+                        $product = $this->factory($productTemplate['type'], $productKey);
 
-                    $resolver = new OptionsResolver();
-                    $product->configure($resolver);
-                    $options = $resolver->resolve($productTemplate);
-                    $product->setOptions($options);
+                        $resolver = new OptionsResolver();
+                        $product->configure($resolver);
+                        $options = $resolver->resolve($productTemplate);
+                        $product->setOptions($options);
 
-                    if ($product instanceof LibChoiceWithDescriptionProduct) {
-                        foreach ($product->getOptionChoices() as $choiceKey => $choiceTemplate) {
-                            $choiceProduct = new LibChoiceProduct($choiceKey);
+                        if ($product instanceof LibChoiceWithDescriptionProduct) {
+                            foreach ($product->getOptionChoices() as $choiceKey => $choiceTemplate) {
+                                $choiceProduct = new LibChoiceProduct($choiceKey);
 
-                            $resolver = new OptionsResolver();
-                            $choiceProduct->configure($resolver);
-                            $options = $resolver->resolve($choiceTemplate);
-                            $choiceProduct->setOptions($options);
+                                $resolver = new OptionsResolver();
+                                $choiceProduct->configure($resolver);
+                                $options = $resolver->resolve($choiceTemplate);
+                                $choiceProduct->setOptions($options);
 
-                            $choiceProduct->setChoiceParent($product);
-                            $product->addChoice($choiceProduct);
+                                $choiceProduct->setChoiceParent($product);
+                                $product->addChoice($choiceProduct);
+                            }
                         }
-                    }
 
-                    $step->addProduct($product);
+                        $step->addProduct($product);
+                    }
                 }
             }
 
