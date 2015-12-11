@@ -42,9 +42,8 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessPackageStepNotExists($sheet, $step);
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create(
-            $sheet
-        );
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
         $stepObject = $template->getStep($step);
 
         if ($stepObject === null) {
@@ -109,7 +108,8 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create($sheet);
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,

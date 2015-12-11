@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduc
 use Proximum\Vimeet\Application\Components\Product\Products\LibPlanningProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProductBuilder
@@ -26,10 +27,24 @@ class ProductBuilder
      *
      * @return Template
      */
-    public function create(Sheet $sheet)
+    public function createFromSheet(Sheet $sheet)
+    {
+        return $this->create($sheet->getTypePackageTemplate());
+    }
+
+    public function createFromType(Type $type)
+    {
+        return $this->create($type->getPackageTemplate());
+    }
+
+    /**
+     * @param array $packageTemplate
+     *
+     * @return Template
+     */
+    public function create(array $packageTemplate)
     {
         $template        = new Template();
-        $packageTemplate = $sheet->getTypePackageTemplate();
 
         foreach ($packageTemplate as $stepKey => $stepTemplate) {
             $step = new Step($stepKey);

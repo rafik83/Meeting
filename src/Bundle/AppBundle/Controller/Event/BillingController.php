@@ -127,7 +127,8 @@ class BillingController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')->create($sheet);
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,
