@@ -14,18 +14,45 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Meeting
 {
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * @var MeetingSlot
+     */
     private $slot;
 
+    /**
+     * @var Sheet
+     */
     private $fromSheet;
 
+    /**
+     * @var ArrayCollection
+     */
     private $fromParticipants;
 
+    /**
+     * @var Sheet
+     */
     private $toSheet;
 
+    /**
+     * @var ArrayCollection
+     */
     private $toParticipants;
 
+    /**
+     * Meeting constructor.
+     *
+     * @param MeetingSlot $slot
+     * @param Sheet       $fromSheet
+     * @param array       $fromParticipants
+     * @param Sheet       $toSheet
+     * @param array       $toParticipants
+     */
     public function __construct(MeetingSlot $slot, Sheet $fromSheet, array $fromParticipants, Sheet $toSheet, array $toParticipants)
     {
         $this->slot             = $slot;

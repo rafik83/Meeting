@@ -29,6 +29,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findAvailableSlotIdByParticipantsIds(array $ids)
     {
         $queryBuilder = $this

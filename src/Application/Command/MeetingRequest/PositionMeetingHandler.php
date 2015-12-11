@@ -16,16 +16,31 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class PositionMeetingHandler
 {
+    /**
+     * @var MeetingRepositoryInterface
+     */
     private $meetingRepository;
 
+    /**
+     * @var RequestRepositoryInterface
+     */
     private $requestRepository;
 
+    /**
+     * PositionMeetingHandler constructor.
+     *
+     * @param MeetingRepositoryInterface $meetingRepository
+     * @param RequestRepositoryInterface $requestRepository
+     */
     public function __construct(MeetingRepositoryInterface $meetingRepository, RequestRepositoryInterface $requestRepository)
     {
         $this->meetingRepository = $meetingRepository;
         $this->requestRepository = $requestRepository;
     }
 
+    /**
+     * @param PositionMeeting $positionMeeting
+     */
     public function handle(PositionMeeting $positionMeeting)
     {
         // Create the meeting

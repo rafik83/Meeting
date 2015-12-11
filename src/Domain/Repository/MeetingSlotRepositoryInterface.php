@@ -12,5 +12,10 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 interface MeetingSlotRepositoryInterface
 {
+    /**
+     * @param array $ids
+     *
+     * @return array
+     */
     public function findAvailableSlotIdByParticipantsIds(array $ids);
 }

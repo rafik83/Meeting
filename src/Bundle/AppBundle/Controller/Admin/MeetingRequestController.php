@@ -24,6 +24,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MeetingRequestController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function listAction(Request $request, Event $event)
     {
         $meetingRequests = $this
@@ -74,6 +80,11 @@ class MeetingRequestController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function slotsAction(Request $request)
     {
         $participants = $request->query->get('participants', []);
