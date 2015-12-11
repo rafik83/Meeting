@@ -142,4 +142,12 @@ class Order
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMode()
+    {
+        return $this->paymentMode;
+    }
 }
