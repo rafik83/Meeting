@@ -63,6 +63,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository_meeting.meeting_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MeetingRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -299,11 +303,21 @@ services:
     proximum.vimeet.application.components.schedule.schedule_builder:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
+<<<<<<< HEAD
             - '@vimeet_infrastructure.repository.schedule_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+=======
+            - @vimeet_infrastructure.repository.schedule_repository
+            - @vimeet_infrastructure.repository_meeting.meeting_repository
+            - @vimeet_infrastructure.repository.unavailability_repository
+            - @vimeet_infrastructure.repository.happening_repository
+            - @vimeet_infrastructure.repository.happening_participation_repository
+            - @vimeet_infrastructure.application.components.sheet.sheet_info_guesser
+            - @vimeet_infrastructure.application.components.sheet.participant_info_guesser
+>>>>>>> 490c84b... Display meetings on schedule
 
     #
     # Meeting Component
