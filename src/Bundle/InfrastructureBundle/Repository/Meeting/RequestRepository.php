@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -23,11 +25,20 @@ class RequestRepository implements RequestRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var PaginatorInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $paginator;
+
+    /**
+     * RequestRepository constructor.
+     *
+     * @param EntityManager      $entityManager
+     * @param PaginatorInterface $paginator
+     */
+    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
     {
         $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -97,5 +108,22 @@ class RequestRepository implements RequestRepositoryInterface
             ->orderBy('request.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPendingByEvent(Event $event, $page, $limit)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit);
     }
 }

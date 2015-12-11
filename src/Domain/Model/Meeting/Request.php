@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 use DateTime;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Meeting;
 
 class Request
 {
@@ -64,6 +65,11 @@ class Request
      * @var string
      */
     private $refuseMessage;
+
+    /**
+     * @var Meeting
+     */
+    private $meeting;
 
     /**
      * @param Sheet    $from
@@ -180,5 +186,29 @@ class Request
     public function setRefuseMessage($refuseMessage)
     {
         $this->refuseMessage = $refuseMessage;
+    }
+
+    /**
+     * Get meeting
+     *
+     * @return Meeting
+     */
+    public function getMeeting()
+    {
+        return $this->meeting;
+    }
+
+    /**
+     * Set meeting
+     *
+     * @param Meeting $meeting
+     *
+     * @return Request
+     */
+    public function setMeeting($meeting)
+    {
+        $this->meeting = $meeting;
+
+        return $this;
     }
 }

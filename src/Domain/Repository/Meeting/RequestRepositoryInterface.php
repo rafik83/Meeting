@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -45,4 +46,13 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getAllRequestBySheet(Sheet $sheet);
+
+    /**
+     * @param Event $event
+     * @param int   $page
+     * @param int   $limit
+     *
+     * @return mixed
+     */
+    public function getPendingByEvent(Event $event, $page, $limit);
 }
