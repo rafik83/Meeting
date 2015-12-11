@@ -37,9 +37,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    form:
-        resources:
-            - "ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig"
+    form_themes:
+        - "VimeetAppBundle::layout.html.twig"
     date:
         timezone: Europe/Paris
 

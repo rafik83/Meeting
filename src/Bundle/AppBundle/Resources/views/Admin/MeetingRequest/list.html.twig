@@ -1,0 +1,29 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>De</th>
+                <th>à</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting_request in meeting_requests %}
+                <tr>
+                    <td>{{ meeting_request.sheetNameFrom }}</td>
+                    <td>{{ meeting_request.sheetNameTo }}</td>
+                    <td>
+                        <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(meeting_requests) }}
+
+{% endblock %}

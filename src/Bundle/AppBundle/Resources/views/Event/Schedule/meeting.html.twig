@@ -5,9 +5,9 @@
 {% block content %}
     <table class="table">
         <caption>
-            {{ meeting.meetingSlot.schedule.date|date('d/m/Y') }}
-            de {{ meeting.meetingSlot.begin|date('H:i') }}
-            à {{ meeting.meetingSlot.end|date('H:i') }}
+            {{ meeting.slot.schedule.date|date('d/m/Y') }}
+            de {{ meeting.slot.begin|date('H:i') }}
+            à {{ meeting.slot.end|date('H:i') }}
         </caption>
         <tr>
             <th>Fiches</th>

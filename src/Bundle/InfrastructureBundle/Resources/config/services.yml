@@ -55,6 +55,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:
@@ -63,8 +65,12 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository_meeting.meeting_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MeetingRepository
+    vimeet_infrastructure.repository.meeting_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.meeting_slot_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -204,7 +210,13 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+    vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Security
@@ -308,7 +320,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
             - '@vimeet_infrastructure.repository.schedule_repository'
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'

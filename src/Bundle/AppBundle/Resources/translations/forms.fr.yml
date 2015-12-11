@@ -251,6 +251,16 @@ form:
         children:
             submit:
                 label: Confirmer
+    position_meeting:
+        children:
+            fromParticipants:
+                label: Participants
+            toParticipants:
+                label: Participants
+            slot:
+                label: Créneau de rendez-vous
+            submit:
+                label: Placer
 
 country:
     placeholder: --- Sélectionner un pays ---

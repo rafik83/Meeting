@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Meeting\Meeting:
+Proximum\Vimeet\Domain\Model\Meeting:
     type: entity
     table: meeting
     id:
@@ -12,12 +12,12 @@ Proximum\Vimeet\Domain\Model\Meeting\Meeting:
         createdAt:
             type: datetime
     manyToOne:
-        from:
-            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-        to:
-            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-        meetingSlot:
+        slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+        fromSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        toSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

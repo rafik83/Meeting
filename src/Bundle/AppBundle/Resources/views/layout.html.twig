@@ -1,0 +1,6 @@
+{% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
+
+{% block box_widget %}
+    {% set label =  '<span>' ~ label ~ '</span>' %}
+    {{ parent() }}
+{% endblock %}
