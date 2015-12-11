@@ -68,3 +68,6 @@ flash:
         type_template_field:
             update:
                 success: Le champ a bien été mis à jour
+        meeting_request:
+            position:
+                success: Le rendez-vous a bien été placé

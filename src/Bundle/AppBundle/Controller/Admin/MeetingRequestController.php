@@ -69,6 +69,7 @@ class MeetingRequestController extends Controller
             $this
                 ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler')
                 ->handle($command);
+            $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
             return $this->redirectToRoute('admin_meeting_request_list', ['id' => $event->getId()]);
         }
