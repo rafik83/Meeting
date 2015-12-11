@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Order:
+    type: entity
+    table: `order`
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        state:
+            type: string
+        proFormaTemplate:
+            type: text
+        packageData:
+            type: json_array
+        billingData:
+            type: json_array
+        createdAt:
+            type: datetime
+        paymentMode:
+            type: string
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            inversedBy: orders

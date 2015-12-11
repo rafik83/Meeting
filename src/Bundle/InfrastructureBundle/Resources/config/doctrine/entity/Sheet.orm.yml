@@ -25,3 +25,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         participants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             mappedBy: sheet
+        orders:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order
+            mappedBy: sheet
