@@ -144,14 +144,14 @@ class MeetingController extends BaseController
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($meetingRequest->getTo()->getParticipants());
+        $this->denyAccessForNonParticipant($meetingRequest->getToSheet()->getParticipants());
         $this->isAllowedToUpdateMeetingRequest($meetingRequest);
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $approveRequest = new ApproveRequest($meetingRequest);
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
-            'sheet' => $meetingRequest->getTo(),
+            'sheet' => $meetingRequest->getToSheet(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -167,8 +167,8 @@ class MeetingController extends BaseController
                 'id'        => $sheet->getId(),
             ]);
         }
-        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
-        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
+        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
         return $this->render('VimeetAppBundle:Event/Meeting:approvedRequest.html.twig', [
             'eventView' => $eventView,
@@ -193,7 +193,7 @@ class MeetingController extends BaseController
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($meetingRequest->getTo()->getParticipants());
+        $this->denyAccessForNonParticipant($meetingRequest->getToSheet()->getParticipants());
         $this->isAllowedToUpdateMeetingRequest($meetingRequest);
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
@@ -214,8 +214,8 @@ class MeetingController extends BaseController
                 'id'        => $sheet->getId(),
             ]);
         }
-        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFrom());
-        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getTo());
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
+        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
         return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
             'eventView' => $eventView,

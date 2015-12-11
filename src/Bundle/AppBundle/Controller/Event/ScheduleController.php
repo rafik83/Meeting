@@ -19,7 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningTyp
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -310,7 +310,7 @@ class ScheduleController extends Controller
      *
      * @ParamConverter(
      *   "meeting",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting",
      *   options={"id" = "meeting_id"}
      * )
      *
@@ -331,8 +331,8 @@ class ScheduleController extends Controller
             'sheet'            => $sheet,
             'schedule'         => $schedule,
             'meeting'          => $meeting,
-            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFrom()),
-            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getTo()),
+            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFromSheet()),
+            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getToSheet()),
             'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
                 return $participantInfoGuesser->guessParticipantInfo($participant);
             }, $meeting->getFromParticipants()->toArray()),

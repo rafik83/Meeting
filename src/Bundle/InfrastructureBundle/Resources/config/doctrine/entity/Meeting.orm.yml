@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Meeting:
+    type: entity
+    table: meeting
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        slot:
+            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+        fromSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        toSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+    manyToMany:
+        fromParticipants:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinTable:
+                name: meeting_from_participants
+        toParticipants:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinTable:
+                name: meeting_to_participants

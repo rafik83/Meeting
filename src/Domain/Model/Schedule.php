@@ -88,7 +88,7 @@ class Schedule
      *
      * @return ArrayCollection
      */
-    public function getMeetingSlots()
+    public function getSlots()
     {
         return $this->meetingSlots;
     }

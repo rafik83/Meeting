@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
-use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
@@ -34,6 +34,15 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Meeting $meeting)
+    {
+        $this->entityManager->persist($meeting);
+        $this->entityManager->flush($meeting);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant)
     {
         $queryBuilder = $this
@@ -41,9 +50,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->createQueryBuilder()
             ->select('meeting, fromSheet, toSheet, meetingSlot')
             ->from(Meeting::class, 'meeting')
-            ->join('meeting.from', 'fromSheet')
-            ->join('meeting.to', 'toSheet')
-            ->join('meeting.meetingSlot', 'meetingSlot', 'WITH', 'meetingSlot.schedule = :schedule')
+            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.slot', 'meetingSlot', 'WITH', 'meetingSlot.schedule = :schedule')
             ->setParameter('schedule', $schedule)
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')

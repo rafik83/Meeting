@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScheduleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\ScheduleSlotView;
@@ -128,7 +128,7 @@ class ScheduleBuilder
     {
         $slots = [];
 
-        foreach ($schedule->getMeetingSlots() as $meetingSlot) {
+        foreach ($schedule->getSlots() as $meetingSlot) {
             $slots[$meetingSlot->getId()] = new ScheduleSlotView(
                 $meetingSlot->getId(),
                 'Vide',
@@ -141,13 +141,13 @@ class ScheduleBuilder
         $meetings = $this->meetingRepository->findByScheduleAndParticipant($schedule, $participant);
 
         foreach ($meetings as $meeting) {
-            $sheet = $meeting->getFrom() === $participant->getSheet() ? $meeting->getTo() : $meeting->getFrom();
+            $sheet = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();
 
-            $slots[$meeting->getMeetingSlot()->getId()] = new ScheduleSlotView(
+            $slots[$meeting->getSlot()->getId()] = new ScheduleSlotView(
                 $meeting->getId(),
                 $this->sheetInfoGuesser->guessSheetInfo($sheet),
-                $meeting->getMeetingSlot()->getBegin(),
-                $meeting->getMeetingSlot()->getEnd(),
+                $meeting->getSlot()->getBegin(),
+                $meeting->getSlot()->getEnd(),
                 true
             );
         }
