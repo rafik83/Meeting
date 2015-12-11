@@ -54,7 +54,7 @@
         'packageTemplate': sheetDataView.type.packageTemplate,
     } %}
 
-    {% if sheetDataView.type.packageTemplate is not empty %}
+    {% if sheetDataView.type.packageTemplate is not empty and sheetDataView.orders is empty %}
         <hr>
         <div class="text-center">
             <a href="{{ path('event_sheet_package_update_step', {

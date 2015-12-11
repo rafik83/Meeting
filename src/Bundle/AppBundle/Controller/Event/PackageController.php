@@ -41,6 +41,7 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessPackageStepNotExists($sheet, $step);
+        $this->denyAccessAfterFirstOrderGenerated($sheet);
 
         $updateStep = new UpdateStep($sheet, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
@@ -64,7 +65,8 @@ class PackageController extends BaseController
                     $form,
                     $packageTemplate[$step],
                     $updateStep->packageData,
-                    $form->get('packageData'));
+                    $form->get('packageData')
+                );
             } catch (ForgotToAddQuantityException $exception) {
                 $packageTemplate = $sheet->getTypePackageTemplate();
                 $this->addErrorOnForm(
@@ -96,8 +98,10 @@ class PackageController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
+        $this->denyAccessAfterFirstOrderGenerated($sheet);
 
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
+            ->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
@@ -117,6 +121,18 @@ class PackageController extends BaseController
         $packageTemplate = $sheet->getTypePackageTemplate();
 
         if (!isset($packageTemplate[$step])) {
+            throw $this->createNotFoundException();
+        }
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @throws NotFoundHttpException
+     */
+    private function denyAccessAfterFirstOrderGenerated(Sheet $sheet)
+    {
+        if (!$sheet->getOrders()->isEmpty()) {
             throw $this->createNotFoundException();
         }
     }
