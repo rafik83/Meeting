@@ -19,6 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingTyp
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MeetingRequestController extends Controller
 {
@@ -54,13 +55,13 @@ class MeetingRequestController extends Controller
             'event'           => $event,
             'meeting_request' => $meetingRequest,
         ]);
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
 
             $this
                 ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler')
                 ->handle($command);
-
 
             return $this->redirectToRoute('admin_meeting_request_list', ['id' => $event->getId()]);
         }

@@ -56,6 +56,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@knp_paginator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:

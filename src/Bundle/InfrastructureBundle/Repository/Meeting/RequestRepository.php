@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 
 class RequestRepository implements RequestRepositoryInterface
 {
@@ -30,15 +32,22 @@ class RequestRepository implements RequestRepositoryInterface
     private $paginator;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * RequestRepository constructor.
      *
      * @param EntityManager      $entityManager
      * @param PaginatorInterface $paginator
+     * @param SheetInfoGuesser   $sheetInfoGuesser
      */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
+    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator, SheetInfoGuesser $sheetInfoGuesser)
     {
-        $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
+        $this->entityManager    = $entityManager;
+        $this->paginator        = $paginator;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
@@ -124,6 +133,20 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event);
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit);
+        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
+
+        $pagination->setItems(array_map(function (Request $request) {
+            return new RequestView(
+                $request->getId(),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getFrom()),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getTo()),
+                $request->getState(),
+                $request->getDescription(),
+                $request->getCreatedAt(),
+                ''
+            );
+        }, $pagination->getItems()));
+
+        return $pagination;
     }
 }

@@ -14,8 +14,8 @@
         <tbody>
             {% for meeting_request in meeting_requests %}
                 <tr>
-                    <td>{{ meeting_request.from.id }}</td>
-                    <td>{{ meeting_request.to.id }}</td>
+                    <td>{{ meeting_request.sheetNameFrom }}</td>
+                    <td>{{ meeting_request.sheetNameTo }}</td>
                     <td>
                         <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
                     </td>

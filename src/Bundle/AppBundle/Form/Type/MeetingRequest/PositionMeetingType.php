@@ -38,7 +38,7 @@ class PositionMeetingType extends AbstractType
                 'choices_as_values' => true,
                 'multiple'          => true,
                 'expanded'          => true,
-                'choices'           => $options['meeting_request']->getFrom()->getParticipants(),
+                'choices'           => $options['meeting_request']->getFrom()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
                 }
@@ -47,7 +47,7 @@ class PositionMeetingType extends AbstractType
                 'choices_as_values' => true,
                 'multiple'          => true,
                 'expanded'          => true,
-                'choices'           => $options['meeting_request']->getTo()->getParticipants(),
+                'choices'           => $options['meeting_request']->getTo()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantInfo($participant);
                 }
@@ -68,7 +68,10 @@ class PositionMeetingType extends AbstractType
                         $meetingSlot->getBegin()->format('H\hi'),
                         $meetingSlot->getEnd()->format('H\hi')
                     );
-                }
+                },
+                'choice_attr' => function (MeetingSlot $meetingSlot) {
+                    return ['data-id' => $meetingSlot->getId()];
+                },
             ]);
     }
 
