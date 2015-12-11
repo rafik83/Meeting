@@ -26,11 +26,10 @@ interface LibCartInterface
     public function prepare(ProductInterface $product, array $dataValue, $locale);
 
     /**
-     * @param ProductInterface $product
      * @param Including        $including
      * @param string           $locale
      *
      * @return CartRow|null
      */
-    public function including(ProductInterface $product, Including $including, $locale);
+    public function including(Including $including, $locale);
 }

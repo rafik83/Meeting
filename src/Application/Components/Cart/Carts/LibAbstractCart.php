@@ -27,13 +27,11 @@ class LibAbstractCart implements LibCartInterface
     /**
      * {@inheritdoc}
      */
-    public function including(ProductInterface $product, Including $including, $locale)
+    public function including(Including $including, $locale)
     {
         $cartRow = null;
 
-        if (null !== $product
-            && null !== $including
-        ) {
+        if (null !== $including) {
             $cartRow = new CartRow(
                 $including->getProductIncluded()->getLabel($locale),
                 $including->getQuantity(),

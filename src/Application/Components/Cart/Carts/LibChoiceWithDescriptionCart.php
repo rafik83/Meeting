@@ -24,6 +24,7 @@ class LibChoiceWithDescriptionCart extends LibAbstractCart
         $cartRow = null;
 
         if (null !== $product
+            && !empty($product->getOptions())
             && isset($dataValue)
             && isset($dataValue['value'])
         ) {
@@ -36,31 +37,11 @@ class LibChoiceWithDescriptionCart extends LibAbstractCart
 
             if (!empty($product->getChoice($dataValue['value'])->getInclude())) {
                 foreach ($product->getChoice($dataValue['value'])->getInclude() as $including) {
-                    $cartRow->addInclude($this->including($product, $including, $locale));
+                    $cartRow->addInclude($this->including($including, $locale));
                 }
             }
         }
 
-
-        return $cartRow;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addInclude(ProductInterface $product, Including $including, $locale)
-    {
-        $cartRow = null;
-
-        if (null !== $product
-            && null !== $including
-        ) {
-            $cartRow = new CartRow(
-                $including->getProductIncluded()->getLabel($locale),
-                $including->getQuantity(),
-                0
-            );
-        }
 
         return $cartRow;
     }

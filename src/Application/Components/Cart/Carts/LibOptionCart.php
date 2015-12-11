@@ -23,6 +23,7 @@ class LibOptionCart extends LibAbstractCart
         $cartRow = null;
 
         if (null !== $product
+            && !empty($product->getOptions())
             && isset($dataValue['value'])
             && $dataValue['value'] !== false
         ) {
@@ -34,7 +35,7 @@ class LibOptionCart extends LibAbstractCart
 
             if (!empty($product->getInclude())) {
                 foreach ($product->getInclude() as $including) {
-                    $cartRow->addInclude($this->including($product, $including, $locale));
+                    $cartRow->addInclude($this->including($including, $locale));
                 }
             }
         }

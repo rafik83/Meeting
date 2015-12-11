@@ -61,12 +61,6 @@ class CartBuilder
                     }
                 }
 
-                if (null !== $cartRow && !empty($productObject->getInclude())) {
-                    foreach ($productObject->getInclude() as $including) {
-                        $this->addInclude($productObject, $including, $locale);
-                    }
-                }
-
                 if (null !== $cartRow) {
                     $cartStep->addCartRow($cartRow);
                 }
