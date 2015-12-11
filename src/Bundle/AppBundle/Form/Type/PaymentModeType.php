@@ -24,7 +24,7 @@ class PaymentModeType extends AbstractType
         $resolver->setDefaults([
             'choices_as_values' => true,
             'choices'           => [
-                'Carte bancaire'  => 'credit cart',
+                'Carte bancaire'  => 'credit card',
                 'Virement'        => 'transfer',
                 'Chèque'          => 'bank cheque',
                 'Payer plus tard' => 'later',
