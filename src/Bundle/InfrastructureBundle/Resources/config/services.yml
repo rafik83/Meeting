@@ -63,6 +63,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
