@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\Unparticipate;
+use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\ParticipateHappeningType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\CancelType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -341,5 +343,50 @@ class ScheduleController extends Controller
             }, $meeting->getToParticipants()->toArray()),
         ]
         );
+    }
+
+    /**
+     * @ParamConverter(
+     *   "schedule",
+     *   class="Proximum\Vimeet\Domain\Model\Schedule",
+     *   options={"id" = "schedule_id"}
+     * )
+     *
+     * @ParamConverter(
+     *   "meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   options={"id" = "meeting_id"}
+     * )
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param Schedule  $schedule
+     * @param Meeting   $meeting
+     *
+     * @return RedirectResponse|Response
+     */
+    public function cancelMeetingAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
+    {
+        $cancel = new Cancel($meeting);
+        $form   = $this->createForm(new CancelType(), $cancel);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler')->handle($cancel);
+            $this->addFlash('success', 'flash.event.schedule.meeting.cancel.success');
+
+            return $this->redirectToRoute('event_sheet_schedule', [
+                'subdomain' => $request->attributes->get('subdomain'),
+                'id'        => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Event/Schedule:cancelMeeting.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'schedule'  => $schedule,
+            'meeting'   => $meeting,
+            'form'      => $form->createView(),
+        ]);
     }
 }
