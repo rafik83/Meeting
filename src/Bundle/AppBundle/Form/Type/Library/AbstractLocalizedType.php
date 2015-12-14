@@ -35,5 +35,6 @@ abstract class AbstractLocalizedType extends AbstractType
         $resolver->setAllowedTypes('template', ['array']);
         $resolver->setAllowedTypes('locale', ['string']);
         $resolver->setDefined(['sheet']);
+        $resolver->setDefaults(['product' => null]);
     }
 }

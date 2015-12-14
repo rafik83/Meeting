@@ -32,12 +32,18 @@ class CartRow
      */
     private $subTotal;
 
+    /**
+     * @var CartRow[]
+     */
+    private $include;
+
     public function __construct($label, $quantity, $unitPrice)
     {
         $this->label     = $label;
         $this->quantity  = $quantity;
         $this->unitPrice = $unitPrice;
         $this->subTotal  = $quantity * $unitPrice;
+        $this->include   = [];
     }
 
     /**
@@ -70,5 +76,21 @@ class CartRow
     public function getSubTotal()
     {
         return $this->subTotal;
+    }
+
+    /**
+     * @return CartRow[]
+     */
+    public function getInclude()
+    {
+        return $this->include;
+    }
+
+    /**
+     * @param CartRow $cartRow
+     */
+    public function addInclude(CartRow $cartRow)
+    {
+        $this->include[] = $cartRow;
     }
 }

@@ -11,15 +11,25 @@
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
+use Proximum\Vimeet\Application\Components\Product\Including;
+use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 
 interface LibCartInterface
 {
     /**
-     * @param array  $template
-     * @param array  $dataValue
-     * @param string $locale
+     * @param ProductInterface  $product
+     * @param array             $dataValue
+     * @param string            $locale
      *
      * @return CartRow|null
      */
-    public function prepare(array $template, array $dataValue, $locale);
+    public function prepare(ProductInterface $product, array $dataValue, $locale);
+
+    /**
+     * @param Including        $including
+     * @param string           $locale
+     *
+     * @return CartRow|null
+     */
+    public function including(Including $including, $locale);
 }

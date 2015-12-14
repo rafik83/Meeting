@@ -38,6 +38,7 @@ class CountryType extends AbstractType
                 return $options['template']['placeholder'][$options['locale']];
             },
             'translation_domain' => false,
+            'product'            => null,
         ]);
         $resolver->setDefined(['sheet']);
     }

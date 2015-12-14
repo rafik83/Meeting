@@ -11,27 +11,37 @@
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
+use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 
-class LibPlanningCart implements LibCartInterface
+class LibPlanningCart extends LibAbstractCart
 {
     /**
      * {@inheritdoc}
      */
-    public function prepare(array $template, array $dataValue, $locale)
+    public function prepare(ProductInterface $product, array $dataValue, $locale)
     {
         $cartRow = null;
 
-        if ([] !== $template
+        if (null !== $product
+            && !empty($product->getOptions())
             && isset($dataValue['planning'])
             && $dataValue['planning'] === true
             && isset($dataValue['planning_bought'])
             && $dataValue['planning_bought'] !== 0
         ) {
             $cartRow = new CartRow(
-                isset($template['label'][$locale]) ? $template['label'][$locale] : null,
-                isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null ? $dataValue['planning_bought'] : 0,
-                isset($template['unitPrice']) ? $template['unitPrice'] : null
+                $product->getLabel($locale),
+                isset($dataValue['planning_bought'])
+                && $dataValue['planning_bought'] !== null
+                ? $dataValue['planning_bought'] : 0,
+                $product->getUnitPrice()
             );
+
+            if (!empty($product->getInclude())) {
+                foreach ($product->getInclude() as $including) {
+                    $cartRow->addInclude($this->including($including, $locale));
+                }
+            }
         }
 
         return $cartRow;

@@ -12,24 +12,27 @@ namespace Tests\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibParticipantCart;
+use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduct;
 
 class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrepareWithEmptyTemplateAndData()
     {
-        $template  = [];
+        $product   = new LibParticipantProduct('key');
+        $product->setOptions([]);
         $dataValue = [];
         $locale    = 'fr';
 
         $optionCart = new LibParticipantCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
     {
-        $template  = [];
+        $product   = new LibParticipantProduct('key');
+        $product->setOptions([]);
         $dataValue = [
             "participant"        => true,
             "participant_bought" => 2,
@@ -37,14 +40,15 @@ class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
         $locale    = 'fr';
 
         $optionCart = new LibParticipantCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
     {
-        $template = [
+        $product  = new LibParticipantProduct('key');
+        $product->setOptions([
             "label"       => [
                 "fr" => "Ajouter des participants",
                 "en" => "Add participants",
@@ -56,7 +60,7 @@ class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
             "required"    => false,
             "type"        => "lib_participant",
             "unitPrice"   => 400,
-        ];
+        ]);
 
         $dataValue = [
             'participant'        => true,
@@ -68,7 +72,7 @@ class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr';
 
         $optionCart = new LibParticipantCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals($result, $cart);
     }

@@ -11,25 +11,33 @@
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
+use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 
-class LibOptionCart implements LibCartInterface
+class LibOptionCart extends LibAbstractCart
 {
     /**
      * {@inheritdoc}
      */
-    public function prepare(array $template, array $dataValue, $locale)
+    public function prepare(ProductInterface $product, array $dataValue, $locale)
     {
         $cartRow = null;
 
-        if ([] !== $template
+        if (null !== $product
+            && !empty($product->getOptions())
             && isset($dataValue['value'])
             && $dataValue['value'] !== false
         ) {
             $cartRow = new CartRow(
-                isset($template['label'][$locale]) ? $template['label'][$locale] : null,
+                $product->getLabel($locale),
                 isset($dataValue['quantity']) && $dataValue['quantity'] !== null ? $dataValue['quantity'] : 1,
-                isset($template['unitPrice']) ? $template['unitPrice'] : null
+                $product->getUnitPrice()
             );
+
+            if (!empty($product->getInclude())) {
+                foreach ($product->getInclude() as $including) {
+                    $cartRow->addInclude($this->including($including, $locale));
+                }
+            }
         }
 
         return $cartRow;

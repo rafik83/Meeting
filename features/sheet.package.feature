@@ -49,8 +49,13 @@ Feature: Choose a package
     And I press "form.update_step.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.package.update_step.success"
-    And I check the "Je ne prends pas" radio
-    And I check the "Formule 3" radio
+    And I should see "event.sheet.package.include"
+    And I check "Logo dans les emails promotionnels de l'événement"
+    And I press "form.update_step.children.submit.label"
+    Then the response status code should be 200
+    And I check "Bannière"
+    And I select the quantity "1" for the checkbox "Bannière"
+    And I press "form.update_step.children.submit.label"
     And I check "Option payant avec sélection de quantité"
     And I select the quantity "2" for the checkbox "Option payant avec sélection de quantité"
     And I press "form.update_step.children.submit.label"
@@ -65,6 +70,7 @@ Feature: Choose a package
     And the response status code should be 200
     And I should see "flash.package.final_step.success"
     And I should see "event.sheet.cart.label.totalPrice"
+    And I should see "30 280,00 €"
     And I follow "event.sheet.cart.label.billingStep"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/billing"
     And the response status code should be 200

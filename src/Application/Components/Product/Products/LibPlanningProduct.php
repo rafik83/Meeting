@@ -1,0 +1,60 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Product\Products;
+
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class LibPlanningProduct extends AbstractDescriptionTypeUnitPriceOptions
+{
+    /**
+     * @var int
+     */
+    private $maxPlanning;
+
+    /**
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        parent::__construct($key);
+
+        $this->maxPlanning = 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configure(OptionsResolver $optionsResolver)
+    {
+        parent::configure($optionsResolver);
+
+        $optionsResolver->setRequired(['label', 'type', 'required', 'unitPrice']);
+        $optionsResolver->setDefined([
+            'description',
+        ]);
+    }
+
+    /**
+     * @param int $maxPlanning
+     */
+    public function setMaxPlaning($maxPlanning)
+    {
+        $this->maxPlanning = $maxPlanning;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPlanning()
+    {
+        return $this->maxPlanning;
+    }
+}

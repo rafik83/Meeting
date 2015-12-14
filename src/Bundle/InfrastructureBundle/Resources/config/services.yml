@@ -226,6 +226,8 @@ services:
     #
     vimeet_infrastructure.application.components.cart.cart_builder:
         class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+    vimeet_infrastructure.application.components.product.product_builder:
+        class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
 
     #
     # Carts components
@@ -246,10 +248,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
         tags:
             - { name: cart, cart: lib_planning }
-    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
-        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
-        tags:
-            - { name: cart, cart: upload_with_choices }
 
     #
     # Sheet Component

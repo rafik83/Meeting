@@ -43,11 +43,21 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
+        $stepObject = $template->getStep($step);
+
+        if ($stepObject === null) {
+            throw $this->createNotFoundException();
+        }
+
         $updateStep = new UpdateStep($sheet, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
+            'step'     => $stepObject,
+
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -100,8 +110,15 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->create($sheet->getTypePackageTemplate(), $sheet->getPackageData(), $request->getLocale());
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
+        $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
+            ->generate(
+                $template,
+                $sheet->getPackageData(),
+                $request->getLocale()
+            )
+        ;
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
