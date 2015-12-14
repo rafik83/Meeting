@@ -32,6 +32,11 @@ class ProductBuilder
         return $this->create($sheet->getTypePackageTemplate());
     }
 
+    /**
+     * @param Type $type
+     *
+     * @return Template
+     */
     public function createFromType(Type $type)
     {
         return $this->create($type->getPackageTemplate());

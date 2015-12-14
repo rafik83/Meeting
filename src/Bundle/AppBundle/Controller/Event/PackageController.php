@@ -47,7 +47,7 @@ class PackageController extends BaseController
         $stepObject = $template->getStep($step);
 
         if ($stepObject === null) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         $updateStep = new UpdateStep($sheet, $step);
