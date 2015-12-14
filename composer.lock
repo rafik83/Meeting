@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bd4308b637ce8bf01f26d0620cdb3308",
-    "content-hash": "11e33a178bb56d61f6acfd0703aac7f5",
+    "hash": "318def8aa8fe5282c0fe1026a5f8ddfd",
+    "content-hash": "c637ae48e50f5e28a79ab15f5018fc42",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1000,29 +1000,28 @@
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",
-            "version": "1.0.0",
+            "version": "v2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle.git",
-                "reference": "b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f"
+                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f",
-                "reference": "b96b8aa1db10cdc2b3051d503c5bf4cbcf91462f",
+                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/9633412138630396fd6ca6515d5bc4fec2265ad4",
+                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.4"
             },
             "suggest": {
-                "elao/form-bundle": "~0.1@dev",
-                "elao/theme-bundle": "~0.1@dev"
+                "elao/form-bundle": "~2.0@dev"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -1052,7 +1051,7 @@
                 "theme-bundle",
                 "twitter"
             ],
-            "time": "2015-07-23 09:41:56"
+            "time": "2015-12-14 09:15:39"
         },
         {
             "name": "friendsofsymfony/elastica-bundle",
