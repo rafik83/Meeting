@@ -20,3 +20,5 @@ parameters:
     secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
 
     domain: vimeet.proximum.dev
+
+    timezone_default: Europe/Paris
