@@ -84,6 +84,9 @@ class BillingController extends BaseController
      */
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
         $createOrder = new CreateOrder(
             $sheet,
             Order::STATE_UNPAID,
