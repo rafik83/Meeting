@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
-
     /**
      * @param EventView $eventView
      * @param Sheet     $sheet
@@ -33,7 +32,6 @@ class OrderController extends BaseController
             'sheet'     => $sheet,
         ]);
     }
-
 
     /**
      * @ParamConverter(
