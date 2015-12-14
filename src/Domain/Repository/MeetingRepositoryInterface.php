@@ -14,5 +14,8 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 
 interface MeetingRepositoryInterface
 {
+    /**
+     * @param Meeting $meeting
+     */
     public function add(Meeting $meeting);
 }

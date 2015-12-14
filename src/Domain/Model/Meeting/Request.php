@@ -67,7 +67,7 @@ class Request
     private $refuseMessage;
 
     /**
-     * @var Meeting
+     * @var null|Meeting
      */
     private $meeting;
 
@@ -191,7 +191,7 @@ class Request
     /**
      * Get meeting
      *
-     * @return Meeting
+     * @return null|Meeting
      */
     public function getMeeting()
     {

@@ -65,7 +65,7 @@ class Meeting
     /**
      * Get id
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {

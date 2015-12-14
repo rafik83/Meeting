@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,13 +23,23 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class PositionMeetingType extends AbstractType
 {
+    /**
+     * @var ParticipantInfoGuesser
+     */
     private $participantInfoGuesser;
 
+    /**
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     */
     public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
     {
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -85,6 +94,9 @@ class PositionMeetingType extends AbstractType
             ]);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['meeting_request', 'event', 'view_timezone']);
