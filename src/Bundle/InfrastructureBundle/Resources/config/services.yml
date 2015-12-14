@@ -69,6 +69,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.meeting_slot_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
         arguments:
