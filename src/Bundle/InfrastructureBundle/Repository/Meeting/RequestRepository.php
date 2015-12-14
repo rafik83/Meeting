@@ -131,7 +131,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->where('request.meeting IS NULL');
 
         $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
 
