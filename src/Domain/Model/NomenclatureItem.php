@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * "Nomenclature"
+ * "Nomenclature".
  */
 class NomenclatureItem
 {
@@ -33,7 +33,7 @@ class NomenclatureItem
     private $translations;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -41,7 +41,7 @@ class NomenclatureItem
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */

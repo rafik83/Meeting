@@ -17,7 +17,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WhatType extends AbstractType
+class DontSeeWhatType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -28,11 +28,11 @@ class WhatType extends AbstractType
         $sheetTemplate       = $this->getSheetTemplate($options['who']);
 
         $builder
-            ->add('participant', new WhatCheckboxesType(), [
+            ->add('participant', WhatCheckboxesType::class, [
                 'template' => $participantTemplate,
                 'locale'   => $options['locale'],
             ])
-            ->add('sheet', new WhatCheckboxesType(), [
+            ->add('sheet', WhatCheckboxesType::class, [
                 'template' => $sheetTemplate,
                 'locale'   => $options['locale'],
             ])
@@ -50,14 +50,6 @@ class WhatType extends AbstractType
         ]);
 
         $resolver->setRequired(['who', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'dont_see_what';
     }
 
     /**
@@ -113,7 +105,7 @@ class WhatType extends AbstractType
             $intersect = ($intersect === null ? $template : $this->arrayIntersectRecursive($intersect, $template));
         }
 
-        return $intersect ? : [];
+        return $intersect ?: [];
     }
 
     /**

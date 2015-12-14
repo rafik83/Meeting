@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 /**
- * "Participant"
+ * "Participant".
  */
 class Participant
 {
@@ -55,7 +55,7 @@ class Participant
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -65,7 +65,7 @@ class Participant
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -75,7 +75,7 @@ class Participant
     }
 
     /**
-     * Get sheet
+     * Get sheet.
      *
      * @return Sheet
      */
@@ -85,7 +85,7 @@ class Participant
     }
 
     /**
-     * Is owner
+     * Is owner.
      *
      * @return bool
      */
@@ -95,7 +95,7 @@ class Participant
     }
 
     /**
-     * Get data
+     * Get data.
      *
      * @return array
      */
@@ -105,7 +105,7 @@ class Participant
     }
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
      *

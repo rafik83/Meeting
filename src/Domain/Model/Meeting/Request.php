@@ -176,11 +176,15 @@ class Request
     }
 
     /**
-     * @param Participant $toParticipant
+     * @param Participant $participant
+     *
+     * @return Request
      */
-    public function addToParticipant(Participant $toParticipant)
+    public function addToParticipant(Participant $participant)
     {
-        $this->toParticipants->add($toParticipant);
+        $this->toParticipants[] = $participant;
+
+        return $this;
     }
 
     /**

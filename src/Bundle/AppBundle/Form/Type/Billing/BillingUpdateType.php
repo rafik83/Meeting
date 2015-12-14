@@ -15,7 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class BillingUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('billingData', new DataType(), [
+            ->add('billingData', DataType::class, [
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'label'    => false,
@@ -37,18 +37,10 @@ class UpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Billing\Update',
-            'intention'  => 'update_sheet_billing',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\Billing\Update',
+            'csrf_token_id' => 'update_sheet_billing',
         ]);
 
         $resolver->setRequired(['template', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'update_sheet_billing';
     }
 }

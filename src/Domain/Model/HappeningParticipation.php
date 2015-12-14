@@ -40,7 +40,7 @@ class HappeningParticipation
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -50,7 +50,7 @@ class HappeningParticipation
     }
 
     /**
-     * Get happening
+     * Get happening.
      *
      * @return Happening
      */
@@ -60,7 +60,7 @@ class HappeningParticipation
     }
 
     /**
-     * Get participant
+     * Get participant.
      *
      * @return Participant
      */

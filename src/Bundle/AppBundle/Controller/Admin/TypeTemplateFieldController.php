@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,9 +62,9 @@ class TypeTemplateFieldController extends Controller
      * @param string  $template
      * @param string  $key
      *
+     * @throws \Exception
      * @return Response|RedirectResponse
      *
-     * @throws \Exception
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $template, $key)
     {
@@ -72,11 +74,11 @@ class TypeTemplateFieldController extends Controller
 
         $update = new UpdateChoice($type, $template, $key);
 
-        $form   = $this->createForm('type_template_field_update_lib_choice', $update, [
+        $form = $this->createForm(TypeTemplateFieldUpdateLibChoiceType::class, $update, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this

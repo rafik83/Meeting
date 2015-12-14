@@ -15,11 +15,12 @@ use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,11 +43,11 @@ class ForgottenPasswordController extends BaseController
 
         $forgottenPassword = new ForgottenPassword($eventView, $request->getLocale());
 
-        $form = $this->createForm(new ForgottenPasswordType(), $forgottenPassword, [
+        $form = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
             'action' => $this->generateUrl('event_forgotten_password', ['subdomain' => $subdomain]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -93,14 +94,14 @@ class ForgottenPasswordController extends BaseController
         $subdomain   = $request->attributes->get('subdomain');
         $newPassword = new NewPassword($forgottenPasswordToken->getUser());
 
-        $form = $this->createForm(new NewPasswordType(), $newPassword, [
+        $form = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'subdomain' => $subdomain,
                 'token'     => $forgottenPasswordToken->getToken(),
             ]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.user.new_password_handler')->handle($newPassword);

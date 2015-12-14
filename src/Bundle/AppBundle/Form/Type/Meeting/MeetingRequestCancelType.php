@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
+use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MessageRequestType extends AbstractType
+class MeetingRequestCancelType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -21,7 +24,7 @@ class MessageRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', 'textarea', [
+            ->add('message', TextareaType::class, [
                 'required' => false,
             ]);
     }
@@ -29,8 +32,10 @@ class MessageRequestType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return 'meeting_request_message';
+        $resolver->setDefaults([
+            'data_class' => CancelRequest::class,
+        ]);
     }
 }

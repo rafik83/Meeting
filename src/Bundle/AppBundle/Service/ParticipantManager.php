@@ -153,7 +153,7 @@ class ParticipantManager
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -173,6 +173,6 @@ class ParticipantManager
             }
         }
 
-        return null;
+        return;
     }
 }

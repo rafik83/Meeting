@@ -49,12 +49,12 @@ class Unavailability
     {
         $this->schedule    = $schedule;
         $this->participant = $participant;
-        $this->begin       = $begin;
-        $this->end         = $end;
+        $this->begin       = $begin->modify($this->schedule->getDate()->format('Y-m-d'));
+        $this->end         = $end->modify($this->schedule->getDate()->format('Y-m-d'));
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -64,7 +64,7 @@ class Unavailability
     }
 
     /**
-     * Get schedule
+     * Get schedule.
      *
      * @return Schedule
      */
@@ -74,7 +74,7 @@ class Unavailability
     }
 
     /**
-     * Get participant
+     * Get participant.
      *
      * @return Participant
      */
@@ -84,7 +84,7 @@ class Unavailability
     }
 
     /**
-     * Get begin
+     * Get begin.
      *
      * @return \DateTime
      */
@@ -94,7 +94,7 @@ class Unavailability
     }
 
     /**
-     * Get end
+     * Get end.
      *
      * @return \DateTime
      */

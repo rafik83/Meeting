@@ -47,7 +47,7 @@ class MeetingSlot
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return mixed
      */
@@ -57,7 +57,7 @@ class MeetingSlot
     }
 
     /**
-     * Get schedule
+     * Get schedule.
      *
      * @return Schedule
      */
@@ -67,7 +67,7 @@ class MeetingSlot
     }
 
     /**
-     * Get begin
+     * Get begin.
      *
      * @return \DateTime
      */
@@ -77,7 +77,7 @@ class MeetingSlot
     }
 
     /**
-     * Get end
+     * Get end.
      *
      * @return \DateTime
      */

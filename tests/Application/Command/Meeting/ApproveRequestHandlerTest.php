@@ -34,22 +34,22 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user3        = new User('test3@test.fr', 'test', 'test', 'fr');
         $user4        = new User('test4@test.fr', 'test', 'test', 'fr');
         $dateTime     = new DateTime;
+        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
+        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
 
         $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1));
         $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
-        $sheetTo->getParticipants()->add($this->createParticipantMock($sheetTo, $user3, 3));
-        $sheetTo->getParticipants()->add($this->createParticipantMock($sheetTo, $user4, 4));
-
-        $participants   = [];
-        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
-        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
+        $sheetTo->getParticipants()->add($toParticipant3);
+        $sheetTo->getParticipants()->add($toParticipant4);
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user1);
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, 'test', $dateTime, $user1);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user1);
+        $expectedRequest->addToParticipant($this->createParticipantMock($sheetTo, $user3, 3));
+        $expectedRequest->addToParticipant($this->createParticipantMock($sheetTo, $user4, 4));
         $expectedRequest->setState(Request::STATE_APPROVED);
 
         $approveRequest = new ApproveRequest($request);
-        $approveRequest->toParticipants = ['0' => 3, '1' => 4];
+        $approveRequest->toParticipants = [$toParticipant3, $toParticipant4];
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
@@ -73,6 +73,7 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($participant, $id);
+        $property->setAccessible(false);
 
         return $participant;
     }

@@ -26,7 +26,7 @@ class ResetPasswordEventListener
     private $templating;
 
     /**
-     * @param \Swift_Mailer    $mailer
+     * @param \Swift_Mailer   $mailer
      * @param EngineInterface $templating
      */
     public function __construct(\Swift_Mailer $mailer, EngineInterface $templating)

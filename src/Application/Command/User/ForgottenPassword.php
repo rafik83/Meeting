@@ -39,4 +39,3 @@ class ForgottenPassword
         $this->locale    = $locale;
     }
 }
-

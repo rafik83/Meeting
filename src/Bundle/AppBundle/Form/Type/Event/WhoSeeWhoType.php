@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,8 +23,8 @@ class WhoSeeWhoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seer', 'who', ['event' => $options['event'], 'placeholder' => ''])
-            ->add('seeable', 'who', ['event' => $options['event'], 'placeholder' => ''])
+            ->add('seer', WhoType::class, ['event' => $options['event'], 'placeholder' => ''])
+            ->add('seeable', WhoType::class, ['event' => $options['event'], 'placeholder' => ''])
         ;
     }
 
@@ -33,13 +34,5 @@ class WhoSeeWhoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'who_see_who';
     }
 }

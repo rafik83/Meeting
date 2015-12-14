@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateChoiceType extends UpdateType
+class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
 {
     /**
      * {@inheritdoc}
@@ -23,11 +24,11 @@ class UpdateChoiceType extends UpdateType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('choices', 'collection', [
-                'type'         => new ChoiceType(),
-                'options'      => ['locales' => $options['locales']],
-                'allow_add'    => true,
-                'allow_delete' => true,
+            ->add('choices', CollectionType::class, [
+                'entry_type'    => ChoiceType::class,
+                'entry_options' => ['locales' => $options['locales']],
+                'allow_add'     => true,
+                'allow_delete'  => true,
             ])
         ;
     }
@@ -38,8 +39,8 @@ class UpdateChoiceType extends UpdateType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice',
-            'intention'  => 'type_template_field_update_lib_choice',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice',
+            'csrf_token_id' => 'type_template_field_update_lib_choice',
         ]);
 
         $resolver->setRequired(['locales']);
@@ -48,7 +49,7 @@ class UpdateChoiceType extends UpdateType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'type_template_field_update_lib_choice';
     }

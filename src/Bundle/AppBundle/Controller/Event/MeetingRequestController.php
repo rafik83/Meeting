@@ -10,15 +10,19 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,7 +81,7 @@ class MeetingRequestController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param Request      $request
      * @param EventView    $eventView
      * @param CategoryView $categoryView
      * @param Sheet        $to
@@ -98,11 +102,11 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $createRequest = new CreateRequest($from, $to, new DateTime, $this->getUser());
-        $form          = $this->createForm('meeting_request_create', $createRequest, [
-            'sheet' => $from
+        $createRequest = new CreateRequest($from, $to, new \DateTime(), $this->getUser());
+        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
+            'sheet' => $from,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -128,9 +132,9 @@ class MeetingRequestController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
@@ -148,10 +152,10 @@ class MeetingRequestController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $approveRequest = new ApproveRequest($meetingRequest);
-        $form           = $this->createForm('meeting_request_approve', $approveRequest, [
-            'sheet' => $meetingRequest->getTo()
+        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
+            'sheet' => $meetingRequest->getTo(),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -177,9 +181,9 @@ class MeetingRequestController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param EventView $eventView
-     * @param Sheet $sheet
+     * @param Request        $request
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
@@ -197,8 +201,8 @@ class MeetingRequestController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm('meeting_request_message', $refuseRequest);
-        $form->add('submit', 'submit');
+        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -248,7 +252,7 @@ class MeetingRequestController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm('meeting_request_message', $cancelRequest);
+        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -58,7 +58,7 @@ class UpdateHandler
             }
 
             if (!$category->getTypes()->contains($eventTypes[$typeId])) {
-                 $category->getTypes()->add($eventTypes[$typeId]);
+                $category->getTypes()->add($eventTypes[$typeId]);
             }
         }
 

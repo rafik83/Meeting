@@ -15,7 +15,7 @@ class UnsetStrategy extends AbstractRecursiveStrategy
     /**
      * {@inheritdoc}
      */
-    function doApply(&$data, $key)
+    public function doApply(&$data, $key)
     {
         unset($data[$key]);
     }

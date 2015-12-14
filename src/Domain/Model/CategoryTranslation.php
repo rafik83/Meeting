@@ -33,7 +33,7 @@ class CategoryTranslation
     private $title;
 
     /**
-     * CategoryTranslation constructor
+     * CategoryTranslation constructor.
      *
      * @param Category $category
      * @param string   $locale

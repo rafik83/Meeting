@@ -79,7 +79,7 @@ form:
                 label: Coordonnées du participant
             submit:
                 label: Envoyer
-    update_sheet_block:
+    update_block:
         children:
             data:
                 label: Modifier les informations
@@ -89,11 +89,11 @@ form:
         children:
             submit:
                 label: Supprimer
-    update_sheet_package_step:
+    update_step:
         children:
             submit:
                 label: Valider et aller à la suite
-    update_sheet_billing:
+    billing_update:
         children:
             submit:
                 label: Enregistrer
@@ -147,7 +147,18 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
-    category:
+    category_create:
+        children:
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            types:
+                label: Sélectionner les types de participation
+            submit:
+                label: Enregistrer
+    category_update:
         children:
             translations:
                 prototype:
@@ -206,10 +217,16 @@ form:
                 label: Choisir des participants pour ce rendez-vous
             submit:
                 label: Envoyer
-    meeting_request_message:
-        children:
+    meeting_request_refuse: 
+        children: 
             message:
-                label: Expliquer pourquoi
+                label: Expliquer pourquoi 
+            submit: 
+                label: Envoyer 
+    meeting_request_cancel:
+        children: 
+            message: 
+                label: Expliquer pourquoi 
             submit:
                 label: Envoyer
     add_unavailability:
@@ -236,9 +253,3 @@ form:
                 label: Participants concernés
             submit:
                 label: Participer
-
-country:
-    placeholder: --- Sélectionner un pays ---
-
-choice:
-    placeholder: --- Sélectionner un item  ---

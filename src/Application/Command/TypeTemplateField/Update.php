@@ -125,6 +125,6 @@ class Update
             }
         }
 
-        return null;
+        return;
     }
 }

@@ -54,7 +54,7 @@ class SheetInfoGuesser
         $sheetData     = $sheet->getData();
 
         foreach ($sheetTemplate as $blockKey => $block) {
-            if (isset($block['template'])){
+            if (isset($block['template'])) {
                 foreach ($block['template'] as $templateKey => $template) {
                     if (isset($template['type'])
                         && $template['type'] === 'lib_organisation'

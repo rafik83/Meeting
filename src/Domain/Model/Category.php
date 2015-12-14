@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * "Categorie de participant"
+ * "Categorie de participant".
  */
 class Category implements WhoInterface
 {
@@ -55,7 +55,7 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -65,7 +65,7 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get types
+     * Get types.
      *
      * @return ArrayCollection
      */
@@ -75,7 +75,7 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get translations
+     * Get translations.
      *
      * @return ArrayCollection
      */
@@ -85,7 +85,7 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get filters
+     * Get filters.
      *
      * @return array
      */
@@ -95,7 +95,7 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return Event
      */

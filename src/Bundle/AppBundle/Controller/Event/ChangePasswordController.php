@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\User\ChangePassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ChangePasswordType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,12 +35,12 @@ class ChangePasswordController extends Controller
 
         $changePassword = new ChangePassword($this->getUser());
 
-        $form = $this->createForm(new ChangePasswordType(), $changePassword, [
+        $form = $this->createForm(ChangePasswordType::class, $changePassword, [
             'action' => $this->generateUrl('event_change_password', ['subdomain' => $subdomain]),
             'method' => 'POST',
         ]);
 
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.application.command.user.change_password')->handle($changePassword);

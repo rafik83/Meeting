@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 /**
- * "Template"
+ * "Template".
  */
 class Template
 {
@@ -76,7 +76,7 @@ class Template
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -86,7 +86,7 @@ class Template
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class Template
     }
 
     /**
-     * Get participant
+     * Get participant.
      *
      * @return array
      */
@@ -106,7 +106,7 @@ class Template
     }
 
     /**
-     * Get sheet
+     * Get sheet.
      *
      * @return array
      */
@@ -116,7 +116,7 @@ class Template
     }
 
     /**
-     * Get package
+     * Get package.
      *
      * @return array
      */
@@ -126,7 +126,7 @@ class Template
     }
 
     /**
-     * Get preview
+     * Get preview.
      *
      * @return string
      */
@@ -136,7 +136,7 @@ class Template
     }
 
     /**
-     * Get view
+     * Get view.
      *
      * @return string
      */

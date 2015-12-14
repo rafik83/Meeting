@@ -26,8 +26,9 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleController extends Controller
@@ -72,7 +73,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $command = new Add($schedule);
-        $form    = $this->createForm(new AddUnavailabilityType(), $command, [
+        $form    = $this->createForm(AddUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', [
                 'subdomain'   => $request->attributes->get('subdomain'),
                 'id'          => $sheet->getId(),
@@ -81,7 +82,7 @@ class ScheduleController extends Controller
             'method' => 'POST',
             'sheet'  => $sheet,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler')->handle($command);
@@ -130,7 +131,7 @@ class ScheduleController extends Controller
         }
 
         $command = new Update($unavailability);
-        $form    = $this->createForm(new UpdateUnavailabilityType(), $command, [
+        $form    = $this->createForm(UpdateUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
                 'subdomain'         => $request->attributes->get('subdomain'),
                 'id'                => $sheet->getId(),
@@ -139,7 +140,7 @@ class ScheduleController extends Controller
             ]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.update_handler')->handle($command);
@@ -227,11 +228,11 @@ class ScheduleController extends Controller
 
         // Command and form
         $command = new Participate($happening, [$participant]);
-        $form    = $this->createForm(new ParticipateHappeningType(), $command, [
+        $form    = $this->createForm(ParticipateHappeningType::class, $command, [
             'sheet'     => $sheet,
             'happening' => $happening,
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         // Handle form
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

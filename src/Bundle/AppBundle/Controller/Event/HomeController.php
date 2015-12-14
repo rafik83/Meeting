@@ -19,6 +19,7 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class HomeController extends BaseController
 {
     /**
-     * Event home
+     * Event home.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -57,7 +58,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * Register an account
+     * Register an account.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -79,14 +80,14 @@ class HomeController extends BaseController
         $register         = new Register();
         $register->locale = $request->getLocale();
 
-        $form = $this->createForm(new RegisterType(), $register, [
+        $form = $this->createForm(RegisterType::class, $register, [
             'action' => $this->generateUrl('event_register', [
                 'typeView'  => $typeView->id,
                 'subdomain' => $request->attributes->get('subdomain'),
             ]),
             'method' => 'POST',
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -114,7 +115,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * Create a participation
+     * Create a participation.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -131,13 +132,13 @@ class HomeController extends BaseController
 
         // Create participate form
         $create = new Create();
-        $form   = $this->createForm(new ParticipantCreateType(), $create, [
+        $form   = $this->createForm(ParticipantCreateType::class, $create, [
             'locale'   => $eventView->locale,
             'template' => $this
                 ->get('vimeet_infrastructure.repository.type_repository')
                 ->getParticipantTemplate($typeView->id),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);

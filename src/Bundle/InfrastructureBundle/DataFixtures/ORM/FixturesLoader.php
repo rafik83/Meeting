@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Fixtures loader
+ * Fixtures loader.
  */
 class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
 {

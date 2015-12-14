@@ -1,6 +1,6 @@
 default:
-    pattern: /
-    host: "%domain%"
+    path: /
+    host: '%domain%'
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
         path: /%locale%/
@@ -9,17 +9,17 @@ default:
 
 default_event:
     path: /
-    host: "{subdomain}.%domain%"
+    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: "[a-zA-Z0-9\-]+"
+        subdomain: '[a-zA-Z0-9\-]+'
     methods: [GET]
 
 vimeet_admin:
-    resource: "@VimeetAppBundle/Resources/config/routing/admin.yml"
+    resource: '@VimeetAppBundle/Resources/config/routing/admin.yml'
     prefix:   /admin
 
 vimeet_event:
-    resource: "@VimeetAppBundle/Resources/config/routing/event.yml"
+    resource: '@VimeetAppBundle/Resources/config/routing/event.yml'
     prefix:   /{_locale}
     defaults:
         _locale: %locale%

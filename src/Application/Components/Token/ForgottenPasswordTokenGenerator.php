@@ -51,6 +51,6 @@ class ForgottenPasswordTokenGenerator
      */
     private function generateToken(User $user)
     {
-        return sha1(uniqid().$user->getId().uniqid());
+        return sha1(uniqid() . $user->getId() . uniqid());
     }
 }

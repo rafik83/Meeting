@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,7 +22,7 @@ abstract class AbstractAddParticipantType extends AbstractParticipantType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email')
+            ->add('email', EmailType::class)
         ;
 
         parent::buildForm($builder, $options);
@@ -33,13 +34,5 @@ abstract class AbstractAddParticipantType extends AbstractParticipantType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'abstract_add_participant';
     }
 }

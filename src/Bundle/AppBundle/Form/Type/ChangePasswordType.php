@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,9 +24,9 @@ class ChangePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('currentPassword', 'password')
-            ->add('plainPassword', 'repeated', [
-                'type'            => 'password',
+            ->add('currentPassword', PasswordType::class)
+            ->add('plainPassword', RepeatedType::class, [
+                'type'            => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;
@@ -36,15 +38,7 @@ class ChangePasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'intention'  => 'change_password',
+            'csrf_token_id' => 'change_password',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'change_password';
     }
 }

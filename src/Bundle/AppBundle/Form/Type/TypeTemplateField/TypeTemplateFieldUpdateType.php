@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class TypeTemplateFieldUpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,13 +28,13 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', 'collection', [
-                'type' => 'text',
+            ->add('label', CollectionType::class, [
+                'entry_type' => TextType::class,
             ])
-            ->add('required', 'checkbox', [
+            ->add('required', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('private', 'checkbox', [
+            ->add('private', CheckboxType::class, [
                 'required' => false,
             ])
         ;
@@ -43,8 +46,8 @@ class UpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\TypeTemplateField\Update',
-            'intention'  => 'type_template_field_update',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\TypeTemplateField\Update',
+            'csrf_token_id' => 'type_template_field_update',
         ]);
     }
 
@@ -54,7 +57,7 @@ class UpdateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['label'] as $labelTranslation) {
-            $localeLabel = Intl::getLocaleBundle()->getLocaleName($labelTranslation->vars['name']);
+            $localeLabel                     = Intl::getLocaleBundle()->getLocaleName($labelTranslation->vars['name']);
             $labelTranslation->vars['label'] = ucfirst($localeLabel);
         }
     }
@@ -62,7 +65,7 @@ class UpdateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'type_template_field_update';
     }

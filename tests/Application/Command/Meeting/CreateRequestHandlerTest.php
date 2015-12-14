@@ -32,14 +32,17 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user1        = new User('test@test.fr', 'test', 'test', 'fr');
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1));
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
+
+        $sheetFrom->getParticipants()->add($participant1);
+        $sheetFrom->getParticipants()->add($participant2);
 
         $dateTime     = new DateTime;
 
         $createRequest = new CreateRequest($sheetFrom, $sheetTo, $dateTime, $user1);
         $createRequest->description = 'test';
-        $createRequest->fromParticipants = ['0' => 1, '1' => 2];
+        $createRequest->fromParticipants = [$participant1, $participant2];
 
         $participants = [];
         $participants[] = $this->createParticipantMock($sheetFrom, $user1, 1);
@@ -68,6 +71,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($participant, $id);
+        $property->setAccessible(false);
 
         return $participant;
     }

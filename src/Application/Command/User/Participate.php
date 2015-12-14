@@ -55,10 +55,10 @@ class Participate
      */
     public function __construct(User $user, Event $event, Type $type, array $data)
     {
-        $this->user   = $user;
-        $this->event  = $event;
-        $this->type   = $type;
-        $this->data   = $data;
-        $this->owner  = true;
+        $this->user  = $user;
+        $this->event = $event;
+        $this->type  = $type;
+        $this->data  = $data;
+        $this->owner = true;
     }
 }

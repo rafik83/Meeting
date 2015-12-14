@@ -46,10 +46,10 @@ class ParticipantView
      */
     public function __construct($id, $data, $userId, $userEmail, $owner)
     {
-        $this->id         = $id;
-        $this->data       = $data;
-        $this->userId     = $userId;
-        $this->userEmail  = $userEmail;
-        $this->owner      = $owner;
+        $this->id        = $id;
+        $this->data      = $data;
+        $this->userId    = $userId;
+        $this->userEmail = $userEmail;
+        $this->owner     = $owner;
     }
 }

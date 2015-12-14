@@ -101,7 +101,7 @@ class ScheduleBuilder
     }
 
     /**
-     * @param Schedule    $schedule
+     * @param Schedule $schedule
      *
      * @return array
      */

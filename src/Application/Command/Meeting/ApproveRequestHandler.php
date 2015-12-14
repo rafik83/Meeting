@@ -32,14 +32,8 @@ class ApproveRequestHandler
      */
     public function handle(ApproveRequest $approveRequest)
     {
-        if (!empty($approveRequest->toParticipants)) {
-            foreach ($approveRequest->toParticipants as $toParticipant) {
-                foreach ($approveRequest->request->getTo()->getParticipants() as $sheetParticipant) {
-                    if ($sheetParticipant->getId() === $toParticipant) {
-                        $approveRequest->request->addToParticipant($sheetParticipant);
-                    }
-                }
-            }
+        foreach ($approveRequest->toParticipants as $participant) {
+            $approveRequest->request->addToParticipant($participant);
         }
 
         $this->requestRepository->set($approveRequest->request);

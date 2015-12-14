@@ -31,16 +31,8 @@ class AddParticipantType extends AbstractAddParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => 'Proximum\Vimeet\Application\Command\Participant\Add',
-            'intention'  => 'add_participant',
+            'data_class'    => 'Proximum\Vimeet\Application\Command\Participant\Add',
+            'csrf_token_id' => 'add_participant',
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'add_participant';
     }
 }

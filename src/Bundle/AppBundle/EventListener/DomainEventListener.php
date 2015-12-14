@@ -40,7 +40,7 @@ class DomainEventListener
     }
 
     /**
-     * Redirect to event fallback locale
+     * Redirect to event fallback locale.
      *
      * @param GetResponseEvent $getResponseEvent
      */

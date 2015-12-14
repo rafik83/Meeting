@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CatalogController extends Controller
 {
     /**
-     * Display catalog categories of an event
+     * Display catalog categories of an event.
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -44,7 +44,7 @@ class CatalogController extends Controller
     }
 
     /**
-     * Display sheets matching category
+     * Display sheets matching category.
      *
      * @param EventView    $eventView
      * @param CategoryView $categoryView
@@ -55,7 +55,7 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheets  = $this
+        $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->search($categoryView->id, $this->getUser());
 
@@ -77,7 +77,7 @@ class CatalogController extends Controller
     }
 
     /**
-     * Display a sheet
+     * Display a sheet.
      *
      * @param EventView    $eventView
      * @param CategoryView $categoryView

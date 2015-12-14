@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * "Fiche de participation"
+ * "Fiche de participation".
  */
 class Sheet
 {
@@ -68,7 +68,7 @@ class Sheet
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return mixed
      */
@@ -78,7 +78,7 @@ class Sheet
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return Event
      */
@@ -88,7 +88,7 @@ class Sheet
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return Type
      */
@@ -98,7 +98,7 @@ class Sheet
     }
 
     /**
-     * Get participants
+     * Get participants.
      *
      * @return ArrayCollection
      */
@@ -108,7 +108,7 @@ class Sheet
     }
 
     /**
-     * Get data
+     * Get data.
      *
      * @return array
      */
@@ -118,7 +118,7 @@ class Sheet
     }
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
      */
@@ -128,7 +128,7 @@ class Sheet
     }
 
     /**
-     * Get packageData
+     * Get packageData.
      *
      * @return array
      */
@@ -138,7 +138,7 @@ class Sheet
     }
 
     /**
-     * Set packageData
+     * Set packageData.
      *
      * @param array $packageData
      */
@@ -148,7 +148,7 @@ class Sheet
     }
 
     /**
-     * Get billingData
+     * Get billingData.
      *
      * @return array
      */
@@ -158,7 +158,7 @@ class Sheet
     }
 
     /**
-     * Set billingData
+     * Set billingData.
      *
      * @param array $billingData
      */
@@ -168,7 +168,7 @@ class Sheet
     }
 
     /**
-     * Get type packageTemplate
+     * Get type packageTemplate.
      *
      * @return array
      */
@@ -178,7 +178,7 @@ class Sheet
     }
 
     /**
-     * Get type packageTemplate
+     * Get type packageTemplate.
      *
      * @return array
      */

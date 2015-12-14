@@ -32,6 +32,7 @@ class EmailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['template', 'locale']);
+        $resolver->setDefined(['sheet']);
     }
 
     /**
@@ -39,13 +40,13 @@ class EmailType extends AbstractType
      */
     public function getParent()
     {
-        return 'email';
+        return \Symfony\Component\Form\Extension\Core\Type\EmailType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lib_email';
     }

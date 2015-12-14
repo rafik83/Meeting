@@ -58,13 +58,14 @@ class RuleManager
     }
 
     /**
-     * Get the most prioritary rule to apply
+     * Get the most prioritary rule to apply.
      *
      * @param Sheet $sheet
      * @param User  $user
      *
-     * @return Rule
      * @throws NoRuleFoundException
+     * @return Rule
+     *
      */
     public function getRule(Sheet $sheet, User $user)
     {

@@ -9,9 +9,9 @@ Feature: Update type template field nomenclature
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
 
   Scenario: I can update an item in a nomenclature collection
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/admin/event/1/type/1/form"
+    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event/1/type/1/form"
     And I should see "SARL"
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/admin/event/1/type/1/form/field/update/sheetTemplate/5641f59e537b9"
+    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event/1/type/1/form/field/update/sheetTemplate/5641f59e537b9"
     Then I fill in the following:
       | type_template_field_update_lib_choice_choices_status3_label_fr | status label fr |
       | type_template_field_update_lib_choice_choices_status3_label_en | status label en |

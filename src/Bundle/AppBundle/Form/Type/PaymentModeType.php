@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PaymentModeType extends AbstractType
@@ -21,10 +22,10 @@ class PaymentModeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choice_as_value' => true,
-            'choices'         => [
-                'cash'     => 'Paiement de la totalité',
-                'transfer' => 'Virement',
+            'choices_as_values' => true,
+            'choices'           => [
+                'Paiement de la totalité' => 'cash',
+                'Virement'                => 'transfer',
             ],
         ]);
     }
@@ -34,14 +35,6 @@ class PaymentModeType extends AbstractType
      */
     public function getParent()
     {
-        return 'choice';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'payment_mode';
+        return ChoiceType::class;
     }
 }
