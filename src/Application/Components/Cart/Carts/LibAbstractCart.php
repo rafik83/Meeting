@@ -34,7 +34,7 @@ class LibAbstractCart implements LibCartInterface
         if (null !== $including) {
             $cartRow = new CartRow(
                 $including->getProductIncluded()->getLabel($locale),
-                $including->getQuantity(),
+                $including->getQuantity() !== null ? $including->getQuantity() : 1,
                 0
             );
         }

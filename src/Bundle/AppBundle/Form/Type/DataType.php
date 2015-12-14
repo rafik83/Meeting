@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
+use Proximum\Vimeet\Application\Exception\Data\DataTypeNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,7 +45,7 @@ class DataType extends AbstractType
 
         foreach ($template as $i => $field) {
             if (!isset($this->types[$field['type']])) {
-                throw new \RuntimeException('Type not found.');
+                throw new DataTypeNotFoundException('Type not found.');
             }
 
             if ($step !== null) {

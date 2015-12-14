@@ -45,7 +45,6 @@ class TypeTemplateFieldController extends Controller
         $packageObject = $this->get('vimeet_infrastructure.application.components.product.product_builder')
             ->createFromType($type);
 
-
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
             'event'         => $event,
             'typeView'      => $typeView,

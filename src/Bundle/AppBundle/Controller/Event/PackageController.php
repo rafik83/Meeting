@@ -57,7 +57,6 @@ class PackageController extends BaseController
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
             'step'     => $stepObject,
-
         ]);
         $form->add('submit', SubmitType::class);
 

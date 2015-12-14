@@ -31,8 +31,7 @@ class LibPlanningCart extends LibAbstractCart
         ) {
             $cartRow = new CartRow(
                 $product->getLabel($locale),
-                isset($dataValue['planning_bought'])
-                && $dataValue['planning_bought'] !== null
+                isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null
                 ? $dataValue['planning_bought'] : 0,
                 $product->getUnitPrice()
             );

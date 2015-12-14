@@ -78,7 +78,7 @@ class OptionType extends AbstractLocalizedType
                 }
             }
             if ($checked === false) {
-                $checked = $product->getRemainingQuantityMax($sheet->getPackageData()) === 0 ? true : false;
+                $checked = $product->getRemainingQuantityMax($sheet->getPackageData()) === 0;
             }
         }
 

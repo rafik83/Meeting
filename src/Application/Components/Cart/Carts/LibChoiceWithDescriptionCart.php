@@ -41,7 +41,6 @@ class LibChoiceWithDescriptionCart extends LibAbstractCart
             }
         }
 
-
         return $cartRow;
     }
 }

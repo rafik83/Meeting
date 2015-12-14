@@ -32,8 +32,7 @@ class LibParticipantCart extends LibAbstractCart
         ) {
             $cartRow = new CartRow(
                 $product->getLabel($locale),
-                isset($dataValue['participant_bought'])
-                && $dataValue['participant_bought'] !== null
+                isset($dataValue['participant_bought']) && $dataValue['participant_bought'] !== null
                 ? $dataValue['participant_bought'] : 0,
                 $product->getUnitPrice()
             );
