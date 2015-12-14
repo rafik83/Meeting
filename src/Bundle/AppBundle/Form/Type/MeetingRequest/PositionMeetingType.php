@@ -67,12 +67,16 @@ class PositionMeetingType extends AbstractType
                         ->join('slot.schedule', 'schedule', 'WITH', 'schedule.event = :event')
                         ->setParameter('event', $options['event']);
                 },
-                'choice_label' => function (MeetingSlot $meetingSlot) {
+                'choice_label' => function (MeetingSlot $meetingSlot) use ($options) {
+                    $begin    = clone $meetingSlot->getBegin();
+                    $end      = clone $meetingSlot->getEnd();
+                    $timezone = new \DateTimeZone($options['view_timezone']);
+
                     return sprintf(
                         '%s : %s %s',
-                        $meetingSlot->getBegin()->format('d/m/Y'),
-                        $meetingSlot->getBegin()->format('H\hi'),
-                        $meetingSlot->getEnd()->format('H\hi')
+                        $begin->setTimezone($timezone)->format('d/m/Y'),
+                        $begin->setTimezone($timezone)->format('H\hi'),
+                        $end->setTimezone($timezone)->format('H\hi')
                     );
                 },
                 'choice_attr' => function (MeetingSlot $meetingSlot) {
@@ -83,7 +87,7 @@ class PositionMeetingType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['meeting_request', 'event']);
+        $resolver->setRequired(['meeting_request', 'event', 'view_timezone']);
         $resolver->setDefaults([
             'method'     => 'POST',
             'data_class' => PositionMeeting::class,
