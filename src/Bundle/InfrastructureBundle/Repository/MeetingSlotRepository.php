@@ -46,11 +46,11 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         // Participants have not unavailability during this slot
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant IN (:ids) AND (u.begin BETWEEN slot.begin AND slot.end OR u.end BETWEEN slot.begin AND slot.end))');
+            ->andWhere('NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant IN (:ids) AND (u.begin BETWEEN slot.begin AND slot.end OR u.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN u.begin AND u.end OR slot.end BETWEEN u.begin AND u.end))');
 
-        // Participants have not blocking partipicipation
+        // Participants have not blocking participation
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end))');
+            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN h.begin AND h.end OR slot.end BETWEEN h.begin AND h.end))');
 
         $queryBuilder->setParameter('ids', $ids);
 
