@@ -48,20 +48,22 @@ class CartBuilder
             );
 
             foreach ($step as $productKey => $product) {
-                $cartRow = null;
                 $productObject = $stepObject->getProduct($productKey);
 
-                if (method_exists($productObject, 'getType')) {
-                    if (isset($this->cartLibs[$productObject->getType()]) && [] !== $product) {
-                        $cartRow = $this->cartLibs[$productObject->getType()]->prepare(
-                            $productObject,
-                            $product,
-                            $locale
-                        );
-                    }
+                if ((!method_exists($productObject, 'getType')
+                    && !isset($this->cartLibs[$productObject->getType()])
+                    ) || [] === $product
+                ) {
+                    continue;
                 }
 
-                if (null !== $cartRow) {
+                $cartRow = $this->cartLibs[$productObject->getType()]->prepare(
+                    $productObject,
+                    $product,
+                    $locale
+                );
+
+                if ($cartRow !== null) {
                     $cartStep->addCartRow($cartRow);
                 }
             }

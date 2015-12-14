@@ -277,30 +277,27 @@ abstract class AbstractProduct implements ProductInterface
      */
     private function isIncludedIn(ProductInterface $product, ProductInterface $productToCheck, array $productData)
     {
-        if ($product->getIncludedIn() === null) {
+        if ($product->getIncludedIn() === null || !isset($productData['value'])) {
             return null;
         }
 
         // This use case is working for LibChoiceWithDescriptionProduct and LibOptionProduct
         // It doesn't take into account LibParticipant and LibPlanning
         if ($productToCheck instanceof LibChoiceWithDescriptionProduct) {
-            if (isset($productData['value'])) {
-                $productChoice = $productToCheck->getChoice($productData['value']);
-                if ($productChoice !== null) {
-                    foreach ($product->getIncludedIn() as $includedIn) {
-                        if ($productChoice === $includedIn->getProductThatInclude()) {
-                            return $includedIn;
-                        }
-                    }
-                }
-            }
-        } else {
-            if (isset($productData['value'])) {
+            $productChoice = $productToCheck->getChoice($productData['value']);
+            if ($productChoice !== null) {
                 foreach ($product->getIncludedIn() as $includedIn) {
-                    if ($productToCheck === $includedIn->getProductThatInclude() && false !== $productData['value']) {
+                    if ($productChoice === $includedIn->getProductThatInclude()) {
                         return $includedIn;
                     }
                 }
+                return null;
+            }
+        }
+
+        foreach ($product->getIncludedIn() as $includedIn) {
+            if ($productToCheck === $includedIn->getProductThatInclude() && false !== $productData['value']) {
+                return $includedIn;
             }
         }
 

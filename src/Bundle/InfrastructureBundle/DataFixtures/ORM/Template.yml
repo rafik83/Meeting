@@ -304,8 +304,8 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Options proposées pour optimiser votre participation"
                     en: "Options to optimize your participation:"
                 description:
-                    fr: "Publicité et prommotion"
-                    en: "Publicité et prommotion en anglais"
+                    fr: "Publicité et promotion"
+                    en: "Publicité et promotion en anglais"
                 template:
                     56615a0ab3f9f:
                         label:
@@ -661,15 +661,17 @@ Proximum\Vimeet\Domain\Model\Template:
                                         <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
                                     </tr>
                                     {% if row.include|length > 0 %}
+                                        <tr>
+                                            <th colspan="5">{{ 'event.sheet.cart.includeTitle'|trans({'%product%': row.label}) }}</th>
+                                        </tr>
                                         {% for include in row.include %}
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td>
-                                                    {{ include.label }}<br>
-                                                    > {{ 'event.sheet.cart.include'|transchoice(include.quantity, {'%count%': include.quantity, '%product%': row.label}) }}
+                                                    &gt; {{ include.quantity }} {{ include.label }}
                                                 </td>
                                                 <td class="text-right">{{ include.unitPrice|number_format_currency('EUR') }}</td>
-                                                <td class="text-right">{% if include.quantity == 0 %}1{% else %}{{ include.quantity }}{% endif %}</td>
+                                                <td class="text-right">{{ include.quantity }}</td>
                                                 <td class="text-right">{{ include.subtotal|number_format_currency('EUR') }}</td>
                                             </tr>
                                         {% endfor %}
