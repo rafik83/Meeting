@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c04b7221d06c58c6e3c6867fb814c3ad",
-    "content-hash": "def45c09f2ce4128d52614d1d9f48466",
+    "hash": "bd4308b637ce8bf01f26d0620cdb3308",
+    "content-hash": "11e33a178bb56d61f6acfd0703aac7f5",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -888,26 +888,26 @@
         },
         {
             "name": "elao/form-bundle",
-            "version": "dev-master",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormBundle.git",
-                "reference": "b55e023c6e4130a51e2e58d55f17bee7e01fbf33"
+                "reference": "8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/b55e023c6e4130a51e2e58d55f17bee7e01fbf33",
-                "reference": "b55e023c6e4130a51e2e58d55f17bee7e01fbf33",
+                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4",
+                "reference": "8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4",
                 "shasum": ""
             },
             "require": {
-                "symfony/form": "~2.7",
-                "symfony/framework-bundle": "~2.3"
+                "symfony/form": "~2.8|~3.0",
+                "symfony/framework-bundle": "~2.8|~3.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -941,7 +941,7 @@
                 "form",
                 "javascript"
             ],
-            "time": "2015-10-07 14:22:04"
+            "time": "2015-12-11 09:11:39"
         },
         {
             "name": "elao/form-translation-bundle",
@@ -1951,7 +1951,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/d4c23faa4c8223ce16caf526f45b1466cf5bda9e",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/6ba617ef740b496439b1bc84344963421174a78e",
                 "reference": "8ab0b0ecefe6c2202c2d930480fbf2b88b3fc2cb",
                 "shasum": ""
             },
@@ -5000,8 +5000,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sonata-project/intl-bundle": 20,
-        "elao/form-bundle": 20
+        "sonata-project/intl-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
