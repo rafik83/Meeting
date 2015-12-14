@@ -13,6 +13,8 @@ Proximum\Vimeet\Domain\Model\Order:
             type: text
         packageData:
             type: json_array
+        packageTemplate:
+            type: json_array
         billingData:
             type: json_array
         createdAt:

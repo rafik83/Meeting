@@ -35,6 +35,7 @@ class CreateOrderHandler
             $createOrder->state,
             $createOrder->proFormaTemplate,
             $createOrder->packageData,
+            $createOrder->packageTemplate,
             $createOrder->billingData,
             $createOrder->createdAt,
             $createOrder->paymentMode

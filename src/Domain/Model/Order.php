@@ -48,6 +48,11 @@ class Order
     /**
      * @var array
      */
+    private $packageTemplate;
+
+    /**
+     * @var array
+     */
     private $billingData;
 
     /**
@@ -65,6 +70,7 @@ class Order
      * @param string            $state
      * @param string            $proFormaTemplate
      * @param array             $packageData
+     * @param array             $packageTemplate
      * @param array             $billingData
      * @param DateTimeInterface $createdAt
      * @param string            $paymentMode
@@ -74,6 +80,7 @@ class Order
         $state,
         $proFormaTemplate,
         array $packageData,
+        array $packageTemplate,
         array $billingData,
         DateTimeInterface $createdAt,
         $paymentMode
@@ -82,6 +89,7 @@ class Order
         $this->state            = $state;
         $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
+        $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;
         $this->createdAt        = $createdAt;
         $this->paymentMode      = $paymentMode;
@@ -125,6 +133,14 @@ class Order
     public function getPackageData()
     {
         return $this->packageData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackageTemplate()
+    {
+        return $this->packageTemplate;
     }
 
     /**

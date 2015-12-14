@@ -92,6 +92,7 @@ class BillingController extends BaseController
             Order::STATE_UNPAID,
             $sheet->getType()->getProFormaTemplate(),
             $sheet->getPackageData(),
+            $sheet->getTypePackageTemplate(),
             $sheet->getBillingData(),
             new DateTime()
         );

@@ -38,6 +38,11 @@ class CreateOrder
     /**
      * @var array
      */
+    public $packageTemplate;
+
+    /**
+     * @var array
+     */
     public $billingData;
 
     /**
@@ -63,6 +68,7 @@ class CreateOrder
         $state,
         $proFormaTemplate,
         array $packageData,
+        array $packageTemplate,
         array $billingData,
         DateTimeInterface $createdAt
     ) {
@@ -70,6 +76,7 @@ class CreateOrder
         $this->state            = $state;
         $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
+        $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;
         $this->createdAt        = $createdAt;
     }
