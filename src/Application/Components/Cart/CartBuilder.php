@@ -50,7 +50,8 @@ class CartBuilder
             foreach ($step as $productKey => $product) {
                 $productObject = $stepObject->getProduct($productKey);
 
-                if ((!method_exists($productObject, 'getType')
+                if ($productObject === null
+                    || (!method_exists($productObject, 'getType')
                     && !isset($this->cartLibs[$productObject->getType()])
                     ) || [] === $product
                 ) {
