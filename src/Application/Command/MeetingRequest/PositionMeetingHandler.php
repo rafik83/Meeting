@@ -64,7 +64,8 @@ class PositionMeetingHandler
             $positionMeeting->fromSheet,
             $positionMeeting->fromParticipants,
             $positionMeeting->toSheet,
-            $positionMeeting->toParticipants
+            $positionMeeting->toParticipants,
+            $positionMeeting->createdAt
         );
 
         $this->meetingRepository->add($meeting);

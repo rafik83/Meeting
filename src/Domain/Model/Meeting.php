@@ -45,6 +45,11 @@ class Meeting
     private $toParticipants;
 
     /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
      * Meeting constructor.
      *
      * @param MeetingSlot $slot
@@ -52,14 +57,22 @@ class Meeting
      * @param array       $fromParticipants
      * @param Sheet       $toSheet
      * @param array       $toParticipants
+     * @param \DateTime   $createdAt
      */
-    public function __construct(MeetingSlot $slot, Sheet $fromSheet, array $fromParticipants, Sheet $toSheet, array $toParticipants)
-    {
+    public function __construct(
+        MeetingSlot $slot,
+        Sheet $fromSheet,
+        array $fromParticipants,
+        Sheet $toSheet,
+        array $toParticipants,
+        \DateTime $createdAt
+    ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->toSheet          = $toSheet;
         $this->toParticipants   = new ArrayCollection($toParticipants);
+        $this->createdAt        = $createdAt;
     }
 
     /**
@@ -120,5 +133,13 @@ class Meeting
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

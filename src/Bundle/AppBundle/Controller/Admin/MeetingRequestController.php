@@ -57,7 +57,7 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        $command = new PositionMeeting($meetingRequest);
+        $command = new PositionMeeting($meetingRequest, new \DateTime);
         $form    = $this->createForm(PositionMeetingType::class, $command, [
             'event'           => $event,
             'meeting_request' => $meetingRequest,
