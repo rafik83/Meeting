@@ -1,13 +1,15 @@
 {% if row.include|length > 0 %}
+    <tr>
+        <th colspan="5">{{ 'event.sheet.cart.includeTitle'|trans({'%product%': row.label}) }}</th>
+    </tr>
     {% for include in row.include %}
         <tr>
             <td>&nbsp;</td>
             <td>
-                {{ include.label }}<br>
-                > {{ 'event.sheet.cart.include'|transchoice(include.quantity, {'%count%': include.quantity, '%product%': row.label}) }}
+                &gt; {{ include.quantity }} {{ include.label }}
             </td>
             <td class="text-right">{{ include.unitPrice|number_format_currency('EUR') }}</td>
-            <td class="text-right">{% if include.quantity == 0 %}1{% else %}{{ include.quantity }}{% endif %}</td>
+            <td class="text-right">{{ include.quantity }}</td>
             <td class="text-right">{{ include.subtotal|number_format_currency('EUR') }}</td>
         </tr>
     {% endfor %}
