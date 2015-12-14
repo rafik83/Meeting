@@ -132,7 +132,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event)
-            ->where('request.state = \'approved\'')
+            ->where('request.state = :state')
+            ->setParameter('state', Request::STATE_APPROVED)
             ->andWhere('request.meeting IS NULL');
 
         $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
