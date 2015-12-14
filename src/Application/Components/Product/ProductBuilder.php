@@ -62,26 +62,7 @@ class ProductBuilder
             if (isset($stepTemplate['template'])) {
                 foreach ($stepTemplate['template'] as $productKey => $productTemplate) {
                     if (isset($productTemplate['type'])) {
-                        $product = $this->factory($productTemplate['type'], $productKey);
-
-                        $resolver = new OptionsResolver();
-                        $product->configure($resolver);
-                        $options = $resolver->resolve($productTemplate);
-                        $product->setOptions($options);
-
-                        if ($product instanceof LibChoiceWithDescriptionProduct) {
-                            foreach ($product->getOptionChoices() as $choiceKey => $choiceTemplate) {
-                                $choiceProduct = new LibChoiceProduct($choiceKey);
-
-                                $resolver = new OptionsResolver();
-                                $choiceProduct->configure($resolver);
-                                $options = $resolver->resolve($choiceTemplate);
-                                $choiceProduct->setOptions($options);
-
-                                $choiceProduct->setChoiceParent($product);
-                                $product->addChoice($choiceProduct);
-                            }
-                        }
+                        $product = $this->createProduct($productTemplate, $productKey);
 
                         $step->addProduct($product);
                     }
@@ -93,6 +74,52 @@ class ProductBuilder
             }
         }
 
+        $template = $this->includeTheProducts($template);
+
+        return $template;
+    }
+
+    /**
+     * Create a product from the productTemplate and the key
+     *
+     * @param array  $productTemplate
+     * @param string $productKey
+     *
+     * @return ProductInterface
+     */
+    private function createProduct(array $productTemplate, $productKey)
+    {
+        $product = $this->factory($productTemplate['type'], $productKey);
+
+        $resolver = new OptionsResolver();
+        $product->configure($resolver);
+        $options = $resolver->resolve($productTemplate);
+        $product->setOptions($options);
+
+        if ($product instanceof LibChoiceWithDescriptionProduct) {
+            foreach ($product->getOptionChoices() as $choiceKey => $choiceTemplate) {
+                $choiceProduct = new LibChoiceProduct($choiceKey);
+
+                $resolver = new OptionsResolver();
+                $choiceProduct->configure($resolver);
+                $options = $resolver->resolve($choiceTemplate);
+                $choiceProduct->setOptions($options);
+
+                $choiceProduct->setChoiceParent($product);
+                $product->addChoice($choiceProduct);
+            }
+        }
+
+        return $product;
+    }
+
+    /**
+     * @param Template $template
+     *
+     * @return Template
+     */
+    private function includeTheProducts(Template $template)
+    {
         foreach ($template->getSteps() as $step) {
             foreach ($step->getProducts() as $product) {
                 if ($product->getOptionsIncludedIn() === null) {
@@ -125,7 +152,7 @@ class ProductBuilder
      *
      * @return ProductInterface
      */
-    public function factory($type, $key)
+    private function factory($type, $key)
     {
         $mapping = [
             'choice_with_description' => LibChoiceWithDescriptionProduct::class,
