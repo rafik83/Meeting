@@ -57,12 +57,20 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@knp_paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    vimeet_infrastructure.repository.notification_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
@@ -209,16 +217,30 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
 
     #
     # Security
@@ -240,6 +262,8 @@ services:
     #
     vimeet_infrastructure.application.components.cart.cart_builder:
         class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+    vimeet_infrastructure.application.components.product.product_builder:
+        class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
 
     #
     # Carts components
@@ -260,10 +284,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
         tags:
             - { name: cart, cart: lib_planning }
-    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
-        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
-        tags:
-            - { name: cart, cart: upload_with_choices }
 
     #
     # Sheet Component

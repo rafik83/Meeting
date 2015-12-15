@@ -25,6 +25,7 @@
                         <td class="text-right">{{ row.quantity }}</td>
                         <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
                     </tr>
+                    {% include 'VimeetAppBundle:Event/Package:cartProductInclude.html.twig' with {'row': row} %}
                 {% endfor %}
             {% endif %}
         {% endfor %}
