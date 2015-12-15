@@ -1,0 +1,62 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Demandes de rendez-vous acceptées</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Demandeur</th>
+                        <th>Destinataire</th>
+                        <th>Date demande</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for requestView in requestViews %}
+                        <tr>
+                            <td>{{ requestView.sheetNameFrom }}</td>
+                            <td>{{ requestView.sheetNameTo }}</td>
+                            <td>{{ requestView.createdAt|date('d/m/Y') }}</td>
+                            <td>
+                                <a href="{{ path('admin_meeting_add', {
+                                    id: event.id,
+                                    meeting_request_id: requestView.id
+                                }) }}" class="btn btn-primary btn-sm">
+                                    Positionner le RDV
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="alert-danger text-center">Aucun RDV accepté</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Rendez-vous positionnées</h2>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Demandeur</th>
+                    <th>Destinataire</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="alert-danger text-center">Aucun RDV positionné</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
