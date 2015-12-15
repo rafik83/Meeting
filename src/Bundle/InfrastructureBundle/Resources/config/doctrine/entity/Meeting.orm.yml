@@ -12,14 +12,12 @@ Proximum\Vimeet\Domain\Model\Meeting:
         createdAt:
             type: datetime
     manyToOne:
-        from:
-            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-            indexBy: id
-        to:
-            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-            indexBy: id
-        meetingSlot:
+        slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+        fromSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        toSheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

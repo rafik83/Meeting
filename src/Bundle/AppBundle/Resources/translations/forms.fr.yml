@@ -223,6 +223,18 @@ form:
                 label: Expliquer pourquoi
             submit:
                 label: Envoyer
+    meeting_request_refuse: 
+        children: 
+            message:
+                label: Expliquer pourquoi 
+            submit: 
+                label: Envoyer 
+    meeting_request_cancel:
+        children: 
+            message: 
+                label: Expliquer pourquoi 
+            submit:
+                label: Envoyer
     add_unavailability:
         children:
             from:
@@ -251,6 +263,16 @@ form:
         children:
             submit:
                 label: Confirmer
+    position_meeting:
+        children:
+            fromParticipants:
+                label: Participants
+            toParticipants:
+                label: Participants
+            slot:
+                label: Créneau de rendez-vous
+            submit:
+                label: Placer
 country:
     placeholder: --- Sélectionner un pays ---
 

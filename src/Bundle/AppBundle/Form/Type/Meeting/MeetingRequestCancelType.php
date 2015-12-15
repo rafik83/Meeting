@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
-use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
+use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MeetingRequestRefuseType extends AbstractType
+class MeetingRequestCancelType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class MeetingRequestRefuseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RefuseRequest::class,
+            'data_class' => CancelRequest::class,
         ]);
     }
 }

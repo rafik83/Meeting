@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
@@ -25,79 +27,38 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     private $entityManager;
 
     /**
-     * @var UnavailabilityRepositoryInterface
-     */
-    private $unavailabilityRepository;
-
-    /**
      * @param EntityManager                     $entityManager
-     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
      */
-    public function __construct(
-        EntityManager $entityManager,
-        UnavailabilityRepositoryInterface $unavailabilityRepository
-    ) {
+    public function __construct(EntityManager $entityManager)
+    {
         $this->entityManager            = $entityManager;
-        $this->unavailabilityRepository = $unavailabilityRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findBlockedForMeetingsByParticipants(array $participants)
+    public function findAvailableSlotIdByParticipantsIds(array $ids)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meetingSlot')
-            ->from(MeetingSlot::class, 'meetingSlot')
-            ->join(Meeting::class, 'meeting', 'WITH', 'meeting.meetingSlot = meetingSlot')
-            ->leftJoin('meeting.fromParticipants', 'fromParticipants')
-            ->leftJoin('meeting.toParticipants', 'toParticipants')
-            ->where('fromParticipants IN (:participants) OR toParticipants IN (:participants)')
-            ->setParameter('participants', $participants);
+            ->select('slot.id')
+            ->from(MeetingSlot::class, 'slot', 'slot.id');
 
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMeetingSlotsDependingOnParticipants(array $participants)
-    {
-        $unavailabilities = array_merge(
-            $this->unavailabilityRepository->findByParticipants($participants),
-            $this->findBlockedForMeetingsByParticipants($participants)
-        );
-
-        return $this->getMeetingSlotsDependingOnUnavailableDateRanges($unavailabilities);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMeetingSlotsDependingOnUnavailableDateRanges(array $unavailabilities)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder();
-
+        // Participants have not already a meeting at this slot
         $queryBuilder
-            ->select('meetingSlot')
-            ->from(MeetingSlot::class, 'meetingSlot')
-            ->orderBy('meetingSlot.begin');
+            ->andWhere('NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id IN (:ids) OR tp.id IN (:ids)) AND m.slot = slot)');
 
-        foreach ($unavailabilities as $key => $unavailability) {
-            if (!$unavailability instanceof DateRangeInterface) {
-                throw new \Exception('Unavailability must be an instance of DateRangeInterface');
-            }
+        // Participants have not unavailability during this slot
+        $queryBuilder
+            ->andWhere('NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant IN (:ids) AND (u.begin BETWEEN slot.begin AND slot.end OR u.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN u.begin AND u.end OR slot.end BETWEEN u.begin AND u.end))');
 
-            $queryBuilder
-                ->andWhere('meetingSlot.begin >= :end' . $key . ' OR meetingSlot.end <= :begin' . $key)
-                ->setParameter('begin' . $key, $unavailability->getBegin())
-                ->setParameter('end' . $key, $unavailability->getEnd());
-        }
+        // Participants have not blocking participation
+        $queryBuilder
+            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE h.blocking = true AND hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN h.begin AND h.end OR slot.end BETWEEN h.begin AND h.end))');
 
-        return $queryBuilder->getQuery()->getResult();
+        $queryBuilder->setParameter('ids', $ids);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 }

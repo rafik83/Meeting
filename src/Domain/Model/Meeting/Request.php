@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Meeting;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -92,7 +93,7 @@ class Request
      * @param array              $fromParticipants
      * @param Sheet              $to
      * @param array              $toParticipants
-     * @param                    $description
+     * @param string             $description
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
      */
@@ -225,14 +226,6 @@ class Request
     }
 
     /**
-     * @param Participant $fromParticipant
-     */
-    public function addFromParticipant(Participant $fromParticipant)
-    {
-        $this->fromParticipants->add($fromParticipant);
-    }
-
-    /**
      * @return Notification[]
      */
     public function getNotifications()
@@ -294,5 +287,17 @@ class Request
     public function hasFromParticipants()
     {
         return !$this->fromParticipants->isEmpty();
+    }
+
+    /**
+     * @param Participant $fromParticipant
+     *
+     * @return Request
+     */
+    public function addFromParticipant(Participant $fromParticipant)
+    {
+        $this->fromParticipants->add($fromParticipant);
+
+        return $this;
     }
 }

@@ -10,11 +10,14 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
+use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,17 +32,13 @@ class MeetingRequestController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $approvedRequests = $this
+        $meetingRequests = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->getRequestsByApprovedState();
-
-        $approvedRequestViews = $this
-            ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
-            ->generate($approvedRequests);
+            ->getPendingByEvent($event, $request->query->getInt('page', 1), 20);
 
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
-            'event'        => $event,
-            'requestViews' => $approvedRequestViews,
+            'event'            => $event,
+            'meeting_requests' => $meetingRequests,
         ]);
     }
 
@@ -47,40 +46,54 @@ class MeetingRequestController extends Controller
      * @ParamConverter(
      *   "meetingRequest",
      *   class="Proximum\Vimeet\Domain\Model\Meeting\Request",
-     *   options={"id" = "meeting_request_id"}
+     *   options={"id" = "request_id"}
      * )
      *
      * @param Request        $request
      * @param Event          $event
      * @param MeetingRequest $meetingRequest
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, Event $event, MeetingRequest $meetingRequest)
+    public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        $meetingRequestView = $this
-            ->get('vimeet_infrastructure.application.components.meeting.request_view_builder')
-            ->generate($meetingRequest);
-
-        $create = new CreateRequest($meetingRequest, new \DateTime());
-        $form   = $this->createForm('meeting_create', $create, [
-            'method'         => 'POST',
-            'action'         => $this->generateUrl('admin_meeting_add', [
-                'id'                 => $event->getId(),
-                'meeting_request_id' => $meetingRequest->getId()
-            ]),
-            'meetingRequest' => $meetingRequest,
+        $command = new PositionMeeting($meetingRequest, new \DateTime);
+        $form    = $this->createForm(PositionMeetingType::class, $command, [
+            'event'           => $event,
+            'meeting_request' => $meetingRequest,
+            'view_timezone'   => $this->getParameter('timezone_default'),
         ]);
-        $form->add('submit', 'submit');
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('admin_meeting_list', ['id' => $event->getId()]);
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler')
+                ->handle($command);
+            $this->addFlash('success', 'flash.admin.meeting_request.position.success');
+
+            return $this->redirectToRoute('admin_meeting_request_list', ['id' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/MeetingRequest:add.html.twig', [
-            'event'       => $event,
-            'requestView' => $meetingRequestView,
-            'form'        => $form->createView(),
+        return $this->render('VimeetAppBundle:Admin/MeetingRequest:position.html.twig', [
+            'event'           => $event,
+            'meeting_request' => $meetingRequest,
+            'form'            => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function slotsAction(Request $request)
+    {
+        $participants = $request->query->get('participants', []);
+
+        $slots = $this
+            ->get('vimeet_infrastructure.repository.meeting_slot_repository')
+            ->findAvailableSlotIdByParticipantsIds($participants);
+
+        return new JsonResponse($slots);
     }
 }

@@ -66,6 +66,10 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MessageRequestType
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type_meeting.meeting_request_cancel_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType
+        tags:
+            - { name: 'form.type' }
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
@@ -84,6 +88,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type_meeting_request.meeting_request:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type

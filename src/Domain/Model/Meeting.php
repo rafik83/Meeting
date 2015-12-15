@@ -28,27 +28,32 @@ class Meeting
     private $from;
 
     /**
-     * @var Participant[]
+     * @var MeetingSlot
+     */
+    private $slot;
+
+    /**
+     * @var Sheet
+     */
+    private $fromSheet;
+
+    /**
+     * @var ArrayCollection
      */
     private $fromParticipants;
 
     /**
      * @var Sheet
      */
-    private $to;
+    private $toSheet;
 
     /**
-     * @var Participant[]
+     * @var ArrayCollection
      */
     private $toParticipants;
 
     /**
-     * @var MeetingSlot
-     */
-    private $meetingSlot;
-
-    /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
@@ -59,14 +64,33 @@ class Meeting
 
     /**
      * Meeting constructor.
+     *
+     * @param MeetingSlot $slot
+     * @param Sheet       $fromSheet
+     * @param array       $fromParticipants
+     * @param Sheet       $toSheet
+     * @param array       $toParticipants
+     * @param \DateTime   $createdAt
      */
-    public function __construct()
-    {
-        $this->fromParticipants = new ArrayCollection();
-        $this->toParticipants   = new ArrayCollection();
+    public function __construct(
+        MeetingSlot $slot,
+        Sheet $fromSheet,
+        array $fromParticipants,
+        Sheet $toSheet,
+        array $toParticipants,
+        \DateTime $createdAt
+    ) {
+        $this->slot             = $slot;
+        $this->fromSheet        = $fromSheet;
+        $this->fromParticipants = new ArrayCollection($fromParticipants);
+        $this->toSheet          = $toSheet;
+        $this->toParticipants   = new ArrayCollection($toParticipants);
+        $this->createdAt        = $createdAt;
     }
 
     /**
+     * Get id
+     *
      * @return int
      */
     public function getId()
@@ -77,7 +101,7 @@ class Meeting
     /**
      * @return Sheet
      */
-    public function getFrom()
+    public function getFromSheet()
     {
         return $this->from;
     }
@@ -127,17 +151,19 @@ class Meeting
     /**
      * @return Sheet
      */
-    public function getTo()
+    public function getToSheet()
     {
-        return $this->to;
+        return $this->toSheet;
     }
 
     /**
-     * @return ArrayCollection
+     * Get slot
+     *
+     * @return MeetingSlot
      */
-    public function getToParticipants()
+    public function getSlot()
     {
-        return $this->toParticipants;
+        return $this->slot;
     }
 
     /**
@@ -175,15 +201,7 @@ class Meeting
     }
 
     /**
-     * @return MeetingSlot
-     */
-    public function getMeetingSlot()
-    {
-        return $this->meetingSlot;
-    }
-
-    /**
-     * @return DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
