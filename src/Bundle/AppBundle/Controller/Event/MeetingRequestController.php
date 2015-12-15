@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class MeetingController extends BaseController
+class MeetingRequestController extends BaseController
 {
     /**
      * @param EventView $eventView
@@ -46,7 +46,7 @@ class MeetingController extends BaseController
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingRequest);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:listRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'request_views' => $requestViews,
@@ -71,7 +71,7 @@ class MeetingController extends BaseController
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingProposition);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:listProposition.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
             'sheet'             => $sheet,
             'proposition_views' => $propositionViews,
@@ -121,7 +121,7 @@ class MeetingController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($from);
         $toName   = $sheetInfoGuesser->guessSheetInfo($to);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:createRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:createRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
