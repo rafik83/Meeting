@@ -75,7 +75,7 @@ class RefuseRequestHandler
 
         if (!$refuseRequest->request->hasFromParticipants()) {
             $notification = new Notification(
-                $refuseRequest->request->getFrom()->getEvent(),
+                $refuseRequest->request->getFromSheet()->getEvent(),
                 $refuseRequest->emitter,
                 $refuseRequest->request->getCreator(),
                 $this->createdAt,
@@ -85,7 +85,7 @@ class RefuseRequestHandler
             $message = $this->translator->trans(
                 'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
                 [
-                    '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getTo()),
+                    '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
                     '%message%'   => $refuseRequest->message
                 ],
                 null,
@@ -99,7 +99,7 @@ class RefuseRequestHandler
         } else {
             foreach ($refuseRequest->request->getFromParticipants() as $participant) {
                 $notification = new Notification(
-                    $refuseRequest->request->getFrom()->getEvent(),
+                    $refuseRequest->request->getFromSheet()->getEvent(),
                     $refuseRequest->emitter,
                     $participant->getUser(),
                     $this->createdAt,
@@ -109,7 +109,7 @@ class RefuseRequestHandler
                 $message = $this->translator->trans(
                     'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
                     [
-                        '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getTo()),
+                        '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
                         '%message%'   => $refuseRequest->message
                     ],
                     null,

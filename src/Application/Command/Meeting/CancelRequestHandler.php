@@ -75,7 +75,7 @@ class CancelRequestHandler
         $cancelRequest->request->setState(Request::STATE_CANCEL);
 
         if (!$cancelRequest->request->hasToParticipants()) {
-            foreach ($cancelRequest->request->getTo()->getParticipants() as $participant) {
+            foreach ($cancelRequest->request->getToSheet()->getParticipants() as $participant) {
                 if ($participant->isOwner()) {
                     $this->notify($cancelRequest, $participant);
                 }
@@ -96,7 +96,7 @@ class CancelRequestHandler
     private function notify(CancelRequest $cancelRequest, Participant $participant)
     {
         $notification = new Notification(
-            $cancelRequest->request->getFrom()->getEvent(),
+            $cancelRequest->request->getFromSheet()->getEvent(),
             $cancelRequest->emitter,
             $participant->getUser(),
             $this->createdAt,
@@ -106,7 +106,7 @@ class CancelRequestHandler
         $message = $this->translator->trans(
             'notification.meeting_request.cancel.' . ($cancelRequest->message ? 'withMessage' : 'withoutMessage'),
             [
-                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($cancelRequest->request->getFrom()),
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($cancelRequest->request->getFromSheet()),
                 '%message%'   => $cancelRequest->message
             ],
             null,
