@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Model\Meeting;
 
-use DateTime;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class Request
 {
@@ -56,7 +57,7 @@ class Request
     private $state;
 
     /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
@@ -66,17 +67,29 @@ class Request
     private $refuseMessage;
 
     /**
-     * @param Sheet    $from
-     * @param array    $fromParticipants
-     * @param Sheet    $to
-     * @param string   $description
-     * @param DateTime $createdAt
+     * @var MeetingSlot
      */
-    public function __construct(Sheet $from, array $fromParticipants, Sheet $to, $description, DateTime $createdAt)
+    private $meetingSlot;
+
+    /**
+     * @var Meeting
+     */
+    private $meeting;
+
+    /**
+     * @param Sheet              $from
+     * @param array              $fromParticipants
+     * @param Sheet              $to
+     * @param array              $toParticipants
+     * @param string             $description
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct(Sheet $from, array $fromParticipants, Sheet $to, array $toParticipants, $description, \DateTimeInterface $createdAt)
     {
         $this->from             = $from;
         $this->fromParticipants = $fromParticipants;
         $this->to               = $to;
+        $this->toParticipants   = $toParticipants;
         $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
@@ -139,7 +152,7 @@ class Request
     }
 
     /**
-     * @return DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -167,6 +180,30 @@ class Request
     }
 
     /**
+     * Get meetingSlot
+     *
+     * @return MeetingSlot
+     */
+    public function getMeetingSlot()
+    {
+        return $this->meetingSlot;
+    }
+
+    /**
+     * Set meetingSlot
+     *
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return Request
+     */
+    public function setMeetingSlot($meetingSlot)
+    {
+        $this->meetingSlot = $meetingSlot;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getRefuseMessage()
@@ -180,5 +217,29 @@ class Request
     public function setRefuseMessage($refuseMessage)
     {
         $this->refuseMessage = $refuseMessage;
+    }
+
+    /**
+     * Get meeting
+     *
+     * @return Meeting
+     */
+    public function getMeeting()
+    {
+        return $this->meeting;
+    }
+
+    /**
+     * Set meeting
+     *
+     * @param Meeting $meeting
+     *
+     * @return Request
+     */
+    public function setMeeting($meeting)
+    {
+        $this->meeting = $meeting;
+
+        return $this;
     }
 }

@@ -22,6 +22,10 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        meetingSlot:
+            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Meeting
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

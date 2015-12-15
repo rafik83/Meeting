@@ -37,6 +37,7 @@ class CreateRequestHandler
             $createRequest->from,
             $createRequest->fromParticipants,
             $createRequest->to,
+            [],
             $createRequest->description,
             $createRequest->createdAt
         );
