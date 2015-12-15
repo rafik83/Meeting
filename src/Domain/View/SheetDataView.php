@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\View;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -62,6 +63,11 @@ class SheetDataView
     public $currentUserParticipant;
 
     /**
+     * @var Order[]
+     */
+    public $orders;
+
+    /**
      * @param int               $id
      * @param Event             $event
      * @param Type              $type
@@ -71,6 +77,7 @@ class SheetDataView
      * @param array             $billingData
      * @param ParticipantView[] $participantViews
      * @param Participant       $currentUserParticipant
+     * @param Order[]            $orders
      */
     public function __construct(
         $id,
@@ -81,7 +88,8 @@ class SheetDataView
         array $packageData,
         array $billingData,
         array $participantViews,
-        Participant $currentUserParticipant
+        Participant $currentUserParticipant,
+        array $orders
     ) {
         $this->id                     = $id;
         $this->event                  = $event;
@@ -92,5 +100,6 @@ class SheetDataView
         $this->billingData            = $billingData;
         $this->participantViews       = $participantViews;
         $this->currentUserParticipant = $currentUserParticipant;
+        $this->orders                 = $orders;
     }
 }

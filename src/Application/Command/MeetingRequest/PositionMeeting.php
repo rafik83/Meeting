@@ -60,9 +60,9 @@ class PositionMeeting
     public function __construct(Request $request, \DateTime $createdAt)
     {
         $this->meetingRequest   = $request;
-        $this->fromSheet        = $request->getFrom();
+        $this->fromSheet        = $request->getFromSheet();
         $this->fromParticipants = $request->getFromParticipants()->toArray();
-        $this->toSheet          = $request->getTo();
+        $this->toSheet          = $request->getToSheet();
         $this->toParticipants   = $request->getFromParticipants()->toArray();
         $this->createdAt        = $createdAt;
     }

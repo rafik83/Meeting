@@ -65,12 +65,12 @@ class Meeting
     /**
      * Meeting constructor.
      *
-     * @param MeetingSlot $slot
-     * @param Sheet       $fromSheet
-     * @param array       $fromParticipants
-     * @param Sheet       $toSheet
-     * @param array       $toParticipants
-     * @param \DateTime   $createdAt
+     * @param MeetingSlot        $slot
+     * @param Sheet              $fromSheet
+     * @param array              $fromParticipants
+     * @param Sheet              $toSheet
+     * @param array              $toParticipants
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         MeetingSlot $slot,
@@ -78,7 +78,7 @@ class Meeting
         array $fromParticipants,
         Sheet $toSheet,
         array $toParticipants,
-        \DateTime $createdAt
+        \DateTimeInterface $createdAt
     ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;

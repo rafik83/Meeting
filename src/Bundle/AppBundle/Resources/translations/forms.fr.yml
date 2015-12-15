@@ -273,8 +273,3 @@ form:
                 label: Créneau de rendez-vous
             submit:
                 label: Placer
-country:
-    placeholder: --- Sélectionner un pays ---
-
-choice:
-    placeholder: --- Sélectionner un item  ---

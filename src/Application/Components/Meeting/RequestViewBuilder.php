@@ -45,8 +45,8 @@ class RequestViewBuilder
      */
     public function generate(Request $request)
     {
-        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFrom());
-        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
+        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet());
+        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet());
 
         $requestView = new RequestView(
             $request->getId(),
@@ -55,7 +55,7 @@ class RequestViewBuilder
             $request->getState(),
             $request->getDescription(),
             $request->getCreatedAt(),
-            $request->getRefuseMessage()
+            ''
         );
 
         foreach ($request->getFromParticipants() as $participant) {

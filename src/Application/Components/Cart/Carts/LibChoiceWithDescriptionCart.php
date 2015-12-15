@@ -11,25 +11,34 @@
 namespace Proximum\Vimeet\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
+use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 
-class LibChoiceWithDescriptionCart implements LibCartInterface
+class LibChoiceWithDescriptionCart extends LibAbstractCart
 {
     /**
      * {@inheritdoc}
      */
-    public function prepare(array $template, array $dataValue, $locale)
+    public function prepare(ProductInterface $product, array $dataValue, $locale)
     {
         $cartRow = null;
 
-        if ([] !== $template
+        if (null !== $product
+            && !empty($product->getOptions())
             && isset($dataValue)
             && isset($dataValue['value'])
         ) {
             $cartRow = new CartRow(
-                $template['label'][$locale] . ' : ' . $template['choices'][$dataValue['value']]['label'][$locale],
-                isset($template['choices'][$dataValue['value']]['quantity']) ? $template['choices'][$dataValue['value']]['quantity'] : 1,
-                isset($template['choices'][$dataValue['value']]['unitPrice']) ? $template['choices'][$dataValue['value']]['unitPrice'] : null
+                $product->getLabel($locale) . ' : ' . $product->getChoice($dataValue['value'])->getLabel($locale),
+                isset($template['choices'][$dataValue['value']]['quantity'])
+                ? $template['choices'][$dataValue['value']]['quantity'] : 1,
+                $product->getChoice($dataValue['value'])->getUnitPrice()
             );
+
+            if (!empty($product->getChoice($dataValue['value'])->getInclude())) {
+                foreach ($product->getChoice($dataValue['value'])->getInclude() as $including) {
+                    $cartRow->addInclude($this->including($including, $locale));
+                }
+            }
         }
 
         return $cartRow;

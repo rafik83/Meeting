@@ -54,7 +54,7 @@
         'packageTemplate': sheetDataView.type.packageTemplate,
     } %}
 
-    {% if sheetDataView.type.packageTemplate is not empty %}
+    {% if sheetDataView.type.packageTemplate is not empty and sheetDataView.orders is empty %}
         <hr>
         <div class="text-center">
             <a href="{{ path('event_sheet_package_update_step', {
@@ -63,6 +63,15 @@
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-primary">
                 {{ 'event.sheet.package.step.next'|trans }}
+            </a>
+        </div>
+    {% elseif sheetDataView.orders is not empty%}
+        <div class="text-center">
+            <a href="{{ path('event_sheet_list_orders', {
+                'id': sheetDataView.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.listOrders.title'|trans }}
             </a>
         </div>
     {% endif %}

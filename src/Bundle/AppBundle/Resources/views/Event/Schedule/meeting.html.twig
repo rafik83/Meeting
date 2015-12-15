@@ -1,0 +1,36 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <table class="table">
+        <caption>
+            {{ meeting.slot.schedule.date|date('d/m/Y') }}
+            de {{ meeting.slot.begin|date('H:i') }}
+            à {{ meeting.slot.end|date('H:i') }}
+        </caption>
+        <tr>
+            <th>Fiches</th>
+            <td>{{ from }}</td>
+            <td>{{ to }}</td>
+        </tr>
+        <tr>
+            <th>Participants</th>
+            <td>
+                <ul>
+                    {% for participant in fromParticipants %}
+                        <li>{{ participant }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for participant in toParticipants %}
+                        <li>{{ participant }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <a href="{{ path('event_sheet_schedule_meeting_cancel', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'meeting_id': meeting.id }) }}" class="btn btn-danger">Annuler</a>
+{% endblock %}

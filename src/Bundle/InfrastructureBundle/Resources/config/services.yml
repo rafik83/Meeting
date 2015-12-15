@@ -65,12 +65,12 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository_meeting.meeting_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MeetingRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
@@ -226,9 +226,13 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -262,6 +266,8 @@ services:
     #
     vimeet_infrastructure.application.components.cart.cart_builder:
         class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+    vimeet_infrastructure.application.components.product.product_builder:
+        class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
 
     #
     # Carts components
@@ -282,10 +288,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart
         tags:
             - { name: cart, cart: lib_planning }
-    vimeet_infrastructure.application.components.cart.carts.lib_upload_with_choices_cart:
-        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibUploadWithChoicesCart
-        tags:
-            - { name: cart, cart: upload_with_choices }
 
     #
     # Sheet Component
@@ -344,7 +346,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
             - '@vimeet_infrastructure.repository.schedule_repository'
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
