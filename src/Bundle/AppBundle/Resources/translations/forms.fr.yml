@@ -247,3 +247,12 @@ form:
                 label: Participants concernés
             submit:
                 label: Participer
+    meeting_cancel:
+        children:
+            submit:
+                label: Confirmer
+country:
+    placeholder: --- Sélectionner un pays ---
+
+choice:
+    placeholder: --- Sélectionner un item  ---
