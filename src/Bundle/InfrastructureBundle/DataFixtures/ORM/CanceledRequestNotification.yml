@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_request1:
+        __construct:
+            - @sheet_exposant2
+            - [@participant_random_1]
+            - @sheet_test
+            - [@participant_test]
+            - <text(100)>
+            - <dateTimeBetween('-10 days', 'now')>
+            - @user_random_1
+        state: 'cancelled'
+
+Proximum\Vimeet\Domain\Model\Notification:
+    notification_request_canceled:
+        __construct:
+            - @user_random_1
+            - @user_test
+            - <dateTimeBetween('-10 days', 'now')>
+            - 'meeting_request.cancel'
+        message: 'Je ne suis plus disponible à ce créneau, désolé'
