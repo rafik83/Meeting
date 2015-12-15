@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Update;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,24 +23,11 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('meetingSlot', 'entity', [
-                'class'    => MeetingSlot::class,
-                'expanded' => true,
-                'choice_label' => function (MeetingSlot $meetingSlot) {
-                    return $meetingSlot->getBegin()->format('d/m/Y H:i') . ' - '  . $meetingSlot->getEnd()->format('H:i');
-                }
-            ])
-            ->add('fromParticipants', 'participant_choice', [
-                'sheet'    => $options['data']->meeting->getFrom(),
+            ->add('participants', 'participant_choice', [
+                'sheet'    => $options['data']->sheet,
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('toParticipants', 'participant_choice', [
-                'sheet'    => $options['data']->meeting->getTo(),
-                'multiple' => true,
-                'expanded' => true,
-            ])
-            ->add('message', 'textarea')
         ;
     }
 

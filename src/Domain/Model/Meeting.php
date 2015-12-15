@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Meeting
 {
@@ -57,6 +58,12 @@ class Meeting
      */
     private $state = self::STATE_SCHEDULED;
 
+    public function __construct()
+    {
+        $this->fromParticipants = new ArrayCollection();
+        $this->toParticipants   = new ArrayCollection();
+    }
+
     /**
      * @return int
      */
@@ -74,11 +81,40 @@ class Meeting
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getFromParticipants()
     {
         return $this->fromParticipants;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function addFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants[$participant->getId()] = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function removeFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    public function hasFromParticipant(Participant $participant)
+    {
+
     }
 
     /**
@@ -90,11 +126,35 @@ class Meeting
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function addToParticipant(Participant $participant)
+    {
+        $this->toParticipants[] = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function removeToParticipant(Participant $participant)
+    {
+        $this->toParticipants->removeElement($participant);
+
+        return $this;
     }
 
     /**

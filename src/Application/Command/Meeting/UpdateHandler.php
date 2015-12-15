@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;
 
 class UpdateHandler
 {
@@ -21,20 +21,20 @@ class UpdateHandler
     private $dateTime;
 
     /**
-     * @var RequestRepositoryInterface
+     * @var MeetingRepositoryInterface
      */
-    private $requestRepository;
+    private $meetingRepositoryInterface;
 
     /**
      * UpdateHandler constructor.
      *
      * @param \DateTimeInterface         $dateTime
-     * @param RequestRepositoryInterface $requestRepository
+     * @param MeetingRepositoryInterface $meetingRepositoryInterface
      */
-    public function __construct(\DateTimeInterface $dateTime, RequestRepositoryInterface $requestRepository)
+    public function __construct(\DateTimeInterface $dateTime, MeetingRepositoryInterface $meetingRepositoryInterface)
     {
-        $this->dateTime          = $dateTime;
-        $this->requestRepository = $requestRepository;
+        $this->dateTime                   = $dateTime;
+        $this->meetingRepositoryInterface = $meetingRepositoryInterface;
     }
 
     /**
@@ -42,21 +42,78 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        // Modifying a meeting amounts to creating a new meeting request linked to this meeting
-        // When the new meeting request is accepted, the meeting is updated else it isn't.
+        // Update participant
+        if ($update->meeting->getFrom() === $update->sheet) {
+            $notifications = $this->updateFromParticipant($update);
+        } elseif ($update->meeting->getTo() === $update->sheet) {
+            $notifications = $this->updateToParticipant($update);
+        } else {
+            throw new \RuntimeException('This sheet do not participate to this meeting.');
+        }
 
-        $request = new Request(
-            $update->meeting->getFrom(),
-            $update->fromParticipants->toArray(),
-            $update->meeting->getTo(),
-            $update->toParticipants->toArray(),
-            $update->message,
-            $this->dateTime
-        );
+        // Save meeeting
+        $this->meetingRepositoryInterface->set($update->meeting);
 
-        $request->setMeeting($update->meeting);
-        $request->setMeetingSlot($update->meetingSlot);
+        // Send notifications
+        $this->notify($notifications);
+    }
 
-        $this->requestRepository->add($request);
+    private function updateFromParticipant(Update $update)
+    {
+        $notifications = [];
+
+        // Remove removed participants
+        foreach ($update->meeting->getToParticipants() as $participant) {
+            if (!in_array($participant, $update->participants)) {
+                $update->meeting->removeFromParticipant($participant);
+                $notifications[] = $this->createRemovedParticipantNotification($participant);
+            }
+        }
+
+        // Add new participant
+        foreach ($update->participants as $participant) {
+            $update->meeting->addFromParticipant($participant);
+            $notifications = $this->createAddedParticipantNotification($participant);
+        }
+
+        return $notifications;
+    }
+
+    private function updateToParticipant(Update $update)
+    {
+        $notifications = [];
+
+        // Remove removed participants
+        foreach ($update->meeting->getToParticipants() as $participant) {
+            if (!in_array($participant, $update->participants)) {
+                $update->meeting->removeToParticipant($participant);
+                $notifications[] = $this->createRemovedParticipantNotification($participant);
+            }
+        }
+
+        // Add new participant
+        foreach ($update->participants as $participant) {
+            $update->meeting->addToParticipant($participant);
+            $notifications = $this->createAddedParticipantNotification($participant);
+        }
+
+        return $notifications;
+    }
+
+    private function createRemovedParticipantNotification(Participant $participant)
+    {
+        return [];
+    }
+
+    private function createAddedParticipantNotification(Participant $participant)
+    {
+        return [];
+    }
+
+    private function notify(array $notifications)
+    {
+        foreach ($notifications as $notification) {
+
+        }
     }
 }

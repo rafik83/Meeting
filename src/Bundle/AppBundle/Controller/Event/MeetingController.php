@@ -136,7 +136,7 @@ class MeetingController extends Controller
      */
     public function updateAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Meeting $meeting)
     {
-        $update = new Update($meeting);
+        $update = new Update($meeting, $sheet);
         $form   = $this->createForm(new UpdateType(), $update, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

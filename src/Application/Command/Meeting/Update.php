@@ -11,7 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Update
 {
@@ -21,35 +22,44 @@ class Update
     public $meeting;
 
     /**
-     * @var MeetingSlot
+     * @var Sheet
      */
-    public $meetingSlot;
+    public $sheet;
 
     /**
-     * @var array
+     * @var Participant[]
      */
-    public $fromParticipants;
-
-    /**
-     * @var array
-     */
-    public $toParticipants;
-
-    /**
-     * @var string
-     */
-    public $message;
+    public $participants;
 
     /**
      * Update constructor.
      *
      * @param Meeting $meeting
+     * @param Sheet   $sheet
      */
-    public function __construct(Meeting $meeting)
+    public function __construct(Meeting $meeting, Sheet $sheet)
     {
-        $this->meeting          = $meeting;
-        $this->meetingSlot      = $meeting->getMeetingSlot();
-        $this->fromParticipants = $meeting->getFromParticipants();
-        $this->toParticipants   = $meeting->getToParticipants();
+        $this->meeting      = $meeting;
+        $this->sheet        = $sheet;
+        $this->participants = $this->getParticipants($meeting, $sheet);
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @param Sheet   $sheet
+     *
+     * @return array
+     */
+    private function getParticipants(Meeting $meeting, Sheet $sheet)
+    {
+        if ($meeting->getFrom() === $sheet) {
+            return $meeting->getFromParticipants()->toArray();
+        }
+
+        if ($meeting->getTo() === $sheet) {
+            return $meeting->getToParticipants()->toArray();
+        }
+
+        throw new \InvalidArgumentException('This sheet do not participate to this meeting.');
     }
 }

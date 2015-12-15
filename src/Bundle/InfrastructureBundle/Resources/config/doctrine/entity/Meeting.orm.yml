@@ -14,8 +14,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
     manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            indexBy: id
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            indexBy: id
         meetingSlot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
     manyToMany:
