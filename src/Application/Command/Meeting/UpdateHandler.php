@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class UpdateHandler
 {

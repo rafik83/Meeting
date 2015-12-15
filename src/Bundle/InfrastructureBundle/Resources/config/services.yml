@@ -212,7 +212,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
         arguments:
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
