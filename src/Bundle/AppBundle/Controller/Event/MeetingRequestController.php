@@ -249,7 +249,8 @@ class MeetingRequestController extends BaseController
         }
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
+
+        $form = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
