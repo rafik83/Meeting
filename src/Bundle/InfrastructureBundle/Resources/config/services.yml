@@ -228,7 +228,7 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@translator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
         class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
         arguments:
@@ -254,6 +254,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:
             - '@vimeet_infrastructure.security.user_password_encoder'
+
+    #
+    # Translator
+    #
+    vimeet_infrastructure.adapter.translator_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
+        arguments:
+            - '@translator'
 
     #
     # Components
