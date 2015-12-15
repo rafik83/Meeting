@@ -122,6 +122,16 @@ Feature: Meeting Request / Proposition
     Then the response status code should be 200
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request"
     And I should see "event.meeting.request.state.from.approved"
+    Then I follow "event.meeting.listRequest.cancel"
+    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/cancel/1"
+    And the response status code should be 200
+    And I fill in the following:
+      | form.meeting_request_cancel.children.message.label | Sorry I can't |
+    Then I press "form.meeting_request_cancel.children.submit.label"
+    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request"
+    And the response status code should be 200
+    And I should see "flash.meeting_request.cancelled.success"
+    And I should see "event.meeting.request.state.from.cancelled"
 
   Scenario: I can refuse a rendez-vous
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -166,7 +176,7 @@ Feature: Meeting Request / Proposition
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition/refused/1"
     And I fill in the following:
-      | form.meeting_request_refuse.children.refuseMessage.label | Sorry I can't |
+      | form.meeting_request_refuse.children.message.label | Sorry I can't |
     Then I press "form.meeting_request_refuse.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition"
     And I should see "flash.meeting_request.refused.success"
@@ -183,3 +193,4 @@ Feature: Meeting Request / Proposition
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request"
     And I should see "event.meeting.request.state.from.refused"
     And I should see "Sorry I can't"
+    And I should not see "event.meeting.request.state.from.cancelled"
