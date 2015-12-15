@@ -3,35 +3,38 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
 
-    <h2>Liste des demandes de RDV acceptées</h2>
+    <h2>Liste des RDV positionnés</h2>
 
     <table class="table">
         <thead>
             <tr>
                 <th>De</th>
                 <th>à</th>
-                <th>Action</th>
+                <th>Slot</th>
+                <th>Créé le</th>
             </tr>
         </thead>
         <tbody>
-            {% for meeting_request in meeting_requests %}
+            {% for meeting in meetings %}
                 <tr>
-                    <td>{{ meeting_request.sheetNameFrom }}</td>
-                    <td>{{ meeting_request.sheetNameTo }}</td>
+                    <td>{{ meeting.sheetNameFrom }}</td>
+                    <td>{{ meeting.sheetNameTo }}</td>
                     <td>
-                        <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                        {{ meeting.slotBegin|date('d/m/Y H:i') }}
+                        {{ meeting.slotEnd|date('H:i') }}
                     </td>
+                    <td>{{ meeting.createdAt|date('d/m/Y') }}</td>
                 </tr>
             {% else %}
                 <tr>
                     <td colspan="3">
-                        Aucune demande de RDV
+                        Aucun RDV positionné
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    {{ knp_pagination_render(meeting_requests) }}
+    {{ knp_pagination_render(meetings) }}
 
 {% endblock %}

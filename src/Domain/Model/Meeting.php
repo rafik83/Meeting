@@ -60,25 +60,33 @@ class Meeting
     /**
      * Meeting constructor.
      *
-     * @param MeetingSlot $slot
-     * @param Sheet       $fromSheet
-     * @param array       $fromParticipants
-     * @param Sheet       $toSheet
-     * @param array       $toParticipants
+     * @param MeetingSlot        $slot
+     * @param Sheet              $fromSheet
+     * @param array              $fromParticipants
+     * @param Sheet              $toSheet
+     * @param array              $toParticipants
+     * @param \DateTimeInterface $createdAt
      */
-    public function __construct(MeetingSlot $slot, Sheet $fromSheet, array $fromParticipants, Sheet $toSheet, array $toParticipants)
-    {
+    public function __construct(
+        MeetingSlot $slot,
+        Sheet $fromSheet,
+        array $fromParticipants,
+        Sheet $toSheet,
+        array $toParticipants,
+        \DateTimeInterface $createdAt
+    ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->toSheet          = $toSheet;
         $this->toParticipants   = new ArrayCollection($toParticipants);
+        $this->createdAt        = $createdAt;
     }
 
     /**
      * Get id
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
