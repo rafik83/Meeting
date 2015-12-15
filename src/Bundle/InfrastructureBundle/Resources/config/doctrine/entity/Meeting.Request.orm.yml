@@ -18,14 +18,12 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: text
             nullable: true
     manyToOne:
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-        meetingSlot:
-            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
-        meeting:
-            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

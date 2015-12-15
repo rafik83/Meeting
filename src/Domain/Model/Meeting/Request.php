@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class Request
 {
@@ -77,6 +76,8 @@ class Request
     private $meeting;
 
     /**
+     * Request constructor.
+     *
      * @param Sheet              $from
      * @param array              $fromParticipants
      * @param Sheet              $to
