@@ -10,17 +10,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - @user_random_1
         state: 'cancelled'
         notifications: [@notification_request_canceled_1]
-    meeting_request_cancelled_2:
-        __construct:
-            - @sheet_exposant2
-            - [@participant_random_1]
-            - @sheet_test
-            - [@participant_test]
-            - <text(100)>
-            - <dateTimeBetween('-50 days', '-30 days')>
-            - @user_random_1
-        state: 'cancelled'
-        notifications: [@notification_request_canceled_2]
 
 Proximum\Vimeet\Domain\Model\Notification:
     notification_request_canceled_1:
@@ -30,12 +19,4 @@ Proximum\Vimeet\Domain\Model\Notification:
             - @user_test
             - <dateTimeBetween('-10 days', 'now')>
             - 'meeting_request.cancel'
-        message: 'Je ne suis plus disponible à ce créneau, désolé'
-    notification_request_canceled_2:
-        __construct:
-            - @event_rdv_carnot_2016
-            - @user_random_1
-            - @user_test
-            - <dateTimeBetween('-10 days', 'now')>
-            - 'meeting_request.cancel'
-        message: 'Je me suis trompé, désolé'
+        message: 'Demande annulée par Munoz pour le motif suivant : "Je ne suis plus disponible à ce créneau, désolé"'
