@@ -68,3 +68,8 @@ flash:
         type_template_field:
             update:
                 success: Le champ a bien été mis à jour
+    meeting_request:
+        approved:
+            success: Vous avez bien validé la demande de rendez-vous
+        refused:
+            success: Vous avez bien refusé la demande de rendez-vous
