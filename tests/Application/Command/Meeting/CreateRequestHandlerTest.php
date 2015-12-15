@@ -40,14 +40,14 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $dateTime     = new DateTime;
 
-        $createRequest = new CreateRequest($sheetFrom, $sheetTo, $dateTime);
+        $createRequest = new CreateRequest($sheetFrom, $sheetTo, $dateTime, $user1);
         $createRequest->description = 'test';
         $createRequest->fromParticipants = [$participant1, $participant2];
 
         $participants = [];
         $participants[] = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participants[] = $this->createParticipantMock($sheetFrom, $user2, 2);
-        $expectedRequest = new Request($sheetFrom, $participants, $sheetTo, 'test', $dateTime);
+        $expectedRequest = new Request($sheetFrom, $participants, $sheetTo, [], 'test', $dateTime, $user1);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->add($expectedRequest)->shouldBeCalled();

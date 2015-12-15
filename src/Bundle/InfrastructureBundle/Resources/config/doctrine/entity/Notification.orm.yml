@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Notification:
+    type: entity
+    table: notification
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        action:
+            type: string
+        message:
+            type: text
+            nullable: true
+        createdAt:
+            type: datetime
+        view:
+            type: boolean
+    manyToOne:
+        emitter:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+        recipient:
+            targetEntity: Proximum\Vimeet\Domain\Model\User

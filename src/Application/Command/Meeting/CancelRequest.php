@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\User;
 
-class RefuseRequest
+class CancelRequest
 {
     /**
      * @var Request
@@ -21,22 +21,22 @@ class RefuseRequest
     public $request;
 
     /**
-     * @var User
-     */
-    public $emitter;
-
-    /**
      * @var string
      */
     public $message;
 
     /**
+     * @var User
+     */
+    public $emitter;
+
+    /**
      * @param Request $request
-     * @param User    $emitter
+     * @param User $emitter
      */
     public function __construct(Request $request, User $emitter)
     {
-        $this->request = $request;
-        $this->emitter = $emitter;
+        $this->request   = $request;
+        $this->emitter   = $emitter;
     }
 }

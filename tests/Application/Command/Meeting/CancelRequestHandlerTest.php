@@ -11,8 +11,8 @@
 namespace Tests\Application\Command\Meeting;
 
 use DateTime;
-use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
-use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
+use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
+use Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
-class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -33,31 +33,21 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom = new Sheet($event, $type, [], []);
         $dateTime  = new DateTime();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
-        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
-
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user, 2));
-
-        $expectedNotification = new Notification($user2, $user, $dateTime, 'meeting_request.refuse');
-        $expectedNotification->setMessage('this is a test');
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
-
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
-        $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->addNotifications($expectedNotification);
+        $expectedRequest->setState(Request::STATE_CANCEL);
 
-
-        $refusedRequest = new RefuseRequest($request, $user2);
+        $refusedRequest = new CancelRequest($request, $user);
         $refusedRequest->message = 'this is a test';
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
-        $notificationRepository->add($expectedNotification)->shouldBeCalled();
+        $notificationRepository->add()->shouldNotBeCalled();
 
-
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
         $handler->handle($refusedRequest);
     }
 
@@ -71,16 +61,16 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
         $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $sheetTo->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
 
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.refuse');
+        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.cancel');
         $expectedNotification->setMessage('this is a test');
 
         $request = new Request(
             $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
-            $sheetTo,
             [],
+            $sheetTo,
+            [$this->createParticipantMock($sheetFrom, $user2, 2)],
             'test',
             $dateTime,
             $user
@@ -88,17 +78,17 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expectedRequest = new Request(
             $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
-            $sheetTo,
             [],
+            $sheetTo,
+            [$this->createParticipantMock($sheetFrom, $user2, 2)],
             'test',
             $dateTime,
             $user
         );
-        $expectedRequest->setState(Request::STATE_REFUSED);
+        $expectedRequest->setState(Request::STATE_CANCEL);
         $expectedRequest->addNotifications($expectedNotification);
 
-        $refusedRequest = new RefuseRequest($request, $user);
+        $refusedRequest = new CancelRequest($request, $user);
         $refusedRequest->message = 'this is a test';
 
 
@@ -108,9 +98,10 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
         $handler->handle($refusedRequest);
     }
+
 
     /**
      * @param Sheet $sheet
@@ -121,7 +112,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function createParticipantMock(Sheet $sheet, User $user, $id)
     {
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], false);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');
