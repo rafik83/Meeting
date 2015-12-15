@@ -372,6 +372,6 @@ event_meeting_request_cancel:
     requirements:
         id: \d+
         meetingRequest: \d+
-        subdomain: "[a-zA-Z0-9\-]+"
+        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
