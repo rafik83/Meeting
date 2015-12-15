@@ -55,6 +55,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
         arguments:
@@ -65,6 +67,16 @@ services:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.meeting_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@knp_paginator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    vimeet_infrastructure.repository.meeting_slot_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -203,6 +215,12 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:

@@ -1,0 +1,40 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>Liste des RDV positionnés</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>De</th>
+                <th>à</th>
+                <th>Slot</th>
+                <th>Créé le</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in meetings %}
+                <tr>
+                    <td>{{ meeting.sheetNameFrom }}</td>
+                    <td>{{ meeting.sheetNameTo }}</td>
+                    <td>
+                        {{ meeting.slotBegin|date('d/m/Y H:i') }}
+                        {{ meeting.slotEnd|date('H:i') }}
+                    </td>
+                    <td>{{ meeting.createdAt|date('d/m/Y') }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">
+                        Aucun RDV positionné
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(meetings) }}
+
+{% endblock %}

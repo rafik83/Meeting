@@ -1,0 +1,18 @@
+Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting:
+    properties:
+        meetingRequest:
+            - NotBlank: ~
+        fromSheet:
+            - NotBlank: ~
+        fromParticipants:
+            - Count:
+                min: 1
+                minMessage: validators.position_meeting.fromParticipants.count.min
+        toSheet:
+            - NotBlank: ~
+        toParticipants:
+            - Count:
+                min: 1
+                minMessage: validators.position_meeting.fromParticipants.count.min
+        slot:
+            - NotBlank: ~

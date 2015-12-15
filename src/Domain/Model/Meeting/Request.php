@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Request
@@ -68,6 +69,11 @@ class Request
      * @var Notification[]
      */
     private $notifications;
+
+    /**
+     * @var Meeting
+     */
+    private $meeting;
 
     /**
      * @var User
@@ -233,5 +239,29 @@ class Request
     public function hasFromParticipants()
     {
         return !$this->fromParticipants->isEmpty();
+    }
+
+    /**
+     * Get meeting
+     *
+     * @return null|Meeting
+     */
+    public function getMeeting()
+    {
+        return $this->meeting;
+    }
+
+    /**
+     * Set meeting
+     *
+     * @param Meeting $meeting
+     *
+     * @return Request
+     */
+    public function setMeeting($meeting)
+    {
+        $this->meeting = $meeting;
+
+        return $this;
     }
 }
