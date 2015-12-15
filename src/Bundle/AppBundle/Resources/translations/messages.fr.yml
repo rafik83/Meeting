@@ -54,6 +54,8 @@ event:
         add_participant:
             title: Ajouter un participant
         package:
+            include: Inclus avec votre forfait
+            includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
             step:
                 next: Choisir votre forfait
             column:
@@ -82,6 +84,8 @@ event:
             label:
                 totalPrice: Total
                 billingStep: Passer à l'étape de facturation
+            includeTitle: Inclus avec %product%
+            include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
     meeting:
         listRequest:
             title: Liste de vos demandes de rendez-vous
