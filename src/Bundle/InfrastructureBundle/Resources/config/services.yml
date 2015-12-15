@@ -193,6 +193,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
@@ -204,11 +208,6 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
-            - '@vimeet_infrastructure.repository_meeting.meeting_repository'
-    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
-        arguments:
-            - '@datetime'
             - '@vimeet_infrastructure.repository_meeting.meeting_repository'
 
     #

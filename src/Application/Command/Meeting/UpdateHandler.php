@@ -16,11 +16,6 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;
 class UpdateHandler
 {
     /**
-     * @var \DateTimeImmutable
-     */
-    private $dateTime;
-
-    /**
      * @var MeetingRepositoryInterface
      */
     private $meetingRepositoryInterface;
@@ -28,12 +23,10 @@ class UpdateHandler
     /**
      * UpdateHandler constructor.
      *
-     * @param \DateTimeInterface         $dateTime
      * @param MeetingRepositoryInterface $meetingRepositoryInterface
      */
-    public function __construct(\DateTimeInterface $dateTime, MeetingRepositoryInterface $meetingRepositoryInterface)
+    public function __construct(MeetingRepositoryInterface $meetingRepositoryInterface)
     {
-        $this->dateTime                   = $dateTime;
         $this->meetingRepositoryInterface = $meetingRepositoryInterface;
     }
 

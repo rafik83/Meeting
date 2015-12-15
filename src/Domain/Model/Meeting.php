@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Meeting
@@ -58,6 +57,9 @@ class Meeting
      */
     private $state = self::STATE_SCHEDULED;
 
+    /**
+     * Meeting constructor.
+     */
     public function __construct()
     {
         $this->fromParticipants = new ArrayCollection();

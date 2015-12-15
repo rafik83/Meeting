@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 
 class Cancel
 {

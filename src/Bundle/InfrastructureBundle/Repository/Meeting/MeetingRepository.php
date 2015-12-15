@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Repository\Meeting\MeetingRepositoryInterface;

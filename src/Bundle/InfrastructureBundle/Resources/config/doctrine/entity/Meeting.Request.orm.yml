@@ -25,7 +25,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
         meetingSlot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
         meeting:
-            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Meeting
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

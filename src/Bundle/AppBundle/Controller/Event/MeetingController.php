@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Proximum\Vimeet\Application\Command\Meeting\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\CancelType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\UpdateType;
-use Proximum\Vimeet\Domain\Model\Meeting\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -36,7 +36,7 @@ class MeetingController extends Controller
      *
      * @ParamConverter(
      *   "meeting",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting",
      *   options={"id" = "meeting_id"}
      * )
      *
@@ -77,7 +77,7 @@ class MeetingController extends Controller
      *
      * @ParamConverter(
      *   "meeting",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting",
      *   options={"id" = "meeting_id"}
      * )
      *
@@ -122,7 +122,7 @@ class MeetingController extends Controller
      *
      * @ParamConverter(
      *   "meeting",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Meeting",
+     *   class="Proximum\Vimeet\Domain\Model\Meeting",
      *   options={"id" = "meeting_id"}
      * )
      *
