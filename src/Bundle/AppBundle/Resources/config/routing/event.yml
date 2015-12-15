@@ -303,6 +303,10 @@ event_sheet_schedule_unparticipate_happening:
     methods:  [POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
 
+#
+# Meeting
+#
+
 event_sheet_schedule_meeting:
     path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}
     host: "{subdomain}.%domain%"
@@ -312,7 +316,7 @@ event_sheet_schedule_meeting:
         schedule_id: \d+
         meeting_id: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:meeting }
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:display }
 
 event_sheet_schedule_meeting_cancel:
     path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/cancel
@@ -323,7 +327,7 @@ event_sheet_schedule_meeting_cancel:
         schedule_id: \d+
         meeting_id: \d+
     methods:  [GET, DELETE]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:cancelMeeting }
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:cancel }
 
 #
 # Meeting Request
