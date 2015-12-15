@@ -55,7 +55,7 @@ class RequestViewBuilder
             $request->getState(),
             $request->getDescription(),
             $request->getCreatedAt(),
-            $request->getRefuseMessage()
+            $this->getMessage($request)
         );
 
         foreach ($request->getFromParticipants() as $participant) {
@@ -69,5 +69,21 @@ class RequestViewBuilder
         }
 
         return $requestView;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getMessage(Request $request)
+    {
+        foreach ($request->getNotifications() as $notification) {
+            if ($notification->getMessage()) {
+                return $notification->getMessage();
+            }
+        }
+
+        return '';
     }
 }
