@@ -67,4 +67,13 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
+    participant_random_1{10..30}:
+        __construct: false
+        user: @user_random_1
+        sheet: @sheet_exposant*
+        owner: false
+        data:
+            563caf1d9b1cb: <firstName()>
+            563caf2746398: <lastName()>
+            563caf2f0ddbd: "0809090909"
 

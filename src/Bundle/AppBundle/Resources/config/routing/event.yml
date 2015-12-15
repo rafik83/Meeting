@@ -233,7 +233,7 @@ event_catalog_sheet_meeting_request:
         categoryView: \d+
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:createRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:createRequest }
 
 #
 # Schedule
@@ -312,7 +312,7 @@ event_meeting_list_request:
         id: \d+
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:listRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listRequest }
 
 event_meeting_list_proposition:
     path: /sheet/{id}/meeting/proposition
@@ -321,7 +321,7 @@ event_meeting_list_proposition:
         id: \d+
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:listProposition }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
 
 event_meeting_request_approved:
     path: /sheet/{id}/meeting/proposition/approved/{meetingRequest}
@@ -331,7 +331,7 @@ event_meeting_request_approved:
         meetingRequest: \d+
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:approvedRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approvedRequest }
 
 event_meeting_request_refused:
     path: /sheet/{id}/meeting/proposition/refused/{meetingRequest}
@@ -341,4 +341,14 @@ event_meeting_request_refused:
         meetingRequest: \d+
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:refusedRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refusedRequest }
+
+event_meeting_request_cancel:
+    path: /sheet/{id}/meeting/request/cancel/{meetingRequest}
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        meetingRequest: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }

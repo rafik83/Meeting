@@ -11,9 +11,10 @@
             <th>{{ 'event.meeting.listRequest.participants'|trans }}</th>
             <th>{{ 'event.meeting.listRequest.informations'|trans }}</th>
             <th>{{ 'event.meeting.listRequest.createdAt'|trans }}</th>
+            <th>{{ 'event.meeting.listRequest.actions'|trans }}</th>
         </thead>
         <tbody>
-            {% set state = { approved: 'success', sent: 'info', refused: 'danger' } %}
+            {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
             {% for request_view in request_views %}
                 <tr>
                     <td>
@@ -26,8 +27,16 @@
                             {{ participantNameView.participantName }}<br>
                         {% endfor %}
                     </td>
-                    <td>{{ request_view.refuseMessage|nl2br }}</td>
+                    <td>{{ request_view.message|nl2br }}</td>
                     <td>{{ request_view.createdAt|date('Y-m-d') }}</td>
+                    <td>{% if request_view.state == 'sent' or request_view.state == 'approved' %}
+                        <a href="{{ path('event_meeting_request_cancel', {
+                            'subdomain': app.request.attributes.get('subdomain'),
+                            'id': sheet.id,
+                            'meetingRequest': request_view.id
+                        }) }}" class="btn-xs alert-warning">{{ 'event.meeting.listRequest.cancel'|trans }}</a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

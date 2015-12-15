@@ -24,7 +24,7 @@ class MeetingRequestRefuseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('refuseMessage', TextareaType::class, [
+            ->add('message', TextareaType::class, [
                 'required' => false,
             ]);
     }
