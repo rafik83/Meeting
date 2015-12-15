@@ -25,7 +25,7 @@ class OptionType extends AbstractLocalizedType
         parent::finishView($view, $form, $options);
 
         $view->vars['quantity_allowed'] = 1;
-        $view->vars['multiple_row']     = false;
+        $view->vars['display_price']    = true;
         $view->vars['is_included']      = false;
 
         if (null !== $options['product'] && isset($options['sheet']) && null !== $options['sheet']) {
@@ -48,11 +48,11 @@ class OptionType extends AbstractLocalizedType
 
             $view->vars['quantity_allowed'] = $product->getRemainingQuantityMax($sheet->getPackageData());
 
-            if ($view->vars['quantity_allowed'] !== 0
-                && null !== $view->vars['quantity_included']
+            if ($view->vars['quantity_allowed'] === 0
+                && null === $view->vars['quantity_included']
                 && true === $view->vars['is_included']
             ) {
-                $view->vars['multiple_row'] = true;
+                $view->vars['display_price'] = false;
             }
         }
     }
