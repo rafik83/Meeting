@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CancelRequestHandler
 {
@@ -35,18 +37,34 @@ class CancelRequestHandler
     private $createdAt;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @param RequestRepositoryInterface      $requestRepository
      * @param NotificationRepositoryInterface $notificationRepository
      * @param DateTimeInterface               $createdAt
+     * @param SheetInfoGuesser                $sheetInfoGuesser
+     * @param TranslatorInterface             $translator
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         NotificationRepositoryInterface $notificationRepository,
-        DateTimeInterface $createdAt
+        DateTimeInterface $createdAt,
+        SheetInfoGuesser $sheetInfoGuesser,
+        TranslatorInterface $translator
     ) {
         $this->requestRepository      = $requestRepository;
         $this->notificationRepository = $notificationRepository;
         $this->createdAt              = $createdAt;
+        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->translator             = $translator;
     }
 
     /**
@@ -85,7 +103,17 @@ class CancelRequestHandler
             'meeting_request.cancel'
         );
 
-        $notification->setMessage($cancelRequest->message);
+        $message = $this->translator->trans(
+            'notification.meeting_request.cancel.' . ($cancelRequest->message ? 'withMessage' : 'withoutMessage'),
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($cancelRequest->request->getFrom()),
+                '%message%'   => $cancelRequest->message
+            ],
+            null,
+            $participant->getUser()->getLocale()
+        );
+
+        $notification->setMessage($message);
         $this->notificationRepository->add($notification);
         $cancelRequest->request->addNotifications($notification);
     }

@@ -16,7 +16,7 @@
         <tbody>
         {% for notification in unreadNotifications %}
             <tr>
-                <td>{{ ('notification.' ~ notification.action)|trans }}</td>
+                <td>{{ ('notification.' ~ notification.action ~ '.action')|trans }}</td>
                 <td>{{ notification.message }}</td>
                 <td>{{ notification.createdAt|date('d/m/Y H:i') }}</td>
             </tr>

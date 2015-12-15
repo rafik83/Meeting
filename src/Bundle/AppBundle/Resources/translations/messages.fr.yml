@@ -170,5 +170,11 @@ who:
 
 notification:
     meeting_request:
-        cancel: Demande de RDV annulée
-        refuse: Demande de RDV refusée
+        cancel:
+            withoutMessage: Demande annulée par %sheetName%
+            withMessage: Demande annulée par %sheetName% pour le motif suivant : "%message%"
+            action: Demande de RDV annulée
+        refuse:
+            withoutMessage: Demande refusée par %sheetName%
+            withMessage: Demande refusée par %sheetName% pour le motif suivant : "%message%"
+            action: Demande de RDV refusée
