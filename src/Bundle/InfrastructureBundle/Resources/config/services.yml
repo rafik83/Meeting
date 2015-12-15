@@ -67,6 +67,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MeetingRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.notification_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -205,10 +209,20 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
             - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
 
     #
     # Security

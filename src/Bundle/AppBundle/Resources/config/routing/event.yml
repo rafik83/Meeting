@@ -380,3 +380,13 @@ event_meeting_request_refused:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refusedRequest }
+
+event_meeting_request_cancel:
+    path: /sheet/{id}/meeting/request/cancel/{meetingRequest}
+    host: "{subdomain}.%domain%"
+    requirements:
+        id: \d+
+        meetingRequest: \d+
+        subdomain: "[a-zA-Z0-9\-]+"
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
