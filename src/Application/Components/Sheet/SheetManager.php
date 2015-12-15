@@ -169,7 +169,7 @@ class SheetManager
 
             foreach ($requests as $request) {
                 if (($request->getTo() === $sheet || $request->getFrom() === $sheet)
-                    && $request->getState() !== Request::STATE_REFUSED
+                    && ($request->getState() === Request::STATE_SENT || $request->getState() === Request::STATE_APPROVED)
                 ) {
                     unset($allowedSheets[$givenSheetKey]);
                 }
