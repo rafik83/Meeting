@@ -209,10 +209,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
             - '@vimeet_infrastructure.repository_meeting.meeting_repository'
-    vimeet_infrastructure.vimeet.application.command.meeting.refused_request_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\RefusedRequestHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # Security
