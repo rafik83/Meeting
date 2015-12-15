@@ -41,6 +41,7 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessPackageStepNotExists($sheet, $step);
+        $this->denyAccessAfterFirstOrderGenerated($sheet);
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
             ->createFromSheet($sheet);
@@ -106,6 +107,7 @@ class PackageController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
+        $this->denyAccessAfterFirstOrderGenerated($sheet);
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
             ->createFromSheet($sheet);
@@ -135,6 +137,18 @@ class PackageController extends BaseController
         $packageTemplate = $sheet->getTypePackageTemplate();
 
         if (!isset($packageTemplate[$step])) {
+            throw $this->createNotFoundException();
+        }
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @throws NotFoundHttpException
+     */
+    private function denyAccessAfterFirstOrderGenerated(Sheet $sheet)
+    {
+        if (!$sheet->getOrders()->isEmpty()) {
             throw $this->createNotFoundException();
         }
     }

@@ -85,7 +85,8 @@ class SheetManager
             $sheet->getPackageData(),
             $sheet->getBillingData(),
             $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
-            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet)
+            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
+            $sheet->getOrders()->toArray()
         );
     }
 

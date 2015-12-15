@@ -69,6 +69,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
         arguments:
@@ -215,6 +219,10 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
