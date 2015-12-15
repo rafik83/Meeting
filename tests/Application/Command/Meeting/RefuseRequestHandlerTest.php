@@ -37,7 +37,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user, 2));
 
-        $expectedNotification = new Notification($user2, $user, $dateTime, 'meeting_request.refuse');
+        $expectedNotification = new Notification($event, $user2, $user, $dateTime, 'meeting_request.refuse');
         $expectedNotification->setMessage('this is a test');
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
@@ -73,7 +73,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
 
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.refuse');
+        $expectedNotification = new Notification($event, $user, $user2, $dateTime, 'meeting_request.refuse');
         $expectedNotification->setMessage('this is a test');
 
         $request = new Request(

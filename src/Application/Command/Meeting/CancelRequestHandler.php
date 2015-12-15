@@ -35,9 +35,9 @@ class CancelRequestHandler
     private $createdAt;
 
     /**
-     * @param RequestRepositoryInterface $requestRepository
+     * @param RequestRepositoryInterface      $requestRepository
      * @param NotificationRepositoryInterface $notificationRepository
-     * @param DateTimeInterface $createdAt
+     * @param DateTimeInterface               $createdAt
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
@@ -78,6 +78,7 @@ class CancelRequestHandler
     private function notify(CancelRequest $cancelRequest, Participant $participant)
     {
         $notification = new Notification(
+            $cancelRequest->request->getFrom()->getEvent(),
             $cancelRequest->emitter,
             $participant->getUser(),
             $this->createdAt,

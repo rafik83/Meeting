@@ -63,7 +63,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetTo->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
 
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.cancel');
+        $expectedNotification = new Notification($event, $user, $user2, $dateTime, 'meeting_request.cancel');
         $expectedNotification->setMessage('this is a test');
 
         $request = new Request(

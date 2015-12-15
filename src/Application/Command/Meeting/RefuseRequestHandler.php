@@ -57,6 +57,7 @@ class RefuseRequestHandler
 
         if (!$refuseRequest->request->hasFromParticipants()) {
             $notification = new Notification(
+                $refuseRequest->request->getFrom()->getEvent(),
                 $refuseRequest->emitter,
                 $refuseRequest->request->getCreator(),
                 $this->createdAt,
@@ -69,6 +70,7 @@ class RefuseRequestHandler
         } else {
             foreach ($refuseRequest->request->getFromParticipants() as $participant) {
                 $notification = new Notification(
+                    $refuseRequest->request->getFrom()->getEvent(),
                     $refuseRequest->emitter,
                     $participant->getUser(),
                     $this->createdAt,

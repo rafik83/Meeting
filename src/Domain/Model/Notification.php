@@ -20,6 +20,11 @@ class Notification
     private $id;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var User
      */
     private $emitter;
@@ -50,13 +55,15 @@ class Notification
     private $message;
 
     /**
+     * @param Event             $event
      * @param User              $emitter
      * @param User              $recipient
      * @param DateTimeInterface $createdAt
      * @param string            $action
      */
-    public function __construct(User $emitter, User $recipient, DateTimeInterface $createdAt, $action)
+    public function __construct(Event $event, User $emitter, User $recipient, DateTimeInterface $createdAt, $action)
     {
+        $this->event     = $event;
         $this->emitter   = $emitter;
         $this->recipient = $recipient;
         $this->createdAt = $createdAt;
@@ -70,6 +77,14 @@ class Notification
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 
     /**
