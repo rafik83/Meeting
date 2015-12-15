@@ -253,3 +253,13 @@ form:
                 label: Participants concernés
             submit:
                 label: Participer
+    position_meeting:
+        children:
+            fromParticipants:
+                label: Participants
+            toParticipants:
+                label: Participants
+            slot:
+                label: Créneau de rendez-vous
+            submit:
+                label: Placer

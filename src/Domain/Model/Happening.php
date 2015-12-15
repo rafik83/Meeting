@@ -43,7 +43,7 @@ class Happening
     private $description;
 
     /**
-     * @var string
+     * @var bool
      */
     private $blocking;
 
@@ -130,7 +130,7 @@ class Happening
     /**
      * Get blocking.
      *
-     * @return string
+     * @return bool
      */
     public function getBlocking()
     {

@@ -19,6 +19,8 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         creator:
             targetEntity: Proximum\Vimeet\Domain\Model\User
     manyToMany:

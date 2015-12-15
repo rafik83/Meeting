@@ -52,8 +52,8 @@ class RequestViewsBuilder
     public function generate($requests)
     {
         foreach ($requests as $request) {
-            $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFrom());
-            $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getTo());
+            $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet());
+            $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet());
             $message       = '';
 
             foreach ($request->getNotifications() as $notification) {

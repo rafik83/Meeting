@@ -42,10 +42,14 @@ class TypeTemplateFieldController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
+        $packageObject = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromType($type);
+
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
-            'event'    => $event,
-            'typeView' => $typeView,
-            'type'     => $type,
+            'event'         => $event,
+            'typeView'      => $typeView,
+            'type'          => $type,
+            'packageObject' => $packageObject,
         ]);
     }
 

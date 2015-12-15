@@ -54,6 +54,8 @@ event:
         add_participant:
             title: Ajouter un participant
         package:
+            include: Inclus avec votre forfait
+            includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
             step:
                 next: Choisir votre forfait
             column:
@@ -66,12 +68,12 @@ event:
                 boughtNumber: '{0}|{1} Vous avez déjà ajouté %count% participant sur votre fiche|]1,Inf[ Vous avez déjà ajouté %count% participants sur votre fiche'
         billing:
             title: Facturation
-            proForma: Visualiser la pro-forma
         payment:
             title: Mode de paiement
             description: Choisissez votre mode de paiement
-        finalStepBilling:
-            title: Finalisation de votre commande
+        listOrders:
+            title: Liste de vos commandes
+            proForma: Visualiser la pro-forma
         cart:
             title: Récapitulatif de votre panier
             column:
@@ -82,6 +84,8 @@ event:
             label:
                 totalPrice: Total
                 billingStep: Passer à l'étape de facturation
+            includeTitle: Inclus avec %product%
+            include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
     meeting:
         listRequest:
             title: Liste de vos demandes de rendez-vous

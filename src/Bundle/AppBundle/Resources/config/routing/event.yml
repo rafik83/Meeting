@@ -122,14 +122,6 @@ event_sheet_package_cart:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Package:cart }
 
-event_sheet_billing_pro_forma:
-    path: /sheet/{id}/pro_forma
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
-    methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Billing:proForma }
-
 event_sheet_billing:
     path: /sheet/{id}/billing
     host: '{subdomain}.%domain%'
@@ -146,13 +138,21 @@ event_sheet_package_payment_mode:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Billing:paymentMode }
 
-event_sheet_package_final_billing_step:
-    path: /sheet/{id}/final
+event_sheet_list_orders:
+    path: /sheet/{id}/orders
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Billing:finalBillingStep }
+    defaults: { _controller: VimeetAppBundle:Event/Order:listOrder }
+
+event_sheet_order_pro_forma:
+    path: /sheet/{id}/pro_forma/{order_id}
+    host: '{subdomain}.%domain%'
+    requirements:
+        subdomain: '[a-zA-Z0-9\-]+'
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Order:proForma }
 
 #
 # Authentication
@@ -299,8 +299,20 @@ event_sheet_schedule_unparticipate_happening:
         id: \d+
         schedule_id: \d+
         happening_id: \d+
+        participant_id: \d+
     methods:  [POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
+
+event_sheet_schedule_meeting:
+    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}
+    host: '{subdomain}.%domain%'
+    requirements:
+        subdomain: '[a-zA-Z0-9\-]+'
+        id: \d+
+        schedule_id: \d+
+        meeting_id: \d+
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Schedule:meeting }
 
 #
 # Meeting

@@ -53,6 +53,11 @@ class Sheet
     private $billingData;
 
     /**
+     * @var ArrayCollection
+     */
+    private $orders;
+
+    /**
      * @param Event $event
      * @param Type  $type
      * @param array $data
@@ -65,6 +70,7 @@ class Sheet
         $this->data         = $data;
         $this->packageData  = $packageData;
         $this->participants = new ArrayCollection();
+        $this->orders       = new ArrayCollection();
     }
 
     /**
@@ -185,5 +191,25 @@ class Sheet
     public function getTypePackageTemplate()
     {
         return $this->getType()->getPackageTemplate();
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return Sheet
+     */
+    public function addOrder(Order $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }

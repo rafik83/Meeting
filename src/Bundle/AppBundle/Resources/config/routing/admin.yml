@@ -105,3 +105,41 @@ admin_category_update:
         type_id: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Category:update }
+
+#
+# Meeting
+#
+
+admin_meeting_list:
+    path: /event/{id}/meeting
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Meeting:list }
+
+#
+# Meeting Request
+#
+
+admin_meeting_request_list:
+    path: /event/{id}/meeting-request
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:list }
+
+admin_meeting_request_position:
+    path: /event/{id}/meeting-request/{request_id}/position
+    requirements:
+        id: \d+
+        request_id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:position }
+
+admin_meeting_request_slots:
+    path: /event/{id}/meeting-request/{request_id}/slots
+    requirements:
+        id: \d+
+        request_id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:slots }

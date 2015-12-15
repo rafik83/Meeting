@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 
 class RequestRepository implements RequestRepositoryInterface
 {
@@ -23,11 +27,27 @@ class RequestRepository implements RequestRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var PaginatorInterface
      */
-    public function __construct(EntityManager $entityManager)
+    private $paginator;
+
+    /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
+     * RequestRepository constructor.
+     *
+     * @param EntityManager      $entityManager
+     * @param PaginatorInterface $paginator
+     * @param SheetInfoGuesser   $sheetInfoGuesser
+     */
+    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator, SheetInfoGuesser $sheetInfoGuesser)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager    = $entityManager;
+        $this->paginator        = $paginator;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
@@ -97,5 +117,39 @@ class RequestRepository implements RequestRepositoryInterface
             ->orderBy('request.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPendingByEvent(Event $event, $page, $limit)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->where('request.state = :state')
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->andWhere('request.meeting IS NULL');
+
+        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
+
+        $pagination->setItems(array_map(function (Request $request) {
+            return new RequestView(
+                $request->getId(),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
+                $request->getState(),
+                $request->getDescription(),
+                $request->getCreatedAt(),
+                ''
+            );
+        }, $pagination->getItems()));
+
+        return $pagination;
     }
 }
