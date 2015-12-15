@@ -25,11 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-<<<<<<< HEAD
 class MeetingController extends Controller
-=======
-class MeetingRequestController extends BaseController
->>>>>>> 4c213d6... 83 - Rename controller
 {
     /**
      * @ParamConverter(
