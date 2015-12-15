@@ -245,7 +245,7 @@ class MeetingRequestController extends BaseController
         if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
             && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
         ) {
-            throw new AccessDeniedException('You can not access this meeting request');
+            throw $this->createAccessDeniedException('You can not access this meeting request');
         }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
@@ -285,7 +285,7 @@ class MeetingRequestController extends BaseController
     private function isAllowedToUpdateMeetingRequest(MeetingRequest $meetingRequest)
     {
         if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT) {
-            throw new AccessDeniedException('You can not access this meeting request');
+            throw $this->createAccessDeniedException('You can not access this meeting request');
         }
     }
 }
