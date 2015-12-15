@@ -42,7 +42,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->createQueryBuilder()
             ->select('happening')
             ->from(Happening::class, 'happening')
-            ->join(HappeningParticipation::class, 'parcipation', 'WITH', 'parcipation.happening = happening AND parcipation.participant = :participant')
+            ->join(HappeningParticipation::class, 'participation', 'WITH', 'participation.happening = happening AND participation.participant = :participant')
             ->setParameter('participant', $participant)
             ->where('happening.schedule = :schedule')
             ->setParameter('schedule', $schedule);
