@@ -23,11 +23,6 @@ class Meeting
     private $id;
 
     /**
-     * @var Sheet
-     */
-    private $from;
-
-    /**
      * @var MeetingSlot
      */
     private $slot;
@@ -103,7 +98,7 @@ class Meeting
      */
     public function getFromSheet()
     {
-        return $this->from;
+        return $this->fromSheet;
     }
 
     /**
