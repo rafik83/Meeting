@@ -96,7 +96,7 @@ class MeetingController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $cancel = new Cancel($meeting);
-        $form   = $this->createForm(new CancelType(), $cancel);
+        $form   = $this->createForm(CancelType::class, $cancel);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler')->handle($cancel);
@@ -143,7 +143,7 @@ class MeetingController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $update = new Update($meeting, $sheet);
-        $form   = $this->createForm(new UpdateType(), $update, ['submit' => true]);
+        $form   = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.update_handler')->handle($update);

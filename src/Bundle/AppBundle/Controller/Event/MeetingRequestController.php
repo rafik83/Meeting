@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MessageRequestType;
 
 class MeetingRequestController extends BaseController
 {
@@ -251,7 +252,7 @@ class MeetingRequestController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm('meeting_request_message', $cancelRequest);
+        $form          = $this->createForm(MessageRequestType::class, $cancelRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

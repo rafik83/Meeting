@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class MessageRequestType extends AbstractType
 {
@@ -21,7 +22,7 @@ class MessageRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', 'textarea', [
+            ->add('message', TextareaType::class, [
                 'required' => false,
             ]);
     }
@@ -29,7 +30,7 @@ class MessageRequestType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'meeting_request_message';
     }

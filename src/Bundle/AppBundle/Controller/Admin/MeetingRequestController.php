@@ -10,8 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use DateTime;
-use Proximum\Vimeet\Application\Command\Meeting\Create;
+use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -63,7 +62,7 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.application.components.meeting.request_view_builder')
             ->generate($meetingRequest);
 
-        $create = new Create($meetingRequest, new DateTime);
+        $create = new CreateRequest($meetingRequest, new \DateTime());
         $form   = $this->createForm('meeting_create', $create, [
             'method'         => 'POST',
             'action'         => $this->generateUrl('admin_meeting_add', [
