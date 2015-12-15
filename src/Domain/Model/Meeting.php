@@ -152,6 +152,14 @@ class Meeting
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getToParticipants()
+    {
+        return $this->toParticipants;
+    }
+
+    /**
      * Get slot
      *
      * @return MeetingSlot
