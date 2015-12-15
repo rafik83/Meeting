@@ -57,7 +57,7 @@ class CancelRequestHandler
         $cancelRequest->request->setState(Request::STATE_CANCEL);
 
         if (!$cancelRequest->request->hasToParticipants()) {
-            foreach ($cancelRequest->request->getTo()->getParticipants() as $participant) {
+            foreach ($cancelRequest->request->getToSheet()->getParticipants() as $participant) {
                 if ($participant->isOwner()) {
                     $this->notify($cancelRequest, $participant);
                 }
