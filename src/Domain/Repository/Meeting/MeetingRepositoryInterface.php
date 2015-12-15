@@ -23,4 +23,9 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant);
+
+    /**
+     * @param Meeting $meeting
+     */
+    public function set(Meeting $meeting);
 }
