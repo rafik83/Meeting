@@ -68,7 +68,6 @@ class CancelRequestHandler
             }
         }
 
-
         $this->requestRepository->set($cancelRequest->request);
     }
 
@@ -84,8 +83,8 @@ class CancelRequestHandler
             $this->createdAt,
             'meeting_request.cancel'
         );
-        $notification->setMessage($cancelRequest->message);
 
+        $notification->setMessage($cancelRequest->message);
         $this->notificationRepository->add($notification);
         $cancelRequest->request->addNotifications($notification);
     }

@@ -97,7 +97,7 @@ class Notification
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {
