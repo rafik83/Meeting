@@ -171,3 +171,4 @@ who:
 notification:
     meeting_request:
         cancel: Demande de RDV annulée
+        refuse: Demande de RDV refusée
