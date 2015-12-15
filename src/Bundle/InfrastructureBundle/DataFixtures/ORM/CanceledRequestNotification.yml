@@ -25,6 +25,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
 Proximum\Vimeet\Domain\Model\Notification:
     notification_request_canceled_1:
         __construct:
+            - @event_rdv_carnot_2016
             - @user_random_1
             - @user_test
             - <dateTimeBetween('-10 days', 'now')>
@@ -32,6 +33,7 @@ Proximum\Vimeet\Domain\Model\Notification:
         message: 'Je ne suis plus disponible à ce créneau, désolé'
     notification_request_canceled_2:
         __construct:
+            - @event_rdv_carnot_2016
             - @user_random_1
             - @user_test
             - <dateTimeBetween('-10 days', 'now')>

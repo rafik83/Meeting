@@ -1,0 +1,26 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <h2>Notifications</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Message</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for notification in unreadNotifications %}
+            <tr>
+                <td>{{ ('notification.' ~ notification.action)|trans }}</td>
+                <td>{{ notification.message }}</td>
+                <td>{{ notification.createdAt|date('d/m/Y H:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

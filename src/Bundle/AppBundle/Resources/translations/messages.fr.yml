@@ -167,3 +167,7 @@ who:
     the:
         category: la catégorie
         type: le type
+
+notification:
+    meeting_request:
+        cancel: Demande de RDV annulée
