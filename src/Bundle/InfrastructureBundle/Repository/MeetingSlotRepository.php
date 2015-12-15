@@ -11,13 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\DateRangeInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
@@ -31,7 +27,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager            = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
