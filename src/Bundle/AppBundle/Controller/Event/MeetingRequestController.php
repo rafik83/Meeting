@@ -243,8 +243,9 @@ class MeetingRequestController extends BaseController
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($meetingRequest->getFromSheet()->getParticipants());
-
-        if (!in_array($meetingRequest->getState(), [MeetingRequest::STATE_SENT, MeetingRequest::STATE_APPROVED])) {
+        if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
+            && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
+        ) {
             throw new AccessDeniedException('You can not access this meeting request');
         }
 
@@ -267,8 +268,8 @@ class MeetingRequestController extends BaseController
         }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-        $fromName         = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
-        $toName           = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
+        $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
         return $this->render('VimeetAppBundle:Event/Meeting:cancelRequest.html.twig', [
             'eventView' => $eventView,
