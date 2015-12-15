@@ -62,6 +62,16 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type_meeting.approved_request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\ApprovedRequestType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_meeting.refused_request_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\RefusedRequestType
+        tags:
+            - { name: form.type }
     vimeet_app.form_type_participant.participant_choice_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
