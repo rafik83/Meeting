@@ -11,8 +11,10 @@
 namespace Tests\Application\Command\Meeting;
 
 use DateTime;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
@@ -22,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +50,16 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add()->shouldNotBeCalled();
 
-        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
+
+        $handler = new CancelRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            $translator->reveal()
+        );
         $handler->handle($refusedRequest);
     }
 
@@ -91,14 +103,23 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $refusedRequest = new CancelRequest($request, $user);
         $refusedRequest->message = 'this is a test';
 
-
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add($expectedNotification)->shouldBeCalled();
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
+        $translator->trans(Argument::cetera())->willReturn('this is a test');
+
+        $handler = new CancelRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            $translator->reveal()
+        );
         $handler->handle($refusedRequest);
     }
 
