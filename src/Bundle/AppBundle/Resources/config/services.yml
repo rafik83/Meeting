@@ -62,10 +62,6 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_meeting.message_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MessageRequestType
-        tags:
-            - { name: 'form.type' }
     vimeet_app.form_type_meeting.meeting_request_cancel_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType
         tags:

@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MessageRequestType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType;
 
 class MeetingRequestController extends BaseController
 {
@@ -252,7 +252,7 @@ class MeetingRequestController extends BaseController
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm(MessageRequestType::class, $cancelRequest);
+        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
         $form->add('submit', 'submit');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -260,7 +260,7 @@ class MeetingRequestController extends BaseController
                 ->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler')
                 ->handle($cancelRequest);
 
-            $this->addFlash('success', 'flash.meeting_request.canceled.success');
+            $this->addFlash('success', 'flash.meeting_request.cancelled.success');
 
             return $this->redirectToRoute('event_meeting_list_request', [
                 'subdomain' => $request->attributes->get('subdomain'),
