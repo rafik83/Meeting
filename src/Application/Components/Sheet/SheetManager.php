@@ -169,7 +169,7 @@ class SheetManager
             $requests = $this->requestRepository->getAllRequestBySheet($givenSheet);
 
             foreach ($requests as $request) {
-                if (($request->getTo() === $sheet || $request->getFrom() === $sheet)
+                if (($request->getToSheet() === $sheet || $request->getFromSheet() === $sheet)
                     && ($request->getState() === Request::STATE_SENT || $request->getState() === Request::STATE_APPROVED)
                 ) {
                     unset($allowedSheets[$givenSheetKey]);

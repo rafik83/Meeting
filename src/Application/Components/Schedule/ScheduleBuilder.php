@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Application\Components\Schedule;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScheduleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\ScheduleSlotView;
@@ -26,6 +28,11 @@ class ScheduleBuilder
      * @var ScheduleRepositoryInterface
      */
     private $scheduleRepository;
+
+    /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
 
     /**
      * @var UnavailabilityRepositoryInterface
@@ -43,6 +50,11 @@ class ScheduleBuilder
     private $happeningParticipationRepository;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * @var ParticipantInfoGuesser
      */
     private $participantInfoGuesser;
@@ -51,22 +63,28 @@ class ScheduleBuilder
      * ScheduleBuilder constructor.
      *
      * @param ScheduleRepositoryInterface               $scheduleRepository
+     * @param MeetingRepositoryInterface                $meetingRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
      * @param HappeningRepositoryInterface              $happeningRepository
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
+     * @param SheetInfoGuesser                          $sheetInfoGuesser
      * @param ParticipantInfoGuesser                    $participantInfoGuesser
      */
     public function __construct(
         ScheduleRepositoryInterface $scheduleRepository,
+        MeetingRepositoryInterface $meetingRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         HappeningRepositoryInterface $happeningRepository,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->scheduleRepository               = $scheduleRepository;
+        $this->meetingRepository                = $meetingRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->happeningRepository              = $happeningRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
+        $this->sheetInfoGuesser                 = $sheetInfoGuesser;
         $this->participantInfoGuesser           = $participantInfoGuesser;
     }
 
@@ -90,7 +108,7 @@ class ScheduleBuilder
                 'id'      => $schedule->getId(),
                 'date'    => $schedule->getDate(),
                 'columns' => [
-                    'meeting'        => $this->buildMeetings($schedule),
+                    'meeting'        => $this->buildMeetings($schedule, $participant),
                     'happening'      => $this->buildHappenings($schedule, $participant),
                     'unavailability' => $this->buildUnavailabilities($schedule, $participant),
                 ],
@@ -101,21 +119,36 @@ class ScheduleBuilder
     }
 
     /**
-     * @param Schedule $schedule
+     * @param Schedule    $schedule
+     * @param Participant $participant
      *
      * @return array
      */
-    private function buildMeetings(Schedule $schedule)
+    private function buildMeetings(Schedule $schedule, Participant $participant)
     {
         $slots = [];
 
-        foreach ($schedule->getMeetingSlots() as $meetingSlot) {
-            $slots[] = new ScheduleSlotView(
+        foreach ($schedule->getSlots() as $meetingSlot) {
+            $slots[$meetingSlot->getId()] = new ScheduleSlotView(
                 $meetingSlot->getId(),
                 'Vide',
                 $meetingSlot->getBegin(),
                 $meetingSlot->getEnd(),
                 false
+            );
+        }
+
+        $meetings = $this->meetingRepository->findByScheduleAndParticipant($schedule, $participant);
+
+        foreach ($meetings as $meeting) {
+            $sheet = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();
+
+            $slots[$meeting->getSlot()->getId()] = new ScheduleSlotView(
+                $meeting->getId(),
+                $this->sheetInfoGuesser->guessSheetInfo($sheet),
+                $meeting->getSlot()->getBegin(),
+                $meeting->getSlot()->getEnd(),
+                true
             );
         }
 

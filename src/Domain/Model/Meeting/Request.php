@@ -128,7 +128,7 @@ class Request
     /**
      * @return Sheet
      */
-    public function getFrom()
+    public function getFromSheet()
     {
         return $this->from;
     }
@@ -144,7 +144,7 @@ class Request
     /**
      * @return Sheet
      */
-    public function getTo()
+    public function getToSheet()
     {
         return $this->to;
     }

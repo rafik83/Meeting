@@ -141,8 +141,8 @@ class RequestRepository implements RequestRepositoryInterface
         $pagination->setItems(array_map(function (Request $request) {
             return new RequestView(
                 $request->getId(),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getFrom()),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getTo()),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
                 $request->getState(),
                 $request->getDescription(),
                 $request->getCreatedAt(),

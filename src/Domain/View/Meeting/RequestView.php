@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\View\Meeting;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
@@ -46,7 +45,7 @@ class RequestView
     public $toParticipants;
 
     /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     public $createdAt;
 
@@ -61,15 +60,15 @@ class RequestView
     public $message;
 
     /**
-     * @param int      $id
-     * @param string   $sheetNameFrom
-     * @param string   $sheetNameTo
-     * @param string   $state
-     * @param string   $description
-     * @param DateTime $createdAt
-     * @param string   $message
+     * @param int                $id
+     * @param string             $sheetNameFrom
+     * @param string             $sheetNameTo
+     * @param string             $state
+     * @param string             $description
+     * @param \DateTimeInterface $createdAt
+     * @param string             $message
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, $createdAt, $message)
+    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, \DateTimeInterface $createdAt, $message)
     {
         $this->id               = $id;
         $this->sheetNameFrom    = $sheetNameFrom;

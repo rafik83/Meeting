@@ -336,9 +336,11 @@ services:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
             - '@vimeet_infrastructure.repository.schedule_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
     #
