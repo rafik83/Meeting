@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Request
 {
@@ -80,14 +81,20 @@ class Request
     private $meeting;
 
     /**
+     * @var User
+     */
+    private $creator;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
      * @param array              $fromParticipants
      * @param Sheet              $to
      * @param array              $toParticipants
-     * @param string             $description
+     * @param                    $description
      * @param \DateTimeInterface $createdAt
+     * @param User               $creator
      */
     public function __construct(
         Sheet $from,
@@ -95,15 +102,17 @@ class Request
         Sheet $to,
         array $toParticipants,
         $description,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        User $creator
     ) {
         $this->from             = $from;
-        $this->fromParticipants = $fromParticipants;
+        $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->to               = $to;
-        $this->toParticipants   = $toParticipants;
+        $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->creator          = $creator;
         $this->notifications    = new ArrayCollection();
     }
 
@@ -216,11 +225,11 @@ class Request
     }
 
     /**
-     * @param Participant[] $fromParticipants
+     * @param Participant $fromParticipant
      */
-    public function setFromParticipants($fromParticipants)
+    public function addFromParticipant(Participant $fromParticipant)
     {
-        $this->fromParticipants = $fromParticipants;
+        $this->fromParticipants->add($fromParticipant);
     }
 
     /**
@@ -261,5 +270,29 @@ class Request
         $this->meeting = $meeting;
 
         return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToParticipants()
+    {
+        return !$this->toParticipants->isEmpty();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFromParticipants()
+    {
+        return !$this->fromParticipants->isEmpty();
     }
 }
