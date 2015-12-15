@@ -329,6 +329,17 @@ event_sheet_schedule_meeting_cancel:
     methods:  [GET, DELETE]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:cancel }
 
+event_sheet_schedule_meeting_update:
+    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/update
+    host: "{subdomain}.%domain%"
+    requirements:
+        subdomain: "[a-zA-Z0-9\-]+"
+        id: \d+
+        schedule_id: \d+
+        meeting_id: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Meeting:update }
+
 #
 # Meeting Request
 #

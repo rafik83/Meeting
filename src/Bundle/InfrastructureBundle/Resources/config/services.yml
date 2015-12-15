@@ -205,6 +205,11 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
             - '@vimeet_infrastructure.repository_meeting.meeting_repository'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
+        arguments:
+            - '@datetime'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # Security

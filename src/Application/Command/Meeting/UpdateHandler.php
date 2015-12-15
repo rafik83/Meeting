@@ -47,9 +47,9 @@ class UpdateHandler
 
         $request = new Request(
             $update->meeting->getFrom(),
-            $update->fromParticipants,
+            $update->fromParticipants->toArray(),
             $update->meeting->getTo(),
-            $update->toParticipants,
+            $update->toParticipants->toArray(),
             $update->message,
             $this->dateTime
         );
