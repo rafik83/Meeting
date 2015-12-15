@@ -33,6 +33,7 @@ class TextareaType extends AbstractType
     {
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
+        $resolver->setDefaults(['product' => null]);
     }
 
     /**

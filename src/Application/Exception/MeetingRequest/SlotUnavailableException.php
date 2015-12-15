@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\MeetingRequest;
 
-class SlotUnvailableException extends \Exception
+class SlotUnavailableException extends \Exception
 {
 }

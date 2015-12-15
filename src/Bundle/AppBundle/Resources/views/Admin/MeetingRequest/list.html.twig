@@ -3,6 +3,8 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
 
+    <h2>Liste des demandes de RDV acceptées</h2>
+
     <table class="table">
         <thead>
             <tr>
@@ -18,6 +20,12 @@
                     <td>{{ meeting_request.sheetNameTo }}</td>
                     <td>
                         <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">
+                        Aucune demande de RDV
                     </td>
                 </tr>
             {% endfor %}

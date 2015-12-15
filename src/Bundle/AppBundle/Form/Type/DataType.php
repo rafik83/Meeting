@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
 
+use Proximum\Vimeet\Application\Exception\Data\DataTypeNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,10 +40,16 @@ class DataType extends AbstractType
         $template = $options['template'];
         $locale   = $options['locale'];
         $sheet    = $options['sheet'];
+        $step     = $options['step'];
+        $product  = null;
 
         foreach ($template as $i => $field) {
             if (!isset($this->types[$field['type']])) {
-                throw new \RuntimeException('Type not found.');
+                throw new DataTypeNotFoundException('Type not found.');
+            }
+
+            if ($step !== null) {
+                $product = $step->getProduct($i);
             }
 
             $builder->add($i, $this->types[$field['type']], [
@@ -52,6 +59,7 @@ class DataType extends AbstractType
                 'template' => $field,
                 'locale'   => $locale,
                 'sheet'    => $sheet,
+                'product'  => $product,
             ]);
         }
     }
@@ -65,5 +73,6 @@ class DataType extends AbstractType
         $resolver->setAllowedTypes('template', ['array']);
         $resolver->setAllowedTypes('locale', ['string']);
         $resolver->setDefaults(['sheet' => null]);
+        $resolver->setDefaults(['step' => null]);
     }
 }

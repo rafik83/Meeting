@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\SlotUnvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\SlotUnavailableException;
 
 class PositionMeetingHandler
 {
@@ -64,7 +64,8 @@ class PositionMeetingHandler
             $positionMeeting->fromSheet,
             $positionMeeting->fromParticipants,
             $positionMeeting->toSheet,
-            $positionMeeting->toParticipants
+            $positionMeeting->toParticipants,
+            $positionMeeting->createdAt
         );
 
         $this->meetingRepository->add($meeting);
@@ -78,7 +79,7 @@ class PositionMeetingHandler
     /**
      * @param PositionMeeting $positionMeeting
      *
-     * @throws SlotUnvailableException
+     * @throws SlotUnavailableException
      */
     private function checkAvailability(PositionMeeting $positionMeeting)
     {
@@ -89,7 +90,7 @@ class PositionMeetingHandler
         $slots = $this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($ids);
 
         if (!in_array($positionMeeting->slot->getId(), $slots)) {
-            throw new SlotUnvailableException(
+            throw new SlotUnavailableException(
                 sprintf('The slot %d is not available.', $positionMeeting->slot->getId())
             );
         }

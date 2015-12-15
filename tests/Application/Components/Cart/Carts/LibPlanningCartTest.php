@@ -12,24 +12,27 @@ namespace Tests\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibPlanningCart;
+use Proximum\Vimeet\Application\Components\Product\Products\LibPlanningProduct;
 
 class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrepareWithEmptyTemplateAndData()
     {
-        $template  = [];
+        $product   = new LibPlanningProduct('key');
+        $product->setOptions([]);
         $dataValue = [];
         $locale    = 'fr';
 
         $optionCart = new LibPlanningCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals(null, $cart);
     }
 
     public function testPrepareWithEmptyTemplate()
     {
-        $template  = [];
+        $product   = new LibPlanningProduct('key');
+        $product->setOptions([]);
         $dataValue = [
             "planning"        => true,
             "planning_bought" => 2,
@@ -37,14 +40,15 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
         $locale    = 'fr';
 
         $optionCart = new LibPlanningCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals(null, $cart);
     }
 
     public function testPrepare()
     {
-        $template = [
+        $product   = new LibPlanningProduct('key');
+        $product->setOptions([
             'label'       => [
                 'fr' => 'Ajouter des plannings',
                 'en' => 'Add plannings',
@@ -56,7 +60,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
             'required'    => false,
             'type'        => 'lib_planning',
             'unitPrice'   => 550,
-        ];
+        ]);
 
         $dataValue = [
             'planning'        => true,
@@ -68,7 +72,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr';
 
         $optionCart = new LibPlanningCart();
-        $cart       = $optionCart->prepare($template, $dataValue, $locale);
+        $cart       = $optionCart->prepare($product, $dataValue, $locale);
 
         $this->assertEquals($result, $cart);
     }

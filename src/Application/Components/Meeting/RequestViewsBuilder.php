@@ -54,6 +54,14 @@ class RequestViewsBuilder
         foreach ($requests as $request) {
             $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet());
             $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet());
+            $message       = '';
+
+            foreach ($request->getNotifications() as $notification) {
+                if (!empty($notification->getMessage())) {
+                    $message = $notification->getMessage();
+                    break;
+                }
+            }
 
             $requestView = new RequestView(
                 $request->getId(),
@@ -62,7 +70,7 @@ class RequestViewsBuilder
                 $request->getState(),
                 $request->getDescription(),
                 $request->getCreatedAt(),
-                $request->getRefuseMessage()
+                $message
             );
 
             foreach ($request->getFromParticipants() as $participant) {

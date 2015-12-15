@@ -14,6 +14,7 @@ use DateTime;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class CreateRequest
 {
@@ -53,15 +54,22 @@ class CreateRequest
     public $createdAt;
 
     /**
+     * @var User
+     */
+    public $creator;
+
+    /**
      * @param Sheet    $from
      * @param Sheet    $to
      * @param DateTime $createdAt
+     * @param User     $creator
      */
-    public function __construct(Sheet $from, Sheet $to, DateTime $createdAt)
+    public function __construct(Sheet $from, Sheet $to, DateTime $createdAt, User $creator)
     {
         $this->from      = $from;
         $this->to        = $to;
         $this->state     = Request::STATE_SENT;
         $this->createdAt = $createdAt;
+        $this->creator   = $creator;
     }
 }

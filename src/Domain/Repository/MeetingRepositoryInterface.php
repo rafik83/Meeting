@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -26,8 +27,15 @@ interface MeetingRepositoryInterface
 
     /**
      * @param Meeting $meeting
+     */
+    public function add(Meeting $meeting);
+
+    /**
+     * @param Event $event
+     * @param int   $page
+     * @param int   $limit
      *
      * @return mixed
      */
-    public function add(Meeting $meeting);
+    public function getByEvent(Event $event, $page, $limit);
 }

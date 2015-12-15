@@ -184,10 +184,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             if ($radioLabel === $label->getText()) {
                 $input = $label->find('css', 'input[type="radio"]');
 
-                if (null == $input) {
+                if (null === $input) {
                     $for = $label->getAttribute('for');
 
-                    if (null != $for) {
+                    if (null !== $for) {
                         $input = $page->find('named', ['id', $for]);
                     }
                 }
@@ -233,8 +233,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             }
 
             foreach ($tbody as $key => $tr) {
-                if (null != $numColumnCheckbox) {
-                    if (null != $tr->find(
+                if (null !== $numColumnCheckbox) {
+                    if (null !== $tr->find(
                             'css',
                             sprintf(
                                 'td:nth-child(%s):contains("%s")',
@@ -249,7 +249,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 }
             }
 
-            if (null !== $numColumnQuantity && null != $numColumnCheckbox && null != $numLine) {
+            if (null !== $numColumnQuantity && null !== $numColumnCheckbox && null !== $numLine) {
                 $table->find(
                     'css',
                     sprintf('tbody tr:nth-child(%s) td:nth-child(%s) select', $numLine, $numColumnQuantity)

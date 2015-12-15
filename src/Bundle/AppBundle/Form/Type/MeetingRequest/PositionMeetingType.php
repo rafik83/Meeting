@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,13 +23,23 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class PositionMeetingType extends AbstractType
 {
+    /**
+     * @var ParticipantInfoGuesser
+     */
     private $participantInfoGuesser;
 
+    /**
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     */
     public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
     {
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -67,12 +76,16 @@ class PositionMeetingType extends AbstractType
                         ->join('slot.schedule', 'schedule', 'WITH', 'schedule.event = :event')
                         ->setParameter('event', $options['event']);
                 },
-                'choice_label' => function (MeetingSlot $meetingSlot) {
+                'choice_label' => function (MeetingSlot $meetingSlot) use ($options) {
+                    $begin    = clone $meetingSlot->getBegin();
+                    $end      = clone $meetingSlot->getEnd();
+                    $timezone = new \DateTimeZone($options['view_timezone']);
+
                     return sprintf(
                         '%s : %s %s',
-                        $meetingSlot->getBegin()->format('d/m/Y'),
-                        $meetingSlot->getBegin()->format('H\hi'),
-                        $meetingSlot->getEnd()->format('H\hi')
+                        $begin->setTimezone($timezone)->format('d/m/Y'),
+                        $begin->setTimezone($timezone)->format('H\hi'),
+                        $end->setTimezone($timezone)->format('H\hi')
                     );
                 },
                 'choice_attr' => function (MeetingSlot $meetingSlot) {
@@ -81,9 +94,12 @@ class PositionMeetingType extends AbstractType
             ]);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['meeting_request', 'event']);
+        $resolver->setRequired(['meeting_request', 'event', 'view_timezone']);
         $resolver->setDefaults([
             'method'     => 'POST',
             'data_class' => PositionMeeting::class,

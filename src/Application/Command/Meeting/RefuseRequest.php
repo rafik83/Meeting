@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\User;
 
 class RefuseRequest
 {
@@ -20,16 +21,22 @@ class RefuseRequest
     public $request;
 
     /**
+     * @var User
+     */
+    public $emitter;
+
+    /**
      * @var string
      */
-    public $refuseMessage;
+    public $message;
 
     /**
      * @param Request $request
+     * @param User    $emitter
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, User $emitter)
     {
         $this->request = $request;
-        $this->request->setState(Request::STATE_REFUSED);
+        $this->emitter = $emitter;
     }
 }

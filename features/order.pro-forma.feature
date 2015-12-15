@@ -18,8 +18,13 @@ Feature: Pro-forma
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
     And I press "form.login.children.submit.label"
     And the response status code should be 200
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/final"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/payment_mode"
     And the response status code should be 200
-    Then I follow "event.sheet.billing.proForma"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/pro_forma"
+    And I check the "Carte bancaire" radio
+    Then I press "form.choose_payment_mode.children.submit.label"
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/orders"
+    And the response status code should be 200
+    And I should see "event.sheet.listOrders.proForma"
+    Then I follow "event.sheet.listOrders.proForma"
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/pro_forma/1"
     And the response status code should be 200
