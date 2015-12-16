@@ -14,9 +14,10 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 
 class RefuseRequestHandler
 {
@@ -72,57 +73,61 @@ class RefuseRequestHandler
     public function handle(RefuseRequest $refuseRequest)
     {
         $refuseRequest->request->setState(Request::STATE_REFUSED);
+        $this->requestRepository->set($refuseRequest->request);
+
+        $this->notify($refuseRequest);
+    }
+
+    /**
+     * @param RefuseRequest $refuseRequest
+     */
+    private function notify(RefuseRequest $refuseRequest)
+    {
+        $notifications = [];
 
         if (!$refuseRequest->request->hasFromParticipants()) {
-            $notification = new Notification(
-                $refuseRequest->request->getFromSheet()->getEvent(),
-                $refuseRequest->emitter,
-                $refuseRequest->request->getCreator(),
-                $this->createdAt,
-                'meeting_request.refuse'
-            );
-
-            $message = $this->translator->trans(
-                'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
-                [
-                    '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
-                    '%message%'   => $refuseRequest->message
-                ],
-                null,
-                $refuseRequest->request->getCreator()->getLocale()
-            );
-
-            $notification->setMessage($message);
-
-            $this->notificationRepository->add($notification);
-            $refuseRequest->request->addNotifications($notification);
+            $notifications[] = $this->notifyParticipant($refuseRequest, $refuseRequest->request->getCreator());
         } else {
             foreach ($refuseRequest->request->getFromParticipants() as $participant) {
-                $notification = new Notification(
-                    $refuseRequest->request->getFromSheet()->getEvent(),
-                    $refuseRequest->emitter,
-                    $participant->getUser(),
-                    $this->createdAt,
-                    'meeting_request.refuse'
-                );
-
-                $message = $this->translator->trans(
-                    'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
-                    [
-                        '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
-                        '%message%'   => $refuseRequest->message
-                    ],
-                    null,
-                    $refuseRequest->request->getCreator()->getLocale()
-                );
-
-                $notification->setMessage($message);
-
-                $this->notificationRepository->add($notification);
-                $refuseRequest->request->addNotifications($notification);
+                $notifications[] = $this->notifyParticipant($refuseRequest, $participant->getUser());
             }
         }
 
+        foreach ($notifications as $notification) {
+            $this->notificationRepository->add($notification);
+            $refuseRequest->request->addNotifications($notification);
+        }
+
         $this->requestRepository->set($refuseRequest->request);
+    }
+
+    /**
+     * @param RefuseRequest $refuseRequest
+     * @param User          $user
+     *
+     * @return Notification
+     */
+    private function notifyParticipant(RefuseRequest $refuseRequest, User $user)
+    {
+        $message = $this->translator->trans(
+            'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
+                '%message%'   => $refuseRequest->message
+            ],
+            null,
+            $user->getLocale()
+        );
+
+        $notification = new Notification(
+            $refuseRequest->request->getFromSheet()->getEvent(),
+            $refuseRequest->emitter,
+            $user,
+            $this->createdAt,
+            'meeting_request.refuse',
+            $message
+        );
+
+        return $notification;
     }
 }

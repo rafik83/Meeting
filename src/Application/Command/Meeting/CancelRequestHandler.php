@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
@@ -73,17 +73,33 @@ class CancelRequestHandler
     public function handle(CancelRequest $cancelRequest)
     {
         $cancelRequest->request->setState(Request::STATE_CANCEL);
+        $this->requestRepository->set($cancelRequest->request);
+
+        $this->notify($cancelRequest);
+    }
+
+    /**
+     * @param CancelRequest $cancelRequest
+     */
+    private function notify(CancelRequest $cancelRequest)
+    {
+        $notifications = [];
 
         if (!$cancelRequest->request->hasToParticipants()) {
             foreach ($cancelRequest->request->getToSheet()->getParticipants() as $participant) {
                 if ($participant->isOwner()) {
-                    $this->notify($cancelRequest, $participant);
+                    $notifications[] = $this->notifyUser($cancelRequest, $participant->getUser());
                 }
             }
         } else {
             foreach ($cancelRequest->request->getToParticipants() as $participant) {
-                $this->notify($cancelRequest, $participant);
+                $notifications[] = $this->notifyUser($cancelRequest, $participant->getUser());
             }
+        }
+
+        foreach ($notifications as $notification) {
+            $this->notificationRepository->add($notification);
+            $cancelRequest->request->addNotifications($notification);
         }
 
         $this->requestRepository->set($cancelRequest->request);
@@ -91,18 +107,12 @@ class CancelRequestHandler
 
     /**
      * @param CancelRequest $cancelRequest
-     * @param Participant   $participant
+     * @param User          $user
+     *
+     * @return Notification
      */
-    private function notify(CancelRequest $cancelRequest, Participant $participant)
+    private function notifyUser(CancelRequest $cancelRequest, User $user)
     {
-        $notification = new Notification(
-            $cancelRequest->request->getFromSheet()->getEvent(),
-            $cancelRequest->emitter,
-            $participant->getUser(),
-            $this->createdAt,
-            'meeting_request.cancel'
-        );
-
         $message = $this->translator->trans(
             'notification.meeting_request.cancel.' . ($cancelRequest->message ? 'withMessage' : 'withoutMessage'),
             [
@@ -110,11 +120,18 @@ class CancelRequestHandler
                 '%message%'   => $cancelRequest->message
             ],
             null,
-            $participant->getUser()->getLocale()
+            $user->getLocale()
         );
 
-        $notification->setMessage($message);
-        $this->notificationRepository->add($notification);
-        $cancelRequest->request->addNotifications($notification);
+        $notification = new Notification(
+            $cancelRequest->request->getFromSheet()->getEvent(),
+            $cancelRequest->emitter,
+            $user,
+            $this->createdAt,
+            'meeting_request.cancel',
+            $message
+        );
+
+        return $notification;
     }
 }

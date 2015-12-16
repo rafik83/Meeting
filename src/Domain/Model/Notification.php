@@ -60,14 +60,16 @@ class Notification
      * @param User              $recipient
      * @param DateTimeInterface $createdAt
      * @param string            $action
+     * @param string            $message
      */
-    public function __construct(Event $event, User $emitter, User $recipient, DateTimeInterface $createdAt, $action)
+    public function __construct(Event $event, User $emitter, User $recipient, DateTimeInterface $createdAt, $action, $message)
     {
         $this->event     = $event;
         $this->emitter   = $emitter;
         $this->recipient = $recipient;
         $this->createdAt = $createdAt;
         $this->action    = $action;
+        $this->message   = $message;
         $this->view      = false;
     }
 
@@ -133,13 +135,5 @@ class Notification
     public function getMessage()
     {
         return $this->message;
-    }
-
-    /**
-     * @param string $message
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
     }
 }

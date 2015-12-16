@@ -220,7 +220,7 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@translator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:
