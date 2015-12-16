@@ -59,8 +59,8 @@ class MeetingController extends Controller
             'sheet'            => $sheet,
             'schedule'         => $schedule,
             'meeting'          => $meeting,
-            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFrom()),
-            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getTo()),
+            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFromSheet()),
+            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getToSheet()),
             'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
                 return $participantInfoGuesser->guessParticipantInfo($participant);
             }, $meeting->getFromParticipants()->toArray()),

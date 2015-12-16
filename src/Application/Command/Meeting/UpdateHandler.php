@@ -36,9 +36,9 @@ class UpdateHandler
     public function handle(Update $update)
     {
         // Update participant
-        if ($update->meeting->getFrom() === $update->sheet) {
+        if ($update->meeting->getFromSheet() === $update->sheet) {
             $notifications = $this->updateFromParticipant($update);
-        } elseif ($update->meeting->getTo() === $update->sheet) {
+        } elseif ($update->meeting->getToSheet() === $update->sheet) {
             $notifications = $this->updateToParticipant($update);
         } else {
             throw new \RuntimeException('This sheet do not participate to this meeting.');

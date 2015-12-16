@@ -52,11 +52,11 @@ class Update
      */
     private function getParticipants(Meeting $meeting, Sheet $sheet)
     {
-        if ($meeting->getFrom() === $sheet) {
+        if ($meeting->getFromSheet() === $sheet) {
             return $meeting->getFromParticipants()->toArray();
         }
 
-        if ($meeting->getTo() === $sheet) {
+        if ($meeting->getToSheet() === $sheet) {
             return $meeting->getToParticipants()->toArray();
         }
 
