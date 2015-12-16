@@ -42,16 +42,16 @@ class UpdateStepHandler
         foreach ($updateStep->packageData as $elementKey => $element) {
             if (isset($element['participant'])) {
                 if ($element['participant']) {
-                    if (!isset($updateStep->packageData[$elementKey]['participant_bought'])) {
+                    if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
                         throw new ForgotToAddQuantityException();
                     }
 
-                    if (!isset($packageData[$updateStep->step][$elementKey]['participant_bought'])) {
-                        $packageData[$updateStep->step][$elementKey]['participant_bought'] = 0;
+                    if (!isset($packageData[$updateStep->step][$elementKey]['quantity'])) {
+                        $packageData[$updateStep->step][$elementKey]['quantity'] = 0;
                     }
 
                     $boughtAndAddedParticipant = count($updateStep->sheet->getParticipants()) - $updateStep->sheet->getType()->getFreeParticipant();
-                    if ($updateStep->packageData[$elementKey]['participant_bought'] < $boughtAndAddedParticipant) {
+                    if ($updateStep->packageData[$elementKey]['quantity'] < $boughtAndAddedParticipant) {
                         throw new BoughtParticipantAlreadyAddedException();
                     }
                 } else {
@@ -60,7 +60,7 @@ class UpdateStepHandler
                     }
                 }
             } elseif (isset($element['planning']) && $element['planning']) {
-                if (!isset($updateStep->packageData[$elementKey]['planning_bought'])) {
+                if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
                     throw new ForgotToAddQuantityException();
                 }
             }

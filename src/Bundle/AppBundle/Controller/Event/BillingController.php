@@ -11,12 +11,11 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use DateTime;
-use Proximum\Vimeet\Application\Command\Billing\CreateOrder;
 use Proximum\Vimeet\Application\Command\Billing\Update;
+use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Billing\BillingUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -87,9 +86,8 @@ class BillingController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $createOrder = new CreateOrder(
+        $createOrder = new Create(
             $sheet,
-            Order::STATE_UNPAID,
             $sheet->getType()->getProFormaTemplate(),
             $sheet->getPackageData(),
             $sheet->getTypePackageTemplate(),
@@ -100,7 +98,7 @@ class BillingController extends BaseController
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.billing.create_order_handler')
+            $this->get('vimeet_infrastructure.vimeet.application.command.order.create_handler')
                 ->handle($createOrder);
 
             $this->addFlash('success', 'flash.package.payment_mode.success');

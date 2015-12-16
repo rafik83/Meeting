@@ -96,11 +96,11 @@ class ParticipantManager
         foreach ($typePackageTemplate as $blockKey => $block) {
             foreach ($block['template'] as $elementKey => $element) {
                 if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
-                    if (isset($packageData[$blockKey][$elementKey]['participant_bought'])
+                    if (isset($packageData[$blockKey][$elementKey]['quantity'])
                         && isset($packageData[$blockKey][$elementKey]['participant'])
                         && true === $packageData[$blockKey][$elementKey]['participant']
                     ) {
-                        return intval($packageData[$blockKey][$elementKey]['participant_bought']);
+                        return intval($packageData[$blockKey][$elementKey]['quantity']);
                     }
                 }
             }

@@ -146,6 +146,14 @@ event_sheet_list_orders:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Order:listOrder }
 
+event_sheet_summary:
+    path: /sheet/{id}/summary
+    host: '{subdomain}.%domain%'
+    requirements:
+        subdomain: '[a-zA-Z0-9\-]+'
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Order:summary }
+
 event_sheet_order_pro_forma:
     path: /sheet/{id}/pro_forma/{order_id}
     host: '{subdomain}.%domain%'

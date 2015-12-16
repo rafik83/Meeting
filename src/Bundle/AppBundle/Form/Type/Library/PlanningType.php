@@ -32,7 +32,7 @@ class PlanningType extends AbstractLocalizedType
                 'label'    => $template['label'][$locale],
                 'required' => isset($template['required']) ? $template['required'] : false,
             ])
-            ->add('planning_bought', CoreChoiceType::class, [
+            ->add('quantity', CoreChoiceType::class, [
                 'choices'           => array_combine($range, $range),
                 'label'             => false,
                 'required'          => isset($template['required']) ? $template['required'] : false,

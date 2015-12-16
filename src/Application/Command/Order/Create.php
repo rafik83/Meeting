@@ -8,12 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Billing;
+namespace Proximum\Vimeet\Application\Command\Order;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CreateOrder
+class Create
 {
     /**
      * @var Sheet
@@ -57,15 +58,14 @@ class CreateOrder
 
     /**
      * @param Sheet             $sheet
-     * @param string            $state
      * @param string            $proFormaTemplate
      * @param array             $packageData
+     * @param array             $packageTemplate
      * @param array             $billingData
      * @param DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
-        $state,
         $proFormaTemplate,
         array $packageData,
         array $packageTemplate,
@@ -73,7 +73,7 @@ class CreateOrder
         DateTimeInterface $createdAt
     ) {
         $this->sheet            = $sheet;
-        $this->state            = $state;
+        $this->state            = Order::STATE_UNPAID;
         $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
         $this->packageTemplate  = $packageTemplate;

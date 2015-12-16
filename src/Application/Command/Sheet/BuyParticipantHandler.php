@@ -91,16 +91,16 @@ class BuyParticipantHandler extends BaseHandler
             foreach ($template['template'] as $blockKey => $block) {
                 // Add +1 on the bought participant option
                 if ($block['type'] === 'lib_participant') {
-                    $packageData[$templateKey][$blockKey]['participant']        = true;
-                    $packageData[$templateKey][$blockKey]['participant_bought'] = isset($packageData[$templateKey][$blockKey]['participant_bought']) ? $packageData[$templateKey][$blockKey]['participant_bought'] + 1 : 1;
-                    $shouldUpdate                                               = true;
+                    $packageData[$templateKey][$blockKey]['participant'] = true;
+                    $packageData[$templateKey][$blockKey]['quantity']    = isset($packageData[$templateKey][$blockKey]['quantity']) ? $packageData[$templateKey][$blockKey]['quantity'] + 1 : 1;
+                    $shouldUpdate                                        = true;
                 }
 
                 // Add the planning if option taken
                 if ($block['type'] === 'lib_planning') {
                     if ($buyParticipant->participantBuyOption['planning'] === true) {
-                        $packageData[$templateKey][$blockKey]['planning']        = true;
-                        $packageData[$templateKey][$blockKey]['planning_bought'] = isset($packageData[$templateKey][$blockKey]['planning_bought']) ? $packageData[$templateKey][$blockKey]['planning_bought'] + 1 : 1;
+                        $packageData[$templateKey][$blockKey]['planning'] = true;
+                        $packageData[$templateKey][$blockKey]['quantity'] = isset($packageData[$templateKey][$blockKey]['quantity']) ? $packageData[$templateKey][$blockKey]['quantity'] + 1 : 1;
 
                         $shouldUpdate = true;
                     }
