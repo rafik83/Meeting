@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Update
 {
@@ -32,16 +33,30 @@ class Update
     public $participants;
 
     /**
+     * @var User
+     */
+    public $user;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $date;
+
+    /**
      * Update constructor.
      *
-     * @param Meeting $meeting
-     * @param Sheet   $sheet
+     * @param Meeting            $meeting
+     * @param Sheet              $sheet
+     * @param User               $user
+     * @param \DateTimeInterface $date
      */
-    public function __construct(Meeting $meeting, Sheet $sheet)
+    public function __construct(Meeting $meeting, Sheet $sheet, User $user, \DateTimeInterface $date)
     {
         $this->meeting      = $meeting;
         $this->sheet        = $sheet;
         $this->participants = $this->getParticipants($meeting, $sheet);
+        $this->user         = $user;
+        $this->date         = $date;
     }
 
     /**

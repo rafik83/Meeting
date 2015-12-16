@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTimeInterface;
-
 class Notification
 {
     /**
@@ -35,7 +33,7 @@ class Notification
     private $view;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
@@ -50,18 +48,20 @@ class Notification
     private $message;
 
     /**
-     * @param User              $emitter
-     * @param User              $recipient
-     * @param DateTimeInterface $createdAt
-     * @param string            $action
+     * @param User               $emitter
+     * @param User               $recipient
+     * @param \DateTimeInterface $createdAt
+     * @param string             $action
+     * @param string             $message
      */
-    public function __construct(User $emitter, User $recipient, DateTimeInterface $createdAt, $action)
+    public function __construct(User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message)
     {
         $this->emitter   = $emitter;
         $this->recipient = $recipient;
         $this->createdAt = $createdAt;
         $this->action    = $action;
         $this->view      = false;
+        $this->message   = $message;
     }
 
     /**
@@ -97,7 +97,7 @@ class Notification
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getCreatedAt()
     {
@@ -118,13 +118,5 @@ class Notification
     public function getMessage()
     {
         return $this->message;
-    }
-
-    /**
-     * @param string $message
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
     }
 }
