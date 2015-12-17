@@ -1,8 +1,9 @@
 Proximum\Vimeet\Application\Command\Meeting\Update:
-    meeting:
-        - NotBlank: ~
-    sheet:
-        - NotBlank: ~
-    participants:
-        - Count:
-            min: 1
+    properties:
+        meeting:
+            - NotBlank: ~
+        sheet:
+            - NotBlank: ~
+        participants:
+            - Count:
+                min: 1
