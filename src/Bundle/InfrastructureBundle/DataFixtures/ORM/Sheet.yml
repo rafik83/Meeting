@@ -19,10 +19,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
             "563cae9c37ff6":
                 "56407f8b58f6b":
                     "participant": true
-                    "participant_bought": 3
+                    "quantity": 3
                 "56407f9b2a1a3":
                     "planning": false
-                    "planning_bought": null
+                    "quantity": null
     sheet_exposant{1..20}:
         __construct: false
         event: @event_rdv_carnot_2016

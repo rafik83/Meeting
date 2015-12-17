@@ -56,11 +56,11 @@ class BuyParticipantHandlerTest extends \PHPUnit_Framework_TestCase
             "azerty654321" => [
                 "azerty12345" => [
                     "participant" => true,
-                    "participant_bought" => 1
+                    "quantity" => 1
                 ],
                 "ytreza54321" => [
                     "planning" => true,
-                    "planning_bought" => 1
+                    "quantity" => 1
                 ]
             ]
         ]);

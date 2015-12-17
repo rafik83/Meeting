@@ -223,11 +223,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
-    vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
-        class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
+    vimeet_infrastructure.vimeet.application.command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.cart_repository'
+            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -267,6 +269,8 @@ services:
             - '@vimeet_infrastructure.repository.cart_repository'
     vimeet_infrastructure.application.components.product.product_builder:
         class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
+    vimeet_infrastructure.application.components.order.order_manager:
+        class: Proximum\Vimeet\Application\Components\Order\OrderManager
 
     #
     # Carts components

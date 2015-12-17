@@ -40,6 +40,33 @@ class UpdateStepHandler
     {
         $packageData = $updateStep->cart->getData();
 
+        foreach ($updateStep->packageData as $elementKey => $element) {
+            if (isset($element['participant'])) {
+                if ($element['participant']) {
+                    if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
+                        throw new ForgotToAddQuantityException();
+                    }
+
+                    if (!isset($packageData[$updateStep->step][$elementKey]['quantity'])) {
+                        $packageData[$updateStep->step][$elementKey]['quantity'] = 0;
+                    }
+
+                    $boughtAndAddedParticipant = count($updateStep->sheet->getParticipants()) - $updateStep->sheet->getType()->getFreeParticipant();
+                    if ($updateStep->packageData[$elementKey]['quantity'] < $boughtAndAddedParticipant) {
+                        throw new BoughtParticipantAlreadyAddedException();
+                    }
+                } else {
+                    if (count($updateStep->sheet->getParticipants()) > $updateStep->sheet->getType()->getFreeParticipant()) {
+                        throw new BoughtParticipantAlreadyAddedException();
+                    }
+                }
+            } elseif (isset($element['planning']) && $element['planning']) {
+                if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
+                    throw new ForgotToAddQuantityException();
+                }
+            }
+        }
+
         $packageData[$updateStep->step] = $updateStep->packageData;
 
         $updateStep->cart->setData($packageData);

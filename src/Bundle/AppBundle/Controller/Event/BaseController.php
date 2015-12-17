@@ -90,7 +90,7 @@ class BaseController extends Controller
                 if (isset($template['template'][$key])
                     && isset($value['participant'])
                     && $value['participant'] === true
-                    && (!isset($value['participant_bought']) || (isset($value['participant_bought']) && $value['participant_bought'] === 0))
+                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
                 ) {
                     $error = new FormError(
                         $this
@@ -101,7 +101,7 @@ class BaseController extends Controller
                 } elseif (isset($template['template'][$key])
                     && isset($value['planning'])
                     && $value['planning'] === true
-                    && (!isset($value['planning_bought']) || (isset($value['planning_bought']) && $value['planning_bought'] === 0))
+                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
                 ) {
                     $error = new FormError(
                         $this

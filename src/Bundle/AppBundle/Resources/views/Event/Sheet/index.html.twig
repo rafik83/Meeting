@@ -65,8 +65,15 @@
                 {{ 'event.sheet.package.step.next'|trans }}
             </a>
         </div>
-    {% elseif sheetDataView.orders is not empty%}
+    {% elseif sheetDataView.orders is not empty %}
         <div class="text-center">
+            <a href="{{ path('event_sheet_summary', {
+                'id': sheetDataView.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.summary.title'|trans }}
+            </a>
+
             <a href="{{ path('event_sheet_list_orders', {
                 'id': sheetDataView.id,
                 'subdomain': app.request.attributes.get('subdomain')

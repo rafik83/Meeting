@@ -34,6 +34,28 @@ class OrderController extends BaseController
     }
 
     /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return Response
+     */
+    public function summaryAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet);
+
+        $summary = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
+            ->generate($template, $sheet->getPackageData(), $request->getLocale());
+
+        return $this->render('VimeetAppBundle:Event/Order:summary.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'summary'   => $summary,
+        ]);
+    }
+
+    /**
      * @ParamConverter(
      *   "order",
      *   class="Proximum\Vimeet\Domain\Model\Order",
