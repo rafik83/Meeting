@@ -74,7 +74,7 @@ class UpdateHandler
         foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.removed', $update->message);
+                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.removed', $update->message);
             }
         }
 
@@ -82,7 +82,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addFromParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.add', $update->message);
+                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.add', $update->message);
             }
         }
 
@@ -102,7 +102,7 @@ class UpdateHandler
         foreach ($update->meeting->getToParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeToParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.removed', '');
+                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.removed', '');
             }
         }
 
@@ -110,7 +110,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addToParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.add', '');
+                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.add', '');
             }
         }
 

@@ -63,7 +63,14 @@ class CancelHandler
      */
     private function notifyParticipant(Cancel $cancel, Participant $participant)
     {
-        $notification = new Notification($cancel->user, $participant->getUser(), $cancel->date, 'metting.cancel', $cancel->message);
+        $notification = new Notification(
+            $participant->getSheet()->getEvent(),
+            $cancel->user,
+            $participant->getUser(),
+            $cancel->date,
+            'metting.cancel',
+            $cancel->message
+        );
 
         $this->notificationRepository->add($notification);
     }
