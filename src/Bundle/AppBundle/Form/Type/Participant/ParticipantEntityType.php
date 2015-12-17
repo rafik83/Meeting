@@ -18,7 +18,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ParticipantChoiceType extends AbstractType
+class ParticipantEntityType extends AbstractType
 {
     /**
      * @var ParticipantInfoGuesser
@@ -26,7 +26,7 @@ class ParticipantChoiceType extends AbstractType
     private $participantInfoGuesser;
 
     /**
-     * ParticipantChoiceType constructor.
+     * ParticipantEntityType constructor.
      *
      * @param ParticipantInfoGuesser $participantInfoGuesser
      */

@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Update;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType;
 
 class UpdateType extends AbstractType
 {
@@ -24,7 +24,7 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participants', ParticipantChoiceType::class, [
+            ->add('participants', ParticipantEntityType::class, [
                 'sheet'    => $options['data']->sheet,
                 'multiple' => true,
                 'expanded' => true,
