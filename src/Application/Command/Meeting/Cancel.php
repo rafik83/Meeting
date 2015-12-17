@@ -20,6 +20,11 @@ class Cancel
     public $meeting;
 
     /**
+     * @var string
+     */
+    public $message;
+
+    /**
      * Cancel constructor.
      *
      * @param Meeting $meeting

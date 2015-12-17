@@ -261,6 +261,8 @@ form:
                 label: Participer
     meeting_cancel:
         children:
+            message:
+                label: Message
             submit:
                 label: Confirmer
     position_meeting:
