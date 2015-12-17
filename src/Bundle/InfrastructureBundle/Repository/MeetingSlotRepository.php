@@ -23,7 +23,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager                     $entityManager
+     * MeetingSlotRepository constructor.
+     *
+     * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {
