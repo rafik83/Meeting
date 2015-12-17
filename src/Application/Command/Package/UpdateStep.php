@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Domain\Model\Cart;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class UpdateStep
 {
@@ -25,18 +26,25 @@ class UpdateStep
     public $step;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
      * @var array
      */
     public $packageData = [];
 
     /**
-     * @param Cart $cart
+     * @param Cart  $cart
+     * @param Sheet $sheet
      * @param int   $step
      */
-    public function __construct(Cart $cart, $step)
+    public function __construct(Cart $cart, Sheet $sheet, $step)
     {
-        $this->cart = $cart;
+        $this->cart  = $cart;
         $this->step  = $step;
+        $this->sheet = $sheet;
 
         $template      = $cart->getTemplate();
         $stepTemplate  = $template[$step]['template'];

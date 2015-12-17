@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -27,13 +29,27 @@ class CreateHandler
     private $sheetRepository;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    private $orderManager;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SheetRepositoryInterface $sheetRepository
+     * @param CartRepositoryInterface  $cartRepository
      */
-    public function __construct(OrderRepositoryInterface $orderRepository, SheetRepositoryInterface $sheetRepository)
-    {
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        SheetRepositoryInterface $sheetRepository,
+        CartRepositoryInterface $cartRepository,
+        OrderManager $orderManager
+    ) {
         $this->orderRepository = $orderRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->cartRepository  = $cartRepository;
+        $this->orderManager    = $orderManager;
     }
 
     public function handle(Create $create)
@@ -45,45 +61,14 @@ class CreateHandler
             $create->packageData,
             $create->packageTemplate,
             $create->billingData,
+            $create->billingTemplate,
             $create->createdAt,
             $create->paymentMode
         ));
 
-        $sheetData = $create->sheet->getPackageData();
+        $this->cartRepository->delete($create->cart);
 
-        // merge products data
-        foreach ($sheetData as $keyStep => $step) {
-            if ($step !== null) {
-                foreach ($step as $keyProduct => $product) {
-                    if ($product !== null) {
-                        foreach ($product as $keyField => $field) {
-                            if (isset($create->packageData[$keyStep][$keyProduct])) {
-                                if ('quantity' === $keyField) {
-                                    // addition
-                                    $sheetData[$keyStep][$keyProduct][$keyField] = $field + $create->packageData[$keyStep][$keyProduct][$keyField];
-                                } else {
-                                    // replace
-                                    $sheetData[$keyStep][$keyProduct][$keyField] = $create->packageData[$keyStep][$keyProduct][$keyField];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // add missing product data
-        foreach ($create->packageData as $keyStep => $step) {
-            if (!isset($sheetData[$keyStep])) {
-                $sheetData[$keyStep] = $create->packageData[$keyStep];
-            } else {
-                foreach ($step as $keyProduct => $product) {
-                    if (!isset($sheetData[$keyStep][$keyProduct])) {
-                        $sheetData[$keyStep][$keyProduct] = $create->packageData[$keyStep][$keyProduct];
-                    }
-                }
-            }
-        }
+        $sheetData = $this->orderManager->mergeTwoPackageData($create->sheet->getPackageData(), $create->packageData);
 
         $create->sheet->setPackageData($sheetData);
         $this->sheetRepository->set($create->sheet);
