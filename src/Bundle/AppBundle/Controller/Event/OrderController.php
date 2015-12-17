@@ -69,6 +69,7 @@ class OrderController extends BaseController
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'cart'      => $cart,
+            'order'     => $order,
         ]);
     }
 }

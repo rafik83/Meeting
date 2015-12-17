@@ -17,6 +17,8 @@ Proximum\Vimeet\Domain\Model\Order:
             type: json_array
         billingData:
             type: json_array
+        billingTemplate:
+            type: json_array
         createdAt:
             type: datetime
         paymentMode:

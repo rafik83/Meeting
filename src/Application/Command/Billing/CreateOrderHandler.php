@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Billing;
 
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class CreateOrderHandler
@@ -21,13 +22,25 @@ class CreateOrderHandler
     private $orderRepository;
 
     /**
-     * @param OrderRepositoryInterface $orderRepository
+     * @var CartRepositoryInterface
      */
-    public function __construct(OrderRepositoryInterface $orderRepository)
-    {
+    private $cartRepository;
+
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     * @param CartRepositoryInterface  $cartRepository
+     */
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        CartRepositoryInterface $cartRepository
+    ) {
         $this->orderRepository = $orderRepository;
+        $this->cartRepository  = $cartRepository;
     }
 
+    /**
+     * @param CreateOrder $createOrder
+     */
     public function handle(CreateOrder $createOrder)
     {
         $this->orderRepository->add(new Order(
@@ -37,8 +50,11 @@ class CreateOrderHandler
             $createOrder->packageData,
             $createOrder->packageTemplate,
             $createOrder->billingData,
+            $createOrder->billingTemplate,
             $createOrder->createdAt,
             $createOrder->paymentMode
         ));
+
+        $this->cartRepository->delete($createOrder->cart);
     }
 }
