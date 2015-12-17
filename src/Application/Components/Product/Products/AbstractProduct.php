@@ -150,8 +150,8 @@ abstract class AbstractProduct implements ProductInterface
     public function hasQuantity()
     {
         return $this->getQuantityMin() !== null
-            && $this->getQuantityMax() !== null
-            && $this->getQuantityMin() <= $this->getQuantityMax();
+            && $this->getQuantityMax([]) !== null
+            && $this->getQuantityMin() <= $this->getQuantityMax([]);
     }
 
     /**
@@ -165,13 +165,22 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
+     * @param array $packageData
+     *
      * @return float|null
      */
-    public function getQuantityMax()
+    public function getQuantityMax(array $packageData)
     {
-        return isset($this->options['quantity'])
-        && isset($this->options['quantity']['max'])
-            ? $this->options['quantity']['max'] : null;
+        if (!isset($this->options['quantity']) || !isset($this->options['quantity']['max'])) {
+            return null;
+        }
+        if (isset($packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'])
+            && $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'] <= $this->options['quantity']['max']
+        ) {
+            return $this->options['quantity']['max'] - $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
+        } else {
+            return $this->options['quantity']['max'];
+        }
     }
 
     /**
@@ -186,6 +195,35 @@ abstract class AbstractProduct implements ProductInterface
 
     /**
      * @param array $packageData
+     * @param array $sheetData
+     *
+     * @return bool
+     */
+    public function allowQuantity(array $packageData, array $sheetData)
+    {
+        if (!$this->hasQuantity()) {
+            return false;
+        }
+
+        $remaingQuantityMax = $this->getRemainingQuantityMax($packageData);
+
+        if ($remaingQuantityMax !== 0) {
+            $step = $this->getStep();
+
+            if (isset($sheetData[$step->getKey()][$this->getKey()]['quantity'])
+                && $sheetData[$step->getKey()][$this->getKey()]['quantity'] >= $remaingQuantityMax
+            ) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param array $packageData
      * @return float
      */
     public function getRemainingQuantityMax(array $packageData)
@@ -194,6 +232,20 @@ abstract class AbstractProduct implements ProductInterface
             return 0;
         }
 
+        $quantity = $this->getQuantityIncludedWithPurchase($packageData);
+
+        return ($this->getQuantityMax($packageData) - $quantity) > 0
+            && ($this->getQuantityMax($packageData) - $quantity) >= $this->getQuantityMin()
+            ? $this->getQuantityMax($packageData) - $quantity : 0;
+    }
+
+    /**
+     * @param array $packageData
+     *
+     * @return int
+     */
+    public function getQuantityIncludedWithPurchase(array $packageData)
+    {
         $quantity   = 0;
         $includings = $this->getIncludingFromPurchase($packageData);
 
@@ -205,9 +257,7 @@ abstract class AbstractProduct implements ProductInterface
             }
         }
 
-        return ($this->getQuantityMax() - $quantity) > 0
-            && ($this->getQuantityMax() - $quantity) >= $this->getQuantityMin()
-            ? $this->getQuantityMax() - $quantity : 0;
+        return $quantity;
     }
 
     /**
