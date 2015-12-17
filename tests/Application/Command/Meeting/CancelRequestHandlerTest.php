@@ -11,8 +11,10 @@
 namespace Tests\Application\Command\Meeting;
 
 use DateTime;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
@@ -38,8 +40,8 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
         $expectedRequest->setState(Request::STATE_CANCEL);
 
-        $refusedRequest = new CancelRequest($request, $user);
-        $refusedRequest->message = 'this is a test';
+        $cancelRequest = new CancelRequest($request, $user);
+        $cancelRequest->message = 'this is a test';
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
@@ -47,8 +49,16 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add()->shouldNotBeCalled();
 
-        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
-        $handler->handle($refusedRequest);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+
+        $handler = new CancelRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            new NullTranslator()
+        );
+        $handler->handle($cancelRequest);
     }
 
     public function testHandleWithNotification()
@@ -57,60 +67,80 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $type      = new Type($event);
         $sheetTo   = new Sheet($event, $type, [], []);
         $sheetFrom = new Sheet($event, $type, [], []);
-        $dateTime  = new DateTime();
+        $dateTime  = new \DateTimeImmutable();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
         $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+        $participant = $this->createParticipantMock($sheetTo, $user2, 2);
+        $sheetTo->getParticipants()->add($participant);
 
-        $sheetTo->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
-
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.cancel');
-        $expectedNotification->setMessage('this is a test');
-
+        // Request to cancel
         $request = new Request(
             $sheetFrom,
             [],
             $sheetTo,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
+            [$participant],
             'test',
             $dateTime,
             $user
         );
 
+        // Expected request
         $expectedRequest = new Request(
             $sheetFrom,
             [],
             $sheetTo,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
+            [$participant],
             'test',
             $dateTime,
             $user
         );
         $expectedRequest->setState(Request::STATE_CANCEL);
-        $expectedRequest->addNotifications($expectedNotification);
 
-        $refusedRequest = new CancelRequest($request, $user);
-        $refusedRequest->message = 'this is a test';
+        // Expected request with notification
+        $expectedNotification = new Notification($event, $user, $user2, $dateTime, 'meeting_request.cancel', 'notification.meeting_request.cancel.withoutMessage');
+        $expectedRequestWithNotification = new Request(
+            $sheetFrom,
+            [],
+            $sheetTo,
+            [$participant],
+            'test',
+            $dateTime,
+            $user
+        );
+        $expectedRequestWithNotification->setState(Request::STATE_CANCEL);
+        $expectedRequestWithNotification->addNotifications($expectedNotification);
 
+        $refusedRequest = new CancelRequest($request, $user, 'this is a test');
 
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add($expectedNotification)->shouldBeCalled();
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $requestRepository->set($expectedRequest)->shouldBeCalled();
+        $requestRepository->set(Argument::that(function ($item) use ($expectedRequest, $expectedRequestWithNotification) {
+            return $item == $expectedRequest || $item == $expectedRequestWithNotification;
+        }))->shouldBeCalledTimes(2);
 
-        $handler = new CancelRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+
+        $handler = new CancelRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            new NullTranslator()
+        );
         $handler->handle($refusedRequest);
     }
 
 
     /**
      * @param Sheet $sheet
-     * @param User $user
-     * @param $id
+     * @param User  $user
+     * @param int   $id
      *
      * @return Participant
      */
-    public function createParticipantMock(Sheet $sheet, User $user, $id)
+    private function createParticipantMock(Sheet $sheet, User $user, $id)
     {
         $participant = new Participant($sheet, $user, [], false);
         $reflection  = new \ReflectionClass(Participant::class);

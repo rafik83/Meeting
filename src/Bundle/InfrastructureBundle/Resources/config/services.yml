@@ -224,11 +224,23 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@datetime'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
         class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
         arguments:
@@ -239,12 +251,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@datetime'
 
     #
     # Security
@@ -260,6 +266,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:
             - '@vimeet_infrastructure.security.user_password_encoder'
+
+    #
+    # Translator
+    #
+    vimeet_infrastructure.adapter.translator_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
+        arguments:
+            - '@translator'
 
     #
     # Components

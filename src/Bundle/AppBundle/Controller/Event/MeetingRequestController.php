@@ -249,11 +249,10 @@ class MeetingRequestController extends BaseController
             throw $this->createAccessDeniedException('You can not access this meeting request');
         }
 
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
-        $form->add('submit', 'submit');
+
+        $form = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
+        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -267,6 +266,8 @@ class MeetingRequestController extends BaseController
                 'id'        => $sheet->getId(),
             ]);
         }
+
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 

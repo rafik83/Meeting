@@ -11,8 +11,10 @@
 namespace Tests\Application\Command\Meeting;
 
 use DateTime;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
@@ -37,27 +39,40 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user, 2));
 
-        $expectedNotification = new Notification($user2, $user, $dateTime, 'meeting_request.refuse');
-        $expectedNotification->setMessage('this is a test');
-
+        // Request to refuse
         $request         = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
 
+        // Expected request
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
         $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->addNotifications($expectedNotification);
 
+        // Expected request with notification
+        $expectedNotification = new Notification($event, $user2, $user, $dateTime, 'meeting_request.refuse', 'notification.meeting_request.refuse.withMessage');
+        $expectedRequestWithNotification = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
+        $expectedRequestWithNotification->setState(Request::STATE_REFUSED);
+        $expectedRequestWithNotification->addNotifications($expectedNotification);
 
+        // Command
         $refusedRequest = new RefuseRequest($request, $user2);
         $refusedRequest->message = 'this is a test';
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $requestRepository->set($expectedRequest)->shouldBeCalled();
+        $requestRepository->set(Argument::that(function ($item) use ($expectedRequest, $expectedRequestWithNotification) {
+            return $item == $expectedRequest || $item == $expectedRequestWithNotification;
+        }))->shouldBeCalledTimes(2);
 
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add($expectedNotification)->shouldBeCalled();
 
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
 
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $handler = new RefuseRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            new NullTranslator()
+        );
         $handler->handle($refusedRequest);
     }
 
@@ -70,15 +85,14 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime  = new DateTime();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
         $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+        $participant = $this->createParticipantMock($sheetFrom, $user2, 2);
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $sheetFrom->getParticipants()->add($participant);
 
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.refuse');
-        $expectedNotification->setMessage('this is a test');
-
+        // Request to refuse
         $request = new Request(
             $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
+            [$participant],
             $sheetTo,
             [],
             'test',
@@ -86,9 +100,10 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $user
         );
 
+        // Expected request
         $expectedRequest = new Request(
             $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
+            [$participant],
             $sheetTo,
             [],
             'test',
@@ -96,19 +111,42 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $user
         );
         $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->addNotifications($expectedNotification);
 
+        // Expected request with notification
+        $expectedNotification = new Notification($event, $user, $user2, $dateTime, 'meeting_request.refuse', 'notification.meeting_request.refuse.withMessage');
+        $expectedRequestWithNotification = new Request(
+            $sheetFrom,
+            [$participant],
+            $sheetTo,
+            [],
+            'test',
+            $dateTime,
+            $user
+        );
+        $expectedRequestWithNotification->setState(Request::STATE_REFUSED);
+        $expectedRequestWithNotification->addNotifications($expectedNotification);
+
+        // Command
         $refusedRequest = new RefuseRequest($request, $user);
         $refusedRequest->message = 'this is a test';
-
 
         $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
         $notificationRepository->add($expectedNotification)->shouldBeCalled();
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $requestRepository->set($expectedRequest)->shouldBeCalled();
+        $requestRepository->set(Argument::that(function ($item) use ($expectedRequest, $expectedRequestWithNotification) {
+            return $item == $expectedRequest || $item == $expectedRequestWithNotification;
+        }))->shouldBeCalledTimes(2);
 
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+
+        $handler = new RefuseRequestHandler(
+            $requestRepository->reveal(),
+            $notificationRepository->reveal(),
+            $dateTime,
+            $sheetInfoGuesser->reveal(),
+            new NullTranslator()
+        );
         $handler->handle($refusedRequest);
     }
 

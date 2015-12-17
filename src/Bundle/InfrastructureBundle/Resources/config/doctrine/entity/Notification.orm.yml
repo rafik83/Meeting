@@ -21,3 +21,5 @@ Proximum\Vimeet\Domain\Model\Notification:
             targetEntity: Proximum\Vimeet\Domain\Model\User
         recipient:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
