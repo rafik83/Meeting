@@ -60,10 +60,16 @@ set :keep_releases, 3
 # Tasks
 
 after 'symfony:cache:warmup', 'app_tasks:install'
+after :deploy, 'app_tasks:initdb'
 after :deploy, 'app_tasks:php'
 after :deploy, 'deploy:cleanup'
 
 namespace :app_tasks do
+  task :initdb do
+      capifony_pretty_print "--> Init DB"
+      invoke_command "cd #{latest_release} && make init-db", :via => run_method
+      capifony_puts_ok
+  end
   task :php do
       capifony_pretty_print "--> Restarting PHP"
       invoke_command "sudo service php5-fpm restart", :via => run_method
