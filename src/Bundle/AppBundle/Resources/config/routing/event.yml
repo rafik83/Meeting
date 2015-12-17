@@ -309,9 +309,9 @@ event_sheet_schedule_unparticipate_happening:
 
 event_sheet_schedule_meeting:
     path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}
-    host: "{subdomain}.%domain%"
+    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: "[a-zA-Z0-9\-]+"
+        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         schedule_id: \d+
         meeting_id: \d+
@@ -320,9 +320,9 @@ event_sheet_schedule_meeting:
 
 event_sheet_schedule_meeting_cancel:
     path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/cancel
-    host: "{subdomain}.%domain%"
+    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: "[a-zA-Z0-9\-]+"
+        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         schedule_id: \d+
         meeting_id: \d+
@@ -331,9 +331,9 @@ event_sheet_schedule_meeting_cancel:
 
 event_sheet_schedule_meeting_update:
     path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/update
-    host: "{subdomain}.%domain%"
+    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: "[a-zA-Z0-9\-]+"
+        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         schedule_id: \d+
         meeting_id: \d+
@@ -383,7 +383,7 @@ event_meeting_request_refused:
 
 event_meeting_request_cancel:
     path: /sheet/{id}/meeting/request/cancel/{meetingRequest}
-    host: "{subdomain}.%domain%"
+    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
         meetingRequest: \d+
