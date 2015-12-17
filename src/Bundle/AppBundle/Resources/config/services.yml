@@ -96,6 +96,13 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: form.type }
+    vimeet_app.form_type_participant.meeting_participant_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type

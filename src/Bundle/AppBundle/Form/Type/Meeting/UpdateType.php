@@ -14,7 +14,8 @@ use Proximum\Vimeet\Application\Command\Meeting\Update;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType;
 
 class UpdateType extends AbstractType
 {
@@ -24,10 +25,14 @@ class UpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('participants', ParticipantChoiceType::class, [
+            ->add('participants', MeetingParticipantChoiceType::class, [
                 'sheet'    => $options['data']->sheet,
+                'meeting'  => $options['data']->meeting,
                 'multiple' => true,
                 'expanded' => true,
+            ])
+            ->add('message', TextareaType::class, [
+                'required' => false,
             ])
         ;
     }

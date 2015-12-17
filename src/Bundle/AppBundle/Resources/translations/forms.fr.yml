@@ -268,7 +268,9 @@ form:
     meeting_update:
         children:
             participants:
-                label: Participant
+                label: Participants
+            message:
+                label: Message
             submit:
                 label: Enregistrer
     position_meeting:

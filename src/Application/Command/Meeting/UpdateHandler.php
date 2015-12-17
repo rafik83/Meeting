@@ -29,7 +29,10 @@ class UpdateHandler
     /**
      * UpdateHandler constructor.
      *
-     * @param MeetingRepositoryInterface $meetingRepositoryInterface
+     * UpdateHandler constructor.
+     *
+     * @param MeetingRepositoryInterface      $meetingRepositoryInterface
+     * @param NotificationRepositoryInterface $notificationRepository
      */
     public function __construct(MeetingRepositoryInterface $meetingRepositoryInterface, NotificationRepositoryInterface $notificationRepository)
     {
@@ -71,7 +74,7 @@ class UpdateHandler
         foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.removed', '');
+                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.removed', $update->message);
             }
         }
 
@@ -79,7 +82,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addFromParticipant($participant);
-                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.add', '');
+                $notifications[] = new Notification($update->user, $participant->getUser(), $update->date, 'participant.add', $update->message);
             }
         }
 

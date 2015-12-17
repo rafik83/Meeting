@@ -43,6 +43,11 @@ class Update
     public $date;
 
     /**
+     * @var string
+     */
+    public $message;
+
+    /**
      * Update constructor.
      *
      * @param Meeting            $meeting
