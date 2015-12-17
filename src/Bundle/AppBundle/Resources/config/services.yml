@@ -143,6 +143,8 @@ services:
             - { name: 'form.type' }
     vimeet_app.form_type_library.option_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
+        arguments:
+            - '@vimeet_infrastructure.application.components.order.order_manager'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.participant_type:

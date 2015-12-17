@@ -34,6 +34,7 @@ class LastNameType extends AbstractType
     {
         $resolver->setRequired(['template', 'locale']);
         $resolver->setDefined(['sheet']);
+        $resolver->setDefaults(['cart' => null]);
         $resolver->setDefaults(['product' => null]);
     }
 
