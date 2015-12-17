@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Cancel
 {
@@ -20,6 +21,16 @@ class Cancel
     public $meeting;
 
     /**
+     * @var User
+     */
+    public $user;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $date;
+
+    /**
      * @var string
      */
     public $message;
@@ -27,10 +38,14 @@ class Cancel
     /**
      * Cancel constructor.
      *
-     * @param Meeting $meeting
+     * @param Meeting            $meeting
+     * @param User               $user
+     * @param \DateTimeInterface $date
      */
-    public function __construct(Meeting $meeting)
+    public function __construct(Meeting $meeting, User $user, \DateTimeInterface $date)
     {
         $this->meeting = $meeting;
+        $this->user    = $user;
+        $this->date    = $date;
     }
 }

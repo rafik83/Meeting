@@ -60,9 +60,9 @@ class RefuseRequestHandler
                 $refuseRequest->emitter,
                 $refuseRequest->request->getCreator(),
                 $this->createdAt,
-                'meeting_request.refuse'
+                'meeting_request.refuse',
+                $refuseRequest->message
             );
-            $notification->setMessage($refuseRequest->message);
 
             $this->notificationRepository->add($notification);
             $refuseRequest->request->addNotifications($notification);
@@ -72,9 +72,9 @@ class RefuseRequestHandler
                     $refuseRequest->emitter,
                     $participant->getUser(),
                     $this->createdAt,
-                    'meeting_request.refuse'
+                    'meeting_request.refuse',
+                    $refuseRequest->message
                 );
-                $notification->setMessage($refuseRequest->message);
 
                 $this->notificationRepository->add($notification);
                 $refuseRequest->request->addNotifications($notification);

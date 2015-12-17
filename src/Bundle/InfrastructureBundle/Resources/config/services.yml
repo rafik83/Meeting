@@ -228,7 +228,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.notification_repository'
-            - '@datetime'
     vimeet_infrastructure.vimeet.application.command.billing.create_order_handler:
         class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
         arguments:

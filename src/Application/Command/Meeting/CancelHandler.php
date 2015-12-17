@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
 class CancelHandler
 {
@@ -20,13 +23,20 @@ class CancelHandler
     private $meetingRepository;
 
     /**
+     * @var NotificationRepositoryInterface
+     */
+    private $notificationRepository;
+
+    /**
      * CancelHandler constructor.
      *
-     * @param MeetingRepositoryInterface $meetingRepository
+     * @param MeetingRepositoryInterface      $meetingRepository
+     * @param NotificationRepositoryInterface $notificationRepository
      */
-    public function __construct(MeetingRepositoryInterface $meetingRepository)
+    public function __construct(MeetingRepositoryInterface $meetingRepository, NotificationRepositoryInterface $notificationRepository)
     {
-        $this->meetingRepository = $meetingRepository;
+        $this->meetingRepository      = $meetingRepository;
+        $this->notificationRepository = $notificationRepository;
     }
 
     /**
@@ -37,5 +47,24 @@ class CancelHandler
         $cancel->meeting->cancel();
 
         $this->meetingRepository->set($cancel->meeting);
+
+        foreach ($cancel->meeting->getFromParticipants() as $participant) {
+            $this->notifyParticipant($cancel, $participant);
+        }
+
+        foreach ($cancel->meeting->getToParticipants() as $participant) {
+            $this->notifyParticipant($cancel, $participant);
+        }
+    }
+
+    /**
+     * @param Cancel      $cancel
+     * @param Participant $participant
+     */
+    private function notifyParticipant(Cancel $cancel, Participant $participant)
+    {
+        $notification = new Notification($cancel->user, $participant->getUser(), $cancel->date, 'metting.cancel', $cancel->message);
+
+        $this->notificationRepository->add($notification);
     }
 }
