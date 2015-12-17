@@ -25,7 +25,9 @@ class CancelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', TextareaType::class)
+            ->add('message', TextareaType::class, [
+                'required' => false,
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
