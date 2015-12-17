@@ -72,7 +72,7 @@ class Cart
     /**
      * @param array $data
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $this->data = $data;
     }
