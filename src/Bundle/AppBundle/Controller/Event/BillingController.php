@@ -86,14 +86,21 @@ class BillingController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
+        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
+
+        if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {
+            throw $this->createNotFoundException('No cart available to complete payment');
+        }
 
         $createOrder = new CreateOrder(
+            $cart,
             $sheet,
             Order::STATE_UNPAID,
             $sheet->getType()->getProFormaTemplate(),
-            $sheet->getPackageData(),
-            $sheet->getTypePackageTemplate(),
+            $cart->getData(),
+            $cart->getTemplate(),
             $sheet->getBillingData(),
+            $sheet->getType()->getEvent()->getBillingTemplate(),
             new DateTime()
         );
         $form = $this->createForm(ChoosePaymentModeType::class, $createOrder);

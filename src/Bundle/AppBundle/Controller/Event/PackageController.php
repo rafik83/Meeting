@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
+use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -43,15 +44,19 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromSheet($sheet);
+            ->create($cart->getTemplate());
+
         $stepObject = $template->getStep($step);
 
         if ($stepObject === null) {
             throw $this->createNotFoundException();
         }
 
-        $updateStep = new UpdateStep($sheet, $step);
+        $updateStep = new UpdateStep($cart, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
@@ -109,12 +114,17 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
+        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
+
+        if ($cart === null) {
+            throw $this->createNotFoundException('Cart not available');
+        }
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromSheet($sheet);
+            ->create($cart->getTemplate());
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,
-                $sheet->getPackageData(),
+                $cart->getData(),
                 $request->getLocale()
             )
         ;
