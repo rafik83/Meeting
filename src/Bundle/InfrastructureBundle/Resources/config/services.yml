@@ -83,6 +83,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.cart_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CartRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -140,7 +144,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.package.update_step_handler:
         class: Proximum\Vimeet\Application\Command\Package\UpdateStepHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.cart_repository'
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:
@@ -223,6 +227,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Billing\CreateOrderHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.cart_repository'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -256,6 +261,10 @@ services:
     #
     vimeet_infrastructure.application.components.cart.cart_builder:
         class: Proximum\Vimeet\Application\Components\Cart\CartBuilder
+    vimeet_infrastructure.application.components.cart.cart_manager:
+        class: Proximum\Vimeet\Application\Components\Cart\CartManager
+        arguments:
+            - '@vimeet_infrastructure.repository.cart_repository'
     vimeet_infrastructure.application.components.product.product_builder:
         class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
 

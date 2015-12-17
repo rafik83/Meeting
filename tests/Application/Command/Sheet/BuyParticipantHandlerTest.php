@@ -68,7 +68,7 @@ class BuyParticipantHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedUser = new User('test@test.com', '', '', 'fr');
         $owner = false;
 
-        $expectedParticipant = new Participant($sheet, $expectedUser, ['foobar' => 'barfoo'], $owner);
+        $expectedParticipant = new Participant($sheet, $expectedUser, ['foobar' => 'barfoo'], $owner, true);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);

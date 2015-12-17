@@ -114,7 +114,7 @@ class BuyParticipantHandler extends BaseHandler
         }
 
         // Add the new participant
-        $participant = new Participant($buyParticipant->sheet, $user, $buyParticipant->participantData['data'], $buyParticipant->owner);
+        $participant = new Participant($buyParticipant->sheet, $user, $buyParticipant->participantData['data'], $buyParticipant->owner, true);
         $this->participantRepository->add($participant);
 
         $buyParticipant->participant = $participant;

@@ -75,7 +75,7 @@ class AddHandler extends BaseHandler
         }
 
         // Add the new participant
-        $participant = new Participant($add->sheet, $user, $add->data, $add->owner);
+        $participant = new Participant($add->sheet, $user, $add->data, $add->owner, true);
         $this->participantRepository->add($participant);
 
         $add->participant = $participant;

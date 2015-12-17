@@ -81,15 +81,11 @@ class ParticipantType extends AbstractLocalizedType
     private function getParticipantChoices(Sheet $sheet)
     {
         $participantManager = $this->participantManager;
-        $remaining          = $participantManager->getBuyQuantityParticipant($sheet);
-        $added              = $participantManager->getAddedBoughtParticipant($sheet);
+        $remaining          = $participantManager->getRemainingPossibleParticipantToBuy($sheet);
+        $added              = 1;
 
         if ($remaining === 0) {
             return [];
-        }
-
-        if ($added === 0) {
-            $added = 1;
         }
 
         $range = range($added, $remaining, 1);

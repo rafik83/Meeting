@@ -25,7 +25,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $participantInfoGuesser = new ParticipantInfoGuesser();
 
@@ -40,7 +40,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
             "563caf1d9b1cb" => "DUPOND",
             "563caf2746398" => "Jean",
@@ -60,7 +60,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
             "563caf1d9b1cb" => "DUPOND",
             "563caf2746398" => "Jean",
@@ -110,7 +110,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $participantInfoGuesser = new ParticipantInfoGuesser();
 
@@ -125,7 +125,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
             "563caf1d9b1cb" => "DUPOND",
             "563caf2746398" => "Jean",
@@ -145,7 +145,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
             "563caf1d9b1cb" => "DUPOND",
             "563caf2746398" => "Jean",
@@ -195,7 +195,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $participantInfoGuesser = new ParticipantInfoGuesser();
 
@@ -210,7 +210,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
             "563caf1d9b1cb" => "DUPOND",
             "563caf2746398" => "Jean",

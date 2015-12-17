@@ -4,6 +4,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_test
         sheet: @sheet_test
         owner: true
+        active: true
         data:
             563caf1d9b1cb: "Dupond"
             563caf2746398: "Jean"
@@ -13,6 +14,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_test_2
         sheet: @sheet_test
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -22,6 +24,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_test_3
         sheet: @sheet_test
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -31,6 +34,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_test_4
         sheet: @sheet_test
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -40,6 +44,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant2
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -48,6 +53,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant2
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -56,6 +62,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant4
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -64,6 +71,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant5
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -72,6 +80,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant*
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>

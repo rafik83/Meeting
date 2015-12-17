@@ -90,23 +90,27 @@ class ParticipantManager
      */
     public function getBoughtParticipant(Sheet $sheet)
     {
-        $typePackageTemplate = $sheet->getType()->getPackageTemplate();
-        $packageData         = $sheet->getPackageData();
+        $bought = 0;
 
-        foreach ($typePackageTemplate as $blockKey => $block) {
-            foreach ($block['template'] as $elementKey => $element) {
-                if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
-                    if (isset($packageData[$blockKey][$elementKey]['participant_bought'])
-                        && isset($packageData[$blockKey][$elementKey]['participant'])
-                        && true === $packageData[$blockKey][$elementKey]['participant']
-                    ) {
-                        return intval($packageData[$blockKey][$elementKey]['participant_bought']);
+        foreach ($sheet->getOrders() as $order) {
+            $typePackageTemplate = $order->getPackageTemplate();
+            $packageData         = $sheet->getPackageData();
+
+            foreach ($typePackageTemplate as $blockKey => $block) {
+                foreach ($block['template'] as $elementKey => $element) {
+                    if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
+                        if (isset($packageData[$blockKey][$elementKey]['participant_bought'])
+                            && isset($packageData[$blockKey][$elementKey]['participant'])
+                            && true === $packageData[$blockKey][$elementKey]['participant']
+                        ) {
+                            $bought += intval($packageData[$blockKey][$elementKey]['participant_bought']);
+                        }
                     }
                 }
             }
         }
 
-        return 0;
+        return $bought;
     }
 
     /**
