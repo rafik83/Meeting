@@ -19,4 +19,4 @@ Proximum\Vimeet\Domain\Model\Notification:
             - @user_test
             - <dateTimeBetween('-10 days', 'now')>
             - 'meeting_request.cancel'
-        message: 'Demande annulée par Munoz pour le motif suivant : "Je ne suis plus disponible à ce créneau, désolé"'
+            - 'Demande annulée par Munoz pour le motif suivant : "Je ne suis plus disponible à ce créneau, désolé"'
