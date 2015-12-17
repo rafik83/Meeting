@@ -56,11 +56,12 @@ class PackageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $updateStep = new UpdateStep($cart, $step);
+        $updateStep = new UpdateStep($cart, $sheet, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
+            'cart'     => $cart,
             'step'     => $stepObject,
         ]);
         $form->add('submit', SubmitType::class);
