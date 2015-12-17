@@ -265,6 +265,12 @@ form:
                 label: Message
             submit:
                 label: Confirmer
+    meeting_update:
+        children:
+            participants:
+                label: Participant
+            submit:
+                label: Enregistrer
     position_meeting:
         children:
             fromParticipants:
