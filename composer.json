@@ -44,11 +44,6 @@
         "hautelook/alice-bundle": "~1.1@dev",
         "fabpot/php-cs-fixer": "^1.10"
     },
-    "required-dev-bak": {
-      "behat/symfony2-extension": "~2.1@dev",
-      "behat/mink-extension": "~2.1@dev",
-      "theofidry/alice-bundle-extension": "v1.1.0"
-    },
     "scripts": {
         "post-create-project-cmd": [
             "SymfonyStandard\\Composer::hookCreateProject"
