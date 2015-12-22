@@ -150,8 +150,8 @@ abstract class AbstractProduct implements ProductInterface
     public function hasQuantity()
     {
         return $this->getQuantityMin() !== null
-            && $this->getQuantityMax([]) !== null
-            && $this->getQuantityMin() <= $this->getQuantityMax([]);
+            && $this->getQuantityMax() !== null
+            && $this->getQuantityMin() <= $this->getQuantityMax();
     }
 
     /**
@@ -165,22 +165,13 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
-     * @param array $packageData
-     *
      * @return float|null
      */
-    public function getQuantityMax(array $packageData)
+    public function getQuantityMax()
     {
-        if (!isset($this->options['quantity']) || !isset($this->options['quantity']['max'])) {
-            return null;
-        }
-        if (isset($packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'])
-            && $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'] <= $this->options['quantity']['max']
-        ) {
-            return $this->options['quantity']['max'] - $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
-        } else {
-            return $this->options['quantity']['max'];
-        }
+        return isset($this->options['quantity'])
+        && isset($this->options['quantity']['max'])
+            ? $this->options['quantity']['max'] : null;
     }
 
     /**
@@ -195,11 +186,10 @@ abstract class AbstractProduct implements ProductInterface
 
     /**
      * @param array $packageData
-     * @param array $sheetData
      *
      * @return bool
      */
-    public function allowQuantity(array $packageData, array $sheetData)
+    public function allowQuantity(array $packageData)
     {
         if (!$this->hasQuantity()) {
             return false;
@@ -207,16 +197,8 @@ abstract class AbstractProduct implements ProductInterface
 
         $remaingQuantityMax = $this->getRemainingQuantityMax($packageData);
 
-        if ($remaingQuantityMax !== 0) {
-            $step = $this->getStep();
-
-            if (isset($sheetData[$step->getKey()][$this->getKey()]['quantity'])
-                && $sheetData[$step->getKey()][$this->getKey()]['quantity'] >= $remaingQuantityMax
-            ) {
-                return false;
-            } else {
-                return true;
-            }
+        if ($remaingQuantityMax > 0) {
+            return true;
         } else {
             return false;
         }
@@ -232,17 +214,42 @@ abstract class AbstractProduct implements ProductInterface
             return 0;
         }
 
-        $quantity = $this->getQuantityIncludedWithPurchase($packageData);
+        $quantityIncluded = $this->getQuantityIncludedWithPurchase($packageData);
 
-        return ($this->getQuantityMax($packageData) - $quantity) > 0
-            && ($this->getQuantityMax($packageData) - $quantity) >= $this->getQuantityMin()
-            ? $this->getQuantityMax($packageData) - $quantity : 0;
+        if (null === $quantityIncluded) {
+            return 0;
+        }
+
+        $quantityMax    = $this->getQuantityMax();
+        $quantityBought = $this->getQuantityBought($packageData);
+
+        return ($quantityMax - $quantityBought - $quantityIncluded) > 0
+            && ($quantityMax - $quantityBought - $quantityIncluded) >= $this->getQuantityMin()
+            ? $quantityMax - $quantityBought- $quantityIncluded : 0;
     }
 
     /**
      * @param array $packageData
      *
      * @return int
+     */
+    public function getQuantityBought(array $packageData)
+    {
+        if (empty($packageData)) {
+            return 0;
+        }
+
+        if (!isset($packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'])) {
+            return 0;
+        } else {
+            return $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
+        }
+    }
+
+    /**
+     * @param array $packageData
+     *
+     * @return int|null
      */
     public function getQuantityIncludedWithPurchase(array $packageData)
     {
@@ -251,7 +258,7 @@ abstract class AbstractProduct implements ProductInterface
 
         foreach ($includings as $including) {
             if ($including->getQuantity() === null) {
-                return 0;
+                return null;
             } else {
                 $quantity += $including->getQuantity();
             }
@@ -299,14 +306,18 @@ abstract class AbstractProduct implements ProductInterface
         if (!empty($packageData) && $template !== null) {
             foreach ($packageData as $stepKey => $stepData) {
                 foreach ($stepData as $productKey => $productData) {
-                    $toInclude = $this->isIncludedIn(
-                        $this,
-                        $template->getStep($stepKey)->getProduct($productKey),
-                        $productData
-                    );
+                    if (null !== $template->getStep($stepKey)
+                        && null != $template->getStep($stepKey)->getProduct($productKey)
+                    ) {
+                        $toInclude = $this->isIncludedIn(
+                            $this,
+                            $template->getStep($stepKey)->getProduct($productKey),
+                            $productData
+                        );
 
-                    if (!empty($toInclude)) {
-                        $includings[] = $toInclude;
+                        if (!empty($toInclude)) {
+                            $includings[] = $toInclude;
+                        }
                     }
                 }
             }

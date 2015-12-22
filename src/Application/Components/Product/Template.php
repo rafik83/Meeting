@@ -54,4 +54,14 @@ class Template
 
         return null;
     }
+
+    /**
+     * @param Step $step
+     */
+    public function removeStep(Step $step)
+    {
+        $this->steps = array_filter($this->steps, function ($templateStep) use ($step) {
+            return $templateStep->getKey() !== $step->getKey();
+        });
+    }
 }

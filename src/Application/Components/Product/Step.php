@@ -154,4 +154,22 @@ class Step
     {
         return $this->template;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasProducts()
+    {
+        return !empty($this->products);
+    }
+
+    /**
+     * @param ProductInterface $product
+     */
+    public function removeProduct(ProductInterface $product)
+    {
+        $this->products = array_filter($this->products, function ($stepProduct) use ($product) {
+            return $stepProduct->getKey() !== $product->getKey();
+        });
+    }
 }
