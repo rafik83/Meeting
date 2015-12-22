@@ -1,0 +1,11 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
+{% block title 'event.sheet.package.products.title'|trans %}
+
+{% block content %}
+    <h2>{{ 'event.sheet.package.products.title'|trans }}</h2>
+    <hr>
+    {{ form(form) }}
+{% endblock %}
