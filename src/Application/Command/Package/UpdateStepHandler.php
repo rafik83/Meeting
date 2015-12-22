@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Package;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateStepHandler
 {
