@@ -92,19 +92,16 @@ class ParticipantManager
     {
         $bought = 0;
 
-        foreach ($sheet->getOrders() as $order) {
-            $typePackageTemplate = $order->getPackageTemplate();
-            $packageData         = $sheet->getPackageData();
+        $packageData = $sheet->getPackageData();
 
-            foreach ($typePackageTemplate as $blockKey => $block) {
-                foreach ($block['template'] as $elementKey => $element) {
-                    if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
-                        if (isset($packageData[$blockKey][$elementKey]['quantity'])
-                            && isset($packageData[$blockKey][$elementKey]['participant'])
-                            && true === $packageData[$blockKey][$elementKey]['participant']
-                        ) {
-                            $bought += intval($packageData[$blockKey][$elementKey]['quantity']);
-                        }
+        foreach ($sheet->getTypePackageTemplate() as $blockKey => $block) {
+            foreach ($block['template'] as $elementKey => $element) {
+                if ($element['type'] === 'lib_participant' && isset($packageData[$blockKey][$elementKey])) {
+                    if (isset($packageData[$blockKey][$elementKey]['quantity'])
+                        && isset($packageData[$blockKey][$elementKey]['participant'])
+                        && true === $packageData[$blockKey][$elementKey]['participant']
+                    ) {
+                        $bought += intval($packageData[$blockKey][$elementKey]['quantity']);
                     }
                 }
             }
