@@ -116,6 +116,27 @@ class BaseController extends Controller
         return $form;
     }
 
+    protected function addErrorOnFormPackage(PackageException $exception, array $data, Form $form)
+    {
+        if ($exception instanceof ForgotToAddQuantityException) {
+            foreach ($data as $stepKey => $step) {
+                foreach ($step as $productKey => $product) {
+                    if (isset($product['planning'])
+                        && $product['planning'] === true
+                        && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.option.quantityMustBeAdded', [], 'validators')
+                        );
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('planning')->addError($error);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * @param \Traversable|array $participants
      *
