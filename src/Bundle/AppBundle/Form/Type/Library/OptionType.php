@@ -115,7 +115,9 @@ class OptionType extends AbstractLocalizedType
         if ($sheet !== null
             && false === $checked
             && $product !== null
-            && $product->allowQuantity($this->orderManager->mergeTwoPackageData($sheet->getPackageData(), $cart->getData()), $sheet->getPackageData())
+            && ($product->allowQuantity($sheet->getPackageData())
+                || (empty($sheet->getPackageData()) && $product->allowQuantity($cart->getData()))
+            )
         ) {
             $builder->add('quantity', QuantityType::class, [
                 'min'   => $product->getQuantityMin(),
