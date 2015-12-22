@@ -80,6 +80,11 @@
             }) }}" class="btn btn-primary">
                 {{ 'event.sheet.listOrders.title'|trans }}
             </a>
+
+            <a href="{{ path('event_sheet_package_products', {
+                'id': sheetDataView.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">{{ 'event.sheet.package.products.title'|trans }}</a>
         </div>
     {% endif %}
 {% endblock %}
