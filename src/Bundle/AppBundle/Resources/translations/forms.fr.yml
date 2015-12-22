@@ -93,6 +93,10 @@ form:
         children:
             submit:
                 label: Valider et aller à la suite
+    add_products:
+        children:
+            submit:
+                label: Valider les produits
     billing_update:
         children:
             submit:

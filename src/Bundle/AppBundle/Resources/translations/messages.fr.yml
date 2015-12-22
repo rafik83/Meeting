@@ -54,6 +54,8 @@ event:
         add_participant:
             title: Ajouter un participant
         package:
+            products:
+                title: Sélectionner des produits à ajouter à ma fiche
             include: Inclus avec votre forfait
             includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
             step:
