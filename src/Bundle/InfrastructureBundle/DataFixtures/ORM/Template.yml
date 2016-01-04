@@ -105,13 +105,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             position74: { label: { fr: "Responsable recherche / Responsable développement", en: "Responsable recherche / Responsable développement" } }
                             position75: { label: { fr: "Directeur recherche et développement", en: "Directeur recherche et développement" } }
         sheet:
-            563cae3691916:
-                label:
-                    fr: "Logo"
-                    en: "Brand"
-                linkTo:
-                    template: "packageTemplate"
-                    index: 56407fa453f4e
             563cae566af03:
                 label:
                     fr: "Société"
