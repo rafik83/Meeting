@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Components\Order\OrderManager;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
@@ -27,20 +29,36 @@ class AddHandler extends BaseHandler
     private $userRepository;
 
     /**
+     * @var ParticipantManager
+     */
+    private $participantManager;
+
+    /**
      * @var ParticipantRepositoryInterface
      */
     private $participantRepository;
 
     /**
+     * @var OrderManager
+     */
+    private $orderManager;
+
+    /**
      * @param UserRepositoryInterface        $userRepository
+     * @param ParticipantManager             $participantManager
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param OrderManager                   $orderManager
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantManager $participantManager,
+        ParticipantRepositoryInterface $participantRepository,
+        OrderManager $orderManager
     ) {
         $this->userRepository        = $userRepository;
+        $this->participantManager    = $participantManager;
         $this->participantRepository = $participantRepository;
+        $this->orderManager          = $orderManager;
     }
 
     /**
@@ -74,8 +92,18 @@ class AddHandler extends BaseHandler
             }
         }
 
+        $active      = $this->participantManager->getNewParticipantState($add->sheet);
+        $participant = new Participant($add->sheet, $user, $add->data, $add->owner, $active);
+
+        // attached to an order
+        if ($active) {
+            $orderToAttach = $this->participantManager->findOrdertoAttach($add->sheet);
+            if ($orderToAttach !== null) {
+                $participant->setOrder($orderToAttach);
+            }
+        }
+
         // Add the new participant
-        $participant = new Participant($add->sheet, $user, $add->data, $add->owner, true);
         $this->participantRepository->add($participant);
 
         $add->participant = $participant;
