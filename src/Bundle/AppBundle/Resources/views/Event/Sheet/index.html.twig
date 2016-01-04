@@ -37,14 +37,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if buttonParticipant.canBuyParticipant %}
-            <a href="{{ path('event_sheet_buy_participant', {
-                'id': sheetDataView.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-default">
-                {{ 'event.sheet.block.buy_participant.title'|trans }}
-            </a>
-        {% endif %}
     </div>
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {

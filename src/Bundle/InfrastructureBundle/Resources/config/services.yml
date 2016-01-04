@@ -126,16 +126,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-    vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\BuyParticipantHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
@@ -234,6 +230,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.cart_repository'
             - '@vimeet_infrastructure.application.components.order.order_manager'
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -275,6 +272,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Product\ProductBuilder
     vimeet_infrastructure.application.components.order.order_manager:
         class: Proximum\Vimeet\Application\Components\Order\OrderManager
+    vimeet_infrastructure.application.components.participant.participant_manager:
+        class: Proximum\Vimeet\Application\Components\Participant\ParticipantManager
+        arguments:
+            - '@vimeet_infrastructure.repository.cart_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.order.order_manager'
 
     #
     # Carts components
