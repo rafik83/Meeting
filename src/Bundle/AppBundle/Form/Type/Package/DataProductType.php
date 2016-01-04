@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Application\Exception\Data\DataTypeNotFoundException;
+use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduct;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -50,7 +50,7 @@ class DataProductType extends AbstractType
             if ($product->isAvailableToPurchase(
                     $productData,
                     isset($productData[$step->getKey()][$product->getKey()])
-                    ? $productData[$step->getKey()][$product->getKey()] : []
+                        ? $productData[$step->getKey()][$product->getKey()] : []
             )) {
                 $builder->add($product->getKey(), $this->types[$product->getType()], [
                     'template' => $template[$product->getKey()],

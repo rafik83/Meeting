@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType as CoreChoiceType;
