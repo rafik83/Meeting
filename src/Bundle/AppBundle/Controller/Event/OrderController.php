@@ -78,7 +78,7 @@ class OrderController extends BaseController
         }
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->create($order->getPackageTemplate());
+            ->createFromOrder($sheet->getType(), $order);
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,

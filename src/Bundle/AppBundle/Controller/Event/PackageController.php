@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedE
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
-use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -50,7 +49,7 @@ class PackageController extends BaseController
             ->findOrCreateCart($sheet);
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->create($cart->getTemplate());
+            ->createFromCart($sheet->getType(), $cart);
 
         $stepObject = $template->getStep($step);
 
@@ -122,7 +121,7 @@ class PackageController extends BaseController
             throw $this->createNotFoundException('Cart not available');
         }
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->create($cart->getTemplate());
+            ->createFromCart($sheet->getType(), $cart);
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,
@@ -149,7 +148,7 @@ class PackageController extends BaseController
     {
         $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_manager')->findOrCreateCart($sheet);
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->create($cart->getTemplate());
+            ->createFromCart($sheet->getType(), $cart);
 
         $addProducts = new AddProducts($cart, $sheet);
         $form        = $this->createForm(AddProductsType::class, $addProducts, [
