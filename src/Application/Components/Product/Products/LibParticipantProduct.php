@@ -93,7 +93,11 @@ class LibParticipantProduct extends AbstractDescriptionTypeUnitPriceOptions
             return true;
         }
 
-        if ($this->hasQuantity() && $this->getRemainingQuantityMax($packageData) > 0) {
+        if (isset($data['participant'])
+            && true === $data['participant']
+            && isset($data['quantity'])
+            && $this->getMaxParticipant() > $data['quantity']
+        ) {
             return true;
         }
 

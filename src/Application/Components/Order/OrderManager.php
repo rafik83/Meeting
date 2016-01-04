@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Order;
 
+use Proximum\Vimeet\Domain\Model\Order;
+
 class OrderManager
 {
     /**
@@ -32,10 +34,15 @@ class OrderManager
                 }
 
                 foreach ($product as $keyField => $field) {
-                    if (isset($packageDataTwo[$keyStep][$keyProduct])) {
+                    if (isset($packageDataTwo[$keyStep][$keyProduct][$keyField])) {
                         if ('quantity' === $keyField) {
                             // addition
                             $sheetData[$keyStep][$keyProduct][$keyField] = $field + $packageDataTwo[$keyStep][$keyProduct][$keyField];
+                        } elseif (is_bool($keyField)) {
+                            if (true === $packageDataTwo[$keyStep][$keyProduct][$keyField]) {
+                                // assign if true
+                                $sheetData[$keyStep][$keyProduct][$keyField] = $packageDataTwo[$keyStep][$keyProduct][$keyField];
+                            }
                         } else {
                             // replace
                             $sheetData[$keyStep][$keyProduct][$keyField] = $packageDataTwo[$keyStep][$keyProduct][$keyField];
@@ -59,5 +66,33 @@ class OrderManager
         }
 
         return $sheetData;
+    }
+
+    /**
+     * @param Order $order
+     * @return int
+     */
+    public function getParticipantBoughtForOrder(Order $order)
+    {
+        if (empty($order->getPackageTemplate()) || empty($order->getPackageData())) {
+            return 0;
+        }
+
+        foreach ($order->getPackageTemplate() as $blockKey => $block) {
+            foreach ($block['template'] as $productKey => $product) {
+                if (isset($product['type']) && 'lib_participant' === $product['type']) {
+                    if (isset($order->getPackageData()[$blockKey][$productKey]['participant'])
+                    && true === $order->getPackageData()[$blockKey][$productKey]['participant']
+                    && isset($order->getPackageData()[$blockKey][$productKey]['quantity'])
+                    ) {
+                        return $order->getPackageData()[$blockKey][$productKey]['quantity'];
+                    } else {
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        return 0;
     }
 }

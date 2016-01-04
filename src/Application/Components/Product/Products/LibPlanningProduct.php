@@ -70,7 +70,11 @@ class LibPlanningProduct extends AbstractDescriptionTypeUnitPriceOptions
             return true;
         }
 
-        if ($this->hasQuantity() && $this->getRemainingQuantityMax($packageData) > 0) {
+        if (isset($data['planning'])
+            && true === $data['planning']
+            && isset($data['quantity'])
+            && $this->getMaxPlanning() > $data['quantity']
+        ) {
             return true;
         }
 
