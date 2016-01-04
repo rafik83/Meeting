@@ -150,4 +150,21 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInactiveParticipantForSheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from('Entity:Participant', 'participant')
+            ->where('participant.sheet = :sheetId')
+            ->setParameter('sheetId', $sheet->getId())
+            ->andWhere('participant.active = false');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

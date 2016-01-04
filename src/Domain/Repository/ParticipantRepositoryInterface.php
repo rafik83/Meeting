@@ -68,4 +68,11 @@ interface ParticipantRepositoryInterface
      * @return ParticipantView[]
      */
     public function getParticipantViewsBySheet($sheetId);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    public function getInactiveParticipantForSheet(Sheet $sheet);
 }
