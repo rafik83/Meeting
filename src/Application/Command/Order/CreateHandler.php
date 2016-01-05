@@ -67,6 +67,8 @@ class CreateHandler
 
     public function handle(Create $create)
     {
+        $create->packageData = $this->orderManager->cleanFalseOption($create->packageData);
+
         $order = new Order(
             $create->sheet,
             $create->state,
