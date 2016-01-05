@@ -54,6 +54,7 @@ class RefuseRequestHandler
         DateTimeInterface $createdAt
     ) {
         $this->requestRepository = $requestRepository;
+        $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
         $this->createdAt         = $createdAt;
     }

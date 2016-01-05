@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -46,6 +46,7 @@ class CancelHandler
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->meetingRepository = $meetingRepository;
+        $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
