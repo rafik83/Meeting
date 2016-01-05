@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67a4ec9b5bd944824077a4272ada5397",
-    "content-hash": "dcbc5ce0e568184a5ba6d89ddb623ddc",
+    "hash": "322b67dd94a0e047e2b9e8d005aa4587",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2627,16 +2626,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.1",
+            "version": "2.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "8956ed50a44c5c4e02f2176c0773e24487477b09"
+                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/8956ed50a44c5c4e02f2176c0773e24487477b09",
-                "reference": "8956ed50a44c5c4e02f2176c0773e24487477b09",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/59915652862ef7c66b29eedb5805f79f37dcf310",
+                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310",
                 "shasum": ""
             },
             "require": {
@@ -2756,7 +2755,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-12-26 15:56:52"
+            "time": "2016-01-04 16:50:38"
         },
         {
             "name": "twig/twig",
@@ -5005,6 +5004,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "symfony/symfony": 20,
         "sonata-project/intl-bundle": 20,
         "behat/behat": 20,
         "knplabs/friendly-contexts": 20,
