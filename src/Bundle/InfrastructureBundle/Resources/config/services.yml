@@ -144,6 +144,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\AddProductsHandler
         arguments:
             - '@vimeet_infrastructure.repository.cart_repository'
+            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:

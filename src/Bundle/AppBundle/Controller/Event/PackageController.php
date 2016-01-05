@@ -168,10 +168,19 @@ class PackageController extends BaseController
 
                 $this->addFlash('success', 'flash.package.add_products.success');
 
-                return $this->redirectToRoute('event_sheet_package_cart', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute(
+                    'event_sheet_package_cart',
+                    [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                    ]
+                );
+            } catch (BoughtParticipantAlreadyAddedException $exception) {
+                $this->addErrorOnFormPackage(
+                    $exception,
+                    $addProducts->packageData,
+                    $form
+                );
             } catch (ForgotToAddQuantityException $exception) {
                 $this->addErrorOnFormPackage(
                     $exception,
