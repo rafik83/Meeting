@@ -14,7 +14,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - @sheet_test
             - [@participant_test]
             - @sheet_exposant2
-            - []
+            - [@participant_random_1]
             - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
