@@ -63,7 +63,7 @@ class PositionMeeting
         $this->fromSheet        = $request->getFromSheet();
         $this->fromParticipants = $request->getFromParticipants()->toArray();
         $this->toSheet          = $request->getToSheet();
-        $this->toParticipants   = $request->getFromParticipants()->toArray();
+        $this->toParticipants   = $request->getToParticipants()->toArray();
         $this->createdAt        = $createdAt;
     }
 }
