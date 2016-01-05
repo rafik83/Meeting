@@ -168,7 +168,7 @@ class Step
      */
     public function removeProduct(ProductInterface $product)
     {
-        $this->products = array_filter($this->products, function ($stepProduct) use ($product) {
+        $this->products = array_filter($this->products, function (ProductInterface $stepProduct) use ($product) {
             return $stepProduct->getKey() !== $product->getKey();
         });
     }

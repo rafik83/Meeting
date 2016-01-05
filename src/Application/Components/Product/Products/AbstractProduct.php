@@ -307,7 +307,7 @@ abstract class AbstractProduct implements ProductInterface
             foreach ($packageData as $stepKey => $stepData) {
                 foreach ($stepData as $productKey => $productData) {
                     if (null !== $template->getStep($stepKey)
-                        && null != $template->getStep($stepKey)->getProduct($productKey)
+                        && null !== $template->getStep($stepKey)->getProduct($productKey)
                     ) {
                         $toInclude = $this->isIncludedIn(
                             $this,

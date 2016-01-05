@@ -60,7 +60,7 @@ class Template
      */
     public function removeStep(Step $step)
     {
-        $this->steps = array_filter($this->steps, function ($templateStep) use ($step) {
+        $this->steps = array_filter($this->steps, function (Step $templateStep) use ($step) {
             return $templateStep->getKey() !== $step->getKey();
         });
     }

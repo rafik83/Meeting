@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\Update;
-use Proximum\Vimeet\Application\Command\Sheet\BuyParticipant;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
@@ -24,7 +23,6 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BuyParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;

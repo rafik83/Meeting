@@ -48,7 +48,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $orderManager       = $this->prophesize(OrderManager::class);
         $participantManager = $this->prophesize(ParticipantManager::class);
 
         $add = new Add($sheet, 'fr');
@@ -58,8 +57,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal(),
-            $orderManager->reveal()
+            $participantRepository->reveal()
         );
         $handler->handle($add);
     }
@@ -86,7 +84,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $orderManager       = $this->prophesize(OrderManager::class);
         $participantManager = $this->prophesize(ParticipantManager::class);
 
 
@@ -97,8 +94,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal(),
-            $orderManager->reveal()
+            $participantRepository->reveal()
         );
         $handler->handle($add);
     }
@@ -129,7 +125,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $orderManager       = $this->prophesize(OrderManager::class);
         $participantManager = $this->prophesize(ParticipantManager::class);
         $participantManager->findOrderToAttach($sheet)->shouldBeCalled()->willReturn($order);
         $participantManager->getNewParticipantState($sheet)->shouldBeCalled()->willReturn(true);
@@ -142,8 +137,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal(),
-            $orderManager->reveal()
+            $participantRepository->reveal()
         );
         $handler->handle($add);
     }

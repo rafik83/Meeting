@@ -128,7 +128,6 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:

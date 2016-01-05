@@ -47,7 +47,6 @@ class OptionType extends AbstractLocalizedType
             && null !== $options['cart']
         ) {
             $product = $options['product'];
-            $sheet   = $options['sheet'];
             $cart    = $options['cart'];
 
             $includeds = $product->getIncludingFromPurchase($cart->getData());

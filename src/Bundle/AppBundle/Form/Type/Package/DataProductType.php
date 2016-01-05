@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduct;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

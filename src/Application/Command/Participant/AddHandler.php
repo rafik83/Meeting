@@ -39,26 +39,18 @@ class AddHandler extends BaseHandler
     private $participantRepository;
 
     /**
-     * @var OrderManager
-     */
-    private $orderManager;
-
-    /**
      * @param UserRepositoryInterface        $userRepository
      * @param ParticipantManager             $participantManager
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param OrderManager                   $orderManager
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         ParticipantManager $participantManager,
-        ParticipantRepositoryInterface $participantRepository,
-        OrderManager $orderManager
+        ParticipantRepositoryInterface $participantRepository
     ) {
         $this->userRepository        = $userRepository;
         $this->participantManager    = $participantManager;
         $this->participantRepository = $participantRepository;
-        $this->orderManager          = $orderManager;
     }
 
     /**
