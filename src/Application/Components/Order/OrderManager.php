@@ -23,6 +23,8 @@ class OrderManager
     public function mergeTwoPackageData(array $sheetData, array $packageDataTwo)
     {
         // merge products data
+        $packageDataTwo = $this->cleanFalseOption($packageDataTwo);
+
         foreach ($sheetData as $keyStep => $step) {
             if ($step === null) {
                 continue;
@@ -38,7 +40,7 @@ class OrderManager
                         if ('quantity' === $keyField) {
                             // addition
                             $sheetData[$keyStep][$keyProduct][$keyField] = $field + $packageDataTwo[$keyStep][$keyProduct][$keyField];
-                        } elseif (is_bool($keyField)) {
+                        } elseif (is_bool($field)) {
                             if (true === $packageDataTwo[$keyStep][$keyProduct][$keyField]) {
                                 // assign if true
                                 $sheetData[$keyStep][$keyProduct][$keyField] = $packageDataTwo[$keyStep][$keyProduct][$keyField];
@@ -94,5 +96,28 @@ class OrderManager
         }
 
         return 0;
+    }
+
+    public function cleanFalseOption(array $packageData)
+    {
+        foreach ($packageData as $stepKey => $step) {
+            $packageData[$stepKey] = array_filter($step, function ($product) {
+                if ($product === null) {
+                    return false;
+                }
+
+                foreach ($product as $keyField => $field) {
+                    if (is_bool($field) && false === $field) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
+
+        return array_filter($packageData, function ($step) {
+            return !($step === null || empty($step));
+        });
     }
 }
