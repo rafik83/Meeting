@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 
-class Meeting
+class Meeting implements MessageSubjectInterface
 {
     const STATE_SCHEDULED = 'scheduled';
     const STATE_CANCELED  = 'canceled';

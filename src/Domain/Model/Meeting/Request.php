@@ -12,14 +12,13 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Request
+class Request implements MessageSubjectInterface
 {
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
@@ -67,11 +66,6 @@ class Request
     private $createdAt;
 
     /**
-     * @var Notification[]
-     */
-    private $notifications;
-
-    /**
      * @var MeetingSlot
      */
     private $meetingSlot;
@@ -114,7 +108,6 @@ class Request
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
         $this->creator          = $creator;
-        $this->notifications    = new ArrayCollection();
     }
 
     /**
@@ -245,22 +238,6 @@ class Request
         $this->meetingSlot = $meetingSlot;
 
         return $this;
-    }
-
-    /**
-     * @return Notification[]
-     */
-    public function getNotifications()
-    {
-        return $this->notifications;
-    }
-
-    /**
-     * @param Notification $notification
-     */
-    public function addNotifications(Notification $notification)
-    {
-        $this->notifications[] = $notification;
     }
 
     /**

@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -20,7 +22,12 @@ class UpdateHandler
     /**
      * @var MeetingRepositoryInterface
      */
-    private $meetingRepositoryInterface;
+    private $meetingRepository;
+
+    /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
 
     /**
      * @var EventDispatcherInterface
@@ -35,13 +42,18 @@ class UpdateHandler
     /**
      * UpdateHandler constructor.
      *
-     * @param MeetingRepositoryInterface $meetingRepositoryInterface
+     * @param MeetingRepositoryInterface $meetingRepository
+     * @param MessageRepositoryInterface $messageRepository
      * @param EventDispatcherInterface   $eventDispatcher
      */
-    public function __construct(MeetingRepositoryInterface $meetingRepositoryInterface, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->meetingRepositoryInterface = $meetingRepositoryInterface;
-        $this->eventDispatcher            = $eventDispatcher;
+    public function __construct(
+        MeetingRepositoryInterface $meetingRepository,
+        MessageRepositoryInterface $messageRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->meetingRepository = $meetingRepository;
+        $this->messageRepository = $messageRepository;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     /**
@@ -59,7 +71,15 @@ class UpdateHandler
         }
 
         // Save meeeting
-        $this->meetingRepositoryInterface->set($update->meeting);
+        $this->meetingRepository->set($update->meeting);
+
+        // Add message
+        $this->messageRepository->add(new Message(
+            $update->meeting,
+            $update->sheet,
+            $update->message,
+            $update->date
+        ));
 
         // Dispatch events
         while ($event = array_shift($this->events)) {

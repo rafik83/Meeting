@@ -95,7 +95,7 @@ class MeetingController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $cancel = new Cancel($meeting, $this->getUser(), new \DateTimeImmutable());
+        $cancel = new Cancel($meeting, $this->getUser(), $sheet, new \DateTimeImmutable());
         $form   = $this->createForm(CancelType::class, $cancel);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

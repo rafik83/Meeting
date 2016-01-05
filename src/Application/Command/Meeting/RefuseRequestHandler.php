@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -21,6 +23,11 @@ class RefuseRequestHandler
      * @var RequestRepositoryInterface
      */
     private $requestRepository;
+
+    /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
 
     /**
      * @var EventDispatcherInterface
@@ -36,11 +43,13 @@ class RefuseRequestHandler
      * RefuseRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
+     * @param MessageRepositoryInterface $messageRepository
      * @param EventDispatcherInterface   $eventDispatcher
      * @param DateTimeInterface          $createdAt
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
+        MessageRepositoryInterface $messageRepository,
         EventDispatcherInterface $eventDispatcher,
         DateTimeInterface $createdAt
     ) {
@@ -54,7 +63,26 @@ class RefuseRequestHandler
      */
     public function handle(RefuseRequest $refuseRequest)
     {
+        // Refuse request
         $this->requestRepository->set($refuseRequest->request->refuse());
-        $this->eventDispatcher->dispatch('meeting_request.refused', new RequestRefusedEvent($refuseRequest->emitter, $refuseRequest->request, $this->createdAt, $refuseRequest->message));
+
+        // Add message
+        $this->messageRepository->add(new Message(
+            $refuseRequest->request,
+            $refuseRequest->request->getToSheet(),
+            $refuseRequest->message,
+            $this->createdAt
+        ));
+
+        // Dispatch event
+        $this->eventDispatcher->dispatch(
+            'meeting_request.refused',
+            new RequestRefusedEvent(
+                $refuseRequest->emitter,
+                $refuseRequest->request,
+                $this->createdAt,
+                $refuseRequest->message
+            )
+        );
     }
 }
