@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 interface MessageRepositoryInterface
 {
     public function add(Message $message);
+
+    public function getLastMessageByRequest(Request $request);
 }
