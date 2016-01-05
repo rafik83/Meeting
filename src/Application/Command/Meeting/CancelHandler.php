@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CancelHandler
 {
@@ -23,20 +24,20 @@ class CancelHandler
     private $meetingRepository;
 
     /**
-     * @var NotificationRepositoryInterface
+     * @var EventDispatcherInterface
      */
-    private $notificationRepository;
+    private $eventDispatcher;
 
     /**
      * CancelHandler constructor.
      *
      * @param MeetingRepositoryInterface      $meetingRepository
-     * @param NotificationRepositoryInterface $notificationRepository
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(MeetingRepositoryInterface $meetingRepository, NotificationRepositoryInterface $notificationRepository)
+    public function __construct(MeetingRepositoryInterface $meetingRepository, EventDispatcherInterface $eventDispatcher)
     {
-        $this->meetingRepository      = $meetingRepository;
-        $this->notificationRepository = $notificationRepository;
+        $this->meetingRepository = $meetingRepository;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     /**
@@ -44,34 +45,7 @@ class CancelHandler
      */
     public function handle(Cancel $cancel)
     {
-        $cancel->meeting->cancel();
-
-        $this->meetingRepository->set($cancel->meeting);
-
-        foreach ($cancel->meeting->getFromParticipants() as $participant) {
-            $this->notifyParticipant($cancel, $participant);
-        }
-
-        foreach ($cancel->meeting->getToParticipants() as $participant) {
-            $this->notifyParticipant($cancel, $participant);
-        }
-    }
-
-    /**
-     * @param Cancel      $cancel
-     * @param Participant $participant
-     */
-    private function notifyParticipant(Cancel $cancel, Participant $participant)
-    {
-        $notification = new Notification(
-            $participant->getSheet()->getEvent(),
-            $cancel->user,
-            $participant->getUser(),
-            $cancel->date,
-            'metting.cancel',
-            $cancel->message
-        );
-
-        $this->notificationRepository->add($notification);
+        $this->meetingRepository->set($cancel->meeting->cancel());
+        $this->eventDispatcher->dispatch('meeting.canceled', new CanceledEvent($cancel->user, $cancel->meeting, $cancel->date, $cancel->message));
     }
 }

@@ -210,6 +210,12 @@ services:
             - '@templating.engine.twig'
         tags:
             - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
+    vimeet_app.vimeet.application.event.notification_event_listener:
+        class: Proximum\Vimeet\Application\Event\NotificationEventListener
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+        tags:
+            - { name: 'kernel.event_subscriber' }
 
     #
     # Twig extension

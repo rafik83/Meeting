@@ -106,11 +106,11 @@ class Sheet
     /**
      * Get participants.
      *
-     * @return ArrayCollection
+     * @return Participant[]
      */
     public function getParticipants()
     {
-        return $this->participants;
+        return $this->participants->toArray();
     }
 
     /**
@@ -211,5 +211,21 @@ class Sheet
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * Get the sheet owner
+     *
+     * @return Participant
+     */
+    public function getOwner()
+    {
+        foreach ($this->getParticipants() as $participant) {
+            if ($participant->isOwner()) {
+                return $participant;
+            }
+        }
+
+        throw new \RuntimeException('Sheet owner not found.');
     }
 }

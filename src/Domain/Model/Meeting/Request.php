@@ -146,7 +146,7 @@ class Request
      */
     public function getFromParticipants()
     {
-        return $this->fromParticipants;
+        return $this->fromParticipants->toArray();
     }
 
     /**
@@ -162,7 +162,7 @@ class Request
      */
     public function getToParticipants()
     {
-        return $this->toParticipants;
+        return $this->toParticipants->toArray();
     }
 
     /**
@@ -182,6 +182,28 @@ class Request
     }
 
     /**
+     * @return Request
+     */
+    public function refuse()
+    {
+        $this->state = self::STATE_REFUSED;
+
+        return $this;
+    }
+
+    /**
+     * @return Request
+     */
+    public function cancel()
+    {
+        $this->state = self::STATE_CANCEL;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     *
      * @param string $state
      */
     public function setState($state)

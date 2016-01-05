@@ -102,11 +102,11 @@ class Meeting
     }
 
     /**
-     * @return ArrayCollection
+     * @return Participant[]
      */
     public function getFromParticipants()
     {
-        return $this->fromParticipants;
+        return $this->fromParticipants->toArray();
     }
 
     /**
@@ -152,11 +152,11 @@ class Meeting
     }
 
     /**
-     * @return ArrayCollection
+     * @return Participant[]
      */
     public function getToParticipants()
     {
-        return $this->toParticipants;
+        return $this->toParticipants->toArray();
     }
 
     /**
@@ -222,7 +222,7 @@ class Meeting
     }
 
     /**
-     * @return MeetingSlot
+     * @return Meeting
      */
     public function cancel()
     {

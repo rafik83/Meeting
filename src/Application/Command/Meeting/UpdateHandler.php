@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandler
 {
@@ -22,22 +23,25 @@ class UpdateHandler
     private $meetingRepositoryInterface;
 
     /**
-     * @var NotificationRepositoryInterface
+     * @var EventDispatcherInterface
      */
-    private $notificationRepository;
+    private $eventDispatcher;
+
+    /**
+     * @var array
+     */
+    private $events = [];
 
     /**
      * UpdateHandler constructor.
      *
-     * UpdateHandler constructor.
-     *
-     * @param MeetingRepositoryInterface      $meetingRepositoryInterface
-     * @param NotificationRepositoryInterface $notificationRepository
+     * @param MeetingRepositoryInterface $meetingRepositoryInterface
+     * @param EventDispatcherInterface   $eventDispatcher
      */
-    public function __construct(MeetingRepositoryInterface $meetingRepositoryInterface, NotificationRepositoryInterface $notificationRepository)
+    public function __construct(MeetingRepositoryInterface $meetingRepositoryInterface, EventDispatcherInterface $eventDispatcher)
     {
         $this->meetingRepositoryInterface = $meetingRepositoryInterface;
-        $this->notificationRepository     = $notificationRepository;
+        $this->eventDispatcher            = $eventDispatcher;
     }
 
     /**
@@ -47,9 +51,9 @@ class UpdateHandler
     {
         // Update participant
         if ($update->meeting->getFromSheet() === $update->sheet) {
-            $notifications = $this->updateFromParticipants($update);
+            $this->updateFromParticipants($update);
         } elseif ($update->meeting->getToSheet() === $update->sheet) {
-            $notifications = $this->updateToParticipants($update);
+            $this->updateToParticipants($update);
         } else {
             throw new \RuntimeException('This sheet do not participate to this meeting.');
         }
@@ -57,24 +61,22 @@ class UpdateHandler
         // Save meeeting
         $this->meetingRepositoryInterface->set($update->meeting);
 
-        // Send notifications
-        $this->notify($notifications);
+        // Dispatch events
+        while ($event = array_shift($this->events)) {
+            $this->eventDispatcher->dispatch($event[0], $event[1]);
+        }
     }
 
     /**
      * @param Update $update
-     *
-     * @return Notification[]
      */
     private function updateFromParticipants(Update $update)
     {
-        $notifications = [];
-
         // Remove removed participants
         foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
-                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.removed', $update->message);
+                $this->events[] = ['participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
@@ -82,27 +84,21 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addFromParticipant($participant);
-                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.add', $update->message);
+                $this->events[] = ['participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
-
-        return $notifications;
     }
 
     /**
      * @param Update $update
-     *
-     * @return Notification[]
      */
     private function updateToParticipants(Update $update)
     {
-        $notifications = [];
-
         // Remove removed participants
         foreach ($update->meeting->getToParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeToParticipant($participant);
-                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.removed', '');
+                $this->events[] = ['participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
@@ -110,20 +106,8 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addToParticipant($participant);
-                $notifications[] = new Notification($participant->getSheet()->getEvent(), $update->user, $participant->getUser(), $update->date, 'participant.add', '');
+                $this->events[] = ['participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
-        }
-
-        return $notifications;
-    }
-
-    /**
-     * @param Notification[] $notifications
-     */
-    private function notify(array $notifications)
-    {
-        foreach ($notifications as $notification) {
-            $this->notificationRepository->add($notification);
         }
     }
 }
