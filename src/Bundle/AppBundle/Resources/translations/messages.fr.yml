@@ -170,7 +170,7 @@ template:
             choice_with_description: Choix avec description
 
 who:
-    see_who_but_dont_see: %seer% voit %seeable% mais ne voit pas :
+    see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
     the:
         category: la catégorie
         type: le type
@@ -179,9 +179,9 @@ notification:
     meeting_request:
         cancel:
             withoutMessage: Demande annulée par %sheetName%
-            withMessage: Demande annulée par %sheetName% pour le motif suivant : "%message%"
+            withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV annulée
         refuse:
             withoutMessage: Demande refusée par %sheetName%
-            withMessage: Demande refusée par %sheetName% pour le motif suivant : "%message%"
+            withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV refusée
