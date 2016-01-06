@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Application\Event\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\User;
+use Symfony\Component\EventDispatcher\Event;
 
-class RequestCanceledEvent
+class RequestCanceledEvent extends Event
 {
     /**
      * @var User
