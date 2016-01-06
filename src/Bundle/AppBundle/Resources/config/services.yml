@@ -214,6 +214,8 @@ services:
         class: Proximum\Vimeet\Application\Event\NotificationEventListener
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: 'kernel.event_subscriber' }
 
