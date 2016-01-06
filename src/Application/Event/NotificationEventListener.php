@@ -86,7 +86,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'participant.added',
+            'participant.removed',
             $event->getMessage()
         );
 
@@ -119,7 +119,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getRequest()->getFromSheet()->getEvent(),
                 $event->getEmitter(),
                 $participant->getUser(),
-                new \DateTime(),
+                $event->getDate(),
                 'meeting_request.refused',
                 $message
             ));
