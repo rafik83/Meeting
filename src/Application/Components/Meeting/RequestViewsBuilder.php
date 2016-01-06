@@ -37,7 +37,7 @@ class RequestViewsBuilder
      */
     public function generate($requests)
     {
-        return array_map(function ($request) {
+        return array_map(function (Request $request) {
             return $this->requestViewBuilder->generate($request);
         }, $requests);
     }
