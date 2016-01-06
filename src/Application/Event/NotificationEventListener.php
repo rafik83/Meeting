@@ -134,7 +134,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onRequestCanceled(RequestCanceledEvent $event)
     {
         $toParticipants = $event->getRequest()->hasToParticipants() ?
-            $event->getRequest()->getToParticipants() :
+            $event->getRequest()->getToParticipants()->toArray() :
             [$event->getRequest()->getToSheet()->getOwner()];
 
         foreach ($toParticipants as $participant) {
@@ -167,8 +167,8 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onMeetingCanceled(CanceledEvent $event)
     {
         $participants = array_merge(
-            $event->getMeeting()->getFromParticipants(),
-            $event->getMeeting()->getToParticipants()
+            $event->getMeeting()->getFromParticipants()->toArray(),
+            $event->getMeeting()->getToParticipants()->toArray()
         );
 
         foreach ($participants as $participant) {

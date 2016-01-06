@@ -106,11 +106,11 @@ class Sheet
     /**
      * Get participants.
      *
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getParticipants()
     {
-        return $this->participants->toArray();
+        return $this->participants;
     }
 
     /**

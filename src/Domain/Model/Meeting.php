@@ -103,11 +103,11 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getFromParticipants()
     {
-        return $this->fromParticipants->toArray();
+        return $this->fromParticipants;
     }
 
     /**
@@ -153,11 +153,11 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getToParticipants()
     {
-        return $this->toParticipants->toArray();
+        return $this->toParticipants;
     }
 
     /**
