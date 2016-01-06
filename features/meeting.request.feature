@@ -192,5 +192,5 @@ Feature: Meeting Request / Proposition
     Then the response status code should be 200
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request"
     And I should see "event.meeting.request.state.from.refused"
-    And I should see "notification.meeting_request.refuse.withMessage"
+    And I should see "Sorry I can't"
     And I should not see "event.meeting.request.state.from.cancelled"
