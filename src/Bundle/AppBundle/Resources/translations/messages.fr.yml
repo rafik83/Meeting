@@ -176,12 +176,17 @@ who:
         type: le type
 
 notification:
+    participant:
+        added:
+            action: Participant ajouté
+        removed:
+            action: Participant retiré
     meeting_request:
-        cancel:
+        canceled:
             withoutMessage: Demande annulée par %sheetName%
             withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV annulée
-        refuse:
+        refused:
             withoutMessage: Demande refusée par %sheetName%
             withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV refusée
