@@ -80,7 +80,7 @@ class SheetManager
             $sheet->getId(),
             $sheet->getEvent(),
             $sheet->getType(),
-            $sheet->getParticipants(),
+            $sheet->getParticipants()->toArray(),
             $sheet->getData(),
             $sheet->getPackageData(),
             $sheet->getBillingData(),

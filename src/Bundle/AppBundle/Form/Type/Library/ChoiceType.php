@@ -52,11 +52,11 @@ class ChoiceType extends AbstractLocalizedType
     }
 
     /**
-     * @param \ArrayAccess $options
+     * @param Options $options
      *
      * @return array
      */
-    protected function getChoices(\ArrayAccess $options)
+    protected function getChoices(Options $options)
     {
         $choices = $options['template']['choices'];
         $locale  = $options['locale'];

@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Meeting:
             generator:
                 strategy: AUTO
     fields:
+        state:
+            type: string
         createdAt:
             type: datetime
     manyToOne:
