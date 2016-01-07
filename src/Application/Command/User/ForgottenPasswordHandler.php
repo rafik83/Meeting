@@ -43,7 +43,7 @@ class ForgottenPasswordHandler
      * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
      * @param UserRepositoryInterface                   $userRepository
      * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
-     * @param EventDispatcherInterface       $eventDispatcher
+     * @param EventDispatcherInterface                  $eventDispatcher
      */
     public function __construct(
         ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
