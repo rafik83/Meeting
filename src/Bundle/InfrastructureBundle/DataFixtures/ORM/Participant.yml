@@ -1,4 +1,5 @@
 Proximum\Vimeet\Domain\Model\Participant:
+    # Elao participant
     participant_test:
         __construct: false
         user: @user_test
@@ -8,6 +9,58 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: "Dupond"
             563caf2746398: "Jean"
             563caf2f0ddbd: "0909090909"
+
+    # Proximum participants
+    proximum_participant_visiteur:
+        __construct: false
+        user: @proximum_user_visiteur
+        sheet: @proximum_sheet_visiteur
+        owner: true
+        data:
+            563cb0568a3bb: MARTIN
+            563cb05cb81ec: Jean
+    proximum_participant_exposant:
+        __construct: false
+        user: @proximum_user_exposant
+        sheet: @proximum_sheet_exposant
+        owner: true
+        data:
+            563caf2746398: BOUCHON
+            563caf1d9b1cb: François
+    proximum_participant_carnot:
+        __construct: false
+        user: @proximum_user_carnot
+        sheet: @proximum_sheet_carnot
+        owner: true
+        data:
+            563caf2746398: MIGNOT
+            563caf1d9b1cb: Isabelle
+    proximum_participant_admin:
+        __construct: false
+        user: @proximum_user_admin
+        sheet: @proximum_sheet_admin
+        owner: true
+        data:
+            563caf2746398: GOI
+            563caf1d9b1cb: Layla
+    proximum_participant_test:
+        __construct: false
+        user: @proximum_user_test
+        sheet: @proximum_sheet_test
+        owner: true
+        data:
+            563caf2746398: LAROSE
+            563caf1d9b1cb: Vincent
+    proximum_participant_ui:
+        __construct: false
+        user: @proximum_user_ui
+        sheet: @proximum_sheet_ui
+        owner: true
+        data:
+            563caf2746398: GAGNARD
+            563caf1d9b1cb: Julien
+
+    # Random
     participant_test_2:
         __construct: false
         user: @user_test_2
@@ -76,4 +129,3 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
             563caf2f0ddbd: "0809090909"
-

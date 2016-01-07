@@ -29,3 +29,41 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "0D/random/0D"
         password: "0D/random/0D"
         locale: "fr"
+
+    # Proximum users
+    proximum_user_visiteur:
+        __construct: false
+        email: "test_visiteur@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    proximum_user_exposant:
+        __construct: false
+        email: "test_exposant@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    proximum_user_carnot:
+        __construct: false
+        email: "test_carnot@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    proximum_user_admin:
+        __construct: false
+        email: "test_admin@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    proximum_user_test:
+        __construct: false
+        email: "test_proximum@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    proximum_user_ui:
+        __construct: false
+        email: "test_UI@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
