@@ -23,7 +23,7 @@ interface MeetingRepositoryInterface
      *
      * @return Meeting
      */
-    public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant);
+    public function findScheduledByScheduleAndParticipant(Schedule $schedule, Participant $participant);
 
     /**
      * @param Meeting $meeting
@@ -31,11 +31,16 @@ interface MeetingRepositoryInterface
     public function add(Meeting $meeting);
 
     /**
+     * @param Meeting $meeting
+     */
+    public function set(Meeting $meeting);
+
+    /**
      * @param Event $event
      * @param int   $page
      * @param int   $limit
      *
-     * @return mixed
+     * @return Meeting[]
      */
     public function getByEvent(Event $event, $page, $limit);
 }

@@ -138,7 +138,7 @@ class ScheduleBuilder
             );
         }
 
-        $meetings = $this->meetingRepository->findByScheduleAndParticipant($schedule, $participant);
+        $meetings = $this->meetingRepository->findScheduledByScheduleAndParticipant($schedule, $participant);
 
         foreach ($meetings as $meeting) {
             $sheet = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();

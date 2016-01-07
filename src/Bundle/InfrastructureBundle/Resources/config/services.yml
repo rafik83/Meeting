@@ -1,5 +1,15 @@
 services:
     #
+    # Event
+    #
+    vimeet_infrastructure.adapter.delayed_event_dispatcher:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\DelayedEventDispatcher
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: process }
+
+    #
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
@@ -57,16 +67,16 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@knp_paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-    vimeet_infrastructure.repository.notification_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_participation_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.notification_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.order_repository:
@@ -85,6 +95,10 @@ services:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.cart_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CartRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.meeting.message_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -193,7 +207,7 @@ services:
             - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
-            - '@vimeet_infrastructure.event.event_dispatcher'
+            - '@event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
@@ -213,6 +227,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
@@ -221,7 +241,21 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+    vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
     vimeet_infrastructure.vimeet.application.command.order.create_handler:
         class: Proximum\Vimeet\Application\Command\Order\CreateHandler
@@ -237,12 +271,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-    vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@datetime'
 
     #
     # Security
@@ -258,6 +286,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:
             - '@vimeet_infrastructure.security.user_password_encoder'
+
+    #
+    # Translator
+    #
+    vimeet_infrastructure.adapter.translator_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
+        arguments:
+            - '@translator'
 
     #
     # Components
@@ -316,14 +352,6 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
     #
-    # Event
-    #
-    vimeet_infrastructure.event.event_dispatcher:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Event\EventDispatcher
-        arguments:
-            - '@event_dispatcher'
-
-    #
     # Rule Component
     #
     vimeet_infrastructure.vimeet.application.components.rule.rule_sorter:
@@ -366,11 +394,16 @@ services:
     #
     # Meeting Component
     #
+    vimeet_infrastructure.application.components.meeting.request_view_builder:
+        class: Proximum\Vimeet\Application\Components\Meeting\RequestViewBuilder
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
     vimeet_infrastructure.application.components.meeting.request_views_builder:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
         arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.meeting.request_view_builder'
 
     #
     # DateTime

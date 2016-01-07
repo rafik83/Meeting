@@ -64,7 +64,15 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByScheduleAndParticipant(Schedule $schedule, Participant $participant)
+    public function set(Meeting $meeting)
+    {
+        $this->entityManager->flush($meeting);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findScheduledByScheduleAndParticipant(Schedule $schedule, Participant $participant)
     {
         $queryBuilder = $this
             ->entityManager
@@ -78,7 +86,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant = :participant OR toParticipant = :participant')
-            ->setParameter('participant', $participant);
+            ->setParameter('participant', $participant)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
     }

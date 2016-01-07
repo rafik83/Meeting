@@ -137,7 +137,10 @@ event:
             title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
         refusedRequest:
-            title: Refuser la demande de rendez vous
+            title: Refuser la proposition de rendez vous
+            label: De %fromName% pour %toName%
+        cancelRequest:
+            title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
     schedule:
         columns:
@@ -171,7 +174,26 @@ template:
             choice_with_description: Choix avec description
 
 who:
-    see_who_but_dont_see: %seer% voit %seeable% mais ne voit pas :
+    see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
     the:
         category: la catégorie
         type: le type
+
+notification:
+    participant:
+        added:
+            action: Participant ajouté
+        removed:
+            action: Participant retiré
+    meeting_request:
+        canceled:
+            withoutMessage: Demande annulée par %sheetName%
+            withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
+            action: Demande de RDV annulée
+        refused:
+            withoutMessage: Demande refusée par %sheetName%
+            withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
+            action: Demande de RDV refusée
+    participant:
+        removed:
+            action: Vous avez été rétiré d'un évènement

@@ -8,8 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event;
+namespace Proximum\Vimeet\Domain\Model\Meeting;
 
-abstract class ApplicationEvent
+interface MessageSubjectInterface
 {
+    public function getId();
 }

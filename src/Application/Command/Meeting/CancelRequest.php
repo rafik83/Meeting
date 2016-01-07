@@ -36,7 +36,7 @@ class CancelRequest
      */
     public function __construct(Request $request, User $emitter)
     {
-        $this->request   = $request;
-        $this->emitter   = $emitter;
+        $this->request = $request;
+        $this->emitter = $emitter;
     }
 }

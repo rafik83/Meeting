@@ -1,4 +1,5 @@
 Proximum\Vimeet\Domain\Model\Sheet:
+    # Elao sheet
     sheet_test:
         __construct: false
         type: @type_exposant
@@ -23,6 +24,72 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 "56407f9b2a1a3":
                     "planning": false
                     "quantity": null
+
+    # Proximum sheets
+    proximum_sheet_visiteur:
+        __construct: false
+        type: @type_visiteur
+        event: @event_rdv_carnot_2016
+        data:
+            563cb00c629d8:
+                563cb02125c23: "Martin & Associés"
+        packageData: []
+    proximum_sheet_exposant:
+        __construct: false
+        type: @type_exposant
+        event: @event_rdv_carnot_2016
+        data:
+            563cae566af03:
+                563cb103926e6: "BIOTECH"
+                563cb115bbeb9: "Laboratoire de recherches et développement dans le domaine de la biotechnologie"
+        packageData: []
+    proximum_sheet_carnot:
+        __construct: false
+        type: @type_institute_carnot
+        event: @event_rdv_carnot_2016
+        data:
+            563cae566af03:
+                563cb103926e6: "ASSOCIATION DES INSTITUTS CARNOT"
+                563cb115bbeb9: "L’Association des instituts Carnot fédère et anime le réseau des 34 instituts Carnot, réseau national de recherche pour l’innovation des entreprises à fort ancrage territorial. Elle a créé Les Rendez-vous Carnot qu'elle organise depuis 2008."
+        packageData: []
+    proximum_sheet_admin:
+        __construct: false
+        type: @type_exposant
+        event: @event_rdv_carnot_2016
+        data:
+            563cae566af03:
+                563cb103926e6: "Vimeet"
+                563cb115bbeb9: "Editeur plateforme de mise en relation B2B"
+        packageData: []
+    proximum_sheet_test:
+        __construct: false
+        type: @type_exposant
+        event: @event_rdv_carnot_2016
+        data:
+            563cae566af03:
+                563cb103926e6: "Proximum"
+                563cb115bbeb9: "Organisateur de convention d'affaires"
+        packageData: []
+        billingData:
+            5645e4242d3df: LAROSE
+            5645e47e7e499: Proximum
+            5645e52f445d1: test_proximum@proximum.com
+            5645e534daa0b: Proximum
+            5645e54061ff2: Chaville
+            5645e5f35a9e0: 92370
+            5645e6067f46a: Chaville
+            5645e5fd8f6a7: FR
+            5645e610e0e1b: ""
+    proximum_sheet_ui:
+        __construct: false
+        type: @type_visiteur
+        event: @event_rdv_carnot_2016
+        data:
+            563cb00c629d8:
+                563cb02125c23: "CREA"
+        packageData: []
+
+    # Random
     sheet_exposant{1..20}:
         __construct: false
         event: @event_rdv_carnot_2016

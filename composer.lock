@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "322b67dd94a0e047e2b9e8d005aa4587",
+    "hash": "c8a9ef2ce61cdf9f8ef8b3797f39e381",
+    "content-hash": "271dda3a0ce58e18a741b1838ea73f87",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2634,7 +2635,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/59915652862ef7c66b29eedb5805f79f37dcf310",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/111f51dfa5a558d7b0bd8d4e8dfb23dad79939f5",
                 "reference": "59915652862ef7c66b29eedb5805f79f37dcf310",
                 "shasum": ""
             },

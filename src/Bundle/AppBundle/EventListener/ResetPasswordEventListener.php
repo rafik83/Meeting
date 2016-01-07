@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Event\ApplicationWrappedEvent;
+use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class ResetPasswordEventListener
@@ -36,24 +36,25 @@ class ResetPasswordEventListener
     }
 
     /**
-     * @param ApplicationWrappedEvent $resetPasswordEvent
+     * @param ResetPasswordEvent $event
      */
-    public function sendToken(ApplicationWrappedEvent $resetPasswordEvent)
+    public function sendToken(ResetPasswordEvent $event)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject(sprintf('[%s] Reset password', $resetPasswordEvent->getApplicationEvent()->getEventView()->title))
+            ->setSubject(sprintf('[%s] Reset password', $event->getEventView()->title))
             ->setFrom('vimeet@vimeet.proximum.elao.ninja')
-            ->setTo($resetPasswordEvent->getApplicationEvent()->getUser()->getEmail())
+            ->setTo($event->getUser()->getEmail())
             ->setBody(
                 $this->templating->render(
                     'VimeetAppBundle:Mail:resetPassword.html.twig',
                     [
-                        'token'     => $resetPasswordEvent->getApplicationEvent()->getForgottenPasswordToken()->getToken(),
-                        'eventView' => $resetPasswordEvent->getApplicationEvent()->getEventView(),
+                        'token'     => $event->getForgottenPasswordToken()->getToken(),
+                        'eventView' => $event->getEventView(),
                     ]
                 )
             )
             ->setContentType('text/html');
+
         $message->getHeaders()->addTextHeader('X-Message-ID', 'forgot_password');
 
         $this->mailer->send($message);
