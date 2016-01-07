@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Category:
     category_exposant:
         __construct: [@event_rdv_carnot_2016]
-        types: [@type_exposant, @type_investisseur]
+        types: [@type_exposant, @type_investisseur, @type_institute_carnot]
         event: @event_rdv_carnot_2016
     category_visiteur:
         __construct: [@event_rdv_carnot_2016]
