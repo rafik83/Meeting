@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -68,4 +69,12 @@ interface ParticipantRepositoryInterface
      * @return ParticipantView[]
      */
     public function getParticipantViewsBySheet($sheetId);
+
+    /**
+     * @param Sheet   $sheet
+     * @param Meeting $meeting
+     *
+     * @return Participant[]
+     */
+    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
 }

@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Request
+class Request implements MessageSubjectInterface
 {
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
@@ -61,14 +61,14 @@ class Request
     private $state;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var Notification[]
+     * @var MeetingSlot
      */
-    private $notifications;
+    private $meetingSlot;
 
     /**
      * @var Meeting
@@ -81,13 +81,15 @@ class Request
     private $creator;
 
     /**
-     * @param Sheet             $from
-     * @param array             $fromParticipants
-     * @param Sheet             $to
-     * @param array             $toParticipants
-     * @param string            $description
-     * @param DateTimeInterface $createdAt
-     * @param User              $creator
+     * Request constructor.
+     *
+     * @param Sheet              $from
+     * @param array              $fromParticipants
+     * @param Sheet              $to
+     * @param array              $toParticipants
+     * @param string             $description
+     * @param \DateTimeInterface $createdAt
+     * @param User               $creator
      */
     public function __construct(
         Sheet $from,
@@ -95,7 +97,7 @@ class Request
         Sheet $to,
         array $toParticipants,
         $description,
-        DateTimeInterface $createdAt,
+        \DateTimeInterface $createdAt,
         User $creator
     ) {
         $this->from             = $from;
@@ -106,7 +108,6 @@ class Request
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
         $this->creator          = $creator;
-        $this->notifications    = new ArrayCollection();
     }
 
     /**
@@ -134,7 +135,7 @@ class Request
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getFromParticipants()
     {
@@ -150,7 +151,7 @@ class Request
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getToParticipants()
     {
@@ -166,7 +167,7 @@ class Request
     }
 
     /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -174,6 +175,28 @@ class Request
     }
 
     /**
+     * @return Request
+     */
+    public function refuse()
+    {
+        $this->state = self::STATE_REFUSED;
+
+        return $this;
+    }
+
+    /**
+     * @return Request
+     */
+    public function cancel()
+    {
+        $this->state = self::STATE_CANCEL;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     *
      * @param string $state
      */
     public function setState($state)
@@ -194,27 +217,51 @@ class Request
     }
 
     /**
-     * @param Participant $fromParticipant
+     * Get meetingSlot
+     *
+     * @return MeetingSlot
      */
-    public function addFromParticipant(Participant $fromParticipant)
+    public function getMeetingSlot()
     {
-        $this->fromParticipants->add($fromParticipant);
+        return $this->meetingSlot;
     }
 
     /**
-     * @return Notification[]
+     * Set meetingSlot
+     *
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return Request
      */
-    public function getNotifications()
+    public function setMeetingSlot($meetingSlot)
     {
-        return $this->notifications;
+        $this->meetingSlot = $meetingSlot;
+
+        return $this;
     }
 
     /**
-     * @param Notification $notification
+     * Get meeting
+     *
+     * @return Meeting
      */
-    public function addNotifications(Notification $notification)
+    public function getMeeting()
     {
-        $this->notifications[] = $notification;
+        return $this->meeting;
+    }
+
+    /**
+     * Set meeting
+     *
+     * @param Meeting $meeting
+     *
+     * @return Request
+     */
+    public function setMeeting($meeting)
+    {
+        $this->meeting = $meeting;
+
+        return $this;
     }
 
     /**
@@ -242,25 +289,13 @@ class Request
     }
 
     /**
-     * Get meeting
-     *
-     * @return null|Meeting
-     */
-    public function getMeeting()
-    {
-        return $this->meeting;
-    }
-
-    /**
-     * Set meeting
-     *
-     * @param Meeting $meeting
+     * @param Participant $fromParticipant
      *
      * @return Request
      */
-    public function setMeeting($meeting)
+    public function addFromParticipant(Participant $fromParticipant)
     {
-        $this->meeting = $meeting;
+        $this->fromParticipants->add($fromParticipant);
 
         return $this;
     }

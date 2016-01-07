@@ -66,8 +66,8 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_participant.participant_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
+    vimeet_app.form_type_participant.participant_entity_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
@@ -88,6 +88,19 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_participant.participant_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_participant.meeting_participant_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: form.type }
 
@@ -197,6 +210,14 @@ services:
             - '@templating.engine.twig'
         tags:
             - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
+    vimeet_app.vimeet.application.event.notification_event_listener:
+        class: Proximum\Vimeet\Application\Event\NotificationEventListener
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: 'kernel.event_subscriber' }
 
     #
     # Twig extension

@@ -17,6 +17,11 @@ flash:
                     success: Vous participez désormais à cet événement.
                 unparticipate:
                     success: Vous ne participez plus à cet événement.
+            meeting:
+                update:
+                    success: Le rendez-vous a été mis à jour.
+                cancel:
+                    success: Le rendez-vous a été annulé.
     change_password:
         success: Votre mot de passe a été changé
     new_password:

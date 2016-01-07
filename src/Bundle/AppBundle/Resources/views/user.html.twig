@@ -1,15 +1,30 @@
 <p>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         {{ 'login.logged_as'|trans({'%email%': app.user.email}) }}
+
+        {{ render(controller(
+            'VimeetAppBundle:Event/Notification:unreadNumber',
+            { 'subdomain': app.request.attributes.get('subdomain') }
+        )) }}
+
         |
-        <a href="{{ path('event_change_password', { 'subdomain': app.request.attributes.get('subdomain') }) }}"
-                >{{ 'change_password.link'|trans }}</a>
+
+        <a href="{{ path('event_change_password', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+            {{ 'change_password.link'|trans }}
+        </a>
+
         |
-        <a href="{{ path('event_logout_confirmation', { 'subdomain': app.request.attributes.get('subdomain') }) }}"
-                >{{ 'logout.link'|trans }}</a>
+
+        <a href="{{ path('event_logout_confirmation', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+            {{ 'logout.link'|trans }}
+        </a>
     {% else %}
         {{ 'greetings'|trans }}
-        <a href="{{ path('event_login', { 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ 'login.link'|trans }}</a>
+
+        <a href="{{ path('event_login', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+            {{ 'login.link'|trans }}
+        </a>
     {% endif %}
+
     | {{ 'now'|format_datetime }}
 </p>

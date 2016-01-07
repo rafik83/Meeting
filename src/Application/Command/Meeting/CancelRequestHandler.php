@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CancelRequestHandler
 {
@@ -25,9 +25,14 @@ class CancelRequestHandler
     private $requestRepository;
 
     /**
-     * @var NotificationRepositoryInterface
+     * @var MessageRepositoryInterface
      */
-    private $notificationRepository;
+    private $messageRepository;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * @var DateTimeInterface
@@ -35,18 +40,23 @@ class CancelRequestHandler
     private $createdAt;
 
     /**
+     * CancelRequestHandler constructor.
+     *
      * @param RequestRepositoryInterface $requestRepository
-     * @param NotificationRepositoryInterface $notificationRepository
-     * @param DateTimeInterface $createdAt
+     * @param MessageRepositoryInterface $messageRepository
+     * @param EventDispatcherInterface   $eventDispatcher
+     * @param DateTimeInterface          $createdAt
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        NotificationRepositoryInterface $notificationRepository,
+        MessageRepositoryInterface $messageRepository,
+        EventDispatcherInterface $eventDispatcher,
         DateTimeInterface $createdAt
     ) {
-        $this->requestRepository      = $requestRepository;
-        $this->notificationRepository = $notificationRepository;
-        $this->createdAt              = $createdAt;
+        $this->requestRepository = $requestRepository;
+        $this->messageRepository = $messageRepository;
+        $this->eventDispatcher   = $eventDispatcher;
+        $this->createdAt         = $createdAt;
     }
 
     /**
@@ -54,39 +64,26 @@ class CancelRequestHandler
      */
     public function handle(CancelRequest $cancelRequest)
     {
-        $cancelRequest->request->setState(Request::STATE_CANCEL);
+        // Cancel request
+        $this->requestRepository->set($cancelRequest->request->cancel());
 
-        if (!$cancelRequest->request->hasToParticipants()) {
-            foreach ($cancelRequest->request->getToSheet()->getParticipants() as $participant) {
-                if ($participant->isOwner()) {
-                    $this->notify($cancelRequest, $participant);
-                }
-            }
-        } else {
-            foreach ($cancelRequest->request->getToParticipants() as $participant) {
-                $this->notify($cancelRequest, $participant);
-            }
-        }
+        // Add message
+        $this->messageRepository->add(new Message(
+            $cancelRequest->request,
+            $cancelRequest->request->getFromSheet(),
+            $cancelRequest->message,
+            $this->createdAt
+        ));
 
-
-        $this->requestRepository->set($cancelRequest->request);
-    }
-
-    /**
-     * @param CancelRequest $cancelRequest
-     * @param Participant   $participant
-     */
-    private function notify(CancelRequest $cancelRequest, Participant $participant)
-    {
-        $notification = new Notification(
-            $cancelRequest->emitter,
-            $participant->getUser(),
-            $this->createdAt,
-            'meeting_request.cancel'
+        // Dispatch event
+        $this->eventDispatcher->dispatch(
+            'meeting_request.canceled',
+            new RequestCanceledEvent(
+                $cancelRequest->emitter,
+                $cancelRequest->request,
+                $this->createdAt,
+                $cancelRequest->message
+            )
         );
-        $notification->setMessage($cancelRequest->message);
-
-        $this->notificationRepository->add($notification);
-        $cancelRequest->request->addNotifications($notification);
     }
 }

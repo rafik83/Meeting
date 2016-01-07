@@ -1,0 +1,11 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_request_cancelled_1:
+        __construct:
+            - @sheet_exposant2
+            - [@participant_random_1]
+            - @sheet_test
+            - [@participant_test]
+            - <text(100)>
+            - <dateTimeBetween('-10 days', 'now')>
+            - @user_random_1
+        state: 'cancelled'

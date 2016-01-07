@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -147,6 +148,38 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
             ->setParameter('userId', $userId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->where('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->andX(
+                // Participant have not already a meeting at this slot (except this one)
+                'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id = participant OR tp.id = participant) AND m.slot = :slot AND m != :meeting)',
+                // Participant have not unavailability during this slot
+                'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :slot_begin AND :slot_end OR u.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN u.begin AND u.end OR :slot_end BETWEEN u.begin AND u.end))',
+                // Participant have not blocking participation
+                'NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE h.blocking = true AND hp.participant = participant AND (h.begin BETWEEN :slot_begin AND :slot_end OR h.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN h.begin AND h.end OR :slot_end BETWEEN h.begin AND h.end))'
+            )
+        );
+
+        $queryBuilder->setParameter('meeting', $meeting);
+        $queryBuilder->setParameter('slot', $meeting->getSlot());
+        $queryBuilder->setParameter('slot_begin', $meeting->getSlot()->getBegin());
+        $queryBuilder->setParameter('slot_end', $meeting->getSlot()->getEnd());
 
         return $queryBuilder->getQuery()->getResult();
     }
