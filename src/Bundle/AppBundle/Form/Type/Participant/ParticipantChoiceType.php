@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
-use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,21 +40,15 @@ class ParticipantChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class'         => Participant::class,
-            'query_builder' => function (Options $options) {
-                return function (EntityRepository $entityRepository) use ($options) {
-                    return $entityRepository
-                        ->createQueryBuilder('participant')
-                        ->where('participant.sheet = :sheet')
-                        ->setParameter('sheet', $options['sheet']);
-                };
-            },
-            'choice_label' => function (Participant $participant) {
+            'choices_as_values' => true,
+            'choice_label'      => function (Participant $participant) {
                 return $this->participantInfoGuesser->guessParticipantInfo($participant);
             },
+            'choices'           => function (Options $options) {
+                return $options['sheet']->getParticipants();
+            },
         ]);
-
-        $resolver->setRequired(['sheet']);
+        $resolver->setRequired('sheet');
     }
 
     /**
@@ -63,6 +56,6 @@ class ParticipantChoiceType extends AbstractType
      */
     public function getParent()
     {
-        return EntityType::class;
+        return ChoiceType::class;
     }
 }

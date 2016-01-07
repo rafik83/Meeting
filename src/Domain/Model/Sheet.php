@@ -212,4 +212,20 @@ class Sheet
     {
         return $this->orders;
     }
+
+    /**
+     * Get the sheet owner
+     *
+     * @return Participant
+     */
+    public function getOwner()
+    {
+        foreach ($this->getParticipants() as $participant) {
+            if ($participant->isOwner()) {
+                return $participant;
+            }
+        }
+
+        throw new \RuntimeException('Sheet owner not found.');
+    }
 }

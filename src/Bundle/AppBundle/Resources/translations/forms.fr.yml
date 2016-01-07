@@ -217,6 +217,12 @@ form:
                 label: Choisir des participants pour ce rendez-vous
             submit:
                 label: Envoyer
+    meeting_request_message:
+        children:
+            message:
+                label: Expliquer pourquoi
+            submit:
+                label: Envoyer
     meeting_request_refuse: 
         children: 
             message:
@@ -253,6 +259,20 @@ form:
                 label: Participants concernés
             submit:
                 label: Participer
+    meeting_cancel:
+        children:
+            message:
+                label: Message
+            submit:
+                label: Confirmer
+    meeting_update:
+        children:
+            participants:
+                label: Participants
+            message:
+                label: Message
+            submit:
+                label: Enregistrer
     position_meeting:
         children:
             fromParticipants:

@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
@@ -22,6 +23,8 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     private $entityManager;
 
     /**
+     * MeetingSlotRepository constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)

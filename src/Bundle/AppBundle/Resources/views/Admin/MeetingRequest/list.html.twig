@@ -7,28 +7,28 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>De</th>
-                <th>à</th>
-                <th>Action</th>
-            </tr>
+        <tr>
+            <th>De</th>
+            <th>à</th>
+            <th>Action</th>
+        </tr>
         </thead>
         <tbody>
-            {% for meeting_request in meeting_requests %}
-                <tr>
-                    <td>{{ meeting_request.sheetNameFrom }}</td>
-                    <td>{{ meeting_request.sheetNameTo }}</td>
-                    <td>
-                        <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="3">
-                        Aucune demande de RDV
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for meeting_request in meeting_requests %}
+            <tr>
+                <td>{{ meeting_request.sheetNameFrom }}</td>
+                <td>{{ meeting_request.sheetNameTo }}</td>
+                <td>
+                    <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">
+                    Aucune demande de RDV
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 

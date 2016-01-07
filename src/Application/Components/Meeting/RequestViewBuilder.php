@@ -13,11 +13,17 @@ namespace Proximum\Vimeet\Application\Components\Meeting;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
 class RequestViewBuilder
 {
+    /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
+
     /**
      * @var SheetInfoGuesser
      */
@@ -29,11 +35,18 @@ class RequestViewBuilder
     private $participantInfoGuesser;
 
     /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * RequestViewBuilder constructor.
+     *
+     * @param MessageRepositoryInterface $messageRepository
+     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
      */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        MessageRepositoryInterface $messageRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser
+    ) {
+        $this->messageRepository      = $messageRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
@@ -55,7 +68,7 @@ class RequestViewBuilder
             $request->getState(),
             $request->getDescription(),
             $request->getCreatedAt(),
-            $request->getRefuseMessage()
+            $this->messageRepository->getLastMessageByRequest($request)
         );
 
         foreach ($request->getFromParticipants() as $participant) {

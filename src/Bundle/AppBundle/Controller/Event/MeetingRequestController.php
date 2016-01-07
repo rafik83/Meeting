@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -27,6 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType;
 
 class MeetingRequestController extends BaseController
 {
@@ -48,7 +48,7 @@ class MeetingRequestController extends BaseController
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingRequest);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:listRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'request_views' => $requestViews,
@@ -73,7 +73,7 @@ class MeetingRequestController extends BaseController
             ->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
             ->generate($meetingProposition);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:listProposition.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
             'sheet'             => $sheet,
             'proposition_views' => $propositionViews,
@@ -123,7 +123,7 @@ class MeetingRequestController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($from);
         $toName   = $sheetInfoGuesser->guessSheetInfo($to);
 
-        return $this->render('VimeetAppBundle:Event/Meeting:createRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:createRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
@@ -172,7 +172,7 @@ class MeetingRequestController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
-        return $this->render('VimeetAppBundle:Event/Meeting:approvedRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:approvedRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
@@ -219,7 +219,7 @@ class MeetingRequestController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
-        return $this->render('VimeetAppBundle:Event/Meeting:refusedRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:refusedRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
@@ -246,7 +246,7 @@ class MeetingRequestController extends BaseController
         if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
             && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
         ) {
-            throw new AccessDeniedException('You can not access this meeting request');
+            throw $this->createAccessDeniedException('You can not access this meeting request');
         }
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
@@ -271,7 +271,7 @@ class MeetingRequestController extends BaseController
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
-        return $this->render('VimeetAppBundle:Event/Meeting:cancelRequest.html.twig', [
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:cancelRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
@@ -287,7 +287,7 @@ class MeetingRequestController extends BaseController
     private function isAllowedToUpdateMeetingRequest(MeetingRequest $meetingRequest)
     {
         if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT) {
-            throw new AccessDeniedException('You can not access this meeting request');
+            throw $this->createAccessDeniedException('You can not access this meeting request');
         }
     }
 }

@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
-use DateTime;
-
 class MeetingView
 {
     /**
@@ -30,17 +28,17 @@ class MeetingView
     public $sheetNameTo;
 
     /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     public $slotBegin;
 
     /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     public $slotEnd;
 
     /**
-     * @var DateTime
+     * @var \DateTimeInterface
      */
     public $createdAt;
 
@@ -48,11 +46,11 @@ class MeetingView
      * @param int      $id
      * @param string   $sheetNameFrom
      * @param string   $sheetNameTo
-     * @param DateTime $createdAt
-     * @param DateTime $slotBegin
-     * @param DateTime $slotEnd
+     * @param \DateTimeInterface $createdAt
+     * @param \DateTimeInterface $slotBegin
+     * @param \DateTimeInterface $slotEnd
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, $createdAt, $slotBegin, $slotEnd)
+    public function __construct($id, $sheetNameFrom, $sheetNameTo, \DateTimeInterface $createdAt, \DateTimeInterface $slotBegin, \DateTimeInterface $slotEnd)
     {
         $this->id            = $id;
         $this->sheetNameFrom = $sheetNameFrom;

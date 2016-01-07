@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,7 +35,7 @@ class AddUnavailabilityType extends AbstractType
                 'widget'        => 'choice',
                 'view_timezone' => 'Europe/Paris',
             ])
-            ->add('participants', ParticipantChoiceType::class, [
+            ->add('participants', ParticipantEntityType::class, [
                 'sheet'    => $options['sheet'],
                 'multiple' => true,
                 'expanded' => true,

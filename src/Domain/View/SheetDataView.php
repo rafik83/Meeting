@@ -33,7 +33,7 @@ class SheetDataView
     public $type;
 
     /**
-     * @var \ArrayAccess
+     * @var array
      */
     public $participants;
 
@@ -71,19 +71,19 @@ class SheetDataView
      * @param int               $id
      * @param Event             $event
      * @param Type              $type
-     * @param \ArrayAccess      $participants
+     * @param array             $participants
      * @param array             $data
      * @param array             $packageData
      * @param array             $billingData
      * @param ParticipantView[] $participantViews
      * @param Participant       $currentUserParticipant
-     * @param Order[]            $orders
+     * @param Order[]           $orders
      */
     public function __construct(
         $id,
         Event $event,
         Type $type,
-        \ArrayAccess $participants,
+        array $participants,
         array $data,
         array $packageData,
         array $billingData,

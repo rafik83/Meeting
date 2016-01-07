@@ -11,13 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RefuseRequestHandler
 {
@@ -27,9 +25,14 @@ class RefuseRequestHandler
     private $requestRepository;
 
     /**
-     * @var NotificationRepositoryInterface
+     * @var MessageRepositoryInterface
      */
-    private $notificationRepository;
+    private $messageRepository;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * @var DateTimeInterface
@@ -37,34 +40,23 @@ class RefuseRequestHandler
     private $createdAt;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param RequestRepositoryInterface      $requestRepository
-     * @param NotificationRepositoryInterface $notificationRepository
-     * @param DateTimeInterface               $createdAt
-     * @param SheetInfoGuesser                $sheetInfoGuesser
-     * @param TranslatorInterface             $translator
+     * RefuseRequestHandler constructor.
+     *
+     * @param RequestRepositoryInterface $requestRepository
+     * @param MessageRepositoryInterface $messageRepository
+     * @param EventDispatcherInterface   $eventDispatcher
+     * @param DateTimeInterface          $createdAt
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        NotificationRepositoryInterface $notificationRepository,
-        DateTimeInterface $createdAt,
-        SheetInfoGuesser $sheetInfoGuesser,
-        TranslatorInterface $translator
+        MessageRepositoryInterface $messageRepository,
+        EventDispatcherInterface $eventDispatcher,
+        DateTimeInterface $createdAt
     ) {
-        $this->requestRepository      = $requestRepository;
-        $this->notificationRepository = $notificationRepository;
-        $this->createdAt              = $createdAt;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->translator             = $translator;
+        $this->requestRepository = $requestRepository;
+        $this->messageRepository = $messageRepository;
+        $this->eventDispatcher   = $eventDispatcher;
+        $this->createdAt         = $createdAt;
     }
 
     /**
@@ -72,62 +64,26 @@ class RefuseRequestHandler
      */
     public function handle(RefuseRequest $refuseRequest)
     {
-        $refuseRequest->request->setState(Request::STATE_REFUSED);
-        $this->requestRepository->set($refuseRequest->request);
+        // Refuse request
+        $this->requestRepository->set($refuseRequest->request->refuse());
 
-        $this->notify($refuseRequest);
-    }
+        // Add message
+        $this->messageRepository->add(new Message(
+            $refuseRequest->request,
+            $refuseRequest->request->getToSheet(),
+            $refuseRequest->message,
+            $this->createdAt
+        ));
 
-    /**
-     * @param RefuseRequest $refuseRequest
-     */
-    private function notify(RefuseRequest $refuseRequest)
-    {
-        $notifications = [];
-
-        if (!$refuseRequest->request->hasFromParticipants()) {
-            $notifications[] = $this->notifyParticipant($refuseRequest, $refuseRequest->request->getCreator());
-        } else {
-            foreach ($refuseRequest->request->getFromParticipants() as $participant) {
-                $notifications[] = $this->notifyParticipant($refuseRequest, $participant->getUser());
-            }
-        }
-
-        foreach ($notifications as $notification) {
-            $this->notificationRepository->add($notification);
-            $refuseRequest->request->addNotifications($notification);
-        }
-
-        $this->requestRepository->set($refuseRequest->request);
-    }
-
-    /**
-     * @param RefuseRequest $refuseRequest
-     * @param User          $user
-     *
-     * @return Notification
-     */
-    private function notifyParticipant(RefuseRequest $refuseRequest, User $user)
-    {
-        $message = $this->translator->trans(
-            'notification.meeting_request.refuse.' . ($refuseRequest->message ? 'withMessage' : 'withoutMessage'),
-            [
-                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($refuseRequest->request->getToSheet()),
-                '%message%'   => $refuseRequest->message
-            ],
-            null,
-            $user->getLocale()
+        // Dispatch event
+        $this->eventDispatcher->dispatch(
+            'meeting_request.refused',
+            new RequestRefusedEvent(
+                $refuseRequest->emitter,
+                $refuseRequest->request,
+                $this->createdAt,
+                $refuseRequest->message
+            )
         );
-
-        $notification = new Notification(
-            $refuseRequest->request->getFromSheet()->getEvent(),
-            $refuseRequest->emitter,
-            $user,
-            $this->createdAt,
-            'meeting_request.refuse',
-            $message
-        );
-
-        return $notification;
     }
 }
