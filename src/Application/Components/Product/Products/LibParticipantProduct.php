@@ -96,7 +96,7 @@ class LibParticipantProduct extends AbstractDescriptionTypeUnitPriceOptions
         if (isset($data['participant'])
             && true === $data['participant']
             && isset($data['quantity'])
-            && $this->getMaxParticipant() > $data['quantity']
+            && $this->getMaxParticipant() > ($data['quantity'] + $this->getFreeParticipant())
         ) {
             return true;
         }
