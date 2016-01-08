@@ -71,4 +71,14 @@ interface ProductInterface
      * @param array $packageData
      */
     public function getIncludingFromPurchase(array $packageData);
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options);
+
+    /**
+     * @return array
+     */
+    public function getOptionsIncludedIn();
 }

@@ -49,7 +49,7 @@ class PackageController extends BaseController
             ->findOrCreateCart($sheet);
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
+            ->createFromCart($cart);
 
         $stepObject = $template->getStep($step);
 
@@ -121,7 +121,7 @@ class PackageController extends BaseController
             throw $this->createNotFoundException('Cart not available');
         }
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
+            ->createFromCart($cart);
         $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
             ->generate(
                 $template,
@@ -146,9 +146,13 @@ class PackageController extends BaseController
      */
     public function addProductsAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_manager')->findOrCreateCart($sheet);
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
+        $cart = $this
+            ->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
+        $template = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromCart($cart);
 
         $addProducts = new AddProducts($cart, $sheet);
         $form        = $this->createForm(AddProductsType::class, $addProducts, [

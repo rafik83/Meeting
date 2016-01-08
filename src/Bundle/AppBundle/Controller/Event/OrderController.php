@@ -77,15 +77,13 @@ class OrderController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromOrder($sheet->getType(), $order);
-        $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate(
-                $template,
-                $order->getPackageData(),
-                $request->getLocale()
-            )
-        ;
+        $template = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromOrder($order);
+
+        $cart = $this
+            ->get('vimeet_infrastructure.application.components.cart.cart_builder')
+            ->generate($template, $order->getPackageData(), $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Order:proForma.html.twig', [
             'eventView' => $eventView,

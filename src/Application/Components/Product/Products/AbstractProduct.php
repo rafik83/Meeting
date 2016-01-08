@@ -113,9 +113,9 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
-     * @param array $options
+     * {@inheritdoc}
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
     }

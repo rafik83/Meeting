@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Order:
     type: entity
-    table: sheet_order
+    table: _order
     id:
         id:
             type: integer
