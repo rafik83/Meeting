@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\View\OrderListView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
@@ -31,7 +32,7 @@ class OrderController extends Controller
      * @param Event   $event
      * @param Sheet   $sheet
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event, Sheet $sheet)
     {
@@ -41,6 +42,7 @@ class OrderController extends Controller
 
         $orders->setItems(array_map(function (Order $order) use ($request) {
             return new OrderListView(
+                $order->getId(),
                 $order->getId(),
                 $order->getCreatedAt(),
                 $this->getOrderAmount($order, $request->getLocale()),
@@ -58,6 +60,24 @@ class OrderController extends Controller
             'sheet'      => $sheet,
             'sheet_info' => $sheetInfo,
             'orders'     => $orders,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Order   $order
+     *
+     * @return Response
+     */
+    public function editAction(Request $request, Order $order)
+    {
+        $sheetInfo = $this
+            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+            ->guessSheetInfo($order->getSheet());
+
+        return $this->render('VimeetAppBundle:Admin/Order:edit.html.twig', [
+            'sheet_info' => $sheetInfo,
+            'order' => $order,
         ]);
     }
 

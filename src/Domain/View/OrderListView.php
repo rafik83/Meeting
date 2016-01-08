@@ -13,6 +13,11 @@ namespace Proximum\Vimeet\Domain\View;
 class OrderListView
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var string
      */
     public $reference;
@@ -40,14 +45,16 @@ class OrderListView
     /**
      * OrderListView constructor.
      *
+     * @param int                $id
      * @param string             $reference
      * @param \DateTimeInterface $date
      * @param float              $amount
      * @param string             $state
      * @param string             $paymentMode
      */
-    public function __construct($reference, \DateTimeInterface $date, $amount, $state, $paymentMode)
+    public function __construct($id, $reference, \DateTimeInterface $date, $amount, $state, $paymentMode)
     {
+        $this->id          = $id;
         $this->reference   = $reference;
         $this->date        = $date;
         $this->amount      = $amount;

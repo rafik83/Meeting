@@ -24,7 +24,9 @@
                 <td>{{ order.paymentMode }}</td>
                 <td>{{ order.state }}</td>
                 <td>{{ order.amount|number_format(2, ',', ' ') }} €</td>
-                <td></td>
+                <td>
+                    <a href="{{ path('admin_sheet_order_edit', { 'id': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
