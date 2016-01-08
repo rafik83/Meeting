@@ -61,6 +61,12 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * @param Order  $order
+     * @param string $locale
+     *
+     * @return int
+     */
     private function getOrderAmount(Order $order, $locale)
     {
         $template = $this
