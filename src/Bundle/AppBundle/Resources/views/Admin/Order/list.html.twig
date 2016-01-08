@@ -23,7 +23,7 @@
                 <td>{{ order.date|date('d/m/Y H:i') }}</td>
                 <td>{{ order.paymentMode }}</td>
                 <td>{{ order.state }}</td>
-                <td>{{ order.amount }}</td>
+                <td>{{ order.amount|number_format(2, ',', ' ') }} €</td>
                 <td></td>
             </tr>
         {% endfor %}
