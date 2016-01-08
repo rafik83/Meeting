@@ -153,3 +153,14 @@ admin_sheet:
         id: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:list }
+
+#
+# Order
+#
+admin_sheet_order_list:
+    path: /event/{id}/sheet/{sheet_id}/order
+    requirements:
+        id: \d+
+        sheet_id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Order:list }

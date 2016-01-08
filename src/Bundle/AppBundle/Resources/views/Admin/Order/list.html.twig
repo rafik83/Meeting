@@ -1,0 +1,39 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ sheet_info }}</h1>
+
+    <h2>Liste des commandes</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Référence</th>
+            <th>Date</th>
+            <th>Mode de paiement</th>
+            <th>Statut</th>
+            <th>Montant total</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.reference }}</td>
+                <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                <td>{{ order.paymentMode }}</td>
+                <td>{{ order.state }}</td>
+                <td>{{ order.amount }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(orders) }}
+
+    <div class="text-left">
+        <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour aux fiches</a>
+    </div>
+
+{% endblock %}
