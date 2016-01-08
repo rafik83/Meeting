@@ -14,7 +14,6 @@ use DateTime;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler;
 use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
-use Proximum\Vimeet\Application\Event\ApplicationEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
@@ -22,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,12 +34,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime               = new DateTime();
         $user                   = new User('test@test.fr', 'test', 'test', 'fr');
         $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', $dateTime);
-        $event                  = new ResetPasswordEvent(
-            $user,
-            $command->eventView,
-            $forgottenPasswordToken,
-            $command->locale
-        );
+        $event                  = new ResetPasswordEvent($user, $command->eventView, $forgottenPasswordToken, $command->locale);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail($command->email)->shouldBeCalled()->willReturn($user);
@@ -55,14 +50,14 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $forgottenPasswordTokenRepository->deleteAllForUser($user)->shouldBeCalled();
         $forgottenPasswordTokenRepository->create($forgottenPasswordToken)->shouldBeCalled();
 
-        $applicationEventDispatcher = $this->prophesize(ApplicationEventDispatcherInterface::class);
-        $applicationEventDispatcher->dispatch('reset_password', $event)->shouldBeCalled();
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch('reset_password', $event)->shouldBeCalled();
 
         $handler = new ForgottenPasswordHandler(
             $forgottenPasswordTokenGenerator->reveal(),
             $userRepository->reveal(),
             $forgottenPasswordTokenRepository->reveal(),
-            $applicationEventDispatcher->reveal()
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -78,12 +73,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 
         $user                   = new User('test@test.fr', 'test', 'test', 'fr');
         $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', new DateTime());
-        $event                  = new ResetPasswordEvent(
-            $user,
-            $command->eventView,
-            $forgottenPasswordToken,
-            $command->locale
-        );
+        $event                  = new ResetPasswordEvent($user, $command->eventView, $forgottenPasswordToken, $command->locale);
 
         $forgottenPasswordTokenGenerator = $this->prophesize(ForgottenPasswordTokenGenerator::class);
         $forgottenPasswordTokenGenerator->generate($user)->shouldNotBeCalled();
@@ -95,14 +85,14 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $forgottenPasswordTokenRepository->deleteAllForUser($user)->shouldNotBeCalled();
         $forgottenPasswordTokenRepository->create($forgottenPasswordToken)->shouldNotBeCalled();
 
-        $applicationEventDispatcher = $this->prophesize(ApplicationEventDispatcherInterface::class);
-        $applicationEventDispatcher->dispatch($event)->shouldNotBeCalled();
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($event)->shouldNotBeCalled();
 
         $handler = new ForgottenPasswordHandler(
             $forgottenPasswordTokenGenerator->reveal(),
             $userRepository->reveal(),
             $forgottenPasswordTokenRepository->reveal(),
-            $applicationEventDispatcher->reveal()
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);

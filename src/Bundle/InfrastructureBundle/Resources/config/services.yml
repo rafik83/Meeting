@@ -204,7 +204,7 @@ services:
             - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
-            - '@vimeet_infrastructure.event.event_dispatcher'
+            - '@event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
@@ -331,14 +331,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
-
-    #
-    # Event
-    #
-    vimeet_infrastructure.event.event_dispatcher:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Event\EventDispatcher
-        arguments:
-            - '@event_dispatcher'
 
     #
     # Rule Component
