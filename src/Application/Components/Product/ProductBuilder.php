@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Components\Product\Products\LibOptionProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\LibPlanningProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
+use Proximum\Vimeet\Domain\Model\Cart;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,12 +25,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ProductBuilder
 {
     /**
+     * @var Type
+     */
+    private $type = null;
+
+    /**
      * @param Sheet $sheet
      *
      * @return Template
      */
     public function createFromSheet(Sheet $sheet)
     {
+        $this->type = $sheet->getType();
         return $this->create($sheet->getTypePackageTemplate());
     }
 
@@ -39,7 +47,32 @@ class ProductBuilder
      */
     public function createFromType(Type $type)
     {
+        $this->type = $type;
         return $this->create($type->getPackageTemplate());
+    }
+
+    /**
+     * @param Type $type
+     * @param Cart $cart
+     *
+     * @return Template
+     */
+    public function createFromCart(Type $type, Cart $cart)
+    {
+        $this->type = $type;
+        return $this->create($cart->getTemplate());
+    }
+
+    /**
+     * @param Type $type
+     * @param Order $order
+     *
+     * @return Template
+     */
+    public function createFromOrder(Type $type, Order $order)
+    {
+        $this->type = $type;
+        return $this->create($order->getPackageTemplate());
     }
 
     /**
@@ -47,7 +80,7 @@ class ProductBuilder
      *
      * @return Template
      */
-    public function create(array $packageTemplate)
+    private function create(array $packageTemplate)
     {
         $template = new Template();
 
@@ -108,6 +141,15 @@ class ProductBuilder
                 $choiceProduct->setChoiceParent($product);
                 $product->addChoice($choiceProduct);
             }
+        }
+
+        if (null !== $this->type && $product instanceof  LibParticipantProduct) {
+            $product->setMaxParticipant($this->type->getMaxParticipant());
+            $product->setFreeParticipant($this->type->getFreeParticipant());
+        }
+
+        if (null !== $this->type && $product instanceof  LibPlanningProduct) {
+            $product->setMaxPlaning($this->type->getMaxPlanning());
         }
 
         return $product;

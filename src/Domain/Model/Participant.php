@@ -41,17 +41,29 @@ class Participant
     private $owner;
 
     /**
+     * @var bool
+     */
+    private $active;
+
+    /**
+     * @var Order
+     */
+    private $order;
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
      * @param bool  $owner
+     * @param bool  $active
      */
-    public function __construct(Sheet $sheet, User $user, array $data, $owner)
+    public function __construct(Sheet $sheet, User $user, array $data, $owner, $active)
     {
-        $this->sheet = $sheet;
-        $this->user  = $user;
-        $this->data  = $data;
-        $this->owner = $owner;
+        $this->sheet  = $sheet;
+        $this->user   = $user;
+        $this->data   = $data;
+        $this->owner  = $owner;
+        $this->active = $active;
     }
 
     /**
@@ -114,5 +126,37 @@ class Participant
     public function setData(array $data)
     {
         $this->data = $data;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }

@@ -27,6 +27,7 @@ class UpdateStepType extends AbstractType
                 'template' => $options['template'],
                 'locale'   => $options['locale'],
                 'sheet'    => $options['sheet'],
+                'cart'     => $options['cart'],
                 'step'     => $options['step'],
                 'label'    => false,
             ])
@@ -43,7 +44,7 @@ class UpdateStepType extends AbstractType
             'csrf_token_id' => 'update_sheet_package_step',
         ]);
 
-        $resolver->setRequired(['template', 'locale', 'step']);
+        $resolver->setRequired(['template', 'locale', 'step', 'cart']);
         $resolver->setDefined(['sheet']);
     }
 }

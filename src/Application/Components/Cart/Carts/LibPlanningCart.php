@@ -26,13 +26,13 @@ class LibPlanningCart extends LibAbstractCart
             && !empty($product->getOptions())
             && isset($dataValue['planning'])
             && $dataValue['planning'] === true
-            && isset($dataValue['planning_bought'])
-            && $dataValue['planning_bought'] !== 0
+            && isset($dataValue['quantity'])
+            && $dataValue['quantity'] !== 0
         ) {
             $cartRow = new CartRow(
                 $product->getLabel($locale),
-                isset($dataValue['planning_bought']) && $dataValue['planning_bought'] !== null
-                ? $dataValue['planning_bought'] : 0,
+                isset($dataValue['quantity']) && $dataValue['quantity'] !== null
+                ? $dataValue['quantity'] : 0,
                 $product->getUnitPrice()
             );
 

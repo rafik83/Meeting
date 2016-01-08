@@ -52,6 +52,8 @@ flash:
     package:
         update_step:
             success: Les informations ont bien été enregistrées
+        add_products:
+            success: L'ajout des produits a bien été pris en compte
         final_step:
             success: Les informations de votre forfait ont bien été enregistrées
         payment_mode:
