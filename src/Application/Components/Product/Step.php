@@ -48,7 +48,7 @@ class Step
      */
     public function addProduct(ProductInterface $product)
     {
-        $this->products[] = $product;
+        $this->products[$product->getKey()] = $product;
         $product->setStep($this);
     }
 
@@ -168,8 +168,6 @@ class Step
      */
     public function removeProduct(ProductInterface $product)
     {
-        $this->products = array_filter($this->products, function (ProductInterface $stepProduct) use ($product) {
-            return $stepProduct->getKey() !== $product->getKey();
-        });
+        unset ($this->products[$product->getKey()]);
     }
 }

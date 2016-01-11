@@ -27,7 +27,7 @@ class Template
      */
     public function addStep(Step $step)
     {
-        $this->steps[] = $step;
+        $this->steps[$step->getKey()] = $step;
         $step->setTemplate($this);
     }
 
@@ -46,13 +46,7 @@ class Template
      */
     public function getStep($key)
     {
-        foreach ($this->steps as $step) {
-            if ($step->getKey() === $key) {
-                return $step;
-            }
-        }
-
-        return null;
+        return isset($this->steps[$key]) ? $this->steps[$key] : null;
     }
 
     /**
@@ -60,8 +54,6 @@ class Template
      */
     public function removeStep(Step $step)
     {
-        $this->steps = array_filter($this->steps, function (Step $templateStep) use ($step) {
-            return $templateStep->getKey() !== $step->getKey();
-        });
+        unset($this->steps[$step->getKey()]);
     }
 }

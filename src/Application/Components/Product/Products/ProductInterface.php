@@ -17,6 +17,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface ProductInterface
 {
     /**
+     * @return string
+     */
+    public function getKey();
+
+    /**
      * @param OptionsResolver $optionsResolver
      */
     public function configure(OptionsResolver $optionsResolver);
