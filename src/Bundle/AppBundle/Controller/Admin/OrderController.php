@@ -77,7 +77,7 @@ class OrderController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Order:edit.html.twig', [
             'sheet_info' => $sheetInfo,
-            'order' => $order,
+            'order'      => $order,
         ]);
     }
 
