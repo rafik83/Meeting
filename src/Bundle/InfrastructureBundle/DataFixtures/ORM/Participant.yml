@@ -68,36 +68,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: Julien
 
     # Random
-    participant_test_2:
-        __construct: false
-        user: @user_test_2
-        sheet: @sheet_test
-        owner: false
-        active: true
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0809090909"
-    participant_test_3:
-        __construct: false
-        user: @user_test_3
-        sheet: @sheet_test
-        owner: false
-        active: true
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0709090909"
-    participant_test_4:
-        __construct: false
-        user: @user_test_4
-        sheet: @sheet_test
-        owner: false
-        active: true
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0609090909"
     participant_random_1:
         __construct: false
         user: @user_random_1
