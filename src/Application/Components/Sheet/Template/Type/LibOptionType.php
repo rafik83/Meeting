@@ -10,18 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-class LibOptionType extends AbstractType
+class LibOptionType extends AbstractProductType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setRequired(['unitPrice']);
-        $resolver->setDefined(['quantity']);
-    }
 }

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibRadioType extends AbstractType
+class LibRadioType extends AbstractProductType
 {
     /**
      * {@inheritdoc}
@@ -21,7 +21,7 @@ class LibRadioType extends AbstractType
     {
         parent::configureOptions($optionsResolver);
 
+        $optionsResolver->remove('unitPrice');
         $optionsResolver->setRequired(['choices']);
-        $optionsResolver->setDefined(['quantity']);
     }
 }

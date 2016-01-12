@@ -28,7 +28,7 @@ abstract class AbstractType implements TypeInterface
     {
         $optionsResolver->setRequired(['label', 'type']);
         $optionsResolver->setDefaults(['required' => false]);
-        $optionsResolver->setDefined(['includedIn', 'description']);
+        $optionsResolver->setDefined(['description']);
     }
 
     /**
@@ -45,7 +45,7 @@ abstract class AbstractType implements TypeInterface
      * @return mixed
      * @throws UnknownOptionException
      */
-    private function getOption($option)
+    protected function getOption($option)
     {
         if (!isset($this->options[$option])) {
             throw new UnknownOptionException($option, array_keys($this->options));
