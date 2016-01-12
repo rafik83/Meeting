@@ -39,15 +39,15 @@ class TemplateFactory
     }
 
     /**
-     * @param array $arrayTemplate
+     * @param array $templateData
      *
      * @return Template
      */
-    public function createTemplateFromArray(array $arrayTemplate)
+    public function createTemplateFromArray(array $templateData)
     {
         $template = new Template();
 
-        foreach ($arrayTemplate as $groupName => $groupTemplate) {
+        foreach ($templateData as $groupName => $groupTemplate) {
             $template->addGroup($groupName, $this->createGroupFromArray($groupTemplate));
         }
 
@@ -55,15 +55,15 @@ class TemplateFactory
     }
 
     /**
-     * @param array $arrayTemplate
+     * @param array $templateData
      *
      * @return Group
      */
-    private function createGroupFromArray(array $arrayTemplate)
+    private function createGroupFromArray(array $templateData)
     {
         $group = new Group();
 
-        foreach ($arrayTemplate as $typeName => $typeTemplate) {
+        foreach ($templateData as $typeName => $typeTemplate) {
             $group->addType($typeName, $this->createTypeFromArray($typeTemplate));
         }
 
@@ -71,17 +71,17 @@ class TemplateFactory
     }
 
     /**
-     * @param array $arrayTemplate
+     * @param array $templateData
      *
      * @return TypeInterface
      * @throws UnknownTypeException
      */
-    private function createTypeFromArray(array $arrayTemplate)
+    private function createTypeFromArray(array $templateData)
     {
         $resolver = new OptionsResolver();
-        $type     = $this->getTypeInstance($arrayTemplate['type']);
+        $type     = $this->getTypeInstance($templateData['type']);
         $type->configureOptions($resolver);
-        $type->setOptions($resolver->resolve($arrayTemplate));
+        $type->setOptions($resolver->resolve($templateData));
 
         return $type;
     }
