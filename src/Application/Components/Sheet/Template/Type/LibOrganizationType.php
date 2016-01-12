@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class LibOrganizationType extends AbstractType
 {
 }
