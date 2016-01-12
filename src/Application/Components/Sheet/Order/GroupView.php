@@ -20,7 +20,7 @@ class GroupView
     /**
      * @var string
      */
-    public $label;
+    private $label;
 
     /**
      * GroupView constructor.
@@ -30,6 +30,16 @@ class GroupView
     public function __construct($label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**
@@ -43,6 +53,16 @@ class GroupView
         $this->rows[$name] = $rowView;
 
         return $this;
+    }
+
+    /**
+     * Get rows
+     *
+     * @return RowView[]
+     */
+    public function getRows()
+    {
+        return $this->rows;
     }
 
     /**

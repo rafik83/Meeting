@@ -412,3 +412,15 @@ services:
     #
     datetime:
         class: DateTimeImmutable
+
+
+
+    #
+    #
+    #
+    components.sheet.template_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory
+    components.sheet.order_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory
+        arguments:
+            - '@components.sheet.template_factory'

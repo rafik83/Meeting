@@ -75,9 +75,12 @@ class OrderController extends Controller
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($order->getSheet());
 
+        $orderView = $this->get('components.sheet.order_view_factory')->createFromOrder($order, $request->getLocale());
+
         return $this->render('VimeetAppBundle:Admin/Order:edit.html.twig', [
             'sheet_info' => $sheetInfo,
             'order'      => $order,
+            'order_view' => $orderView,
         ]);
     }
 

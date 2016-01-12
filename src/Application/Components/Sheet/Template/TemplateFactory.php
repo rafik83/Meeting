@@ -35,6 +35,10 @@ class TemplateFactory
             'lib_radio'        => Type\LibRadioType::class,
             'lib_textArea'     => Type\LibTextAreaType::class,
             'lib_text'         => Type\LibTextType::class,
+            'lib_participant'  => Type\LibParticipantType::class,
+            'lib_planning'     => Type\LibPlanningType::class,
+            // BC
+            'choice_with_description' => Type\LibRadioType::class,
         ];
     }
 
@@ -66,7 +70,7 @@ class TemplateFactory
         $group->configureOptions($resolver);
         $group->setOptions($resolver->resolve($templateData));
 
-        foreach ($templateData as $typeName => $typeTemplate) {
+        foreach ($templateData['template'] as $typeName => $typeTemplate) {
             $group->addType($typeName, $this->createTypeFromArray($typeTemplate));
         }
 

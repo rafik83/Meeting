@@ -32,6 +32,7 @@ class Group
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setRequired(['label', 'template']);
+        $optionsResolver->setDefined(['description']);
     }
 
     /**

@@ -31,6 +31,14 @@ class OrderView
     }
 
     /**
+     * @return GroupView[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
      * @return float
      */
     public function getTotal()
