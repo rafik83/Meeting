@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\NotAvailableException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LibRadioType extends AbstractProductType
@@ -23,5 +25,40 @@ class LibRadioType extends AbstractProductType
 
         $optionsResolver->remove('unitPrice');
         $optionsResolver->setRequired(['choices']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUnitPrice()
+    {
+        throw new NotAvailableException('Method getUnitPrice not available. Use getChoiceUnitPrice instead.');
+    }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     * @throws UnknownOptionException
+     */
+    public function getChoiceUnitPrice($value)
+    {
+        $choices = $this->getOption('choices');
+
+        return $choices[$value]['unitPrice'];
+    }
+
+    /**
+     * @param string $value
+     * @param string $locale
+     *
+     * @return string
+     * @throws UnknownOptionException
+     */
+    public function getChoiceLabel($value, $locale)
+    {
+        $choices = $this->getOption('choices');
+
+        return $choices[$value]['label'][$locale];
     }
 }

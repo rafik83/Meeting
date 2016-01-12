@@ -10,8 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\WrongTypeException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownGroupException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownTypeException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AbstractProductType;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibRadioType;
 use Proximum\Vimeet\Domain\Model\Order;
 
 class OrderViewFactory
@@ -82,18 +87,35 @@ class OrderViewFactory
 
     /**
      * @param Template $template
-     * @param string   $groupName
-     * @param string   $rowName
+     * @param          $groupName
+     * @param          $rowName
      * @param array    $rowData
-     * @param string   $locale
+     * @param          $locale
      *
      * @return RowView
+     * @throws WrongTypeException
+     * @throws UnknownGroupException
+     * @throws UnknownTypeException
      */
     private function createRowViewFromArray(Template $template, $groupName, $rowName, array $rowData, $locale)
     {
-        $label = $template->getGroup($groupName)->getType($rowName)->getLabel($locale);
+        $product = $template->getGroup($groupName)->getType($rowName);
 
-        $row = new RowView($label, 2000, 1);
+        if (!$product instanceof AbstractProductType) {
+            throw new WrongTypeException($product, AbstractProductType::class);
+        }
+
+        if ($product instanceof LibRadioType) {
+            $label = $product->getChoiceLabel($rowData['value'], $locale);
+            $price = $product->getChoiceUnitPrice($rowData['value']);
+        } else {
+            $label = $product->getLabel($locale);
+            $price = $product->getUnitPrice();
+        }
+
+        $quantity = isset($rowData['quantity']) ? $rowData['quantity'] : 1;
+
+        $row = new RowView($label, $price, $quantity);
 
         return $row;
     }

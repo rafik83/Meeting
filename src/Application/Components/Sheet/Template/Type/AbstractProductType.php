@@ -23,7 +23,8 @@ abstract class AbstractProductType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setRequired(['unitPrice']);
-        $resolver->setDefined(['includedIn', 'quantity']);
+        $resolver->setDefined(['includedIn']);
+        $resolver->setDefaults(['quantity' => 1]);
     }
 
     /**
