@@ -28,6 +28,11 @@ class RowView
     public $quantity;
 
     /**
+     * @var RowView[]
+     */
+    public $included = [];
+
+    /**
      * RowView constructor.
      *
      * @param string $label
@@ -47,5 +52,17 @@ class RowView
     public function getTotal()
     {
         return $this->unitPrice * $this->quantity;
+    }
+
+    /**
+     * @param RowView $included
+     *
+     * @return RowView
+     */
+    public function addIncluded(RowView $included)
+    {
+        $this->included[] = $included;
+
+        return $this;
     }
 }

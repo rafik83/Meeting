@@ -60,6 +60,30 @@ class OrderViewFactory
             $view->addGroupView($groupName, $group);
         }
 
+        // Included in
+        foreach ($template->getGroups() as $groupName => $group) {
+            foreach ($group->getTypes() as $typeName => $type) {
+                if ($type instanceof AbstractProductType) {
+                    $includedIn = $type->getIncludedIn();
+
+                    foreach ($includedIn as $path => $quantity) {
+
+                        // get parts
+                        $parts = explode('.', $path);
+
+                        // get value
+                        $value = $data[$parts[0]][$parts[1]]['value'];
+
+                        if (count($parts) === 2 && $value === true) {
+                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded(new RowView('', 0, $quantity));
+                        } elseif (count($parts) === 3 && $value === $parts[2]) {
+                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded(new RowView('', 0, $quantity));
+                        }
+                    }
+                }
+            }
+        }
+
         return $view;
     }
 

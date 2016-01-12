@@ -23,10 +23,19 @@
                     <tr>
                         <td>&nbsp;</td>
                         <td>{{ row.label }}</td>
-                        <td class="text-right">{{ row.unitPrice }}</td>
+                        <td class="text-right">{{ row.unitPrice|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">{{ row.quantity }}</td>
-                        <td class="text-right">{{ row.total }}</td>
+                        <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
                     </tr>
+                    {% for included in row.included %}
+                        <tr>
+                            <td>&gt;</td>
+                            <td>{{ included.label }}</td>
+                            <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-right">{{ included.quantity }}</td>
+                            <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
             {% endfor %}
 

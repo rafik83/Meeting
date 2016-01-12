@@ -66,6 +66,16 @@ class GroupView
     }
 
     /**
+     * @param string $name
+     *
+     * @return RowView
+     */
+    public function getRow($name)
+    {
+        return $this->rows[$name];
+    }
+
+    /**
      * @return float
      */
     public function getTotal()

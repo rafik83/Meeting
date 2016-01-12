@@ -23,8 +23,10 @@ abstract class AbstractProductType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setRequired(['unitPrice']);
-        $resolver->setDefined(['includedIn']);
-        $resolver->setDefaults(['quantity' => 1]);
+        $resolver->setDefaults([
+            'quantity'   => 1,
+            'includedIn' => [],
+        ]);
     }
 
     /**
@@ -34,5 +36,14 @@ abstract class AbstractProductType extends AbstractType
     public function getUnitPrice()
     {
         return (float) $this->getOption('unitPrice');
+    }
+
+    /**
+     * @return array
+     * @throws UnknownOptionException
+     */
+    public function getIncludedIn()
+    {
+        return $this->getOption('includedIn');
     }
 }

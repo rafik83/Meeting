@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownGroup
 class Template
 {
     /**
-     * @var array
+     * @var Group[]
      */
     private $groups = [];
 
@@ -46,6 +46,16 @@ class Template
         }
 
         return $this->groups[$name];
+    }
+
+    /**
+     * Get groups
+     *
+     * @return Group[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
     }
 
     /**

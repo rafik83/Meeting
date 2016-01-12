@@ -44,6 +44,16 @@ class OrderView
     }
 
     /**
+     * @param string $name
+     *
+     * @return GroupView
+     */
+    public function getGroup($name)
+    {
+        return $this->groups[$name];
+    }
+
+    /**
      * Get vat
      *
      * @return float

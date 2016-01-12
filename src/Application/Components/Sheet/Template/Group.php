@@ -17,9 +17,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class Group
 {
     /**
-     * @var array
+     * @var TypeInterface[]
      */
-    private $type = [];
+    private $types = [];
 
     /**
      * @var array
@@ -49,7 +49,7 @@ class Group
      */
     public function addType($name, TypeInterface $type)
     {
-        $this->type[$name] = $type;
+        $this->types[$name] = $type;
     }
 
     /**
@@ -85,10 +85,20 @@ class Group
      */
     public function getType($name)
     {
-        if (!isset($this->type[$name])) {
-            throw new UnknownTypeException($name, array_keys($this->type));
+        if (!isset($this->types[$name])) {
+            throw new UnknownTypeException($name, array_keys($this->types));
         }
 
-        return $this->type[$name];
+        return $this->types[$name];
+    }
+
+    /**
+     * Get types
+     *
+     * @return TypeInterface[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }
