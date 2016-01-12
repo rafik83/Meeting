@@ -5,6 +5,8 @@
 
     <h2>Commande {{ order.id }}</h2>
 
+    {{ dump(order) }}
+
     <div class="text-left">
         <a href="{{ path('admin_sheet_order_list', { 'id': order.sheet.event.id, 'sheet_id': order.sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
     </div>

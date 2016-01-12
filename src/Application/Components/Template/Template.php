@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Template;
 
+use Proximum\Vimeet\Application\Components\Template\Exception\InvalidDataException;
 use Proximum\Vimeet\Application\Components\Template\Exception\UnknownGroupException;
 
 class Template
@@ -45,5 +46,19 @@ class Template
         }
 
         return $this->groups[$name];
+    }
+
+    /**
+     * Validate data against the template
+     *
+     * @param array $data
+     *
+     * @throws InvalidDataException
+     */
+    public function validateData(array $data)
+    {
+        if (false) {
+            throw new InvalidDataException();
+        }
     }
 }

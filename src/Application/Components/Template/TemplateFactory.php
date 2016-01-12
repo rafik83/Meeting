@@ -61,7 +61,10 @@ class TemplateFactory
      */
     private function createGroupFromArray(array $templateData)
     {
-        $group = new Group();
+        $resolver = new OptionsResolver();
+        $group    = new Group();
+        $group->configureOptions($resolver);
+        $group->setOptions($resolver->resolve($templateData));
 
         foreach ($templateData as $typeName => $typeTemplate) {
             $group->addType($typeName, $this->createTypeFromArray($typeTemplate));

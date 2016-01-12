@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Components\Template;
 
+use Proximum\Vimeet\Application\Components\Template\Exception\UnknownOptionException;
 use Proximum\Vimeet\Application\Components\Template\Exception\UnknownTypeException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Group
 {
@@ -20,12 +22,58 @@ class Group
     private $type = [];
 
     /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setRequired(['label', 'template']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
      * @param string        $name
      * @param TypeInterface $type
      */
     public function addType($name, TypeInterface $type)
     {
         $this->type[$name] = $type;
+    }
+
+    /**
+     * @param string $option
+     *
+     * @return mixed
+     * @throws UnknownOptionException
+     */
+    private function getOption($option)
+    {
+        if (!isset($this->options[$option])) {
+            throw new UnknownOptionException($option, array_keys($this->options));
+        }
+
+        return $this->options[$option];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel($locale)
+    {
+        $label = $this->getOption('label');
+
+        return (string) (is_array($label) ? $label[$locale] : $label);
     }
 
     /**

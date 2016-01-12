@@ -120,4 +120,26 @@ class OrderManager
             return !($step === null || empty($step));
         });
     }
+
+    public function getOrderView(Order $order, $locale)
+    {
+        $view = [];
+
+        $template = $order->getPackageTemplate();
+        $data     = $order->getPackageData();
+
+
+        foreach ($data as $group => $groupData) {
+
+            $view[$group] = [
+                'label' => $template[$group]['label'][$locale],
+                'rows'  => [],
+            ];
+
+
+        }
+
+
+
+    }
 }

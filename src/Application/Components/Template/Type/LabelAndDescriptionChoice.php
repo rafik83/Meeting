@@ -13,6 +13,6 @@ namespace Proximum\Vimeet\Application\Components\Template\Type;
 use Proximum\Vimeet\Application\Components\Template\TypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChoiceWithDescription extends AbstractType
+class LabelAndDescriptionChoice extends AbstractType
 {
 }
