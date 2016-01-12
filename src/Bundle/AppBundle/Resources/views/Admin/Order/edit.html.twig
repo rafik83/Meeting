@@ -37,12 +37,12 @@
             <tr>
                 <th colspan="2"></th>
                 <th colspan="2">TVA</th>
-                <th class="text-right">20%</th>
+                <th class="text-right">{{ order_view.vat }}%</th>
             </tr>
             <tr>
                 <th colspan="2"></th>
                 <th colspan="2">Total TTC</th>
-                <th class="text-right">13&nbsp;464,00&nbsp;€</th>
+                <th class="text-right">{{ order_view.totalWithVat|number_format(2, ',', ' ') }} €</th>
             </tr>
         </tbody>
 

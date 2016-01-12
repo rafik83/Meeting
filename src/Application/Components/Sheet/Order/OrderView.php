@@ -18,6 +18,11 @@ class OrderView
     private $groups = [];
 
     /**
+     * @var float
+     */
+    private $vat;
+
+    /**
      * @param string    $name
      * @param GroupView $groupView
      *
@@ -39,6 +44,30 @@ class OrderView
     }
 
     /**
+     * Get vat
+     *
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * Set vat
+     *
+     * @param float $vat
+     *
+     * @return OrderView
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getTotal()
@@ -46,5 +75,13 @@ class OrderView
         return array_reduce($this->groups, function ($carry, GroupView $groupView) {
             return $carry + $groupView->getTotal();
         }, 0);
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWithVat()
+    {
+        return $this->getTotal() * (1 + $this->getVat() / 100);
     }
 }

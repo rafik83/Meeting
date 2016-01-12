@@ -43,8 +43,13 @@ class OrderViewFactory
         $data     = $order->getPackageData();
         $view     = new OrderView();
 
+        // Validate data
         $template->validateData($data);
 
+        // Set vat rate
+        $view->setVat($order->getSheet()->getType()->getEvent()->getVat());
+
+        // Set groups and types
         foreach ($data as $groupName => $groupData) {
             $group = $this->createGroupViewFromArray($template, $groupName, $groupData, $locale);
             $view->addGroupView($groupName, $group);
