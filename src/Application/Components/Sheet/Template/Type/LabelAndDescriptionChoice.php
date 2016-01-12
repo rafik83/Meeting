@@ -8,10 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibOrganizationType extends AbstractType
+class LabelAndDescriptionChoice extends AbstractType
 {
 }

@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Application\Components\Template\Exception\InvalidDataException;
-use Proximum\Vimeet\Application\Components\Template\Exception\UnknownGroupException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\InvalidDataException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownGroupException;
 
 class Template
 {

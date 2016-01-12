@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type\Order;
+namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
 class GroupView
 {

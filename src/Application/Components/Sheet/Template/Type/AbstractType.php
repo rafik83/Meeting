@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Proximum\Vimeet\Application\Components\Template\Exception\UnknownOptionException;
-use Proximum\Vimeet\Application\Components\Template\TypeInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractType implements TypeInterface

@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibCountryType extends AbstractType
+class LibOptionType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -21,8 +21,6 @@ class LibCountryType extends AbstractType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults([
-            'placeholder' => false,
-        ]);
+        $resolver->setRequired(['unitPrice']);
     }
 }

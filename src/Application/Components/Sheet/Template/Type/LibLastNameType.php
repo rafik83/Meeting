@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Exception;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-class InvalidDataException extends TemplateException
+class LibLastNameType extends AbstractType
 {
 }

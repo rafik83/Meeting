@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Exception;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Exception;
 
 class UnknownTypeException extends TemplateException
 {

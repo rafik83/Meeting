@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type\Order;
+namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-use Proximum\Vimeet\Application\Components\Template\Template;
-use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Order;
 
 class OrderViewFactory

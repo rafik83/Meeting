@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Application\Components\Template\Exception\UnknownOptionException;
-use Proximum\Vimeet\Application\Components\Template\Exception\UnknownTypeException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownTypeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Group

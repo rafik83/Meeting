@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibChoiceType extends AbstractType
+class LibCountryType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,6 @@ class LibChoiceType extends AbstractType
 
         $resolver->setDefaults([
             'placeholder' => false,
-            'choices'     => []
         ]);
     }
 }

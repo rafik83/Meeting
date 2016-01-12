@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Type;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-class LibTextAreaType extends AbstractType
+class LibFirstNameType extends AbstractType
 {
 }

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template;
+namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
