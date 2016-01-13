@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownTypeE
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AbstractProductType;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AddedRowType;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibRadioType;
 use Proximum\Vimeet\Domain\Model\Order;
 
@@ -119,6 +120,7 @@ class OrderViewFactory
         $quantity = isset($rowData['quantity']) ? $rowData['quantity'] : 1;
 
         $row = new RowView($label, $price, $quantity);
+        $row->editable = $product instanceof AddedRowType;
 
         return $row;
     }

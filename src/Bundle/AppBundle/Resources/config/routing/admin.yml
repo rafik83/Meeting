@@ -171,9 +171,25 @@ admin_sheet_order_edit:
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Order:edit }
 admin_sheet_order_add_row:
-    path: /order/{id}/add-row/{group}
+    path: /order/{id}/group/{group}/row/add
     requirements:
         id: \d+
         group: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:addRow }
+admin_sheet_order_remove_row:
+    path: /order/{id}/group/{group}/row/{row}/remove
+    requirements:
+        id: \d+
+        group: '[a-zA-Z0-9\-]+'
+        row: '[a-zA-Z0-9\-]+'
+    methods: [DELETE]
+    defaults: { _controller: VimeetAppBundle:Admin/Order:removeRow }
+admin_sheet_order_update_row:
+    path: /order/{id}/group/{group}/row/{row}/update
+    requirements:
+        id: \d+
+        group: '[a-zA-Z0-9\-]+'
+        row: '[a-zA-Z0-9\-]+'
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Order:updateRow }

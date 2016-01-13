@@ -277,6 +277,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.order.remove_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+    command.order.update_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
 
     #
     # Security
@@ -332,6 +340,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart
         tags:
             - { name: cart, cart: lib_option }
+    vimeet_infrastructure.application.components.cart.carts.added_row:
+        class: Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart
+        tags:
+            - { name: cart, cart: added_row }
     vimeet_infrastructure.application.components.cart.carts.lib_participant_cart:
         class: Proximum\Vimeet\Application\Components\Cart\Carts\LibParticipantCart
         tags:

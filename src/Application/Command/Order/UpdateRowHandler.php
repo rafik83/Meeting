@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
-class AddRowHandler
+class UpdateRowHandler
 {
     /**
      * @var OrderRepositoryInterface
@@ -20,7 +20,7 @@ class AddRowHandler
     private $orderRepository;
 
     /**
-     * AddRowHandler constructor.
+     * UpdateRowHandler constructor.
      *
      * @param OrderRepositoryInterface $orderRepository
      */
@@ -30,19 +30,19 @@ class AddRowHandler
     }
 
     /**
-     * @param AddRow $addRow
+     * @param UpdateRow $updateRow
      */
-    public function handle(AddRow $addRow)
+    public function handle(UpdateRow $updateRow)
     {
-        $addRow->order->addRow(
-            $addRow->group,
-            uniqid(),
-            $addRow->label,
-            $addRow->description,
-            $addRow->price,
-            $addRow->quantity
+        $updateRow->order->updateRow(
+            $updateRow->group,
+            $updateRow->row,
+            $updateRow->label,
+            $updateRow->description,
+            $updateRow->price,
+            $updateRow->quantity
         );
 
-        $this->orderRepository->set($addRow->order);
+        $this->orderRepository->set($updateRow->order);
     }
 }

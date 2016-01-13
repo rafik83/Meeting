@@ -33,6 +33,11 @@ class RowView
     public $included = [];
 
     /**
+     * @var bool
+     */
+    public $editable = false;
+
+    /**
      * RowView constructor.
      *
      * @param string $label

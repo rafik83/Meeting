@@ -188,6 +188,7 @@ class ProductBuilder
         $mapping = [
             'choice_with_description' => LibChoiceWithDescriptionProduct::class,
             'lib_option'              => LibOptionProduct::class,
+            'added_row'               => LibOptionProduct::class,
             'lib_planning'            => LibPlanningProduct::class,
             'lib_participant'         => LibParticipantProduct::class,
         ];

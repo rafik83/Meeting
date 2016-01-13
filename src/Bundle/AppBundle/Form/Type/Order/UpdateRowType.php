@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order;
 
-use Proximum\Vimeet\Application\Command\Order\AddRow;
+use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddRowType extends AbstractRowType
+class UpdateRowType extends AbstractRowType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class AddRowType extends AbstractRowType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => AddRow::class,
+            'data_class' => UpdateRow::class,
         ]);
     }
 }
