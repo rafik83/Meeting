@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Order\AddRow;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -17,6 +19,7 @@ use Proximum\Vimeet\Domain\View\OrderListView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -81,6 +84,36 @@ class OrderController extends Controller
             'sheet_info' => $sheetInfo,
             'order'      => $order,
             'order_view' => $orderView,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Order   $order
+     * @param string  $group
+     *
+     * @return RedirectResponse|Response
+     */
+    public function addRowAction(Request $request, Order $order, $group)
+    {
+        $sheetInfo = $this
+            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+            ->guessSheetInfo($order->getSheet());
+
+        $addRow = new AddRow($order, $group);
+        $form   = $this->createForm(AddRowType::class, $addRow);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.order.add_row_handler')->handle($addRow);
+            $this->addFlash('success', 'flash.admin.order.add_row.success');
+
+            return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Order:addRow.html.twig', [
+            'sheet_info' => $sheetInfo,
+            'order'      => $order,
+            'form'       => $form->createView(),
         ]);
     }
 

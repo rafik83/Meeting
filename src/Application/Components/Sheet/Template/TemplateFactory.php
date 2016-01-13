@@ -37,6 +37,8 @@ class TemplateFactory
             'lib_text'         => Type\LibTextType::class,
             'lib_participant'  => Type\LibParticipantType::class,
             'lib_planning'     => Type\LibPlanningType::class,
+            // Added row
+            'added_row'        => Type\AddedRowType::class,
             // BC
             'choice_with_description' => Type\LibRadioType::class,
         ];

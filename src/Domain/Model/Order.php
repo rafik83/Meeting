@@ -182,4 +182,30 @@ class Order
     {
         return $this->paymentMode;
     }
+
+    /**
+     * Add row to the order
+     *
+     * @param string $group
+     * @param string $label
+     * @param string $description
+     * @param float  $unitPrice
+     * @param int    $quantity
+     */
+    public function addRow($group, $label, $description, $unitPrice, $quantity)
+    {
+        $row = uniqid();
+
+        $this->packageTemplate[$group]['template'][$row] = [
+            'label'       => $label,
+            'description' => $description,
+            'type'        => 'added_row',
+            'unitPrice'   => $unitPrice,
+        ];
+
+        $this->packageData[$group][$row] = [
+            'value'    => true,
+            'quantity' => $quantity,
+        ];
+    }
 }

@@ -15,9 +15,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for group in order_view.groups %}
+            {% for groupName, group in order_view.groups %}
                 <tr class="active">
-                    <th colspan="5">{{ group.label }}</th>
+                    <th colspan="4">{{ group.label }}</th>
+                    <td class="text-right">
+                        <a href="{{ path('admin_sheet_order_add_row', { 'id': order.id, 'group': groupName }) }}"><i class="glyphicon glyphicon-plus"></i></a>
+                    </td>
                 </tr>
                 {% for row in group.rows %}
                     <tr>

@@ -273,6 +273,10 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    command.order.add_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
 
     #
     # Security

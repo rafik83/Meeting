@@ -170,3 +170,10 @@ admin_sheet_order_edit:
         id: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Order:edit }
+admin_sheet_order_add_row:
+    path: /order/{id}/add-row/{group}
+    requirements:
+        id: \d+
+        group: '[a-zA-Z0-9\-]+'
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Order:addRow }
