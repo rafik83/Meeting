@@ -61,28 +61,7 @@ class OrderViewFactory
         }
 
         // Included in
-        foreach ($template->getGroups() as $groupName => $group) {
-            foreach ($group->getTypes() as $typeName => $type) {
-                if ($type instanceof AbstractProductType) {
-                    $includedIn = $type->getIncludedIn();
-
-                    foreach ($includedIn as $path => $quantity) {
-
-                        // get parts
-                        $parts = explode('.', $path);
-
-                        // get value
-                        $value = $data[$parts[0]][$parts[1]]['value'];
-
-                        if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
-                            $row = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
-                            $row->unitPrice = 0;
-                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded($row);
-                        }
-                    }
-                }
-            }
-        }
+        $this->includedPass($template, $view, $data, $locale);
 
         return $view;
     }
@@ -142,5 +121,39 @@ class OrderViewFactory
         $row = new RowView($label, $price, $quantity);
 
         return $row;
+    }
+
+    /**
+     * @param Template  $template
+     * @param OrderView $view
+     * @param array     $data
+     * @param string    $locale
+     *
+     * @throws WrongTypeException
+     */
+    private function includedPass(Template $template, OrderView $view, array $data, $locale)
+    {
+        foreach ($template->getGroups() as $groupName => $group) {
+            foreach ($group->getTypes() as $typeName => $type) {
+                if ($type instanceof AbstractProductType) {
+                    $includedIn = $type->getIncludedIn();
+
+                    foreach ($includedIn as $path => $quantity) {
+
+                        // get parts
+                        $parts = explode('.', $path);
+
+                        // get value
+                        $value = $data[$parts[0]][$parts[1]]['value'];
+
+                        if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
+                            $row            = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
+                            $row->unitPrice = 0;
+                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded($row);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
