@@ -74,10 +74,10 @@ class OrderViewFactory
                         // get value
                         $value = $data[$parts[0]][$parts[1]]['value'];
 
-                        if (count($parts) === 2 && $value === true) {
-                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded(new RowView('', 0, $quantity));
-                        } elseif (count($parts) === 3 && $value === $parts[2]) {
-                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded(new RowView('', 0, $quantity));
+                        if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
+                            $row = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
+                            $row->unitPrice = 0;
+                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded($row);
                         }
                     }
                 }

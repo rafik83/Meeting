@@ -27,10 +27,16 @@
                         <td class="text-right">{{ row.quantity }}</td>
                         <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
                     </tr>
+                    {% if row.included is not empty %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <th colspan="4">Inclus :</th>
+                        </tr>
+                    {% endif %}
                     {% for included in row.included %}
                         <tr>
-                            <td>&gt;</td>
-                            <td>{{ included.label }}</td>
+                            <td>&nbsp;</td>
+                            <td>&gt; {{ included.label }}</td>
                             <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">{{ included.quantity }}</td>
                             <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
