@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class LabelAndDescriptionChoice extends AbstractType
 {
 }
