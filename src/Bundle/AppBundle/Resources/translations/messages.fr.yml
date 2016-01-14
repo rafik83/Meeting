@@ -197,3 +197,9 @@ notification:
     participant:
         removed:
             action: Vous avez été rétiré d'un évènement
+
+message:
+    admin:
+        order:
+            remove_row:
+                confirm: Confirmer la suppression

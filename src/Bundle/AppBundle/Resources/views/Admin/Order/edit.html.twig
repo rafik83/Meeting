@@ -35,7 +35,7 @@
                         <td class="text-right">
                             {% if row.editable %}
                                 <a href="{{ path('admin_sheet_order_update_row', { 'id': order.id, 'group': groupName, 'row': rowName }) }}"><i class="glyphicon glyphicon-pencil"></i></a>
-                                {{ macro.button(path('admin_sheet_order_remove_row', { 'id': order.id, 'group': groupName, 'row': rowName }), 'DELETE', '<i class="glyphicon glyphicon-trash"></i>', { 'class': 'btn btn-link btn-np', 'data-confirm': 'message.admin.order.remove_row.confirm' }) }}
+                                {{ macro.button(path('admin_sheet_order_remove_row', { 'id': order.id, 'group': groupName, 'row': rowName }), 'DELETE', '<i class="glyphicon glyphicon-trash"></i>', { 'class': 'btn btn-link btn-np', 'data-confirm': 'message.admin.order.remove_row.confirm'|trans }) }}
                             {% endif %}
                         </td>
                     </tr>
