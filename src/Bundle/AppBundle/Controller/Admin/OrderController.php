@@ -178,7 +178,7 @@ class OrderController extends Controller
     public function removeRowAction(Order $order, $group, $row)
     {
         $this->get('command.order.remove_row_handler')->handle(new RemoveRow($order, $group, $row));
-        $this->addFlash('succes', 'flash.admin.order.remove_row.success');
+        $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
     }
