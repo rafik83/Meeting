@@ -18,7 +18,9 @@
                 <tr>
                     <td>{{ sheet.title }}</td>
                     <td>{{ sheet.type }}</td>
-                    <td></td>
+                    <td>
+                        <a href="{{ path('admin_sheet_order_list', { 'id': event.id, 'sheet_id': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

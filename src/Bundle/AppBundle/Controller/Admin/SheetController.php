@@ -18,6 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SheetController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listAction(Request $request, Event $event)
     {
         $sheets = $this
