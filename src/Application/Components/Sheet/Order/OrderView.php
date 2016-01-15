@@ -20,7 +20,7 @@ class OrderView
     /**
      * @var float
      */
-    private $vat;
+    private $vat = 0;
 
     /**
      * @param string    $name

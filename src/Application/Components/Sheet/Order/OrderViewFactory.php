@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\WrongTypeException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownGroupException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownTypeException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\InvalidDataException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AbstractProductType;
@@ -45,15 +46,33 @@ class OrderViewFactory
      */
     public function createFromOrder(Order $order, $locale)
     {
-        $template = $this->templateFactory->createTemplateFromArray($order->getPackageTemplate());
-        $data     = $order->getPackageData();
+        return $this->createFromData(
+            $order->getPackageTemplate(),
+            $order->getPackageData(),
+            $order->getSheet()->getType()->getEvent()->getVat(),
+            $locale
+        );
+    }
+
+    /**
+     * @param array  $template
+     * @param array  $data
+     * @param float  $vat
+     * @param string $locale
+     *
+     * @return OrderView
+     * @throws InvalidDataException
+     */
+    public function createFromData(array $template, array $data, $vat, $locale)
+    {
+        $template = $this->templateFactory->createTemplateFromArray($template);
         $view     = new OrderView();
 
         // Validate data
         $template->validateData($data);
 
         // Set vat rate
-        $view->setVat($order->getSheet()->getType()->getEvent()->getVat());
+        $view->setVat($vat);
 
         // Set groups and types
         foreach ($data as $groupName => $groupData) {
