@@ -16,9 +16,9 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>{{ row.label }}</td>
-                <td class="text-right">{{ row.unitPrice|number_format(2, ',', ' ') }} €</td>
+                <td class="text-right">{{ row.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 <td class="text-right">{{ row.quantity }}</td>
-                <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
+                <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
             </tr>
             {% if row.included is not empty %}
                 <tr>
@@ -30,9 +30,9 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td>&gt; {{ included.label }}</td>
-                    <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-right">{{ included.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                     <td class="text-right">{{ included.quantity }}</td>
-                    <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-right">{{ included.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -41,7 +41,7 @@
     <tr class="info">
         <th colspan="2"></th>
         <th colspan="2">Total</th>
-        <th class="text-right">{{ order.total|number_format(2, ',', ' ') }} €</th>
+        <th class="text-right">{{ order.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
     </tr>
     <tr>
         <th colspan="2"></th>
@@ -51,7 +51,7 @@
     <tr>
         <th colspan="2"></th>
         <th colspan="2">Total TTC</th>
-        <th class="text-right">{{ order.totalWithVat|number_format(2, ',', ' ') }} €</th>
+        <th class="text-right">{{ order.totalWithVat|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
     </tr>
     </tbody>
 
