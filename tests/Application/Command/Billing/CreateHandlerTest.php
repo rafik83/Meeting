@@ -46,8 +46,5 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         //Handler
         $handler = new CreateOrderHandler($billingRepository->reveal());
         $handler->handle($createOrder);
-
-
     }
 }
-

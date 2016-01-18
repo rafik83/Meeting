@@ -93,7 +93,6 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
         //Handler
         $handler = new UpdateBlockHandler($sheetRepository->reveal());
         $handler->handle($command);
-
     }
 
 }
