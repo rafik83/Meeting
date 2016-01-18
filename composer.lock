@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c8a9ef2ce61cdf9f8ef8b3797f39e381",
-    "content-hash": "271dda3a0ce58e18a741b1838ea73f87",
+    "hash": "954aed408ab984e22dcecddf7e90ad7d",
+    "content-hash": "dcbc5ce0e568184a5ba6d89ddb623ddc",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2627,16 +2627,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.8.x-dev",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310"
+                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/111f51dfa5a558d7b0bd8d4e8dfb23dad79939f5",
-                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
+                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
                 "shasum": ""
             },
             "require": {
@@ -2756,7 +2756,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-01-04 16:50:38"
+            "time": "2016-01-14 12:01:11"
         },
         {
             "name": "twig/twig",
@@ -2831,7 +2831,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/ca2c78e4695ee120d44363fd8ea3b3fc28330ff7",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/718159921b1d844b8805b5ab2e7d1be34ca323cb",
                 "reference": "2059cbe4bb8055c8555fa3365c6ea3b4b30288f5",
                 "shasum": ""
             },
@@ -5005,7 +5005,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "symfony/symfony": 20,
         "sonata-project/intl-bundle": 20,
         "behat/behat": 20,
         "knplabs/friendly-contexts": 20,
