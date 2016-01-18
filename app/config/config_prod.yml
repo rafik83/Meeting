@@ -36,3 +36,4 @@ elao_error_notifier:
     handlePHPWarnings: true
     handleSilentErrors: false
     ignoredClasses: ~
+    repeatTimeout: 3600
