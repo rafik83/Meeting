@@ -18,7 +18,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\OrderListView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,28 +43,15 @@ class OrderController extends Controller
     {
         $orders = $this
             ->get('vimeet_infrastructure.repository.order_repository')
-            ->paginate($request->query->getInt('page', 1), 20, $sheet)
-        ;
+            ->paginate($request->query->getInt('page', 1), 20, $sheet);
 
-        $orders->setItems(
-            array_map(
-                function (Order $order) use ($request) {
-                    return new OrderListView(
-                        $order->getId(),
-                        $order->getId(),
-                        $order->getCreatedAt(),
-                        $this->getOrderAmount($order, $request->getLocale()),
-                        $order->getState(),
-                        $order->getPaymentMode()
-                    );
-                }, $orders->getItems()
-            )
-        );
+        $orders->setItems(array_map(function (Order $order) use ($request) {
+            return $this->get('components.sheet.order_view_factory')->createFromOrder($order, $request->getLocale());
+        }, $orders->getItems()));
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet)
-        ;
+            ->guessSheetInfo($sheet);
 
         return $this->render(
             'VimeetAppBundle:Admin/Order:list.html.twig', [
@@ -181,24 +167,5 @@ class OrderController extends Controller
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
-    }
-
-    /**
-     * @param Order  $order
-     * @param string $locale
-     *
-     * @return int
-     */
-    private function getOrderAmount(Order $order, $locale)
-    {
-        $template = $this
-            ->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromOrder($order);
-
-        $cart = $this
-            ->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate($template, $order->getPackageData(), $locale);
-
-        return $cart->getTotal();
     }
 }
