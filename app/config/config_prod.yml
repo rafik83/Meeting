@@ -25,3 +25,14 @@ monolog:
             level: debug
         console:
             type:  console
+
+elao_error_notifier:
+    from: vimeet@proximum.com
+    to: vimeet@elao.com
+    handle404: true
+    handleHTTPcodes: ~
+    mailer: swiftmailer.mailer.error
+    handlePHPErrors: true
+    handlePHPWarnings: true
+    handleSilentErrors: false
+    ignoredClasses: ~
