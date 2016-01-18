@@ -10,6 +10,7 @@
 
 namespace Tests\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMerge;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -181,13 +182,17 @@ class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        // Expected
+        $expected = new OrderMerge([], 20);
+
         // Mock
         $orderViewFactory = $this->prophesize(OrderViewFactory::class);
         $orderViewFactory->createGroupsFromArray($template, $data, 'fr')->shouldBeCalled()->willReturn([]);
 
         // Merge
         $merger = new OrderMergeFactory($orderViewFactory->reveal());
-        $merger->merge($orders, 20, 'fr');
+
+        $this->assertEquals($expected, $merger->merge($orders, 20, 'fr'));
     }
 
     private function createOrder(Sheet $sheet, array $template, array $data)
