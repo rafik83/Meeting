@@ -64,7 +64,7 @@ class ProformaViewFactory
         );
 
         // Billing data
-        $billingView = new BillingView();
+        $billingView = new BillingView($order->getBillingTemplate(), $order->getBillingData());
 
         // Participant
         $participants = array_map(
