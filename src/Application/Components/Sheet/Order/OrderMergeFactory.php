@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class OrderMergeFactory
 {
@@ -30,13 +31,29 @@ class OrderMergeFactory
     }
 
     /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return OrderView
+     */
+    public function createFromSheet(Sheet $sheet, $locale)
+    {
+        return $this->createFromOrders(
+            $sheet->getOrders()->toArray(),
+            $sheet->getEvent()->getVat(),
+            $locale
+        );
+    }
+
+
+    /**
      * @param Order[] $orders
      * @param float   $vat
      * @param string  $locale
      *
      * @return OrderView
      */
-    public function merge(array $orders, $vat, $locale)
+    public function createFromOrders(array $orders, $vat, $locale)
     {
         $template = [];
         $data     = [];

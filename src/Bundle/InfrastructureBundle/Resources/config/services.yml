@@ -432,11 +432,19 @@ services:
 
 
     #
-    #
+    # Template component
     #
     components.sheet.template_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory
+
+    #
+    # Order component
+    #
     components.sheet.order_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory
         arguments:
             - '@components.sheet.template_factory'
+    components.sheet.order_merge_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory
+        arguments:
+            - '@components.sheet.order_view_factory'

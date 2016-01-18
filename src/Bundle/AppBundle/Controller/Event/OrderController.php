@@ -42,11 +42,9 @@ class OrderController extends BaseController
      */
     public function summaryAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromSheet($sheet);
-
-        $summary = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate($template, $sheet->getPackageData(), $request->getLocale());
+        $summary = $this
+            ->get('components.sheet.order_merge_factory')
+            ->createFromSheet($sheet, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Order:summary.html.twig', [
             'eventView' => $eventView,
