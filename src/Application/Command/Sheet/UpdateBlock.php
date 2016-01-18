@@ -20,7 +20,7 @@ class UpdateBlock
     public $sheet;
 
     /**
-     * @var int
+     * @var string
      */
     public $block;
 
@@ -31,7 +31,7 @@ class UpdateBlock
 
     /**
      * @param Sheet $sheet
-     * @param int   $block
+     * @param string   $block
      */
     public function __construct(Sheet $sheet, $block)
     {
