@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
 
-class OrderMerger
+class OrderMergeFactory
 {
     /**
      * @var OrderViewFactory
@@ -46,7 +46,10 @@ class OrderMerger
             $this->mergeData($data, $order->getPackageData());
         }
 
-        return $this->orderViewFactory->createFromData($template, $data, $vat, $locale);
+        return new OrderMerge(
+            $this->orderViewFactory->createGroupsFromArray($template, $data, $locale),
+            $vat
+        );
     }
 
     /**

@@ -10,88 +10,52 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-class OrderView
+class OrderView extends Groups
 {
     /**
-     * @var GroupView[]
+     * @var int
      */
-    private $groups = [];
+    public $id;
 
     /**
-     * @var float
+     * @var string
      */
-    private $vat = 0;
+    public $reference;
 
     /**
-     * @param string    $name
-     * @param GroupView $groupView
+     * @var \DateTimeInterface
+     */
+    public $date;
+
+    /**
+     * @var string
+     */
+    public $state;
+
+    /**
+     * @var string
+     */
+    public $paymentMode;
+
+    /**
+     * OrderView constructor.
      *
-     * @return $this
+     * @param int                $id
+     * @param string             $reference
+     * @param \DateTimeInterface $date
+     * @param string             $state
+     * @param string             $paymentMode
+     * @param float              $vat
+     * @param GroupView[]        $groups
      */
-    public function addGroupView($name, GroupView $groupView)
+    public function __construct($id, $reference, \DateTimeInterface $date, $state, $paymentMode, $vat, array $groups = [])
     {
-        $this->groups[$name] = $groupView;
+        parent::__construct($groups, $vat);
 
-        return $this;
-    }
-
-    /**
-     * @return GroupView[]
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return GroupView
-     */
-    public function getGroup($name)
-    {
-        return $this->groups[$name];
-    }
-
-    /**
-     * Get vat
-     *
-     * @return float
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * Set vat
-     *
-     * @param float $vat
-     *
-     * @return OrderView
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        return array_reduce($this->groups, function ($carry, GroupView $groupView) {
-            return $carry + $groupView->getTotal();
-        }, 0);
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalWithVat()
-    {
-        return $this->getTotal() * (1 + $this->getVat() / 100);
+        $this->id          = $id;
+        $this->reference   = $reference;
+        $this->date        = $date;
+        $this->state       = $state;
+        $this->paymentMode = $paymentMode;
     }
 }

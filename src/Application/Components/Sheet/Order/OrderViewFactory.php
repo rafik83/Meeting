@@ -46,44 +46,43 @@ class OrderViewFactory
      */
     public function createFromOrder(Order $order, $locale)
     {
-        return $this->createFromData(
-            $order->getPackageTemplate(),
-            $order->getPackageData(),
+        return new OrderView(
+            $order->getId(),
+            $order->getId(),
+            $order->getCreatedAt(),
+            $order->getState(),
+            $order->getPaymentMode(),
             $order->getSheet()->getType()->getEvent()->getVat(),
-            $locale
+            $this->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale)
         );
     }
 
     /**
      * @param array  $template
      * @param array  $data
-     * @param float  $vat
      * @param string $locale
      *
-     * @return OrderView
+     * @return array
      * @throws InvalidDataException
      */
-    public function createFromData(array $template, array $data, $vat, $locale)
+    public function createGroupsFromArray(array $template, array $data, $locale)
     {
+        // Create template
         $template = $this->templateFactory->createTemplateFromArray($template);
-        $view     = new OrderView();
 
         // Validate data
         $template->validateData($data);
 
-        // Set vat rate
-        $view->setVat($vat);
-
-        // Set groups and types
+        // Create groups
+        $groups = [];
         foreach ($data as $groupName => $groupData) {
-            $group = $this->createGroupViewFromArray($template, $groupName, $groupData, $locale);
-            $view->addGroupView($groupName, $group);
+            $groups[$groupName] = $this->createGroupViewFromArray($template, $groupName, $groupData, $locale);
         }
 
         // Included in
-        $this->includedPass($template, $view, $data, $locale);
+        $this->includedPass($template, $groups, $data, $locale);
 
-        return $view;
+        return $groups;
     }
 
     /**
@@ -145,33 +144,35 @@ class OrderViewFactory
     }
 
     /**
-     * @param Template  $template
-     * @param OrderView $view
-     * @param array     $data
-     * @param string    $locale
+     * @param Template    $template
+     * @param GroupView[] $groups
+     * @param array       $data
+     * @param string      $locale
      *
      * @throws WrongTypeException
      */
-    private function includedPass(Template $template, OrderView $view, array $data, $locale)
+    private function includedPass(Template $template, array &$groups, array $data, $locale)
     {
         foreach ($template->getGroups() as $groupName => $group) {
             foreach ($group->getTypes() as $typeName => $type) {
-                if ($type instanceof AbstractProductType) {
-                    $includedIn = $type->getIncludedIn();
+                if (!$type instanceof AbstractProductType) {
+                    continue;
+                }
 
-                    foreach ($includedIn as $path => $quantity) {
+                $includedIn = $type->getIncludedIn();
 
-                        // get parts
-                        $parts = explode('.', $path);
+                foreach ($includedIn as $path => $quantity) {
 
-                        // get value
-                        $value = $data[$parts[0]][$parts[1]]['value'];
+                    // get parts
+                    $parts = explode('.', $path);
 
-                        if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
-                            $row            = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
-                            $row->unitPrice = 0;
-                            $view->getGroup($parts[0])->getRow($parts[1])->addIncluded($row);
-                        }
+                    // get value
+                    $value = $data[$parts[0]][$parts[1]]['value'];
+
+                    if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
+                        $row            = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
+                        $row->unitPrice = 0;
+                        $groups[$parts[0]]->getRow($parts[1])->addIncluded($row);
                     }
                 }
             }

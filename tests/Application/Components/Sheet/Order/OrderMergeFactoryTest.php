@@ -10,15 +10,14 @@
 
 namespace Tests\Application\Components\Sheet\Order;
 
-use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMerger;
-use Proximum\Vimeet\Application\Components\Sheet\Order\OrderView;
+use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class OrderMergerTest extends \PHPUnit_Framework_TestCase
+class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testMerge()
     {
@@ -184,10 +183,10 @@ class OrderMergerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $orderViewFactory = $this->prophesize(OrderViewFactory::class);
-        $orderViewFactory->createFromData($template, $data, 20, 'fr')->shouldBeCalled()->willReturn(new OrderView());
+        $orderViewFactory->createGroupsFromArray($template, $data, 'fr')->shouldBeCalled()->willReturn([]);
 
-        // Merger
-        $merger = new OrderMerger($orderViewFactory->reveal());
+        // Merge
+        $merger = new OrderMergeFactory($orderViewFactory->reveal());
         $merger->merge($orders, 20, 'fr');
     }
 
