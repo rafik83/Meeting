@@ -45,8 +45,5 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
 
         $handler = new RemoveHandler($unavailabilityRepository->reveal());
         $handler->handle($remove);
-
-
-
     }
 }
