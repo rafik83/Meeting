@@ -31,11 +31,12 @@ class OrderMerger
 
     /**
      * @param Order[] $orders
+     * @param float   $vat
      * @param string  $locale
      *
      * @return OrderView
      */
-    public function merge(array $orders, $locale)
+    public function merge(array $orders, $vat, $locale)
     {
         $template = [];
         $data     = [];
@@ -45,7 +46,7 @@ class OrderMerger
             $this->mergeData($data, $order->getPackageData());
         }
 
-        return $this->orderViewFactory->createFromData($template, $data, 20, $locale);
+        return $this->orderViewFactory->createFromData($template, $data, $vat, $locale);
     }
 
     /**

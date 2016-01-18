@@ -188,7 +188,7 @@ class OrderMergerTest extends \PHPUnit_Framework_TestCase
 
         // Merger
         $merger = new OrderMerger($orderViewFactory->reveal());
-        $merger->merge($orders, 'fr');
+        $merger->merge($orders, 20, 'fr');
     }
 
     private function createOrder(Sheet $sheet, array $template, array $data)
