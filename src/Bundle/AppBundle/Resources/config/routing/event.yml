@@ -160,7 +160,7 @@ event_sheet_order_pro_forma:
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Order:proForma }
+    defaults: { _controller: VimeetAppBundle:Event/Order:proforma }
 
 #
 # Authentication

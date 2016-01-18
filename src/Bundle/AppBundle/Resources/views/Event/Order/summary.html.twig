@@ -5,64 +5,7 @@
 {% block content %}
     <h2>{{ 'event.sheet.summary.title'|trans }}</h2>
 
-    <table class="table table-condensed">
-        <thead>
-        <tr>
-            <th colspan="2">Produit</th>
-            <th class="text-right">Prix unitaire</th>
-            <th class="text-right">Quantité</th>
-            <th class="text-right">Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for groupName, group in summary.groups %}
-            <tr class="active">
-                <th colspan="5">{{ group.label }}</th>
-            </tr>
-            {% for rowName, row in group.rows %}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>{{ row.label }}</td>
-                    <td class="text-right">{{ row.unitPrice|number_format(2, ',', ' ') }} €</td>
-                    <td class="text-right">{{ row.quantity }}</td>
-                    <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
-                </tr>
-                {% if row.included is not empty %}
-                    <tr>
-                        <td>&nbsp;</td>
-                        <th colspan="4">Inclus :</th>
-                    </tr>
-                {% endif %}
-                {% for included in row.included %}
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&gt; {{ included.label }}</td>
-                        <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
-                        <td class="text-right">{{ included.quantity }}</td>
-                        <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
-                    </tr>
-                {% endfor %}
-            {% endfor %}
-        {% endfor %}
-
-        <tr class="info">
-            <th colspan="2"></th>
-            <th colspan="2">Total</th>
-            <th class="text-right">{{ summary.total|number_format(2, ',', ' ') }} €</th>
-        </tr>
-        <tr>
-            <th colspan="2"></th>
-            <th colspan="2">TVA</th>
-            <th class="text-right">{{ summary.vat }}%</th>
-        </tr>
-        <tr>
-            <th colspan="2"></th>
-            <th colspan="2">Total TTC</th>
-            <th class="text-right">{{ summary.totalWithVat|number_format(2, ',', ' ') }} €</th>
-        </tr>
-        </tbody>
-
-    </table>
+    {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': summary }, false) }}
 
     <hr>
     <a href="{{ path('event_sheet', {

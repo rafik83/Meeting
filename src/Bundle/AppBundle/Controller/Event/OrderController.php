@@ -66,7 +66,7 @@ class OrderController extends BaseController
      *
      * @return Response
      */
-    public function proFormaAction(Request $request, EventView $eventView, Sheet $sheet, Order $order)
+    public function proformaAction(Request $request, EventView $eventView, Sheet $sheet, Order $order)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
@@ -75,19 +75,15 @@ class OrderController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $template = $this
-            ->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromOrder($order);
+        $proforma = $this
+            ->get('components.sheet.proforma_view_factory')
+            ->createFromOrder($order, $request->getLocale());
 
-        $cart = $this
-            ->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate($template, $order->getPackageData(), $request->getLocale());
-
-        return $this->render('VimeetAppBundle:Event/Order:proForma.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Order:proforma.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'cart'      => $cart,
             'order'     => $order,
+            'proforma'  => $proforma,
         ]);
     }
 }
