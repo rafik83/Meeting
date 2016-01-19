@@ -10,10 +10,27 @@
 
 namespace Proximum\Vimeet\Application\Components\Participant;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
 
 class ParticipantInfoGuesser
 {
+    /**
+     * @var TaggedInfoGuesser
+     */
+    private $taggedInfoGuesser;
+
+    /**
+     * ParticipantInfoGuesser constructor.
+     *
+     * @param TaggedInfoGuesser $taggedInfoGuesser
+     */
+    public function __construct(TaggedInfoGuesser $taggedInfoGuesser)
+    {
+        $this->taggedInfoGuesser = $taggedInfoGuesser;
+    }
+
     /**
      * @param Participant $participant
      *
@@ -21,16 +38,12 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantLastName(Participant $participant)
     {
-        $participantTemplate = $participant->getSheet()->getType()->getParticipantTemplate();
-        $participantData     = $participant->getData();
+        $template = $participant->getSheet()->getType()->getParticipantTemplate();
+        $data     = $participant->getData();
 
-        foreach ($participantTemplate as $fieldKey => $field) {
-            if ($field['type'] === 'lib_last_name' && isset($participantData[$fieldKey])) {
-                return $participantData[$fieldKey];
-            }
-        }
+        $info = $this->taggedInfoGuesser->guess($template, $data, Tag::PARTICIPANT_FIRSTNAME);
 
-        return '';
+        return empty($info) ? '' : $info[0];
     }
 
     /**
@@ -40,16 +53,12 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantFirstName(Participant $participant)
     {
-        $participantTemplate = $participant->getSheet()->getType()->getParticipantTemplate();
-        $participantData     = $participant->getData();
+        $template = $participant->getSheet()->getType()->getParticipantTemplate();
+        $data     = $participant->getData();
 
-        foreach ($participantTemplate as $fieldKey => $field) {
-            if ($field['type'] === 'lib_first_name' && isset($participantData[$fieldKey])) {
-                return $participantData[$fieldKey];
-            }
-        }
+        $info = $this->taggedInfoGuesser->guess($template, $data, Tag::PARTICIPANT_LASTNAME);
 
-        return '';
+        return empty($info) ? '' : $info[0];
     }
 
     /**

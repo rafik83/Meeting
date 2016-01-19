@@ -78,6 +78,7 @@ class Group
     public function addType(TypeInterface $type)
     {
         $this->types[$type->getName()] = $type;
+        $type->setGroup($this);
 
         return $this;
     }

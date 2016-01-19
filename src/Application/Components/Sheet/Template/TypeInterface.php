@@ -61,4 +61,16 @@ interface TypeInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * @param Group $group
+     *
+     * @return TypeInterface
+     */
+    public function setGroup(Group $group);
+
+    /**
+     * @return Group
+     */
+    public function getGroup();
 }

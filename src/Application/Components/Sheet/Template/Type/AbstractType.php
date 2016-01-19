@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Group;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,6 +21,11 @@ abstract class AbstractType implements TypeInterface
      * @var string
      */
     protected $name;
+
+    /**
+     * @var Group
+     */
+    protected $group;
 
     /**
      * @var array
@@ -33,7 +39,7 @@ abstract class AbstractType implements TypeInterface
      */
     public function __construct($name)
     {
-        $this->name = $name;
+        $this->name  = $name;
     }
 
     /**
@@ -121,5 +127,23 @@ abstract class AbstractType implements TypeInterface
     public function hasTag($tag)
     {
         return in_array($tag, $this->getTags());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }
