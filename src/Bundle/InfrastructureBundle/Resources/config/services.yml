@@ -451,6 +451,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory
         arguments:
             - '@components.sheet.order_view_factory'
+    components.sheet.cart_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Order\CartViewFactory
+        arguments:
+            - '@components.sheet.order_view_factory'
 
     #
     # Proforma component

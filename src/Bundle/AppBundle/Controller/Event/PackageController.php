@@ -120,20 +120,13 @@ class PackageController extends BaseController
         if ($cart === null) {
             throw $this->createNotFoundException('Cart not available');
         }
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($cart);
-        $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate(
-                $template,
-                $cart->getData(),
-                $request->getLocale()
-            )
-        ;
+
+        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'cart'      => $cart,
+            'cartView'  => $cartView,
         ]);
     }
 

@@ -99,6 +99,17 @@ class OrderViewFactory
         $group = new GroupView($label);
 
         foreach ($groupData as $rowName => $rowData) {
+
+            // Filter empty row (to improve)
+            if (
+                isset($rowData['value']) && $rowData['value'] === false ||
+                isset($rowData['participant']) && $rowData['participant'] === false ||
+                isset($rowData['planning']) && $rowData['planning'] === false ||
+                isset($rowData['quantity']) && $rowData['quantity'] === 0
+            )  {
+                continue;
+            }
+
             $row = $this->createRowViewFromArray($template, $groupName, $rowName, $rowData, $locale);
 
             $group->addRowView($rowName, $row);
