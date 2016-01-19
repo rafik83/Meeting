@@ -16,6 +16,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractType implements TypeInterface
 {
+    const MARK_AS_PARTICIPANT_FIRSTNAME = 'participant_firstname';
+    const MARK_AS_PARTICIPANT_LASTNAME  = 'participant_lastname';
+    const MARK_AS_BILLING_ADDRESS       = 'billing_address';
+    const MARK_AS_BILLING_CITY          = 'billing_city';
+    const MARK_AS_BILLING_ZIPCODE       = 'billing_zipcode';
+    const MARK_AS_BILLING_COUNTRY       = 'billing_contry';
+    const MARK_AS_BILLING_PHONE         = 'billing_phone';
+    const MARK_AS_BILLING_EMAIL         = 'billing_email';
+    const MARK_AS_BILLING_ORGANIZATION  = 'billing_organization';
+    const MARK_AS_BILLING_VAT_NUMBER    = 'billing_vat_number';
+    const MARK_AS_BILLING_EXTRA         = 'billing_extra';
+    const MARK_AS_ORGANIZATION          = 'organization';
+
     /**
      * @var array
      */
@@ -28,7 +41,7 @@ abstract class AbstractType implements TypeInterface
     {
         $optionsResolver->setRequired(['label', 'type']);
         $optionsResolver->setDefaults(['required' => false]);
-        $optionsResolver->setDefined(['description']);
+        $optionsResolver->setDefined(['description', 'mark_as']);
     }
 
     /**
