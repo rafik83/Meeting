@@ -39,11 +39,6 @@ class Order
     private $state;
 
     /**
-     * @var string
-     */
-    private $proFormaTemplate;
-
-    /**
      * @var array
      */
     private $packageData;
@@ -76,7 +71,6 @@ class Order
     /**
      * @param Sheet             $sheet
      * @param string            $state
-     * @param string            $proFormaTemplate
      * @param array             $packageData
      * @param array             $packageTemplate
      * @param array             $billingData
@@ -87,7 +81,6 @@ class Order
     public function __construct(
         Sheet $sheet,
         $state,
-        $proFormaTemplate,
         array $packageData,
         array $packageTemplate,
         array $billingData,
@@ -97,7 +90,6 @@ class Order
     ) {
         $this->sheet            = $sheet;
         $this->state            = $state;
-        $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
         $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;
@@ -128,14 +120,6 @@ class Order
     public function getState()
     {
         return $this->state;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProFormaTemplate()
-    {
-        return $this->proFormaTemplate;
     }
 
     /**

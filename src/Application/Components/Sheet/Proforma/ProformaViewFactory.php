@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
+use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -28,15 +29,25 @@ class ProformaViewFactory
     private $participantInfoGuesser;
 
     /**
+     * @var BillingInfoGuesser
+     */
+    private $billingInfoGuesser;
+
+    /**
      * ProformaViewFactory constructor.
      *
      * @param OrderViewFactory       $orderViewFactory
      * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param BillingInfoGuesser     $billingInfoGuesser
      */
-    public function __construct(OrderViewFactory $orderViewFactory, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        OrderViewFactory $orderViewFactory,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        BillingInfoGuesser $billingInfoGuesser
+    ) {
         $this->orderViewFactory       = $orderViewFactory;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->billingInfoGuesser     = $billingInfoGuesser;
     }
 
     /**
@@ -64,7 +75,18 @@ class ProformaViewFactory
         );
 
         // Billing data
-        $billingView = new BillingView($order->getBillingTemplate(), $order->getBillingData());
+        $billingView = new BillingView(
+            $this->billingInfoGuesser->getName($sheet),
+            $this->billingInfoGuesser->getAddress($sheet),
+            $this->billingInfoGuesser->getCity($sheet),
+            $this->billingInfoGuesser->getZipcode($sheet),
+            $this->billingInfoGuesser->getCountry($sheet),
+            $this->billingInfoGuesser->getPhone($sheet),
+            $this->billingInfoGuesser->getEmail($sheet),
+            $this->billingInfoGuesser->getOrganization($sheet),
+            $this->billingInfoGuesser->getVatNumber($sheet),
+            $this->billingInfoGuesser->getExtra($sheet)
+        );
 
         // Participant
         $participants = array_map(

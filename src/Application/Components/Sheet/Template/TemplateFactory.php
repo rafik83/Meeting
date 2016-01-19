@@ -37,6 +37,7 @@ class TemplateFactory
             'lib_text'         => Type\LibTextType::class,
             'lib_participant'  => Type\LibParticipantType::class,
             'lib_planning'     => Type\LibPlanningType::class,
+            'lib_email'        => Type\LibTextType::class,
             // Added row
             'added_row'        => Type\AddedRowType::class,
             // BC

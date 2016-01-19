@@ -94,7 +94,6 @@ class BillingController extends BaseController
         $createOrder = new Create(
             $cart,
             $sheet,
-            $sheet->getType()->getProFormaTemplate(),
             $cart->getData(),
             $cart->getTemplate(),
             $sheet->getBillingData(),

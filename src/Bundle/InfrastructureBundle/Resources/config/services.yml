@@ -460,8 +460,13 @@ services:
         arguments:
             - '@components.sheet.order_view_factory'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@components.sheet.billing_info_guesser'
 
     components.sheet.tagged_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser
         arguments:
             - '@components.sheet.template_factory'
+    components.sheet.billing_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
+        arguments:
+            - '@components.sheet.tagged_info_guesser'

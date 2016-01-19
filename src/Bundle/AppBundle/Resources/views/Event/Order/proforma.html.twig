@@ -17,22 +17,14 @@
         </div>
         <div class="col-md-5">
             <h2>Informations destinataire :</h2>
-            {% if proforma.billingView.data['5645e534daa0b'] is defined %}
-                <p>{{ proforma.billingView.data['5645e534daa0b'] }}</p>
-            {% endif %}
-            {% if proforma.billingView.data['5645e4242d3df'] is defined %}
-                <p>{{ proforma.billingView.data['5645e4242d3df'] }}</p>
-            {% endif %}
-            {% if proforma.billingView.data['5645e534daa0b'] is defined and proforma.billingView.data['5645e5f35a9e0'] is defined and proforma.billingView.data['5645e6067f46a'] is defined and proforma.billingView.data['5645e5fd8f6a7'] is defined %}
-                <p>
-                    {{ proforma.billingView.data['5645e534daa0b'] }}<br>
-                    {{ proforma.billingView.data['5645e5f35a9e0'] }} {{ proforma.billingView.data['5645e6067f46a'] }}<br>
-                    {{ proforma.billingView.data['5645e5fd8f6a7']|country }}
-                </p>
-            {% endif %}
-            {% if proforma.billingView.data['5645e610e0e1b'] is defined %}
-                <p>{{ proforma.billingView.template['5645e610e0e1b']['label'][app.request.locale] }}: {{ proforma.billingView.data['5645e610e0e1b'] }}</p>
-            {% endif %}
+            <p>{{ proforma.billingView.organization }}</p>
+            <p>{{ proforma.billingView.name }}</p>
+            <p>
+                {{ proforma.billingView.address }}<br>
+                {{ proforma.billingView.zipcode }} {{ proforma.billingView.city }}<br>
+                {{ proforma.billingView.country|country }}
+            </p>
+            <p>N° de TVA intracommunautaire : {{ proforma.billingView.vat_number }}</p>
         </div>
     </div>
     <div class="row">

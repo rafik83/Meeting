@@ -13,24 +13,80 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 class BillingView
 {
     /**
-     * @var array
+     * @var string
      */
-    public $template;
+    public $name;
 
     /**
-     * @var array
+     * @var string
      */
-    public $data;
+    public $address;
+
+    /**
+     * @var string
+     */
+    public $city;
+
+    /**
+     * @var string
+     */
+    public $zipcode;
+
+    /**
+     * @var string
+     */
+    public $country;
+
+    /**
+     * @var string
+     */
+    public $phone;
+
+    /**
+     * @var string
+     */
+    public $email;
+
+    /**
+     * @var string
+     */
+    public $organization;
+
+    /**
+     * @var string
+     */
+    public $vat_number;
+
+    /**
+     * @var string
+     */
+    public $extra;
 
     /**
      * BillingView constructor.
      *
-     * @param array $template
-     * @param array $data
+     * @param string $name
+     * @param string $address
+     * @param string $city
+     * @param string $zipcode
+     * @param string $country
+     * @param string $phone
+     * @param string $email
+     * @param string $organization
+     * @param string $vat_number
+     * @param string $extra
      */
-    public function __construct(array $template, array $data)
+    public function __construct($name, $address, $city, $zipcode, $country, $phone, $email, $organization, $vat_number, $extra)
     {
-        $this->template = $template;
-        $this->data     = $data;
+        $this->name         = $name;
+        $this->address      = $address;
+        $this->city         = $city;
+        $this->zipcode      = $zipcode;
+        $this->country      = $country;
+        $this->phone        = $phone;
+        $this->email        = $email;
+        $this->organization = $organization;
+        $this->vat_number   = $vat_number;
+        $this->extra        = $extra;
     }
 }
