@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Sheet\SearchQueryBuilder;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -30,15 +32,25 @@ class SheetRepository implements SheetRepositoryInterface
     private $typeRepository;
 
     /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    /**
      * SheetRepository constructor.
      *
      * @param EntityManager           $entityManager
      * @param TypeRepositoryInterface $typeRepository
+     * @param PaginatorInterface      $paginator
      */
-    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        TypeRepositoryInterface $typeRepository,
+        PaginatorInterface $paginator
+    ) {
         $this->entityManager  = $entityManager;
         $this->typeRepository = $typeRepository;
+        $this->paginator      = $paginator;
     }
 
     /**
@@ -56,6 +68,25 @@ class SheetRepository implements SheetRepositoryInterface
     public function set(Sheet $sheet)
     {
         $this->entityManager->flush($sheet);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($page, $limit, Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, type, typeTranslation')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event)
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.owner = TRUE');
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit);
     }
 
     /**

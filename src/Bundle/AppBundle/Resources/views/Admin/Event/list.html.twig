@@ -19,6 +19,7 @@
                         <a href="{{ path('admin_category_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Catégories</a>
                         <a href="{{ path('admin_meeting_request_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Demandes de RDV</a>
                         <a href="{{ path('admin_meeting_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">RDV</a>
+                        <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Fiches</a>
                     </td>
                 </tr>
             {% endfor %}

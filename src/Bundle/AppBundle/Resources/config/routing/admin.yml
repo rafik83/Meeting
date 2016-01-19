@@ -143,3 +143,24 @@ admin_meeting_request_slots:
         request_id: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:slots }
+
+#
+# Sheet
+#
+admin_sheet:
+    path: /event/{id}/sheet
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Sheet:list }
+
+#
+# Order
+#
+admin_sheet_order_list:
+    path: /event/{id}/sheet/{sheet_id}/order
+    requirements:
+        id: \d+
+        sheet_id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Order:list }
