@@ -27,7 +27,7 @@ monolog:
             type:  console
 
 elao_error_notifier:
-    from: vimeet@proximum.com
+    from: "%mailer_error_from%"
     to: vimeet@elao.com
     handle404: true
     handleHTTPcodes: ~
