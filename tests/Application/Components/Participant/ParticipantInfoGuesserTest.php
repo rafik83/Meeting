@@ -42,9 +42,9 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet       = new Sheet($event, $type, [], []);
         $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
-            "563caf1d9b1cb" => "DUPOND",
-            "563caf2746398" => "Jean",
-            "563caf2f0ddbd" => "0909090909",
+            '563caf1d9b1cb' => 'DUPOND',
+            '563caf2746398' => 'Jean',
+            '563caf2f0ddbd' => '0909090909',
         ]);
 
         $participantInfoGuesser = new ParticipantInfoGuesser();
@@ -62,37 +62,38 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet       = new Sheet($event, $type, [], []);
         $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
-            "563caf1d9b1cb" => "DUPOND",
-            "563caf2746398" => "Jean",
-            "563caf2f0ddbd" => "0909090909",
+            '563caf1d9b1cb' => 'DUPOND',
+            '563caf2746398' => 'Jean',
+            '563caf2f0ddbd' => '0909090909',
         ]);
 
         $sheet->getType()->setParticipantTemplate([
-            "563caf1d9b1cb" => [
-                "type" => "lib_last_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Nom",
-                    "en" => "Lastname"
+            '563caf1d9b1cb' => [
+                'type' => 'lib_last_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Nom',
+                    'en' => 'Lastname'
+                ],
+                
+            ],
+            '563caf2746398' => [
+                'type' => 'lib_first_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Prénom',
+                    'en' => 'Firstname',
                 ],
             ],
-            "563caf2746398" => [
-                "type" => "lib_first_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Prénom",
-                    "en" => "Firstname",
-                ],
-            ],
-            "563caf2f0ddbd" => [
-                "type" => "lib_text",
-                "required" => true,
-                "private" => true,
-                "label" => [
-                    "fr" => "Téléphone",
-                    "en" => "Phone",
+            '563caf2f0ddbd' => [
+                'type' => 'lib_text',
+                'required' => true,
+                'private' => true,
+                'label' => [
+                    'fr' => 'Téléphone',
+                    'en' => 'Phone',
                 ],
             ],
         ]);
@@ -127,9 +128,9 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet       = new Sheet($event, $type, [], []);
         $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
-            "563caf1d9b1cb" => "DUPOND",
-            "563caf2746398" => "Jean",
-            "563caf2f0ddbd" => "0909090909",
+            '563caf1d9b1cb' => 'DUPOND',
+            '563caf2746398' => 'Jean',
+            '563caf2f0ddbd' => '0909090909',
         ]);
 
         $participantInfoGuesser = new ParticipantInfoGuesser();
@@ -147,37 +148,37 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet       = new Sheet($event, $type, [], []);
         $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
-            "563caf1d9b1cb" => "DUPOND",
-            "563caf2746398" => "Jean",
-            "563caf2f0ddbd" => "0909090909",
+            '563caf1d9b1cb' => 'DUPOND',
+            '563caf2746398' => 'Jean',
+            '563caf2f0ddbd' => '0909090909',
         ]);
 
         $sheet->getType()->setParticipantTemplate([
-            "563caf1d9b1cb" => [
-                "type" => "lib_last_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Nom",
-                    "en" => "Lastname"
+            '563caf1d9b1cb' => [
+                'type' => 'lib_last_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Nom',
+                    'en' => 'Lastname'
                 ],
             ],
-            "563caf2746398" => [
-                "type" => "lib_first_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Prénom",
-                    "en" => "Firstname",
+            '563caf2746398' => [
+                'type' => 'lib_first_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Prénom',
+                    'en' => 'Firstname',
                 ],
             ],
-            "563caf2f0ddbd" => [
-                "type" => "lib_text",
-                "required" => true,
-                "private" => true,
-                "label" => [
-                    "fr" => "Téléphone",
-                    "en" => "Phone",
+            '563caf2f0ddbd' => [
+                'type' => 'lib_text',
+                'required' => true,
+                'private' => true,
+                'label' => [
+                    'fr' => 'Téléphone',
+                    'en' => 'Phone',
                 ],
             ],
         ]);
@@ -212,37 +213,37 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet       = new Sheet($event, $type, [], []);
         $participant = new Participant($sheet, $user, [], true, true);
         $participant->setData([
-            "563caf1d9b1cb" => "DUPOND",
-            "563caf2746398" => "Jean",
-            "563caf2f0ddbd" => "0909090909",
+            '563caf1d9b1cb' => 'DUPOND',
+            '563caf2746398' => 'Jean',
+            '563caf2f0ddbd' => '0909090909',
         ]);
 
         $sheet->getType()->setParticipantTemplate([
-            "563caf1d9b1cb" => [
-                "type" => "lib_last_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Nom",
-                    "en" => "Lastname"
+            '563caf1d9b1cb' => [
+                'type' => 'lib_last_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Nom',
+                    'en' => 'Lastname'
                 ],
             ],
-            "563caf2746398" => [
-                "type" => "lib_first_name",
-                "required" => true,
-                "private" => false,
-                "label" => [
-                    "fr" => "Prénom",
-                    "en" => "Firstname",
+            '563caf2746398' => [
+                'type' => 'lib_first_name',
+                'required' => true,
+                'private' => false,
+                'label' => [
+                    'fr' => 'Prénom',
+                    'en' => 'Firstname',
                 ],
             ],
-            "563caf2f0ddbd" => [
-                "type" => "lib_text",
-                "required" => true,
-                "private" => true,
-                "label" => [
-                    "fr" => "Téléphone",
-                    "en" => "Phone",
+            '563caf2f0ddbd' => [
+                'type' => 'lib_text',
+                'required' => true,
+                'private' => true,
+                'label' => [
+                    'fr' => 'Téléphone',
+                    'en' => 'Phone',
                 ],
             ],
         ]);
