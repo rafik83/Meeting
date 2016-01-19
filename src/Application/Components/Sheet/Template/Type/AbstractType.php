@@ -16,18 +16,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractType implements TypeInterface
 {
-    const MARK_AS_PARTICIPANT_FIRSTNAME = 'participant_firstname';
-    const MARK_AS_PARTICIPANT_LASTNAME  = 'participant_lastname';
-    const MARK_AS_BILLING_ADDRESS       = 'billing_address';
-    const MARK_AS_BILLING_CITY          = 'billing_city';
-    const MARK_AS_BILLING_ZIPCODE       = 'billing_zipcode';
-    const MARK_AS_BILLING_COUNTRY       = 'billing_contry';
-    const MARK_AS_BILLING_PHONE         = 'billing_phone';
-    const MARK_AS_BILLING_EMAIL         = 'billing_email';
-    const MARK_AS_BILLING_ORGANIZATION  = 'billing_organization';
-    const MARK_AS_BILLING_VAT_NUMBER    = 'billing_vat_number';
-    const MARK_AS_BILLING_EXTRA         = 'billing_extra';
-    const MARK_AS_ORGANIZATION          = 'organization';
+    /**
+     * @var string
+     */
+    protected $name;
 
     /**
      * @var array
@@ -35,13 +27,31 @@ abstract class AbstractType implements TypeInterface
     protected $options = [];
 
     /**
+     * AbstractType constructor.
+     *
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setRequired(['label', 'type']);
-        $optionsResolver->setDefaults(['required' => false]);
-        $optionsResolver->setDefined(['description', 'mark_as']);
+        $optionsResolver->setDefaults(['required' => false, 'private' => false, 'tags' => []]);
+        $optionsResolver->setDefined(['description']);
     }
 
     /**
@@ -50,6 +60,8 @@ abstract class AbstractType implements TypeInterface
     public function setOptions(array $options)
     {
         $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -93,5 +105,21 @@ abstract class AbstractType implements TypeInterface
     public function isRequired()
     {
         return (bool) $this->getOption('required');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        return (array) $this->getOption('tags');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasTag($tag)
+    {
+        return in_array($tag, $this->getTags());
     }
 }

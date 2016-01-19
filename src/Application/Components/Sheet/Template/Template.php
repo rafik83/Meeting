@@ -21,14 +21,13 @@ class Template
     private $groups = [];
 
     /**
-     * @param string $name
      * @param Group  $group
      *
      * @return Template
      */
-    public function addGroup($name, Group $group)
+    public function addGroup(Group $group)
     {
-        $this->groups[$name] = $group;
+        $this->groups[$group->getName()] = $group;
 
         return $this;
     }
@@ -39,7 +38,7 @@ class Template
      * @return Group
      * @throws UnknownGroupException
      */
-    public function getGroup($name)
+    public function getGroup($name = 'default')
     {
         if (!isset($this->groups[$name])) {
             throw new UnknownGroupException($name, array_keys($this->groups));
@@ -70,5 +69,19 @@ class Template
         if (false) {
             throw new InvalidDataException();
         }
+    }
+
+    /**
+     * @param string $tag
+     *
+     * @return array
+     */
+    public function getTypesByTag($tag)
+    {
+        return array_reduce($this->getGroups(), function (array $carry, Group $group) use ($tag) {
+            return array_values(array_merge($carry, array_filter($group->getTypes(), function (TypeInterface $type) use ($tag) {
+                return $type->hasTag($tag);
+            })));
+        }, []);
     }
 }

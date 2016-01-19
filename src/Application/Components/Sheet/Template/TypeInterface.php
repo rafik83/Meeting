@@ -44,4 +44,21 @@ interface TypeInterface
      * @return bool
      */
     public function isRequired();
+
+    /**
+     * @return array
+     */
+    public function getTags();
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function hasTag($tag);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

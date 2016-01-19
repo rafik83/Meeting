@@ -54,41 +54,52 @@ class TemplateFactory
         $template = new Template();
 
         foreach ($templateData as $groupName => $groupTemplate) {
-            $template->addGroup($groupName, $this->createGroupFromArray($groupTemplate));
+            if (!isset($groupTemplate['template'])) {
+                return $this->createTemplateFromArray([
+                    'default' => [
+                        'label'    => 'Default',
+                        'template' => $templateData,
+                    ],
+                ]);
+            }
+
+            $template->addGroup($this->createGroupFromArray($groupName, $groupTemplate));
         }
 
         return $template;
     }
 
     /**
-     * @param array $templateData
+     * @param string $groupName
+     * @param array  $templateData
      *
      * @return Group
      */
-    private function createGroupFromArray(array $templateData)
+    private function createGroupFromArray($groupName, array $templateData)
     {
         $resolver = new OptionsResolver();
-        $group    = new Group();
+        $group    = new Group($groupName);
         $group->configureOptions($resolver);
         $group->setOptions($resolver->resolve($templateData));
 
         foreach ($templateData['template'] as $typeName => $typeTemplate) {
-            $group->addType($typeName, $this->createTypeFromArray($typeTemplate));
+            $group->addType($this->createTypeFromArray($typeName, $typeTemplate));
         }
 
         return $group;
     }
 
     /**
-     * @param array $templateData
+     * @param string $typeName
+     * @param array  $templateData
      *
      * @return TypeInterface
      * @throws UnknownTypeException
      */
-    private function createTypeFromArray(array $templateData)
+    private function createTypeFromArray($typeName, array $templateData)
     {
         $resolver = new OptionsResolver();
-        $type     = $this->getTypeInstance($templateData['type']);
+        $type     = $this->getTypeInstance($typeName, $templateData['type']);
         $type->configureOptions($resolver);
         $type->setOptions($resolver->resolve($templateData));
 
@@ -96,17 +107,18 @@ class TemplateFactory
     }
 
     /**
+     * @param string $typeName
      * @param string $type
      *
      * @return TypeInterface
      * @throws UnknownTypeException
      */
-    private function getTypeInstance($type)
+    private function getTypeInstance($typeName, $type)
     {
         if (!isset($this->types[$type])) {
             throw new UnknownTypeException($type, array_keys($this->types));
         }
 
-        return new $this->types[$type]();
+        return new $this->types[$type]($typeName);
     }
 }

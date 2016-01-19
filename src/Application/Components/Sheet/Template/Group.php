@@ -17,6 +17,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class Group
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var TypeInterface[]
      */
     private $types = [];
@@ -25,6 +30,26 @@ class Group
      * @var array
      */
     private $options = [];
+
+    /**
+     * Group constructor.
+     *
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * {@inheritdoc}
@@ -41,15 +66,20 @@ class Group
     public function setOptions(array $options)
     {
         $this->options = $options;
+
+        return $this;
     }
 
     /**
-     * @param string        $name
      * @param TypeInterface $type
+     *
+     * @return Group
      */
-    public function addType($name, TypeInterface $type)
+    public function addType(TypeInterface $type)
     {
-        $this->types[$name] = $type;
+        $this->types[$type->getName()] = $type;
+
+        return $this;
     }
 
     /**
