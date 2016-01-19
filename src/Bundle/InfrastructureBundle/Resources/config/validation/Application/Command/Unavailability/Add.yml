@@ -14,6 +14,6 @@ Proximum\Vimeet\Application\Command\Unavailability\Add:
             - NotBlank: ~
             - Count:
                 min: 1
-                minMessage: Vous devez choisir au moins {{ limit }} participant
+                minMessage: You must select at least {{ limit }} participants
             - All:
                 - Type: { type: object }
