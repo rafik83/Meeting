@@ -19,7 +19,7 @@ parameters:
     mailer_error_host:      127.0.0.1
     mailer_error_user:      ~
     mailer_error_password:  ~
-    mailer_error_from:      ~
+    mailer_error_from:      "vimeet@proximum.com"
 
 
     # A secret key that's used to generate certain security-related tokens
