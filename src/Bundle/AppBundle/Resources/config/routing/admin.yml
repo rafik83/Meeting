@@ -197,3 +197,19 @@ admin_sheet_order_update_row:
         row: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:updateRow }
+
+#
+# Transaction
+#
+admin_sheet_transaction_create:
+    path: /sheet/{id}/transaction/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:create }
+admin_sheet_transaction_update:
+    path: /sheet/{id}/transaction/{transaction_id}/update
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
