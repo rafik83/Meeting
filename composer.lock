@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "954aed408ab984e22dcecddf7e90ad7d",
-    "content-hash": "dcbc5ce0e568184a5ba6d89ddb623ddc",
+    "hash": "8d04ce32ec1f8d4129d560f65dec1716",
+    "content-hash": "9895b0f196b518432da25ed18f07d482",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -885,6 +885,61 @@
                 "orm"
             ],
             "time": "2015-11-23 12:44:25"
+        },
+        {
+            "name": "elao/error-notifier-bundle",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elao/ErrorNotifierBundle.git",
+                "reference": "b851c7c0b66a365a12a171ceac4aa824614807fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elao/ErrorNotifierBundle/zipball/b851c7c0b66a365a12a171ceac4aa824614807fe",
+                "reference": "b851c7c0b66a365a12a171ceac4aa824614807fe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "swiftmailer/swiftmailer": "~5.0",
+                "symfony/console": "~2.3|~3.0",
+                "symfony/framework-bundle": "~2.3|~3.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elao\\ErrorNotifierBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elao Team",
+                    "homepage": "http://www.elao.com"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "http://github.com/Elao/ErrorNotifierBundle/contributors"
+                }
+            ],
+            "description": "This bundle send html mail when an error appear",
+            "homepage": "http://github.com/Elao/ErrorNotifierBundle",
+            "keywords": [
+                "bundle",
+                "elao",
+                "error",
+                "notifier"
+            ],
+            "time": "2015-12-21 14:56:20"
         },
         {
             "name": "elao/form-bundle",
@@ -3028,7 +3083,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/05e3b3116eaf525ce1d4bbd0374ecb65df3e3d64",
+                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/2650f5420e713e3807c7f09a07370a4f48367bf9",
                 "reference": "05e3b3116eaf525ce1d4bbd0374ecb65df3e3d64",
                 "shasum": ""
             },
