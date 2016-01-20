@@ -30,11 +30,11 @@ class CartBuilder
      * @param array    $productData
      * @param string   $locale
      *
-     * @return Cart
+     * @return CartRecap
      */
     public function generate(Template $template, array $productData, $locale)
     {
-        $cart = new Cart(0);
+        $cart = new CartRecap(0);
 
         if (empty($productData)) {
             return $cart;

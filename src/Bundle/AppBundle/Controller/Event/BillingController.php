@@ -11,12 +11,11 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use DateTime;
-use Proximum\Vimeet\Application\Command\Billing\CreateOrder;
 use Proximum\Vimeet\Application\Command\Billing\Update;
+use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Billing\BillingUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -86,21 +85,26 @@ class BillingController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
+        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
 
-        $createOrder = new CreateOrder(
+        if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {
+            throw $this->createNotFoundException('No cart available to complete payment');
+        }
+
+        $createOrder = new Create(
+            $cart,
             $sheet,
-            Order::STATE_UNPAID,
-            $sheet->getType()->getProFormaTemplate(),
-            $sheet->getPackageData(),
-            $sheet->getTypePackageTemplate(),
+            $cart->getData(),
+            $cart->getTemplate(),
             $sheet->getBillingData(),
+            $sheet->getType()->getEvent()->getBillingTemplate(),
             new DateTime()
         );
         $form = $this->createForm(ChoosePaymentModeType::class, $createOrder);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.billing.create_order_handler')
+            $this->get('vimeet_infrastructure.vimeet.application.command.order.create_handler')
                 ->handle($createOrder);
 
             $this->addFlash('success', 'flash.package.payment_mode.success');

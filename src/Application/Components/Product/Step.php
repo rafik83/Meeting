@@ -48,7 +48,7 @@ class Step
      */
     public function addProduct(ProductInterface $product)
     {
-        $this->products[] = $product;
+        $this->products[$product->getKey()] = $product;
         $product->setStep($this);
     }
 
@@ -153,5 +153,21 @@ class Step
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasProducts()
+    {
+        return !empty($this->products);
+    }
+
+    /**
+     * @param ProductInterface $product
+     */
+    public function removeProduct(ProductInterface $product)
+    {
+        unset ($this->products[$product->getKey()]);
     }
 }

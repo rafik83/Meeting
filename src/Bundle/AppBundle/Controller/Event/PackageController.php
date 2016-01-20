@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Command\Package\AddProducts;
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -43,19 +45,24 @@ class PackageController extends BaseController
         $this->denyAccessPackageStepNotExists($sheet, $step);
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
+        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromSheet($sheet);
+            ->createFromCart($cart);
+
         $stepObject = $template->getStep($step);
 
         if ($stepObject === null) {
             throw $this->createNotFoundException();
         }
 
-        $updateStep = new UpdateStep($sheet, $step);
+        $updateStep = new UpdateStep($cart, $sheet, $step);
         $form       = $this->createForm(UpdateStepType::class, $updateStep, [
             'template' => $sheet->getTypePackageTemplate()[$step]['template'],
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
+            'cart'     => $cart,
             'step'     => $stepObject,
         ]);
         $form->add('submit', SubmitType::class);
@@ -107,22 +114,83 @@ class PackageController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
-        $this->denyAccessAfterFirstOrderGenerated($sheet);
 
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromSheet($sheet);
-        $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate(
-                $template,
-                $sheet->getPackageData(),
-                $request->getLocale()
-            )
-        ;
+        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
+
+        if ($cart === null) {
+            throw $this->createNotFoundException('Cart not available');
+        }
+
+        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'cart'      => $cart,
+            'cartView'  => $cartView,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     *
+     * @return Response
+     */
+    public function addProductsAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        $cart = $this
+            ->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
+        $template = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromCart($cart);
+
+        $addProducts = new AddProducts($cart, $sheet);
+        $form        = $this->createForm(AddProductsType::class, $addProducts, [
+            'productTemplate' => $template,
+            'packageTemplate' => $sheet->getTypePackageTemplate(),
+            'cart'            => $cart,
+            'sheet'           => $sheet,
+            'locale'          => $request->getLocale(),
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this
+                    ->get('vimeet_infrastructure.vimeet.application.command.package.add_products_handler')
+                    ->handle($addProducts);
+
+                $this->addFlash('success', 'flash.package.add_products.success');
+
+                return $this->redirectToRoute(
+                    'event_sheet_package_cart',
+                    [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                    ]
+                );
+            } catch (BoughtParticipantAlreadyAddedException $exception) {
+                $this->addErrorOnFormPackage(
+                    $exception,
+                    $addProducts->packageData,
+                    $form
+                );
+            } catch (ForgotToAddQuantityException $exception) {
+                $this->addErrorOnFormPackage(
+                    $exception,
+                    $addProducts->packageData,
+                    $form
+                );
+            }
+        }
+
+        return $this->render('VimeetAppBundle:Event/Package:products.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'form'      => $form->createView(),
         ]);
     }
 

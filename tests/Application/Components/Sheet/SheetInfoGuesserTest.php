@@ -12,6 +12,8 @@ namespace Tests\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -26,7 +28,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
 
@@ -35,7 +37,9 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantInfo($participant)->shouldBeCalled()->willReturn('');
 
-        $sheetInfoGuesser = new SheetInfoGuesser($participantInfoGuesser->reveal());
+        $taggedInfoGuesser = new TaggedInfoGuesser(new TemplateFactory());
+
+        $sheetInfoGuesser = new SheetInfoGuesser($taggedInfoGuesser, $participantInfoGuesser->reveal());
         $sheetInfoResult  = $sheetInfoGuesser->guessSheetInfo($sheet);
 
         $this->assertEquals($expectedSheetInfo, $sheetInfoResult);
@@ -47,7 +51,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
 
@@ -56,7 +60,9 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantInfo($participant)->shouldBeCalled()->willReturn('DUPONT Jean');
 
-        $sheetInfoGuesser = new SheetInfoGuesser($participantInfoGuesser->reveal());
+        $taggedInfoGuesser = new TaggedInfoGuesser(new TemplateFactory());
+
+        $sheetInfoGuesser = new SheetInfoGuesser($taggedInfoGuesser, $participantInfoGuesser->reveal());
         $sheetInfoResult  = $sheetInfoGuesser->guessSheetInfo($sheet);
 
         $this->assertEquals($expectedSheetInfo, $sheetInfoResult);
@@ -69,9 +75,12 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], []);
         $type->setSheetTemplate([
             'azer' => [
+                'label' => 'foobar',
                 'template' => [
                     'azert' => [
-                        'type' => 'lib_organisation',
+                        'label' => 'Organization',
+                        'type'  => 'lib_text',
+                        'tags'  => ['sheet_organization'],
                     ],
                 ],
             ],
@@ -87,7 +96,9 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantInfo()->shouldNotBeCalled();
 
-        $sheetInfoGuesser = new SheetInfoGuesser($participantInfoGuesser->reveal());
+        $taggedInfoGuesser = new TaggedInfoGuesser(new TemplateFactory());
+
+        $sheetInfoGuesser = new SheetInfoGuesser($taggedInfoGuesser, $participantInfoGuesser->reveal());
         $sheetInfoResult  = $sheetInfoGuesser->guessSheetInfo($sheet);
 
         $this->assertEquals($expectedSheetInfo, $sheetInfoResult);

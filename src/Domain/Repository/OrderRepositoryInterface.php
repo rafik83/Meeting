@@ -21,6 +21,11 @@ interface OrderRepositoryInterface
     public function add(Order $order);
 
     /**
+     * @param Order $order
+     */
+    public function set(Order $order);
+
+    /**
      * @param int   $page
      * @param int   $limit
      * @param Sheet $sheet

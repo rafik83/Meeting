@@ -37,14 +37,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if buttonParticipant.canBuyParticipant %}
-            <a href="{{ path('event_sheet_buy_participant', {
-                'id': sheetDataView.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-default">
-                {{ 'event.sheet.block.buy_participant.title'|trans }}
-            </a>
-        {% endif %}
     </div>
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {
@@ -65,14 +57,26 @@
                 {{ 'event.sheet.package.step.next'|trans }}
             </a>
         </div>
-    {% elseif sheetDataView.orders is not empty%}
+    {% elseif sheetDataView.orders is not empty %}
         <div class="text-center">
+            <a href="{{ path('event_sheet_summary', {
+                'id': sheetDataView.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">
+                {{ 'event.sheet.summary.title'|trans }}
+            </a>
+
             <a href="{{ path('event_sheet_list_orders', {
                 'id': sheetDataView.id,
                 'subdomain': app.request.attributes.get('subdomain')
             }) }}" class="btn btn-primary">
                 {{ 'event.sheet.listOrders.title'|trans }}
             </a>
+
+            <a href="{{ path('event_sheet_package_products', {
+                'id': sheetDataView.id,
+                'subdomain': app.request.attributes.get('subdomain')
+            }) }}" class="btn btn-primary">{{ 'event.sheet.package.products.title'|trans }}</a>
         </div>
     {% endif %}
 {% endblock %}

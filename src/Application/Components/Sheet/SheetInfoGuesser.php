@@ -11,17 +11,30 @@
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetInfoGuesser
 {
     /**
+     * @var TaggedInfoGuesser
+     */
+    private $taggedInfoGuesser;
+
+    /**
      * @var ParticipantInfoGuesser
      */
     private $participantInfoGuesser;
 
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
+    /**
+     * SheetInfoGuesser constructor.
+     *
+     * @param TaggedInfoGuesser      $taggedInfoGuesser
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     */
+    public function __construct(TaggedInfoGuesser $taggedInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
     {
+        $this->taggedInfoGuesser      = $taggedInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
@@ -32,15 +45,11 @@ class SheetInfoGuesser
      */
     public function guessOwnerInfo(Sheet $sheet)
     {
-        $participants = $sheet->getParticipants();
-
-        foreach ($participants as $participant) {
-            if ($participant->isOwner()) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
-            }
+        try {
+            return $this->participantInfoGuesser->guessParticipantInfo($sheet->getOwner());
+        } catch (\RuntimeException $exception) {
+            return '';
         }
-
-        return '';
     }
 
     /**
@@ -50,28 +59,20 @@ class SheetInfoGuesser
      */
     public function guessSheetInfo(Sheet $sheet)
     {
-        $sheetTemplate = $sheet->getTypeSheetTemplate();
-        $sheetData     = $sheet->getData();
+        $template = $sheet->getTypeSheetTemplate();
+        $data     = $sheet->getData();
+        $info     = $this->taggedInfoGuesser->guess($template, $data, Tag::SHEET_ORGANIZATION);
 
-        foreach ($sheetTemplate as $blockKey => $block) {
-            if (isset($block['template'])) {
-                foreach ($block['template'] as $templateKey => $template) {
-                    if (isset($template['type'])
-                        && $template['type'] === 'lib_organisation'
-                        && isset($sheetData[$blockKey][$templateKey])
-                    ) {
-                        return $sheetData[$blockKey][$templateKey];
-                    }
-                }
-            }
+        if (!empty($info)) {
+            return $info[0];
         }
 
-        $ownerInfo = $this->guessOwnerInfo($sheet);
+        $owner = $this->guessOwnerInfo($sheet);
 
-        if (empty($ownerInfo)) {
-            return sprintf('#%s', $sheet->getId());
-        } else {
-            return $ownerInfo;
+        if (!empty($owner)) {
+            return $owner;
         }
+
+        return sprintf('#%s', $sheet->getId());
     }
 }

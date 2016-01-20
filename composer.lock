@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8901aeee357fed56c2a80cecb77403b5",
-    "content-hash": "16528574a24a5c8abfa5dac9d5887512",
+    "hash": "8d04ce32ec1f8d4129d560f65dec1716",
+    "content-hash": "9895b0f196b518432da25ed18f07d482",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2682,16 +2682,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.8.x-dev",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310"
+                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/617bf78b1770f5436e7716deac11220e291f5f0e",
-                "reference": "59915652862ef7c66b29eedb5805f79f37dcf310",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
+                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
                 "shasum": ""
             },
             "require": {
@@ -2811,7 +2811,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-01-04 16:50:38"
+            "time": "2016-01-14 12:01:11"
         },
         {
             "name": "twig/twig",
@@ -2886,7 +2886,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/c6dcbe4511e5881b3d62e77902bcae7b80a39ae9",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/718159921b1d844b8805b5ab2e7d1be34ca323cb",
                 "reference": "2059cbe4bb8055c8555fa3365c6ea3b4b30288f5",
                 "shasum": ""
             },
@@ -3083,7 +3083,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/05e3b3116eaf525ce1d4bbd0374ecb65df3e3d64",
+                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/2650f5420e713e3807c7f09a07370a4f48367bf9",
                 "reference": "05e3b3116eaf525ce1d4bbd0374ecb65df3e3d64",
                 "shasum": ""
             },
@@ -5060,7 +5060,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "symfony/symfony": 20,
         "sonata-project/intl-bundle": 20,
         "behat/behat": 20,
         "knplabs/friendly-contexts": 20,

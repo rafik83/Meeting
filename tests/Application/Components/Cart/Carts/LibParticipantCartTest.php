@@ -35,7 +35,7 @@ class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
         $product->setOptions([]);
         $dataValue = [
             "participant"        => true,
-            "participant_bought" => 2,
+            "quantity" => 2,
         ];
         $locale    = 'fr';
 
@@ -64,7 +64,7 @@ class LibParticipantCartTest extends \PHPUnit_Framework_TestCase
 
         $dataValue = [
             'participant'        => true,
-            'participant_bought' => 3,
+            'quantity' => 3,
         ];
 
         $result = new CartRow('Ajouter des participants', 3, 400);

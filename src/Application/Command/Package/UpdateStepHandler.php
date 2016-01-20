@@ -12,21 +12,21 @@ namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 
 class UpdateStepHandler
 {
     /**
-     * @var SheetRepositoryInterface
+     * @var CartRepositoryInterface
      */
-    private $sheetRepository;
+    private $cartRepository;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
+     * @param CartRepositoryInterface  $cartRepository
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    public function __construct(CartRepositoryInterface $cartRepository)
     {
-        $this->sheetRepository = $sheetRepository;
+        $this->cartRepository  = $cartRepository;
     }
 
     /**
@@ -37,21 +37,21 @@ class UpdateStepHandler
      */
     public function handle(UpdateStep $updateStep)
     {
-        $packageData = $updateStep->sheet->getPackageData();
+        $packageData = $updateStep->cart->getData();
 
         foreach ($updateStep->packageData as $elementKey => $element) {
             if (isset($element['participant'])) {
                 if ($element['participant']) {
-                    if (!isset($updateStep->packageData[$elementKey]['participant_bought'])) {
+                    if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
                         throw new ForgotToAddQuantityException();
                     }
 
-                    if (!isset($packageData[$updateStep->step][$elementKey]['participant_bought'])) {
-                        $packageData[$updateStep->step][$elementKey]['participant_bought'] = 0;
+                    if (!isset($packageData[$updateStep->step][$elementKey]['quantity'])) {
+                        $packageData[$updateStep->step][$elementKey]['quantity'] = 0;
                     }
 
                     $boughtAndAddedParticipant = count($updateStep->sheet->getParticipants()) - $updateStep->sheet->getType()->getFreeParticipant();
-                    if ($updateStep->packageData[$elementKey]['participant_bought'] < $boughtAndAddedParticipant) {
+                    if ($updateStep->packageData[$elementKey]['quantity'] < $boughtAndAddedParticipant) {
                         throw new BoughtParticipantAlreadyAddedException();
                     }
                 } else {
@@ -60,7 +60,7 @@ class UpdateStepHandler
                     }
                 }
             } elseif (isset($element['planning']) && $element['planning']) {
-                if (!isset($updateStep->packageData[$elementKey]['planning_bought'])) {
+                if (!isset($updateStep->packageData[$elementKey]['quantity'])) {
                     throw new ForgotToAddQuantityException();
                 }
             }
@@ -68,8 +68,8 @@ class UpdateStepHandler
 
         $packageData[$updateStep->step] = $updateStep->packageData;
 
-        $updateStep->sheet->setPackageData($packageData);
+        $updateStep->cart->setData($packageData);
 
-        $this->sheetRepository->set($updateStep->sheet);
+        $this->cartRepository->set($updateStep->cart);
     }
 }

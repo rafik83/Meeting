@@ -9,7 +9,6 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: @template_exhibitor->sheet
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
-        proFormaTemplate: @template_exhibitor->proForma
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -21,7 +20,6 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: @template_exhibitor->sheet
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
-        proFormaTemplate: @template_exhibitor->proForma
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -34,7 +32,6 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: @template_visitor->package
         previewTemplate: @template_visitor->preview
         viewTemplate: @template_visitor->view
-        proFormaTemplate: @template_visitor->proForma
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -47,7 +44,6 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: @template_visitor->package
         previewTemplate: @template_visitor->preview
         viewTemplate: @template_visitor->view
-        proFormaTemplate: @template_visitor->proForma
 
     type_institute_carnot:
         __construct: ["@event_rdv_carnot_2016"]
@@ -59,7 +55,6 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: @template_exhibitor->sheet
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
-        proFormaTemplate: @template_exhibitor->proForma
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type_exposant_fr:

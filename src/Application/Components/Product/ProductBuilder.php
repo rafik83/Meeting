@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Components\Product\Products\LibOptionProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\LibParticipantProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\LibPlanningProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
+use Proximum\Vimeet\Domain\Model\Cart;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,7 +31,7 @@ class ProductBuilder
      */
     public function createFromSheet(Sheet $sheet)
     {
-        return $this->create($sheet->getTypePackageTemplate());
+        return $this->create($sheet->getTypePackageTemplate(), $sheet->getType());
     }
 
     /**
@@ -39,15 +41,36 @@ class ProductBuilder
      */
     public function createFromType(Type $type)
     {
-        return $this->create($type->getPackageTemplate());
+        return $this->create($type->getPackageTemplate(), $type);
     }
 
     /**
-     * @param array $packageTemplate
+     * @param Cart $cart
      *
      * @return Template
      */
-    public function create(array $packageTemplate)
+    public function createFromCart(Cart $cart)
+    {
+        return $this->create($cart->getTemplate(), $cart->getSheet()->getType());
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return Template
+     */
+    public function createFromOrder(Order $order)
+    {
+        return $this->create($order->getPackageTemplate(), $order->getSheet()->getType());
+    }
+
+    /**
+     * @param array     $packageTemplate
+     * @param Type|null $type
+     *
+     * @return Template
+     */
+    private function create(array $packageTemplate, Type $type = null)
     {
         $template = new Template();
 
@@ -62,7 +85,7 @@ class ProductBuilder
             if (isset($stepTemplate['template'])) {
                 foreach ($stepTemplate['template'] as $productKey => $productTemplate) {
                     if (isset($productTemplate['type'])) {
-                        $product = $this->createProduct($productTemplate, $productKey);
+                        $product = $this->createProduct($productTemplate, $productKey, $type);
 
                         $step->addProduct($product);
                     }
@@ -82,12 +105,13 @@ class ProductBuilder
     /**
      * Create a product from the productTemplate and the key
      *
-     * @param array  $productTemplate
-     * @param string $productKey
+     * @param array $productTemplate
+     * @param string    $productKey
+     * @param Type|null $type
      *
      * @return ProductInterface
      */
-    private function createProduct(array $productTemplate, $productKey)
+    private function createProduct(array $productTemplate, $productKey, Type $type = null)
     {
         $product = $this->factory($productTemplate['type'], $productKey);
 
@@ -110,6 +134,15 @@ class ProductBuilder
             }
         }
 
+        if (null !== $type && $product instanceof  LibParticipantProduct) {
+            $product->setMaxParticipant($type->getMaxParticipant());
+            $product->setFreeParticipant($type->getFreeParticipant());
+        }
+
+        if (null !== $type && $product instanceof  LibPlanningProduct) {
+            $product->setMaxPlaning($type->getMaxPlanning());
+        }
+
         return $product;
     }
 
@@ -128,12 +161,10 @@ class ProductBuilder
 
                 foreach ($product->getOptionsIncludedIn() as $productThatIncludekey => $includedQuantity) {
                     $path               = explode('.', $productThatIncludekey);
-                    $productThatInclude = null;
+                    $productThatInclude = $template->getStep($path[0])->getProduct($path[1]);
 
-                    if (count($path) === 3) {
-                        $productThatInclude = $template->getStep($path[0])->getProduct($path[1])->getChoice($path[2]);
-                    } else {
-                        $productThatInclude = $template->getStep($path[0])->getProduct($path[1]);
+                    if (count($path) === 3 && $productThatInclude instanceof LibChoiceWithDescriptionProduct) {
+                        $productThatInclude = $productThatInclude->getChoice($path[2]);
                     }
 
                     if (null !== $productThatInclude) {
@@ -157,6 +188,7 @@ class ProductBuilder
         $mapping = [
             'choice_with_description' => LibChoiceWithDescriptionProduct::class,
             'lib_option'              => LibOptionProduct::class,
+            'added_row'               => LibOptionProduct::class,
             'lib_planning'            => LibPlanningProduct::class,
             'lib_participant'         => LibParticipantProduct::class,
         ];
