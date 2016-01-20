@@ -5,34 +5,64 @@
 
     <h2>Liste des commandes</h2>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Référence</th>
-            <th>Date</th>
-            <th>Mode de paiement</th>
-            <th>Statut</th>
-            <th>Montant total</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for order in orders_views %}
+    {% if orders is empty %}
+        <p class="alert alert-info">Aucune commande pour cette fiche.</p>
+    {% else %}
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ order.reference }}</td>
-                <td>{{ order.date|date('d/m/Y H:i') }}</td>
-                <td>{{ order.paymentMode }}</td>
-                <td>{{ order.state }}</td>
-                <td>{{ order.total|number_format(2, ',', ' ') }} € HT</td>
-                <td>
-                    <a href="{{ path('admin_sheet_order_edit', { 'id': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                </td>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Mode de paiement</th>
+                <th>Montant</th>
+                <th></th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.reference }}</td>
+                        <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ order.paymentMode }}</td>
+                        <td>{{ order.total|number_format(2, ',', ' ') }} € HT</td>
+                        <td>
+                            <a href="{{ path('admin_sheet_order_edit', { 'id': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <h2>Liste des transactions</h2>
+
+    {% if transactions is empty %}
+        <p class="alert alert-info">Aucune transaction pour cette fiche. <a href="" class="btn btn-success">Ajouter une transaction</a></p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Mode de paiement</th>
+                <th>Montant</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.reference }}</td>
+                        <td>{{ transaction.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ transaction.paymentMode }}</td>
+                        <td>{{ transaction.amount|number_format(2, ',', ' ') }} € HT</td>
+                        <td>
+                            <a href="{#{{ path('admin_sheet_transaction_edit', { 'id': order.id }) }}#}" class="btn btn-primary btn-sm">Modifier</a>
+                            <a href="{#{{ path('admin_sheet_transaction_edit', { 'id': order.id }) }}#}" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <div class="text-left">
         <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour aux fiches</a>

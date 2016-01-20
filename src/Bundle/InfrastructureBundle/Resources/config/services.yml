@@ -102,6 +102,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.transaction:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TransactionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
