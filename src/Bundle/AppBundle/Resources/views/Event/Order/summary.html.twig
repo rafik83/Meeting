@@ -5,39 +5,7 @@
 {% block content %}
     <h2>{{ 'event.sheet.summary.title'|trans }}</h2>
 
-    <table class="table table-condensed">
-        <thead>
-        <th colspan="2">{{ 'event.sheet.cart.column.product'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.cart.column.unitPrice'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.cart.column.quantity'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.cart.column.total'|trans }}</th>
-        </thead>
-        <tbody>
-        {% for step in summary.cartSteps  %}
-            {% if step.cartRows is defined and step.cartRows|length > 0 %}
-                <tr class="active">
-                    <th colspan="5">{{ step.label }}</th>
-                </tr>
-                {% for row in step.cartRows %}
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>{{ row.label }}</td>
-                        <td class="text-right">{{ row.unitPrice|number_format_currency('EUR') }}</td>
-                        <td class="text-right">{{ row.quantity }}</td>
-                        <td class="text-right">{{ row.subtotal|number_format_currency('EUR') }}</td>
-                    </tr>
-                    {% include 'VimeetAppBundle:Event/Order:summaryProductInclude.html.twig' with {'row': row} %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        {% if summary.total is defined %}
-            <tr class="info">
-                <th colspan="4">{{ 'event.sheet.cart.label.totalPrice'|trans }}</th>
-                <th class="text-right">{{ summary.total|number_format_currency('EUR') }}</th>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+    {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': summary }, false) }}
 
     <hr>
     <a href="{{ path('event_sheet', {

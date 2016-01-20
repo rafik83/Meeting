@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Exception\Order\NotAddedRowException;
+use Proximum\Vimeet\Domain\Model\Exception\Order\RowAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
 
 /**
  * "Commande"
@@ -34,11 +37,6 @@ class Order
      * @var string
      */
     private $state;
-
-    /**
-     * @var string
-     */
-    private $proFormaTemplate;
 
     /**
      * @var array
@@ -73,7 +71,6 @@ class Order
     /**
      * @param Sheet             $sheet
      * @param string            $state
-     * @param string            $proFormaTemplate
      * @param array             $packageData
      * @param array             $packageTemplate
      * @param array             $billingData
@@ -84,7 +81,6 @@ class Order
     public function __construct(
         Sheet $sheet,
         $state,
-        $proFormaTemplate,
         array $packageData,
         array $packageTemplate,
         array $billingData,
@@ -94,7 +90,6 @@ class Order
     ) {
         $this->sheet            = $sheet;
         $this->state            = $state;
-        $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
         $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;
@@ -125,14 +120,6 @@ class Order
     public function getState()
     {
         return $this->state;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProFormaTemplate()
-    {
-        return $this->proFormaTemplate;
     }
 
     /**
@@ -181,5 +168,112 @@ class Order
     public function getPaymentMode()
     {
         return $this->paymentMode;
+    }
+
+    /**
+     * Add row to the order
+     *
+     * @param string $group
+     * @param string $row
+     * @param string $label
+     * @param string $description
+     * @param float  $unitPrice
+     * @param int    $quantity
+     */
+    public function addRow($group, $row, $label, $description, $unitPrice, $quantity)
+    {
+        if ($this->issetRow($group, $row)) {
+            throw new RowAlreadyExistsException($group, $row);
+        }
+
+        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+    }
+
+    /**
+     * Remove a row
+     *
+     * @param string $group
+     * @param string $row
+     */
+    public function removeRow($group, $row)
+    {
+        if (!$this->issetRow($group, $row)) {
+            throw new RowNotFoundException($group, $row);
+        }
+
+        if (!$this->isAddedRow($group, $row)) {
+            throw new NotAddedRowException($group, $row);
+        }
+
+        unset ($this->packageTemplate[$group]['template'][$row]);
+        unset ($this->packageData[$group][$row]);
+    }
+
+    /**
+     * Update row
+     *
+     * @param string $group
+     * @param string $row
+     * @param string $label
+     * @param string $description
+     * @param float  $unitPrice
+     * @param int    $quantity
+     */
+    public function updateRow($group, $row, $label, $description, $unitPrice, $quantity)
+    {
+        if (!$this->issetRow($group, $row)) {
+            throw new RowNotFoundException($group, $row);
+        }
+
+        if (!$this->isAddedRow($group, $row)) {
+            throw new NotAddedRowException($group, $row);
+        }
+
+        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+    }
+
+    /**
+     * @param string $group
+     * @param string $row
+     *
+     * @return bool
+     */
+    private function issetRow($group, $row)
+    {
+        return isset($this->packageTemplate[$group]['template'][$row]) && isset($this->packageData[$group][$row]);
+    }
+
+    /**
+     * @param $group
+     * @param $row
+     *
+     * @return bool
+     */
+    private function isAddedRow($group, $row)
+    {
+        return $this->packageTemplate[$group]['template'][$row]['type'] === 'added_row';
+    }
+
+    /**
+     * @param string $group
+     * @param string $row
+     * @param string $label
+     * @param string $description
+     * @param float  $unitPrice
+     * @param int    $quantity
+     */
+    private function setRow($group, $row, $label, $description, $unitPrice, $quantity)
+    {
+        $this->packageTemplate[$group]['template'][$row] = [
+            'label'       => $label,
+            'description' => $description,
+            'type'        => 'added_row',
+            'unitPrice'   => $unitPrice,
+        ];
+
+        $this->packageData[$group][$row] = [
+            'value'    => true,
+            'quantity' => $quantity,
+        ];
     }
 }

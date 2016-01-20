@@ -1,0 +1,15 @@
+{% macro button(url, method, label, attributes) %}
+    {% set attributes = attributes|default({})|merge({'type': 'submit'}) %}
+
+    {% if method|upper not in ['POST', 'GET'] %}
+        {% set _method = method %}
+        {% set method  = 'POST' %}
+    {% endif %}
+
+    <form action="{{ url }}" method="{{ method }}" style="display: inline;">
+        {% if _method is defined %}
+            <input type="hidden" name="_method" value="{{ _method }}" />
+        {% endif %}
+        <button {% for attribute, value in attributes %} {{ attribute }}="{{ value }}"{% endfor %}>{{ label|html }}</button>
+    </form>
+{% endmacro %}

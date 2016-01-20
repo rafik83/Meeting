@@ -19,5 +19,3 @@ Proximum\Vimeet\Domain\Model\Template:
             type: string
         view:
             type: string
-        proForma:
-            type: text

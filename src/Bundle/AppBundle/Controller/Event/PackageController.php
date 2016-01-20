@@ -49,7 +49,7 @@ class PackageController extends BaseController
             ->findOrCreateCart($sheet);
 
         $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
+            ->createFromCart($cart);
 
         $stepObject = $template->getStep($step);
 
@@ -120,20 +120,13 @@ class PackageController extends BaseController
         if ($cart === null) {
             throw $this->createNotFoundException('Cart not available');
         }
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
-        $cart     = $this->get('vimeet_infrastructure.application.components.cart.cart_builder')
-            ->generate(
-                $template,
-                $cart->getData(),
-                $request->getLocale()
-            )
-        ;
+
+        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'cart'      => $cart,
+            'cartView'  => $cartView,
         ]);
     }
 
@@ -146,9 +139,13 @@ class PackageController extends BaseController
      */
     public function addProductsAction(Request $request, EventView $eventView, Sheet $sheet)
     {
-        $cart = $this->get('vimeet_infrastructure.application.components.cart.cart_manager')->findOrCreateCart($sheet);
-        $template = $this->get('vimeet_infrastructure.application.components.product.product_builder')
-            ->createFromCart($sheet->getType(), $cart);
+        $cart = $this
+            ->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
+        $template = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromCart($cart);
 
         $addProducts = new AddProducts($cart, $sheet);
         $form        = $this->createForm(AddProductsType::class, $addProducts, [

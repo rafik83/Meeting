@@ -52,6 +52,14 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Order $order)
+    {
+        $this->entityManager->flush($order);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function paginate($page, $limit, Sheet $sheet)
     {
         $queryBuilder = $this

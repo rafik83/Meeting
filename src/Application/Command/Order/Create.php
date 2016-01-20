@@ -33,11 +33,6 @@ class Create
     public $state;
 
     /**
-     * @var string
-     */
-    public $proFormaTemplate;
-
-    /**
      * @var array
      */
     public $packageData;
@@ -70,7 +65,6 @@ class Create
     /**
      * @param Cart              $cart
      * @param Sheet             $sheet
-     * @param string            $proFormaTemplate
      * @param array             $packageData
      * @param array             $packageTemplate
      * @param array             $billingData
@@ -80,7 +74,6 @@ class Create
     public function __construct(
         Cart $cart,
         Sheet $sheet,
-        $proFormaTemplate,
         array $packageData,
         array $packageTemplate,
         array $billingData,
@@ -90,7 +83,6 @@ class Create
         $this->cart             = $cart;
         $this->sheet            = $sheet;
         $this->state            = Order::STATE_UNPAID;
-        $this->proFormaTemplate = $proFormaTemplate;
         $this->packageData      = $packageData;
         $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;

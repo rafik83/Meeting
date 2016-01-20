@@ -287,3 +287,15 @@ form:
                 label: Créneau de rendez-vous
             submit:
                 label: Placer
+    order_row:
+        children:
+            label:
+                label: Intitulé
+            description:
+                label: Description
+            price:
+                label: Prix unitaire
+            quantity:
+                label: Quantité
+            submit:
+                label: Enregistrer

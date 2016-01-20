@@ -38,17 +38,17 @@ class Type implements WhoInterface
     private $translations;
 
     /**
-     * @var string
+     * @var array
      */
     private $participantTemplate = [];
 
     /**
-     * @var string
+     * @var array
      */
     private $sheetTemplate = [];
 
     /**
-     * @var string
+     * @var array
      */
     private $packageTemplate = [];
 
@@ -81,11 +81,6 @@ class Type implements WhoInterface
      * @var ArrayCollection
      */
     private $categories;
-
-    /**
-     * @var string
-     */
-    private $proFormaTemplate = '';
 
     /**
      * Type constructor.
@@ -202,27 +197,39 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param string $participantTemplate
+     * @param array $participantTemplate
+     *
+     * @return Type
      */
-    public function setParticipantTemplate($participantTemplate)
+    public function setParticipantTemplate(array $participantTemplate)
     {
         $this->participantTemplate = $participantTemplate;
+
+        return $this;
     }
 
     /**
-     * @param string $sheetTemplate
+     * @param array $sheetTemplate
+     *
+     * @return Type
      */
-    public function setSheetTemplate($sheetTemplate)
+    public function setSheetTemplate(array $sheetTemplate)
     {
         $this->sheetTemplate = $sheetTemplate;
+
+        return $this;
     }
 
     /**
-     * @param string $packageTemplate
+     * @param array $packageTemplate
+     *
+     * @return Type
      */
-    public function setPackageTemplate($packageTemplate)
+    public function setPackageTemplate(array $packageTemplate)
     {
         $this->packageTemplate = $packageTemplate;
+
+        return $this;
     }
 
     /**
@@ -280,14 +287,6 @@ class Type implements WhoInterface
     }
 
     /**
-     * @return string
-     */
-    public function getProFormaTemplate()
-    {
-        return $this->proFormaTemplate;
-    }
-
-    /**
      * @param Template $template
      */
     public function setTemplate(Template $template)
@@ -297,7 +296,6 @@ class Type implements WhoInterface
         $this->packageTemplate     = $template->getPackage();
         $this->previewTemplate     = $template->getPreview();
         $this->viewTemplate        = $template->getView();
-        $this->proFormaTemplate    = $template->getProForma();
     }
 
     /**

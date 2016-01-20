@@ -72,7 +72,6 @@ class CreateHandler
         $order = new Order(
             $create->sheet,
             $create->state,
-            $create->proFormaTemplate,
             $create->packageData,
             $create->packageTemplate,
             $create->billingData,

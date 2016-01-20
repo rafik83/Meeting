@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Order:
     type: entity
-    table: sheet_order
+    table: _order
     id:
         id:
             type: integer
@@ -9,8 +9,6 @@ Proximum\Vimeet\Domain\Model\Order:
     fields:
         state:
             type: string
-        proFormaTemplate:
-            type: text
         packageData:
             type: json_array
         packageTemplate:

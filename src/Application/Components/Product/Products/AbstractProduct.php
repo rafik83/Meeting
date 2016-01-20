@@ -69,7 +69,13 @@ abstract class AbstractProduct implements ProductInterface
      */
     public function getLabel($locale)
     {
-        return isset($this->options['label'][$locale]) ? $this->options['label'][$locale] : null;
+        if (!isset($this->options['label'])) {
+            return null;
+        }
+
+        $label = $this->options['label'];
+
+        return (string) (is_array($label) ? (isset($label[$locale]) ? $label[$locale] : null) : $label);
     }
 
     /**
@@ -113,9 +119,9 @@ abstract class AbstractProduct implements ProductInterface
     }
 
     /**
-     * @param array $options
+     * {@inheritdoc}
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
     }
