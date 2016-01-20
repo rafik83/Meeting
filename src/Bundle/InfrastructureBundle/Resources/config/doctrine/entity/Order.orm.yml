@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Order:
     type: entity
-    table: _order
+    table: sheet_order
     id:
         id:
             type: integer
@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Order:
         packageTemplate:
             type: json_array
         billingData:
+            type: json_array
+        billingTemplate:
             type: json_array
         createdAt:
             type: datetime

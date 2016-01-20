@@ -26,7 +26,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
 
@@ -47,7 +47,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event       = new Event();
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
 

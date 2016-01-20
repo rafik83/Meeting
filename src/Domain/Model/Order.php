@@ -56,6 +56,11 @@ class Order
     private $billingData;
 
     /**
+     * @var array
+     */
+    private $billingTemplate;
+
+    /**
      * @var DateTimeInterface
      */
     private $createdAt;
@@ -72,6 +77,7 @@ class Order
      * @param array             $packageData
      * @param array             $packageTemplate
      * @param array             $billingData
+     * @param array             $billingTemplate
      * @param DateTimeInterface $createdAt
      * @param string            $paymentMode
      */
@@ -82,6 +88,7 @@ class Order
         array $packageData,
         array $packageTemplate,
         array $billingData,
+        array $billingTemplate,
         DateTimeInterface $createdAt,
         $paymentMode
     ) {
@@ -91,6 +98,7 @@ class Order
         $this->packageData      = $packageData;
         $this->packageTemplate  = $packageTemplate;
         $this->billingData      = $billingData;
+        $this->billingTemplate  = $billingTemplate;
         $this->createdAt        = $createdAt;
         $this->paymentMode      = $paymentMode;
     }
@@ -149,6 +157,14 @@ class Order
     public function getBillingData()
     {
         return $this->billingData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBillingTemplate()
+    {
+        return $this->billingTemplate;
     }
 
     /**

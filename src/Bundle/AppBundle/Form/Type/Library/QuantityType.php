@@ -33,6 +33,7 @@ class QuantityType extends AbstractType
             },
             'choices_as_values' => true,
             'product'           => null,
+            'cart'              => null,
         ]);
     }
 

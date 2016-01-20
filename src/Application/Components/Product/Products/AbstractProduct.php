@@ -186,6 +186,26 @@ abstract class AbstractProduct implements ProductInterface
 
     /**
      * @param array $packageData
+     *
+     * @return bool
+     */
+    public function allowQuantity(array $packageData)
+    {
+        if (!$this->hasQuantity()) {
+            return false;
+        }
+
+        $remaingQuantityMax = $this->getRemainingQuantityMax($packageData);
+
+        if ($remaingQuantityMax > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param array $packageData
      * @return float
      */
     public function getRemainingQuantityMax(array $packageData)
@@ -194,20 +214,57 @@ abstract class AbstractProduct implements ProductInterface
             return 0;
         }
 
+        $quantityIncluded = $this->getQuantityIncludedWithPurchase($packageData);
+
+        if (null === $quantityIncluded) {
+            return 0;
+        }
+
+        $quantityMax    = $this->getQuantityMax();
+        $quantityBought = $this->getQuantityBought($packageData);
+
+        return ($quantityMax - $quantityBought - $quantityIncluded) > 0
+            && ($quantityMax - $quantityBought - $quantityIncluded) >= $this->getQuantityMin()
+            ? $quantityMax - $quantityBought- $quantityIncluded : 0;
+    }
+
+    /**
+     * @param array $packageData
+     *
+     * @return int
+     */
+    public function getQuantityBought(array $packageData)
+    {
+        if (empty($packageData)) {
+            return 0;
+        }
+
+        if (!isset($packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'])) {
+            return 0;
+        } else {
+            return $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
+        }
+    }
+
+    /**
+     * @param array $packageData
+     *
+     * @return int|null
+     */
+    public function getQuantityIncludedWithPurchase(array $packageData)
+    {
         $quantity   = 0;
         $includings = $this->getIncludingFromPurchase($packageData);
 
         foreach ($includings as $including) {
             if ($including->getQuantity() === null) {
-                return 0;
+                return null;
             } else {
                 $quantity += $including->getQuantity();
             }
         }
 
-        return ($this->getQuantityMax() - $quantity) > 0
-            && ($this->getQuantityMax() - $quantity) >= $this->getQuantityMin()
-            ? $this->getQuantityMax() - $quantity : 0;
+        return $quantity;
     }
 
     /**
@@ -249,14 +306,18 @@ abstract class AbstractProduct implements ProductInterface
         if (!empty($packageData) && $template !== null) {
             foreach ($packageData as $stepKey => $stepData) {
                 foreach ($stepData as $productKey => $productData) {
-                    $toInclude = $this->isIncludedIn(
-                        $this,
-                        $template->getStep($stepKey)->getProduct($productKey),
-                        $productData
-                    );
+                    if (null !== $template->getStep($stepKey)
+                        && null !== $template->getStep($stepKey)->getProduct($productKey)
+                    ) {
+                        $toInclude = $this->isIncludedIn(
+                            $this,
+                            $template->getStep($stepKey)->getProduct($productKey),
+                            $productData
+                        );
 
-                    if (!empty($toInclude)) {
-                        $includings[] = $toInclude;
+                        if (!empty($toInclude)) {
+                            $includings[] = $toInclude;
+                        }
                     }
                 }
             }

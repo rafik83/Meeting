@@ -71,6 +71,13 @@ interface ParticipantRepositoryInterface
     public function getParticipantViewsBySheet($sheetId);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    public function getInactiveParticipantForSheet(Sheet $sheet);
+
+    /**
      * @param Sheet   $sheet
      * @param Meeting $meeting
      *

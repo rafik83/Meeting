@@ -12,6 +12,7 @@ namespace Tests\Application\Components\Cart;
 
 use Proximum\Vimeet\Application\Components\Cart\Cart;
 use Proximum\Vimeet\Application\Components\Cart\CartBuilder;
+use Proximum\Vimeet\Application\Components\Cart\CartRecap;
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibChoiceWithDescriptionCart;
 use Proximum\Vimeet\Application\Components\Cart\CartStep;
@@ -27,7 +28,7 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $dataValue  = [];
         $locale     = 'fr';
-        $result     = new Cart(0);
+        $result     = new CartRecap(0);
         $cart       = new CartBuilder();
         $template   = new Template();
 
@@ -51,7 +52,7 @@ class CartBuilderTest extends \PHPUnit_Framework_TestCase
             'value' => '563cb13a4d3de',
         ];
 
-        $result = new Cart(0);
+        $result = new CartRecap(0);
         $resultStep = new CartStep('Forfait de participation', 0);
         $libChoiceWithDescriptionResult = new CartRow('Forfait : Formule de sponsoring des CONFERENCES', 1, 11000);
         $includeCartRow = new CartRow(

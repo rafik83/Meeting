@@ -70,6 +70,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher->reveal(),
             $dateTime
         );
+
         $handler->handle($refuseRequest);
     }
 }

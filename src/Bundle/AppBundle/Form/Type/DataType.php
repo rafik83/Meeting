@@ -40,6 +40,7 @@ class DataType extends AbstractType
         $template = $options['template'];
         $locale   = $options['locale'];
         $sheet    = $options['sheet'];
+        $cart     = $options['cart'];
         $step     = $options['step'];
         $product  = null;
 
@@ -59,6 +60,7 @@ class DataType extends AbstractType
                 'template' => $field,
                 'locale'   => $locale,
                 'sheet'    => $sheet,
+                'cart'     => $cart,
                 'product'  => $product,
             ]);
         }
@@ -73,6 +75,7 @@ class DataType extends AbstractType
         $resolver->setAllowedTypes('template', ['array']);
         $resolver->setAllowedTypes('locale', ['string']);
         $resolver->setDefaults(['sheet' => null]);
+        $resolver->setDefaults(['cart' => null]);
         $resolver->setDefaults(['step' => null]);
     }
 }

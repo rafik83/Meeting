@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Cart;
 
-class Cart
+class CartRecap
 {
     /**
      * @var int

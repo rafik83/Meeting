@@ -61,4 +61,27 @@ class LibOptionProduct extends AbstractProduct
     {
         return $this->options['unitPrice'];
     }
+
+    /**
+     * @param array $packageData
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function isAvailableToPurchase(array $packageData, array $data)
+    {
+        if (null === $this->getQuantityIncludedWithPurchase($packageData)) {
+            return false;
+        }
+
+        if (empty($data) || !isset($data['value']) || false === $data['value']) {
+            return true;
+        }
+
+        if ($this->hasQuantity() && $this->getRemainingQuantityMax($packageData) > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

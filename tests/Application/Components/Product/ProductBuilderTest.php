@@ -17,6 +17,9 @@ use Proximum\Vimeet\Application\Components\Product\Products\LibChoiceWithDescrip
 use Proximum\Vimeet\Application\Components\Product\Products\LibOptionProduct;
 use Proximum\Vimeet\Application\Components\Product\Step;
 use Proximum\Vimeet\Application\Components\Product\Template;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,8 +28,12 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedTemplate = new Template();
         $productBuilder   = new ProductBuilder();
         $packageTemplate  = [];
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
 
-        $template = $productBuilder->create($packageTemplate);
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 
@@ -202,7 +209,12 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $template = $productBuilder->create($packageTemplate);
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
+
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 
@@ -445,7 +457,12 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $template = $productBuilder->create($packageTemplate);
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
+
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 }

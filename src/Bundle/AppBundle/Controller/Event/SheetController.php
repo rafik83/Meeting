@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\Update;
-use Proximum\Vimeet\Application\Command\Sheet\BuyParticipant;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
@@ -24,7 +23,6 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BuyParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -66,7 +64,7 @@ class SheetController extends BaseController
             ->get('vimeet_infrastructure.application.components.sheet.manager')
             ->getSheetDataView($sheet, $this->getUser());
 
-        $buttonParticipant = $this->get('vimeet_app.service.participant_manager')->canBuyOrAddParticipant($sheet);
+        $buttonParticipant = $this->get('vimeet_infrastructure.application.components.participant.participant_manager')->canBuyOrAddParticipant($sheet);
 
         $participantDeleteForms = $this->addDeleteParticipantForm(
             $request,
@@ -95,7 +93,7 @@ class SheetController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $participantManager = $this->get('vimeet_app.service.participant_manager');
+        $participantManager = $this->get('vimeet_infrastructure.application.components.participant.participant_manager');
 
         if ($participantManager->canAddParticipant($sheet) <= 0) {
             throw new AccessDeniedException('You can not add a new participant');
@@ -342,73 +340,5 @@ class SheetController extends BaseController
         }
 
         return $participantDeleteForms;
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function buyParticipantAction(Request $request, EventView $eventView, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if ($sheet->getType()->getMaxParticipant() <= count($sheet->getParticipants())) {
-            throw new AccessDeniedException('You can not buy a new participant');
-        }
-
-        $participantManager = $this->get('vimeet_app.service.participant_manager');
-        $participantPrice   = $participantManager->getParticipantPrice($sheet);
-        $planningPrice      = $participantManager->getPlanningPrice($sheet);
-
-        $buyParticipant = new BuyParticipant($sheet, $request->getLocale());
-        $form           = $this->createForm(BuyParticipantType::class, $buyParticipant, [
-            'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale'   => $request->getLocale(),
-        ]);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.buy_participant_handler')
-                    ->handle($buyParticipant);
-
-                $this->addFlash('success', 'flash.sheet.add_participant.success');
-
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
-            } catch (EmailCanNotBeNullException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('validators.field.required', [], 'validators'),
-                    $form->get('participantData')->get('email')
-                );
-            } catch (ParticipantAlreadyExistException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('event.sheet.participant.already_exists'),
-                    $form->get('participantData')->get('email')
-                );
-            } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $buyParticipant->participantData['data'],
-                    $form->get('participantData')->get('data')
-                );
-            }
-        }
-
-        return $this->render('VimeetAppBundle:Event/Sheet:buyParticipant.html.twig', [
-            'eventView'        => $eventView,
-            'sheet'            => $sheet,
-            'form'             => $form->createView(),
-            'participantPrice' => $participantPrice,
-            'planningPrice'    => $planningPrice,
-        ]);
     }
 }
