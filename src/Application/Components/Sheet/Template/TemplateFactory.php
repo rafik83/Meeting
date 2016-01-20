@@ -33,7 +33,7 @@ class TemplateFactory
             'lib_option'       => Type\LibOptionType::class,
             'lib_organization' => Type\LibOrganizationType::class,
             'lib_radio'        => Type\LibRadioType::class,
-            'lib_textArea'     => Type\LibTextAreaType::class,
+            'lib_textarea'     => Type\LibTextAreaType::class,
             'lib_text'         => Type\LibTextType::class,
             'lib_participant'  => Type\LibParticipantType::class,
             'lib_planning'     => Type\LibPlanningType::class,
