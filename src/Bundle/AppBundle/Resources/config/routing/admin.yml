@@ -155,15 +155,19 @@ admin_sheet:
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:list }
 
 #
-# Order
+# Billing
 #
-admin_sheet_order_list:
-    path: /event/{id}/sheet/{sheet_id}/order
+admin_sheet_billing:
+    path: /event/{id}/sheet/{sheet_id}/billing
     requirements:
         id: \d+
         sheet_id: \d+
     methods: [GET]
-    defaults: { _controller: VimeetAppBundle:Admin/Order:list }
+    defaults: { _controller: VimeetAppBundle:Admin/Billing:list }
+
+#
+# Order
+#
 admin_sheet_order_edit:
     path: /order/{id}/edit
     requirements:

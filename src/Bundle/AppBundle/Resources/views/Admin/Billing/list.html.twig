@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for order in orders %}
+        {% for order in orders_views %}
             <tr>
                 <td>{{ order.reference }}</td>
                 <td>{{ order.date|date('d/m/Y H:i') }}</td>
@@ -32,7 +32,7 @@
         </tbody>
     </table>
 
-    {{ knp_pagination_render(orders) }}
+    <h2>Liste des transactions</h2>
 
     <div class="text-left">
         <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour aux fiches</a>
