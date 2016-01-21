@@ -49,6 +49,11 @@
                             'meetingRequest': proposition_view.id
                         }) }}" class="btn btn-xs btn-danger">{{ 'event.meeting.listProposition.refuse'|trans() }}</a>
                     {% endif %}
+                    <a href="{{ path('event_meeting_request_show', {
+                        'subdomain': app.request.attributes.get('subdomain'),
+                        'id': sheet.id,
+                        'meetingRequest': proposition_view.id
+                    }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listProposition.show'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}

@@ -62,6 +62,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.meeting_message_repository:
+            class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
+            arguments:
+                - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.request_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
