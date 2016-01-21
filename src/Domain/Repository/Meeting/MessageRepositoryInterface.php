@@ -18,4 +18,6 @@ interface MessageRepositoryInterface
     public function add(Message $message);
 
     public function getLastMessageByRequest(Request $request);
+
+    public function getMessagesByMeetingRequest(Request $request);
 }
