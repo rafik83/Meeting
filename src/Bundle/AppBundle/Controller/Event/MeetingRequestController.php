@@ -253,7 +253,7 @@ class MeetingRequestController extends BaseController
             throw $this->createNotFoundException('Request not found');
         }
 
-        $messages = $this->get('vimeet_infrastructure.repository.meeting_message_repository')->getMessageByMeetingRequest($meetingRequest);
+        $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')->getMessagesByMeetingRequest($meetingRequest);
 
         $meetingRequestView = new ShowDetailsView(
             $meetingRequest->getId(),
