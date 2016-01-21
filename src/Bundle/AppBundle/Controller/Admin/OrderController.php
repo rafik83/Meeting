@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Domain\Model\Order;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
