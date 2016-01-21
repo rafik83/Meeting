@@ -1,13 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Jeremy
- * Date: 21/01/2016
- * Time: 11:35
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\View\Meeting;
-
 
 class ShowDetailsView
 {
