@@ -22,14 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BillingController extends Controller
 {
-
     /**
-     * @ParamConverter(
-     *   "sheet",
-     *   class="Proximum\Vimeet\Domain\Model\Sheet",
-     *   options={"id" = "sheet_id"}
-     * )
-     *
      * @param Request $request
      * @param Event   $event
      * @param Sheet   $sheet

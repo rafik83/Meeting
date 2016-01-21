@@ -10,7 +10,7 @@
     {{ form(form) }}
 
     <div class="text-left">
-        <a href="{{ path('admin_sheet_billing', { 'id': sheet.event.id, 'sheet_id': sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
+        <a href="{{ path('admin_sheet_billing', { 'event': sheet.event.id, 'sheet': sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
     </div>
 
 {% endblock %}

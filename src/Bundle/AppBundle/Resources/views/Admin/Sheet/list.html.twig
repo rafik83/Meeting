@@ -19,7 +19,7 @@
                     <td>{{ sheet.title }}</td>
                     <td>{{ sheet.type }}</td>
                     <td>
-                        <a href="{{ path('admin_sheet_billing', { 'id': event.id, 'sheet_id': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
+                        <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
                     </td>
                 </tr>
             {% endfor %}

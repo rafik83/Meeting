@@ -42,8 +42,8 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'id'       => $sheet->getEvent()->getId(),
-                'sheet_id' => $sheet->getId(),
+                'event'       => $sheet->getEvent()->getId(),
+                'sheet' => $sheet->getId(),
             ]);
         }
 
@@ -81,8 +81,8 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'id'       => $sheet->getEvent()->getId(),
-                'sheet_id' => $sheet->getId(),
+                'event'       => $sheet->getEvent()->getId(),
+                'sheet' => $sheet->getId(),
             ]);
         }
 
@@ -117,8 +117,8 @@ class TransactionController extends Controller
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
         return $this->redirectToRoute('admin_sheet_billing', [
-            'id'       => $sheet->getEvent()->getId(),
-            'sheet_id' => $sheet->getId(),
+            'event'       => $sheet->getEvent()->getId(),
+            'sheet' => $sheet->getId(),
         ]);
     }
 }

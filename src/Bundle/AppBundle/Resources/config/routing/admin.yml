@@ -158,7 +158,7 @@ admin_sheet:
 # Billing
 #
 admin_sheet_billing:
-    path: /event/{id}/sheet/{sheet_id}/billing
+    path: /event/{event}/sheet/{sheet}/billing
     requirements:
         id: \d+
         sheet_id: \d+
