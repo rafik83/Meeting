@@ -17,6 +17,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface ProductInterface
 {
     /**
+     * @return string
+     */
+    public function getKey();
+
+    /**
      * @param OptionsResolver $optionsResolver
      */
     public function configure(OptionsResolver $optionsResolver);
@@ -71,4 +76,14 @@ interface ProductInterface
      * @param array $packageData
      */
     public function getIncludingFromPurchase(array $packageData);
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options);
+
+    /**
+     * @return array
+     */
+    public function getOptionsIncludedIn();
 }

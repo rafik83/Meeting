@@ -39,6 +39,7 @@ class CountryType extends AbstractType
             },
             'translation_domain' => false,
             'product'            => null,
+            'cart'               => null,
         ]);
         $resolver->setDefined(['sheet']);
     }

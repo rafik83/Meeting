@@ -35,8 +35,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], []);
         $owner = true;
 
-        $participant         = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner);
-        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'foobar'], $owner);
+        $participant         = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner, true);
+        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'foobar'], $owner, true);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->findById(1)->shouldBeCalled()->willReturn($participant);

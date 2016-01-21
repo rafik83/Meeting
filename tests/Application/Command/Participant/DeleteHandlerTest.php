@@ -31,8 +31,8 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $event        = new Event();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
-        $participant1 = new Participant($sheet, $user1, [], true);
-        $participant2 = new Participant($sheet, $user2, [], false);
+        $participant1 = new Participant($sheet, $user1, [], true, true);
+        $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant1);
         $sheet->getParticipants()->add($participant2);
 
@@ -56,7 +56,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $event        = new Event();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
-        $participant2 = new Participant($sheet, $user2, [], false);
+        $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant2);
 
         $delete = new Delete($sheet, $user1, 2);
@@ -76,8 +76,8 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $event        = new Event();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
-        $participant1 = new Participant($sheet, $user1, [], true);
-        $participant2 = new Participant($sheet, $user2, [], false);
+        $participant1 = new Participant($sheet, $user1, [], true, true);
+        $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant1);
         $sheet->getParticipants()->add($participant2);
 
@@ -99,8 +99,8 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $event        = new Event();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], []);
-        $participant1 = new Participant($sheet, $user1, [], false);
-        $participant2 = new Participant($sheet, $user2, [], false);
+        $participant1 = new Participant($sheet, $user1, [], false, true);
+        $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant1);
         $sheet->getParticipants()->add($participant2);
 

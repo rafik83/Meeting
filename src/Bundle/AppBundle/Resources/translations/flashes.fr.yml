@@ -52,6 +52,8 @@ flash:
     package:
         update_step:
             success: Les informations ont bien été enregistrées
+        add_products:
+            success: L'ajout des produits a bien été pris en compte
         final_step:
             success: Les informations de votre forfait ont bien été enregistrées
         payment_mode:
@@ -78,3 +80,10 @@ flash:
         meeting_request:
             position:
                 success: Le rendez-vous a bien été placé
+        order:
+            add_row:
+                success: La linge a été ajouté
+            update_row:
+                success: La ligne a été mise à jour
+            remove_row:
+                success: La ligne a été supprimé

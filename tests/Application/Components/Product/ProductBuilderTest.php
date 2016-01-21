@@ -17,20 +17,328 @@ use Proximum\Vimeet\Application\Components\Product\Products\LibChoiceWithDescrip
 use Proximum\Vimeet\Application\Components\Product\Products\LibOptionProduct;
 use Proximum\Vimeet\Application\Components\Product\Step;
 use Proximum\Vimeet\Application\Components\Product\Template;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWithEmptyPackage()
+    public function testCreateFromTypeEmpty()
+    {
+        // In
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setPackageTemplate([]);
+
+        // Expected
+        $template = new Template();
+
+        // Builder
+        $productBuilder = new ProductBuilder();
+
+        // Assert
+        $this->assertEquals($template, $productBuilder->createFromType($type));
+    }
+
+    public function testCreateFromTypeWithOneStep()
+    {
+        // In
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setPackageTemplate([
+            'step1' => [
+                'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+                'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'template'    => [
+                    'option1' => [
+                        'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                    'option2' => [
+                        'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                    'option3' => [
+                        'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                ]
+            ]
+        ]);
+
+        // Expected
+        $template = new Template();
+
+        $step1 = new Step('step1');
+        $step1->setOptions([
+            'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+            'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'template'    => [
+               'option1' => [
+                   'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+               'option2' => [
+                   'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+               'option3' => [
+                   'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+            ]
+        ]);
+        $template->addStep($step1);
+
+        $product1 = new LibOptionProduct('option1');
+        $product1->setOptions([
+            'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step1->addProduct($product1);
+
+        $product2 = new LibOptionProduct('option2');
+        $product2->setOptions([
+            'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step1->addProduct($product2);
+
+        $product3 = new LibOptionProduct('option3');
+        $product3->setOptions([
+            'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step1->addProduct($product3);
+
+        // Builder
+        $productBuilder = new ProductBuilder();
+
+        // Assert
+        $this->assertEquals($template, $productBuilder->createFromType($type));
+    }
+
+    public function testCreateFromTypeWithTwoSteps()
+    {
+        // In
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setPackageTemplate([
+            'step1' => [
+                'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+                'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'template'    => [
+                    'option1' => [
+                        'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                ],
+            ],
+            'step2' => [
+                'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+                'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'template'    => [
+                    'option2' => [
+                        'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                    'option3' => [
+                        'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+                        'description' => ['fr' => '', 'en' => ''],
+                        'type'        => 'lib_option',
+                        'unitPrice'   => 300,
+                        'quantity'    => ['min' => 0, 'max' => 2],
+                    ],
+                ],
+            ],
+        ]);
+
+        // Expected
+        $template = new Template();
+
+        $step1 = new Step('step1');
+        $step1->setOptions([
+            'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+            'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'template'    => [
+               'option1' => [
+                   'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+            ]
+        ]);
+        $template->addStep($step1);
+
+        $product1 = new LibOptionProduct('option1');
+        $product1->setOptions([
+            'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step1->addProduct($product1);
+
+        $step2 = new Step('step2');
+        $step2->setOptions([
+            'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+            'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'template'    => [
+               'option2' => [
+                   'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+               'option3' => [
+                   'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+                   'description' => ['fr' => '', 'en' => ''],
+                   'type'        => 'lib_option',
+                   'unitPrice'   => 300,
+                   'quantity'    => ['min' => 0, 'max' => 2],
+               ],
+            ]
+        ]);
+        $template->addStep($step2);
+
+        $product2 = new LibOptionProduct('option2');
+        $product2->setOptions([
+            'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step2->addProduct($product2);
+
+        $product3 = new LibOptionProduct('option3');
+        $product3->setOptions([
+            'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
+            'description' => ['fr' => '', 'en' => ''],
+            'type'        => 'lib_option',
+            'unitPrice'   => 300,
+            'quantity'    => ['min' => 0, 'max' => 2],
+        ]);
+        $step2->addProduct($product3);
+
+        // Builder
+        $productBuilder = new ProductBuilder();
+
+        // Assert
+        $this->assertEquals($template, $productBuilder->createFromType($type));
+    }
+
+    public function testCreateFromTypeWithChoice()
+    {
+        // In
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setPackageTemplate([
+            'step1' => [
+                'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+                'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'template'    => [
+                    'choice1' => [
+                        'type'        => 'lib_choices',
+                        'label'       => ['fr' => 'Choix 1', 'en' => 'Choice 1'],
+                        'placeholder' => ['fr' => '--- Sélectionner un item  ---', 'en' => '--- Choose an item  ---'],
+                        'required'    => true,
+                        'private'     => false,
+                        'choices'     => [
+                            'item1' => ['label' => ['fr' => 'Item 1', 'en' => 'Item 1']],
+                            'item2' => ['label' => ['fr' => 'Item 2', 'en' => 'Item 2']],
+                            'item3' => ['label' => ['fr' => 'Item 3', 'en' => 'Item 3']],
+                            'item4' => ['label' => ['fr' => 'Item 4', 'en' => 'Item 4']],
+                        ],
+                    ],
+                ],
+            ]
+        ]);
+
+        // Expected
+        $template = new Template();
+
+        $step1 = new Step('step1');
+        $step1->setOptions([
+            'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
+            'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'template'    => [
+                'choice1' => [
+                    'type'        => 'lib_choices',
+                    'label'       => ['fr' => 'Choix 1', 'en' => 'Choice 1'],
+                    'placeholder' => ['fr' => '--- Sélectionner un item  ---', 'en' => '--- Choose an item  ---'],
+                    'required'    => true,
+                    'private'     => false,
+                    'choices'     => [
+                        'item1' => ['label' => ['fr' => 'Item 1', 'en' => 'Item 1']],
+                        'item2' => ['label' => ['fr' => 'Item 2', 'en' => 'Item 2']],
+                        'item3' => ['label' => ['fr' => 'Item 3', 'en' => 'Item 3']],
+                        'item4' => ['label' => ['fr' => 'Item 4', 'en' => 'Item 4']],
+                    ],
+                ],
+            ]
+        ]);
+        $template->addStep($step1);
+
+        // Builder
+        $productBuilder = new ProductBuilder();
+
+        // Assert
+        $this->assertEquals($template, $productBuilder->createFromType($type));
+    }
+
+    public function _testWithEmptyPackage()
     {
         $expectedTemplate = new Template();
         $productBuilder   = new ProductBuilder();
         $packageTemplate  = [];
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
 
-        $template = $productBuilder->create($packageTemplate);
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 
-    public function testProductBuilderWithoutIncludedIn()
+    public function _testProductBuilderWithoutIncludedIn()
     {
         $expectedTemplate   = new Template();
         $expectedStep       = new Step('563cae7496da1');
@@ -202,11 +510,16 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $template = $productBuilder->create($packageTemplate);
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
+
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 
-    public function testProductBuilderWithIncludedIn()
+    public function _testProductBuilderWithIncludedIn()
     {
         $expectedTemplate   = new Template();
         $expectedStep       = new Step('563cae7496da1');
@@ -445,7 +758,12 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $template = $productBuilder->create($packageTemplate);
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], []);
+        $type->setPackageTemplate($packageTemplate);
+
+        $template = $productBuilder->createFromSheet($sheet);
         $this->assertEquals($expectedTemplate, $template);
     }
 }

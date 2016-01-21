@@ -80,4 +80,27 @@ class LibParticipantProduct extends AbstractDescriptionTypeUnitPriceOptions
     {
         $this->maxParticipant = $maxParticipant;
     }
+
+    /**
+     * @param array $packageData
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function isAvailableToPurchase(array $packageData, array $data)
+    {
+        if (empty($data) || !isset($data['participant']) || false === $data['participant']) {
+            return true;
+        }
+
+        if (isset($data['participant'])
+            && true === $data['participant']
+            && isset($data['quantity'])
+            && $this->getMaxParticipant() > ($data['quantity'] + $this->getFreeParticipant())
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }

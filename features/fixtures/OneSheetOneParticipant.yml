@@ -4,6 +4,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_1
         sheet: @sheet_1
         owner: true
+        active: true
         data:
             563caf1d9b1cb: "Dutest"
             563caf2746398: "Jean"

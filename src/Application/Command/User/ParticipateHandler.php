@@ -56,7 +56,7 @@ class ParticipateHandler extends BaseHandler
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
-        $participant = new Participant($sheet, $participate->user, $participate->data, $participate->owner);
+        $participant = new Participant($sheet, $participate->user, $participate->data, $participate->owner, true);
         $this->participantRepository->add($participant);
 
         $participate->sheet = $sheet;

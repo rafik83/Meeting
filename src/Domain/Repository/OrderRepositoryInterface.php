@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface OrderRepositoryInterface
 {
@@ -18,4 +19,18 @@ interface OrderRepositoryInterface
      * @param Order $order
      */
     public function add(Order $order);
+
+    /**
+     * @param Order $order
+     */
+    public function set(Order $order);
+
+    /**
+     * @param int   $page
+     * @param int   $limit
+     * @param Sheet $sheet
+     *
+     * @return mixed
+     */
+    public function paginate($page, $limit, Sheet $sheet);
 }

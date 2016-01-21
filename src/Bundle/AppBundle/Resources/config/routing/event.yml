@@ -74,14 +74,6 @@ event_sheet_add_participant:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:addParticipant }
 
-event_sheet_buy_participant:
-    path: /sheet/{id}/buy_participant
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
-    methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:buyParticipant }
-
 event_sheet_update_participant:
     path: /sheet/{id}/update_participant/{participant_id}
     host: '{subdomain}.%domain%'
@@ -113,6 +105,14 @@ event_sheet_package_update_step:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Package:updateStep }
+
+event_sheet_package_products:
+    path: /sheet/{id}/products
+    host: '{subdomain}.%domain%'
+    requirements:
+        subdomain: '[a-zA-Z0-9\-]+'
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Package:addProducts }
 
 event_sheet_package_cart:
     path: /sheet/{id}/cart
@@ -146,13 +146,21 @@ event_sheet_list_orders:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Order:listOrder }
 
+event_sheet_summary:
+    path: /sheet/{id}/summary
+    host: '{subdomain}.%domain%'
+    requirements:
+        subdomain: '[a-zA-Z0-9\-]+'
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Order:summary }
+
 event_sheet_order_pro_forma:
     path: /sheet/{id}/pro_forma/{order_id}
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Order:proForma }
+    defaults: { _controller: VimeetAppBundle:Event/Order:proforma }
 
 #
 # Authentication

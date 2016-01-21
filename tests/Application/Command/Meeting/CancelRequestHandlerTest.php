@@ -59,6 +59,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
+
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher->dispatch('meeting_request.canceled', $exectedEvent);
 

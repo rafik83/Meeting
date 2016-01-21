@@ -27,13 +27,13 @@ class LibParticipantCart extends LibAbstractCart
             && isset($dataValue)
             && isset($dataValue['participant'])
             && $dataValue['participant'] === true
-            && isset($dataValue['participant_bought'])
-            && $dataValue['participant_bought'] !== 0
+            && isset($dataValue['quantity'])
+            && $dataValue['quantity'] !== 0
         ) {
             $cartRow = new CartRow(
                 $product->getLabel($locale),
-                isset($dataValue['participant_bought']) && $dataValue['participant_bought'] !== null
-                ? $dataValue['participant_bought'] : 0,
+                isset($dataValue['quantity']) && $dataValue['quantity'] !== null
+                ? $dataValue['quantity'] : 0,
                 $product->getUnitPrice()
             );
 

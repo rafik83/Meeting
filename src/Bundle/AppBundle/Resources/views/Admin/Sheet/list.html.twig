@@ -1,0 +1,35 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>Liste des fiches</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fiche</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sheet in sheets %}
+                <tr>
+                    <td>{{ sheet.title }}</td>
+                    <td>{{ sheet.type }}</td>
+                    <td>
+                        <a href="{{ path('admin_sheet_order_list', { 'id': event.id, 'sheet_id': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(sheets) }}
+
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+
+{% endblock %}
