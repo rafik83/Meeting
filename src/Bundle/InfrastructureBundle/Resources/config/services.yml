@@ -288,6 +288,18 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.transaction.create_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
+        arguments:
+            - '@repository.transaction'
+    command.transaction.update_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
+        arguments:
+            - '@repository.transaction'
+    command.transaction.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\RemoveHandler
+        arguments:
+            - '@repository.transaction'
 
     #
     # Security

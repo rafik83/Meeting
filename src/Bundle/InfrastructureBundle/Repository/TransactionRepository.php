@@ -45,4 +45,30 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Transaction $transaction)
+    {
+        $this->entityManager->persist($transaction);
+        $this->entityManager->flush($transaction);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Transaction $transaction)
+    {
+        $this->entityManager->flush($transaction);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Transaction $transaction)
+    {
+        $this->entityManager->remove($transaction);
+        $this->entityManager->flush($transaction);
+    }
 }

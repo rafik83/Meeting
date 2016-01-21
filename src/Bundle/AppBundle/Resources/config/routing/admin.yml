@@ -213,3 +213,9 @@ admin_sheet_transaction_update:
         id: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
+admin_sheet_transaction_remove:
+    path: /sheet/{id}/transaction/{transaction_id}/remove
+    requirements:
+        id: \d+
+    methods: [DELETE]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:remove }

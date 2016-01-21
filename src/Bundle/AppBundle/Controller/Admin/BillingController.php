@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\OrderView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,12 +55,26 @@ class BillingController extends Controller
         // Transactions
         $transactions = $this->get('repository.transaction')->findBySheet($sheet);
 
+        // Balance
+        $ordersTotal = array_reduce($orders, function ($carry, OrderView $order) {
+            return $carry + $order->getTotalWithVat();
+        }, 0);
+
+        $transactionsTotal = array_reduce($transactions, function ($carry, Transaction $transaction) {
+            return $carry + $transaction->getAmount();
+        }, 0);
+
+        $balance = $transactionsTotal - $ordersTotal;
+
         return $this->render('VimeetAppBundle:Admin/Billing:list.html.twig', [
-            'event'        => $event,
-            'sheet'        => $sheet,
-            'sheet_info'   => $sheetInfo,
-            'orders'       => $orders,
-            'transactions' => $transactions,
+            'event'              => $event,
+            'sheet'              => $sheet,
+            'sheet_info'         => $sheetInfo,
+            'orders'             => $orders,
+            'transactions'       => $transactions,
+            'balance'            => $balance,
+            'orders_total'       => $ordersTotal,
+            'transactions_total' => $transactionsTotal,
         ]);
     }
 }

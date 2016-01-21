@@ -31,6 +31,11 @@ class Transaction
     private $amount;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $date;
+
+    /**
      * @var string
      */
     private $mode;
@@ -43,17 +48,39 @@ class Transaction
     /**
      * Transaction constructor.
      *
-     * @param Sheet  $sheet
-     * @param float  $amount
-     * @param string $mode
-     * @param string $reference
+     * @param Sheet              $sheet
+     * @param float              $amount
+     * @param \DateTimeInterface $date
+     * @param string             $mode
+     * @param string             $reference
      */
-    public function __construct(Sheet $sheet, $amount, $mode, $reference)
+    public function __construct(Sheet $sheet, $amount, \DateTimeInterface $date, $mode, $reference)
     {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
+        $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
+    }
+
+    /**
+     * Update transaction
+     *
+     * @param float              $amount
+     * @param \DateTimeInterface $date
+     * @param string             $mode
+     * @param string             $reference
+     *
+     * @return Transaction
+     */
+    public function update($amount, \DateTimeInterface $date, $mode, $reference)
+    {
+        $this->amount    = $amount;
+        $this->date      = $date;
+        $this->mode      = $mode;
+        $this->reference = $reference;
+
+        return $this;
     }
 
     /**
@@ -84,6 +111,16 @@ class Transaction
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTimeInterface
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 
     /**

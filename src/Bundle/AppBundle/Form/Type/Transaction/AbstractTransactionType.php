@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\PaymentModeType;
+
+abstract class AbstractTransactionType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('amount', NumberType::class)
+            ->add('date', DateTimeType::class)
+            ->add('mode', PaymentModeType::class, ['placeholder' => ''])
+            ->add('reference', TextType::class, ['required' => false])
+        ;
+    }
+}
