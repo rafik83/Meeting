@@ -77,7 +77,7 @@
                         <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
                             <a href="{{ path('admin_sheet_transaction_update', { 'id': sheet.id, 'transaction_id': transaction.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                            {{ macro.button(path('admin_sheet_transaction_remove', { 'id': sheet.id, 'transaction_id': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm' }) }}
+                            {{ macro.button(path('admin_sheet_transaction_remove', { 'id': sheet.id, 'transaction_id': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'message.admin.transaction.remove.confirm'|trans }) }}
                         </td>
                     </tr>
                 {% endfor %}
