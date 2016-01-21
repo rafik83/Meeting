@@ -1,0 +1,40 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% block title 'event.meeting.showDetailsRequest.title'|trans %}
+
+{% block content %}
+    <h2>{{ 'event.meeting.showDetailsRequest.title'|trans }}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <th>{{ 'event.meeting.showDetailsRequest.to'|trans }}</th>
+            <th>{{ 'event.meeting.showDetailsRequest.participants'|trans }}</th>
+            <th>{{ 'event.meeting.showDetailsRequest.state'|trans }}</th>
+        </thead>
+        <tbody>
+        {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
+        <tr>
+            <td>
+                {{ meetingRequestView.sheetName }}
+            </td>
+            <td>
+                {% for participantName in meetingRequestView.participantNames %}
+                    {{ participantName }}
+                {% endfor %}
+            </td>
+            <td>
+                <span class="btn-xs alert-{{ state[meetingRequestView.state] }}">
+                        {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>{{ 'event.meeting.showDetailsRequest.message'|trans }}</h3>
+    {% for message in meetingRequestView.messages %}
+        <blockquote{% if sheet == message.from %} class="blockquote-reverse"{% endif %}>
+            {{ meetingRequestView.messages }}
+        </blockquote>
+    {% endfor %}
+
+{% endblock %}
