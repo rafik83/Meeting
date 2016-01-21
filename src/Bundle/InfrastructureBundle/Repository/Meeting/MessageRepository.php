@@ -64,7 +64,7 @@ class MessageRepository implements MessageRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getMessageByMeetingRequest(Request $request)
+    public function getMessagesByMeetingRequest(Request $request)
     {
         $queryBuilder = $this
             ->entityManager
@@ -75,6 +75,6 @@ class MessageRepository implements MessageRepositoryInterface
             ->setParameter('request', $request)
         ;
 
-        return $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+        return $queryBuilder->getQuery()->getResult();
     }
 }
