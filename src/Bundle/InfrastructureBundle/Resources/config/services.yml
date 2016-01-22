@@ -458,18 +458,22 @@ services:
     #
     # Order component
     #
+    components.sheet.group_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Order\GroupFactory
+        arguments:
+            - '@components.sheet.template_factory'
     components.sheet.order_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory
         arguments:
-            - '@components.sheet.template_factory'
+            - '@components.sheet.group_factory'
     components.sheet.order_merge_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory
         arguments:
-            - '@components.sheet.order_view_factory'
+            - '@components.sheet.group_factory'
     components.sheet.cart_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\CartViewFactory
         arguments:
-            - '@components.sheet.order_view_factory'
+            - '@components.sheet.group_factory'
 
     #
     # Proforma component

@@ -16,18 +16,18 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 class OrderMergeFactory
 {
     /**
-     * @var OrderViewFactory
+     * @var GroupFactory
      */
-    private $orderViewFactory;
+    private $groupFactory;
 
     /**
      * OrderMergeFactory constructor.
      *
-     * @param OrderViewFactory $orderViewFactory
+     * @param GroupFactory $groupFactory
      */
-    public function __construct(OrderViewFactory $orderViewFactory)
+    public function __construct(GroupFactory $groupFactory)
     {
-        $this->orderViewFactory = $orderViewFactory;
+        $this->groupFactory = $groupFactory;
     }
 
     /**
@@ -66,7 +66,7 @@ class OrderMergeFactory
         }
 
         return new OrderMerge(
-            $this->orderViewFactory->createGroupsFromArray($template, $data, $locale),
+            $this->groupFactory->createGroupsFromArray($template, $data, $locale),
             $mode,
             $vat
         );

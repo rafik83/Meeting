@@ -15,18 +15,18 @@ use Proximum\Vimeet\Domain\Model\Cart;
 class CartViewFactory
 {
     /**
-     * @var OrderViewFactory
+     * @var GroupFactory
      */
-    private $orderViewFactory;
+    private $groupFactory;
 
     /**
      * CartViewFactory constructor.
      *
-     * @param OrderViewFactory $orderViewFactory
+     * @param GroupFactory $groupFactory
      */
-    public function __construct(OrderViewFactory $orderViewFactory)
+    public function __construct(GroupFactory $groupFactory)
     {
-        $this->orderViewFactory = $orderViewFactory;
+        $this->groupFactory = $groupFactory;
     }
 
     /**
@@ -38,7 +38,7 @@ class CartViewFactory
     public function createFromCart(Cart $cart, $locale)
     {
         return new CartView(
-            $this->orderViewFactory->createGroupsFromArray($cart->getTemplate(), $cart->getData(), $locale),
+            $this->groupFactory->createGroupsFromArray($cart->getTemplate(), $cart->getData(), $locale),
             $cart->getSheet()->getEvent()->getMode(),
             $cart->getSheet()->getEvent()->getVat()
         );
