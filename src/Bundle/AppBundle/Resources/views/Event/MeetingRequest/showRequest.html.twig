@@ -31,8 +31,8 @@
 
     <h3>{{ 'event.meeting.showDetailsRequest.message'|trans }}</h3>
     {% for message in meetingRequestView.messages %}
-        <blockquote{% if sheet == message.from %} class="blockquote-reverse"{% endif %}>
-            {{ meetingRequestView.messages }}
+        <blockquote{% if sheet == meetingRequest.fromSheet %} class="blockquote-reverse"{% endif %}>
+            {{ message.content }}
         </blockquote>
     {% endfor %}
 

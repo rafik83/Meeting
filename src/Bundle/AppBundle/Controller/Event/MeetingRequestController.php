@@ -269,6 +269,7 @@ class MeetingRequestController extends BaseController
             'eventView'          => $eventView,
             'meetingRequestView' => $meetingRequestView,
             'sheet'              => $sheet,
+            'meetingRequest'     => $meetingRequest,
         ]);
 
     }
