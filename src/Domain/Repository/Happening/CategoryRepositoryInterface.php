@@ -21,8 +21,14 @@ interface CategoryRepositoryInterface
     public function add(Category $category);
 
     /**
-     * @param Event $event
+     * @param Category $category
+     */
+    public function set(Category $category);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
      * @return Category[]
      */
-    public function findByEvent(Event $event);
+    public function findByEvent(Event $event, $locale);
 }
