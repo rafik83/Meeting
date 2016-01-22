@@ -103,6 +103,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository_happening.category_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
