@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Happening\Category:
     type:  entity
-    table: type
+    table: happening_category
     id:
         id:
             type: integer
@@ -12,3 +12,6 @@ Proximum\Vimeet\Domain\Model\Happening\Category:
             mappedBy: type
             indexBy: locale
             cascade: ["persist"]
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
