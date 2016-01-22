@@ -303,7 +303,6 @@ form:
         children:
             amount:
                 label: Montant
-
             date:
                 label: Date
             mode:
