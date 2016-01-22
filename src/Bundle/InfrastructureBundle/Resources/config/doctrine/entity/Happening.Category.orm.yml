@@ -6,10 +6,13 @@ Proximum\Vimeet\Domain\Model\Happening\Category:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        picto:
+            type: string
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation
-            mappedBy: type
+            mappedBy: category
             indexBy: locale
             cascade: ["persist"]
     manyToOne:
