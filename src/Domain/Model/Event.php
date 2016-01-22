@@ -17,6 +17,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Event
 {
+    const MODE_WITH_VAT    = 'with_vat';
+    const MODE_WITHOUT_VAT = 'without_vat';
+
     /**
      * @var int
      */
@@ -78,7 +81,12 @@ class Event
     private $legalInformation;
 
     /**
-     * @var int
+     * @var string
+     */
+    private $mode;
+
+    /**
+     * @var float
      */
     private $vat;
 
@@ -244,7 +252,17 @@ class Event
     }
 
     /**
-     * @return int
+     * Get mode
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @return float
      */
     public function getVat()
     {
