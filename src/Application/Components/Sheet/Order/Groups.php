@@ -10,12 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\Exception\VatNotEnabledException;
+use Proximum\Vimeet\Domain\Model\Event;
+
 abstract class Groups
 {
     /**
      * @var GroupView[]
      */
     private $groups;
+
+    /**
+     * @var string
+     */
+    private $mode;
 
     /**
      * @var float
@@ -26,11 +34,13 @@ abstract class Groups
      * Groups constructor.
      *
      * @param GroupView[] $groups
+     * @param string      $mode
      * @param float       $vat
      */
-    public function __construct(array $groups, $vat)
+    public function __construct(array $groups, $mode, $vat)
     {
         $this->groups = $groups;
+        $this->mode   = $mode;
         $this->vat    = $vat;
     }
 
@@ -103,9 +113,14 @@ abstract class Groups
 
     /**
      * @return float
+     * @throws VatNotEnabledException
      */
     public function getTotalWithVat()
     {
+        if ($this->mode !== Event::MODE_WITH_VAT) {
+            throw new VatNotEnabledException('Vat not enabled');
+        }
+
         return $this->getTotal() * (1 + $this->getVat() / 100);
     }
 }

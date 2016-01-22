@@ -39,6 +39,7 @@ class CartViewFactory
     {
         return new CartView(
             $this->orderViewFactory->createGroupsFromArray($cart->getTemplate(), $cart->getData(), $locale),
+            $cart->getSheet()->getEvent()->getMode(),
             $cart->getSheet()->getEvent()->getVat()
         );
     }

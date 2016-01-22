@@ -40,6 +40,7 @@ class OrderMergeFactory
     {
         return $this->createFromOrders(
             $sheet->getOrders()->toArray(),
+            $sheet->getEvent()->getMode(),
             $sheet->getEvent()->getVat(),
             $locale
         );
@@ -48,12 +49,13 @@ class OrderMergeFactory
 
     /**
      * @param Order[] $orders
+     * @param string  $mode
      * @param float   $vat
      * @param string  $locale
      *
      * @return OrderView
      */
-    public function createFromOrders(array $orders, $vat, $locale)
+    public function createFromOrders(array $orders, $mode, $vat, $locale)
     {
         $template = [];
         $data     = [];
@@ -65,6 +67,7 @@ class OrderMergeFactory
 
         return new OrderMerge(
             $this->orderViewFactory->createGroupsFromArray($template, $data, $locale),
+            $mode,
             $vat
         );
     }

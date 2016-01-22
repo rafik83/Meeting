@@ -183,7 +183,7 @@ class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Expected
-        $expected = new OrderMerge([], 20);
+        $expected = new OrderMerge([], Event::MODE_WITH_VAT, 20);
 
         // Mock
         $orderViewFactory = $this->prophesize(OrderViewFactory::class);
@@ -192,7 +192,7 @@ class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
         // Merge
         $merger = new OrderMergeFactory($orderViewFactory->reveal());
 
-        $this->assertEquals($expected, $merger->createFromOrders($orders, 20, 'fr'));
+        $this->assertEquals($expected, $merger->createFromOrders($orders, Event::MODE_WITH_VAT, 20, 'fr'));
     }
 
     private function createOrder(Sheet $sheet, array $template, array $data)
