@@ -15,7 +15,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\PaymentModeType;
 
 abstract class AbstractTransactionType extends AbstractType
 {
@@ -27,7 +26,7 @@ abstract class AbstractTransactionType extends AbstractType
         $builder
             ->add('amount', NumberType::class)
             ->add('date', DateTimeType::class)
-            ->add('mode', PaymentModeType::class, ['placeholder' => ''])
+            ->add('mode', TransactionModeType::class, ['placeholder' => ''])
             ->add('reference', TextType::class, ['required' => false])
         ;
     }
