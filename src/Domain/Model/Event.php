@@ -203,12 +203,16 @@ class Event
      * @param string $title
      * @param array  $locales
      * @param string $fallback
+     * @param string $mode
+     * @param float  $vat
      */
-    public function update($title, array $locales, $fallback)
+    public function update($title, array $locales, $fallback, $mode, $vat)
     {
         $this->title    = $title;
         $this->locales  = $locales;
         $this->fallback = $fallback;
+        $this->mode     = $mode;
+        $this->vat      = $vat;
     }
 
     /**
