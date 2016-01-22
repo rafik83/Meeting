@@ -1,0 +1,14 @@
+Proximum\Vimeet\Domain\Model\Happening\Category:
+    type:  entity
+    table: type
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation
+            mappedBy: type
+            indexBy: locale
+            cascade: ["persist"]
