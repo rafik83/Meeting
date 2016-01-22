@@ -40,16 +40,30 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
+     * @param Category $category
+     */
+    public function set(Category $category)
+    {
+        $this->entityManager->flush($category);
+
+        foreach ($category->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findByEvent(Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('category')
+            ->select('NEW Proximum\Vimeet\Domain\View\Happening\CategoryListView(category.id, translation.title, category.picto)')
             ->from(Category::class, 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->where('category.event = :event')
+            ->setParameter('locale', $locale)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
