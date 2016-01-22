@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Happening;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 
 interface CategoryRepositoryInterface
@@ -18,4 +19,10 @@ interface CategoryRepositoryInterface
      * @param Category $category
      */
     public function add(Category $category);
+
+    /**
+     * @param Event $event
+     * @return Category[]
+     */
+    public function findByEvent(Event $event);
 }

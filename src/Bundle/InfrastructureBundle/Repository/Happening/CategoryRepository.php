@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
 
@@ -30,11 +31,27 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
-     * @param Category $category
+     * {@inheritdoc}
      */
     public function add(Category $category)
     {
         $this->entityManager->persist($category);
         $this->entityManager->flush($category);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category')
+            ->from(Category::class, 'category')
+            ->where('category.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
