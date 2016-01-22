@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Happening\Category;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
-use Proximum\Vimeet\Domain\Model\Template;
-use Proximum\Vimeet\Domain\Model\Type;
 
 class Create
 {
