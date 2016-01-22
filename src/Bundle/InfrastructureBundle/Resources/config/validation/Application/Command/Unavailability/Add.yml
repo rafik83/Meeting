@@ -14,5 +14,6 @@ Proximum\Vimeet\Application\Command\Unavailability\Add:
             - NotBlank: ~
             - Count:
                 min: 1
+                minMessage: "validators.unavailability.participants.count.min"
             - All:
                 - Type: { type: object }
