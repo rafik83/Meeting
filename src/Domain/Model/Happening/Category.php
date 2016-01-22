@@ -37,11 +37,13 @@ class Category
 
     /**
      * Category constructor.
-     * @param Event $event
+     * @param Event  $event
+     * @param string $picto
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $picto)
     {
         $this->event        = $event;
+        $this->picto        = $picto;
         $this->translations = new ArrayCollection();
     }
 

@@ -101,4 +101,16 @@ class CategoryTranslation
     {
         $this->title = $title;
     }
+
+    /**
+     * @param string $title
+     *
+     * @return CategoryTranslation
+     */
+    public function update($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
 }
