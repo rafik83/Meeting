@@ -9,6 +9,8 @@ Proximum\Vimeet\Domain\Model\Transaction:
     fields:
         amount:
             type: float
+        date:
+            type: datetime
         mode:
             type: string
         reference:
