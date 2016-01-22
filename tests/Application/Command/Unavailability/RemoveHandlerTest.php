@@ -32,7 +32,7 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         //Actual unavailability
         $unavailability = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 11:00:00'));

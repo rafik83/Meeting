@@ -110,7 +110,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $sheet = new Sheet($event, $type, [], []);
-        $order = new Order($sheet, 'unpaid', '', [], [], [], [], new \DateTime, 'toto');
+        $order = new Order($sheet, 'unpaid', [], [], [], [], new \DateTime, 'toto');
         $sheet->addOrder($order);
 
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');

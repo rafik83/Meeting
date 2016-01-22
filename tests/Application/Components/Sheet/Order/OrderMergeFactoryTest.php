@@ -197,6 +197,6 @@ class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
 
     private function createOrder(Sheet $sheet, array $template, array $data)
     {
-        return new Order($sheet, Order::STATE_PAID, '', $data, $template, [], [], new \DateTime(), '');
+        return new Order($sheet, Order::STATE_PAID, $data, $template, [], [], new \DateTime(), '');
     }
 }
