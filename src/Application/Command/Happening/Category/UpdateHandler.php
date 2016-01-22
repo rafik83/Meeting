@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Category;
 
-
 use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
 
 class UpdateHandler
