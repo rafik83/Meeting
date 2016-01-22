@@ -265,66 +265,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($template, $productBuilder->createFromType($type));
     }
 
-    public function testCreateFromTypeWithChoice()
-    {
-        // In
-        $event = new Event();
-        $type  = new Type($event);
-        $type->setPackageTemplate([
-            'step1' => [
-                'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
-                'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-                'template'    => [
-                    'choice1' => [
-                        'type'        => 'lib_choices',
-                        'label'       => ['fr' => 'Choix 1', 'en' => 'Choice 1'],
-                        'placeholder' => ['fr' => '--- Sélectionner un item  ---', 'en' => '--- Choose an item  ---'],
-                        'required'    => true,
-                        'private'     => false,
-                        'choices'     => [
-                            'item1' => ['label' => ['fr' => 'Item 1', 'en' => 'Item 1']],
-                            'item2' => ['label' => ['fr' => 'Item 2', 'en' => 'Item 2']],
-                            'item3' => ['label' => ['fr' => 'Item 3', 'en' => 'Item 3']],
-                            'item4' => ['label' => ['fr' => 'Item 4', 'en' => 'Item 4']],
-                        ],
-                    ],
-                ],
-            ]
-        ]);
-
-        // Expected
-        $template = new Template();
-
-        $step1 = new Step('step1');
-        $step1->setOptions([
-            'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
-            'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-            'template'    => [
-                'choice1' => [
-                    'type'        => 'lib_choices',
-                    'label'       => ['fr' => 'Choix 1', 'en' => 'Choice 1'],
-                    'placeholder' => ['fr' => '--- Sélectionner un item  ---', 'en' => '--- Choose an item  ---'],
-                    'required'    => true,
-                    'private'     => false,
-                    'choices'     => [
-                        'item1' => ['label' => ['fr' => 'Item 1', 'en' => 'Item 1']],
-                        'item2' => ['label' => ['fr' => 'Item 2', 'en' => 'Item 2']],
-                        'item3' => ['label' => ['fr' => 'Item 3', 'en' => 'Item 3']],
-                        'item4' => ['label' => ['fr' => 'Item 4', 'en' => 'Item 4']],
-                    ],
-                ],
-            ]
-        ]);
-        $template->addStep($step1);
-
-        // Builder
-        $productBuilder = new ProductBuilder();
-
-        // Assert
-        $this->assertEquals($template, $productBuilder->createFromType($type));
-    }
-
-    public function _testWithEmptyPackage()
+    public function testWithEmptyPackage()
     {
         $expectedTemplate = new Template();
         $productBuilder   = new ProductBuilder();
@@ -338,7 +279,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplate, $template);
     }
 
-    public function _testProductBuilderWithoutIncludedIn()
+    public function testProductBuilderWithoutIncludedIn()
     {
         $expectedTemplate   = new Template();
         $expectedStep       = new Step('563cae7496da1');
@@ -519,7 +460,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplate, $template);
     }
 
-    public function _testProductBuilderWithIncludedIn()
+    public function testProductBuilderWithIncludedIn()
     {
         $expectedTemplate   = new Template();
         $expectedStep       = new Step('563cae7496da1');
