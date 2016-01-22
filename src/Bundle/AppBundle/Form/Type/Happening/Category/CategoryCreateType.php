@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -27,15 +26,7 @@ class CategoryCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('picto', ChoiceType::class, [
-                'choices' => [
-                    'picto1' => 'picto1',
-                    'picto2' => 'picto2',
-                    'picto3' => 'picto3',
-                    'picto4' => 'picto4',
-                ],
-                'choices_as_values' => true,
-            ])
+            ->add('picto', CategoryPictoType::class)
             ->add('translations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
                 'label'      => false,
