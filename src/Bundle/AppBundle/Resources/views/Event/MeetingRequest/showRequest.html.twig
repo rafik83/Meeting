@@ -3,6 +3,7 @@
 {% block title 'event.meeting.showDetailsRequest.title'|trans %}
 
 {% block content %}
+
     <h2>{{ 'event.meeting.showDetailsRequest.title'|trans }}</h2>
     <table class="table table-bordered">
         <thead>
@@ -13,9 +14,7 @@
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
         <tr>
-            <td>
-                {{ meetingRequestView.sheetName }}
-            </td>
+            <td>{{ meetingRequestView.sheetName }}</td>
             <td>
                 {% for participantName in meetingRequestView.participantNames %}
                     {{ participantName }}
@@ -23,7 +22,7 @@
             </td>
             <td>
                 <span class="btn-xs alert-{{ state[meetingRequestView.state] }}">
-                        {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
+                    {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
             </td>
         </tr>
