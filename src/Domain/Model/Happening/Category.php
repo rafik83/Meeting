@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Category
 {
@@ -18,6 +19,11 @@ class Category
      * @var int
      */
     private $id;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * @var string
@@ -31,9 +37,11 @@ class Category
 
     /**
      * Category constructor.
+     * @param Event $event
      */
-    public function __construct()
+    public function __construct(Event $event)
     {
+        $this->event        = $event;
         $this->translations = new ArrayCollection();
     }
 
@@ -43,6 +51,22 @@ class Category
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
     }
 
     /**
