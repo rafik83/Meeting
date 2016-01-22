@@ -193,3 +193,26 @@ admin_sheet_order_update_row:
         row: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:updateRow }
+
+#
+# Happening
+#
+admin_happening_category_list:
+    path: /event/{id}/happening/category
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:listCategory }
+admin_happening_category_create:
+    path: /event/{id}/happening/category/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:createCategory }
+admin_happening_category_update:
+    path: /event/{id}/happening/category/{category}/update
+    requirements:
+        id: \d+
+        category: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:updateCategory }
