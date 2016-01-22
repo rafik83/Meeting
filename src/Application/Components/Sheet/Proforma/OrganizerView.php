@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
+use Proximum\Vimeet\Domain\Model\Address;
+
 class OrganizerView
 {
     /**
@@ -18,7 +20,7 @@ class OrganizerView
     public $organiserName;
 
     /**
-     * @var string
+     * @var Address
      */
     public $paymentAddress;
 
@@ -45,14 +47,14 @@ class OrganizerView
     /**
      * OrganizerView constructor.
      *
-     * @param string $organiserName
-     * @param string $paymentAddress
-     * @param string $organiserEmail
-     * @param string $bankInfo
-     * @param string $legalInformation
-     * @param string $elementToJoinWithInvoice
+     * @param string  $organiserName
+     * @param Address $paymentAddress
+     * @param string  $organiserEmail
+     * @param string  $bankInfo
+     * @param string  $legalInformation
+     * @param string  $elementToJoinWithInvoice
      */
-    public function __construct($organiserName, $paymentAddress, $organiserEmail, $bankInfo, $legalInformation, $elementToJoinWithInvoice)
+    public function __construct($organiserName, Address $paymentAddress, $organiserEmail, $bankInfo, $legalInformation, $elementToJoinWithInvoice)
     {
         $this->organiserName            = $organiserName;
         $this->paymentAddress           = $paymentAddress;

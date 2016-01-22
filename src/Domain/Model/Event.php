@@ -58,7 +58,7 @@ class Event
     private $organiserName;
 
     /**
-     * @var string
+     * @var Address
      */
     private $paymentAddress;
 
@@ -212,7 +212,7 @@ class Event
     }
 
     /**
-     * @return string
+     * @return Address
      */
     public function getPaymentAddress()
     {
