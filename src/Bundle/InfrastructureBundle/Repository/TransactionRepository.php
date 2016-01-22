@@ -41,7 +41,9 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('transaction')
-            ->from(Transaction::class, 'transaction');
+            ->from(Transaction::class, 'transaction')
+            ->where('transaction.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getResult();
     }
