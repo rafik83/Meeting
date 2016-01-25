@@ -1,3 +1,5 @@
+{{ dump(order) }}
+
 <table class="table table-condensed">
     <thead>
     <tr>
@@ -9,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for groupName, group in order.groups %}
+    {% for groupName, group in order.groups if group.rows|length %}
         <tr class="active">
             <th colspan="6">{{ group.label }}</th>
         </tr>

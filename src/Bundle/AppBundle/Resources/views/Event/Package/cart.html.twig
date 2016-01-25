@@ -5,7 +5,7 @@
 {% block content %}
     <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
 
-    {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': cartView }, false) }}
+    {{ include('VimeetAppBundle:Event/Package:table.html.twig', { 'order': cartView }, false) }}
 
     <div class="text-center">
         <a href="{{ path('event_sheet_billing', {
