@@ -10,7 +10,6 @@
 
 namespace Tests\Application\Command\Happening\Category;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Command\Happening\Category\Create;
 use Proximum\Vimeet\Application\Command\Happening\Category\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
