@@ -43,7 +43,7 @@ class EventUpdateType extends AbstractType
                 'entry_type' => EventUpdateTranslationType::class,
                 'label'      => false,
             ])
-            ->add('mode', VatMode::class, [
+            ->add('mode', VatModeType::class, [
                 'expanded' => true,
             ])
             ->add('vat', NumberType::class)

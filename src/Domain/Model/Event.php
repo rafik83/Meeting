@@ -17,8 +17,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Event
 {
-    const MODE_WITH_VAT    = 'with_vat';
-    const MODE_WITHOUT_VAT = 'without_vat';
+    /**
+     * All Taxes Include : prices include taxes, no additional taxes computed
+     */
+    const VAT_MODE_ATI = 'ati';
+
+    /**
+     * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
+     */
+    const VAT_MODE_ET  = 'et';
 
     /**
      * @var int
