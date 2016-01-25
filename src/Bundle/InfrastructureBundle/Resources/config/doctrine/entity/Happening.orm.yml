@@ -18,6 +18,8 @@ Proximum\Vimeet\Domain\Model\Happening:
         blocking:
             type: boolean
     manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
         schedule:
             targetEntity: Proximum\Vimeet\Domain\Model\Schedule
             inversedBy: happenings

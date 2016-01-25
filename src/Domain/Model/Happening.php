@@ -18,6 +18,11 @@ class Happening
     private $id;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var Schedule
      */
     private $schedule;
@@ -50,6 +55,7 @@ class Happening
     /**
      * Happening constructor.
      *
+     * @param Event     $event
      * @param Schedule  $schedule
      * @param \DateTime $begin
      * @param \DateTime $end
@@ -57,8 +63,9 @@ class Happening
      * @param string    $description
      * @param bool      $blocking
      */
-    public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
+    public function __construct(Event $event, Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
     {
+        $this->event       = $event;
         $this->schedule    = $schedule;
         $this->begin       = $begin;
         $this->end         = $end;
@@ -75,6 +82,22 @@ class Happening
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
     }
 
     /**
