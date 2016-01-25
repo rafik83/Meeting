@@ -5,25 +5,39 @@
         <th class="text-right">Prix unitaire</th>
         <th class="text-right">Quantité</th>
         <th class="text-right">Total</th>
+        <th class="text-right">Action</th>
     </tr>
     </thead>
     <tbody>
     {% for groupName, group in order.groups %}
         <tr class="active">
-            <th colspan="5">{{ group.label }}</th>
+            <th colspan="6">{{ group.label }}</th>
         </tr>
         {% for rowName, row in group.rows %}
             <tr>
                 <td>&nbsp;</td>
-                <td>{{ row.label }}</td>
+                <td>
+                    {{ row.label }}
+                    {% if row.updatableUntil %}
+                        <span class="label {{ row.updatable ? 'label-default' : 'label-danger' }}">
+                            {{ row.updatable ? "Modifiable jusqu'au" : "N'est plus modifiable depuis le" }}
+                            {{ row.updatableUntil|date('d/m/Y à H:i') }}
+                        </span>
+                    {% endif %}
+                </td>
                 <td class="text-right">{{ row.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 <td class="text-right">{{ row.quantity }}</td>
                 <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+                <td class="text-right">
+                    {% if row.updatable %}
+                        <a href="#" class="btn btn-default btn-xs">Modifier</a>
+                    {% endif %}
+                </td>
             </tr>
             {% if row.included is not empty %}
                 <tr>
                     <td>&nbsp;</td>
-                    <th colspan="4">Inclus :</th>
+                    <th colspan="5">Inclus :</th>
                 </tr>
             {% endif %}
             {% for included in row.included %}
@@ -33,6 +47,7 @@
                     <td class="text-right">{{ included.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                     <td class="text-right">{{ included.quantity }}</td>
                     <td class="text-right">{{ included.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+                    <td></td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -42,16 +57,19 @@
         <th colspan="2"></th>
         <th colspan="2">Total</th>
         <th class="text-right">{{ order.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+        <th></th>
     </tr>
     <tr>
         <th colspan="2"></th>
         <th colspan="2">TVA</th>
         <th class="text-right">{{ order.vat }}%</th>
+        <th></th>
     </tr>
     <tr>
         <th colspan="2"></th>
         <th colspan="2">Total TTC</th>
         <th class="text-right">{{ order.totalWithVat|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+        <th></th>
     </tr>
     </tbody>
 
