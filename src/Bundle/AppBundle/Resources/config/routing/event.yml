@@ -399,6 +399,16 @@ event_meeting_request_cancel:
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
 
+event_meeting_request_show:
+    path: /sheet/{id}/meeting/request/show/{meetingRequest}
+    host: '{subdomain}.%domain%'
+    requirements:
+        id: \d+
+        meetingRequest: \d+
+        subdomain: '[a-zA-Z0-9\-]+'
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
+
 #
 # Notification
 #

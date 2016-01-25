@@ -100,6 +100,7 @@ event:
             createdAt: Envoyé le
             actions: Actions
             cancel: Annuler
+            show: Voir
         listProposition:
             title: Liste de vos propositions de rendez-vous
             state: Statut
@@ -112,6 +113,13 @@ event:
             accept: Accepter
             refuse: Refuser
             actions: Actions
+            show: Voir
+        showDetailsRequest:
+            title: Détails de la demande de rendez-vous
+            to: A destination de
+            participants: Les participants
+            message: Votre conversation
+            state: Statut
         request:
             state:
                 from:

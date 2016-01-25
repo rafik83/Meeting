@@ -18,9 +18,11 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -225,6 +227,51 @@ class MeetingRequestController extends BaseController
             'toName'    => $toName,
             'form'      => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param EventView      $eventView
+     * @param Sheet          $sheet
+     * @param MeetingRequest $meetingRequest
+     *
+     * @return Response
+     */
+    public function showRequestAction(
+        EventView $eventView,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ){
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($sheet === $meetingRequest->getFromSheet()) {
+            $otherSheet   = $meetingRequest->getToSheet();
+            $participants = $meetingRequest->getFromParticipants()->toArray();
+        } elseif ($sheet === $meetingRequest->getToSheet()) {
+            $otherSheet   = $meetingRequest->getFromSheet();
+            $participants = $meetingRequest->getFromParticipants()->toArray();
+        } else {
+            throw $this->createNotFoundException('Request not found');
+        }
+
+        $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')->getMessagesByMeetingRequest($meetingRequest);
+
+        $meetingRequestView = new ShowDetailsView(
+            $meetingRequest->getId(),
+            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($otherSheet),
+            array_map(function (Participant $participant) {
+                return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
+            }, $participants),
+            $messages,
+            $meetingRequest->getState()
+        );
+
+        return $this->render('VimeetAppBundle:Event/MeetingRequest:showRequest.html.twig', [
+            'eventView'          => $eventView,
+            'meetingRequestView' => $meetingRequestView,
+            'sheet'              => $sheet,
+            'meetingRequest'     => $meetingRequest,
+        ]);
+
     }
 
     /**
