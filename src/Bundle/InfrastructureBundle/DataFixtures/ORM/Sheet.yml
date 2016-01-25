@@ -13,17 +13,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 563ccd1fe3a81: FR
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>
-        packageData:
-            "563cae7496da1":
-                "563cae8a5072d":
-                    "value": "563cb13a4d3de"
-            "563cae9c37ff6":
-                "56407f8b58f6b":
-                    "participant": true
-                    "participant_bought": 3
-                "56407f9b2a1a3":
-                    "planning": false
-                    "planning_bought": null
+        packageData: []
 
     # Proximum sheets
     proximum_sheet_visiteur:

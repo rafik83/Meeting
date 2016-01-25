@@ -11,9 +11,13 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: json_array
         owner:
             type: boolean
+        active:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             inversedBy: participants
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+        order:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order

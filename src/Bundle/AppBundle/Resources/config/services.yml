@@ -1,11 +1,4 @@
 services:
-
-    #
-    # Services
-    #
-    vimeet_app.service.participant_manager:
-        class: Proximum\Vimeet\Bundle\AppBundle\Service\ParticipantManager
-
     #
     # Params converters
     #
@@ -137,7 +130,26 @@ services:
                 lib_first_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType'
                 lib_organisation: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType'
         tags:
-            - { name: 'form.type' }
+            - { name: form.type }
+    vimeet_app.form_type_package.data_product_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\DataProductType
+        arguments:
+            -
+                choice_with_description: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType'
+                upload_with_choices: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType'
+                lib_text: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType'
+                lib_textarea: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType'
+                lib_email: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType'
+                lib_option: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType'
+                lib_participant: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType'
+                lib_planning: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType'
+                lib_country: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType'
+                lib_choice: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType'
+                lib_last_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType'
+                lib_first_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType'
+                lib_organisation: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType'
+        tags:
+            - { name: form.type }
     vimeet_app.form_type_library.choice_with_description:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:
@@ -156,6 +168,8 @@ services:
             - { name: 'form.type' }
     vimeet_app.form_type_library.option_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
+        arguments:
+            - '@vimeet_infrastructure.application.components.order.order_manager'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.participant_type:
@@ -163,7 +177,7 @@ services:
         tags:
             - { name: 'form.type' }
         arguments:
-            - '@vimeet_app.service.participant_manager'
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
     vimeet_app.form_type_library.planning_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType
         tags:

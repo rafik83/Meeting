@@ -35,7 +35,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
         $product->setOptions([]);
         $dataValue = [
             "planning"        => true,
-            "planning_bought" => 2,
+            "quantity" => 2,
         ];
         $locale    = 'fr';
 
@@ -64,7 +64,7 @@ class LibPlanningCartTest extends \PHPUnit_Framework_TestCase
 
         $dataValue = [
             'planning'        => true,
-            'planning_bought' => 2,
+            'quantity' => 2,
         ];
 
         $result = new CartRow('Ajouter des plannings', 2, 550);

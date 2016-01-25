@@ -4,6 +4,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_3
         sheet: @sheet_2
         owner: true
+        active: true
         data:
             563caf1d9b1cb: "Super"
             563caf2746398: "Test"
@@ -61,3 +62,506 @@ Proximum\Vimeet\Domain\Model\Sheet:
             "5645e6067f46a": "test"
             "5645e5fd8f6a7": "FR"
             "5645e610e0e1b": "test"
+        orders: [@order_1]
+
+Proximum\Vimeet\Domain\Model\Order:
+    order_1:
+        __construct: false
+        state: 'unpaid'
+        packageData:
+            "563cae7496da1":
+                "563cae8a5072d":
+                    "value": "563cb15fbf353"
+            "563cae9c37ff6":
+                "56407f8b58f6b":
+                    "participant": true
+                    "participant_bought": 1
+                "56407f9b2a1a3":
+                    "planning": true
+                    "planning_bought": 2
+            "56407fa453f4e":
+                "563caea37f864":
+                    "file": null
+                    "value":
+                        "value": "563cb173969ba"
+                "563caeb152464": null
+                "563caeb98d3af":
+                    "file": null
+                    "value":
+                        "value": "563caf7c2b89a"
+                "563caec361723": null
+                "563caecd66d86":
+                    "value": true
+                    "quantity": 3
+                "563caedade41a":
+                    "value": false
+                    "quantity": 1
+            "563caee826357":
+                "563caef76f49e":
+                    "value": false
+                "563caefd7879f":
+                    "value": true
+                    "quantity": 1
+                "563caf044d656":
+                    "value": false
+        packageTemplate:
+            563cae7496da1:
+                label:
+                    fr: "Forfait de participation"
+                    en: "Participation package"
+                description:
+                    fr: "Description de l'étape en français"
+                    en: "Step Description in english"
+                template:
+                    563cae8a5072d:
+                        label:
+                            fr: "Forfait"
+                            en: "Package"
+                        description:
+                            fr: "Description forfait fr"
+                            en: "Description package en"
+                        type: choice_with_description
+                        required: true
+                        choices:
+                            563cb1257722e:
+                                label:
+                                    fr: "Formule Exposant"
+                                    en: "Exhibitors package"
+                                description:
+                                    fr: >
+                                        Votre inscription aux Rendez-vous CARNOT comprend les prestations suivantes (valables pour 1 personne) :
+                                           - La publication de votre profil dans le catalogue envoyé aux participants par e-mail.
+                                           - L’accès au catalogue en ligne comprenant les « fiches de présentation » de chaque participant pour faire vos choix de rendez-vous.
+                                           - L’ouverture de votre « Espace Client » sur notre site internet.
+                                           - L’assistance logistique de notre équipe avant et pendant le salon.
+                                           - Un planning de rendez-vous préprogrammés sur 2 jours.
+                                           - Votre stand équipé de 4 m² (2 x 2 m) comprenant votre enseigne, un rail de 2 spots lumineux, une table, 4 chaises, moquette et une prise électrique.
+                                           - L’accès gratuit aux conférences, ateliers thématiques et tables rondes.
+                                           - L’accès à la pause café permanente propice au contact informel.
+                                           - Une invitation au cocktail inaugural.
+                                    en: "Description Exhibitors"
+                                unitPrice: 2190
+                            563cb12b41909:
+                                label:
+                                    fr: "Formule Découverte"
+                                    en: "Discovery formula"
+                                description:
+                                    fr: "Description forfait Découverte"
+                                    en: "Description Discovery"
+                                unitPrice: 1090
+                            563cb13a4d3de:
+                                label:
+                                    fr: "Forfait Silver"
+                                    en: "Silver formula"
+                                description:
+                                    fr: "Description forfait  Silver"
+                                    en: "Description Silver"
+                                unitPrice: 3990
+                            563cb1546dd70:
+                                label:
+                                    fr: "Forfait Gold"
+                                    en: "Gold formula"
+                                description:
+                                    fr: "Description forfait  Gold"
+                                    en: "Description Gold"
+                                unitPrice: 5990
+                            563cb15fbf353:
+                                label:
+                                    fr: "Formule de sponsoring des CONFERENCES"
+                                    en: "Sponsoring formula for CONFERENCES"
+                                description:
+                                    fr: "Description forfait  sponsoring"
+                                    en: "Description sponsoring"
+                                unitPrice: 11000
+            563cae9c37ff6:
+                label:
+                    fr: "Augmenter le nombre de participants sur votre fiche"
+                    en: "Traduction en anglais"
+                description:
+                    fr: "description en fr"
+                    en: "description en en"
+                template:
+                    56407f8b58f6b:
+                        label:
+                            fr: "Ajouter des participants"
+                            en: "Add participants"
+                        description:
+                            fr: "Vous pouvez ajouter des participants à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des participants à votre fiche"
+                        required: false
+                        type: lib_participant
+                        unitPrice: 400
+                    56407f9b2a1a3:
+                        label:
+                            fr: "Ajouter des plannings"
+                            en: "Add plannings"
+                        description:
+                            fr: "Vous pouvez ajouter des plannings à votre fiche"
+                            en: "En Anglais: Vous pouvez ajouter des plannings à votre fiche"
+                        required: false
+                        type: lib_planning
+                        unitPrice: 550
+            56407fa453f4e:
+                label:
+                    fr: "Options proposées pour optimiser votre participation"
+                    en: "Options to optimize your participation:"
+                description:
+                    fr: "Publicité et promotion"
+                    en: "Publicité et promotion en anglais"
+                template:
+                    56615a0ab3f9f:
+                        label:
+                            fr: "Affichage logo sur site événement et supports de communication"
+                            en: "Affichage logo sur site événement et supports de communication en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 200
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bcdb140f:
+                        label:
+                            fr: "Page pub sur la fiche"
+                            en: "Page pub sur la fiche en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 300
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bf2bb41b:
+                        label:
+                            fr: "Pub dans pochette accueil"
+                            en: "Pub dans pochette accueil en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 400
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615bfe852a0:
+                        label:
+                            fr: "Logo dans les emails promotionnels de l'événement"
+                            en: "Logo dans les emails promotionnels de l'événement en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 450
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56615c2dc5e91:
+                        label:
+                            fr: "Logo sur le programme des conférences"
+                            en: "Logo sur le programme des conférences en anglais"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 1200
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+            56615ef1b3b7d:
+                label:
+                    fr: "Stands et équipements"
+                    en: "Stands et équipements en anglais:"
+                description:
+                    fr: "Description: Stands et équipements"
+                    en: "Description: Stands et équipements en anglais"
+                template:
+                    56615fbd30518:
+                        label:
+                            fr: "Stand 4m²"
+                            en: "Stand 4m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 200
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: ~
+                    56615feba09a4:
+                        label:
+                            fr: "Stand 6m²"
+                            en: "Stand 6m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 300
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
+                    56615ff492a29:
+                        label:
+                            fr: "Stand 10m²"
+                            en: "Stand 10m²"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 375
+                        quantity:
+                            min: 0
+                            max: 2
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                    56616023b335e:
+                        label:
+                            fr: "Bannière"
+                            en: "Bannière"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 250
+                        quantity:
+                            min: 0
+                            max: 1
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                    56616046619b6:
+                        label:
+                            fr: "Rail pour spot éléctrique"
+                            en: "Rail pour spot éléctrique"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 120
+                        quantity:
+                            min: 0
+                            max: 4
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+                    5661605ccbc61:
+                        label:
+                            fr: "Table"
+                            en: "Table"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 50
+                        quantity:
+                            min: 0
+                            max: 3
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+                    5661606674b6d:
+                        label:
+                            fr: "Chaise"
+                            en: "Chaise"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 40
+                        quantity:
+                            min: 0
+                            max: 8
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 4
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 4
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 6
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 6
+                    566160678d9cb:
+                        label:
+                            fr: "Prise éléctrique"
+                            en: "Prise éléctrique"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: "lib_option"
+                        unitPrice: 30
+                        quantity:
+                            min: 0
+                            max: 4
+                        includedIn:
+                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
+                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
+                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
+                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+            5666eb32401d6:
+                label:
+                    fr: "Options supplémentaires"
+                    en: "Options supplémentaires en anglais:"
+                description:
+                    fr: "Description step 3 en fr"
+                    en: "Description step 3 en en"
+                template:
+                    563caec361723:
+                        label:
+                            fr: "Lien sur la bannière pub vers votre site internet"
+                            en: "Link on the ads banner"
+                        description:
+                            fr: "Module équipé de 4m² supplémentaires"
+                            en: "Additional equipped booth of 4 sqm"
+                        type: "lib_option"
+                        required: false
+                        unitPrice: 3990
+                        quantity:
+                            min: 1
+                            max: 5
+                    563caecd66d86:
+                        label:
+                            fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
+                            en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
+                        description:
+                            fr: "Quantité min 3, quantité max 3"
+                            en: "Quantité min 3, quantité max 3"
+                        type: lib_option
+                        unitPrice: 5990
+                        quantity:
+                            min: 3
+                            max: 3
+                    563caedade41a:
+                        label:
+                            fr: "Option payant avec sélection de quantité"
+                            en: "Option payant avec sélection de quantité"
+                        description:
+                            fr: "Quantité min 1, quantité max 5"
+                            en: "Quantité min 1, quantité max 5"
+                        type: lib_option
+                        unitPrice: 11000
+                        quantity:
+                            min: 1
+                            max: 5
+            563caee826357:
+                label:
+                    en: "Options supplémentaires"
+                    fr: "Options supplémentaires"
+                description:
+                    en: "ceci est une description"
+                    fr: "ceci est une description"
+                template:
+                    563caef76f49e:
+                        label:
+                            fr: "Wifi sur place"
+                            en: "Wifi sur place"
+                        description:
+                            fr: ""
+                            en: ""
+                        type: lib_option
+                        unitPrice: 0
+                    563caefd7879f:
+                        label:
+                            fr: "traduction de votre fiche de présentation"
+                            en: "traduction de votre fiche de présentation"
+                        description:
+                            en: ""
+                            fr: ""
+                        unitPrice: 95
+                        type: lib_option
+                        quantity:
+                            min: 1
+                            max: 5
+                    563caf044d656:
+                        label:
+                            fr: "Insertion de votre brochure dans les pochettes d’accueil"
+                            en: "Insertion de votre brochure dans les pochettes d’accueil"
+                        description:
+                            en: ""
+                            fr: ""
+                        unitPrice: 2600
+                        type: lib_option
+        billingData:
+            "5645e4242d3df": "test"
+            "5645e47e7e499": "test"
+            "5645e52f445d1": "test@test.fr"
+            "5645e534daa0b": "test"
+            "5645e54061ff2": "test"
+            "5645e5f35a9e0": "test"
+            "5645e6067f46a": "test"
+            "5645e5fd8f6a7": "FJ"
+            "5645e610e0e1b": "test"
+        billingTemplate:
+            5645e4242d3df:
+                type: lib_text
+                required: true
+                label:
+                    fr: "Nom"
+                    en: "Name"
+                tags: ["billing_name"]
+            5645e47e7e499:
+                type: lib_text
+                required": false
+                label:
+                    fr: "Téléphone"
+                    en: "Phone"
+                tags: ["billing_phone"]
+            5645e52f445d1:
+                type: lib_email
+                required": true
+                label:
+                    fr: "Email"
+                    en: "Email"
+                tags: ["billing_email"]
+            5645e534daa0b:
+                type: lib_text
+                required: true
+                label:
+                    fr: "Raison sociale"
+                    en: "Company"
+                tags: ["billing_organization"]
+            5645e54061ff2:
+                type: lib_text
+                required: true
+                label:
+                    fr: "Adresse"
+                    en: "Address"
+                tags: ["billing_address"]
+            5645e5f35a9e0:
+                type: lib_text
+                required: true
+                label:
+                    fr: "Code postal"
+                    en: "Zip code"
+                tags: ["billing_zipcode"]
+            5645e6067f46a:
+                type: lib_text
+                required: true
+                label:
+                    fr: "Ville"
+                    en: "City"
+                tags: ["billing_city"]
+            5645e5fd8f6a7:
+                type: lib_country
+                required: true
+                label:
+                    fr: "Pays"
+                    en: "Country"
+                placeholder:
+                    fr: "--- Sélectionner un pays  ---"
+                    en: "--- Sélectionner un pays  ---"
+                tags: ["billing_country"]
+            5645e610e0e1b:
+                type: lib_text
+                required: false
+                label:
+                    fr: "N° de TVA intracommunautaire"
+                    en: "N° VAT"
+                tags: ["billing_vat_number"]
+        createdAt: <dateTimeBetween('-2 days', 'now')>
+        paymentMode: 'cb'
+        sheet: @sheet_2

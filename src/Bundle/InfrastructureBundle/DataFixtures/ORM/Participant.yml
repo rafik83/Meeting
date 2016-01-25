@@ -5,6 +5,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_test
         sheet: @sheet_test
         owner: true
+        active: true
         data:
             563caf1d9b1cb: "Dupond"
             563caf2746398: "Jean"
@@ -16,6 +17,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_visiteur
         sheet: @proximum_sheet_visiteur
         owner: true
+        active: true
         data:
             563cb0568a3bb: MARTIN
             563cb05cb81ec: Jean
@@ -24,6 +26,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_exposant
         sheet: @proximum_sheet_exposant
         owner: true
+        active: true
         data:
             563caf2746398: BOUCHON
             563caf1d9b1cb: François
@@ -32,6 +35,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_carnot
         sheet: @proximum_sheet_carnot
         owner: true
+        active: true
         data:
             563caf2746398: MIGNOT
             563caf1d9b1cb: Isabelle
@@ -40,6 +44,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_admin
         sheet: @proximum_sheet_admin
         owner: true
+        active: true
         data:
             563caf2746398: GOI
             563caf1d9b1cb: Layla
@@ -48,6 +53,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_test
         sheet: @proximum_sheet_test
         owner: true
+        active: true
         data:
             563caf2746398: LAROSE
             563caf1d9b1cb: Vincent
@@ -56,43 +62,18 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @proximum_user_ui
         sheet: @proximum_sheet_ui
         owner: true
+        active: true
         data:
             563caf2746398: GAGNARD
             563caf1d9b1cb: Julien
 
     # Random
-    participant_test_2:
-        __construct: false
-        user: @user_test_2
-        sheet: @sheet_test
-        owner: false
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0809090909"
-    participant_test_3:
-        __construct: false
-        user: @user_test_3
-        sheet: @sheet_test
-        owner: false
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0709090909"
-    participant_test_4:
-        __construct: false
-        user: @user_test_4
-        sheet: @sheet_test
-        owner: false
-        data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0609090909"
     participant_random_1:
         __construct: false
         user: @user_random_1
         sheet: @sheet_exposant2
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -101,6 +82,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant2
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -109,6 +91,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant4
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -117,6 +100,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant5
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
@@ -125,6 +109,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: @user_random_1
         sheet: @sheet_exposant*
         owner: false
+        active: true
         data:
             563caf1d9b1cb: <firstName()>
             563caf2746398: <lastName()>
