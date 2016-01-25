@@ -18,6 +18,11 @@ class MeetingSlot
     private $id;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var Schedule
      */
     private $schedule;
@@ -35,12 +40,14 @@ class MeetingSlot
     /**
      * MeetingSlot constructor.
      *
+     * @param Event     $event
      * @param Schedule  $schedule
      * @param \DateTime $begin
      * @param \DateTime $end
      */
-    public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end)
+    public function __construct(Event $event, Schedule $schedule, \DateTime $begin, \DateTime $end)
     {
+        $this->event    = $event;
         $this->schedule = $schedule;
         $this->begin    = $begin;
         $this->end      = $end;
@@ -54,6 +61,22 @@ class MeetingSlot
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
     }
 
     /**

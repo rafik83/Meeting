@@ -12,6 +12,8 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
         end:
             type: datetime
     manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
         schedule:
             targetEntity: Proximum\Vimeet\Domain\Model\Schedule
             inversedBy: meetingSlots
