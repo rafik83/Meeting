@@ -236,8 +236,8 @@ class NotificationEventListener implements EventSubscriberInterface
             'meeting_request.refused'             => 'onRequestRefused',
             'meeting_request.canceled'            => 'onRequestCanceled',
             'meeting.canceled'                    => 'onMeetingCanceled',
-            'meeting_request_participant.added'   => 'onParticipantAddedToMeetingRequest',
-            'meeting_request_participant.removed' => 'onParticipantRemovedToMeetingRequest',
+            'meeting_request.participant.removed' => 'onParticipantRemovedToMeetingRequest',
+            'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
         ];
     }
 }
