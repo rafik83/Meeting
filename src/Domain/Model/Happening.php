@@ -10,6 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
+use Proximum\Vimeet\Domain\Model\Happening\DescriptionTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\TitleTranslation;
+
 class Happening
 {
     /**
@@ -23,55 +28,46 @@ class Happening
     private $event;
 
     /**
-     * @var Schedule
+     * @var CategoryHappening
      */
-    private $schedule;
+    private $category;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $begin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $end;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
-    private $title;
+    private $titleTranslations;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
-    private $description;
-
-    /**
-     * @var bool
-     */
-    private $blocking;
+    private $descriptionTranslations;
 
     /**
      * Happening constructor.
      *
-     * @param Event     $event
-     * @param Schedule  $schedule
-     * @param \DateTime $begin
-     * @param \DateTime $end
-     * @param string    $title
-     * @param string    $description
-     * @param bool      $blocking
+     * @param Event              $event
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param CategoryHappening  $category
      */
-    public function __construct(Event $event, Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
     {
-        $this->event       = $event;
-        $this->schedule    = $schedule;
-        $this->begin       = $begin;
-        $this->end         = $end;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->blocking    = $blocking;
+        $this->event                   = $event;
+        $this->begin                   = $begin;
+        $this->end                     = $end;
+        $this->category                = $category;
+        $this->titleTranslations       = new ArrayCollection();
+        $this->descriptionTranslations = new ArrayCollection();
     }
 
     /**
@@ -93,27 +89,25 @@ class Happening
     }
 
     /**
-     * @param Event $event
+     * @return CategoryHappening
      */
-    public function setEvent($event)
+    public function getCategory()
     {
-        $this->event = $event;
+        return $this->category;
     }
 
     /**
-     * Get schedule.
-     *
-     * @return Schedule
+     * @param CategoryHappening $category
      */
-    public function getSchedule()
+    public function setCategory($category)
     {
-        return $this->schedule;
+        $this->category = $category;
     }
 
     /**
      * Get begin.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getBegin()
     {
@@ -123,7 +117,7 @@ class Happening
     /**
      * Get end.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getEnd()
     {
@@ -131,32 +125,34 @@ class Happening
     }
 
     /**
-     * Get title.
-     *
-     * @return string
+     * @param TitleTranslation $titleTranslation
      */
-    public function getTitle()
+    public function setTitleTranslation(TitleTranslation $titleTranslation)
     {
-        return $this->title;
+        $this->titleTranslations->set($titleTranslation->getLocale(), $titleTranslation);
     }
 
     /**
-     * Get description.
-     *
-     * @return string
+     * @param DescriptionTranslation $descriptionTranslation
      */
-    public function getDescription()
+    public function setDescriptionTranslation(DescriptionTranslation $descriptionTranslation)
     {
-        return $this->description;
+        $this->descriptionTranslations->set($descriptionTranslation->getLocale(), $descriptionTranslation);
     }
 
     /**
-     * Get blocking.
-     *
-     * @return bool
+     * @return ArrayCollection
      */
-    public function getBlocking()
+    public function getTitleTranslations()
     {
-        return $this->blocking;
+        return $this->titleTranslations;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDescriptionTranslations()
+    {
+        return $this->descriptionTranslations;
     }
 }

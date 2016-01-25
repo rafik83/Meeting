@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Happening\TitleTranslation:
+    type:  entity
+    table: happening_title_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        locale:
+            type: string
+    manyToOne:
+        happening:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            inversedBy: titleTranslations
