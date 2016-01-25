@@ -21,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Order:
             type: datetime
         paymentMode:
             type: string
+        vat:
+            type: float
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

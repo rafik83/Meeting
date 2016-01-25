@@ -44,7 +44,7 @@ class OrderViewFactory
             $order->getState(),
             $order->getPaymentMode(),
             $order->getSheet()->getType()->getEvent()->getMode(),
-            $order->getSheet()->getType()->getEvent()->getVat(),
+            $order->getVat(),
             $this->groupFactory->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale)
         );
     }
