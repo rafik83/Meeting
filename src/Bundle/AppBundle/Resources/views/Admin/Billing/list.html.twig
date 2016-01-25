@@ -7,7 +7,18 @@
         <h2>Balance : <strong class="{{ balance < 0 ? 'text-danger' : 'text-success' }}">{{ balance|number_format(2, ',', ' ') }} €</strong></h2>
     </div>
 
-    <h1 class="clearfix">{{ sheet_info }}</h1>
+    <h1>{{ sheet_info }}</h1>
+
+    <address class="clearfix">
+        <p>{{ billing.organization }}</p>
+        <p>{{ billing.name }}</p>
+        <p>
+            {{ billing.address }}<br>
+            {{ billing.zipcode }} {{ billing.city }}<br>
+            {{ billing.country|country }}
+        </p>
+        <p>N° de TVA intracommunautaire : {{ billing.vat_number }}</p>
+    </address>
 
     <h2>Liste des commandes</h2>
 

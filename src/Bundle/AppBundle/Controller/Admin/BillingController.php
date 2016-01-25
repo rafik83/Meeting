@@ -58,6 +58,9 @@ class BillingController extends Controller
 
         $balance = $transactionsTotal - $ordersTotal;
 
+        // Billing view
+        $billing = $this->get('components.sheet.billing_view_factory')->createFromSheet($sheet);
+
         return $this->render('VimeetAppBundle:Admin/Billing:list.html.twig', [
             'event'              => $event,
             'sheet'              => $sheet,
@@ -67,6 +70,7 @@ class BillingController extends Controller
             'balance'            => $balance,
             'orders_total'       => $ordersTotal,
             'transactions_total' => $transactionsTotal,
+            'billing'            => $billing,
         ]);
     }
 }
