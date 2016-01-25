@@ -56,7 +56,14 @@ class GroupFactory
         // Create groups
         $groups = [];
         foreach ($data as $groupName => $groupData) {
-            $groups[$groupName] = $this->createGroupViewFromArray($template, $groupName, $groupData, $locale);
+            $group = $this->createGroupViewFromArray($template, $groupName, $groupData, $locale);
+
+            // Filter empty groups
+            if (!$group->hasRows()) {
+                continue;
+            }
+
+            $groups[$groupName] = $group;
         }
 
         // Included in
