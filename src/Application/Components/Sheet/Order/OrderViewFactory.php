@@ -174,6 +174,10 @@ class OrderViewFactory
                     // get parts
                     $parts = explode('.', $path);
 
+                    if (!isset($data[$parts[0]]) || !isset($data[$parts[0]][$parts[1]]) || !isset($data[$parts[0]][$parts[1]]['value'])) {
+                        continue;
+                    }
+
                     // get value
                     $value = $data[$parts[0]][$parts[1]]['value'];
 
