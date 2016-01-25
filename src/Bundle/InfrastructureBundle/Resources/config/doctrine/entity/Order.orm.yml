@@ -21,7 +21,9 @@ Proximum\Vimeet\Domain\Model\Order:
             type: datetime
         paymentMode:
             type: string
-        vat:
+        vatMode:
+            type: string
+        vatRate:
             type: float
     manyToOne:
         sheet:

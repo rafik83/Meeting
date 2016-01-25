@@ -69,9 +69,14 @@ class Order
     private $paymentMode;
 
     /**
+     * @var string
+     */
+    private $vatMode;
+
+    /**
      * @var float
      */
-    private $vat;
+    private $vatRate;
 
     /**
      * @param Sheet             $sheet
@@ -101,7 +106,8 @@ class Order
         $this->billingTemplate  = $billingTemplate;
         $this->createdAt        = $createdAt;
         $this->paymentMode      = $paymentMode;
-        $this->vat              = $sheet->getEvent()->getVat();
+        $this->vatMode          = $sheet->getEvent()->getMode();
+        $this->vatRate          = $sheet->getEvent()->getVat();
     }
 
     /**
@@ -177,13 +183,35 @@ class Order
     }
 
     /**
+     * @deprecated Use getVatRate instead
+     *
      * Get vat
      *
      * @return float
      */
     public function getVat()
     {
-        return $this->vat;
+        return $this->getVatRate();
+    }
+
+    /**
+     * Get vatMode
+     *
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
+
+    /**
+     * Get vatRate
+     *
+     * @return float
+     */
+    public function getVatRate()
+    {
+        return $this->vatRate;
     }
 
     /**
