@@ -44,7 +44,9 @@ class TaggedInfoGuesser
             $groupName = $type->getGroup()->getName();
             $typeName  = $type->getName();
 
-            return $groupName === 'default' ? $data[$typeName] : $data[$groupName][$typeName];
+            return $groupName === 'default' ?
+                (isset($data[$typeName]) ? $data[$typeName] : null) :
+                (isset($data[$groupName][$typeName]) ? $data[$groupName][$typeName] : null);
         }, $types);
 
         return $values;
