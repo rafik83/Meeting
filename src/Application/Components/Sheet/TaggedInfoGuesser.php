@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Domain\Model\Order;
 
 class TaggedInfoGuesser
 {
@@ -50,5 +51,16 @@ class TaggedInfoGuesser
         }, $types);
 
         return $values;
+    }
+
+    /**
+     * @param Order  $order
+     * @param string $tag
+     *
+     * @return array
+     */
+    public function guessFromOrder(Order $order, $tag)
+    {
+        return $this->guess($order->getBillingTemplate(), $order->getBillingData(), $tag);
     }
 }
