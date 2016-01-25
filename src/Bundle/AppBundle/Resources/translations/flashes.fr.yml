@@ -87,3 +87,9 @@ flash:
                 success: La ligne a été mise à jour
             remove_row:
                 success: La ligne a été supprimé
+        happening:
+            category:
+                update:
+                    success: La catégorie de sous événement a bien été mise à jour
+                create:
+                    success: La catégorie de sous événement a bien été créée
