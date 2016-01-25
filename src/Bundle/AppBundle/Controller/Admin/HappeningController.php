@@ -30,6 +30,19 @@ class HappeningController extends Controller
      *
      * @return Response
      */
+    public function listAction(Request $request, Event $event)
+    {
+        return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function listCategoryAction(Request $request, Event $event)
     {
         $categories = $this

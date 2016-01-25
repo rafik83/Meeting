@@ -197,6 +197,12 @@ admin_sheet_order_update_row:
 #
 # Happening
 #
+admin_happening_list:
+    path: /event/{id}/happening
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:list }
 admin_happening_category_list:
     path: /event/{id}/happening/category
     requirements:
