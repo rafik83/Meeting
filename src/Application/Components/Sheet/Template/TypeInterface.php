@@ -41,6 +41,16 @@ interface TypeInterface
     public function getDescription($locale);
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getUpdatableUntil();
+
+    /**
+     * @return bool
+     */
+    public function isUpdatable();
+
+    /**
      * @return bool
      */
     public function isRequired();

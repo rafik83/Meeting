@@ -99,14 +99,12 @@ class OrderViewFactory
         $group = new GroupView($label);
 
         foreach ($groupData as $rowName => $rowData) {
-
             // Filter empty row (to improve)
-            if (
-                isset($rowData['value']) && $rowData['value'] === false ||
+            if (isset($rowData['value']) && $rowData['value'] === false ||
                 isset($rowData['participant']) && $rowData['participant'] === false ||
                 isset($rowData['planning']) && $rowData['planning'] === false ||
                 isset($rowData['quantity']) && $rowData['quantity'] === 0
-            )  {
+            ) {
                 continue;
             }
 
@@ -148,7 +146,7 @@ class OrderViewFactory
 
         $quantity = isset($rowData['quantity']) ? $rowData['quantity'] : 1;
 
-        $row = new RowView($label, $price, $quantity);
+        $row = new RowView($label, $price, $quantity, $product->getUpdatableUntil(), $product->isUpdatable());
         $row->editable = $product instanceof AddedRowType;
 
         return $row;
@@ -173,7 +171,6 @@ class OrderViewFactory
                 $includedIn = $type->getIncludedIn();
 
                 foreach ($includedIn as $path => $quantity) {
-
                     // get parts
                     $parts = explode('.', $path);
 
@@ -181,7 +178,13 @@ class OrderViewFactory
                     $value = $data[$parts[0]][$parts[1]]['value'];
 
                     if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
-                        $row            = $this->createRowViewFromArray($template, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
+                        $row = $this->createRowViewFromArray(
+                            $template,
+                            $groupName,
+                            $typeName,
+                            ['value' => $value, 'quantity' => $quantity],
+                            $locale
+                        );
                         $row->unitPrice = 0;
                         $groups[$parts[0]]->getRow($parts[1])->addIncluded($row);
                     }

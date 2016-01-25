@@ -61,6 +61,7 @@ abstract class AbstractProduct implements ProductInterface
         $optionsResolver->setDefined([
             'includedIn',
             'required',
+            'updatableUntil',
         ]);
     }
 

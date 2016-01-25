@@ -56,7 +56,14 @@ abstract class AbstractType implements TypeInterface
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setRequired(['label', 'type']);
-        $optionsResolver->setDefaults(['required' => false, 'private' => false, 'tags' => []]);
+        $optionsResolver->setDefaults(
+            [
+                'required'       => false,
+                'private'        => false,
+                'tags'           => [],
+                'updatableUntil' => null,
+            ]
+        );
         $optionsResolver->setDefined(['description']);
     }
 
@@ -103,6 +110,22 @@ abstract class AbstractType implements TypeInterface
         $description = $this->getOption('description');
 
         return (string) (is_array($description) ? $description[$locale] : $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatableUntil()
+    {
+        return $this->getOption('updatableUntil') ? new \DateTime($this->getOption('updatableUntil')) : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUpdatable()
+    {
+        return $this->getUpdatableUntil() > new \DateTime();
     }
 
     /**
