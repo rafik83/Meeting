@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
@@ -74,6 +76,8 @@ class NotificationEventListener implements EventSubscriberInterface
         $this->notificationRepository->add($notification);
     }
 
+
+
     /**
      * Notify removed participant
      *
@@ -87,6 +91,44 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'participant.removed',
+            $event->getMessage()
+        );
+
+        $this->notificationRepository->add($notification);
+    }
+
+    /**
+     * Notify added participant
+     *
+     * @param MeetingRequestParticipantAddedEvent $event
+     */
+    public function onParticipantAddedToMeetingRequest(MeetingRequestParticipantAddedEvent $event)
+    {
+        $notification = new Notification(
+            $event->getParticipant()->getSheet()->getEvent(),
+            $event->getEmitter(),
+            $event->getParticipant()->getUser(),
+            $event->getDate(),
+            'meeting_request_participant.added',
+            $event->getMessage()
+        );
+
+        $this->notificationRepository->add($notification);
+    }
+
+    /**
+     * Notify removed participant
+     *
+     * @param MeetingRequestParticipantRemovedEvent $event
+     */
+    public function onParticipantRemovedToMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
+    {
+        $notification = new Notification(
+            $event->getParticipant()->getSheet()->getEvent(),
+            $event->getEmitter(),
+            $event->getParticipant()->getUser(),
+            $event->getDate(),
+            'meeting_request_participant.removed',
             $event->getMessage()
         );
 
@@ -189,11 +231,13 @@ class NotificationEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'participant.added'        => 'onParticipantAdded',
-            'participant.removed'      => 'onParticipantRemoved',
-            'meeting_request.refused'  => 'onRequestRefused',
-            'meeting_request.canceled' => 'onRequestCanceled',
-            'meeting.canceled'         => 'onMeetingCanceled',
+            'participant.added'                   => 'onParticipantAdded',
+            'participant.removed'                 => 'onParticipantRemoved',
+            'meeting_request.refused'             => 'onRequestRefused',
+            'meeting_request.canceled'            => 'onRequestCanceled',
+            'meeting.canceled'                    => 'onMeetingCanceled',
+            'meeting_request_participant.added'   => 'onParticipantAddedToMeetingRequest',
+            'meeting_request_participant.removed' => 'onParticipantRemovedToMeetingRequest',
         ];
     }
 }

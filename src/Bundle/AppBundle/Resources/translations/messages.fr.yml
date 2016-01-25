@@ -101,6 +101,7 @@ event:
             actions: Actions
             cancel: Annuler
             show: Voir
+            edit: Modifier
         listProposition:
             title: Liste de vos propositions de rendez-vous
             state: Statut
@@ -114,6 +115,7 @@ event:
             refuse: Refuser
             actions: Actions
             show: Voir
+            edit: Modifier
         showDetailsRequest:
             title: Détails de la demande de rendez-vous
             to: A destination de
@@ -133,6 +135,9 @@ event:
                     refused: Refusé
                     cancelled: Annulé
         createRequest:
+            title: Demande de rendez-vous
+            destination: Pour %toName% avec la fiche %fromName%
+        editRequest:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
         approvedRequest:
