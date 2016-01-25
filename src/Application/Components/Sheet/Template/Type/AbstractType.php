@@ -78,7 +78,7 @@ abstract class AbstractType implements TypeInterface
      */
     protected function getOption($option)
     {
-        if (!isset($this->options[$option])) {
+        if (!array_key_exists($option, $this->options)) {
             throw new UnknownOptionException($option, array_keys($this->options));
         }
 
