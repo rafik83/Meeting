@@ -37,7 +37,7 @@ class CreateHandler
         $category = new Category($create->event, $create->picto);
 
         foreach ($create->translations as $locale => $translation) {
-            $category->getTranslations()->set($locale, new CategoryTranslation($category, $locale, $translation['title']));
+            $category->setTranslation(new CategoryTranslation($category, $locale, $translation['title']));
         }
 
         $this->categoryRepository->add($category);

@@ -95,11 +95,8 @@ class Category
         return $this->translations;
     }
 
-    /**
-     * @param ArrayCollection $translations
-     */
-    public function setTranslations($translations)
+    public function setTranslation(CategoryTranslation $categoryTranslation)
     {
-        $this->translations = $translations;
+        $this->translations->set($categoryTranslation->getLocale(), $categoryTranslation);
     }
 }
