@@ -6,9 +6,14 @@
 
 {% block content %}
     <h2>{{ 'event.sheet.package.products.title'|trans }}</h2>
-    <hr>
+
     {{ form(form) }}
-    <a class="btn btn-danger" href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
-        {{ 'event.link.product.cancel'|trans() }}
-    </a>
+
+    <hr>
+
+    <p>
+        <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+            {{ 'event.link.product.cancel'|trans() }}
+        </a>
+    </p>
 {% endblock %}
