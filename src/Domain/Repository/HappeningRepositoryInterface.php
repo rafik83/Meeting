@@ -23,6 +23,11 @@ interface HappeningRepositoryInterface
     public function add(Happening $happening);
 
     /**
+     * @param Happening $happening
+     */
+    public function set(Happening $happening);
+
+    /**
      * @param Event  $event
      * @param string $locale
      *

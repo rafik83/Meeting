@@ -34,12 +34,28 @@ class HappeningRepository implements HappeningRepositoryInterface
     }
 
     /**
-     * @param Happening $happening
+     * {@inheritdoc}
      */
     public function add(Happening $happening)
     {
         $this->entityManager->persist($happening);
         $this->entityManager->flush($happening);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Happening $happening)
+    {
+        $this->entityManager->flush($happening);
+
+        foreach ($happening->getTitleTranslations() as $titleTranslation) {
+            $this->entityManager->flush($titleTranslation);
+        }
+
+        foreach ($happening->getDescriptionTranslations() as $descriptionTranslation) {
+            $this->entityManager->flush($descriptionTranslation);
+        }
     }
 
     /**
@@ -60,6 +76,9 @@ class HappeningRepository implements HappeningRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event, $locale)
     {
         $queryBuilder = $this
