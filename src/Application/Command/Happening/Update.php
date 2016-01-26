@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 
