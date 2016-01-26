@@ -101,26 +101,31 @@ abstract class Groups
         return $this;
     }
 
-    /**
-     * @return float
-     */
-    public function getTotal()
+    public function getTotalWithoutTaxes()
     {
         return array_reduce($this->groups, function ($carry, GroupView $groupView) {
             return $carry + $groupView->getTotal();
         }, 0);
     }
 
+    public function getTotalWithTaxes()
+    {
+        return $this->getTotalWithoutTaxes() * (1 + $this->getVat() / 100);
+    }
+
     /**
-     * @return float
-     * @throws VatNotEnabledException
+     * @deprecated
      */
     public function getTotalWithVat()
     {
-        if ($this->mode !== Event::MODE_WITH_VAT) {
-            throw new VatNotEnabledException('Vat not enabled');
-        }
+        return $this->getTotalWithoutTaxes();
+    }
 
-        return $this->getTotal() * (1 + $this->getVat() / 100);
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->getTotalWithoutTaxes();
     }
 }

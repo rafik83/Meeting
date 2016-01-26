@@ -38,6 +38,11 @@ class OrderView extends Groups
     public $paymentMode;
 
     /**
+     * @var bool
+     */
+    public $vatApplicable;
+
+    /**
      * OrderView constructor.
      *
      * @param int                $id
@@ -47,16 +52,32 @@ class OrderView extends Groups
      * @param string             $paymentMode
      * @param string             $mode
      * @param float              $vat
+     * @param bool               $vatApplicable
      * @param GroupView[]        $groups
      */
-    public function __construct($id, $reference, \DateTimeInterface $date, $state, $paymentMode, $mode, $vat, array $groups = [])
-    {
+    public function __construct(
+        $id,
+        $reference,
+        \DateTimeInterface $date,
+        $state,
+        $paymentMode,
+        $mode,
+        $vat,
+        $vatApplicable,
+        array $groups = []
+    ) {
         parent::__construct($groups, $mode, $vat);
 
-        $this->id          = $id;
-        $this->reference   = $reference;
-        $this->date        = $date;
-        $this->state       = $state;
-        $this->paymentMode = $paymentMode;
+        $this->id            = $id;
+        $this->reference     = $reference;
+        $this->date          = $date;
+        $this->state         = $state;
+        $this->paymentMode   = $paymentMode;
+        $this->vatApplicable = $vatApplicable;
+    }
+
+    public function getTotal()
+    {
+        return $this->vatApplicable ? $this->getTotalWithTaxes() : $this->getTotalWithoutTaxes();
     }
 }

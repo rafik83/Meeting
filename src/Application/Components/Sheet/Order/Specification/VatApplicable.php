@@ -57,7 +57,7 @@ class VatApplicable extends CompositeSpecification
         $eventCountry   = $object->getSheet()->getEvent()->getPaymentAddress()->getCountry();
 
         // Order billing country and event country are the same
-        if ($billingCountry === $eventCountry) {
+        if (strtoupper($billingCountry) === strtoupper($eventCountry)) {
             return true;
         }
 

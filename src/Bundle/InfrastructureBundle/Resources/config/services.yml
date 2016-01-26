@@ -471,6 +471,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory
         arguments:
             - '@components.sheet.group_factory'
+            - '@components.sheet.specification.vat_applicable'
     components.sheet.order_merge_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory
         arguments:

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Model\Order;
 
 class OrderViewFactory
@@ -20,13 +21,20 @@ class OrderViewFactory
     private $groupFactory;
 
     /**
+     * @var VatApplicable
+     */
+    private $vatApplicable;
+
+    /**
      * OrderViewFactory constructor.
      *
-     * @param GroupFactory $groupFactory
+     * @param GroupFactory  $groupFactory
+     * @param VatApplicable $vatApplicable
      */
-    public function __construct(GroupFactory $groupFactory)
+    public function __construct(GroupFactory $groupFactory, VatApplicable $vatApplicable)
     {
-        $this->groupFactory = $groupFactory;
+        $this->groupFactory  = $groupFactory;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -45,6 +53,7 @@ class OrderViewFactory
             $order->getPaymentMode(),
             $order->getVatMode(),
             $order->getVatRate(),
+            $this->vatApplicable->isSatisfiedBy($order),
             $this->groupFactory->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale)
         );
     }

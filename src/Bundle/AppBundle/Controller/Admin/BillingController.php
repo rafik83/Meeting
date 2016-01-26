@@ -49,7 +49,7 @@ class BillingController extends Controller
 
         // Balance
         $ordersTotal = array_reduce($orders, function ($carry, OrderView $order) {
-            return $carry + $order->getTotalWithVat();
+            return $carry + $order->getTotal();
         }, 0);
 
         $transactionsTotal = array_reduce($transactions, function ($carry, Transaction $transaction) {
