@@ -12,9 +12,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class UnavailabilityRepository implements UnavailabilityRepositoryInterface
