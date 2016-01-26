@@ -19,36 +19,8 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class UpdateType extends HappeningType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $event = $options['event'];
-
-        $builder
-            ->add('category', CategoryType::class, [
-                'event' => $options['event']
-            ])
-            ->add('begin', DateTimeType::class, [
-                'view_timezone' => $event->getTimeZone(),
-            ])
-            ->add('end', DateTimeType::class, [
-                'view_timezone' => $event->getTimeZone(),
-            ])
-            ->add('titleTranslations', CollectionType::class, [
-                'entry_type' => TitleTranslationType::class,
-                'label'      => false,
-            ])
-            ->add('descriptionTranslations', CollectionType::class, [
-                'entry_type' => DescriptionTranslationType::class,
-                'label'      => false,
-            ])
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */

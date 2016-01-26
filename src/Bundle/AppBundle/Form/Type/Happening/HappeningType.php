@@ -1,0 +1,49 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+abstract class HappeningType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $event = $options['event'];
+
+        $builder
+            ->add('category', CategoryType::class, ['event' => $options['event']])
+            ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
+            ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
+            ->add('titleTranslations', CollectionType::class, [
+                    'entry_type' => TitleTranslationType::class,
+                    'label'      => false,
+                ])
+            ->add('descriptionTranslations', CollectionType::class, [
+                    'entry_type' => DescriptionTranslationType::class,
+                    'label'      => false,
+                ]);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'happening';
+    }
+}
