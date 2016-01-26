@@ -10,12 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order\Specification;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
-use Symfony\Bundle\SecurityBundle\Tests\Functional\Bundle\AclBundle\Entity\Car;
 
 class VatApplicable
 {
