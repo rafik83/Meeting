@@ -54,6 +54,21 @@ class TaggedInfoGuesser
     }
 
     /**
+     * @param array      $template
+     * @param array      $data
+     * @param string     $tag
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    public function guessFirst(array $template, array $data, $tag, $default = null)
+    {
+        $info = $this->guess($template, $data, $tag);
+
+        return !empty($info) ? $info[0] : $default;
+    }
+
+    /**
      * @param Order  $order
      * @param string $tag
      *
