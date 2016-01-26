@@ -301,6 +301,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+    command.happening.update_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Security
