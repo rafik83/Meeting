@@ -10,7 +10,6 @@
             <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.yourParticipants'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.description'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.informations'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.actions'|trans }}</th>
@@ -33,7 +32,6 @@
                         {{ participantNameView.participantName }}<br>
                     {% endfor %}
                 </td>
-                <td>{{ proposition_view.description|nl2br }}</td>
                 <td nowrap>{{ proposition_view.createdAt|date('d/m/Y') }}</td>
                 <td>{{ proposition_view.message|nl2br }}</td>
                 <td nowrap>

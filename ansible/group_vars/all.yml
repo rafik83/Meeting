@@ -59,7 +59,14 @@ elao_apt_packages: []
 elao_ssh_config_sshd_template: config/sshd/{{ _env }}.j2
 
 elao_ssh_config_template: config/{{ _env }}.j2
-elao_ssh_config: []
+elao_ssh_config:
+  # Demo
+  - Host *.elao.ninja.local:
+    - User:                  deploy
+    - ProxyCommand:          ssh gateway@hv-1.elao.ninja "nc %h %p"
+    - ForwardAgent:          true
+    - StrictHostKeyChecking: false
+    - HashKnownHosts:        false
 
 #######
 # Git #

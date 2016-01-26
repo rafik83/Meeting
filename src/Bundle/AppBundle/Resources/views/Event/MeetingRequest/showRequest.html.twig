@@ -8,13 +8,15 @@
     <table class="table table-bordered">
         <thead>
             <th>{{ 'event.meeting.showDetailsRequest.to'|trans }}</th>
+            <th>{{ 'event.meeting.showDetailsRequest.from'|trans }}</th>
             <th>{{ 'event.meeting.showDetailsRequest.participants'|trans }}</th>
             <th>{{ 'event.meeting.showDetailsRequest.state'|trans }}</th>
         </thead>
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
         <tr>
-            <td>{{ meetingRequestView.sheetName }}</td>
+            <td>{{ meetingRequestView.toSheetName }}</td>
+            <td>{{ meetingRequestView.fromSheetName }}</td>
             <td>
                 {% for participantName in meetingRequestView.participantNames %}
                     {{ participantName }}
@@ -31,8 +33,17 @@
 
     <h3>{{ 'event.meeting.showDetailsRequest.message'|trans }}</h3>
     {% for message in meetingRequestView.messages %}
-        <blockquote{% if sheet == meetingRequest.fromSheet %} class="blockquote-reverse"{% endif %}>
+    {% if message.from.id == meetingRequestView.fromSheetId %}
+        <h5>{{ meetingRequestView.fromSheetName }}</h5>
+    {% else %}
+        <h5>{{ meetingRequestView.toSheetName }}</h5>
+    {% endif %}
+        <blockquote>
             {{ message.content }}
+            <br>
+            <span class="label label-default">
+                {{ message.createdAt|date('d/m/Y H:i') }}
+            </span>
         </blockquote>
     {% endfor %}
 
