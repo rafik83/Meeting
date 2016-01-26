@@ -77,11 +77,9 @@ class ProformaViewFactory
         $billingView = $this->billingViewFactory->createFromSheet($sheet);
 
         // Participant
-        $participants = array_map(
-            function (Participant $participant) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
-            }, $sheet->getParticipants()->toArray()
-        );
+        $participants = array_map(function (Participant $participant) {
+            return $this->participantInfoGuesser->guessParticipantInfo($participant);
+        }, $sheet->getParticipants()->toArray());
 
         return new ProformaView(
             $sheet->getEvent()->getTitle(),
