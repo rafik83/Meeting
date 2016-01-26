@@ -116,12 +116,18 @@ class OrderMergeFactory
 
                     if (isset($merge[$groupName][$typeName])) {
 
-                        if (is_array($type) && is_bool($type['value'])) {
-                            $merge[$groupName][$typeName]['value'] |= $type['value'];
-                        }
+                        if (is_array($type)) {
+                            if (isset($type['value']) && is_bool($type['value'])) {
+                                $merge[$groupName][$typeName]['value'] |= $type['value'];
+                            } elseif (isset($type['planning']) && is_bool($type['planning'])) {
+                                $merge[$groupName][$typeName]['planning'] |= $type['planning'];
+                            } elseif (isset($type['participant']) && is_bool($type['participant'])) {
+                                $merge[$groupName][$typeName]['participant'] |= $type['participant'];
+                            }
 
-                        if (is_array($type) && isset($type['quantity'])) {
-                            $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
+                            if (isset($type['quantity'])) {
+                                $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
+                            }
                         }
 
                     } else {
