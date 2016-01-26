@@ -83,8 +83,8 @@ flash:
                 success: Le rendez-vous a bien été placé
         order:
             add_row:
-                success: La linge a été ajouté
+                success: La ligne a été ajoutée
             update_row:
                 success: La ligne a été mise à jour
             remove_row:
-                success: La ligne a été supprimé
+                success: La ligne a été supprimée
