@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-use Proximum\Vimeet\Application\Components\Sheet\Order\Exception\VatNotEnabledException;
-use Proximum\Vimeet\Domain\Model\Event;
-
 abstract class Groups
 {
     /**
