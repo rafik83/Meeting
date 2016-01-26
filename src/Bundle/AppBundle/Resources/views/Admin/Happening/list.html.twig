@@ -23,7 +23,9 @@
                 <td>{{ happening.title }}</td>
                 <td>{{ happening.begin|date('Y-m-d h:i:s') }}</td>
                 <td>{{ happening.end|date('Y-m-d h:i:s') }}</td>
-                <td></td>
+                <td>
+                    <a href="{{ path('admin_happening_update', {id: event.id, happening: happening.id}) }}" class="btn btn-default">Modifier</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
