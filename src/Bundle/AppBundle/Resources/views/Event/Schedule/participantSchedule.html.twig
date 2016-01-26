@@ -5,9 +5,7 @@
     <h3>{{ schedule.date|date('d/m/Y') }}</h3>
 
     <p>
-        {#
-        <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
-        #}
+        <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
     </p>
 
     <div class="row">

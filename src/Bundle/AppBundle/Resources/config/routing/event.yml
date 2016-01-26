@@ -257,34 +257,31 @@ event_sheet_schedule:
     defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
 
 event_sheet_schedule_add_unavailability:
-    path: /sheet/{id}/schedule/{schedule_id}/unavailability/add
+    path: /sheet/{id}/schedule/unavailability/add
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
 
 event_sheet_schedule_update_unavailability:
-    path: /sheet/{id}/schedule/{schedule_id}/unavailability/{unavailability_id}/update
+    path: /sheet/{id}/schedule/unavailability/{unavailability}/update
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        unavailability_id: \d+
+        unavailability: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:updateUnavailability }
 
 event_sheet_schedule_remove_unavailability:
-    path: /sheet/{id}/schedule/{schedule_id}/unavailability/{unavailability_id}/remove
+    path: /sheet/{id}/schedule/unavailability/{unavailability}/remove
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        unavailability_id: \d+
+        unavailability: \d+
     methods:  [DELETE]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:removeUnavailability }
 

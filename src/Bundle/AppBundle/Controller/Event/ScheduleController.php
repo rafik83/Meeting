@@ -56,29 +56,21 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "schedule",
-     *   class="Proximum\Vimeet\Domain\Model\Schedule",
-     *   options={"id" = "schedule_id"}
-     * )
-     *
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
-     * @param Schedule  $schedule
      *
      * @return RedirectResponse|Response
      */
-    public function addUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule)
+    public function addUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $command = new Add($schedule);
+        $command = new Add();
         $form    = $this->createForm(AddUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', [
                 'subdomain'   => $request->attributes->get('subdomain'),
                 'id'          => $sheet->getId(),
-                'schedule_id' => $schedule->getId(),
             ]),
             'method' => 'POST',
             'sheet'  => $sheet,
@@ -97,49 +89,31 @@ class ScheduleController extends Controller
 
         return $this->render('VimeetAppBundle:Event/Schedule:addUnavailability.html.twig', [
             'eventView' => $eventView,
-            'schedule'  => $schedule,
             'form'      => $form->createView(),
         ]);
     }
 
     /**
-     * @ParamConverter(
-     *   "schedule",
-     *   class="Proximum\Vimeet\Domain\Model\Schedule",
-     *   options={"id" = "schedule_id"}
-     * )
-     *
-     * @ParamConverter(
-     *   "unavailability",
-     *   class="Proximum\Vimeet\Domain\Model\Unavailability",
-     *   options={"id" = "unavailability_id"}
-     * )
-     *
      * @param Request        $request
      * @param EventView      $eventView
      * @param Sheet          $sheet
-     * @param Schedule       $schedule
      * @param Unavailability $unavailability
      *
      * @return RedirectResponse|Response
      */
-    public function updateUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Unavailability $unavailability)
+    public function updateUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Unavailability $unavailability)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if ($unavailability->getSchedule() !== $schedule) {
-            $this->createNotFoundException('Unavailability not found.');
-        }
 
         $command = new Update($unavailability);
         $form    = $this->createForm(UpdateUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
-                'subdomain'         => $request->attributes->get('subdomain'),
-                'id'                => $sheet->getId(),
-                'schedule_id'       => $schedule->getId(),
-                'unavailability_id' => $unavailability->getId(),
+                'subdomain'      => $request->attributes->get('subdomain'),
+                'id'             => $sheet->getId(),
+                'unavailability' => $unavailability->getId(),
             ]),
             'method' => 'POST',
+            'sheet'  => $sheet,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -155,39 +129,21 @@ class ScheduleController extends Controller
 
         return $this->render('VimeetAppBundle:Event/Schedule:updateUnavailability.html.twig', [
             'eventView' => $eventView,
-            'schedule'  => $schedule,
             'form'      => $form->createView(),
         ]);
     }
 
     /**
-     * @ParamConverter(
-     *   "schedule",
-     *   class="Proximum\Vimeet\Domain\Model\Schedule",
-     *   options={"id" = "schedule_id"}
-     * )
-     *
-     * @ParamConverter(
-     *   "unavailability",
-     *   class="Proximum\Vimeet\Domain\Model\Unavailability",
-     *   options={"id" = "unavailability_id"}
-     * )
-     *
      * @param Request        $request
      * @param EventView      $eventView
      * @param Sheet          $sheet
-     * @param Schedule       $schedule
      * @param Unavailability $unavailability
      *
      * @return RedirectResponse|Response
      */
-    public function removeUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Unavailability $unavailability)
+    public function removeUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Unavailability $unavailability)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if ($unavailability->getSchedule() !== $schedule) {
-            $this->createNotFoundException('Unavailability not found.');
-        }
 
         $command = new Remove($unavailability);
         $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler')->handle($command);
