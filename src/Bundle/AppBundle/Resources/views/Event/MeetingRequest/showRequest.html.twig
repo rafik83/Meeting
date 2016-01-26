@@ -40,6 +40,10 @@
     {% endif %}
         <blockquote>
             {{ message.content }}
+            <br>
+            <span class="label label-default">
+                {{ message.createdAt|date('d/m/Y H:i') }}
+            </span>
         </blockquote>
     {% endfor %}
 

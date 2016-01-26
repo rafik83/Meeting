@@ -73,6 +73,7 @@ class MessageRepository implements MessageRepositoryInterface
             ->from(Message::class, 'message')
             ->where('message.request = :request')
             ->setParameter('request', $request)
+            ->orderBy('message.createdAt', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
