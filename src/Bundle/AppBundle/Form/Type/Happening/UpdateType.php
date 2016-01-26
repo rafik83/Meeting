@@ -22,11 +22,12 @@ class UpdateType extends HappeningType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class'    => 'Proximum\Vimeet\Application\Command\Happening\Update',
             'csrf_token_id' => 'happening_update',
         ]);
-        $resolver->setRequired(['event']);
     }
 
     /**

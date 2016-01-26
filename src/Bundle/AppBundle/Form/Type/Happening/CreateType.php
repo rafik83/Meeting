@@ -22,11 +22,12 @@ class CreateType extends HappeningType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class'    => 'Proximum\Vimeet\Application\Command\Happening\Create',
             'csrf_token_id' => 'happening_create',
         ]);
-        $resolver->setRequired(['event']);
     }
 
     /**
