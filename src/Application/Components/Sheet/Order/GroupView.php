@@ -72,7 +72,7 @@ class GroupView
      */
     public function getRow($name)
     {
-        return $this->rows[$name];
+        return isset($this->rows[$name]) ? $this->rows[$name] : null;
     }
 
     /**
