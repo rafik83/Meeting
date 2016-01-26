@@ -15,7 +15,9 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\CreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -63,6 +65,34 @@ class HappeningController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening:create.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    public function updateAction(Request $request, Event $event, Happening $happening)
+    {
+        $update = new \Proximum\Vimeet\Application\Command\Happening\Update($happening);
+        $form   = $this->createForm(UpdateType::class, $update, [
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_happening_update', [
+                'id'        => $event->getId(),
+                'happening' => $happening->getId(),
+            ]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.happening.update_handler')->handle($update);
+            $this->addFlash('success', 'flash.admin.happening.update.success');
+
+            return $this->redirectToRoute('admin_happening_list', [
+                'id' => $event->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
