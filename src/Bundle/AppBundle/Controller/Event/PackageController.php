@@ -117,12 +117,11 @@ class PackageController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
+        $cartView = null;
 
-        if ($cart === null) {
-            throw $this->createNotFoundException('Cart not available');
+        if ($cart !== null) {
+            $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
         }
-
-        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
             'eventView' => $eventView,
