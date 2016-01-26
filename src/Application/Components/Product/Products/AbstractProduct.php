@@ -167,8 +167,9 @@ abstract class AbstractProduct implements ProductInterface
     public function getQuantityMin()
     {
         return isset($this->options['quantity'])
-        && isset($this->options['quantity']['min'])
-            ? $this->options['quantity']['min'] : null;
+            && isset($this->options['quantity']['min'])
+            ? $this->options['quantity']['min']
+            : null;
     }
 
     /**
@@ -177,8 +178,9 @@ abstract class AbstractProduct implements ProductInterface
     public function getQuantityMax()
     {
         return isset($this->options['quantity'])
-        && isset($this->options['quantity']['max'])
-            ? $this->options['quantity']['max'] : null;
+            && isset($this->options['quantity']['max'])
+            ? $this->options['quantity']['max']
+            : null;
     }
 
     /**
@@ -186,9 +188,9 @@ abstract class AbstractProduct implements ProductInterface
      */
     public function getQuantityRange()
     {
-        return isset($this->options['quantity'])
-        && isset($this->options['quantity']['range'])
-            ? $this->options['quantity']['range'] : 1;
+        return isset($this->options['quantity']) && isset($this->options['quantity']['range'])
+            ? $this->options['quantity']['range']
+            : 1;
     }
 
     /**
@@ -202,13 +204,7 @@ abstract class AbstractProduct implements ProductInterface
             return false;
         }
 
-        $remaingQuantityMax = $this->getRemainingQuantityMax($packageData);
-
-        if ($remaingQuantityMax > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getRemainingQuantityMax($packageData) > 0;
     }
 
     /**
@@ -248,9 +244,9 @@ abstract class AbstractProduct implements ProductInterface
 
         if (!isset($packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'])) {
             return 0;
-        } else {
-            return $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
         }
+
+        return $packageData[$this->getStep()->getKey()][$this->getKey()]['quantity'];
     }
 
     /**

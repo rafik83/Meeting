@@ -272,6 +272,6 @@ class PackageController extends BaseController
             }
         }
 
-        return;
+        return null;
     }
 }

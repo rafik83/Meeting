@@ -65,6 +65,9 @@ class CreateHandler
         $this->participantManager = $participantManager;
     }
 
+    /**
+     * @param Create $create
+     */
     public function handle(Create $create)
     {
         $create->packageData = $this->orderManager->cleanFalseOption($create->packageData);

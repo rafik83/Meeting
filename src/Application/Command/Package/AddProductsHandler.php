@@ -43,8 +43,9 @@ class AddProductsHandler
     /**
      * @param AddProducts $addProducts
      *
-     * @throws ForgotToAddQuantityException
      * @throws BoughtParticipantAlreadyAddedException
+     * @throws EmptyPackageException
+     * @throws ForgotToAddQuantityException
      */
     public function handle(AddProducts $addProducts)
     {

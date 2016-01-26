@@ -34,7 +34,7 @@ class OrderMergeFactory
      * @param Sheet  $sheet
      * @param string $locale
      *
-     * @return OrderView
+     * @return OrderMerge
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
@@ -51,7 +51,7 @@ class OrderMergeFactory
      * @param float   $vat
      * @param string  $locale
      *
-     * @return OrderView
+     * @return OrderMerge
      */
     public function createFromOrders(array $orders, $vat, $locale)
     {
