@@ -23,23 +23,23 @@ class MeetingSlot
     private $event;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $begin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $end;
 
     /**
      * MeetingSlot constructor.
      *
-     * @param Event     $event
-     * @param \DateTime $begin
-     * @param \DateTime $end
+     * @param Event              $event
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
      */
-    public function __construct(Event $event, \DateTime $begin, \DateTime $end)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end)
     {
         $this->event    = $event;
         $this->begin    = $begin;
@@ -75,7 +75,7 @@ class MeetingSlot
     /**
      * Get begin.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getBegin()
     {
@@ -85,7 +85,7 @@ class MeetingSlot
     /**
      * Get end.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getEnd()
     {
