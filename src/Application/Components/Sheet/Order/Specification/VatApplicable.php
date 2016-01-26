@@ -11,17 +11,18 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Order\Specification;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
-use Satisfaction\CompositeSpecification;
-use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
+use Symfony\Bundle\SecurityBundle\Tests\Functional\Bundle\AclBundle\Entity\Car;
 
-class VatApplicable extends CompositeSpecification
+class VatApplicable
 {
     /**
-     * @var TaggedInfoGuesser
+     * @var BillingInfoGuesser
      */
-    private $taggedInfoGuesser;
+    private $billingInfoGuesser;
 
     /**
      * @var array
@@ -31,39 +32,65 @@ class VatApplicable extends CompositeSpecification
     /**
      * VatApplicable constructor.
      *
-     * @param TaggedInfoGuesser $taggedInfoGuesser
+     * @param BillingInfoGuesser $billingInfoGuesser
      * @param array             $europeanCountries
      */
-    public function __construct(TaggedInfoGuesser $taggedInfoGuesser, array $europeanCountries)
+    public function __construct(BillingInfoGuesser $billingInfoGuesser, array $europeanCountries)
     {
-        $this->taggedInfoGuesser = $taggedInfoGuesser;
+        $this->billingInfoGuesser = $billingInfoGuesser;
         $this->europeanCountries = $europeanCountries;
     }
 
     /**
-     * {@inheritdoc}
+     * @param Order $order
+     *
+     * @return bool
      */
-    public function isSatisfiedBy($object)
+    public function onOrder(Order $order)
     {
-        if (!$object instanceof Order) {
+        return $this->isApplicable(
+            $order->getVatMode(),
+            $order->getSheet()->getEvent()->getPaymentAddress()->getCountry(),
+            $this->billingInfoGuesser->getCountry($order),
+            $this->billingInfoGuesser->getVatNumber($order)
+        );
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return bool
+     */
+    public function onCart(Cart $cart)
+    {
+        return $this->isApplicable(
+            $cart->getSheet()->getEvent()->getMode(),
+            $cart->getSheet()->getEvent()->getPaymentAddress()->getCountry(),
+            $this->billingInfoGuesser->getCountry($cart),
+            $this->billingInfoGuesser->getVatNumber($cart)
+        );
+    }
+
+    /**
+     * @param string $mode
+     * @param string $eventCountry
+     * @param string $billingCountry
+     * @param string $vatNumber
+     *
+     * @return bool
+     */
+    private function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber)
+    {
+        if ($mode === Event::VAT_MODE_ATI) {
             return false;
         }
 
-        if ($object->getVatMode() === Event::VAT_MODE_ATI) {
-            return false;
-        }
-
-        $billingCountry = $this->taggedInfoGuesser->guessFromOrder($object, Tag::BILLING_COUNTRY)[0];
-        $eventCountry   = $object->getSheet()->getEvent()->getPaymentAddress()->getCountry();
-
-        // Order billing country and event country are the same
+        // Billing country and event country are the same
         if (strtoupper($billingCountry) === strtoupper($eventCountry)) {
             return true;
         }
 
-        $vatNumber = $this->taggedInfoGuesser->guessFromOrder($object, Tag::BILLING_VAT_NUMBER)[0];
-
-        // Order billing country is in the EU and there is not billing vat number
+        // Billing country is in the EU and there is not billing vat number
         if (in_array($billingCountry, $this->europeanCountries) && !$vatNumber) {
             return true;
         }

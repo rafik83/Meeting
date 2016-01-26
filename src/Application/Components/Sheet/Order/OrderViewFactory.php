@@ -53,7 +53,7 @@ class OrderViewFactory
             $order->getPaymentMode(),
             $order->getVatMode(),
             $order->getVatRate(),
-            $this->vatApplicable->isSatisfiedBy($order),
+            $this->vatApplicable->onOrder($order),
             $this->groupFactory->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale)
         );
     }

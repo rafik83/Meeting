@@ -67,15 +67,4 @@ class TaggedInfoGuesser
 
         return !empty($info) ? $info[0] : $default;
     }
-
-    /**
-     * @param Order  $order
-     * @param string $tag
-     *
-     * @return array
-     */
-    public function guessFromOrder(Order $order, $tag)
-    {
-        return $this->guess($order->getBillingTemplate(), $order->getBillingData(), $tag);
-    }
 }

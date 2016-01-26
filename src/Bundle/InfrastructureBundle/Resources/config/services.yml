@@ -461,7 +461,7 @@ services:
     components.sheet.specification.vat_applicable:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@components.sheet.billing_info_guesser'
             - '%app.eu_countries%'
     components.sheet.group_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\GroupFactory

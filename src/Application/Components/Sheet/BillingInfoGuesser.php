@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\BillingInfoInterface;
 
 class BillingInfoGuesser
 {
@@ -31,141 +31,141 @@ class BillingInfoGuesser
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getName(Sheet $sheet)
+    public function getName(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_NAME
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getAddress(Sheet $sheet)
+    public function getAddress(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_ADDRESS
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getCity(Sheet $sheet)
+    public function getCity(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_CITY
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getZipcode(Sheet $sheet)
+    public function getZipcode(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_ZIPCODE
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getCountry(Sheet $sheet)
+    public function getCountry(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_COUNTRY
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getPhone(Sheet $sheet)
+    public function getPhone(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_PHONE
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getEmail(Sheet $sheet)
+    public function getEmail(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_EMAIL
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getOrganization(Sheet $sheet)
+    public function getOrganization(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_ORGANIZATION
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getVatNumber(Sheet $sheet)
+    public function getVatNumber(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_VAT_NUMBER
         );
     }
 
     /**
-     * @param Sheet $sheet
+     * @param BillingInfoInterface $object
      *
      * @return string
      */
-    public function getExtra(Sheet $sheet)
+    public function getExtra(BillingInfoInterface $object)
     {
         return $this->taggedInfoGuesser->guessFirst(
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            $sheet->getBillingData(),
+            $object->getBillingTemplate(),
+            $object->getBillingData(),
             Tag::BILLING_EXTRA
         );
     }
