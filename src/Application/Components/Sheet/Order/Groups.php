@@ -15,40 +15,30 @@ abstract class Groups
     /**
      * @var GroupView[]
      */
-    private $groups;
+    public $groups;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $mode;
+    public $vatApplicable;
 
     /**
      * @var float
      */
-    private $vat;
+    public $vat;
 
     /**
      * Groups constructor.
      *
      * @param GroupView[] $groups
-     * @param string      $mode
+     * @param bool        $vatApplicable
      * @param float       $vat
      */
-    public function __construct(array $groups, $mode, $vat)
+    public function __construct(array $groups, $vatApplicable, $vat)
     {
-        $this->groups = $groups;
-        $this->mode   = $mode;
-        $this->vat    = $vat;
-    }
-
-    /**
-     * Get groups
-     *
-     * @return GroupView[]
-     */
-    public function getGroups()
-    {
-        return $this->groups;
+        $this->groups        = $groups;
+        $this->vatApplicable = $vatApplicable;
+        $this->vat           = $vat;
     }
 
     /**
@@ -75,29 +65,8 @@ abstract class Groups
     }
 
     /**
-     * Get vat
-     *
      * @return float
      */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * Set vat
-     *
-     * @param float $vat
-     *
-     * @return OrderView
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
     public function getTotalWithoutTaxes()
     {
         return array_reduce($this->groups, function ($carry, GroupView $groupView) {
@@ -105,9 +74,12 @@ abstract class Groups
         }, 0);
     }
 
+    /**
+     * @return float
+     */
     public function getTotalWithTaxes()
     {
-        return $this->getTotalWithoutTaxes() * (1 + $this->getVat() / 100);
+        return $this->getTotalWithoutTaxes() * (1 + $this->vat / 100);
     }
 
     /**
@@ -123,6 +95,6 @@ abstract class Groups
      */
     public function getTotal()
     {
-        return $this->getTotalWithoutTaxes();
+        return $this->vatApplicable ? $this->getTotalWithTaxes() : $this->getTotalWithoutTaxes();
     }
 }

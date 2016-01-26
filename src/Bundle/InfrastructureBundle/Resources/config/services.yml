@@ -480,6 +480,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\CartViewFactory
         arguments:
             - '@components.sheet.group_factory'
+            - '@components.sheet.specification.vat_applicable'
 
     #
     # Proforma component

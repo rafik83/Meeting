@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Model\Cart;
 
 class CartViewFactory
@@ -20,13 +21,20 @@ class CartViewFactory
     private $groupFactory;
 
     /**
-     * CartViewFactory constructor.
-     *
-     * @param GroupFactory $groupFactory
+     * @var VatApplicable
      */
-    public function __construct(GroupFactory $groupFactory)
+    private $vatApplicable;
+
+    /**
+     * OrderViewFactory constructor.
+     *
+     * @param GroupFactory  $groupFactory
+     * @param VatApplicable $vatApplicable
+     */
+    public function __construct(GroupFactory $groupFactory, VatApplicable $vatApplicable)
     {
-        $this->groupFactory = $groupFactory;
+        $this->groupFactory  = $groupFactory;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -39,7 +47,7 @@ class CartViewFactory
     {
         return new CartView(
             $this->groupFactory->createGroupsFromArray($cart->getTemplate(), $cart->getData(), $locale),
-            $cart->getSheet()->getEvent()->getMode(),
+            $this->vatApplicable->onCart($cart),
             $cart->getSheet()->getEvent()->getVat()
         );
     }
