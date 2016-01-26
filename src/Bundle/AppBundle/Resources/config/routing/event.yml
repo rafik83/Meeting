@@ -289,25 +289,23 @@ event_sheet_schedule_remove_unavailability:
     defaults: { _controller: VimeetAppBundle:Event/Schedule:removeUnavailability }
 
 event_sheet_schedule_participate_happening:
-    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/participate
+    path: /sheet/{id}/happening/{happening}/participate
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        happening_id: \d+
+        happening: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:participateHappening }
 
 event_sheet_schedule_unparticipate_happening:
-    path: /sheet/{id}/schedule/{schedule_id}/happening/{happening_id}/unparticipate/{participant_id}
+    path: /sheet/{id}/happening/{happening}/unparticipate/{participant}
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        happening_id: \d+
-        participant_id: \d+
+        happening: \d+
+        participant: \d+
     methods:  [POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
 
@@ -316,35 +314,32 @@ event_sheet_schedule_unparticipate_happening:
 #
 
 event_sheet_schedule_meeting:
-    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}
+    path: /sheet/{id}/meeting/{meeting}
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        meeting_id: \d+
+        meeting: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:display }
 
 event_sheet_schedule_meeting_cancel:
-    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/cancel
+    path: /sheet/{id}/meeting/{meeting}/cancel
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        meeting_id: \d+
+        meeting: \d+
     methods:  [GET, DELETE]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:cancel }
 
 event_sheet_schedule_meeting_update:
-    path: /sheet/{id}/schedule/{schedule_id}/meeting/{meeting_id}/update
+    path: /sheet/{id}/meeting/{meeting}/update
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
-        schedule_id: \d+
-        meeting_id: \d+
+        meeting: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Meeting:update }
 
