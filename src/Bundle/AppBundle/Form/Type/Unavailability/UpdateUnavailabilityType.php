@@ -23,16 +23,18 @@ class UpdateUnavailabilityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $event = $options['sheet']->getEvent();
+
         $builder
             ->add('from', TimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
-                'view_timezone' => 'Europe/Paris',
+                'view_timezone' => $event->getTimeZone(),
             ])
             ->add('to', TimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
-                'view_timezone' => 'Europe/Paris',
+                'view_timezone' => $event->getTimeZone(),
             ])
         ;
     }
