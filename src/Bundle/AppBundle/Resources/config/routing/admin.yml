@@ -209,6 +209,13 @@ admin_happening_create:
         id: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:create }
+admin_happening_update:
+    path: /event/{id}/happening/{happening}/update
+    requirements:
+        id: \d+
+        happening: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:update }
 admin_happening_category_list:
     path: /event/{id}/happening/category
     requirements:
