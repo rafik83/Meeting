@@ -1,66 +1,60 @@
-Proximum\Vimeet\Domain\Model\Schedule:
-    schedule_day_one:
-        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 12:00:00', 'Europe/Paris', 'UTC')>"]
-    schedule_day_two:
-        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>"]
-
 Proximum\Vimeet\Domain\Model\MeetingSlot:
     meeting_slot_day_one_1:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 09:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 09:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_2:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_3:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_4:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 11:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 11:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_5:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_6:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_7:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_8:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_9:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 14:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 14:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_10:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_11:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_12:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 16:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 16:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_13:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_one_14:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_one, "<date('2016-10-18 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-18 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_1:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 09:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 09:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_2:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_3:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_4:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 11:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 11:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_5:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_6:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_7:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_8:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_9:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 14:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 14:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_10:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_11:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:55:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_12:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 16:35:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 16:35:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_13:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:15:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:15:00', 'Europe/Paris', 'UTC')>"]
     meeting_slot_day_two_14:
-        __construct: [@event_rdv_carnot_2016, @schedule_day_two, "<date('2016-10-19 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:55:00', 'Europe/Paris', 'UTC')>"]
+        __construct: [@event_rdv_carnot_2016, "<date('2016-10-19 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:55:00', 'Europe/Paris', 'UTC')>"]
 
 Proximum\Vimeet\Domain\Model\Happening:
     happening_day_one_1:

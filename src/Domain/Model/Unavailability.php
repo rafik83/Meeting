@@ -18,11 +18,6 @@ class Unavailability
     private $id;
 
     /**
-     * @var Schedule
-     */
-    private $schedule;
-
-    /**
      * @var Participant
      */
     private $participant;
@@ -40,14 +35,12 @@ class Unavailability
     /**
      * Unavailability constructor.
      *
-     * @param Schedule    $schedule
      * @param Participant $participant
      * @param \DateTime   $begin
      * @param \DateTime   $end
      */
-    public function __construct(Schedule $schedule, Participant $participant, \DateTime $begin, \DateTime $end)
+    public function __construct(Participant $participant, \DateTime $begin, \DateTime $end)
     {
-        $this->schedule    = $schedule;
         $this->participant = $participant;
         $this->begin       = $begin;
         $this->end         = $end;
