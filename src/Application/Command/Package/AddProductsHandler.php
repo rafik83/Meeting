@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 
@@ -75,6 +76,10 @@ class AddProductsHandler
                     }
                 }
             }
+        }
+
+        if (empty($this->orderManager->cleanFalseOption($addProducts->packageData))) {
+            throw new EmptyPackageException();
         }
 
         $addProducts->cart->setData($addProducts->packageData);
