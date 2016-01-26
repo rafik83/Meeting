@@ -115,6 +115,14 @@ class Happening
     }
 
     /**
+     * @param \DateTimeInterface $begin
+     */
+    public function setBegin($begin)
+    {
+        $this->begin = $begin;
+    }
+
+    /**
      * Get end.
      *
      * @return \DateTimeInterface
@@ -122,6 +130,14 @@ class Happening
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * @param \DateTimeInterface $end
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
     }
 
     /**
@@ -154,5 +170,35 @@ class Happening
     public function getDescriptionTranslations()
     {
         return $this->descriptionTranslations;
+    }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param CategoryHappening  $category
+     */
+    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
+    {
+        $this->begin    = $begin;
+        $this->end      = $end;
+        $this->category = $category;
+    }
+
+    /**
+     * @param string $locale
+     * @param string $title
+     */
+    public function updateTitleTranslation($locale, $title)
+    {
+        $this->titleTranslations->get($locale)->update($title);
+    }
+
+    /**
+     * @param string $locale
+     * @param string $description
+     */
+    public function updateDescriptionTranslation($locale, $description)
+    {
+        $this->descriptionTranslations->get($locale)->update($description);
     }
 }
