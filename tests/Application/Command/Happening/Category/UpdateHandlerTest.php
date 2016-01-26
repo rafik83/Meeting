@@ -47,8 +47,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update  = new Update($category);
         $update->picto = 'picto2';
         $update->translations = [
-            'fr' => ['title' =>'truc'],
-            'en' => ['title' =>  'trac'],
+            'fr' => ['title' => 'troc'],
+            'en' => ['title' => 'trec'],
         ];
 
         $handler = new UpdateHandler($categoryRepository->reveal());
