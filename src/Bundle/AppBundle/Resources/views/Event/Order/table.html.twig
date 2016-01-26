@@ -55,6 +55,20 @@
                 <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
             </tr>
         {% endif %}
+        {% if order.vats is defined %}
+            {% for vat, amount in order.vats %}
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">TVA {{ vat }}%</th>
+                    <th class="text-right">{{ amount|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="2"></th>
+                <th colspan="2">Total TTC</th>
+                <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            </tr>
+        {% endif %}
     </tbody>
 
 </table>

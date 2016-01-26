@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-abstract class Groups
+class Groups
 {
     /**
      * @var GroupView[]
@@ -77,17 +77,17 @@ abstract class Groups
     /**
      * @return float
      */
-    public function getTotalWithTaxes()
+    public function getTaxes()
     {
-        return $this->getTotalWithoutTaxes() * (1 + $this->vat / 100);
+        return $this->getTotalWithoutTaxes() * $this->vat / 100;
     }
 
     /**
-     * @deprecated
+     * @return float
      */
-    public function getTotalWithVat()
+    public function getTotalWithTaxes()
     {
-        return $this->getTotalWithoutTaxes();
+        return $this->getTotalWithoutTaxes() + $this->getTaxes();
     }
 
     /**

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -21,13 +22,20 @@ class OrderMergeFactory
     private $groupFactory;
 
     /**
-     * OrderMergeFactory constructor.
-     *
-     * @param GroupFactory $groupFactory
+     * @var VatApplicable
      */
-    public function __construct(GroupFactory $groupFactory)
+    private $vatApplicable;
+
+    /**
+     * OrderViewFactory constructor.
+     *
+     * @param GroupFactory  $groupFactory
+     * @param VatApplicable $vatApplicable
+     */
+    public function __construct(GroupFactory $groupFactory, VatApplicable $vatApplicable)
     {
-        $this->groupFactory = $groupFactory;
+        $this->groupFactory  = $groupFactory;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -38,38 +46,40 @@ class OrderMergeFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
-        return $this->createFromOrders(
-            $sheet->getOrders()->toArray(),
-            $sheet->getEvent()->getMode(),
-            $sheet->getEvent()->getVat(),
-            $locale
-        );
+        return $this->createFromOrders($sheet->getOrders()->toArray(), $locale);
     }
 
 
     /**
      * @param Order[] $orders
-     * @param string  $mode
-     * @param float   $vat
      * @param string  $locale
      *
      * @return OrderView
      */
-    public function createFromOrders(array $orders, $mode, $vat, $locale)
+    public function createFromOrders(array $orders, $locale)
     {
         $template = [];
         $data     = [];
+        $vats     = [];
 
         foreach ($orders as $order) {
             $this->mergeTemplate($template, $order->getPackageTemplate());
             $this->mergeData($data, $order->getPackageData());
+
+            $groups = new Groups(
+                $this->groupFactory->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale),
+                $this->vatApplicable->onOrder($order),
+                $order->getVatRate()
+            );
+
+            if (isset($vats[(string) $groups->vat])) {
+                $vats[(string) $groups->vat] += $groups->getTaxes();
+            } else {
+                $vats[(string) $groups->vat] = $groups->getTaxes();
+            }
         }
 
-        return new OrderMerge(
-            $this->groupFactory->createGroupsFromArray($template, $data, $locale),
-            $mode,
-            $vat
-        );
+        return new OrderMerge($this->groupFactory->createGroupsFromArray($template, $data, $locale), $vats);
     }
 
     /**

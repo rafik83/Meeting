@@ -22,7 +22,7 @@ Proximum\Vimeet\Domain\Model\Event:
         legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
-        mode: 'with_vat'
+        mode: 'et'
         vat: 20
         elementToJoinWithInvoice: |+
             - Numéro de la Facture
