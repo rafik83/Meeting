@@ -97,6 +97,10 @@ form:
         children:
             submit:
                 label: Valider les produits
+    edit_product:
+        children:
+            submit:
+                label: Valider
     billing_update:
         children:
             submit:
@@ -130,7 +134,6 @@ form:
                 label: Ajouter
     planning:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
-
     type_update:
         children:
             translations:

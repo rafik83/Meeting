@@ -1,16 +1,18 @@
 {% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
 {% block title eventView.title %}
 
 {% block content %}
-    <h2>{{ 'event.sheet.summary.title'|trans }}</h2>
+    <h2>{{ 'event.sheet.edit_product.title'|trans }}</h2>
 
-    {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'sheet': sheet, 'order': summary }, false) }}
+    {{ form(form) }}
 
     <hr>
+
     <a href="{{ path('event_sheet', {
         'id'       : sheet.id,
         'subdomain': app.request.attributes.get('subdomain')
-    }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
-
+    }) }}">{{ 'event.link.go_back_to_sheet'|trans }}</a>
 {% endblock %}

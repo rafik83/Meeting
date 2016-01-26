@@ -92,6 +92,8 @@ event:
             include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
         summary:
             title: Récapitulatif de participation
+        edit_product:
+            title: Modifier un produit commandé
     meeting:
         listRequest:
             title: Liste de vos demandes de rendez-vous

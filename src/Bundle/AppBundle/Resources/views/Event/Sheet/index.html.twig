@@ -59,6 +59,15 @@
         </div>
     {% elseif sheetDataView.orders is not empty %}
         <div class="text-center">
+            <a href="{{ path('event_sheet_package_cart', {
+                    'id': sheetDataView.id,
+                    'subdomain': app.request.attributes.get('subdomain')
+                }) }}"
+               class="btn btn-primary"
+            >
+                <span class="glyphicon glyphicon-shopping-cart"></span> Panier
+            </a>
+
             <a href="{{ path('event_sheet_summary', {
                 'id': sheetDataView.id,
                 'subdomain': app.request.attributes.get('subdomain')

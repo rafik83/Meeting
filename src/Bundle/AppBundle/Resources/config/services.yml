@@ -150,6 +150,13 @@ services:
                 lib_organisation: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType'
         tags:
             - { name: form.type }
+    vimeet_app.form_type_package.edit_product_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\EditProductType
+        arguments:
+            -
+                lib_option: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType'
+        tags:
+            - { name: form.type }
     vimeet_app.form_type_library.choice_with_description:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:

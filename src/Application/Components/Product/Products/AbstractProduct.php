@@ -62,6 +62,7 @@ abstract class AbstractProduct implements ProductInterface
             'includedIn',
             'required',
             'updatableUntil',
+            'quantity',
         ]);
     }
 
@@ -228,7 +229,32 @@ abstract class AbstractProduct implements ProductInterface
 
         return ($quantityMax - $quantityBought - $quantityIncluded) > 0
             && ($quantityMax - $quantityBought - $quantityIncluded) >= $this->getQuantityMin()
-            ? $quantityMax - $quantityBought- $quantityIncluded : 0;
+            ? $quantityMax - $quantityBought - $quantityIncluded
+            : 0;
+    }
+
+    /**
+     * @param array $packageData
+     * @return float
+     */
+    public function getQuantityMaxWithoutPurchased(array $packageData)
+    {
+        if ($this->hasQuantity() === false) {
+            return 0;
+        }
+
+        $quantityIncluded = $this->getQuantityIncludedWithPurchase($packageData);
+
+        if (null === $quantityIncluded) {
+            return 0;
+        }
+
+        $quantityMax = $this->getQuantityMax();
+
+        return ($quantityMax - $quantityIncluded) > 0
+            && ($quantityMax - $quantityIncluded) >= $this->getQuantityMin()
+            ? $quantityMax - $quantityIncluded
+            : 0;
     }
 
     /**

@@ -11,15 +11,18 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\AddProducts;
+use Proximum\Vimeet\Application\Command\Package\EditProduct;
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\EditProductType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,6 +142,9 @@ class PackageController extends BaseController
      */
     public function addProductsAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
         $cart = $this
             ->get('vimeet_infrastructure.application.components.cart.cart_manager')
             ->findOrCreateCart($sheet);
@@ -192,6 +198,101 @@ class PackageController extends BaseController
         return $this->render('VimeetAppBundle:Event/Package:products.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     * @param string  $groupId
+     * @param string  $rowId
+     *
+     * @return Response
+     */
+    public function editProductAction(Request $request, EventView $eventView, Sheet $sheet, $groupId, $rowId)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        $orderMerge = $this
+            ->get('components.sheet.order_merge_factory')
+            ->createFromSheet($sheet, $request->getLocale());
+
+        $group = $orderMerge->getGroup($groupId);
+
+        if (null == $group) {
+            throw $this->createNotFoundException('Invalid product group');
+        }
+
+        $row = $group->getRow($rowId);
+
+        if (null == $row) {
+            throw $this->createNotFoundException('Invalid product row');
+        }
+
+        if (!$row->updatable) {
+            throw $this->createAccessDeniedException('Product not updatable');
+        }
+
+        $cart = $this
+            ->get('vimeet_infrastructure.application.components.cart.cart_manager')
+            ->findOrCreateCart($sheet);
+
+        $product = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
+            ->createFromSheet($sheet)
+            ->getStep($groupId)
+            ->getProduct($rowId);
+
+        $productTemplate = $sheet->getTypePackageTemplate()[$groupId]['template'][$rowId];
+
+        $editProduct = new EditProduct($sheet, $cart, $product, $row->quantity);
+
+        $form = $this->createForm(EditProductType::class, $editProduct, [
+            'template' => $productTemplate,
+            'locale'   => $request->getLocale(),
+            'sheet'    => $sheet,
+            'product'  => $product,
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.package.edit_product_handler')
+                ->handle($editProduct);
+
+            if ($editProduct->isNegative()) {
+                $this->addFlash('success', 'flash.package.edit_product.created_negative_order');
+
+                return $this->redirectToRoute(
+                    'event_sheet_list_orders',
+                    [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                    ]
+                );
+            } elseif ($editProduct->isPositive()) {
+                $this->addFlash('success', 'flash.package.edit_product.added_updated_product_to_cart');
+
+                return $this->redirectToRoute(
+                    'event_sheet_package_cart',
+                    [
+                        'subdomain' => $request->attributes->get('subdomain'),
+                        'id'        => $sheet->getId(),
+                    ]
+                );
+            }
+
+            $form->addError(new FormError('Aucune modification effectuée'));
+        }
+
+        return $this->render('VimeetAppBundle:Event/Package:editProduct.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'group'     => $group,
+            'product'   => $product,
+            'row'       => $row,
             'form'      => $form->createView(),
         ]);
     }
