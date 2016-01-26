@@ -141,6 +141,14 @@ class Happening
     }
 
     /**
+     * @param string $locale
+     */
+    public function getTitle($locale)
+    {
+        return $this->getTitleTranslations()->get($locale)->getTitle();
+    }
+
+    /**
      * @param TitleTranslation $titleTranslation
      */
     public function setTitleTranslation(TitleTranslation $titleTranslation)
