@@ -22,7 +22,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::MODE_WITH_VAT, 20);
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -42,7 +42,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::MODE_WITH_VAT, 20);
+        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
 
@@ -59,7 +59,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::MODE_WITH_VAT, 20);
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -79,7 +79,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::MODE_WITH_VAT, 20);
+        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
         $expectedEvent->getTranslations()->set('de', new EventTranslation($expectedEvent, 'de', ''));
@@ -97,7 +97,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::MODE_WITH_VAT, 20, Event::MODE_WITH_VAT, 20);
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -117,7 +117,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->update('foobar', ['fr'], 'fr', Event::MODE_WITH_VAT, 20);
+        $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
         // Mock
