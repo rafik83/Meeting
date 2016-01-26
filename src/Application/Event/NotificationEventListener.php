@@ -109,7 +109,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'meeting_request_participant.added',
+            'meeting_request.participant.added',
             $event->getMessage()
         );
 
@@ -128,7 +128,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'meeting_request_participant.removed',
+            'meeting_request.participant.removed',
             $event->getMessage()
         );
 
