@@ -107,7 +107,7 @@ class DescriptionTranslation
     /**
      * @param string $description
      *
-     * @return CategoryTranslation
+     * @return DescriptionTranslation
      */
     public function update($description)
     {

@@ -107,7 +107,7 @@ class TitleTranslation
     /**
      * @param string $title
      *
-     * @return CategoryTranslation
+     * @return TitleTranslation
      */
     public function update($title)
     {
