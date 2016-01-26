@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -27,14 +26,13 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Context
         $event       = new Event();
-        $schedule    = new Schedule($event, new \DateTime('2016-01-15 12:00:00'));
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         // Actual unavailability
-        $unavailability = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 11:00:00'));
+        $unavailability = new Unavailability($participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 11:00:00'));
 
         // Command
         $command       = new Update($unavailability);
@@ -42,7 +40,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->to   = new \DateTime('2016-01-15 13:00:00');
 
         // Expected
-        $expected = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 13:00:00'));
+        $expected = new Unavailability($participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 13:00:00'));
 
         // Mock
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
@@ -60,16 +58,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Context
         $event       = new Event();
-        $schedule    = new Schedule($event, new \DateTime('2016-01-15 12:00:00'));
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
 
         //Actual unavailability
-        $unavailability1 = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 13:00:00'));
-        $unavailability2 = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 12:00:00'), new \DateTime('2016-01-15 17:00:00'));
+        $unavailability1 = new Unavailability($participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 13:00:00'));
+        $unavailability2 = new Unavailability($participant, new \DateTime('2016-01-15 12:00:00'), new \DateTime('2016-01-15 17:00:00'));
 
         //Command
         $command       = new Update($unavailability1);
@@ -77,8 +74,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->to   = new \DateTime('2016-01-15 13:00:00');
 
         //Expected unavailability
-        $expected1 = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 08:00:00'), new \DateTime('2016-01-15 13:00:00'));
-        $expected2 = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 08:00:00'), new \DateTime('2016-01-15 17:00:00'));
+        $expected1 = new Unavailability($participant, new \DateTime('2016-01-15 08:00:00'), new \DateTime('2016-01-15 13:00:00'));
+        $expected2 = new Unavailability($participant, new \DateTime('2016-01-15 08:00:00'), new \DateTime('2016-01-15 17:00:00'));
 
         //Mock
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
