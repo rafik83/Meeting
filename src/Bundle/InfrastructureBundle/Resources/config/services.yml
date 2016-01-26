@@ -229,6 +229,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
         arguments:

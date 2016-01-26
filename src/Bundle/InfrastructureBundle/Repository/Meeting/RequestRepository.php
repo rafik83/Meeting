@@ -144,7 +144,6 @@ class RequestRepository implements RequestRepositoryInterface
                 $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
                 $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
                 $request->getState(),
-                $request->getDescription(),
                 $request->getCreatedAt(),
                 ''
             );
