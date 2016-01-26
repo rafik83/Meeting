@@ -34,18 +34,19 @@ use Symfony\Component\HttpFoundation\Response;
 class ScheduleController extends Controller
 {
     /**
+     * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function displayAction(EventView $eventView, Sheet $sheet)
+    public function displayAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $participantSchedules = $this
             ->get('proximum.vimeet.application.components.schedule.schedule_builder')
-            ->buildForSheet($sheet);
+            ->buildForSheet($sheet, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Event/Schedule:display.html.twig', [
             'eventView'            => $eventView,
@@ -199,27 +200,14 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "schedule",
-     *   class="Proximum\Vimeet\Domain\Model\Schedule",
-     *   options={"id" = "schedule_id"}
-     * )
-     *
-     * @ParamConverter(
-     *   "happening",
-     *   class="Proximum\Vimeet\Domain\Model\Happening",
-     *   options={"id" = "happening_id"}
-     * )
-     *
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
-     * @param Schedule  $schedule
      * @param Happening $happening
      *
      * @return RedirectResponse|Response
      */
-    public function participateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening)
+    public function participateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening)
     {
         // Get user participant
         $participant = $this
@@ -251,41 +239,21 @@ class ScheduleController extends Controller
         return $this->render('VimeetAppBundle:Event/Schedule:participateHappening.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'schedule'  => $schedule,
             'happening' => $happening,
             'form'      => $form->createView(),
         ]);
     }
 
     /**
-     * @ParamConverter(
-     *   "schedule",
-     *   class="Proximum\Vimeet\Domain\Model\Schedule",
-     *   options={"id" = "schedule_id"}
-     * )
-     *
-     * @ParamConverter(
-     *   "happening",
-     *   class="Proximum\Vimeet\Domain\Model\Happening",
-     *   options={"id" = "happening_id"}
-     * )
-     *
-     * @ParamConverter(
-     *   "participant",
-     *   class="Proximum\Vimeet\Domain\Model\Participant",
-     *   options={"id" = "participant_id"}
-     * )
-     *
      * @param Request     $request
      * @param EventView   $eventView
      * @param Sheet       $sheet
-     * @param Schedule    $schedule
      * @param Happening   $happening
      * @param Participant $participant
      *
      * @return RedirectResponse
      */
-    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Schedule $schedule, Happening $happening, Participant $participant)
+    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening, Participant $participant)
     {
         // Unparticipate
         $this

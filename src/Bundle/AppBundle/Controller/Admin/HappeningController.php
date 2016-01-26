@@ -37,7 +37,7 @@ class HappeningController extends Controller
     {
         $happenings = $this
             ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findByEvent($event, $request->getLocale());
+            ->findListByEvent($event, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
             'event'      => $event,
