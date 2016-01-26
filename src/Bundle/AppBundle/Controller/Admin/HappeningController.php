@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Create;
 use Proximum\Vimeet\Application\Command\Happening\Category\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryUpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,8 +33,38 @@ class HappeningController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $happenings = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findByEvent($event, $request->getLocale());
+
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
+            'event'      => $event,
+            'happenings' => $happenings,
+        ]);
+    }
+
+    public function createAction(Request $request, Event $event)
+    {
+        $create = new \Proximum\Vimeet\Application\Command\Happening\Create($event);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_happening_create', ['id' => $event->getId()]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.happening.create_handler')->handle($create);
+            $this->addFlash('success', 'flash.admin.happening.create.success');
+
+            return $this->redirectToRoute('admin_happening_list', [
+                'id' => $event->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Happening:create.html.twig', [
             'event' => $event,
+            'form'  => $form->createView(),
         ]);
     }
 
