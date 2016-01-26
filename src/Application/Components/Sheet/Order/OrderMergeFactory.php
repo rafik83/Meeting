@@ -72,10 +72,12 @@ class OrderMergeFactory
                 $order->getVatRate()
             );
 
-            if (isset($vats[(string) $groups->vat])) {
-                $vats[(string) $groups->vat] += $groups->getTaxes();
-            } else {
-                $vats[(string) $groups->vat] = $groups->getTaxes();
+            if ($groups->vatApplicable) {
+                if (isset($vats[(string) $groups->vat])) {
+                    $vats[(string) $groups->vat] += $groups->getTaxes();
+                } else {
+                    $vats[(string) $groups->vat] = $groups->getTaxes();
+                }
             }
         }
 
