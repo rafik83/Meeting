@@ -32,6 +32,8 @@ event:
         see_meeting_request: Voir mes demandes de rendez-vous
         see_meeting_proposition: Voir mes propositions de rendez-vous
         go_back_to_sheet: Retourner à la fiche
+        product:
+            cancel: Annuler
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté

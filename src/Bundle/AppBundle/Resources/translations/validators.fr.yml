@@ -22,3 +22,8 @@ validators:
         toParticipants:
             count:
                 min: Vous devez choisir au moins {{ limit }} participant
+
+    unavailability:
+        participants:
+            count:
+                min: Vous devez choisir au moins {{ limit }} participant

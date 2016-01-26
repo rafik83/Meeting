@@ -107,7 +107,17 @@ class OrderManager
                 }
 
                 foreach ($product as $keyField => $field) {
+                    // If option is not taken
                     if (is_bool($field) && false === $field) {
+                        return false;
+                    }
+
+                    // if option is taken but the quantity set is 0
+                    if ($keyField === 'quantity'
+                        && $field === 0
+                        && isset($product['value'])
+                        && $product['value'] === true
+                    ) {
                         return false;
                     }
                 }
