@@ -26,12 +26,18 @@ class CreateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $event = $options['event'];
+
         $builder
             ->add('category', CategoryType::class, [
                 'event' => $options['event']
             ])
-            ->add('begin', DateTimeType::class)
-            ->add('end', DateTimeType::class)
+            ->add('begin', DateTimeType::class, [
+                'view_timezone' => $event->getTimeZone(),
+            ])
+            ->add('end', DateTimeType::class, [
+                'view_timezone' => $event->getTimeZone(),
+            ])
             ->add('titleTranslations', CollectionType::class, [
                 'entry_type' => TitleTranslationType::class,
                 'label'      => false,
