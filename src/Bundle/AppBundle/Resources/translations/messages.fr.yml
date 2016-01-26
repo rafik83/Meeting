@@ -117,6 +117,7 @@ event:
         showDetailsRequest:
             title: Détails de la demande de rendez-vous
             to: A destination de
+            from: Provenant de
             participants: Les participants
             message: Votre conversation
             state: Statut

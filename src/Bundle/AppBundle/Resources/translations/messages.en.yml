@@ -22,6 +22,7 @@ event:
         showDetailsRequest:
             title: Details request for appointment
             to: To
+            from: From
             participants: Participants
             message: Your conversation
             state: State

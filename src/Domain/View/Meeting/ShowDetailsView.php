@@ -15,12 +15,27 @@ class ShowDetailsView
     /**
      * @var int
      */
-    public $id;
+    public $meetingRequestId;
+
+    /**
+     * @var int
+     */
+    public $toSheetId;
 
     /**
      * @var string
      */
-    public $sheetName;
+    public $toSheetName;
+
+    /**
+     * @var int
+     */
+    public $fromSheetId;
+
+    /**
+     * @var string
+     */
+    public $fromSheetName;
 
     /**
      * @var array
@@ -37,10 +52,33 @@ class ShowDetailsView
      */
     public $state;
 
-    public function __construct($id, $sheetName, $participantNames, $messages, $state)
-    {
-        $this->id               = $id;
-        $this->sheetName        = $sheetName;
+    /**
+     * ShowDetailsView constructor.
+     *
+     * @param $meetingRequestId
+     * @param $toSheetId
+     * @param $toSheetName
+     * @param $fromSheetId
+     * @param $fromSheetName
+     * @param $participantNames
+     * @param $messages
+     * @param $state
+     */
+    public function __construct(
+        $meetingRequestId,
+        $toSheetId,
+        $toSheetName,
+        $fromSheetId,
+        $fromSheetName,
+        $participantNames,
+        $messages,
+        $state
+    ) {
+        $this->meetingRequestId = $meetingRequestId;
+        $this->toSheetId        = $toSheetId;
+        $this->toSheetName      = $toSheetName;
+        $this->fromSheetId      = $fromSheetId;
+        $this->fromSheetName    = $fromSheetName;
         $this->participantNames = $participantNames;
         $this->messages         = $messages;
         $this->state            = $state;

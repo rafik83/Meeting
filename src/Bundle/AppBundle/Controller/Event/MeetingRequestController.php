@@ -244,20 +244,26 @@ class MeetingRequestController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($sheet === $meetingRequest->getFromSheet()) {
-            $otherSheet   = $meetingRequest->getToSheet();
+            $toSheet      = $meetingRequest->getToSheet();
+            $fromSheet    = $meetingRequest->getFromSheet();
             $participants = $meetingRequest->getFromParticipants()->toArray();
         } elseif ($sheet === $meetingRequest->getToSheet()) {
-            $otherSheet   = $meetingRequest->getFromSheet();
-            $participants = $meetingRequest->getFromParticipants()->toArray();
+            $fromSheet    = $meetingRequest->getFromSheet();
+            $toSheet      = $meetingRequest->getToSheet();
+            $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
             throw $this->createNotFoundException('Request not found');
         }
 
-        $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')->getMessagesByMeetingRequest($meetingRequest);
+        $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
+            ->getMessagesByMeetingRequest($meetingRequest);
 
         $meetingRequestView = new ShowDetailsView(
             $meetingRequest->getId(),
-            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($otherSheet),
+            $toSheet->getId(),
+            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($toSheet),
+            $fromSheet->getId(),
+            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($fromSheet),
             array_map(function (Participant $participant) {
                 return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
             }, $participants),
@@ -268,10 +274,7 @@ class MeetingRequestController extends BaseController
         return $this->render('VimeetAppBundle:Event/MeetingRequest:showRequest.html.twig', [
             'eventView'          => $eventView,
             'meetingRequestView' => $meetingRequestView,
-            'sheet'              => $sheet,
-            'meetingRequest'     => $meetingRequest,
         ]);
-
     }
 
     /**

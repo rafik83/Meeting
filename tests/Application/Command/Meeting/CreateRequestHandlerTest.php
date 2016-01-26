@@ -47,7 +47,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participants = [];
         $participants[] = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participants[] = $this->createParticipantMock($sheetFrom, $user2, 2);
-        $expectedRequest = new Request($sheetFrom, $participants, $sheetTo, [], 'test', $dateTime, $user1);
+        $expectedRequest = new Request($sheetFrom, $participants, $sheetTo, [], $dateTime, $user1);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->add($expectedRequest)->shouldBeCalled();
