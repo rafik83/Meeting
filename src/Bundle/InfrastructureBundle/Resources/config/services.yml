@@ -164,8 +164,9 @@ services:
     vimeet_infrastructure.vimeet.application.command.package.edit_product_handler:
         class: Proximum\Vimeet\Application\Command\Package\EditProductHandler
         arguments:
-            - '@vimeet_infrastructure.vimeet.application.command.order.add_negative_handler'
             - '@vimeet_infrastructure.repository.cart_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
@@ -273,12 +274,6 @@ services:
             - '@vimeet_infrastructure.repository.cart_repository'
             - '@vimeet_infrastructure.application.components.order.order_manager'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
-    vimeet_infrastructure.vimeet.application.command.order.add_negative_handler:
-        class: Proximum\Vimeet\Application\Command\Order\AddNegativeHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:

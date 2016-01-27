@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
-use Proximum\Vimeet\Application\Command\Order\AddNegative;
-use Proximum\Vimeet\Application\Command\Order\AddNegativeHandler;
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
+use Proximum\Vimeet\Application\Components\Payment\PaymentMode;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class EditProductHandler
 {
@@ -23,9 +25,14 @@ class EditProductHandler
     private $orderManager;
 
     /**
-     * @var AddNegativeHandler
+     * @var OrderRepositoryInterface
      */
-    private $orderAddNegativeHandler;
+    private $orderRepository;
+
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
 
     /**
      * @var CartRepositoryInterface
@@ -33,18 +40,21 @@ class EditProductHandler
     private $cartRepository;
 
     /**
-     * @param AddNegativeHandler      $orderAddNegativeHandler
-     * @param CartRepositoryInterface $cartRepository
-     * @param OrderManager            $orderManager
+     * @param CartRepositoryInterface  $cartRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param OrderManager             $orderManager
      */
     public function __construct(
-        AddNegativeHandler $orderAddNegativeHandler,
         CartRepositoryInterface $cartRepository,
+        OrderRepositoryInterface $orderRepository,
+        SheetRepositoryInterface $sheetRepository,
         OrderManager $orderManager
     ) {
-        $this->orderAddNegativeHandler = $orderAddNegativeHandler;
-        $this->cartRepository          = $cartRepository;
-        $this->orderManager            = $orderManager;
+        $this->orderRepository = $orderRepository;
+        $this->cartRepository  = $cartRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->orderManager    = $orderManager;
     }
 
     /**
@@ -64,13 +74,35 @@ class EditProductHandler
      */
     private function createNegativeOrder(EditProduct $editProduct)
     {
-        $createOrderAddNegative = new AddNegative(
+        $order = new Order(
             $editProduct->sheet,
-            $this->getNewPackageData($editProduct),
-            new \DateTime()
+            Order::STATE_PAID,
+            [],
+            $editProduct->sheet->getTypePackageTemplate(),
+            $editProduct->sheet->getBillingData(),
+            $editProduct->sheet->getEvent()->getBillingTemplate(),
+            new \DateTime(),
+            PaymentMode::NOPAYMENT
         );
 
-        $this->orderAddNegativeHandler->handle($createOrderAddNegative);
+        $order->addRow(
+            $editProduct->product->getStep()->getKey(),
+            $editProduct->product->getKey(),
+            $editProduct->product->getLabel($editProduct->locale),
+            $editProduct->product->getDescription($editProduct->locale),
+            $editProduct->product->getUnitPrice(),
+            $editProduct->getNewQuantity()
+        );
+
+        $this->orderRepository->add($order);
+
+        $sheetData = $this->orderManager->mergeTwoPackageData(
+            $editProduct->sheet->getPackageData(),
+            $order->getPackageData()
+        );
+
+        $editProduct->sheet->setPackageData($sheetData);
+        $this->sheetRepository->set($editProduct->sheet);
     }
 
     /**
@@ -78,28 +110,12 @@ class EditProductHandler
      */
     private function addProductToCart(EditProduct $editProduct)
     {
-        $data = $this->orderManager->mergeTwoPackageData(
-            $this->getNewPackageData($editProduct),
-            $editProduct->cart->getData()
+        $editProduct->cart->setRow(
+            $editProduct->product->getStep()->getKey(),
+            $editProduct->product->getKey(),
+            $editProduct->getNewQuantity()
         );
-        $editProduct->cart->setData($data);
-        $this->cartRepository->set($editProduct->cart);
-    }
 
-    /**
-     * @param EditProduct $editProduct
-     *
-     * @return array
-     */
-    private function getNewPackageData(EditProduct $editProduct)
-    {
-        return [
-            $editProduct->product->getStep()->getKey() => [
-                $editProduct->product->getKey() => [
-                    'value' => true,
-                    'quantity' => $editProduct->getNewQuantity(),
-                ]
-            ]
-        ];
+        $this->cartRepository->set($editProduct->cart);
     }
 }

@@ -29,40 +29,6 @@ class LibOptionProduct extends AbstractProduct
     }
 
     /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getDescription($locale)
-    {
-        return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->options['type'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return isset($this->options['required']) ? $this->options['required'] : false;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUnitPrice()
-    {
-        return $this->options['unitPrice'];
-    }
-
-    /**
      * @param array $packageData
      * @param array $data
      *

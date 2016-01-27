@@ -247,7 +247,7 @@ class PackageController extends BaseController
 
         $productTemplate = $sheet->getTypePackageTemplate()[$groupId]['template'][$rowId];
 
-        $editProduct = new EditProduct($sheet, $cart, $product, $row->quantity);
+        $editProduct = new EditProduct($sheet, $cart, $product, $request->getLocale(), $row->quantity);
 
         $form = $this->createForm(EditProductType::class, $editProduct, [
             'template' => $productTemplate,

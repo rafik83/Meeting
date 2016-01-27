@@ -83,6 +83,38 @@ abstract class AbstractProduct implements ProductInterface
     /**
      * {@inheritdoc}
      */
+    public function getDescription($locale)
+    {
+        return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->options['type'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequired()
+    {
+        return isset($this->options['required']) ? $this->options['required'] : false;
+    }
+
+    /**
+     * @return float
+     */
+    public function getUnitPrice()
+    {
+        return $this->options['unitPrice'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function including(ProductInterface $includer, ProductInterface $include, $quantity)
     {
         return new Including($includer, $include, $quantity);
@@ -310,14 +342,6 @@ abstract class AbstractProduct implements ProductInterface
     public function getStep()
     {
         return $this->step;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return isset($this->options['required']) ? $this->options['required'] : false;
     }
 
     /**

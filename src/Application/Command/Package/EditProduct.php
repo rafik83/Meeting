@@ -32,6 +32,11 @@ class EditProduct
     public $product;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @var array
      */
     public $productItem = [];
@@ -50,13 +55,15 @@ class EditProduct
      * @param Sheet            $sheet
      * @param Cart             $cart
      * @param ProductInterface $product
+     * @param string           $locale
      * @param int              $quantity
      */
-    public function __construct(Sheet $sheet, Cart $cart, ProductInterface $product, $quantity)
+    public function __construct(Sheet $sheet, Cart $cart, ProductInterface $product, $locale, $quantity)
     {
         $this->sheet                   = $sheet;
         $this->cart                    = $cart;
         $this->product                 = $product;
+        $this->locale                  = $locale;
         $this->productItem['value']    = $this->checked;
         $this->productItem['quantity'] = $quantity;
         $this->previousQuantity        = $quantity;
