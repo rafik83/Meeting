@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateRequestHandler
 {
@@ -21,11 +23,22 @@ class CreateRequestHandler
     private $requestRepository;
 
     /**
-     * @param RequestRepositoryInterface $requestRepository
+     * @var EventDispatcherInterface
      */
-    public function __construct(RequestRepositoryInterface $requestRepository)
-    {
+    private $eventDispatcher;
+
+    /**
+     * CreateRequestHandler constructor.
+     *
+     * @param RequestRepositoryInterface $requestRepository
+     * @param EventDispatcherInterface   $eventDispatcher
+     */
+    public function __construct(
+        RequestRepositoryInterface $requestRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->requestRepository = $requestRepository;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     /**
@@ -33,6 +46,7 @@ class CreateRequestHandler
      */
     public function handle(CreateRequest $createRequest)
     {
+        // Create new request
         $request = new Request(
             $createRequest->from,
             $createRequest->fromParticipants,
@@ -44,5 +58,13 @@ class CreateRequestHandler
         );
 
         $this->requestRepository->add($request);
+
+        // Dispatch event
+        $this->eventDispatcher->dispatch('meeting_request.send', new RequestSentEvent(
+            $createRequest->creator,
+            $request,
+            $createRequest->createdAt,
+            $createRequest->description
+        ));
     }
 }
