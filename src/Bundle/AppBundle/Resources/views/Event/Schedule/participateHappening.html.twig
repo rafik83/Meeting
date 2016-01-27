@@ -3,7 +3,7 @@
 {% block title eventView.title %}
 
 {% block content %}
-
+        <h3>{{ happening.title(app.request.locale) }}</h3>
         <p class="alert alert-warning">Attention, cet événement est bloquant, si vous y participez vous ne pourrez pas obtenir de rendez vous entre {{ happening.begin|date('H:i') }} et {{ happening.end|date('H:i') }}</p>
 
     {{ form(form) }}

@@ -39,9 +39,19 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository.happening_repository')
             ->findListByEvent($event, $request->getLocale());
 
+        $happeningsAllowedToBeModifiedArray = [];
+        $happeningsAllowedToBeModified      = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findByEventWithoutParticipation($event);
+
+        foreach ($happeningsAllowedToBeModified as $happening) {
+            $happeningsAllowedToBeModifiedArray[$happening->getId()] = $happening->getId();
+        }
+
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
-            'event'      => $event,
-            'happenings' => $happenings,
+            'event'           => $event,
+            'happenings'      => $happenings,
+            'allowToModified' => $happeningsAllowedToBeModifiedArray,
         ]);
     }
 

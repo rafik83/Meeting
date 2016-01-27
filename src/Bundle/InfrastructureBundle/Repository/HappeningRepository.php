@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
@@ -68,6 +69,23 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('happening.titleTranslations', 'translation', 'WITH', 'translation.locale = :locale')
             ->where('happening.event = :event')
             ->setParameter('locale', $locale)
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithoutParticipation(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->where('happening.event = :event')
+            ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
