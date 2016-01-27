@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -184,6 +185,33 @@ class NotificationEventListener implements EventSubscriberInterface
     }
 
     /**
+     * Notify the recipient sheet owner when new request is send
+     *
+     * @param RequestSentEvent $event
+     */
+    public function onRequestSent(RequestSentEvent $event)
+    {
+        $recipient = $event->getRequest()->getToSheet()->getOwner()->getUser();
+        $message   = $this->translator->trans(
+            'notification.meeting_request.receive.message',
+            [
+                '%from_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
+            ],
+            'notification',
+            $recipient->getLocale()
+        );
+
+        $this->notificationRepository->add(new Notification(
+            $event->getRequest()->getFromSheet()->getEvent(),
+            $event->getEmitter(),
+            $recipient,
+            $event->getDate(),
+            'metting.canceled',
+            $message
+        ));
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -191,6 +219,7 @@ class NotificationEventListener implements EventSubscriberInterface
         return [
             'meeting.participant.added'   => 'onParticipantAddedToMeeting',
             'meeting.participant.removed' => 'onParticipantRemovedFromMeeting',
+            'meeting_request.sent'        => 'onRequestSent',
             'meeting_request.refused'     => 'onRequestRefused',
             'meeting_request.canceled'    => 'onRequestCanceled',
             'meeting.canceled'            => 'onMeetingCanceled',
