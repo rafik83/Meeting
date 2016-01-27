@@ -76,8 +76,6 @@ class NotificationEventListener implements EventSubscriberInterface
         $this->notificationRepository->add($notification);
     }
 
-
-
     /**
      * Notify removed participant
      *
