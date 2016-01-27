@@ -104,13 +104,23 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantAddedToMeetingRequest(MeetingRequestParticipantAddedEvent $event)
     {
+        $message = $this->translator->trans(
+            'notification.meeting_request.participant.added.message',
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%message%'   => $event->getMessage(),
+            ],
+            null,
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
         $notification = new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.added',
-            $event->getMessage()
+            $message
         );
 
         $this->notificationRepository->add($notification);
@@ -123,13 +133,23 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantRemovedToMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
     {
+        $message = $this->translator->trans(
+            'notification.meeting_request.participant.removed.message',
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%message%'   => $event->getMessage(),
+            ],
+            null,
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
         $notification = new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.removed',
-            $event->getMessage()
+            $message
         );
 
         $this->notificationRepository->add($notification);

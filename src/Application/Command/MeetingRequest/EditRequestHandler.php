@@ -90,7 +90,16 @@ class EditRequestHandler
         foreach ($editRequest->meetingRequest->getFromParticipants() as $participant) {
             if (!in_array($participant, $editRequest->fromParticipants)) {
                 $editRequest->meetingRequest->removeFromParticipant($participant);
-                $this->events[] = ['meeting_request.participant.removed', new ParticipantRemovedEvent($editRequest->editor, $participant, $editRequest->meetingRequest, $editRequest->description, $editRequest->date)];
+                $this->events[] = [
+                    'meeting_request.participant.removed',
+                    new ParticipantRemovedEvent(
+                        $editRequest->editor,
+                        $participant,
+                        $editRequest->meetingRequest,
+                        $editRequest->description,
+                        $editRequest->date
+                    )
+                ];
             }
         }
 
@@ -98,7 +107,16 @@ class EditRequestHandler
         foreach ($editRequest->fromParticipants as $participant) {
             if (!$editRequest->meetingRequest->hasFromParticipant($participant)) {
                 $editRequest->meetingRequest->addFromParticipant($participant);
-                $this->events[] = ['meeting_request.participant.added', new ParticipantAddedEvent($editRequest->editor, $participant, $editRequest->meetingRequest, $editRequest->description, $editRequest->date)];
+                $this->events[] = [
+                    'meeting_request.participant.added',
+                    new ParticipantAddedEvent(
+                        $editRequest->editor,
+                        $participant,
+                        $editRequest->meetingRequest,
+                        $editRequest->description,
+                        $editRequest->date
+                    )
+                ];
             }
         }
     }

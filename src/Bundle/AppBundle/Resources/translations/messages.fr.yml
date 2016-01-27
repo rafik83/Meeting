@@ -208,9 +208,11 @@ notification:
             withoutMessage: Demande refusée par %sheetName%
             withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV refusée
-    participant:
-        removed:
-            action: Vous avez été rétiré d'un évènement
+        participant:
+            removed:
+                message: 'Participant retiré par %sheetName% pour le motif suivant : "%message%"'
+            added:
+                message: 'Participant ajouté par %sheetName% pour le motif suivant : "%message%"'
 
 message:
     admin:
