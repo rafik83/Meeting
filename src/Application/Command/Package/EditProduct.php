@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -42,6 +43,11 @@ class EditProduct
     public $productItem = [];
 
     /**
+     * @var DateTimeInterface
+     */
+    public $createdAt;
+
+    /**
      * @var bool
      */
     private $checked = true;
@@ -55,11 +61,18 @@ class EditProduct
      * @param Sheet            $sheet
      * @param Cart             $cart
      * @param ProductInterface $product
+     * @param DateTimeInterface $createdAt
      * @param string           $locale
      * @param int              $quantity
      */
-    public function __construct(Sheet $sheet, Cart $cart, ProductInterface $product, $locale, $quantity)
-    {
+    public function __construct(
+        Sheet $sheet,
+        Cart $cart,
+        ProductInterface $product,
+        DateTimeInterface $createdAt,
+        $locale,
+        $quantity
+    ) {
         $this->sheet                   = $sheet;
         $this->cart                    = $cart;
         $this->product                 = $product;
@@ -67,6 +80,7 @@ class EditProduct
         $this->productItem['value']    = $this->checked;
         $this->productItem['quantity'] = $quantity;
         $this->previousQuantity        = $quantity;
+        $this->createdAt               = $createdAt;
     }
 
     /**

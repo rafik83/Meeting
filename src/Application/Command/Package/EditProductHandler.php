@@ -81,13 +81,14 @@ class EditProductHandler
             $editProduct->sheet->getTypePackageTemplate(),
             $editProduct->sheet->getBillingData(),
             $editProduct->sheet->getEvent()->getBillingTemplate(),
-            new \DateTime(),
+            $editProduct->createdAt,
             PaymentMode::NOPAYMENT
         );
 
         $order->addRow(
             $editProduct->product->getStep()->getKey(),
             $editProduct->product->getKey(),
+            $editProduct->product->getType(),
             $editProduct->product->getLabel($editProduct->locale),
             $editProduct->product->getDescription($editProduct->locale),
             $editProduct->product->getUnitPrice(),
