@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\Happening\DescriptionTranslation:
     fields:
         description:
             type: text
+            nullable: true
         locale:
             type: string
     manyToOne:

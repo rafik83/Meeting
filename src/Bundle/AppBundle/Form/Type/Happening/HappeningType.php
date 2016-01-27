@@ -32,10 +32,12 @@ abstract class HappeningType extends AbstractType
             ->add('titleTranslations', CollectionType::class, [
                     'entry_type' => TitleTranslationType::class,
                     'label'      => false,
+                    'required'   => true,
                 ])
             ->add('descriptionTranslations', CollectionType::class, [
                     'entry_type' => DescriptionTranslationType::class,
                     'label'      => false,
+                    'required'   => false,
                 ]);
     }
 
