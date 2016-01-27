@@ -35,31 +35,30 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo   = new Sheet($event, $type, [], []);
         $sheetFrom = new Sheet($event, $type, [], []);
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
-        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
-        $user3     = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2    = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
         $participant3 = $this->createParticipantMock($sheetFrom, $user3, 3);
 
-
-        $participantFrom         = [$participant1, $participant2];
-        $participantFromExpected = [$participant1, $participant3];
+        $participantFrom = [$participant1, $participant2];
+        $participantTo = [];
 
         $datetime = new \DateTime('2016-01-24 09:00:00');
 
         //Actual
-        $request = new Request($sheetFrom, $participantFrom, $sheetTo, [], new \DateTime('2016-01-15 09:00:00'), $user1);
+        $request = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user1);
 
         //Command
-        $command = new EditRequest($request, 'modif', $datetime, $user1);
-        $command->meetingRequest->removeFromParticipant($participant2);
-        $command->meetingRequest->hasFromParticipant($participant3);
-        $command->meetingRequest->addFromParticipant($participant3);
+        $command = new EditRequest($request, 'modif', $datetime, $user2);
+        $command->fromParticipants = [$participant1, $participant3];
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, $participantFromExpected, $sheetTo, [], $datetime, $user1);
-        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'this is a test', new \DateTime('2016-01-21 09:00:00'));
+        $expectedRequest = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user2);
+        $expectedRequest->removeFromParticipant($participant2);
+        $expectedRequest->addFromParticipant($participant3);
+        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -71,11 +70,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher->dispatch(
             'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user1, $participant2, $expectedRequest, $expectedMessage, new \DateTime('2016-01-24 09:00:00'))
+            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
         )->shouldBeCalled();
         $eventDispatcher->dispatch(
             'meeting_request.participant.added',
-            new ParticipantAddedEvent($user1, $participant3, $expectedRequest, $expectedMessage, new \DateTime('2016-01-24 09:00:00'))
+            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
         )->shouldBeCalled();
 
         //Handler
