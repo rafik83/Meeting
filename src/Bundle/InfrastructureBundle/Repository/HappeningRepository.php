@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
