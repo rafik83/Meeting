@@ -1,15 +1,13 @@
 <h2>{{ participantSchedule.name }}</h2>
+<p>
+    <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
+</p>
 
 {% for schedule in participantSchedule.schedules %}
 
     <h3>{{ schedule.date|date('d/m/Y') }}</h3>
 
-    <p>
-        <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
-    </p>
-
     <div class="row">
-
         <div class="col-md-4">
             <h4>{{ ('event.schedule.columns.meeting.title')|trans }}</h4>
             {% for slot in schedule.meetings %}
