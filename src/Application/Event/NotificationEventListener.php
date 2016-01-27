@@ -60,14 +60,14 @@ class NotificationEventListener implements EventSubscriberInterface
      *
      * @param ParticipantAddedEvent $event
      */
-    public function onParticipantAdded(ParticipantAddedEvent $event)
+    public function onParticipantAddedToMeeting(ParticipantAddedEvent $event)
     {
         $notification = new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'participant.added',
+            'meeting.participant.added',
             $event->getMessage()
         );
 
@@ -79,14 +79,14 @@ class NotificationEventListener implements EventSubscriberInterface
      *
      * @param ParticipantRemovedEvent $event
      */
-    public function onParticipantRemoved(ParticipantRemovedEvent $event)
+    public function onParticipantRemovedFromMeeting(ParticipantRemovedEvent $event)
     {
         $notification = new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'participant.removed',
+            'meeting.participant.removed',
             $event->getMessage()
         );
 
@@ -189,11 +189,11 @@ class NotificationEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'participant.added'        => 'onParticipantAdded',
-            'participant.removed'      => 'onParticipantRemoved',
-            'meeting_request.refused'  => 'onRequestRefused',
-            'meeting_request.canceled' => 'onRequestCanceled',
-            'meeting.canceled'         => 'onMeetingCanceled',
+            'meeting.participant.added'   => 'onParticipantAddedToMeeting',
+            'meeting.participant.removed' => 'onParticipantRemovedFromMeeting',
+            'meeting_request.refused'     => 'onRequestRefused',
+            'meeting_request.canceled'    => 'onRequestCanceled',
+            'meeting.canceled'            => 'onMeetingCanceled',
         ];
     }
 }
