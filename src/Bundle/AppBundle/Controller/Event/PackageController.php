@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Application\Command\Package\AddProducts;
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
@@ -184,6 +185,8 @@ class PackageController extends BaseController
                     $addProducts->packageData,
                     $form
                 );
+            } catch (EmptyPackageException $exception) {
+                $this->addFlash('error', 'flash.package.add_products.empty');
             }
         }
 
