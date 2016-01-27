@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
-use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;

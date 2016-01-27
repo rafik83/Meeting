@@ -221,13 +221,13 @@ class PackageController extends BaseController
 
         $group = $orderMerge->getGroup($groupId);
 
-        if (null == $group) {
+        if (null === $group) {
             throw $this->createNotFoundException('Invalid product group');
         }
 
         $row = $group->getRow($rowId);
 
-        if (null == $row) {
+        if (null === $row) {
             throw $this->createNotFoundException('Invalid product row');
         }
 
