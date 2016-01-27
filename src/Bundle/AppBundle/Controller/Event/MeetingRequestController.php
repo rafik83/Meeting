@@ -361,7 +361,7 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $editRequest = new EditRequest($meetingRequest, null, new \DateTime(), $this->getUser());
+        $editRequest = new EditRequest($meetingRequest, new \DateTime(), $this->getUser());
         $form        = $this->createForm(MeetingRequestEditType::class, $editRequest, [
             'sheet' => $from,
         ]);
