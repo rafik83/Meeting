@@ -112,6 +112,8 @@ class ScheduleBuilder
         $scheduleViews = $this->buildHappeningsForScheduleViews($scheduleViews, $participant, $locale);
         $scheduleViews = $this->buildUnavailabilitiesForScheduleViews($scheduleViews, $participant);
 
+        $this->sortScheduleViews($scheduleViews);
+
         return [
             'participant' => $participant,
             'name'        => $this->participantInfoGuesser->guessParticipantInfo($participant),
@@ -330,6 +332,16 @@ class ScheduleBuilder
     {
         usort($slots, function (ScheduleSlotView $one, ScheduleSlotView $another) {
             return $one->begin->getTimestamp() - $another->begin->getTimestamp();
+        });
+    }
+
+    /**
+     * @param array $scheduleViews
+     */
+    private function sortScheduleViews(array &$scheduleViews)
+    {
+        usort($scheduleViews, function (ScheduleView $one, ScheduleView $another) {
+            return $one->date->getTimestamp() - $another->date->getTimestamp();
         });
     }
 
