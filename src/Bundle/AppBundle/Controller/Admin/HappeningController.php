@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\Happening\Category\Create;
-use Proximum\Vimeet\Application\Command\Happening\Category\Update;
+use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCategory;
+use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
+use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
+use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\CreateType;
@@ -64,7 +66,7 @@ class HappeningController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
-        $create = new \Proximum\Vimeet\Application\Command\Happening\Create($event);
+        $create = new CreateHappening($event);
         $form   = $this->createForm(CreateType::class, $create, [
             'event'  => $event,
             'action' => $this->generateUrl('admin_happening_create', ['id' => $event->getId()]),
@@ -104,7 +106,7 @@ class HappeningController extends Controller
             throw new NotFoundHttpException('This happpening can not be modified as it has participant');
         }
 
-        $update = new \Proximum\Vimeet\Application\Command\Happening\Update($happening);
+        $update = new UpdateHappening($happening);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $event,
             'action' => $this->generateUrl('admin_happening_update', [
@@ -156,7 +158,7 @@ class HappeningController extends Controller
      */
     public function createCategoryAction(Request $request, Event $event)
     {
-        $create = new Create($event);
+        $create = new CreateCategory($event);
         $form   = $this->createForm(CategoryCreateType::class, $create, [
             'action' => $this->generateUrl('admin_happening_category_create', ['id' => $event->getId()]),
             'method' => 'POST',
@@ -191,7 +193,7 @@ class HappeningController extends Controller
             throw $this->createNotFoundException('Category not found.');
         }
 
-        $update = new Update($category);
+        $update = new UpdateCategory($category);
         $form   = $this->createForm(CategoryUpdateType::class, $update, [
             'action' => $this->generateUrl('admin_happening_category_update', ['id' => $event->getId(), 'category' => $category->getId()]),
             'method' => 'POST',
