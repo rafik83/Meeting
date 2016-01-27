@@ -70,7 +70,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - @user_random_2
-        state: <randomElement(['sent'])>
+        state: 'sent'
     meeting_proposition2:
         __construct:
             - @sheet_exposant2
