@@ -77,7 +77,6 @@ class OrderMergeFactory
     {
         foreach ($template as $groupName => $group) {
             if (isset($merge[$groupName])) {
-
                 foreach ($group['template'] as $typeName => $type) {
                     if (!isset($merge[$groupName]['template'][$typeName])) {
                         $merge[$groupName]['template'][$typeName] = $type;
@@ -98,16 +97,17 @@ class OrderMergeFactory
     {
         foreach ($data as $groupName => $group) {
             if (isset($merge[$groupName])) {
-
                 foreach ($group as $typeName => $type) {
-
                     if (isset($merge[$groupName][$typeName])) {
-
                         if (is_array($type) && is_bool($type['value'])) {
                             $merge[$groupName][$typeName]['value'] |= $type['value'];
                         }
 
                         if (is_array($type) && isset($type['quantity'])) {
+                            if (!isset($merge[$groupName][$typeName]['quantity'])) {
+                                $merge[$groupName][$typeName]['quantity'] = 1;
+                            }
+
                             $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
                         }
 
