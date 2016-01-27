@@ -53,9 +53,9 @@ class MeetingRequestController extends BaseController
             ->generate($meetingRequest);
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
-            'eventView'                     => $eventView,
-            'sheet'                         => $sheet,
-            'request_views'                 => $requestViews,
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'request_views' => $requestViews,
         ]);
     }
 
