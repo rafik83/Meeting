@@ -245,13 +245,12 @@ class MeetingRequestController extends BaseController
     ){
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $toSheet   = $meetingRequest->getToSheet();
+        $fromSheet = $meetingRequest->getFromSheet();
+
         if ($sheet === $meetingRequest->getFromSheet()) {
-            $toSheet      = $meetingRequest->getToSheet();
-            $fromSheet    = $meetingRequest->getFromSheet();
             $participants = $meetingRequest->getFromParticipants()->toArray();
         } elseif ($sheet === $meetingRequest->getToSheet()) {
-            $fromSheet    = $meetingRequest->getFromSheet();
-            $toSheet      = $meetingRequest->getToSheet();
             $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
             throw $this->createNotFoundException('Request not found');
