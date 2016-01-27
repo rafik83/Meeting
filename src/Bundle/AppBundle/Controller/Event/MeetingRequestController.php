@@ -358,6 +358,7 @@ class MeetingRequestController extends BaseController
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($from->getParticipants());
+        $this->denyAccessForNonParticipant($meetingRequest->getToSheet()->getParticipants());
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
