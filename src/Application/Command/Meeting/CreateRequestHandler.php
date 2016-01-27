@@ -21,6 +21,10 @@ class CreateRequestHandler
      * @var RequestRepositoryInterface
      */
     private $requestRepository;
+
+    /**
+     * @var MessageRepositoryInterface
+     */
     private $messageRepository;
 
     /**
