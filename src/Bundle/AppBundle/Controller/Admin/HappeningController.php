@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HappeningController extends Controller
 {
@@ -55,6 +56,12 @@ class HappeningController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event $event
+     *
+     * @return RedirectResponse|Response
+     */
     public function createAction(Request $request, Event $event)
     {
         $create = new \Proximum\Vimeet\Application\Command\Happening\Create($event);
@@ -80,8 +87,23 @@ class HappeningController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event $event
+     * @param Happening $happening
+     *
+     * @return RedirectResponse|Response
+     */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
+        $happeningsAllowedToBeModified      = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findByEventWithoutParticipation($event);
+
+        if (!in_array($happening, $happeningsAllowedToBeModified)) {
+            throw new NotFoundHttpException('This happpening can not be modified as it has participant');
+        }
+
         $update = new \Proximum\Vimeet\Application\Command\Happening\Update($happening);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $event,
