@@ -12,3 +12,6 @@ role :app, domain, :primary => true
 
 # Scm
 set :branch, "demo"
+
+# Tasks
+after :deploy, 'app_tasks:initdb'
