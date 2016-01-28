@@ -10,19 +10,12 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest;
 
-use Doctrine\ORM\EntityRepository;
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class FilterMeetingRequestType extends AbstractType
 {
