@@ -51,8 +51,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user1);
 
         //Command
-        $command = new EditRequest($request, 'modif', $datetime, $user2);
+        $command = new EditRequest($request, $datetime, $user2);
         $command->fromParticipants = [$participant1, $participant3];
+        $command->description = 'modif';
 
         //Expected
         $expectedRequest = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user2);
