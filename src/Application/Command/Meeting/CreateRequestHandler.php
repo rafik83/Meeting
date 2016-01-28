@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -23,6 +25,11 @@ class CreateRequestHandler
     private $requestRepository;
 
     /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -31,13 +38,16 @@ class CreateRequestHandler
      * CreateRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
+     * @param MessageRepositoryInterface $messageRepository
      * @param EventDispatcherInterface   $eventDispatcher
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
+        MessageRepositoryInterface $messageRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->requestRepository = $requestRepository;
+        $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
@@ -52,12 +62,19 @@ class CreateRequestHandler
             $createRequest->fromParticipants,
             $createRequest->to,
             [],
-            $createRequest->description,
             $createRequest->createdAt,
             $createRequest->creator
         );
 
         $this->requestRepository->add($request);
+
+        // Add message
+        $this->messageRepository->add(new Message(
+            $request,
+            $request->getFromSheet(),
+            $createRequest->description,
+            $createRequest->createdAt
+        ));
 
         // Dispatch event
         $this->eventDispatcher->dispatch('meeting_request.send', new RequestSentEvent(

@@ -102,6 +102,8 @@ event:
             createdAt: Envoyé le
             actions: Actions
             cancel: Annuler
+            show: Voir
+            edit: Modifier
         listProposition:
             title: Liste de vos propositions de rendez-vous
             state: Statut
@@ -114,6 +116,15 @@ event:
             accept: Accepter
             refuse: Refuser
             actions: Actions
+            show: Voir
+            edit: Modifier
+        showDetailsRequest:
+            title: Détails de la demande de rendez-vous
+            to: A destination de
+            from: Provenant de
+            participants: Les participants
+            message: Votre conversation
+            state: Statut
         request:
             state:
                 from:
@@ -127,6 +138,9 @@ event:
                     refused: Refusé
                     cancelled: Annulé
         createRequest:
+            title: Demande de rendez-vous
+            destination: Pour %toName% avec la fiche %fromName%
+        editRequest:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
         approvedRequest:
@@ -196,9 +210,11 @@ notification:
             withoutMessage: Demande refusée par %sheetName%
             withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
             action: Demande de RDV refusée
-    participant:
-        removed:
-            action: Vous avez été rétiré d'un évènement
+        participant:
+            removed:
+                message: 'Participant retiré par %sheetName% pour le motif suivant : "%message%"'
+            added:
+                message: 'Participant ajouté par %sheetName% pour le motif suivant : "%message%"'
 
 message:
     admin:

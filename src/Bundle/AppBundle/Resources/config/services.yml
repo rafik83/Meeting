@@ -45,6 +45,12 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type_meeting.request_edit_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestEditType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: 'form.type' }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
         arguments:

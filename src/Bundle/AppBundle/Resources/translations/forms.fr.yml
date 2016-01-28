@@ -219,6 +219,14 @@ form:
                 label: Motiver votre demande
             submit:
                 label: Envoyer
+    meeting_request_edit:
+        children:
+            fromParticipants:
+                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
+            description:
+                label: Expliquer pourquoi
+            submit:
+                label: Envoyer
     meeting_request_approve:
         children:
             toParticipants:

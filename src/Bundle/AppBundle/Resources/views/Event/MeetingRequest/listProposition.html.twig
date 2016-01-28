@@ -10,7 +10,6 @@
             <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.yourParticipants'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.description'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.informations'|trans }}</th>
             <th>{{ 'event.meeting.listProposition.actions'|trans }}</th>
@@ -33,7 +32,6 @@
                         {{ participantNameView.participantName }}<br>
                     {% endfor %}
                 </td>
-                <td>{{ proposition_view.description|nl2br }}</td>
                 <td nowrap>{{ proposition_view.createdAt|date('d/m/Y') }}</td>
                 <td>{{ proposition_view.message|nl2br }}</td>
                 <td nowrap>
@@ -49,6 +47,11 @@
                             'meetingRequest': proposition_view.id
                         }) }}" class="btn btn-xs btn-danger">{{ 'event.meeting.listProposition.refuse'|trans() }}</a>
                     {% endif %}
+                    <a href="{{ path('event_meeting_request_show', {
+                        'subdomain': app.request.attributes.get('subdomain'),
+                        'id': sheet.id,
+                        'meetingRequest': proposition_view.id
+                    }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listProposition.show'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}
