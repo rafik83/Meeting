@@ -3,7 +3,23 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
 
-    <h2>Liste des demandes de RDV acceptées</h2>
+    <h2>Liste des demandes de RDV</h2>
+
+    <h3>Filtrer par statut</h3>
+    {{ form_start(filter_form) }}
+    <div class="col-md-4">
+        {{ form_row(filter_form.state) }}
+        {% if filtered %}
+            <a href="{{ path('admin_meeting_request_list', {id: event.id}) }}" class="btn btn-link">Vider les filtres</a>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(filter_form.submit) }}
+    </div>
+    {{ form_end(filter_form) }}
+    <div class="col-md-4">
+        <h4 class="text-right">Nombre de demande de rendez-vous: {{ totalRequest }}</h4>
+    </div>
 
     <table class="table">
         <thead>

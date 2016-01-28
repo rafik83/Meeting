@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -25,6 +26,19 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingRequestController extends Controller
 {
     /**
+     * @param string $type
+     * @param string $data
+     * @param array  $options
+     *
+     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     */
+    private function createFilterForm($type, $data, array $options = [])
+    {
+        return $this->get('form.factory')->createNamed('', $type, $data, $options);
+    }
+
+
+    /**
      * @param Request $request
      * @param Event   $event
      *
@@ -32,13 +46,28 @@ class MeetingRequestController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $filter     = [];
+        $filtered   = false;
+        $filterForm = $this->createFilterForm(
+            FilterMeetingRequestType::class,
+            ['state' => $request->query->get('state')]
+        );
+
+        if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
+            $filter   = $filterForm->getData();
+            $filtered = true;
+        }
+
         $meetingRequests = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->getPendingByEvent($event, $request->query->getInt('page', 1), 20);
+            ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filter);
 
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
+            'totalRequest'     => $meetingRequests->getTotalItemCount(),
+            'filter_form'      => $filterForm->createView(),
+            'filtered'         => $filtered,
         ]);
     }
 
