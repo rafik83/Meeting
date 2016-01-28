@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\View\Meeting\AdminShowDetailsView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
