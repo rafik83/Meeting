@@ -122,6 +122,47 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = [])
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->where('request.meeting IS NULL');
+
+        if (!empty($filter) && isset($filter['state'])) {
+            $queryBuilder
+                ->andWhere('request.state = :state')
+                ->setParameter('state', $filter['state']);
+        }
+
+        $queryBuilder
+            ->orderBy('request.createdAt', 'DESC');
+
+        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
+
+        $pagination->setItems(array_map(function (Request $request) {
+            return new RequestView(
+                $request->getId(),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
+                $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
+                $request->getState(),
+                $request->getDescription(),
+                $request->getCreatedAt(),
+                ''
+            );
+        }, $pagination->getItems()));
+
+        return $pagination;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPendingByEvent(Event $event, $page, $limit)
     {
         $queryBuilder = $this
