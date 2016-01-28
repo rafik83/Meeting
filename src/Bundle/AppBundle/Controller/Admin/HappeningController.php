@@ -10,17 +10,23 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\Happening\Category\Create;
-use Proximum\Vimeet\Application\Command\Happening\Category\Update;
+use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCategory;
+use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
+use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
+use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryUpdateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\CreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HappeningController extends Controller
 {
@@ -32,8 +38,97 @@ class HappeningController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $happenings = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findListByEvent($event, $request->getLocale());
+
+        $happeningsAllowedToBeModifiedArray = [];
+        $happeningsAllowedToBeModified      = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findByEventWithoutParticipation($event);
+
+        foreach ($happeningsAllowedToBeModified as $happening) {
+            $happeningsAllowedToBeModifiedArray[$happening->getId()] = $happening->getId();
+        }
+
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
+            'event'           => $event,
+            'happenings'      => $happenings,
+            'allowToModified' => $happeningsAllowedToBeModifiedArray,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function createAction(Request $request, Event $event)
+    {
+        $create = new CreateHappening($event);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_happening_create', ['id' => $event->getId()]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.happening.create_handler')->handle($create);
+            $this->addFlash('success', 'flash.admin.happening.create.success');
+
+            return $this->redirectToRoute('admin_happening_list', [
+                'id' => $event->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Happening:create.html.twig', [
             'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event $event
+     * @param Happening $happening
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request, Event $event, Happening $happening)
+    {
+        $happeningsAllowedToBeModified      = $this
+            ->get('vimeet_infrastructure.repository.happening_repository')
+            ->findByEventWithoutParticipation($event);
+
+        if (!in_array($happening, $happeningsAllowedToBeModified)) {
+            throw new NotFoundHttpException('This happpening can not be modified as it has participant');
+        }
+
+        $update = new UpdateHappening($happening);
+        $form   = $this->createForm(UpdateType::class, $update, [
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_happening_update', [
+                'id'        => $event->getId(),
+                'happening' => $happening->getId(),
+            ]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.happening.update_handler')->handle($update);
+            $this->addFlash('success', 'flash.admin.happening.update.success');
+
+            return $this->redirectToRoute('admin_happening_list', [
+                'id' => $event->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -63,7 +158,7 @@ class HappeningController extends Controller
      */
     public function createCategoryAction(Request $request, Event $event)
     {
-        $create = new Create($event);
+        $create = new CreateCategory($event);
         $form   = $this->createForm(CategoryCreateType::class, $create, [
             'action' => $this->generateUrl('admin_happening_category_create', ['id' => $event->getId()]),
             'method' => 'POST',
@@ -98,7 +193,7 @@ class HappeningController extends Controller
             throw $this->createNotFoundException('Category not found.');
         }
 
-        $update = new Update($category);
+        $update = new UpdateCategory($category);
         $form   = $this->createForm(CategoryUpdateType::class, $update, [
             'action' => $this->generateUrl('admin_happening_category_update', ['id' => $event->getId(), 'category' => $category->getId()]),
             'method' => 'POST',

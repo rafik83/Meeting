@@ -25,6 +25,6 @@
         </tbody>
     </table>
     <div class="text-left">
-        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+        <a href="{{ path('admin_happening_list', {id: event.id}) }}" class="btn btn-link">&larr; Retour aux sous-événements</a>
     </div>
 {% endblock %}

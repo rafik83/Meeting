@@ -95,6 +95,9 @@ class Category
         return $this->translations;
     }
 
+    /**
+     * @param CategoryTranslation $categoryTranslation
+     */
     public function setTranslation(CategoryTranslation $categoryTranslation)
     {
         $this->translations->set($categoryTranslation->getLocale(), $categoryTranslation);

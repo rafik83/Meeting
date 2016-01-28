@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 
@@ -72,30 +71,6 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findScheduledByScheduleAndParticipant(Schedule $schedule, Participant $participant)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('meeting, fromSheet, toSheet, meetingSlot')
-            ->from(Meeting::class, 'meeting')
-            ->join('meeting.fromSheet', 'fromSheet')
-            ->join('meeting.toSheet', 'toSheet')
-            ->join('meeting.slot', 'meetingSlot', 'WITH', 'meetingSlot.schedule = :schedule')
-            ->setParameter('schedule', $schedule)
-            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
-            ->leftJoin('meeting.toParticipants', 'toParticipant')
-            ->where('fromParticipant = :participant OR toParticipant = :participant')
-            ->setParameter('participant', $participant)
-            ->andWhere('meeting.state = :state')
-            ->setParameter('state', Meeting::STATE_SCHEDULED);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getByEvent(Event $event, $page, $limit)
     {
         $queryBuilder = $this
@@ -121,5 +96,27 @@ class MeetingRepository implements MeetingRepositoryInterface
         }, $pagination->getItems()));
 
         return $pagination;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromSheet, toSheet')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.toSheet', 'toSheet')
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->where('fromParticipant = :participant OR toParticipant = :participant')
+            ->setParameter('participant', $participant)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

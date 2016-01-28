@@ -36,8 +36,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create  = new Create($event);
         $create->picto = 'picto1';
         $create->translations = [
-            'fr' => ['title' =>'truc'],
-            'en' => ['title' =>  'trac'],
+            'fr' => ['title' => 'truc'],
+            'en' => ['title' => 'trac'],
         ];
 
         $handler = new CreateHandler($categoryRepository->reveal());

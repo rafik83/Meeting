@@ -1,25 +1,37 @@
 <h2>{{ participantSchedule.name }}</h2>
+<p>
+    <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
+</p>
 
 {% for schedule in participantSchedule.schedules %}
 
     <h3>{{ schedule.date|date('d/m/Y') }}</h3>
 
-    <p>
-        <a href="{{ path('event_sheet_schedule_add_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id }) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
-    </p>
-
     <div class="row">
-
-        {% for type, column in schedule.columns %}
-            <div class="col-md-{{ 12 / schedule|length }}">
-                <h4>{{ ('event.schedule.columns.' ~ type ~ '.title')|trans }}</h4>
-                {% for slot in column|default([]) %}
-                    <div style="border-top:1px solid #333;">
-                        {{ include('VimeetAppBundle:Event/Schedule:Slot/' ~ type ~ '.html.twig', { 'sheet': sheet, 'schedule': schedule, 'participant': participantSchedule.participant, 'type': type, 'slot': slot }, false) }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
+        <div class="col-md-4">
+            <h4>{{ ('event.schedule.columns.meeting.title')|trans }}</h4>
+            {% for slot in schedule.meetings %}
+                <div style="border-top:1px solid #333;">
+                    {{ include('VimeetAppBundle:Event/Schedule:Slot/meeting.html.twig', { 'slot': slot }) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <h4>{{ ('event.schedule.columns.happening.title')|trans }}</h4>
+            {% for slot in schedule.happenings %}
+                <div style="border-top:1px solid #333;">
+                    {{ include('VimeetAppBundle:Event/Schedule:Slot/happening.html.twig', { 'slot': slot, 'participant': participantSchedule.participant }) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <h4>{{ ('event.schedule.columns.unavailability.title')|trans }}</h4>
+            {% for slot in schedule.unavailabilities %}
+                <div style="border-top:1px solid #333;">
+                    {{ include('VimeetAppBundle:Event/Schedule:Slot/unavailability.html.twig', { 'slot': slot }) }}
+                </div>
+            {% endfor %}
+        </div>
 
     </div>
 

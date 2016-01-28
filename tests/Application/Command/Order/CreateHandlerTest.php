@@ -39,9 +39,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $createdAt = new \DateTime();
         $cart      = new Cart([], [], $sheet, $createdAt);
 
-        $expectedOrder = new Order($sheet, Order::STATE_UNPAID, '', [], [], [], [], $createdAt, 'card');
+        $expectedOrder = new Order($sheet, Order::STATE_UNPAID, [], [], [], [], $createdAt, 'card');
 
-        $create = new Create($cart, $sheet, '', [], [], [], [], $createdAt);
+        $create = new Create($cart, $sheet, [], [], [], [], $createdAt);
         $create->paymentMode = 'card';
 
         $orderManager->cleanFalseOption([])->shouldBeCalled()->willReturn([]);

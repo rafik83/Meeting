@@ -3,7 +3,35 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
     <h2>Sous-événements</h2>
-    <div class="text-right"><a href="{{ path('admin_happening_category_list', {id: event.id}) }}" class="btn btn-primary">Catégories de sous-événement</a></div>
+    <div class="text-right">
+        <a href="{{ path('admin_happening_create', {id: event.id}) }}" class="btn btn-success">Ajouter</a>
+        <a href="{{ path('admin_happening_category_list', {id: event.id}) }}" class="btn btn-primary">Catégories de sous-événement &rarr; </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Acion</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for happening in happenings %}
+            <tr>
+                <td>{{ happening.title }}</td>
+                <td>{{ happening.begin|date('Y-m-d h:i:s') }}</td>
+                <td>{{ happening.end|date('Y-m-d h:i:s') }}</td>
+                <td>
+                    {% if allowToModified[happening.id] is defined %}
+                        <a href="{{ path('admin_happening_update', {id: event.id, happening: happening.id}) }}" class="btn btn-default">Modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>

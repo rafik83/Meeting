@@ -23,12 +23,12 @@ class ScheduleSlotView
     public $title;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $begin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $end;
 
@@ -40,13 +40,13 @@ class ScheduleSlotView
     /**
      * ScheduleSlotView constructor.
      *
-     * @param int       $id
-     * @param string    $title
-     * @param \DateTime $begin
-     * @param \DateTime $end
-     * @param bool      $active
+     * @param int                $id
+     * @param string             $title
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param bool               $active
      */
-    public function __construct($id, $title, \DateTime $begin, \DateTime $end, $active)
+    public function __construct($id, $title, \DateTimeInterface $begin, \DateTimeInterface $end, $active)
     {
         $this->id     = $id;
         $this->title  = $title;

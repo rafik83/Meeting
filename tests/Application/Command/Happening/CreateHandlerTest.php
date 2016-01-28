@@ -1,0 +1,69 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Command\Happening;
+
+use Proximum\Vimeet\Application\Command\Happening\Create;
+use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Category;
+use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+
+class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event = new Event();
+        $event->setLocales(['fr', 'en']);
+
+        $begin = new \DateTime('2016-01-27 00:00:00');
+        $end   = new \DateTime('2016-01-29 00:00:00');
+
+        // Current
+        $category        = new Category($event, 'picto1');
+        $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
+        $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
+        $category->setTranslation($catTranslation1);
+        $category->setTranslation($catTranslation2);
+
+        // Expected
+        $expectedSubEvent = new Happening($event, $begin, $end, $category);
+        $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
+        $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
+
+        $expectedSubEvent->setTranslation($expectedTranslation);
+        $expectedSubEvent->setTranslation($expectedTranslation2);
+
+        // Mock
+        $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $happeningRepository->add($expectedSubEvent)->shouldBeCalled();
+
+        // Command
+        $create = new Create($event);
+        $create->category = $category;
+        $create->begin = $begin;
+        $create->end   = $end;
+        $create->translations = [
+            'fr' => [
+                'title'       => 'truc',
+                'description' => 'bidule'
+            ],
+            'en' => [
+                'title'       => 'trac',
+                'description' => 'machin',
+            ],
+        ];
+
+        $handler = new CreateHandler($happeningRepository->reveal());
+        $handler->handle($create);
+    }
+}

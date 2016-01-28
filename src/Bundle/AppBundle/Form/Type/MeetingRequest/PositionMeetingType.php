@@ -73,13 +73,13 @@ class PositionMeetingType extends AbstractType
                 'query_builder' => function (EntityRepository $repository) use ($options) {
                     return $repository
                         ->createQueryBuilder('slot')
-                        ->join('slot.schedule', 'schedule', 'WITH', 'schedule.event = :event')
+                        ->where('slot.event = :event')
                         ->setParameter('event', $options['event']);
                 },
                 'choice_label' => function (MeetingSlot $meetingSlot) use ($options) {
                     $begin    = clone $meetingSlot->getBegin();
                     $end      = clone $meetingSlot->getEnd();
-                    $timezone = new \DateTimeZone($options['view_timezone']);
+                    $timezone = new \DateTimeZone($options['event']->getTimeZone());
 
                     return sprintf(
                         '%s : %s %s',
@@ -99,7 +99,7 @@ class PositionMeetingType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['meeting_request', 'event', 'view_timezone']);
+        $resolver->setRequired(['meeting_request', 'event']);
         $resolver->setDefaults([
             'method'     => 'POST',
             'data_class' => PositionMeeting::class,

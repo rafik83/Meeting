@@ -5,8 +5,8 @@
 {% endif %}
 
 {% if slot.active %}
-    <a href="{{ path('event_sheet_schedule_update_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" class="btn btn-primary btn-xs">Modifier</a>
-    <form action="{{ path('event_sheet_schedule_remove_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'unavailability_id': slot.id }) }}" method="POST" style="display: inline">
+    <a href="{{ path('event_sheet_schedule_update_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id,'unavailability': slot.id }) }}" class="btn btn-primary btn-xs">Modifier</a>
+    <form action="{{ path('event_sheet_schedule_remove_unavailability', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'unavailability': slot.id }) }}" method="POST" style="display: inline">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" class="btn btn-danger btn-xs">Supprimer</button>
     </form>
