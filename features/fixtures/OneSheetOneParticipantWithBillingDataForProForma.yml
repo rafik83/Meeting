@@ -260,7 +260,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: ~
                     56615feba09a4:
@@ -275,7 +275,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
                     56615ff492a29:
@@ -290,7 +290,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                     56616023b335e:
@@ -305,7 +305,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 1
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                             563cae7496da1.563cae8a5072d.563cb15fbf353: ~
@@ -321,7 +321,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 4
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
@@ -339,7 +339,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 3
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
@@ -357,7 +357,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 8
-                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 4
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 4
@@ -375,7 +375,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 4
-                        updatableUntil: <dateTimeBetween('-100 days', '-10 days')>
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
