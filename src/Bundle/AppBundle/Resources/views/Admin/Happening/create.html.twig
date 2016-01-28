@@ -9,8 +9,7 @@
     {{ form_row(form.category) }}
     {{ form_row(form.begin) }}
     {{ form_row(form.end) }}
-    {{ form_row(form.titleTranslations) }}
-    {{ form_row(form.descriptionTranslations) }}
+    {{ form_row(form.translations) }}
     <div class="text-right">
         <a href="{{ path('admin_happening_list', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
         {{ form_widget(form.submit) }}

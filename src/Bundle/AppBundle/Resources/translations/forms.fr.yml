@@ -307,14 +307,11 @@ form:
                 label: Date de début
             end:
                 label: Date de fin
-            titleTranslations:
+            translations:
                 prototype:
                     children:
                         title:
                             label: Titre
-            descriptionTranslations:
-                prototype:
-                    children:
                         description:
                             label: Description
             submit:
@@ -327,14 +324,11 @@ form:
                 label: Date de début
             end:
                 label: Date de fin
-            titleTranslations:
+            translations:
                 prototype:
                     children:
                         title:
                             label: Titre
-            descriptionTranslations:
-                prototype:
-                    children:
                         description:
                             label: Description
             submit:

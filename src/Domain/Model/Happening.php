@@ -12,8 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
-use Proximum\Vimeet\Domain\Model\Happening\DescriptionTranslation;
-use Proximum\Vimeet\Domain\Model\Happening\TitleTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
 
 class Happening
 {
@@ -45,12 +44,7 @@ class Happening
     /**
      * @var ArrayCollection
      */
-    private $titleTranslations;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $descriptionTranslations;
+    private $translations;
 
     /**
      * Happening constructor.
@@ -62,12 +56,11 @@ class Happening
      */
     public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
     {
-        $this->event                   = $event;
-        $this->begin                   = $begin;
-        $this->end                     = $end;
-        $this->category                = $category;
-        $this->titleTranslations       = new ArrayCollection();
-        $this->descriptionTranslations = new ArrayCollection();
+        $this->event        = $event;
+        $this->begin        = $begin;
+        $this->end          = $end;
+        $this->category     = $category;
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -145,39 +138,23 @@ class Happening
      */
     public function getTitle($locale)
     {
-        return $this->getTitleTranslations()->get($locale)->getTitle();
+        return $this->getTranslations()->get($locale)->getTitle();
     }
 
     /**
-     * @param TitleTranslation $titleTranslation
+     * @param HappeningTranslation $translation
      */
-    public function setTitleTranslation(TitleTranslation $titleTranslation)
+    public function setTranslation(HappeningTranslation $translation)
     {
-        $this->titleTranslations->set($titleTranslation->getLocale(), $titleTranslation);
-    }
-
-    /**
-     * @param DescriptionTranslation $descriptionTranslation
-     */
-    public function setDescriptionTranslation(DescriptionTranslation $descriptionTranslation)
-    {
-        $this->descriptionTranslations->set($descriptionTranslation->getLocale(), $descriptionTranslation);
+        $this->translations->set($translation->getLocale(), $translation);
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getTitleTranslations()
+    public function getTranslations()
     {
-        return $this->titleTranslations;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getDescriptionTranslations()
-    {
-        return $this->descriptionTranslations;
+        return $this->translations;
     }
 
     /**
@@ -195,18 +172,10 @@ class Happening
     /**
      * @param string $locale
      * @param string $title
-     */
-    public function updateTitleTranslation($locale, $title)
-    {
-        $this->titleTranslations->get($locale)->update($title);
-    }
-
-    /**
-     * @param string $locale
      * @param string $description
      */
-    public function updateDescriptionTranslation($locale, $description)
+    public function updateTranslation($locale, $title, $description)
     {
-        $this->descriptionTranslations->get($locale)->update($description);
+        $this->translations->get($locale)->update($title, $description);
     }
 }

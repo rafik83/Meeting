@@ -35,13 +35,8 @@ class UpdateHandler
         $happening = $update->happening;
         $happening->update($update->begin, $update->end, $update->category);
 
-
-        foreach ($update->titleTranslations as $locale => $translation) {
-            $happening->updateTitleTranslation($locale, $translation['title']);
-        }
-
-        foreach ($update->descriptionTranslations as $locale => $translation) {
-            $happening->updateDescriptionTranslation($locale, $translation['description']);
+        foreach ($update->translations as $locale => $translation) {
+            $happening->updateTranslation($locale, $translation['title'], $translation['description']);
         }
 
         $this->happeningRepository->set($happening);

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Application\Command\Happening\Update;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
@@ -25,7 +26,7 @@ class UpdateType extends HappeningType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Happening\Update',
+            'data_class'    => Update::class,
             'csrf_token_id' => 'happening_update',
         ]);
     }
@@ -43,10 +44,7 @@ class UpdateType extends HappeningType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        foreach ($view->children['titleTranslations'] as $translation) {
-            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
-        }
-        foreach ($view->children['descriptionTranslations'] as $translation) {
+        foreach ($view->children['translations'] as $translation) {
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
     }

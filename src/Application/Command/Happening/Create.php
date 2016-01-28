@@ -38,12 +38,7 @@ class Create
     /**
      * @var array
      */
-    public $titleTranslations = [];
-
-    /**
-     * @var array
-     */
-    public $descriptionTranslations = [];
+    public $translations = [];
 
     /**
      * Create constructor.
@@ -55,10 +50,8 @@ class Create
         $this->event = $event;
 
         foreach ($event->getLocales() as $locale) {
-            $this->titleTranslations[$locale] = [
-                'title' => '',
-            ];
-            $this->descriptionTranslations[$locale] = [
+            $this->translations[$locale] = [
+                'title'       => '',
                 'description' => '',
             ];
         }

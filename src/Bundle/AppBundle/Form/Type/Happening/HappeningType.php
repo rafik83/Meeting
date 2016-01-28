@@ -29,15 +29,9 @@ abstract class HappeningType extends AbstractType
             ->add('category', CategoryType::class, ['event' => $event])
             ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
-            ->add('titleTranslations', CollectionType::class, [
-                    'entry_type' => TitleTranslationType::class,
+            ->add('translations', CollectionType::class, [
+                    'entry_type' => TranslationType::class,
                     'label'      => false,
-                    'required'   => true,
-                ])
-            ->add('descriptionTranslations', CollectionType::class, [
-                    'entry_type' => DescriptionTranslationType::class,
-                    'label'      => false,
-                    'required'   => false,
                 ]);
     }
 

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 
-class DescriptionTranslation
+class HappeningTranslation
 {
     /**
      * @var int
@@ -32,19 +32,26 @@ class DescriptionTranslation
     /**
      * @var string
      */
+    private $title;
+
+    /**
+     * @var string
+     */
     private $description;
 
     /**
-     * CategoryTranslation constructor.
+     * HappeningTranslation constructor.
      *
      * @param Happening $happening
      * @param string    $locale
+     * @param string    $title
      * @param string    $description
      */
-    public function __construct(Happening $happening, $locale, $description)
+    public function __construct(Happening $happening, $locale, $title, $description)
     {
         $this->happening   = $happening;
         $this->locale      = $locale;
+        $this->title       = $title;
         $this->description = $description;
     }
 
@@ -88,6 +95,23 @@ class DescriptionTranslation
         $this->happening = $happening;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
     /**
      * @return string
      */
@@ -105,12 +129,14 @@ class DescriptionTranslation
     }
 
     /**
+     * @param string $title
      * @param string $description
      *
-     * @return DescriptionTranslation
+     * @return HappeningTranslation
      */
-    public function update($description)
+    public function update($title, $description)
     {
+        $this->title       = $title;
         $this->description = $description;
 
         return $this;

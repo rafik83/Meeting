@@ -12,13 +12,8 @@ Proximum\Vimeet\Domain\Model\Happening:
         end:
             type: datetime
     oneToMany:
-        titleTranslations:
-            targetEntity: Proximum\Vimeet\Domain\Model\Happening\TitleTranslation
-            mappedBy: happening
-            indexBy: locale
-            cascade: ["persist"]
-        descriptionTranslations:
-            targetEntity: Proximum\Vimeet\Domain\Model\Happening\DescriptionTranslation
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation
             mappedBy: happening
             indexBy: locale
             cascade: ["persist"]

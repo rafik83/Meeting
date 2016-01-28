@@ -38,12 +38,7 @@ class Update
     /**
      * @var array
      */
-    public $titleTranslations = [];
-
-    /**
-     * @var array
-     */
-    public $descriptionTranslations = [];
+    public $translations = [];
 
     /**
      * Update constructor.
@@ -57,15 +52,10 @@ class Update
         $this->begin     = $happening->getBegin();
         $this->end       = $happening->getEnd();
 
-        foreach ($happening->getTitleTranslations() as $titleTranslation) {
-            $this->titleTranslations[$titleTranslation->getLocale()] = [
-                'title' => $titleTranslation->getTitle(),
-            ];
-        }
-
-        foreach ($happening->getDescriptionTranslations() as $descriptionTranslation) {
-            $this->descriptionTranslations[$descriptionTranslation->getLocale()] = [
-                'description' => $descriptionTranslation->getDescription(),
+        foreach ($happening->getTranslations() as $translation) {
+            $this->translations[$translation->getLocale()] = [
+                'title'       => $translation->getTitle(),
+                'description' => $translation->getDescription(),
             ];
         }
     }

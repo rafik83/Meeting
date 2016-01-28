@@ -46,12 +46,8 @@ class HappeningRepository implements HappeningRepositoryInterface
     {
         $this->entityManager->flush($happening);
 
-        foreach ($happening->getTitleTranslations() as $titleTranslation) {
-            $this->entityManager->flush($titleTranslation);
-        }
-
-        foreach ($happening->getDescriptionTranslations() as $descriptionTranslation) {
-            $this->entityManager->flush($descriptionTranslation);
+        foreach ($happening->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
         }
     }
 
@@ -65,7 +61,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\HappeningListView(happening.id, happening.begin, happening.end, translation.title)')
             ->from(Happening::class, 'happening')
-            ->join('happening.titleTranslations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->where('happening.event = :event')
             ->setParameter('locale', $locale)
             ->setParameter('event', $event);

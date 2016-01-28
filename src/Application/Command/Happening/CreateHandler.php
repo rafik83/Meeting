@@ -35,13 +35,10 @@ class CreateHandler
     {
         $happening = new Happening($create->event, $create->begin, $create->end, $create->category);
 
-        foreach ($create->titleTranslations as $locale => $translation) {
-            $happening->setTitleTranslation(new Happening\TitleTranslation($happening, $locale, $translation['title']));
+        foreach ($create->translations as $locale => $translation) {
+            $happening->setTranslation(new Happening\HappeningTranslation($happening, $locale, $translation['title'], $translation['description']));
         }
 
-        foreach ($create->descriptionTranslations as $locale => $translation) {
-            $happening->setDescriptionTranslation(new Happening\DescriptionTranslation($happening, $locale, $translation['description']));
-        }
 
         $this->happeningRepository->add($happening);
     }
