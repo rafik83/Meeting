@@ -78,7 +78,7 @@ class CreateRequestHandler
         ));
 
         // Notify request creation
-        $this->eventDispatcher->dispatch('meeting_request.send', new RequestSentEvent(
+        $this->eventDispatcher->dispatch('meeting_request.sent', new RequestSentEvent(
             $createRequest->creator,
             $request,
             $createRequest->createdAt,
