@@ -52,6 +52,13 @@
                         'id': sheet.id,
                         'meetingRequest': proposition_view.id
                     }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listProposition.show'|trans }}</a>
+                    {% if proposition_view.state is same as('approved') %}
+                        <a href="{{ path('event_meeting_request_edit', {
+                            'subdomain': app.request.attributes.get('subdomain'),
+                            'id': sheet.id,
+                            'meetingRequest': proposition_view.id
+                        }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listProposition.edit'|trans }}</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

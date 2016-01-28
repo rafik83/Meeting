@@ -105,7 +105,7 @@ class NotificationEventListener implements EventSubscriberInterface
         $message = $this->translator->trans(
             'notification.meeting_request.participant.added.message',
             [
-                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getParticipant()->getSheet()),
                 '%message%'   => $event->getMessage(),
             ],
             null,
@@ -134,7 +134,7 @@ class NotificationEventListener implements EventSubscriberInterface
         $message = $this->translator->trans(
             'notification.meeting_request.participant.removed.message',
             [
-                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getParticipant()->getSheet()),
                 '%message%'   => $event->getMessage(),
             ],
             null,

@@ -283,6 +283,16 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasToParticipant(Participant $participant)
+    {
+        return $this->fromParticipants->contains($participant);
+    }
+
+    /**
      * @param Participant $fromParticipant
      *
      * @return Request
@@ -290,6 +300,18 @@ class Request implements MessageSubjectInterface
     public function addFromParticipant(Participant $fromParticipant)
     {
         $this->fromParticipants->add($fromParticipant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeToParticipant(Participant $participant)
+    {
+        $this->toParticipants->removeElement($participant);
 
         return $this;
     }

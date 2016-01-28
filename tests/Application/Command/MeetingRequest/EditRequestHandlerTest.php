@@ -51,8 +51,8 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user1);
 
         //Command
-        $command = new EditRequest($request, 'modif', $datetime, $user2);
-        $command->fromParticipants = [$participant1, $participant3];
+        $command = new EditRequest($request, [$participant1, $participant3], $datetime, $user2);
+        $command->description = 'modif';
 
         //Expected
         $expectedRequest = new Request($sheetFrom, $participantFrom, $sheetTo, $participantTo, $datetime, $user2);
@@ -84,7 +84,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher->reveal()
         );
 
-        $handler->handle($command);
+        $handler->handle($command, $sheetFrom);
     }
 
     /**

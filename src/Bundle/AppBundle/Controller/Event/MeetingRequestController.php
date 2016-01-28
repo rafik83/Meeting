@@ -346,7 +346,7 @@ class MeetingRequestController extends BaseController
      * @param Request        $request
      * @param EventView      $eventView
      * @param MeetingRequest $meetingRequest
-     * @param Sheet          $from
+     * @param Sheet          $sheetFrom
      *
      * @return RedirectResponse|Response
      */
@@ -354,39 +354,53 @@ class MeetingRequestController extends BaseController
         Request $request,
         EventView $eventView,
         MeetingRequest $meetingRequest,
-        Sheet $from
+        Sheet $sheetFrom
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($from->getParticipants());
-        $this->denyAccessForNonParticipant($meetingRequest->getFromSheet()->getParticipants());
+        $this->denyAccessForNonParticipant($sheetFrom->getParticipants());
+
+        if ($sheetFrom === $meetingRequest->getFromSheet()) {
+            $participants = $meetingRequest->getFromParticipants()->toArray();
+        } elseif ($sheetFrom === $meetingRequest->getToSheet()) {
+            $participants = $meetingRequest->getToParticipants()->toArray();
+        } else {
+            throw $this->createNotFoundException('Request not found');
+        }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $editRequest = new EditRequest($meetingRequest, new \DateTime(), $this->getUser());
+        $editRequest = new EditRequest($meetingRequest, $participants, new \DateTime(), $this->getUser());
         $form        = $this->createForm(MeetingRequestEditType::class, $editRequest, [
-            'sheet' => $from,
+            'sheet' => $sheetFrom === $meetingRequest->getFromSheet() ? $sheetFrom : $meetingRequest->getToSheet(),
         ]);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler')->handle($editRequest);
+            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler')
+                ->handle($editRequest, $sheetFrom);
 
             $this->addFlash('success', 'flash.meeting_request.edit.success');
 
-            return $this->redirectToRoute('event_meeting_list_request', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $from->getId()
-            ]);
+            if($sheetFrom === $meetingRequest->getFromSheet())
+                return $this->redirectToRoute('event_meeting_list_request', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $sheetFrom->getId()
+                ]);
+            else
+                return $this->redirectToRoute('event_meeting_list_proposition', [
+                    'subdomain' => $request->attributes->get('subdomain'),
+                    'id'        => $meetingRequest->getToSheet()->getId()
+                ]);
         }
-        $fromName = $sheetInfoGuesser->guessSheetInfo($from);
+
+        $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:editRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $fromName,
             'toName'    => $toName,
-            'form'      => $form->createView(),
-            'sheet'     => $form
+            'form'      => $form->createView()
         ]);
     }
 }

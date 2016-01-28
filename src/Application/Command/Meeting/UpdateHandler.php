@@ -124,7 +124,7 @@ class UpdateHandler
 
         // Add new participants
         foreach ($update->participants as $participant) {
-            if (!$update->meeting->hasFromParticipant($participant)) {
+            if (!$update->meeting->hasToParticipant($participant)) {
                 $update->meeting->addToParticipant($participant);
                 $this->events[] = ['participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
