@@ -1,0 +1,56 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block title 'Details de la demande de Rendez-vous' %}
+
+{% block content %}
+
+    <h2>Details de la demande de rendez-vous</h2>
+    <table class="table table-bordered">
+        <thead>
+        <th>Provenant de:</th>
+        <th>Participants de la provenance:</th>
+        <th>A destination de:</th>
+        <th>Participant de la destination:</th>
+        <th>Statut</th>
+        </thead>
+        <tbody>
+        {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
+        <tr>
+            <td>{{ meetingRequestView.fromSheetName }}</td>
+            <td>
+                {% for fromParticipantName in meetingRequestView.fromParticipantNames %}
+                    {{ fromParticipantName }}
+                {% endfor %}
+            </td>
+            <td>{{ meetingRequestView.toSheetName }}</td>
+            <td>
+                {% for toParticipantName in meetingRequestView.toParticipantNames %}
+                    {{ toParticipantName }}
+                {% endfor %}
+            </td>
+            <td>
+                <span class="btn-xs alert-{{ state[meetingRequestView.state] }}">
+                    {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Echanges de messages:</h3>
+    {% for message in meetingRequestView.messages %}
+        {% if message.from.id == meetingRequestView.fromSheetId %}
+            <h5>{{ meetingRequestView.fromSheetName }}</h5>
+        {% else %}
+            <h5>{{ meetingRequestView.toSheetName }}</h5>
+        {% endif %}
+        <blockquote>
+            {{ message.content }}
+            <br>
+            <span class="label label-default">
+                {{ message.createdAt|date('d/m/Y H:i') }}
+            </span>
+        </blockquote>
+    {% endfor %}
+
+{% endblock %}
