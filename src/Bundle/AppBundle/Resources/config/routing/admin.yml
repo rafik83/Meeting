@@ -129,10 +129,10 @@ admin_meeting_request_list:
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:list }
 
 admin_meeting_request_position:
-    path: /event/{id}/meeting-request/{request_id}/position
+    path: /event/{id}/meeting-request/{meetingRequest}/position
     requirements:
         id: \d+
-        request_id: \d+
+        meetingRequest: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:position }
 

@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeetingRequestController extends Controller
 {
@@ -72,12 +73,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "meetingRequest",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Request",
-     *   options={"id" = "request_id"}
-     * )
-     *
      * @param Request        $request
      * @param Event          $event
      * @param MeetingRequest $meetingRequest
@@ -86,6 +81,10 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
+        if ($meetingRequest->getState() !== MeetingRequest::STATE_APPROVED) {
+            throw new NotFoundHttpException();
+        }
+
         $command = new PositionMeeting($meetingRequest, new \DateTime);
         $form    = $this->createForm(PositionMeetingType::class, $command, [
             'event'           => $event,
