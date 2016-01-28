@@ -333,3 +333,13 @@ form:
                             label: Description
             submit:
                 label: Envoyer
+    admin:
+        meeting_request:
+            list:
+                filter:
+                    state:
+                        children:
+                            approved: Accepté
+                            refused: Refusé
+                            cancel: Annulé
+                            sent: Envoyé
