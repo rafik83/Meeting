@@ -1,4 +1,5 @@
 greetings: 'Bonjour !'
+greetings: 'Bonjour !'
 
 login:
     title: Connexion
@@ -205,3 +206,12 @@ message:
         order:
             remove_row:
                 confirm: Confirmer la suppression
+
+admin:
+    meeting_request:
+        list:
+            state:
+                sent: Envoyé
+                approved: Accepté
+                refused: Refusé
+                cancelled: Annulé

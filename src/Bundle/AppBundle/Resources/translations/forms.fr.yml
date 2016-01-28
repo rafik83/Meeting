@@ -343,3 +343,6 @@ form:
                             refused: Refusé
                             cancel: Annulé
                             sent: Envoyé
+                    children:
+                        submit:
+                            label: Filtrer

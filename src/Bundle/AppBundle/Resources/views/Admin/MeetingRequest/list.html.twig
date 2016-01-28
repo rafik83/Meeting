@@ -26,6 +26,7 @@
         <tr>
             <th>De</th>
             <th>à</th>
+            <th>Créé le</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -34,8 +35,12 @@
             <tr>
                 <td>{{ meeting_request.sheetNameFrom }}</td>
                 <td>{{ meeting_request.sheetNameTo }}</td>
+                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ ('admin.meeting_request.list.state.' ~ meeting_request.state)|trans }}</td>
                 <td>
+                    {% if meeting_request.state == 'approved' %}
                     <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
