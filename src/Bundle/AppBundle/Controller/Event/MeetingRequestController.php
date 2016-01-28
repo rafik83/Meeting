@@ -346,7 +346,7 @@ class MeetingRequestController extends BaseController
      * @param Request        $request
      * @param EventView      $eventView
      * @param MeetingRequest $meetingRequest
-     * @param Sheet          $sheetFrom
+     * @param Sheet          $sheet
      *
      * @return RedirectResponse|Response
      */
@@ -354,14 +354,14 @@ class MeetingRequestController extends BaseController
         Request $request,
         EventView $eventView,
         MeetingRequest $meetingRequest,
-        Sheet $sheetFrom
+        Sheet $sheet
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheetFrom->getParticipants());
+        $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        if ($sheetFrom === $meetingRequest->getFromSheet()) {
+        if ($sheet === $meetingRequest->getFromSheet()) {
             $participants = $meetingRequest->getFromParticipants()->toArray();
-        } elseif ($sheetFrom === $meetingRequest->getToSheet()) {
+        } elseif ($sheet === $meetingRequest->getToSheet()) {
             $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
             throw $this->createNotFoundException('Request not found');
@@ -371,25 +371,25 @@ class MeetingRequestController extends BaseController
 
         $editRequest = new EditRequest($meetingRequest, $participants, new \DateTime(), $this->getUser());
         $form        = $this->createForm(MeetingRequestEditType::class, $editRequest, [
-            'sheet' => $sheetFrom === $meetingRequest->getFromSheet() ? $sheetFrom : $meetingRequest->getToSheet(),
+            'sheet' => $sheet,
         ]);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler')
-                ->handle($editRequest, $sheetFrom);
+                ->handle($editRequest, $sheet);
 
             $this->addFlash('success', 'flash.meeting_request.edit.success');
 
-            if($sheetFrom === $meetingRequest->getFromSheet())
+            if($sheet === $meetingRequest->getFromSheet())
                 return $this->redirectToRoute('event_meeting_list_request', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheetFrom->getId()
+                    'id'        => $sheet->getId()
                 ]);
             else
                 return $this->redirectToRoute('event_meeting_list_proposition', [
                     'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $meetingRequest->getToSheet()->getId()
+                    'id'        => $sheet->getId()
                 ]);
         }
 
