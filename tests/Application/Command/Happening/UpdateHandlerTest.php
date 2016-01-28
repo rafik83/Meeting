@@ -38,16 +38,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
 
-        $happening = new Happening($event, $begin, $end, $category);
-        $happeningTitleTranslation  = new Happening\TitleTranslation($happening, 'fr', 'truc');
-        $happeningTitleTranslation2 = new Happening\TitleTranslation($happening, 'en', 'trac');
-        $happeningDescTranslation   = new Happening\DescriptionTranslation($happening, 'fr', 'bidule');
-        $happeningDescTranslation2  = new Happening\DescriptionTranslation($happening, 'en', 'machin');
+        $happening             = new Happening($event, $begin, $end, $category);
+        $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
+        $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
-        $happening->setTitleTranslation($happeningTitleTranslation);
-        $happening->setTitleTranslation($happeningTitleTranslation2);
-        $happening->setDescriptionTranslation($happeningDescTranslation);
-        $happening->setDescriptionTranslation($happeningDescTranslation2);
+        $happening->setTranslation($happeningTranslation);
+        $happening->setTranslation($happeningTranslation2);
 
         $newCategory        = new Category($event, 'picto3');
         $newCatTranslation1 = new CategoryTranslation($newCategory, 'fr', 'trec');
@@ -57,16 +53,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         // Expected
-        $expectedSubEvent = new Happening($event, $newBegin, $newEnd, $newCategory);
-        $expectedTitleTranslation  = new Happening\TitleTranslation($expectedSubEvent, 'fr', 'test');
-        $expectedTitleTranslation2 = new Happening\TitleTranslation($expectedSubEvent, 'en', 'tset');
-        $expectedDescTranslation   = new Happening\DescriptionTranslation($expectedSubEvent, 'fr', 'ok');
-        $expectedDescTranslation2  = new Happening\DescriptionTranslation($expectedSubEvent, 'en', 'ko');
+        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory);
+        $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
+        $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
 
-        $expectedSubEvent->setTitleTranslation($expectedTitleTranslation);
-        $expectedSubEvent->setTitleTranslation($expectedTitleTranslation2);
-        $expectedSubEvent->setDescriptionTranslation($expectedDescTranslation);
-        $expectedSubEvent->setDescriptionTranslation($expectedDescTranslation2);
+        $expectedSubEvent->setTranslation($expectedTranslation);
+        $expectedSubEvent->setTranslation($expectedTranslation2);
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
@@ -77,13 +69,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->category = $newCategory;
         $update->begin = $newBegin;
         $update->end   = $newEnd;
-        $update->titleTranslations = [
-            'fr' => ['title' => 'test'],
-            'en' => ['title' => 'tset'],
-        ];
-        $update->descriptionTranslations = [
-            'fr' => ['description' => 'ok'],
-            'en' => ['description' => 'ko'],
+        $update->translations = [
+            'fr' => [
+                'title' => 'test',
+                'description' => 'ok',
+            ],
+            'en' => [
+                'title' => 'tset',
+                'description' => 'ko',
+            ],
         ];
 
         $handler = new UpdateHandler($happeningRepository->reveal());

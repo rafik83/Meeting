@@ -37,15 +37,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedSubEvent = new Happening($event, $begin, $end, $category);
-        $expectedTitleTranslation  = new Happening\TitleTranslation($expectedSubEvent, 'fr', 'truc');
-        $expectedTitleTranslation2 = new Happening\TitleTranslation($expectedSubEvent, 'en', 'trac');
-        $expectedDescTranslation   = new Happening\DescriptionTranslation($expectedSubEvent, 'fr', 'bidule');
-        $expectedDescTranslation2  = new Happening\DescriptionTranslation($expectedSubEvent, 'en', 'machin');
+        $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
+        $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
 
-        $expectedSubEvent->setTitleTranslation($expectedTitleTranslation);
-        $expectedSubEvent->setTitleTranslation($expectedTitleTranslation2);
-        $expectedSubEvent->setDescriptionTranslation($expectedDescTranslation);
-        $expectedSubEvent->setDescriptionTranslation($expectedDescTranslation2);
+        $expectedSubEvent->setTranslation($expectedTranslation);
+        $expectedSubEvent->setTranslation($expectedTranslation2);
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
@@ -56,13 +52,15 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->category = $category;
         $create->begin = $begin;
         $create->end   = $end;
-        $create->titleTranslations = [
-            'fr' => ['title' => 'truc'],
-            'en' => ['title' => 'trac'],
-        ];
-        $create->descriptionTranslations = [
-            'fr' => ['description' => 'bidule'],
-            'en' => ['description' => 'machin'],
+        $create->translations = [
+            'fr' => [
+                'title'       => 'truc',
+                'description' => 'bidule'
+            ],
+            'en' => [
+                'title'       => 'trac',
+                'description' => 'machin',
+            ],
         ];
 
         $handler = new CreateHandler($happeningRepository->reveal());
