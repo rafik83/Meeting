@@ -17,4 +17,4 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
-            inversedBy: happeningTranslations
+            inversedBy: translations
