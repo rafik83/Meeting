@@ -40,7 +40,7 @@
 
         <tr class="info">
             <th colspan="2"></th>
-            <th colspan="2">Total</th>
+            <th colspan="2">Total HT</th>
             <th class="text-right">{{ order.totalWithoutTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
         </tr>
         {% set show_taxes = show_taxes is defined ? show_taxes : true %}
