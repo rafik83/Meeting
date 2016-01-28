@@ -29,12 +29,24 @@
                     </td>
                     <td>{{ request_view.message|nl2br }}</td>
                     <td>{{ request_view.createdAt|date('Y-m-d') }}</td>
-                    <td>{% if request_view.state in ['sent', 'approved'] %}
+                    <td><a href="{{ path('event_meeting_request_show', {
+                            'subdomain': app.request.attributes.get('subdomain'),
+                            'id': sheet.id,
+                            'meetingRequest': request_view.id
+                        }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listRequest.show'|trans }}</a>
+                        {% if request_view.state in ['sent', 'approved'] %}
                         <a href="{{ path('event_meeting_request_cancel', {
                             'subdomain': app.request.attributes.get('subdomain'),
                             'id': sheet.id,
                             'meetingRequest': request_view.id
                         }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listRequest.cancel'|trans }}</a>
+                        {% endif %}
+                        {% if request_view.state is same as('sent') %}
+                        <a href="{{ path('event_meeting_request_edit', {
+                            'subdomain': app.request.attributes.get('subdomain'),
+                            'id': sheet.id,
+                            'meetingRequest': request_view.id
+                        }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listRequest.edit'|trans }}</a>
                         {% endif %}
                     </td>
                 </tr>

@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest:
+    properties:
+        description:
+            - NotBlank: ~

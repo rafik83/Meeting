@@ -31,11 +31,6 @@ class Request implements MessageSubjectInterface
     private $id;
 
     /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * @var Sheet
      */
     private $from;
@@ -87,7 +82,6 @@ class Request implements MessageSubjectInterface
      * @param array              $fromParticipants
      * @param Sheet              $to
      * @param array              $toParticipants
-     * @param string             $description
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
      */
@@ -96,15 +90,13 @@ class Request implements MessageSubjectInterface
         array $fromParticipants,
         Sheet $to,
         array $toParticipants,
-        $description,
-        \DateTimeInterface $createdAt,
+        DateTimeInterface $createdAt,
         User $creator
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->to               = $to;
         $this->toParticipants   = new ArrayCollection($toParticipants);
-        $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
         $this->creator          = $creator;
@@ -116,14 +108,6 @@ class Request implements MessageSubjectInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -289,6 +273,16 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasFromParticipant(Participant $participant)
+    {
+        return $this->fromParticipants->contains($participant);
+    }
+
+    /**
      * @param Participant $fromParticipant
      *
      * @return Request
@@ -296,6 +290,18 @@ class Request implements MessageSubjectInterface
     public function addFromParticipant(Participant $fromParticipant)
     {
         $this->fromParticipants->add($fromParticipant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants->removeElement($participant);
 
         return $this;
     }

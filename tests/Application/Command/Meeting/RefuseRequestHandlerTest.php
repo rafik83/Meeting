@@ -40,13 +40,13 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Request to refuse
 
-        $request = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
+        $request = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $refuseRequest = new RefuseRequest($request, $user);
         $refuseRequest->message = 'this is a test';
 
         // Expceted
 
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $expectedRequest->refuse();
         $expectedMessage = new Message($expectedRequest, $sheetFrom, 'this is a test', $dateTime);
         $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');

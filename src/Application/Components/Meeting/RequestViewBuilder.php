@@ -66,7 +66,6 @@ class RequestViewBuilder
             $sheetNameFrom,
             $sheetNameTo,
             $request->getState(),
-            $request->getDescription(),
             $request->getCreatedAt(),
             $this->messageRepository->getLastMessageByRequest($request)
         );

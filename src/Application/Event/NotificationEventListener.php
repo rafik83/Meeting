@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
@@ -88,6 +90,64 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'participant.removed',
             $event->getMessage()
+        );
+
+        $this->notificationRepository->add($notification);
+    }
+
+    /**
+     * Notify added participant
+     *
+     * @param MeetingRequestParticipantAddedEvent $event
+     */
+    public function onParticipantAddedToMeetingRequest(MeetingRequestParticipantAddedEvent $event)
+    {
+        $message = $this->translator->trans(
+            'notification.meeting_request.participant.added.message',
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%message%'   => $event->getMessage(),
+            ],
+            null,
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
+        $notification = new Notification(
+            $event->getParticipant()->getSheet()->getEvent(),
+            $event->getEmitter(),
+            $event->getParticipant()->getUser(),
+            $event->getDate(),
+            'meeting_request.participant.added',
+            $message
+        );
+
+        $this->notificationRepository->add($notification);
+    }
+
+    /**
+     * Notify removed participant
+     *
+     * @param MeetingRequestParticipantRemovedEvent $event
+     */
+    public function onParticipantRemovedToMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
+    {
+        $message = $this->translator->trans(
+            'notification.meeting_request.participant.removed.message',
+            [
+                '%sheetName%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
+                '%message%'   => $event->getMessage(),
+            ],
+            null,
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
+        $notification = new Notification(
+            $event->getParticipant()->getSheet()->getEvent(),
+            $event->getEmitter(),
+            $event->getParticipant()->getUser(),
+            $event->getDate(),
+            'meeting_request.participant.removed',
+            $message
         );
 
         $this->notificationRepository->add($notification);
@@ -189,11 +249,13 @@ class NotificationEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'participant.added'        => 'onParticipantAdded',
-            'participant.removed'      => 'onParticipantRemoved',
-            'meeting_request.refused'  => 'onRequestRefused',
-            'meeting_request.canceled' => 'onRequestCanceled',
-            'meeting.canceled'         => 'onMeetingCanceled',
+            'participant.added'                   => 'onParticipantAdded',
+            'participant.removed'                 => 'onParticipantRemoved',
+            'meeting_request.refused'             => 'onRequestRefused',
+            'meeting_request.canceled'            => 'onRequestCanceled',
+            'meeting.canceled'                    => 'onMeetingCanceled',
+            'meeting_request.participant.removed' => 'onParticipantRemovedToMeetingRequest',
+            'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
         ];
     }
 }

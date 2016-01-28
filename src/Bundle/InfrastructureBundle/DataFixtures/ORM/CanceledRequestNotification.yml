@@ -5,7 +5,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - [@participant_random_1]
             - @sheet_test
             - [@participant_test]
-            - <text(100)>
             - <dateTimeBetween('-10 days', 'now')>
             - @user_random_1
         state: 'cancelled'

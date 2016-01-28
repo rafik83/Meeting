@@ -11,6 +11,12 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "0D/random/0D"
         password: "0D/random/0D"
         locale: "fr"
+    user_random_2:
+        __construct: false
+        email: "random2@elao.com"
+        salt: "0D/random/0D"
+        password: "0D/random/0D"
+        locale: "fr"
 
     # Proximum users
     proximum_user_visiteur:

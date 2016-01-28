@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
+use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Application\Command\Participant\Update;
 
-class ParticipantUpdateType extends AbstractParticipantType
+class MeetingRequestEditType extends AbstractMeetingRequestType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,8 @@ class ParticipantUpdateType extends AbstractParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => Update::class,
-        ]);
+           'data_class' => EditRequest::class,
+       ])
+        ;
     }
 }
