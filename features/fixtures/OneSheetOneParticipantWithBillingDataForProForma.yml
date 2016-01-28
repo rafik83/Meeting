@@ -28,30 +28,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
                     "planning": true
                     "planning_bought": 2
             "56407fa453f4e":
-                "563caea37f864":
-                    "file": null
-                    "value":
-                        "value": "563cb173969ba"
-                "563caeb152464": null
-                "563caeb98d3af":
-                    "file": null
-                    "value":
-                        "value": "563caf7c2b89a"
-                "563caec361723": null
-                "563caecd66d86":
-                    "value": true
-                    "quantity": 3
                 "563caedade41a":
-                    "value": false
+                    "value": true
                     "quantity": 1
             "563caee826357":
-                "563caef76f49e":
-                    "value": false
                 "563caefd7879f":
                     "value": true
                     "quantity": 1
-                "563caf044d656":
-                    "value": false
         billingData:
             "5645e4242d3df": "test"
             "5645e47e7e499": "test"
@@ -71,7 +54,7 @@ Proximum\Vimeet\Domain\Model\Order:
         packageData:
             "563cae7496da1":
                 "563cae8a5072d":
-                    "value": "563cb15fbf353"
+                    "value": "563cb1257722e"
             "563cae9c37ff6":
                 "56407f8b58f6b":
                     "participant": true
@@ -80,30 +63,17 @@ Proximum\Vimeet\Domain\Model\Order:
                     "planning": true
                     "planning_bought": 2
             "56407fa453f4e":
-                "563caea37f864":
-                    "file": null
-                    "value":
-                        "value": "563cb173969ba"
-                "563caeb152464": null
-                "563caeb98d3af":
-                    "file": null
-                    "value":
-                        "value": "563caf7c2b89a"
-                "563caec361723": null
-                "563caecd66d86":
+                "56615a0ab3f9f":
                     "value": true
                     "quantity": 3
-                "563caedade41a":
-                    "value": false
+            "56615ef1b3b7d":
+                "56615fbd30518":
+                    "value": true
                     "quantity": 1
             "563caee826357":
-                "563caef76f49e":
-                    "value": false
                 "563caefd7879f":
                     "value": true
                     "quantity": 1
-                "563caf044d656":
-                    "value": false
         packageTemplate:
             563cae7496da1:
                 label:
@@ -244,6 +214,7 @@ Proximum\Vimeet\Domain\Model\Order:
                             en: ""
                         type: "lib_option"
                         unitPrice: 400
+                        updatableUntil: "2016-08-01 00:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                             563cae7496da1.563cae8a5072d.563cb15fbf353: ~
@@ -289,6 +260,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: ~
                     56615feba09a4:
@@ -303,6 +275,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
                     56615ff492a29:
@@ -317,6 +290,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 2
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                     56616023b335e:
@@ -331,6 +305,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 1
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                             563cae7496da1.563cae8a5072d.563cb15fbf353: ~
@@ -346,6 +321,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 4
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
@@ -363,6 +339,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 3
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
@@ -380,6 +357,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 8
+                        updatableUntil: <dateTimeBetween('+100 days', '+200 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 4
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 4
@@ -397,6 +375,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 0
                             max: 4
+                        updatableUntil: <dateTimeBetween('-100 days', '-10 days')>
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
@@ -423,7 +402,7 @@ Proximum\Vimeet\Domain\Model\Order:
                         quantity:
                             min: 1
                             max: 5
-                    563caecd66d86:
+                    56615a0ab3f9f:
                         label:
                             fr: 'La mise en avant de votre entreprise au centre d’un e-mailing de promotion générale des Rendez-vous CARNOT dans la rubrique "Zoom sur"'
                             en: 'The highlighting of your company in an e-mailing promoting Rendez-vous Carnot in the heading "zoom on"'
@@ -563,5 +542,5 @@ Proximum\Vimeet\Domain\Model\Order:
                     en: "N° VAT"
                 tags: ["billing_vat_number"]
         createdAt: <dateTimeBetween('-2 days', 'now')>
-        paymentMode: 'cb'
+        paymentMode: 'credit-card'
         sheet: @sheet_2

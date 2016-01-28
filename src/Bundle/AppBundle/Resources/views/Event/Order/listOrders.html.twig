@@ -25,6 +25,14 @@
     <a href="{{ path('event_sheet', {
         'id'       : sheet.id,
         'subdomain': app.request.attributes.get('subdomain')
-    }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+    }) }}" class="btn btn-link">
+        {{ 'event.link.go_back_to_sheet'|trans }}
+    </a>
 
+    <a href="{{ path('event_sheet_summary', {
+        'id'       : sheet.id,
+        'subdomain': app.request.attributes.get('subdomain')
+    }) }}" class="btn btn-link">
+        {{ 'event.sheet.summary.title'|trans }}
+    </a>
 {% endblock %}
