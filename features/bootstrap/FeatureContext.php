@@ -13,6 +13,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 {
     private $kernel;
 
+    private $baseUrl = 'http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php';
+
     /**
      * Initializes context.
      *
@@ -235,14 +237,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($tbody as $key => $tr) {
                 if (null !== $numColumnCheckbox) {
                     if (null !== $tr->find(
-                            'css',
-                            sprintf(
-                                'td:nth-child(%s):contains("%s")',
-                                $numColumnCheckbox,
-                                $checkbox
-                            )
+                        'css',
+                        sprintf(
+                            'td:nth-child(%s):contains("%s")',
+                            $numColumnCheckbox,
+                            $checkbox
                         )
-                    ) {
+                    )) {
                         $numLine = $key + 1;
                         break;
                     }
@@ -282,6 +283,18 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $this->getSession()->maximizeWindow();
         $this->getSession()->wait(5000, 'document.readyState === "complete"');
+    }
+
+    /**
+     * @Given I am logged with :email and :password
+     */
+    public function iAmLogged($email, $password)
+    {
+        $this->visit($this->baseUrl . '/fr/login');
+        $this->fillField('form.login.children.username.label', $email);
+        $this->fillField('form.login.children.password.label', $password);
+        $this->pressButton('form.login.children.submit.label');
+        $this->assertResponseStatus(200);
     }
 
     /**
