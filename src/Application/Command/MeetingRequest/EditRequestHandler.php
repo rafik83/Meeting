@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EditRequestHandler
 {
@@ -64,28 +66,91 @@ class EditRequestHandler
      */
     public function handle(EditRequest $editRequest, Sheet $sheet)
     {
-        // Update participant
-        if ($editRequest->meetingRequest->getFromSheet() === $sheet) {
-            $this->updateFromParticipants($editRequest);
-        } elseif ($editRequest->meetingRequest->getToSheet() === $sheet) {
-            $this->updateToParticipants($editRequest);
-        } else {
-            throw new \RuntimeException('This sheet do not participate to this meeting.');
+        if($sheet === $editRequest->meetingRequest->getFromSheet()) {
+            if($editRequest->meetingRequest->getState() != Request::STATE_SENT && $editRequest->meetingRequest->getState() != Request::STATE_APPROVED) {
+                throw new AccessDeniedException('You can not update this data');
+            }
+            else {
+                // Update participant
+                if ($editRequest->meetingRequest->getFromSheet() === $sheet) {
+                    $this->updateFromParticipants($editRequest);
+                } elseif ($editRequest->meetingRequest->getToSheet() === $sheet) {
+                    $this->updateToParticipants($editRequest);
+                } else {
+                    throw new \RuntimeException('This sheet do not participate to this meeting.');
+                }
+
+                $this->requestRepository->set($editRequest->meetingRequest);
+
+                // Add message
+                $this->messageRepository->add(new Message(
+                                                  $editRequest->meetingRequest,
+                                                  $editRequest->meetingRequest->getFromSheet(),
+                                                  $editRequest->description,
+                                                  $editRequest->date
+                                              ));
+
+                // Dispatch events
+                while ($event = array_shift($this->events)) {
+                    $this->eventDispatcher->dispatch($event[0], $event[1]);
+                }
+            }
         }
+        elseif($sheet === $editRequest->meetingRequest->getToSheet()) {
+            if($editRequest->meetingRequest->getState() != Request::STATE_APPROVED) {
+                throw new AccessDeniedException('You can not update this data');
+            }
+            else {
+                // Update participant
+                if ($editRequest->meetingRequest->getFromSheet() === $sheet) {
+                    $this->updateFromParticipants($editRequest);
+                } elseif ($editRequest->meetingRequest->getToSheet() === $sheet) {
+                    $this->updateToParticipants($editRequest);
+                } else {
+                    throw new \RuntimeException('This sheet do not participate to this meeting.');
+                }
 
-        $this->requestRepository->set($editRequest->meetingRequest);
+                $this->requestRepository->set($editRequest->meetingRequest);
 
-        // Add message
-        $this->messageRepository->add(new Message(
-          $editRequest->meetingRequest,
-          $editRequest->meetingRequest->getFromSheet(),
-          $editRequest->description,
-          $editRequest->date
-        ));
+                // Add message
+                $this->messageRepository->add(new Message(
+                                                  $editRequest->meetingRequest,
+                                                  $editRequest->meetingRequest->getFromSheet(),
+                                                  $editRequest->description,
+                                                  $editRequest->date
+                                              ));
 
-        // Dispatch events
-        while ($event = array_shift($this->events)) {
-            $this->eventDispatcher->dispatch($event[0], $event[1]);
+                // Dispatch events
+                while ($event = array_shift($this->events)) {
+                    $this->eventDispatcher->dispatch($event[0], $event[1]);
+                }
+            }
+        }
+        else
+        {
+            // Update participant
+            if ($editRequest->meetingRequest->getFromSheet() === $sheet) {
+                $this->updateFromParticipants($editRequest);
+            } elseif ($editRequest->meetingRequest->getToSheet() === $sheet) {
+                $this->updateToParticipants($editRequest);
+            } else {
+                throw new \RuntimeException('This sheet do not participate to this meeting.');
+            }
+
+            $this->requestRepository->set($editRequest->meetingRequest);
+
+            // Add message
+            $this->messageRepository->add(new Message(
+                                              $editRequest->meetingRequest,
+                                              $editRequest->meetingRequest->getFromSheet(),
+                                              $editRequest->description,
+                                              $editRequest->date
+                                          ));
+
+            // Dispatch events
+            while ($event = array_shift($this->events)) {
+                $this->eventDispatcher->dispatch($event[0], $event[1]);
+            }
         }
     }
 
