@@ -302,3 +302,37 @@ form:
                 label: Quantité
             submit:
                 label: Enregistrer
+    happening_create:
+        children:
+            category:
+                label: Catégorie
+            begin:
+                label: Date de début
+            end:
+                label: Date de fin
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+            submit:
+                label: Envoyer
+    happening_update:
+        children:
+            category:
+                label: Catégorie
+            begin:
+                label: Date de début
+            end:
+                label: Date de fin
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+            submit:
+                label: Envoyer

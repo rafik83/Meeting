@@ -30,14 +30,12 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet                 = new Sheet($event, $type, [], []);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true, true);
-        $schedule              = new Schedule($event, new \DateTime('2015-11-25 12:00:00'));
-        $command               = new Add($schedule);
+        $command               = new Add();
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
 
         $expectedUnavailability = new Unavailability(
-            $schedule,
             $participant,
             new \DateTime('2015-11-25 10:00:00'),
             new \DateTime('2015-11-25 14:00:00')
@@ -58,35 +56,30 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet                 = new Sheet($event, $type, [], []);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true, true);
-        $schedule              = new Schedule($event, new \DateTime('2015-11-25 12:00:00'));
-        $command               = new Add($schedule);
+        $command               = new Add();
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
 
         $unavailability1 = new Unavailability(
-            $schedule,
             $participant,
             new \DateTime('2015-11-25 09:00:00'),
             new \DateTime('2015-11-25 11:00:00')
         );
 
         $unavailability2 = new Unavailability(
-            $schedule,
             $participant,
             new \DateTime('2015-11-25 13:00:00'),
             new \DateTime('2015-11-25 15:00:00')
         );
 
         $createdUnavailability = new Unavailability(
-            $schedule,
             $participant,
             new \DateTime('2015-11-25 10:00:00'),
             new \DateTime('2015-11-25 14:00:00')
         );
 
         $mergedUnavailability = new Unavailability(
-            $schedule,
             $participant,
             new \DateTime('2015-11-25 09:00:00'),
             new \DateTime('2015-11-25 15:00:00')

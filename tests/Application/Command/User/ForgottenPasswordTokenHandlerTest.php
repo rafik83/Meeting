@@ -27,7 +27,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $eventView = new EventView(1, 'test', 'test', 'fr', []);
+        $eventView = new EventView(1, 'test', 'test', 'fr', [], 'Europe/Paris');
         $command   = new ForgottenPassword($eventView, 'fr');
         $command->email = 'test@test.fr';
 
@@ -67,7 +67,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(EmailDoesNotExistException::class);
 
-        $eventView = new EventView(1, 'test', 'test', 'fr', []);
+        $eventView = new EventView(1, 'test', 'test', 'fr', [], 'Europe/Paris');
         $command   = new ForgottenPassword($eventView, 'fr');
         $command->email = 'test2@test.fr';
 
