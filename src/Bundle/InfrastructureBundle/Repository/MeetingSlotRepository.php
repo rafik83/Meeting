@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -35,6 +36,22 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findAvailableSlotIdByParticipantsIds(array $ids)
     {
         $queryBuilder = $this
@@ -53,7 +70,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         // Participants have not blocking participation
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE h.blocking = true AND hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN h.begin AND h.end OR slot.end BETWEEN h.begin AND h.end))');
+            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN h.begin AND h.end OR slot.end BETWEEN h.begin AND h.end))');
 
         $queryBuilder->setParameter('ids', $ids);
 

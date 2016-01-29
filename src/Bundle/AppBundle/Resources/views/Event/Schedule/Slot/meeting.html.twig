@@ -5,7 +5,8 @@
         De {{ slot.begin|date('H:i') }} à {{ slot.end|date('H:i') }} :
     {% endif %}
     {% if slot.active %}
-        <a href="{{ path('event_sheet_schedule_meeting', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'meeting_id': slot.id }) }}">{{ slot.title }}</a>
+
+        <a href="{{ path('event_sheet_schedule_meeting', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'meeting': slot.id }) }}">{{ slot.title }}</a>
     {% else %}
         {{ slot.title }}
     {% endif %}

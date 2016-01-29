@@ -18,36 +18,29 @@ class Unavailability
     private $id;
 
     /**
-     * @var Schedule
-     */
-    private $schedule;
-
-    /**
      * @var Participant
      */
     private $participant;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $begin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $end;
 
     /**
      * Unavailability constructor.
      *
-     * @param Schedule    $schedule
-     * @param Participant $participant
-     * @param \DateTime   $begin
-     * @param \DateTime   $end
+     * @param Participant        $participant
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
      */
-    public function __construct(Schedule $schedule, Participant $participant, \DateTime $begin, \DateTime $end)
+    public function __construct(Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end)
     {
-        $this->schedule    = $schedule;
         $this->participant = $participant;
         $this->begin       = $begin;
         $this->end         = $end;
@@ -64,16 +57,6 @@ class Unavailability
     }
 
     /**
-     * Get schedule.
-     *
-     * @return Schedule
-     */
-    public function getSchedule()
-    {
-        return $this->schedule;
-    }
-
-    /**
      * Get participant.
      *
      * @return Participant
@@ -86,7 +69,7 @@ class Unavailability
     /**
      * Get begin.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getBegin()
     {
@@ -96,7 +79,7 @@ class Unavailability
     /**
      * Get end.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getEnd()
     {
@@ -118,10 +101,10 @@ class Unavailability
     }
 
     /**
-     * @param \DateTime $begin
-     * @param \DateTime $end
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
      */
-    public function update(\DateTime $begin, \DateTime $end)
+    public function update(\DateTimeInterface $begin, \DateTimeInterface $end)
     {
         $this->begin = $begin;
         $this->end   = $end;

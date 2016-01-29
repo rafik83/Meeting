@@ -12,7 +12,5 @@ Proximum\Vimeet\Domain\Model\Unavailability:
         end:
             type: datetime
     manyToOne:
-        schedule:
-            targetEntity: Proximum\Vimeet\Domain\Model\Schedule
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

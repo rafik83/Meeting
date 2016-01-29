@@ -106,6 +106,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TransactionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository_happening.category_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -300,6 +304,22 @@ services:
         class: Proximum\Vimeet\Application\Command\Transaction\RemoveHandler
         arguments:
             - '@repository.transaction'
+    command.happening.category.create_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Category\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+    command.happening.category.update_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Category\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+    command.happening.create_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+    command.happening.update_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Security
@@ -419,13 +439,13 @@ services:
     proximum.vimeet.application.components.schedule.schedule_builder:
         class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
         arguments:
-            - '@vimeet_infrastructure.repository.schedule_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Meeting Component
