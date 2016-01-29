@@ -18,6 +18,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Event
 {
     /**
+     * All Taxes Include : prices include taxes, no additional taxes computed
+     */
+    const VAT_MODE_ATI = 'ati';
+
+    /**
+     * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
+     */
+    const VAT_MODE_ET  = 'et';
+
+    /**
      * @var int
      */
     private $id;
@@ -63,7 +73,7 @@ class Event
     private $organiserName;
 
     /**
-     * @var string
+     * @var Address
      */
     private $paymentAddress;
 
@@ -83,7 +93,12 @@ class Event
     private $legalInformation;
 
     /**
-     * @var int
+     * @var string
+     */
+    private $mode;
+
+    /**
+     * @var float
      */
     private $vat;
 
@@ -208,12 +223,16 @@ class Event
      * @param string $title
      * @param array  $locales
      * @param string $fallback
+     * @param string $mode
+     * @param float  $vat
      */
-    public function update($title, array $locales, $fallback)
+    public function update($title, array $locales, $fallback, $mode, $vat)
     {
         $this->title    = $title;
         $this->locales  = $locales;
         $this->fallback = $fallback;
+        $this->mode     = $mode;
+        $this->vat      = $vat;
     }
 
     /**
@@ -225,7 +244,7 @@ class Event
     }
 
     /**
-     * @return string
+     * @return Address
      */
     public function getPaymentAddress()
     {
@@ -257,7 +276,17 @@ class Event
     }
 
     /**
-     * @return int
+     * Get mode
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @return float
      */
     public function getVat()
     {

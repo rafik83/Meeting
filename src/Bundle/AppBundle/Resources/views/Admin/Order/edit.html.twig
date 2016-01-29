@@ -59,26 +59,31 @@
             {% endfor %}
 
             <tr class="info">
-                <th colspan="3"></th>
-                <th colspan="2">Total</th>
-                <th class="text-right">{{ order_view.total|number_format(2, ',', ' ') }} €</th>
+                <th colspan="2"></th>
+                <th colspan="2">Total HT</th>
+                <th class="text-right">{{ order_view.totalWithoutTaxes|number_format(2, ',', ' ') }} €</th>
+                <th></th>
             </tr>
-            <tr>
-                <th colspan="3"></th>
-                <th colspan="2">TVA</th>
-                <th class="text-right">{{ order_view.vat }}%</th>
-            </tr>
-            <tr>
-                <th colspan="3"></th>
-                <th colspan="2">Total TTC</th>
-                <th class="text-right">{{ order_view.totalWithVat|number_format(2, ',', ' ') }} €</th>
-            </tr>
+            {% if order_view.vatApplicable %}
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">TVA</th>
+                    <th class="text-right">{{ order_view.vat }}%</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">Total TTC</th>
+                    <th class="text-right">{{ order_view.totalWithTaxes|number_format(2, ',', ' ') }} €</th>
+                    <th></th>
+                </tr>
+            {% endif %}
         </tbody>
 
     </table>
 
     <div class="text-left">
-        <a href="{{ path('admin_sheet_order_list', { 'id': order.sheet.event.id, 'sheet_id': order.sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
+        <a href="{{ path('admin_sheet_billing', { 'event': order.sheet.event.id, 'sheet': order.sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
     </div>
 
 {% endblock %}

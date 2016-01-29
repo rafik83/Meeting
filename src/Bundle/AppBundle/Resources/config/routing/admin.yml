@@ -163,15 +163,19 @@ admin_sheet:
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:list }
 
 #
+# Billing
+#
+admin_sheet_billing:
+    path: /event/{event}/sheet/{sheet}/billing
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Billing:list }
+
+#
 # Order
 #
-admin_sheet_order_list:
-    path: /event/{id}/sheet/{sheet_id}/order
-    requirements:
-        id: \d+
-        sheet_id: \d+
-    methods: [GET]
-    defaults: { _controller: VimeetAppBundle:Admin/Order:list }
 admin_sheet_order_edit:
     path: /order/{id}/edit
     requirements:
@@ -201,6 +205,28 @@ admin_sheet_order_update_row:
         row: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:updateRow }
+
+#
+# Transaction
+#
+admin_sheet_transaction_create:
+    path: /sheet/{id}/transaction/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:create }
+admin_sheet_transaction_update:
+    path: /sheet/{id}/transaction/{transaction_id}/update
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
+admin_sheet_transaction_remove:
+    path: /sheet/{id}/transaction/{transaction_id}/remove
+    requirements:
+        id: \d+
+    methods: [DELETE]
+    defaults: { _controller: VimeetAppBundle:Admin/Transaction:remove }
 
 #
 # Happening

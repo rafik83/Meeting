@@ -113,6 +113,10 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            mode:
+                label: Mode
+            vat:
+                label: TVA
             translations:
                 prototype:
                     children:
@@ -305,6 +309,31 @@ form:
                 label: Prix unitaire
             quantity:
                 label: Quantité
+            submit:
+                label: Enregistrer
+    create_transaction:
+        children:
+            amount:
+                label: Montant
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
+            submit:
+                label: Enregistrer
+    update_transaction:
+        children:
+            amount:
+                label: Montant
+
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
             submit:
                 label: Enregistrer
     happening_create:

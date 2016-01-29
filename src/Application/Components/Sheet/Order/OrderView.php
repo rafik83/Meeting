@@ -45,17 +45,26 @@ class OrderView extends Groups
      * @param \DateTimeInterface $date
      * @param string             $state
      * @param string             $paymentMode
+     * @param bool               $vatApplicable
      * @param float              $vat
      * @param GroupView[]        $groups
      */
-    public function __construct($id, $reference, \DateTimeInterface $date, $state, $paymentMode, $vat, array $groups = [])
-    {
-        parent::__construct($groups, $vat);
+    public function __construct(
+        $id,
+        $reference,
+        \DateTimeInterface $date,
+        $state,
+        $paymentMode,
+        $vatApplicable,
+        $vat,
+        array $groups = []
+    ) {
+        parent::__construct($groups, $vatApplicable, $vat);
 
-        $this->id          = $id;
-        $this->reference   = $reference;
-        $this->date        = $date;
-        $this->state       = $state;
-        $this->paymentMode = $paymentMode;
+        $this->id            = $id;
+        $this->reference     = $reference;
+        $this->date          = $date;
+        $this->state         = $state;
+        $this->paymentMode   = $paymentMode;
     }
 }

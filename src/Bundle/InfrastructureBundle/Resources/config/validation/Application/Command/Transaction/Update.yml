@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Transaction\Update:
+    properties:
+        transaction:
+            - NotBlank: ~
+        amount:
+            - NotBlank: ~
+            - Type: { type: float }
+        date:
+            - NotBlank: ~
+            - DateTime: ~
+        mode:
+            - NotBlank: ~
+        reference:
+            - Type: { type: string }

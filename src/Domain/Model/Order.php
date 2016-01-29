@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
 /**
  * "Commande"
  */
-class Order
+class Order implements BillingInfoInterface
 {
     const STATE_UNPAID = 'unpaid';
     const STATE_PAID   = 'paid';
@@ -69,6 +69,16 @@ class Order
     private $paymentMode;
 
     /**
+     * @var string
+     */
+    private $vatMode;
+
+    /**
+     * @var float
+     */
+    private $vatRate;
+
+    /**
      * @param Sheet             $sheet
      * @param string            $state
      * @param array             $packageData
@@ -96,6 +106,8 @@ class Order
         $this->billingTemplate  = $billingTemplate;
         $this->createdAt        = $createdAt;
         $this->paymentMode      = $paymentMode;
+        $this->vatMode          = $sheet->getEvent()->getMode();
+        $this->vatRate          = $sheet->getEvent()->getVat();
     }
 
     /**
@@ -168,6 +180,38 @@ class Order
     public function getPaymentMode()
     {
         return $this->paymentMode;
+    }
+
+    /**
+     * @deprecated Use getVatRate instead
+     *
+     * Get vat
+     *
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->getVatRate();
+    }
+
+    /**
+     * Get vatMode
+     *
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
+
+    /**
+     * Get vatRate
+     *
+     * @return float
+     */
+    public function getVatRate()
+    {
+        return $this->vatRate;
     }
 
     /**

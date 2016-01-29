@@ -8,9 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet\Template;
+namespace Proximum\Vimeet\Application\Components\Sheet\Order\Exception;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class OrderException extends \DomainException
 {
-
 }
