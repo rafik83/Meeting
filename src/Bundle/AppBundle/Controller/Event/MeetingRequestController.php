@@ -155,7 +155,7 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $approveRequest = new ApproveRequest($meetingRequest);
+        $approveRequest = new ApproveRequest($meetingRequest, new \DateTime());
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'sheet' => $meetingRequest->getToSheet(),
         ]);
@@ -204,7 +204,7 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
+        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser(), new \DateTime());
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
         $form->add('submit', SubmitType::class);
 
@@ -242,7 +242,7 @@ class MeetingRequestController extends BaseController
         EventView $eventView,
         Sheet $sheet,
         MeetingRequest $meetingRequest
-    ){
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $toSheet   = $meetingRequest->getToSheet();
@@ -300,7 +300,7 @@ class MeetingRequestController extends BaseController
             throw $this->createAccessDeniedException('You can not access this meeting request');
         }
 
-        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
+        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime());
 
         $form = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
         $form->add('submit', SubmitType::class);
