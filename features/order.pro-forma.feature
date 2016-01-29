@@ -10,12 +10,10 @@ Feature: Pro-forma
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
       | User.yml                                                      |
       | OneSheetOneParticipantWithBillingDataForProForma.yml          |
+    Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can see a valid pro-forma
-    Given I am logged with "test-3@test.com" and "p@ssw0rd"
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/orders"
-    And the response status code should be 200
-    And I should see "event.sheet.listOrders.proForma"
+    When I go to this page "/fr/sheet/1/orders"
+    Then I should see "event.sheet.listOrders.proForma"
     Then I follow "event.sheet.listOrders.proForma"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/pro_forma/1"
-    And the response status code should be 200
+    And I should be on this page "/fr/sheet/1/pro_forma/1"

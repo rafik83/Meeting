@@ -13,7 +13,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 {
     private $kernel;
 
-    private $baseUrl = 'http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php';
+    private $baseUrl;
 
     /**
      * Initializes context.
@@ -265,6 +265,51 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When I should see :something in the column :column for the row containing :row
+     */
+    public function iShouldSeeInTheRowAndColumn($something, $column, $row)
+    {
+        $tables = $this->getSession()->getPage()->findAll('css', 'table');
+
+        foreach ($tables as $table) {
+            $numColumn = null;
+
+            $ths = $table->findAll('css', 'thead th');
+
+            $cols = 0;
+            foreach ($ths as $th) {
+                // calculate col num depending on colspan
+                $colspan = $th->getAttribute('colspan');
+                $cols += $colspan !== null ? $colspan : 1;
+                if (strpos($th->getText(), $column) !== false) {
+                    $numColumn = $cols;
+                }
+            }
+
+            if (null !== $numColumn) {
+                $trs = $table->findAll('css', 'tbody tr');
+                foreach ($trs as $tr) {
+                    if (strpos($tr->getText(), $row) !== false) {
+                        $tds = $tr->findAll('css', 'td');
+                        $cols = 0;
+                        foreach ($tds as $td) {
+                            // calculate col num depending on colspan
+                            $colspan = $td->getAttribute('colspan');
+                            $cols += $colspan !== null ? $colspan : 1;
+
+                            if ($cols == $numColumn && false !== strpos($td->getText(), $something)) {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        throw new \Exception('Element not found');
+    }
+
+    /**
      * @When I wait until I see :something
      */
     public function iWaitUntilISee($something)
@@ -286,14 +331,38 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @Given I am logged with :email and :password
+     * @Given I am logged with :email and :password on event :event
      */
-    public function iAmLogged($email, $password)
+    public function iAmLoggedOnEvent($email, $password, $eventUrl)
     {
-        $this->visit($this->baseUrl . '/fr/login');
+        $this->setBaseUrl($eventUrl);
+        $this->visit('/fr/login');
         $this->fillField('form.login.children.username.label', $email);
         $this->fillField('form.login.children.password.label', $password);
         $this->pressButton('form.login.children.submit.label');
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * Opens specified page.
+     *
+     * @Given /^(?:|I )am on this page "(?P<page>[^"]+)"$/
+     * @When /^(?:|I )go to this page "(?P<page>[^"]+)"$/
+     */
+    public function visit($page)
+    {
+        parent::visit($this->baseUrl . $page);
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * Checks, that current page PATH is equal to specified.
+     *
+     * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
+     */
+    public function assertPageAddress($page)
+    {
+        parent::assertPageAddress($this->baseUrl . $page);
         $this->assertResponseStatus(200);
     }
 
@@ -305,5 +374,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function iDumpThePage()
     {
         echo $this->getSession()->getPage()->getOuterHtml();
+    }
+
+    /**
+     * @param $url
+     */
+    private function setBaseUrl($url)
+    {
+        $this->baseUrl = $url . '/app_test.php';
     }
 }
