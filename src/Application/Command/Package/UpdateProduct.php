@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class EditProduct
+class UpdateProduct
 {
     /**
      * @var Sheet

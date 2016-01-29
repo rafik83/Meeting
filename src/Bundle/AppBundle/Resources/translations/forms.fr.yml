@@ -97,7 +97,7 @@ form:
         children:
             submit:
                 label: Valider les produits
-    edit_product:
+    update_product:
         children:
             submit:
                 label: Valider

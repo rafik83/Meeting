@@ -92,13 +92,13 @@ event:
             include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
         summary:
             title: Récapitulatif de participation
-            edit_product: Modifier
+            update_product: Modifier
             product: Produit
             unit_price: Prix unitaire
             quantity: Quantité
             total: Total
             action: Action
-        edit_product:
+        update_product:
             title: Modifier un produit commandé
     meeting:
         listRequest:

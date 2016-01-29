@@ -16,7 +16,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditProductType extends AbstractType
+class UpdateProductType extends AbstractType
 {
     /**
      * @var array

@@ -55,7 +55,7 @@ flash:
         add_products:
             success: L'ajout des produits a bien été pris en compte
             empty: Pas de produits ajoutés
-        edit_product:
+        update_product:
             added_updated_product_to_cart: La quantité de produit en plus a été ajoutée au panier
             created_negative_order: Une commande à quantité négative a été créée
         final_step:

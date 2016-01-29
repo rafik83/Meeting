@@ -30,13 +30,13 @@
                 <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 <td class="text-right">
                     {% if row.updatable %}
-                        <a href="{{ path('event_sheet_product_edit', {
+                        <a href="{{ path('event_sheet_product_update', {
                             'id': sheet.id,
                             'groupId': groupName,
                             'rowId': rowName,
                             'subdomain': app.request.attributes.get('subdomain')
                         }) }}" class="btn btn-default btn-xs">
-                            {{ 'event.sheet.summary.edit_product'|trans }}
+                            {{ 'event.sheet.summary.update_product'|trans }}
                         </a>
                     {% endif %}
                 </td>

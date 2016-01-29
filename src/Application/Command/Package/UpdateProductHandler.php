@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class EditProductHandler
+class UpdateProductHandler
 {
     /**
      * @var OrderManager
@@ -58,65 +58,65 @@ class EditProductHandler
     }
 
     /**
-     * @param EditProduct $editProduct
+     * @param UpdateProduct $updateProduct
      */
-    public function handle(EditProduct $editProduct)
+    public function handle(UpdateProduct $updateProduct)
     {
-        if ($editProduct->isNegative()) {
-            $this->createNegativeOrder($editProduct);
-        } elseif ($editProduct->isPositive()) {
-            $this->addProductToCart($editProduct);
+        if ($updateProduct->isNegative()) {
+            $this->createNegativeOrder($updateProduct);
+        } elseif ($updateProduct->isPositive()) {
+            $this->addProductToCart($updateProduct);
         }
     }
 
     /**
-     * @param EditProduct $editProduct
+     * @param UpdateProduct $updateProduct
      */
-    private function createNegativeOrder(EditProduct $editProduct)
+    private function createNegativeOrder(UpdateProduct $updateProduct)
     {
         $order = new Order(
-            $editProduct->sheet,
+            $updateProduct->sheet,
             Order::STATE_PAID,
             [],
-            $editProduct->sheet->getTypePackageTemplate(),
-            $editProduct->sheet->getBillingData(),
-            $editProduct->sheet->getEvent()->getBillingTemplate(),
-            $editProduct->createdAt,
+            $updateProduct->sheet->getTypePackageTemplate(),
+            $updateProduct->sheet->getBillingData(),
+            $updateProduct->sheet->getEvent()->getBillingTemplate(),
+            $updateProduct->createdAt,
             PaymentMode::NOPAYMENT
         );
 
         $order->addRow(
-            $editProduct->product->getStep()->getKey(),
-            $editProduct->product->getKey(),
-            $editProduct->product->getType(),
-            $editProduct->product->getLabel($editProduct->locale),
-            $editProduct->product->getDescription($editProduct->locale),
-            $editProduct->product->getUnitPrice(),
-            $editProduct->getNewQuantity()
+            $updateProduct->product->getStep()->getKey(),
+            $updateProduct->product->getKey(),
+            $updateProduct->product->getType(),
+            $updateProduct->product->getLabel($updateProduct->locale),
+            $updateProduct->product->getDescription($updateProduct->locale),
+            $updateProduct->product->getUnitPrice(),
+            $updateProduct->getNewQuantity()
         );
 
         $this->orderRepository->add($order);
 
         $sheetData = $this->orderManager->mergeTwoPackageData(
-            $editProduct->sheet->getPackageData(),
+            $updateProduct->sheet->getPackageData(),
             $order->getPackageData()
         );
 
-        $editProduct->sheet->setPackageData($sheetData);
-        $this->sheetRepository->set($editProduct->sheet);
+        $updateProduct->sheet->setPackageData($sheetData);
+        $this->sheetRepository->set($updateProduct->sheet);
     }
 
     /**
-     * @param EditProduct $editProduct
+     * @param UpdateProduct $updateProduct
      */
-    private function addProductToCart(EditProduct $editProduct)
+    private function addProductToCart(UpdateProduct $updateProduct)
     {
-        $editProduct->cart->setRow(
-            $editProduct->product->getStep()->getKey(),
-            $editProduct->product->getKey(),
-            $editProduct->getNewQuantity()
+        $updateProduct->cart->setRow(
+            $updateProduct->product->getStep()->getKey(),
+            $updateProduct->product->getKey(),
+            $updateProduct->getNewQuantity()
         );
 
-        $this->cartRepository->set($editProduct->cart);
+        $this->cartRepository->set($updateProduct->cart);
     }
 }

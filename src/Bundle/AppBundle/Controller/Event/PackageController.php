@@ -11,13 +11,13 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\Package\AddProducts;
-use Proximum\Vimeet\Application\Command\Package\EditProduct;
+use Proximum\Vimeet\Application\Command\Package\UpdateProduct;
 use Proximum\Vimeet\Application\Command\Package\UpdateStep;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\EditProductType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateProductType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -210,7 +210,7 @@ class PackageController extends BaseController
      *
      * @return Response
      */
-    public function editProductAction(Request $request, EventView $eventView, Sheet $sheet, $groupId, $rowId)
+    public function updateProductAction(Request $request, EventView $eventView, Sheet $sheet, $groupId, $rowId)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
@@ -247,9 +247,16 @@ class PackageController extends BaseController
 
         $productTemplate = $sheet->getTypePackageTemplate()[$groupId]['template'][$rowId];
 
-        $editProduct = new EditProduct($sheet, $cart, $product, new \DateTime(), $request->getLocale(), $row->quantity);
+        $updateProduct = new UpdateProduct(
+            $sheet,
+            $cart,
+            $product,
+            new \DateTime(),
+            $request->getLocale(),
+            $row->quantity
+        );
 
-        $form = $this->createForm(EditProductType::class, $editProduct, [
+        $form = $this->createForm(UpdateProductType::class, $updateProduct, [
             'template' => $productTemplate,
             'locale'   => $request->getLocale(),
             'sheet'    => $sheet,
@@ -259,11 +266,11 @@ class PackageController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.package.edit_product_handler')
-                ->handle($editProduct);
+                ->get('vimeet_infrastructure.vimeet.application.command.package.update_product_handler')
+                ->handle($updateProduct);
 
-            if ($editProduct->isNegative()) {
-                $this->addFlash('success', 'flash.package.edit_product.created_negative_order');
+            if ($updateProduct->isNegative()) {
+                $this->addFlash('success', 'flash.package.update_product.created_negative_order');
 
                 return $this->redirectToRoute(
                     'event_sheet_list_orders',
@@ -272,8 +279,8 @@ class PackageController extends BaseController
                         'id'        => $sheet->getId(),
                     ]
                 );
-            } elseif ($editProduct->isPositive()) {
-                $this->addFlash('success', 'flash.package.edit_product.added_updated_product_to_cart');
+            } elseif ($updateProduct->isPositive()) {
+                $this->addFlash('success', 'flash.package.update_product.added_updated_product_to_cart');
 
                 return $this->redirectToRoute(
                     'event_sheet_package_cart',
@@ -287,7 +294,7 @@ class PackageController extends BaseController
             $form->addError(new FormError('Aucune modification effectuée'));
         }
 
-        return $this->render('VimeetAppBundle:Event/Package:editProduct.html.twig', [
+        return $this->render('VimeetAppBundle:Event/Package:updateProduct.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'group'     => $group,

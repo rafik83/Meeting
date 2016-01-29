@@ -114,13 +114,13 @@ event_sheet_package_products:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Package:addProducts }
 
-event_sheet_product_edit:
-    path: /sheet/{id}/products/edit/{groupId}/{rowId}
+event_sheet_product_update:
+    path: /sheet/{id}/products/update/{groupId}/{rowId}
     host: '{subdomain}.%domain%'
     requirements:
         subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Package:editProduct }
+    defaults: { _controller: VimeetAppBundle:Event/Package:updateProduct }
 
 event_sheet_package_cart:
     path: /sheet/{id}/cart

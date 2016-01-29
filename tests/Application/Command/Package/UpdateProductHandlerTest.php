@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Meeting;
+namespace Tests\Application\Command\Package;
 
-use Proximum\Vimeet\Application\Command\Package\EditProduct;
-use Proximum\Vimeet\Application\Command\Package\EditProductHandler;
+use Proximum\Vimeet\Application\Command\Package\UpdateProduct;
+use Proximum\Vimeet\Application\Command\Package\UpdateProductHandler;
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Application\Components\Payment\PaymentMode;
 use Proximum\Vimeet\Application\Components\Product\ProductBuilder;
@@ -24,7 +24,7 @@ use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class EditProductHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateNegativeOrder()
     {
@@ -106,19 +106,19 @@ class EditProductHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         // we have 2 quantities
-        $editProduct = new EditProduct($sheet, $cart, $product, $createdAt, 'fr', 2);
+        $updateProduct = new UpdateProduct($sheet, $cart, $product, $createdAt, 'fr', 2);
         // we select 1, we expect to have a negative order with -1 (2 - 3)
-        $editProduct->productItem['quantity'] = 1;
+        $updateProduct->productItem['quantity'] = 1;
 
         $orderRepository->add($expectedOrder)->shouldBeCalled();
 
-        $handler = new EditProductHandler(
+        $handler = new UpdateProductHandler(
             $cartRepository->reveal(),
             $orderRepository->reveal(),
             $sheetRepository->reveal(),
             new OrderManager()
         );
-        $handler->handle($editProduct);
+        $handler->handle($updateProduct);
     }
 
     public function testAddUpdatedProductToCart()
@@ -185,18 +185,18 @@ class EditProductHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         // we have 2 quantities
-        $editProduct = new EditProduct($sheet, $cart, $product, $createdAt, 'fr', 2);
+        $updateProduct = new UpdateProduct($sheet, $cart, $product, $createdAt, 'fr', 2);
         // we select 3, we expect to have 1 (3 - 2) in cart
-        $editProduct->productItem['quantity'] = 3;
+        $updateProduct->productItem['quantity'] = 3;
 
         $cartRepository->set($expectedCart)->shouldBeCalled();
 
-        $handler = new EditProductHandler(
+        $handler = new UpdateProductHandler(
             $cartRepository->reveal(),
             $orderRepository->reveal(),
             $sheetRepository->reveal(),
             new OrderManager()
         );
-        $handler->handle($editProduct);
+        $handler->handle($updateProduct);
     }
 }
