@@ -1,11 +1,11 @@
 <table class="table table-condensed">
     <thead>
     <tr>
-        <th colspan="2">Produit</th>
-        <th class="text-right">Prix unitaire</th>
-        <th class="text-right">Quantité</th>
-        <th class="text-right">Total</th>
-        <th class="text-right">Action</th>
+        <th colspan="2">{{ 'event.sheet.summary.product'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.summary.unit_price'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.summary.quantity'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.summary.total'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.summary.action'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -35,7 +35,9 @@
                             'groupId': groupName,
                             'rowId': rowName,
                             'subdomain': app.request.attributes.get('subdomain')
-                        }) }}" class="btn btn-default btn-xs">Modifier</a>
+                        }) }}" class="btn btn-default btn-xs">
+                            {{ 'event.sheet.summary.edit_product'|trans }}
+                        </a>
                     {% endif %}
                 </td>
             </tr>
