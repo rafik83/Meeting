@@ -99,7 +99,8 @@ class MeetingRequestController extends Controller
             }, $meetingRequest->getToParticipants()->toArray()),
             $messages,
             $meetingRequest->getState(),
-            $meetingRequest->getCreatedAt()
+            $meetingRequest->getCreatedAt(),
+            $meetingRequest->getStateUpdatedAt()
         );
 
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:details.html.twig', [

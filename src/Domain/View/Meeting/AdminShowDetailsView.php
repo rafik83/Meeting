@@ -63,6 +63,11 @@ class AdminShowDetailsView
     public $createdAt;
 
     /**
+     * @var \DateTimeInterface
+     */
+    public $stateUpdatedAt;
+
+    /**
      * AdminShowDetailsView constructor.
      *
      * @param string             $meetingRequestId
@@ -75,6 +80,7 @@ class AdminShowDetailsView
      * @param array              $messages
      * @param string             $state
      * @param \DateTimeInterface $createdAt
+     * @param \DateTimeInterface $stateUpdatedAt
      */
     public function __construct(
         $meetingRequestId,
@@ -86,7 +92,8 @@ class AdminShowDetailsView
         array $fromParticipantNames,
         array $messages,
         $state,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $stateUpdatedAt
     ) {
         $this->meetingRequestId     = $meetingRequestId;
         $this->fromSheetId          = $fromSheetId;
@@ -98,5 +105,6 @@ class AdminShowDetailsView
         $this->messages             = $messages;
         $this->state                = $state;
         $this->createdAt            = $createdAt;
+        $this->stateUpdatedAt       = $stateUpdatedAt;
     }
 }

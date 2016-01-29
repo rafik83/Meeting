@@ -12,6 +12,8 @@
         <th>A destination de:</th>
         <th>Participant de la destination:</th>
         <th>Statut</th>
+        <th>Création</th>
+        <th>Changement de statut</th>
         </thead>
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
@@ -33,6 +35,8 @@
                     {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
             </td>
+            <td>{{ meetingRequestView.createdAt|date('d/m/Y H:i') }}</td>
+            <td>{{ meetingRequestView.stateUpdatedAt|date('d/m/Y H:i') }}</td>
         </tr>
         </tbody>
     </table>
