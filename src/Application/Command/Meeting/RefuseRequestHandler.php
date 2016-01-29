@@ -65,7 +65,7 @@ class RefuseRequestHandler
     public function handle(RefuseRequest $refuseRequest)
     {
         // Refuse request
-        $this->requestRepository->set($refuseRequest->request->refuse());
+        $this->requestRepository->set($refuseRequest->request->refuse($refuseRequest->date));
 
         // Add message
         $this->messageRepository->add(new Message(

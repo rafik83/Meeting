@@ -31,12 +31,19 @@ class CancelRequest
     public $emitter;
 
     /**
-     * @param Request $request
-     * @param User $emitter
+     * @var \DateTimeInterface
      */
-    public function __construct(Request $request, User $emitter)
+    public $date;
+
+    /**
+     * @param Request            $request
+     * @param User               $emitter
+     * @param \DateTimeInterface $date
+     */
+    public function __construct(Request $request, User $emitter, \DateTimeInterface $date)
     {
         $this->request = $request;
         $this->emitter = $emitter;
+        $this->date    = $date;
     }
 }
