@@ -25,7 +25,7 @@ class MeetingRequestCancelType extends AbstractType
     {
         $builder
             ->add('message', TextareaType::class, [
-                'required' => false,
+                'required' => true,
             ]);
     }
 
