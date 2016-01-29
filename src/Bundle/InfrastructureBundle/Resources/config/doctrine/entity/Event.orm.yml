@@ -21,18 +21,21 @@ Proximum\Vimeet\Domain\Model\Event:
             type: json_array
         organiserName:
             type: string
-        paymentAddress:
-            type: string
         organiserEmail:
             type: string
         bankInfo:
             type: string
         legalInformation:
             type: string
+        mode:
+            type: string
         vat:
-            type: integer
+            type: float
         elementToJoinWithInvoice:
             type: string
+    embedded:
+        paymentAddress:
+            class: Proximum\Vimeet\Domain\Model\Address
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation

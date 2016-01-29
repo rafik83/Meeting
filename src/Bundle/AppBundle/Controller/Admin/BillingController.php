@@ -49,7 +49,7 @@ class BillingController extends Controller
 
         // Balance
         $ordersTotal = array_reduce($orders, function ($carry, OrderView $order) {
-            return $carry + $order->getTotalWithVat();
+            return $carry + $order->getTotal();
         }, 0);
 
         $transactionsTotal = array_reduce($transactions, function ($carry, Transaction $transaction) {
@@ -57,6 +57,9 @@ class BillingController extends Controller
         }, 0);
 
         $balance = $transactionsTotal - $ordersTotal;
+
+        // Billing view
+        $billing = $this->get('components.sheet.billing_view_factory')->createFromSheet($sheet);
 
         return $this->render('VimeetAppBundle:Admin/Billing:list.html.twig', [
             'event'              => $event,
@@ -67,6 +70,7 @@ class BillingController extends Controller
             'balance'            => $balance,
             'orders_total'       => $ordersTotal,
             'transactions_total' => $transactionsTotal,
+            'billing'            => $billing,
         ]);
     }
 }

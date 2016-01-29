@@ -8,51 +8,68 @@
     </tr>
     </thead>
     <tbody>
-    {% for groupName, group in order.groups %}
-        <tr class="active">
-            <th colspan="5">{{ group.label }}</th>
-        </tr>
-        {% for rowName, row in group.rows %}
-            <tr>
-                <td>&nbsp;</td>
-                <td>{{ row.label }}</td>
-                <td class="text-right">{{ row.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
-                <td class="text-right">{{ row.quantity }}</td>
-                <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+        {% for groupName, group in order.groups %}
+            <tr class="active">
+                <th colspan="5">{{ group.label }}</th>
             </tr>
-            {% if row.included is not empty %}
+            {% for rowName, row in group.rows %}
                 <tr>
                     <td>&nbsp;</td>
-                    <th colspan="4">Inclus :</th>
+                    <td>{{ row.label }}</td>
+                    <td class="text-right">{{ row.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+                    <td class="text-right">{{ row.quantity }}</td>
+                    <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 </tr>
-            {% endif %}
-            {% for included in row.included %}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&gt; {{ included.label }}</td>
-                    <td class="text-right">{{ included.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
-                    <td class="text-right">{{ included.quantity }}</td>
-                    <td class="text-right">{{ included.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
-                </tr>
+                {% if row.included is not empty %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <th colspan="4">Inclus :</th>
+                    </tr>
+                {% endif %}
+                {% for included in row.included %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&gt; {{ included.label }}</td>
+                        <td class="text-right">{{ included.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+                        <td class="text-right">{{ included.quantity }}</td>
+                        <td class="text-right">{{ included.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-    <tr class="info">
-        <th colspan="2"></th>
-        <th colspan="2">Total</th>
-        <th class="text-right">{{ order.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-    </tr>
-    <tr>
-        <th colspan="2"></th>
-        <th colspan="2">TVA</th>
-        <th class="text-right">{{ order.vat }}%</th>
-    </tr>
-    <tr>
-        <th colspan="2"></th>
-        <th colspan="2">Total TTC</th>
-        <th class="text-right">{{ order.totalWithVat|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-    </tr>
+        <tr class="info">
+            <th colspan="2"></th>
+            <th colspan="2">Total HT</th>
+            <th class="text-right">{{ order.totalWithoutTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+        </tr>
+        {% set show_taxes = show_taxes is defined ? show_taxes : true %}
+        {% if show_taxes and order.vatApplicable %}
+            <tr>
+                <th colspan="2"></th>
+                <th colspan="2">TVA {{ order.vat }}%</th>
+                <th class="text-right">{{ order.taxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            </tr>
+            <tr>
+                <th colspan="2"></th>
+                <th colspan="2">Total TTC</th>
+                <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            </tr>
+        {% endif %}
+        {% if show_taxes and order.vats is defined %}
+            {% for vat, amount in order.vats %}
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">TVA {{ vat }}%</th>
+                    <th class="text-right">{{ amount|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="2"></th>
+                <th colspan="2">Total TTC</th>
+                <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            </tr>
+        {% endif %}
     </tbody>
 
 </table>

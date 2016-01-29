@@ -113,6 +113,10 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            mode:
+                label: Mode
+            vat:
+                label: TVA
             translations:
                 prototype:
                     children:

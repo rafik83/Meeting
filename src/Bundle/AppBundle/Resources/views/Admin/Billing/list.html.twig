@@ -9,6 +9,17 @@
 
     <h1>{{ sheet_info }}</h1>
 
+    <address class="clearfix">
+        <p>{{ billing.organization }}</p>
+        <p>{{ billing.name }}</p>
+        <p>
+            {{ billing.address }}<br>
+            {{ billing.zipcode }} {{ billing.city }}<br>
+            {{ billing.country|country }}
+        </p>
+        <p>N° de TVA intracommunautaire : {{ billing.vat_number }}</p>
+    </address>
+
     <h2>Liste des commandes</h2>
 
     {% if orders is empty %}
@@ -35,7 +46,7 @@
                         <td>{{ order.reference }}</td>
                         <td>{{ order.date|date('d/m/Y H:i') }}</td>
                         <td>{{ order.paymentMode }}</td>
-                        <td class="text-right">{{ order.totalWithVat|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ (order.total)|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
                             <a href="{{ path('admin_sheet_order_edit', { 'id': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                         </td>

@@ -1,0 +1,11 @@
+Proximum\Vimeet\Domain\Model\Address:
+    type:  embeddable
+    fields:
+        street:
+            type: string
+        zipcode:
+            type: string
+        city:
+            type: string
+        country:
+            type: string

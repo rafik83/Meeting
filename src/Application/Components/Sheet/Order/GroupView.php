@@ -66,6 +66,16 @@ class GroupView
     }
 
     /**
+     * Has rows
+     *
+     * @return bool
+     */
+    public function hasRows()
+    {
+        return !empty($this->rows);
+    }
+
+    /**
      * @param string $name
      *
      * @return RowView

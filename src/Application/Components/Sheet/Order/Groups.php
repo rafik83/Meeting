@@ -10,38 +10,35 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-abstract class Groups
+class Groups
 {
     /**
      * @var GroupView[]
      */
-    private $groups;
+    public $groups;
+
+    /**
+     * @var bool
+     */
+    public $vatApplicable;
 
     /**
      * @var float
      */
-    private $vat;
+    public $vat;
 
     /**
      * Groups constructor.
      *
      * @param GroupView[] $groups
+     * @param bool        $vatApplicable
      * @param float       $vat
      */
-    public function __construct(array $groups, $vat)
+    public function __construct(array $groups, $vatApplicable, $vat)
     {
-        $this->groups = $groups;
-        $this->vat    = $vat;
-    }
-
-    /**
-     * Get groups
-     *
-     * @return GroupView[]
-     */
-    public function getGroups()
-    {
-        return $this->groups;
+        $this->groups        = $groups;
+        $this->vatApplicable = $vatApplicable;
+        $this->vat           = $vat;
     }
 
     /**
@@ -68,33 +65,9 @@ abstract class Groups
     }
 
     /**
-     * Get vat
-     *
      * @return float
      */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * Set vat
-     *
-     * @param float $vat
-     *
-     * @return OrderView
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotal()
+    public function getTotalWithoutTaxes()
     {
         return array_reduce($this->groups, function ($carry, GroupView $groupView) {
             return $carry + $groupView->getTotal();
@@ -104,8 +77,24 @@ abstract class Groups
     /**
      * @return float
      */
-    public function getTotalWithVat()
+    public function getTaxes()
     {
-        return $this->getTotal() * (1 + $this->getVat() / 100);
+        return $this->getTotalWithoutTaxes() * $this->vat / 100;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWithTaxes()
+    {
+        return $this->getTotalWithoutTaxes() + $this->getTaxes();
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->vatApplicable ? $this->getTotalWithTaxes() : $this->getTotalWithoutTaxes();
     }
 }

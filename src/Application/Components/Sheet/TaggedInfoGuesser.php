@@ -44,9 +44,26 @@ class TaggedInfoGuesser
             $groupName = $type->getGroup()->getName();
             $typeName  = $type->getName();
 
-            return $groupName === 'default' ? $data[$typeName] : $data[$groupName][$typeName];
+            return $groupName === 'default' ?
+                (isset($data[$typeName]) ? $data[$typeName] : null) :
+                (isset($data[$groupName][$typeName]) ? $data[$groupName][$typeName] : null);
         }, $types);
 
         return $values;
+    }
+
+    /**
+     * @param array      $template
+     * @param array      $data
+     * @param string     $tag
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    public function guessFirst(array $template, array $data, $tag, $default = null)
+    {
+        $info = $this->guess($template, $data, $tag);
+
+        return !empty($info) ? $info[0] : $default;
     }
 }

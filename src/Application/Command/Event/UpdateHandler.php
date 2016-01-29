@@ -34,7 +34,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $event = $update->event;
-        $event->update($update->title, $update->locales, $update->fallback);
+        $event->update($update->title, $update->locales, $update->fallback, $update->mode, $update->vat);
 
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
