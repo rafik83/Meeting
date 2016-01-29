@@ -65,16 +65,34 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantAddedToMeeting(ParticipantAddedEvent $event)
     {
-        $notification = new Notification(
+        // Guess the sheet the participant has meeting with
+        if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
+            $sheet = $event->getMeeting()->getToSheet();
+        } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
+            $sheet = $event->getMeeting()->getFromSheet();
+        } else {
+            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+        }
+
+        // Translate message
+        $message = $this->translator->trans(
+            'notification.request.participant.added.message',
+            [
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            ],
+            'notifications',
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
+        // Send notification
+        $this->notificationRepository->add(new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
-            'meeting.participant.added',
-            $event->getMessage()
-        );
-
-        $this->notificationRepository->add($notification);
+            'notification.meeting.participant.added.message',
+            $message
+        ));
     }
 
     /**
@@ -84,16 +102,34 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantRemovedFromMeeting(ParticipantRemovedEvent $event)
     {
-        $notification = new Notification(
+        // Guess the sheet the participant has meeting with
+        if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
+            $sheet = $event->getMeeting()->getToSheet();
+        } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
+            $sheet = $event->getMeeting()->getFromSheet();
+        } else {
+            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+        }
+
+        // Translate message
+        $message = $this->translator->trans(
+            'notification.meeting.participant.removed.message',
+            [
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            ],
+            'notifications',
+            $event->getParticipant()->getUser()->getLocale()
+        );
+
+        // Send notification
+        $this->notificationRepository->add(new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting.participant.removed',
-            $event->getMessage()
-        );
-
-        $this->notificationRepository->add($notification);
+            $message
+        ));
     }
 
     /**
@@ -103,26 +139,34 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantAddedToMeetingRequest(MeetingRequestParticipantAddedEvent $event)
     {
+        // Guess the sheet the participant has meeting with
+        if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
+            $sheet = $event->getMeetingRequest()->getToSheet();
+        } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
+            $sheet = $event->getMeetingRequest()->getFromSheet();
+        } else {
+            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+        }
+
+        // Translate message
         $message = $this->translator->trans(
             'notification.meeting_request.participant.added.message',
             [
-                '%to_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
-                '%message%'  => $event->getMessage(),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($sheet),
             ],
             'notifications',
             $event->getParticipant()->getUser()->getLocale()
         );
 
-        $notification = new Notification(
+        // Send notification
+        $this->notificationRepository->add(new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.added',
             $message
-        );
-
-        $this->notificationRepository->add($notification);
+        ));
     }
 
     /**
@@ -132,26 +176,34 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantRemovedToMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
     {
+        // Guess the sheet the participant has meeting with
+        if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
+            $sheet = $event->getMeetingRequest()->getToSheet();
+        } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
+            $sheet = $event->getMeetingRequest()->getFromSheet();
+        } else {
+            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+        }
+
+        // Translate message
         $message = $this->translator->trans(
             'notification.meeting_request.participant.removed.message',
             [
-                '%sheet_to%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeetingRequest()->getToSheet()),
-                '%message%'  => $event->getMessage(),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($sheet),
             ],
             'notifications',
             $event->getParticipant()->getUser()->getLocale()
         );
 
-        $notification = new Notification(
+        // Send notification
+        $this->notificationRepository->add(new Notification(
             $event->getParticipant()->getSheet()->getEvent(),
             $event->getEmitter(),
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.removed',
             $message
-        );
-
-        $this->notificationRepository->add($notification);
+        ));
     }
 
     /**
@@ -161,6 +213,7 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onRequestRefused(RequestRefusedEvent $event)
     {
+        // From : Get sheet owner and request participants
         $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
         $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
 
@@ -169,6 +222,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($fromParticipants as $participant) {
+            // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.refused.message',
                 [
@@ -178,6 +232,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+            // Send notification
             $this->notificationRepository->add(new Notification(
                 $event->getRequest()->getFromSheet()->getEvent(),
                 $event->getEmitter(),
@@ -197,6 +252,7 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onRequestCanceled(RequestCanceledEvent $event)
     {
+        // From : Get owner and request participants
         $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
         $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
 
@@ -205,6 +261,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($fromParticipants as $participant) {
+            // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.to_message',
                 [
@@ -214,8 +271,9 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+            // Send notification
             $this->notificationRepository->add(new Notification(
-                $event->getRequest()->getToSheet()->getEvent(),
+                $event->getRequest()->getFromSheet()->getEvent(),
                 $event->getEmitter(),
                 $participant->getUser(),
                 $event->getDate(),
@@ -224,14 +282,16 @@ class NotificationEventListener implements EventSubscriberInterface
             ));
         }
 
-        $toSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $toParticipants = $event->getRequest()->getFromParticipants()->toArray();
+        // To : Get sheet owner and request participants
+        $toSheetOwner   = $event->getRequest()->getToSheet()->getOwner();
+        $toParticipants = $event->getRequest()->getToParticipants()->toArray();
 
         if (!in_array($toSheetOwner, $toParticipants)) {
             array_push($toParticipants, $toSheetOwner);
         }
 
         foreach ($toParticipants as $participant) {
+            // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.to_message',
                 [
@@ -241,6 +301,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+            // Send notification
             $this->notificationRepository->add(new Notification(
                 $event->getRequest()->getToSheet()->getEvent(),
                 $event->getEmitter(),
@@ -259,18 +320,18 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onMeetingCanceled(CanceledEvent $event)
     {
-        // Notify each from participants
-
-        $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
+        // From : Get sheet owner and meeting participants
+        $fromSheetOwner   = $event->getMeeting()->getFromSheet()->getOwner();
+        $fromParticipants = $event->getMeeting()->getFromParticipants()->toArray();
 
         if (!in_array($fromSheetOwner, $fromParticipants)) {
             array_push($fromParticipants, $fromSheetOwner);
         }
 
         foreach ($fromParticipants as $participant) {
+            // Translate message
             $message = $this->translator->trans(
-                'notification.meeting.canceled',
+                'notification.meeting.canceled.message',
                 [
                     '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getToSheet()),
                 ],
@@ -278,6 +339,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+            // Send notification
             $this->notificationRepository->add(new Notification(
                 $event->getMeeting()->getFromSheet()->getEvent(),
                 $event->getEmitter(),
@@ -288,8 +350,7 @@ class NotificationEventListener implements EventSubscriberInterface
             ));
         }
 
-        // Notify each to participants
-
+        // To : Get sheet owner and meeting participants
         $toSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
         $toParticipants = $event->getRequest()->getFromParticipants()->toArray();
 
@@ -297,7 +358,8 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($toParticipants, $toSheetOwner);
         }
 
-        foreach ($fromParticipants as $participant) {
+        foreach ($toParticipants as $participant) {
+            // Translate message
             $message = $this->translator->trans(
                 'notification.meeting.canceled',
                 [
@@ -307,6 +369,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+            // Send notification
             $this->notificationRepository->add(new Notification(
                 $event->getMeeting()->getFromSheet()->getEvent(),
                 $event->getEmitter(),
@@ -325,16 +388,20 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onRequestSent(RequestSentEvent $event)
     {
+        // Get sheet owner
         $recipient = $event->getRequest()->getToSheet()->getOwner()->getUser();
-        $message   = $this->translator->trans(
+
+        // Translate message
+        $message = $this->translator->trans(
             'notification.meeting_request.receive.message',
             [
                 '%from_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
             ],
-            'notification',
+            'notifications',
             $recipient->getLocale()
         );
 
+        // Send notification
         $this->notificationRepository->add(new Notification(
             $event->getRequest()->getFromSheet()->getEvent(),
             $event->getEmitter(),
