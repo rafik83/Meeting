@@ -10,8 +10,18 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
 interface MeetingSlotRepositoryInterface
 {
+    /**
+     * @param Event $event
+     *
+     * @return MeetingSlot[]
+     */
+    public function findByEvent(Event $event);
+
     /**
      * @param array $ids
      *

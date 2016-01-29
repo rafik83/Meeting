@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         domain:
             type: string
+        timeZone:
+            type: string
         locales:
             type: json_array
         fallback:

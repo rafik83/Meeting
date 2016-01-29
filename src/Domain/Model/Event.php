@@ -43,6 +43,11 @@ class Event
     private $title;
 
     /**
+     * @var string
+     */
+    private $timeZone;
+
+    /**
      * @var ArrayCollection
      */
     private $translations;
@@ -138,6 +143,14 @@ class Event
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimeZone()
+    {
+        return $this->timeZone;
     }
 
     /**

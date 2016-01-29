@@ -11,13 +11,14 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: datetime
         end:
             type: datetime
-        title:
-            type: string
-        description:
-            type: string
-        blocking:
-            type: boolean
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation
+            mappedBy: happening
+            indexBy: locale
+            cascade: ["persist"]
     manyToOne:
-        schedule:
-            targetEntity: Proximum\Vimeet\Domain\Model\Schedule
-            inversedBy: happenings
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        category:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Category

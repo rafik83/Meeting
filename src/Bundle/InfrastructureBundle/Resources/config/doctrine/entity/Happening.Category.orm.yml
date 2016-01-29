@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Happening\Category:
+    type:  entity
+    table: happening_category
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        picto:
+            type: string
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation
+            mappedBy: category
+            indexBy: locale
+            cascade: ["persist"]
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event

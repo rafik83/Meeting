@@ -20,6 +20,7 @@
                         <a href="{{ path('admin_meeting_request_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Demandes de RDV</a>
                         <a href="{{ path('admin_meeting_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">RDV</a>
                         <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Fiches</a>
+                        <a href="{{ path('admin_happening_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Sous-événements</a>
                     </td>
                 </tr>
             {% endfor %}

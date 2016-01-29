@@ -40,10 +40,11 @@
 
         <tr class="info">
             <th colspan="2"></th>
-            <th colspan="2">Total</th>
+            <th colspan="2">Total HT</th>
             <th class="text-right">{{ order.totalWithoutTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
         </tr>
-        {% if show_taxes|default(true) and order.vatApplicable %}
+        {% set show_taxes = show_taxes is defined ? show_taxes : true %}
+        {% if show_taxes and order.vatApplicable %}
             <tr>
                 <th colspan="2"></th>
                 <th colspan="2">TVA {{ order.vat }}%</th>
@@ -55,7 +56,7 @@
                 <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
             </tr>
         {% endif %}
-        {% if show_taxes|default(true) and order.vats is defined %}
+        {% if show_taxes and order.vats is defined %}
             {% for vat, amount in order.vats %}
                 <tr>
                     <th colspan="2"></th>
