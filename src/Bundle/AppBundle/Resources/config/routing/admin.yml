@@ -160,8 +160,8 @@ admin_sheet:
 admin_sheet_billing:
     path: /event/{event}/sheet/{sheet}/billing
     requirements:
-        id: \d+
-        sheet_id: \d+
+        event: \d+
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Billing:list }
 
