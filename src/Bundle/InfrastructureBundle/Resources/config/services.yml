@@ -84,7 +84,6 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
     vimeet_infrastructure.repository.meeting_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
         arguments:
@@ -101,6 +100,10 @@ services:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.transaction:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TransactionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository_happening.category_repository:
@@ -289,6 +292,18 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.transaction.create_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
+        arguments:
+            - '@repository.transaction'
+    command.transaction.update_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
+        arguments:
+            - '@repository.transaction'
+    command.transaction.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\RemoveHandler
+        arguments:
+            - '@repository.transaction'
     command.happening.category.create_handler:
         class: Proximum\Vimeet\Application\Command\Happening\Category\CreateHandler
         arguments:

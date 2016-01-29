@@ -299,6 +299,31 @@ form:
                 label: Quantité
             submit:
                 label: Enregistrer
+    create_transaction:
+        children:
+            amount:
+                label: Montant
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
+            submit:
+                label: Enregistrer
+    update_transaction:
+        children:
+            amount:
+                label: Montant
+
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
+            submit:
+                label: Enregistrer
     happening_create:
         children:
             category:

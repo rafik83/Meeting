@@ -88,6 +88,13 @@ flash:
                 success: La ligne a été mise à jour
             remove_row:
                 success: La ligne a été supprimé
+        transaction:
+            create:
+                success: La transaction a été créée
+            update:
+                success: La transaction a été mise à jour
+            remove:
+                success: La transaction a été supprimée
         happening:
             category:
                 update:
