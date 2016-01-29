@@ -357,7 +357,17 @@ class MeetingRequestController extends BaseController
         Sheet $sheet
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if($sheet === $meetingRequest->getFromSheet()) {
+            if($meetingRequest->getState() != MeetingRequest::STATE_SENT and $meetingRequest->getState() != MeetingRequest::STATE_APPROVED) {
+                throw new AccessDeniedException('You can not update this data');
+            }
+        }
+        elseif($sheet === $meetingRequest->getToSheet()) {
+            if($meetingRequest->getState() != MeetingRequest::STATE_APPROVED) {
+                throw new AccessDeniedException('You can not update this data');
+            }
+        }
 
         if ($sheet === $meetingRequest->getFromSheet()) {
             $participants = $meetingRequest->getFromParticipants()->toArray();
