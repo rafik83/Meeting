@@ -95,3 +95,13 @@ flash:
                 success: La transaction a été mise à jour
             remove:
                 success: La transaction a été supprimée
+        happening:
+            category:
+                update:
+                    success: La catégorie de sous événement a bien été mise à jour
+                create:
+                    success: La catégorie de sous événement a bien été créée
+            create:
+                success: Le sous événement a bien été créé
+            update:
+                success: Le sous événement a bien été mis à jour

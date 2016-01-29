@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,16 +23,18 @@ class UpdateUnavailabilityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $event = $options['sheet']->getEvent();
+
         $builder
-            ->add('from', TimeType::class, [
+            ->add('from', DateTimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
-                'view_timezone' => 'Europe/Paris',
+                'view_timezone' => $event->getTimeZone(),
             ])
-            ->add('to', TimeType::class, [
+            ->add('to', DateTimeType::class, [
                 'input'         => 'datetime',
                 'widget'        => 'choice',
-                'view_timezone' => 'Europe/Paris',
+                'view_timezone' => $event->getTimeZone(),
             ])
         ;
     }
@@ -46,5 +48,7 @@ class UpdateUnavailabilityType extends AbstractType
             'data_class'    => Update::class,
             'csrf_token_id' => 'update_unavailability',
         ]);
+
+        $resolver->setRequired(['sheet']);
     }
 }

@@ -52,7 +52,6 @@ class AddHandler
     private function createUnavailability(Add $addUnavailability, Participant $participant)
     {
         $unavailability = new Unavailability(
-            $addUnavailability->schedule,
             $participant,
             $addUnavailability->from,
             $addUnavailability->to

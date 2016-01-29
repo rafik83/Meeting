@@ -28,3 +28,5 @@ parameters:
     domain: vimeet.proximum.dev
 
     timezone_default: Europe/Paris
+
+    trusted_proxies: []

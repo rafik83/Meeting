@@ -61,7 +61,6 @@ class MeetingRequestController extends Controller
         $form    = $this->createForm(PositionMeetingType::class, $command, [
             'event'           => $event,
             'meeting_request' => $meetingRequest,
-            'view_timezone'   => $this->getParameter('timezone_default'),
         ]);
         $form->add('submit', SubmitType::class);
 

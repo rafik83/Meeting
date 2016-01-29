@@ -219,3 +219,45 @@ admin_sheet_transaction_remove:
         id: \d+
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:remove }
+
+#
+# Happening
+#
+admin_happening_list:
+    path: /event/{id}/happening
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:list }
+admin_happening_create:
+    path: /event/{id}/happening/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:create }
+admin_happening_update:
+    path: /event/{id}/happening/{happening}/update
+    requirements:
+        id: \d+
+        happening: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:update }
+admin_happening_category_list:
+    path: /event/{id}/happening/category
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:listCategory }
+admin_happening_category_create:
+    path: /event/{id}/happening/category/create
+    requirements:
+        id: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:createCategory }
+admin_happening_category_update:
+    path: /event/{id}/happening/category/{category}/update
+    requirements:
+        id: \d+
+        category: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Happening:updateCategory }

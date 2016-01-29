@@ -28,12 +28,12 @@
                                 {{ 'event.link.see_meeting_proposition'|trans() }}
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ path('event_sheet_schedule', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                                {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
+                            </a>
+                        </li>
                     </ul>
-                </li>
-                <li>
-                    <a href="{{ path('event_sheet_schedule', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
-                        {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
-                    </a>
                 </li>
             {% endfor %}
         </ul>
