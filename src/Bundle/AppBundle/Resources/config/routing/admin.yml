@@ -141,7 +141,7 @@ admin_meeting_request_details:
     requirements:
         id: \d+
         meetingRequest: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:showDetail }
 
 admin_meeting_request_slots:
