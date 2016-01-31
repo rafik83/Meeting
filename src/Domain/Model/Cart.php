@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTimeInterface;
-
-class Cart
+class Cart implements BillingInfoInterface
 {
     /**
      * @var int
@@ -35,17 +33,17 @@ class Cart
     private $sheet;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @param array             $data
-     * @param array             $template
-     * @param Sheet             $sheet
-     * @param DateTimeInterface $createdAt
+     * @param array              $data
+     * @param array              $template
+     * @param Sheet              $sheet
+     * @param \DateTimeInterface $createdAt
      */
-    public function __construct(array $data, array $template, Sheet $sheet, DateTimeInterface $createdAt)
+    public function __construct(array $data, array $template, Sheet $sheet, \DateTimeInterface $createdAt)
     {
         $this->data      = $data;
         $this->template  = $template;
@@ -94,7 +92,7 @@ class Cart
     }
 
     /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -125,5 +123,21 @@ class Cart
     private function issetRow($group, $row)
     {
         return isset($this->template[$group]['template'][$row]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingData()
+    {
+        return $this->sheet->getBillingData();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingTemplate()
+    {
+        return $this->sheet->getBillingTemplate();
     }
 }

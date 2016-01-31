@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Fiche de participation".
  */
-class Sheet
+class Sheet implements BillingInfoInterface
 {
     /**
      * @var int
@@ -154,9 +154,7 @@ class Sheet
     }
 
     /**
-     * Get billingData.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getBillingData()
     {
@@ -227,5 +225,13 @@ class Sheet
         }
 
         throw new \RuntimeException('Sheet owner not found.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingTemplate()
+    {
+        return $this->getEvent()->getBillingTemplate();
     }
 }

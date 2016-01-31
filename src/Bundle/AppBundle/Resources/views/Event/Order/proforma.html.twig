@@ -39,7 +39,6 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h2>Panier</h2>
             {{ include('VimeetAppBundle:Event/Order:proformaTable.html.twig', { 'order': proforma.orderView }, false) }}
         </div>
     </div>
@@ -47,7 +46,11 @@
         <div class="col-md-4">
             <h2>Informations expéditeur</h2>
             <p>{{ proforma.organizerView.organiserName }}</p>
-            <p>{{ proforma.organizerView.paymentAddress|nl2br  }}</p>
+            <p>
+                {{ proforma.organizerView.paymentAddress.street }}<br />
+                {{ proforma.organizerView.paymentAddress.zipcode }} {{ proforma.organizerView.paymentAddress.city }}<br />
+                {{ proforma.organizerView.paymentAddress.country|country }}<br />
+            </p>
             <p>Mail: {{ proforma.organizerView.organiserEmail }}</p>
             <p>
                 Coordonnées bancaires:<br>
@@ -72,8 +75,4 @@
         </div>
     </div>
 </div>
-{% block javascripts %}
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-{% endblock %}
 </body>

@@ -26,11 +26,9 @@ interface OrderRepositoryInterface
     public function set(Order $order);
 
     /**
-     * @param int   $page
-     * @param int   $limit
      * @param Sheet $sheet
      *
-     * @return mixed
+     * @return Order[]
      */
-    public function paginate($page, $limit, Sheet $sheet);
+    public function findBySheet(Sheet $sheet);
 }

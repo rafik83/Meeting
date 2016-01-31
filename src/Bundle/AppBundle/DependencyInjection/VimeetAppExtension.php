@@ -28,7 +28,9 @@ class VimeetAppExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('app.eu_countries', $config['eu_countries']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

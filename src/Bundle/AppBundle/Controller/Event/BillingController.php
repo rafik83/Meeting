@@ -116,10 +116,13 @@ class BillingController extends BaseController
             ]);
         }
 
+        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
+
         return $this->render('VimeetAppBundle:Event/Billing:paymentMode.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
             'sheet'     => $sheet,
+            'cart_view' => $cartView,
         ]);
     }
 }

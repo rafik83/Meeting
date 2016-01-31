@@ -214,3 +214,6 @@ message:
         order:
             remove_row:
                 confirm: Confirmer la suppression
+        transaction:
+            remove:
+                confirm: Confirmer la suppression

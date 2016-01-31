@@ -62,22 +62,40 @@
 
     <tr class="info">
         <th colspan="2"></th>
-        <th colspan="2">Total</th>
-        <th class="text-right">{{ order.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+        <th colspan="2">Total HT</th>
+        <th class="text-right">{{ order.totalWithoutTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
         <th></th>
     </tr>
-    <tr>
-        <th colspan="2"></th>
-        <th colspan="2">TVA</th>
-        <th class="text-right">{{ order.vat }}%</th>
-        <th></th>
-    </tr>
-    <tr>
-        <th colspan="2"></th>
-        <th colspan="2">Total TTC</th>
-        <th class="text-right">{{ order.totalWithVat|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-        <th></th>
-    </tr>
-    </tbody>
 
+    {% if order.vatApplicable %}
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">TVA {{ order.vat }}%</th>
+            <th class="text-right">{{ order.taxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            <th></th>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">Total TTC</th>
+            <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            <th></th>
+        </tr>
+    {% endif %}
+    {% if order.vats is defined %}
+        {% for vat, amount in order.vats %}
+            <tr>
+                <th colspan="2"></th>
+                <th colspan="2">TVA {{ vat }}%</th>
+                <th class="text-right">{{ amount|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+                <th></th>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">Total TTC</th>
+            <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
+            <th></th>
+        </tr>
+    {% endif %}
+    </tbody>
 </table>

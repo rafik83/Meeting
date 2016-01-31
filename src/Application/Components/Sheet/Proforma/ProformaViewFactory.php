@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
-use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 class ProformaViewFactory
@@ -29,25 +28,25 @@ class ProformaViewFactory
     private $participantInfoGuesser;
 
     /**
-     * @var BillingInfoGuesser
+     * @var BillingViewFactory
      */
-    private $billingInfoGuesser;
+    private $billingViewFactory;
 
     /**
      * ProformaViewFactory constructor.
      *
      * @param OrderViewFactory       $orderViewFactory
      * @param ParticipantInfoGuesser $participantInfoGuesser
-     * @param BillingInfoGuesser     $billingInfoGuesser
+     * @param BillingViewFactory     $billingViewFactory
      */
     public function __construct(
         OrderViewFactory $orderViewFactory,
         ParticipantInfoGuesser $participantInfoGuesser,
-        BillingInfoGuesser $billingInfoGuesser
+        BillingViewFactory $billingViewFactory
     ) {
         $this->orderViewFactory       = $orderViewFactory;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->billingInfoGuesser     = $billingInfoGuesser;
+        $this->billingViewFactory     = $billingViewFactory;
     }
 
     /**
@@ -75,25 +74,12 @@ class ProformaViewFactory
         );
 
         // Billing data
-        $billingView = new BillingView(
-            $this->billingInfoGuesser->getName($sheet),
-            $this->billingInfoGuesser->getAddress($sheet),
-            $this->billingInfoGuesser->getCity($sheet),
-            $this->billingInfoGuesser->getZipcode($sheet),
-            $this->billingInfoGuesser->getCountry($sheet),
-            $this->billingInfoGuesser->getPhone($sheet),
-            $this->billingInfoGuesser->getEmail($sheet),
-            $this->billingInfoGuesser->getOrganization($sheet),
-            $this->billingInfoGuesser->getVatNumber($sheet),
-            $this->billingInfoGuesser->getExtra($sheet)
-        );
+        $billingView = $this->billingViewFactory->createFromSheet($sheet);
 
         // Participant
-        $participants = array_map(
-            function (Participant $participant) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
-            }, $sheet->getParticipants()->toArray()
-        );
+        $participants = array_map(function (Participant $participant) {
+            return $this->participantInfoGuesser->guessParticipantInfo($participant);
+        }, $sheet->getParticipants()->toArray());
 
         return new ProformaView(
             $sheet->getEvent()->getTitle(),

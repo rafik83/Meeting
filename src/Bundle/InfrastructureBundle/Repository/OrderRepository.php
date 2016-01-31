@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -24,20 +23,13 @@ class OrderRepository implements OrderRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
-     */
-    private $paginator;
-
-    /**
      * OrderRepository constructor.
      *
      * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
      */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
     }
 
     /**
@@ -60,7 +52,7 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, Sheet $sheet)
+    public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
             ->entityManager
@@ -70,6 +62,6 @@ class OrderRepository implements OrderRepositoryInterface
             ->where('_order.sheet = :sheet')
             ->setParameter('sheet', $sheet);
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

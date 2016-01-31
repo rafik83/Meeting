@@ -40,6 +40,16 @@ class Update
     public $translations;
 
     /**
+     * @var string
+     */
+    public $mode;
+
+    /**
+     * @var float
+     */
+    public $vat;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -49,6 +59,8 @@ class Update
         $this->locales      = $event->getLocales();
         $this->fallback     = $event->getFallback();
         $this->translations = [];
+        $this->mode         = $event->getMode();
+        $this->vat          = $event->getVat();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

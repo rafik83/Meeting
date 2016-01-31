@@ -10,24 +10,32 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
+use Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class OrderMergeFactory
 {
     /**
-     * @var OrderViewFactory
+     * @var GroupFactory
      */
-    private $orderViewFactory;
+    private $groupFactory;
 
     /**
-     * OrderMergeFactory constructor.
-     *
-     * @param OrderViewFactory $orderViewFactory
+     * @var VatApplicable
      */
-    public function __construct(OrderViewFactory $orderViewFactory)
+    private $vatApplicable;
+
+    /**
+     * OrderViewFactory constructor.
+     *
+     * @param GroupFactory  $groupFactory
+     * @param VatApplicable $vatApplicable
+     */
+    public function __construct(GroupFactory $groupFactory, VatApplicable $vatApplicable)
     {
-        $this->orderViewFactory = $orderViewFactory;
+        $this->groupFactory  = $groupFactory;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -38,35 +46,42 @@ class OrderMergeFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
-        return $this->createFromOrders(
-            $sheet->getOrders()->toArray(),
-            $sheet->getEvent()->getVat(),
-            $locale
-        );
+        return $this->createFromOrders($sheet->getOrders()->toArray(), $locale);
     }
 
 
     /**
      * @param Order[] $orders
-     * @param float   $vat
      * @param string  $locale
      *
      * @return OrderMerge
      */
-    public function createFromOrders(array $orders, $vat, $locale)
+    public function createFromOrders(array $orders, $locale)
     {
         $template = [];
         $data     = [];
+        $vats     = [];
 
         foreach ($orders as $order) {
             $this->mergeTemplate($template, $order->getPackageTemplate());
             $this->mergeData($data, $order->getPackageData());
+
+            $groups = new Groups(
+                $this->groupFactory->createGroupsFromArray($order->getPackageTemplate(), $order->getPackageData(), $locale),
+                $this->vatApplicable->onOrder($order),
+                $order->getVatRate()
+            );
+
+            if ($groups->vatApplicable) {
+                if (isset($vats[(string) $groups->vat])) {
+                    $vats[(string) $groups->vat] += $groups->getTaxes();
+                } else {
+                    $vats[(string) $groups->vat] = $groups->getTaxes();
+                }
+            }
         }
 
-        return new OrderMerge(
-            $this->orderViewFactory->createGroupsFromArray($template, $data, $locale),
-            $vat
-        );
+        return new OrderMerge($this->groupFactory->createGroupsFromArray($template, $data, $locale), $vats);
     }
 
     /**
@@ -99,22 +114,26 @@ class OrderMergeFactory
             if (isset($merge[$groupName])) {
                 foreach ($group as $typeName => $type) {
                     if (isset($merge[$groupName][$typeName])) {
-                        if (is_array($type) && is_bool($type['value'])) {
-                            $merge[$groupName][$typeName]['value'] |= $type['value'];
-                        }
-
-                        if (is_array($type) && isset($type['quantity'])) {
-                            if (!isset($merge[$groupName][$typeName]['quantity'])) {
-                                $merge[$groupName][$typeName]['quantity'] = 1;
+                        if (is_array($type)) {
+                            if (isset($type['value']) && is_bool($type['value'])) {
+                                $merge[$groupName][$typeName]['value'] |= $type['value'];
+                            } elseif (isset($type['planning']) && is_bool($type['planning'])) {
+                                $merge[$groupName][$typeName]['planning'] |= $type['planning'];
+                            } elseif (isset($type['participant']) && is_bool($type['participant'])) {
+                                $merge[$groupName][$typeName]['participant'] |= $type['participant'];
                             }
 
-                            $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
+                            if (isset($type['quantity'])) {
+                                if (!isset($merge[$groupName][$typeName]['quantity'])) {
+                                    $merge[$groupName][$typeName]['quantity'] = 1;
+                                }
+                                $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
+                            }
                         }
 
                     } else {
                         $merge[$groupName][$typeName] = $type;
                     }
-
                 }
 
             } else {
