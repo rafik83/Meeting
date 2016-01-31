@@ -91,6 +91,7 @@ event:
             includeTitle: Inclus avec %product%
             include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
             empty: Aucun produit dans le panier
+            totalWithoutTaxes: Total HT
         summary:
             title: Récapitulatif de participation
             update_product: Modifier
