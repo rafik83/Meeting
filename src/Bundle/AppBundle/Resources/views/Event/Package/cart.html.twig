@@ -17,6 +17,6 @@
             </a>
         </div>
     {% else %}
-        <div class="alert alert-danger">Aucun produit dans le panier</div>
+        <div class="alert alert-danger">{{ 'event.sheet.cart.empty'|trans }}</div>
     {% endif %}
 {% endblock %}

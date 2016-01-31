@@ -90,6 +90,7 @@ event:
                 billingStep: Passer à l'étape de facturation
             includeTitle: Inclus avec %product%
             include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
+            empty: Aucun produit dans le panier
         summary:
             title: Récapitulatif de participation
             update_product: Modifier
