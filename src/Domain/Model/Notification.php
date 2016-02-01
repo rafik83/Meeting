@@ -66,7 +66,7 @@ class Notification
      * @param string             $message
      * @param string             $url
      */
-    public function __construct(Event $event, User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message, $url)
+    public function __construct(Event $event, User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message, $url = null)
     {
         $this->event     = $event;
         $this->emitter   = $emitter;
