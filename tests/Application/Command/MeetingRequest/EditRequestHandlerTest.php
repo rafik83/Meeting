@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequestHandler;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -152,7 +152,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithStateSentForSheetTo()
     {
-        $this->setExpectedException(AccessDeniedException::class);
+        $this->setExpectedException(IsNotAllowedToUpdateDataException::class);
 
         // Context
         $event     = new Event();

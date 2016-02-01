@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EditRequestHandler
 {
@@ -63,6 +63,8 @@ class EditRequestHandler
     /**
      * @param EditRequest $editRequest
      * @param Sheet       $sheet
+     *
+     * @throws IsNotAllowedToUpdateDataException
      */
     public function handle(EditRequest $editRequest, Sheet $sheet)
     {
@@ -70,13 +72,13 @@ class EditRequestHandler
             if ($editRequest->meetingRequest->getState() !== Request::STATE_SENT
                 && $editRequest->meetingRequest->getState() !== Request::STATE_APPROVED
             ) {
-                throw new AccessDeniedException('You can not update this data');
+                throw new IsNotAllowedToUpdateDataException('You can not update this data');
             } else {
                 $this->updateFromParticipants($editRequest);
             }
         } elseif ($sheet === $editRequest->meetingRequest->getToSheet()) {
             if ($editRequest->meetingRequest->getState() !== Request::STATE_APPROVED) {
-                throw new AccessDeniedException('You can not update this data');
+                throw new IsNotAllowedToUpdateDataException('You can not update this data');
             } else {
                 $this->updateToParticipants($editRequest);
             }
