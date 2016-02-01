@@ -9,7 +9,7 @@
         {{ form_row(form.toParticipants) }}
         {{ form_row(form.slot, { 'attr': {
             'data-slot': true,
-            'data-url': path('admin_meeting_request_slots', { 'id': event.id, 'request_id': meeting_request.id }),
+            'data-url': path('admin_meeting_request_slots', { 'event': event.id, 'meetingRequest': meeting_request.id }),
             'data-from-participants': '#' ~ form.fromParticipants.vars.id,
             'data-to-participants': '#' ~ form.toParticipants.vars.id,
         } }) }}

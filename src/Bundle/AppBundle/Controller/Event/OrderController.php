@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -54,11 +53,6 @@ class OrderController extends BaseController
     }
 
     /**
-     * @ParamConverter(
-     *   "order",
-     *   class="Proximum\Vimeet\Domain\Model\Order",
-     *   options={"id" = "order_id"}
-     * )
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet

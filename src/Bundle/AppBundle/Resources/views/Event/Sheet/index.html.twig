@@ -25,10 +25,7 @@
                     <table class="table table-bordered table-condensed" style="height: 160px;">
                         <tr>
                             <td class="text-center">
-                                <a href="{{ path('event_sheet_add_participant', {
-                                    'id': sheetDataView.id,
-                                    'subdomain': app.request.attributes.get('subdomain')
-                                }) }}" class="btn btn-default">
+                                <a href="{{ path('event_sheet_add_participant', { 'sheet': sheetDataView.id }) }}" class="btn btn-default">
                                     {{ 'event.sheet.block.add_participant.title'|trans }}
                                 </a>
                             </td>
@@ -49,43 +46,25 @@
     {% if sheetDataView.type.packageTemplate is not empty and sheetDataView.orders is empty %}
         <hr>
         <div class="text-center">
-            <a href="{{ path('event_sheet_package_update_step', {
-                'id': sheetDataView.id,
-                'step': sheetDataView.type.packageTemplate|keys|first,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">
+            <a href="{{ path('event_sheet_package_update_step', { 'sheet': sheetDataView.id, 'step': sheetDataView.type.packageTemplate|keys|first }) }}" class="btn btn-primary">
                 {{ 'event.sheet.package.step.next'|trans }}
             </a>
         </div>
     {% elseif sheetDataView.orders is not empty %}
         <div class="text-center">
-            <a href="{{ path('event_sheet_package_cart', {
-                    'id': sheetDataView.id,
-                    'subdomain': app.request.attributes.get('subdomain')
-                }) }}"
-               class="btn btn-primary"
-            >
+            <a href="{{ path('event_sheet_package_cart', { 'sheet': sheetDataView.id }) }}" class="btn btn-primary">
                 <span class="glyphicon glyphicon-shopping-cart"></span> Panier
             </a>
 
-            <a href="{{ path('event_sheet_summary', {
-                'id': sheetDataView.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">
+            <a href="{{ path('event_sheet_summary', { 'sheet': sheetDataView.id }) }}" class="btn btn-primary">
                 {{ 'event.sheet.summary.title'|trans }}
             </a>
 
-            <a href="{{ path('event_sheet_list_orders', {
-                'id': sheetDataView.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">
+            <a href="{{ path('event_sheet_list_orders', { 'sheet': sheetDataView.id }) }}" class="btn btn-primary">
                 {{ 'event.sheet.listOrders.title'|trans }}
             </a>
 
-            <a href="{{ path('event_sheet_package_products', {
-                'id': sheetDataView.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">{{ 'event.sheet.package.products.title'|trans }}</a>
+            <a href="{{ path('event_sheet_package_products', { 'sheet': sheetDataView.id }) }}" class="btn btn-primary">{{ 'event.sheet.package.products.title'|trans }}</a>
         </div>
     {% endif %}
 {% endblock %}

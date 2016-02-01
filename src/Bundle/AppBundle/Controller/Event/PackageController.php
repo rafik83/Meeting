@@ -203,10 +203,11 @@ class PackageController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param Sheet   $sheet
-     * @param string  $groupId
-     * @param string  $rowId
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param string    $groupId
+     * @param string    $rowId
      *
      * @return Response
      */

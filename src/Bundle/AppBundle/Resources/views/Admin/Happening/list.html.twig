@@ -4,8 +4,8 @@
     <h1>{{ event.title }}</h1>
     <h2>Sous-événements</h2>
     <div class="text-right">
-        <a href="{{ path('admin_happening_create', {id: event.id}) }}" class="btn btn-success">Ajouter</a>
-        <a href="{{ path('admin_happening_category_list', {id: event.id}) }}" class="btn btn-primary">Catégories de sous-événement &rarr; </a>
+        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-success">Ajouter</a>
+        <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}" class="btn btn-primary">Catégories de sous-événement &rarr; </a>
     </div>
 
     <table class="table">
@@ -25,7 +25,7 @@
                 <td>{{ happening.end|date('Y-m-d h:i:s') }}</td>
                 <td>
                     {% if allowToModified[happening.id] is defined %}
-                        <a href="{{ path('admin_happening_update', {id: event.id, happening: happening.id}) }}" class="btn btn-default">Modifier</a>
+                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">Modifier</a>
                     {% endif %}
                 </td>
             </tr>

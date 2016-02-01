@@ -6,7 +6,7 @@
     {% endif %}
     {% if slot.active %}
 
-        <a href="{{ path('event_sheet_schedule_meeting', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'meeting': slot.id }) }}">{{ slot.title }}</a>
+        <a href="{{ path('event_sheet_schedule_meeting', {  'sheet': sheet.id, 'meeting': slot.id }) }}">{{ slot.title }}</a>
     {% else %}
         {{ slot.title }}
     {% endif %}

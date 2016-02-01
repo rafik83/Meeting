@@ -8,10 +8,10 @@
         {# Only for validate #Vimeet-67: update one-level nomenclature #}
         {% if key in ['563cb1036EB88', '5641f581998c1', '5641f59737211', '5641f59e537b9'] %}
             <a href="{{ path('admin_type_template_field_update', {
-                id: event.id,
-                type_id: type.id,
-                template: templateName,
-                key: key
+                'event': event.id,
+                'type': type.id,
+                'template': templateName,
+                'key': key
             }) }}" class="btn btn-default btn-sm">Modifier</a>
         {% endif %}
     </td>

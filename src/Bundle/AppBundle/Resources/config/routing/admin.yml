@@ -8,7 +8,9 @@ admin_event_list:
     defaults: { _controller: VimeetAppBundle:Admin/Event:list }
 
 admin_event_update:
-    path: /event/{id}/update
+    path: /event/{event}/update
+    requirements:
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Event:update }
 
@@ -17,22 +19,25 @@ admin_event_update:
 #
 
 admin_rule_list:
-    path: /event/{id}/who-see-who
+    path: /event/{event}/who-see-who
+    requirements:
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Rule:list }
 
 admin_who_see_who_dont_see_what:
-    path: /event/{id}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
+    path: /event/{event}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Rule:what }
     requirements:
+        event: \d+
         seerIdentifier: category|type
         seerId: \d+
         seeableIdentifier: category|type
         seeableId: \d+
 
 admin_rule_delete:
-    path: /event/{id}/who-see-who/{rule_id}/delete
+    path: /event/{event}/who-see-who/{rule}/delete
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Rule:delete }
 
@@ -41,40 +46,40 @@ admin_rule_delete:
 #
 
 admin_type_list:
-    path: /event/{id}/type
+    path: /event/{event}/type
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Type:list }
 
 admin_type_create:
-    path: /event/{id}/type/create
+    path: /event/{event}/type/create
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Type:create }
 
 admin_type_update:
-    path: /event/{id}/type/{type_id}/update
+    path: /event/{event}/type/{type}/update
     requirements:
-        id: \d+
-        type_id: \d+
+        event: \d+
+        type: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Type:update }
 
 admin_type_template_field_list:
-    path: /event/{id}/type/{type_id}/form
+    path: /event/{event}/type/{type}/form
     requirements:
-        id: \d+
-        type_id: \d+
+        event: \d+
+        type: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:list }
 
 admin_type_template_field_update:
-    path: /event/{id}/type/{type_id}/form/field/update/{template}/{key}
+    path: /event/{event}/type/{type}/form/field/update/{template}/{key}
     requirements:
-        id: \d+
-        type_id: \d+
+        event: \d+
+        type: \d+
         template: \w+
         key: \w+
     methods: [GET, POST]
@@ -85,24 +90,24 @@ admin_type_template_field_update:
 #
 
 admin_category_list:
-    path: /event/{id}/category
+    path: /event/{event}/category
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Category:list }
 
 admin_category_create:
-    path: /event/{id}/category/create
+    path: /event/{event}/category/create
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Category:create }
 
 admin_category_update:
-    path: /event/{id}/category/{category_id}/update
+    path: /event/{event}/category/{category}/update
     requirements:
-        id: \d+
-        type_id: \d+
+        event: \d+
+        category: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Category:update }
 
@@ -111,9 +116,9 @@ admin_category_update:
 #
 
 admin_meeting_list:
-    path: /event/{id}/meeting
+    path: /event/{event}/meeting
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Meeting:list }
 
@@ -122,25 +127,25 @@ admin_meeting_list:
 #
 
 admin_meeting_request_list:
-    path: /event/{id}/meeting-request
+    path: /event/{event}/meeting-request
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:list }
 
 admin_meeting_request_position:
-    path: /event/{id}/meeting-request/{request_id}/position
+    path: /event/{event}/meeting-request/{meetingRequest}/position
     requirements:
-        id: \d+
-        request_id: \d+
+        event: \d+
+        meetingRequest: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:position }
 
 admin_meeting_request_slots:
-    path: /event/{id}/meeting-request/{request_id}/slots
+    path: /event/{event}/meeting-request/{meetingRequest}/slots
     requirements:
-        id: \d+
-        request_id: \d+
+        event: \d+
+        meetingRequest: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:slots }
 
@@ -148,7 +153,7 @@ admin_meeting_request_slots:
 # Sheet
 #
 admin_sheet:
-    path: /event/{id}/sheet
+    path: /event/{event}/sheet
     requirements:
         id: \d+
     methods: [GET]
@@ -169,30 +174,30 @@ admin_sheet_billing:
 # Order
 #
 admin_sheet_order_edit:
-    path: /order/{id}/edit
+    path: /order/{order}/edit
     requirements:
-        id: \d+
+        order: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Order:edit }
 admin_sheet_order_add_row:
-    path: /order/{id}/group/{group}/row/add
+    path: /order/{order}/group/{group}/row/add
     requirements:
-        id: \d+
+        order: \d+
         group: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:addRow }
 admin_sheet_order_remove_row:
-    path: /order/{id}/group/{group}/row/{row}/remove
+    path: /order/{order}/group/{group}/row/{row}/remove
     requirements:
-        id: \d+
+        order: \d+
         group: '[a-zA-Z0-9\-]+'
         row: '[a-zA-Z0-9\-]+'
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Order:removeRow }
 admin_sheet_order_update_row:
-    path: /order/{id}/group/{group}/row/{row}/update
+    path: /order/{order}/group/{group}/row/{row}/update
     requirements:
-        id: \d+
+        order: \d+
         group: '[a-zA-Z0-9\-]+'
         row: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
@@ -202,21 +207,21 @@ admin_sheet_order_update_row:
 # Transaction
 #
 admin_sheet_transaction_create:
-    path: /sheet/{id}/transaction/create
+    path: /sheet/{sheet}/transaction/create
     requirements:
-        id: \d+
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:create }
 admin_sheet_transaction_update:
-    path: /sheet/{id}/transaction/{transaction_id}/update
+    path: /sheet/{sheet}/transaction/{transaction}/update
     requirements:
-        id: \d+
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
 admin_sheet_transaction_remove:
-    path: /sheet/{id}/transaction/{transaction_id}/remove
+    path: /sheet/{sheet}/transaction/{transaction}/remove
     requirements:
-        id: \d+
+        sheet: \d+
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:remove }
 
@@ -224,40 +229,40 @@ admin_sheet_transaction_remove:
 # Happening
 #
 admin_happening_list:
-    path: /event/{id}/happening
+    path: /event/{event}/happening
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:list }
 admin_happening_create:
-    path: /event/{id}/happening/create
+    path: /event/{event}/happening/create
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:create }
 admin_happening_update:
-    path: /event/{id}/happening/{happening}/update
+    path: /event/{event}/happening/{happening}/update
     requirements:
-        id: \d+
+        event: \d+
         happening: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:update }
 admin_happening_category_list:
-    path: /event/{id}/happening/category
+    path: /event/{event}/happening/category
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:listCategory }
 admin_happening_category_create:
-    path: /event/{id}/happening/category/create
+    path: /event/{event}/happening/category/create
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:createCategory }
 admin_happening_category_update:
-    path: /event/{id}/happening/category/{category}/update
+    path: /event/{event}/happening/category/{category}/update
     requirements:
-        id: \d+
+        event: \d+
         category: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:updateCategory }

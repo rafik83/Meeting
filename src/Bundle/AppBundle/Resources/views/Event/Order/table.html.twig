@@ -31,10 +31,9 @@
                 <td class="text-right">
                     {% if row.updatable %}
                         <a href="{{ path('event_sheet_product_update', {
-                            'id': sheet.id,
+                            'sheet': sheet.id,
                             'groupId': groupName,
-                            'rowId': rowName,
-                            'subdomain': app.request.attributes.get('subdomain')
+                            'rowId': rowName
                         }) }}" class="btn btn-default btn-xs">
                             {{ 'event.sheet.summary.update_product'|trans }}
                         </a>

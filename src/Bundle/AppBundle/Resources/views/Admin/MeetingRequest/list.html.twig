@@ -19,7 +19,7 @@
                 <td>{{ meeting_request.sheetNameFrom }}</td>
                 <td>{{ meeting_request.sheetNameTo }}</td>
                 <td>
-                    <a href="{{ path('admin_meeting_request_position', { 'id': event.id, 'request_id': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    <a href="{{ path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
                 </td>
             </tr>
         {% else %}

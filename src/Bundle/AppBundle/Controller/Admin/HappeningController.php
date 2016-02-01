@@ -69,7 +69,7 @@ class HappeningController extends Controller
         $create = new CreateHappening($event);
         $form   = $this->createForm(CreateType::class, $create, [
             'event'  => $event,
-            'action' => $this->generateUrl('admin_happening_create', ['id' => $event->getId()]),
+            'action' => $this->generateUrl('admin_happening_create', ['event' => $event->getId()]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -78,9 +78,7 @@ class HappeningController extends Controller
             $this->get('command.happening.create_handler')->handle($create);
             $this->addFlash('success', 'flash.admin.happening.create.success');
 
-            return $this->redirectToRoute('admin_happening_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening:create.html.twig', [
@@ -110,7 +108,7 @@ class HappeningController extends Controller
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $event,
             'action' => $this->generateUrl('admin_happening_update', [
-                'id'        => $event->getId(),
+                'event'     => $event->getId(),
                 'happening' => $happening->getId(),
             ]),
             'method' => 'POST',
@@ -121,9 +119,7 @@ class HappeningController extends Controller
             $this->get('command.happening.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.update.success');
 
-            return $this->redirectToRoute('admin_happening_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [
@@ -160,7 +156,7 @@ class HappeningController extends Controller
     {
         $create = new CreateCategory($event);
         $form   = $this->createForm(CategoryCreateType::class, $create, [
-            'action' => $this->generateUrl('admin_happening_category_create', ['id' => $event->getId()]),
+            'action' => $this->generateUrl('admin_happening_category_create', ['event' => $event->getId()]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -169,9 +165,7 @@ class HappeningController extends Controller
             $this->get('command.happening.category.create_handler')->handle($create);
             $this->addFlash('success', 'flash.admin.happening.category.create.success');
 
-            return $this->redirectToRoute('admin_happening_category_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening/Category:create.html.twig', [
@@ -195,7 +189,7 @@ class HappeningController extends Controller
 
         $update = new UpdateCategory($category);
         $form   = $this->createForm(CategoryUpdateType::class, $update, [
-            'action' => $this->generateUrl('admin_happening_category_update', ['id' => $event->getId(), 'category' => $category->getId()]),
+            'action' => $this->generateUrl('admin_happening_category_update', ['event' => $event->getId(), 'category' => $category->getId()]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -204,9 +198,7 @@ class HappeningController extends Controller
             $this->get('command.happening.category.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.category.update.success');
 
-            return $this->redirectToRoute('admin_happening_category_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening/Category:update.html.twig', [

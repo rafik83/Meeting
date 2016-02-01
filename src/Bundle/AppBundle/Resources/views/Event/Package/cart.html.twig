@@ -9,10 +9,7 @@
         {{ include('VimeetAppBundle:Event/Package:table.html.twig', { 'order': cartView }, false) }}
 
         <div class="text-center">
-            <a href="{{ path('event_sheet_billing', {
-                'id'       : sheet.id,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-primary">
+            <a href="{{ path('event_sheet_billing', { 'sheet': sheet.id }) }}" class="btn btn-primary">
                 {{ 'event.sheet.cart.label.billingStep'|trans }}
             </a>
         </div>

@@ -16,7 +16,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,7 +52,7 @@ class TypeController extends Controller
     {
         $create = new Create($event);
         $form   = $this->createForm(TypeCreateType::class, $create, [
-            'action' => $this->generateUrl('admin_type_create', ['id' => $event->getId()]),
+            'action' => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -62,9 +61,7 @@ class TypeController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.type.create_handler')->handle($create);
             $this->addFlash('success', 'flash.admin.type.create.success');
 
-            return $this->redirectToRoute('admin_type_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Type:create.html.twig', [
@@ -74,12 +71,6 @@ class TypeController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "type",
-     *   class="Proximum\Vimeet\Domain\Model\Type",
-     *   options={"id" = "type_id"}
-     * )
-     *
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
@@ -94,7 +85,7 @@ class TypeController extends Controller
 
         $update = new Update($type);
         $form   = $this->createForm(TypeUpdateType::class, $update, [
-            'action' => $this->generateUrl('admin_type_update', ['id' => $event->getId(), 'type_id' => $type->getId()]),
+            'action' => $this->generateUrl('admin_type_update', ['event' => $event->getId(), 'type' => $type->getId()]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -103,9 +94,7 @@ class TypeController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.type.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.type.update.success');
 
-            return $this->redirectToRoute('admin_type_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Type:update.html.twig', [

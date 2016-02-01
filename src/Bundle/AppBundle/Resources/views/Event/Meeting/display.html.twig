@@ -32,6 +32,6 @@
             </td>
         </tr>
     </table>
-    <a href="{{ path('event_sheet_schedule_meeting_update', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-primary">Modifier</a>
-    <a href="{{ path('event_sheet_schedule_meeting_cancel', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-danger">Annuler</a>
+    <a href="{{ path('event_sheet_schedule_meeting_update', {  'sheet': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('event_sheet_schedule_meeting_cancel', {  'sheet': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-danger">Annuler</a>
 {% endblock %}
