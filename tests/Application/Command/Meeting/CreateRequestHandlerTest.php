@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -50,9 +51,10 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest = new Request($sheetFrom, $participants, $sheetTo, [], $dateTime, $user1);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $requestRepository->add($expectedRequest)->shouldBeCalled();
 
-        $handler = new CreateRequestHandler($requestRepository->reveal());
+        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal());
         $handler->handle($createRequest);
     }
 
