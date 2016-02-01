@@ -293,16 +293,15 @@ event_meeting_list_proposition:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
 
-event_meeting_request_approved:
-    path: /sheet/{sheet}/meeting/proposition/approved/{meetingRequest}
+event_meeting_request_approve:
+    path: /meeting/request/{meetingRequest}/approve
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approvedRequest }
 
-event_meeting_request_refused:
-    path: /sheet/{sheet}/meeting/proposition/refused/{meetingRequest}
+event_meeting_request_refuse:
+    path: /meeting/request/{meetingRequest}/refuse
     requirements:
         sheet: \d+
         meetingRequest: \d+

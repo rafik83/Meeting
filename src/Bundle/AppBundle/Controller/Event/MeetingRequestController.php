@@ -237,8 +237,22 @@ class MeetingRequestController extends BaseController
         $fromSheet = $meetingRequest->getFromSheet();
 
         if ($fromSheet->hasUser($user)) {
+            // Current user is member of the from sheet
+            $canEdit    = !$meetingRequest->isRefused();
+            $canCancel  = $meetingRequest->isSent() || $meetingRequest->isApproved();
+            $canRefuse  = false;
+            $canApprove = false;
+
+            // List from participants
             $participants = $meetingRequest->getFromParticipants()->toArray();
         } elseif ($toSheet->hasUser($user)) {
+            // Current user is member of the to sheet
+            $canEdit    = $meetingRequest->isApproved();
+            $canCancel  = $meetingRequest->isApproved();
+            $canRefuse  = $meetingRequest->isSent();
+            $canApprove = $meetingRequest->isSent();
+
+            // List to participant
             $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
             throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
@@ -267,6 +281,10 @@ class MeetingRequestController extends BaseController
         return $this->render('VimeetAppBundle:Event/MeetingRequest:showRequest.html.twig', [
             'eventView'          => $eventView,
             'meetingRequestView' => $meetingRequestView,
+            'canEdit'            => $canEdit,
+            'canCancel'          => $canCancel,
+            'canRefuse'          => $canRefuse,
+            'canApprove'         => $canApprove,
         ]);
     }
 

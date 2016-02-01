@@ -31,6 +31,32 @@
         </tbody>
     </table>
 
+    <p>
+        {% if canEdit %}
+            <a href="{{ path('event_meeting_request_edit', { 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-default">
+                {{ 'event.meeting.listRequest.edit'|trans }}
+            </a>
+        {% endif %}
+
+        {% if canCancel %}
+            <a href="{{ path('event_meeting_request_cancel', { 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-default">
+                {{ 'event.meeting.listRequest.cancel'|trans }}
+            </a>
+        {% endif %}
+
+        {% if canApprove %}
+            <a href="{{ path('event_meeting_request_approve', { 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-primary">
+                {{ 'event.meeting.listProposition.accept'|trans() }}
+            </a>
+        {% endif %}
+
+        {% if canRefuse %}
+            <a href="{{ path('event_meeting_request_refuse', { 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-danger">
+                {{ 'event.meeting.listProposition.refuse'|trans() }}
+            </a>
+        {% endif %}
+    </p>
+
     <h3>{{ 'event.meeting.showDetailsRequest.message'|trans }}</h3>
     {% for message in meetingRequestView.messages %}
     {% if message.from.id == meetingRequestView.fromSheetId %}
