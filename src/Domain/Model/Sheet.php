@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\User;
 
 /**
  * "Fiche de participation".
