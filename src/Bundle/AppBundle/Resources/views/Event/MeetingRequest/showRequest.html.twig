@@ -13,7 +13,6 @@
             <th>{{ 'event.meeting.showDetailsRequest.state'|trans }}</th>
         </thead>
         <tbody>
-        {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
         <tr>
             <td>{{ meetingRequestView.toSheetName }}</td>
             <td>{{ meetingRequestView.fromSheetName }}</td>
@@ -23,6 +22,7 @@
                 {% endfor %}
             </td>
             <td>
+                {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
                 <span class="btn-xs alert-{{ state[meetingRequestView.state] }}">
                     {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
