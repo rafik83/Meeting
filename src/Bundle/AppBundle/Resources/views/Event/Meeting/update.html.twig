@@ -9,7 +9,7 @@
             {{ form_row(child) }}
         {% endfor %}
         <div>
-            <a href="{{ path('event_sheet_schedule_meeting', {  'id': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-text">Retour</a>
+            <a href="{{ path('event_sheet_schedule_meeting', {  'sheet': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-text">Retour</a>
             {{ form_widget(form.submit) }}
         </div>
     {{ form_end(form) }}

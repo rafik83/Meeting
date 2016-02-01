@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for sheetAllowed in sheetAllowedForMeetingRequest %}
-        <a href="{{ path('event_catalog_sheet_meeting_request', { 'categoryView': categoryView.id, 'id': sheet.id, 'from': sheetAllowed.id }) }}" class="btn btn-primary">
+        <a href="{{ path('event_catalog_sheet_meeting_request', { 'categoryView': categoryView.id, 'to': sheet.id, 'from': sheetAllowed.id }) }}" class="btn btn-primary">
             {{ 'event.catalog.sheet.meetingRequest'|trans }}
         </a>
     {% endfor %}

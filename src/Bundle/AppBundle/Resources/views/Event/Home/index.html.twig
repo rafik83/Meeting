@@ -14,22 +14,22 @@
             </li>
             {% for sheet in sheets %}
                 <li>
-                    <a href="{{ path('event_sheet', { 'id': sheet.id }) }}">
+                    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">
                         {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
                     </a>
                     <ul>
                         <li>
-                            <a href="{{ path('event_meeting_list_request', { 'id': sheet.id }) }}">
+                            <a href="{{ path('event_meeting_list_request', { 'sheet': sheet.id }) }}">
                                 {{ 'event.link.see_meeting_request'|trans() }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('event_meeting_list_proposition', { 'id': sheet.id }) }}">
+                            <a href="{{ path('event_meeting_list_proposition', { 'sheet': sheet.id }) }}">
                                 {{ 'event.link.see_meeting_proposition'|trans() }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('event_sheet_schedule', { 'id': sheet.id }) }}">
+                            <a href="{{ path('event_sheet_schedule', { 'sheet': sheet.id }) }}">
                                 {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
                             </a>
                         </li>

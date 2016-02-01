@@ -166,7 +166,7 @@ class PackageController extends BaseController
 
                 $this->addFlash('success', 'flash.package.add_products.success');
 
-                return $this->redirectToRoute('event_sheet_package_cart', ['id' => $sheet->getId()]);
+                return $this->redirectToRoute('event_sheet_package_cart', ['sheet' => $sheet->getId()]);
             } catch (BoughtParticipantAlreadyAddedException $exception) {
                 $this->addErrorOnFormPackage(
                     $exception,
@@ -238,14 +238,14 @@ class PackageController extends BaseController
             $this->addFlash('success', 'flash.package.update_step.success');
 
             return $this->generateUrl('event_sheet_package_update_step', [
-                'id'   => $sheet->getId(),
-                'step' => $nextStep,
+                'sheet' => $sheet->getId(),
+                'step'  => $nextStep,
             ]);
         }
 
         $this->addFlash('success', 'flash.package.final_step.success');
 
-        return $this->generateUrl('event_sheet_package_cart', ['id' => $sheet->getId()]);
+        return $this->generateUrl('event_sheet_package_cart', ['sheet' => $sheet->getId()]);
     }
 
     /**

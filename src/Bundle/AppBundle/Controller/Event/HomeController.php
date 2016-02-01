@@ -146,7 +146,7 @@ class HomeController extends BaseController
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['id' => $participate->sheet->getId()]);
+                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form->get('data'));
             }

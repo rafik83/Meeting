@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,12 +42,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "meetingRequest",
-     *   class="Proximum\Vimeet\Domain\Model\Meeting\Request",
-     *   options={"id" = "request_id"}
-     * )
-     *
      * @param Request        $request
      * @param Event          $event
      * @param MeetingRequest $meetingRequest
@@ -70,7 +63,7 @@ class MeetingRequestController extends Controller
                 ->handle($command);
             $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
-            return $this->redirectToRoute('admin_meeting_request_list', ['id' => $event->getId()]);
+            return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:position.html.twig', [

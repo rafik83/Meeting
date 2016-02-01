@@ -8,6 +8,6 @@
     {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': summary }, false) }}
 
     <hr>
-    <a href="{{ path('event_sheet', { 'id': sheet.id }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
 
 {% endblock %}

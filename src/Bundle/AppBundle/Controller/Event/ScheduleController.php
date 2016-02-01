@@ -66,7 +66,7 @@ class ScheduleController extends Controller
 
         $command = new Add();
         $form    = $this->createForm(AddUnavailabilityType::class, $command, [
-            'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['id' => $sheet->getId()]),
+            'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['sheet' => $sheet->getId()]),
             'method' => 'POST',
             'sheet'  => $sheet,
         ]);
@@ -76,7 +76,7 @@ class ScheduleController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler')->handle($command);
             $this->addFlash('success', 'flash.event.schedule.unavailability.add.success');
 
-            return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Event/Schedule:addUnavailability.html.twig', [
@@ -100,7 +100,7 @@ class ScheduleController extends Controller
         $command = new Update($unavailability);
         $form    = $this->createForm(UpdateUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
-                'id'             => $sheet->getId(),
+                'sheet'          => $sheet->getId(),
                 'unavailability' => $unavailability->getId(),
             ]),
             'method' => 'POST',
@@ -112,7 +112,7 @@ class ScheduleController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.update_handler')->handle($command);
             $this->addFlash('success', 'flash.event.schedule.unavailability.update.success');
 
-            return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Event/Schedule:updateUnavailability.html.twig', [
@@ -137,7 +137,7 @@ class ScheduleController extends Controller
         $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler')->handle($command);
         $this->addFlash('success', 'flash.event.schedule.unavailability.remove.success');
 
-        return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+        return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
     }
 
     /**
@@ -171,7 +171,7 @@ class ScheduleController extends Controller
 
             $this->addFlash('success', 'flash.event.schedule.happening.participate.success');
 
-            return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Event/Schedule:participateHappening.html.twig', [
@@ -200,6 +200,6 @@ class ScheduleController extends Controller
 
         $this->addFlash('success', 'flash.event.schedule.happening.unparticipate.success');
 
-        return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+        return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
     }
 }

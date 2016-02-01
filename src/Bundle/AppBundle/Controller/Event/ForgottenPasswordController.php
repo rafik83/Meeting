@@ -19,7 +19,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\View\EventView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,12 +68,6 @@ class ForgottenPasswordController extends BaseController
     }
 
     /**
-     * @ParamConverter(
-     *   "forgottenPasswordToken",
-     *   class="Proximum\Vimeet\Domain\Model\ForgottenPasswordToken",
-     *   options={"token" = "token"}
-     * )
-     *
      * @param Request                $request
      * @param EventView              $eventView
      * @param ForgottenPasswordToken $forgottenPasswordToken

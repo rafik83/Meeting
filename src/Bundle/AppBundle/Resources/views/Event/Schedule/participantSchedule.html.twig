@@ -1,6 +1,6 @@
 <h2>{{ participantSchedule.name }}</h2>
 <p>
-    <a href="{{ path('event_sheet_schedule_add_unavailability', {  'id': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
+    <a href="{{ path('event_sheet_schedule_add_unavailability', {  'sheet': sheet.id}) }}" class="btn btn-primary">Ajouter une indisponibilité</a>
 </p>
 
 {% for schedule in participantSchedule.schedules %}

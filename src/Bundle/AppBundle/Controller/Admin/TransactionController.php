@@ -17,7 +17,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction\CreateTransactionType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction\UpdateTransactionType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +41,7 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'event'       => $sheet->getEvent()->getId(),
+                'event' => $sheet->getEvent()->getId(),
                 'sheet' => $sheet->getId(),
             ]);
         }
@@ -59,12 +58,6 @@ class TransactionController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "transaction",
-     *   class="Proximum\Vimeet\Domain\Model\Transaction",
-     *   options={"id" = "transaction_id"}
-     * )
-     *
      * @param Request     $request
      * @param Sheet       $sheet
      * @param Transaction $transaction
@@ -81,7 +74,7 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'event'       => $sheet->getEvent()->getId(),
+                'event' => $sheet->getEvent()->getId(),
                 'sheet' => $sheet->getId(),
             ]);
         }
@@ -98,12 +91,6 @@ class TransactionController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "transaction",
-     *   class="Proximum\Vimeet\Domain\Model\Transaction",
-     *   options={"id" = "transaction_id"}
-     * )
-     *
      * @Method("DELETE")
      *
      * @param Sheet       $sheet
@@ -117,7 +104,7 @@ class TransactionController extends Controller
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
         return $this->redirectToRoute('admin_sheet_billing', [
-            'event'       => $sheet->getEvent()->getId(),
+            'event' => $sheet->getEvent()->getId(),
             'sheet' => $sheet->getId(),
         ]);
     }

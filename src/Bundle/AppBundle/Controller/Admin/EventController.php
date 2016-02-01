@@ -37,7 +37,7 @@ class EventController extends Controller
         $form = $this->createForm(EventUpdateType::class, $update, [
             'locales' => $event->getLocales(),
             'method'  => 'POST',
-            'action'  => $this->generateUrl('admin_event_update', ['id' => $event->getId()]),
+            'action'  => $this->generateUrl('admin_event_update', ['event' => $event->getId()]),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -45,7 +45,7 @@ class EventController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.event.update.success');
 
-            return $this->redirectToRoute('admin_event_update', ['id' => $event->getId()]);
+            return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Event:update.html.twig', [

@@ -68,7 +68,7 @@ class OrderController extends Controller
             $this->get('command.order.add_row_handler')->handle($addRow);
             $this->addFlash('success', 'flash.admin.order.add_row.success');
 
-            return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
         }
 
         return $this->render(
@@ -102,7 +102,7 @@ class OrderController extends Controller
             $this->get('command.order.update_row_handler')->handle($updateRow);
             $this->addFlash('success', 'flash.admin.order.update_row.success');
 
-            return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
         }
 
         return $this->render(
@@ -126,6 +126,6 @@ class OrderController extends Controller
         $this->get('command.order.remove_row_handler')->handle(new RemoveRow($order, $group, $row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
-        return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+        return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
     }
 }

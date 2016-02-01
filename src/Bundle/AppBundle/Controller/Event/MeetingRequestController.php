@@ -161,7 +161,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
@@ -205,7 +205,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.refused.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
@@ -252,7 +252,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.cancelled.success');
 
-            return $this->redirectToRoute('event_meeting_list_request', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);
         }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');

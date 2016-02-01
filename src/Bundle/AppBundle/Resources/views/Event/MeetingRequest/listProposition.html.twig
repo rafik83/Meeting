@@ -39,13 +39,11 @@
                 <td nowrap>
                     {% if proposition_view.state == 'sent' %}
                         <a href="{{ path('event_meeting_request_approved', {
-
-                            'id': sheet.id,
+                            'sheet': sheet.id,
                             'meetingRequest': proposition_view.id
                         }) }}" class="btn btn-xs btn-primary">{{ 'event.meeting.listProposition.accept'|trans() }}</a>
                         <a href="{{ path('event_meeting_request_refused', {
-
-                            'id': sheet.id,
+                            'sheet': sheet.id,
                             'meetingRequest': proposition_view.id
                         }) }}" class="btn btn-xs btn-danger">{{ 'event.meeting.listProposition.refuse'|trans() }}</a>
                     {% endif %}

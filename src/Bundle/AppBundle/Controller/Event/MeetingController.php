@@ -73,7 +73,7 @@ class MeetingController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler')->handle($cancel);
             $this->addFlash('success', 'flash.event.schedule.meeting.cancel.success');
 
-            return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Event/Meeting:cancel.html.twig', [
@@ -103,7 +103,7 @@ class MeetingController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.meeting.update_handler')->handle($update);
             $this->addFlash('success', 'flash.event.schedule.meeting.update.success');
 
-            return $this->redirectToRoute('event_sheet_schedule', ['id' => $sheet->getId()]);
+            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Event/Meeting:update.html.twig', [

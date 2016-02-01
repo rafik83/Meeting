@@ -14,7 +14,7 @@
         {{ form_row(child) }}
     {% endfor %}
     <div class="text-right">
-        <a href="{{ path('admin_rule_list', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
+        <a href="{{ path('admin_rule_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
         {{ form_rest(form) }}
     </div>
     {{ form_end(form) }}
