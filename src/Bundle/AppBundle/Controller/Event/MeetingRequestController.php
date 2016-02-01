@@ -224,38 +224,39 @@ class MeetingRequestController extends BaseController
 
     /**
      * @param EventView      $eventView
-     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showRequestAction(
-        EventView $eventView,
-        Sheet $sheet,
-        MeetingRequest $meetingRequest
-    ){
+    public function showRequestAction(EventView $eventView, MeetingRequest $meetingRequest)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $user      = $this->getUser();
         $toSheet   = $meetingRequest->getToSheet();
         $fromSheet = $meetingRequest->getFromSheet();
 
-        if ($sheet === $meetingRequest->getFromSheet()) {
+        if ($fromSheet->hasUser($user)) {
             $participants = $meetingRequest->getFromParticipants()->toArray();
-        } elseif ($sheet === $meetingRequest->getToSheet()) {
+        } elseif ($toSheet->hasUser($user)) {
             $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
-            throw $this->createNotFoundException('Request not found');
+            throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
         }
 
-        $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
+        // Get messages
+        $messages = $this
+            ->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest);
+
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $meetingRequestView = new ShowDetailsView(
             $meetingRequest->getId(),
             $toSheet->getId(),
-            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($toSheet),
+            $sheetInfoGuesser->guessSheetInfo($toSheet),
             $fromSheet->getId(),
-            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($fromSheet),
+            $sheetInfoGuesser->guessSheetInfo($fromSheet),
             array_map(function (Participant $participant) {
                 return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
             }, $participants),

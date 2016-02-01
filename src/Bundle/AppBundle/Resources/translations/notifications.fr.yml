@@ -20,3 +20,5 @@ notification:
             from_message: Votre demande de rendez-vous à %sheet% a été annulé.
         refused:
             message: Votre demande de rendez-vous à destination de %to_sheet% a été refusée
+        accepted:
+            message: Votre demande de rendez-vous à destination de %to_sheet% a été accepté

@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Event;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\RequestAcceptedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
@@ -42,20 +44,28 @@ class NotificationEventListener implements EventSubscriberInterface
     private $translator;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * NotificationEventListener constructor.
      *
      * @param NotificationRepositoryInterface $notificationRepository
      * @param SheetInfoGuesser                $sheetInfoGuesser
      * @param TranslatorInterface             $translator
+     * @param RouterInterface                 $router
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        RouterInterface $router
     ) {
         $this->notificationRepository = $notificationRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->translator             = $translator;
+        $this->router                 = $router;
     }
 
     /**
@@ -91,7 +101,8 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'notification.meeting.participant.added.message',
-            $message
+            $message,
+            null
         ));
     }
 
@@ -128,7 +139,8 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting.participant.removed',
-            $message
+            $message,
+            null
         ));
     }
 
@@ -165,7 +177,8 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.added',
-            $message
+            $message,
+            $this->router->generateMeetingRequest($event->getMeetingRequest())
         ));
     }
 
@@ -174,7 +187,7 @@ class NotificationEventListener implements EventSubscriberInterface
      *
      * @param MeetingRequestParticipantRemovedEvent $event
      */
-    public function onParticipantRemovedToMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
+    public function onParticipantRemovedFromMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
     {
         // Guess the sheet the participant has meeting with
         if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
@@ -202,7 +215,8 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getParticipant()->getUser(),
             $event->getDate(),
             'meeting_request.participant.removed',
-            $message
+            $message,
+            null
         ));
     }
 
@@ -239,7 +253,47 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser(),
                 $event->getDate(),
                 'meeting_request.refused',
-                $message
+                $message,
+                $this->router->generateMeetingRequest($event->getRequest())
+            ));
+        }
+    }
+
+    /**
+     * Notify the request has been accepted
+     *
+     * @param RequestAcceptedEvent $event
+     */
+    public function onRequestAccepted(RequestAcceptedEvent $event)
+    {
+        // From : Get sheet owner and request participants
+        $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
+        $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
+
+        if (!in_array($fromSheetOwner, $fromParticipants)) {
+            array_push($fromParticipants, $fromSheetOwner);
+        }
+
+        foreach ($fromParticipants as $participant) {
+            // Translate message
+            $message = $this->translator->trans(
+                'notification.meeting_request.accepted.message',
+                [
+                    '%to_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getToSheet()),
+                ],
+                'notifications',
+                $participant->getUser()->getLocale()
+            );
+
+            // Send notification
+            $this->notificationRepository->add(new Notification(
+                $event->getRequest()->getFromSheet()->getEvent(),
+                $event->getEmitter(),
+                $participant->getUser(),
+                $event->getDate(),
+                'meeting_request.accepted',
+                $message,
+                $this->router->generateMeetingRequest($event->getRequest())
             ));
         }
     }
@@ -278,7 +332,8 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser(),
                 $event->getDate(),
                 'meeting_request.canceled',
-                $message
+                $message,
+                null
             ));
         }
 
@@ -308,7 +363,8 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser(),
                 $event->getDate(),
                 'meeting_request.canceled',
-                $message
+                $message,
+                null
             ));
         }
     }
@@ -346,7 +402,8 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser(),
                 $event->getDate(),
                 'metting.canceled',
-                $message
+                $message,
+                null
             ));
         }
 
@@ -376,7 +433,8 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser(),
                 $event->getDate(),
                 'metting.canceled',
-                $message
+                $message,
+                null
             ));
         }
     }
@@ -408,7 +466,8 @@ class NotificationEventListener implements EventSubscriberInterface
             $recipient,
             $event->getDate(),
             'metting.canceled',
-            $message
+            $message,
+            $this->router->generateMeetingRequest($event->getRequest())
         ));
     }
 
@@ -423,8 +482,9 @@ class NotificationEventListener implements EventSubscriberInterface
             'meeting_request.sent'                => 'onRequestSent',
             'meeting_request.refused'             => 'onRequestRefused',
             'meeting_request.canceled'            => 'onRequestCanceled',
+            'meeting_request.accepted'            => 'onRequestAccepted',
             'meeting.canceled'                    => 'onMeetingCanceled',
-            'meeting_request.participant.removed' => 'onParticipantRemovedToMeetingRequest',
+            'meeting_request.participant.removed' => 'onParticipantRemovedFromMeetingRequest',
             'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
         ];
     }

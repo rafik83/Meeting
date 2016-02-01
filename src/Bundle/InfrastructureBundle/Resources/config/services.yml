@@ -345,12 +345,16 @@ services:
             - '@vimeet_infrastructure.security.user_password_encoder'
 
     #
-    # Translator
+    # Adapters
     #
     vimeet_infrastructure.adapter.translator_adapter:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
         arguments:
             - '@translator'
+    adapter.router:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\RouterAdapter
+        arguments:
+            - '@router'
 
     #
     # Components

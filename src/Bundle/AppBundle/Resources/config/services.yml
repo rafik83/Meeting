@@ -236,6 +236,7 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
 
