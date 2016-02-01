@@ -27,10 +27,8 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, EventView $eventView)
     {
-        $subdomain = $request->attributes->get('subdomain');
-
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
+            return $this->redirectToRoute('event');
         }
 
         $authenticationUtils = $this->get('security.authentication_utils');
@@ -40,7 +38,7 @@ class SecurityController extends Controller
         $user = ['username' => $authenticationUtils->getLastUsername()];
 
         $form = $this->createForm(LoginType::class, $user, [
-            'action' => $this->generateUrl('event_login_check', ['subdomain' => $subdomain]),
+            'action' => $this->generateUrl('event_login_check'),
         ]);
 
         return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [

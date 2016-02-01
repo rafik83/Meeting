@@ -38,7 +38,7 @@ class NotificationController extends BaseController
      *
      * @return Response
      */
-    public function unreadNumberAction(EventView $eventView, $subdomain)
+    public function unreadNumberAction(EventView $eventView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -46,7 +46,6 @@ class NotificationController extends BaseController
             ->getUnreadByEventAndUser($eventView->id, $this->getUser());
 
         return $this->render('VimeetAppBundle:Event/Notification:unreadNumber.html.twig', [
-            'subdomain'    => $subdomain,
             'unreadNumber' => count($unreadNotifications),
         ]);
     }

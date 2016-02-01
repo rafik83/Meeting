@@ -9,14 +9,12 @@ default:
 
 default_event:
     path: /
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods: [GET]
 
 vimeet_admin:
     resource: '@VimeetAppBundle/Resources/config/routing/admin.yml'
     prefix:   /admin
+    host:     '%domain%'
 
 vimeet_event:
     resource: '@VimeetAppBundle/Resources/config/routing/event.yml'

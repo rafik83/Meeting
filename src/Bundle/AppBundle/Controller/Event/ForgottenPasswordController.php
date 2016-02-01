@@ -19,7 +19,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\View\EventView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,16 +34,14 @@ class ForgottenPasswordController extends BaseController
      */
     public function forgottenPasswordAction(Request $request, EventView $eventView)
     {
-        $subdomain = $request->attributes->get('subdomain');
-
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('event', ['subdomain' => $subdomain]);
+            return $this->redirectToRoute('event');
         }
 
         $forgottenPassword = new ForgottenPassword($eventView, $request->getLocale());
 
         $form = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
-            'action' => $this->generateUrl('event_forgotten_password', ['subdomain' => $subdomain]),
+            'action' => $this->generateUrl('event_forgotten_password'),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -55,9 +52,7 @@ class ForgottenPasswordController extends BaseController
 
                 $this->addFlash('success', 'flash.reset_password_token.success');
 
-                return $this->redirectToRoute('event', [
-                    'subdomain' => $subdomain,
-                ]);
+                return $this->redirectToRoute('event');
             } catch (EmailDoesNotExistException $exception) {
                 $this->addGivenErrorOnGivenField(
                     $this->get('translator')->trans('validators.emailDoesNotExist', [], 'validators'),
@@ -73,12 +68,6 @@ class ForgottenPasswordController extends BaseController
     }
 
     /**
-     * @ParamConverter(
-     *   "forgottenPasswordToken",
-     *   class="Proximum\Vimeet\Domain\Model\ForgottenPasswordToken",
-     *   options={"token" = "token"}
-     * )
-     *
      * @param Request                $request
      * @param EventView              $eventView
      * @param ForgottenPasswordToken $forgottenPasswordToken
@@ -91,13 +80,11 @@ class ForgottenPasswordController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $subdomain   = $request->attributes->get('subdomain');
         $newPassword = new NewPassword($forgottenPasswordToken->getUser());
 
         $form = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
-                'subdomain' => $subdomain,
-                'token'     => $forgottenPasswordToken->getToken(),
+                'token' => $forgottenPasswordToken->getToken(),
             ]),
             'method' => 'POST',
         ]);
@@ -109,9 +96,7 @@ class ForgottenPasswordController extends BaseController
 
             $this->addFlash('success', 'flash.new_password.success');
 
-            return $this->redirectToRoute('event', [
-                'subdomain' => $subdomain,
-            ]);
+            return $this->redirectToRoute('event');
         }
 
         return $this->render('VimeetAppBundle:Event/ResetPassword:new_password.html.twig', [

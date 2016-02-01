@@ -28,7 +28,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Proximum\Vimeet\Domain\View\EventView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,10 +111,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (EmailCanNotBeNullException $exception) {
                 $this->addGivenErrorOnGivenField(
                     $this->get('translator')->trans('validators.field.required', [], 'validators'),
@@ -144,12 +140,6 @@ class SheetController extends BaseController
     }
 
     /**
-     * @ParamConverter(
-     *   "participant",
-     *   class="Proximum\Vimeet\Domain\Model\Participant",
-     *   options={"id" = "participant_id"}
-     * )
-     *
      * @param Request     $request
      * @param EventView   $eventView
      * @param Sheet       $sheet
@@ -185,10 +175,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.update_participant.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -241,10 +228,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -263,12 +247,6 @@ class SheetController extends BaseController
     }
 
     /**
-     * @ParamConverter(
-     *   "participant",
-     *   class="Proximum\Vimeet\Domain\Model\Participant",
-     *   options={"id" = "participant_id"}
-     * )
-     *
      * @param Request     $request
      * @param Sheet       $sheet
      * @param Participant $participant
@@ -298,10 +276,7 @@ class SheetController extends BaseController
         }
 
         // Go to the sheet
-        return $this->redirectToRoute('event_sheet', [
-            'subdomain' => $request->attributes->get('subdomain'),
-            'id'        => $sheet->getId(),
-        ]);
+        return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
     }
 
     /**
@@ -328,9 +303,8 @@ class SheetController extends BaseController
                             'action' => $this->generateUrl(
                                 'event_sheet_delete_participant',
                                 [
-                                    'subdomain'      => $request->attributes->get('subdomain'),
-                                    'id'             => $sheet->getId(),
-                                    'participant_id' => $participantView->id,
+                                    'sheet'       => $sheet->getId(),
+                                    'participant' => $participantView->id,
                                 ]
                             ),
                         ]

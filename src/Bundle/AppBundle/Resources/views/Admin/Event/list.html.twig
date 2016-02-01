@@ -13,14 +13,14 @@
                 <tr>
                     <td>{{ event.title }}</td>
                     <td>
-                        <a href="{{ path('admin_event_update', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="{{ path('admin_rule_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Qui voit qui</a>
-                        <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Types</a>
-                        <a href="{{ path('admin_category_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Catégories</a>
-                        <a href="{{ path('admin_meeting_request_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Demandes de RDV</a>
-                        <a href="{{ path('admin_meeting_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">RDV</a>
-                        <a href="{{ path('admin_sheet', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Fiches</a>
-                        <a href="{{ path('admin_happening_list', { 'id': event.id }) }}" class="btn btn-primary btn-sm">Sous-événements</a>
+                        <a href="{{ path('admin_event_update', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="{{ path('admin_rule_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Qui voit qui</a>
+                        <a href="{{ path('admin_type_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Types</a>
+                        <a href="{{ path('admin_category_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Catégories</a>
+                        <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Demandes de RDV</a>
+                        <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">RDV</a>
+                        <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Fiches</a>
+                        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Sous-événements</a>
                     </td>
                 </tr>
             {% endfor %}

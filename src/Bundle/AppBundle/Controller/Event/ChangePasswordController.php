@@ -31,12 +31,10 @@ class ChangePasswordController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $subdomain = $request->attributes->get('subdomain');
-
         $changePassword = new ChangePassword($this->getUser());
 
         $form = $this->createForm(ChangePasswordType::class, $changePassword, [
-            'action' => $this->generateUrl('event_change_password', ['subdomain' => $subdomain]),
+            'action' => $this->generateUrl('event_change_password'),
             'method' => 'POST',
         ]);
 
@@ -47,9 +45,7 @@ class ChangePasswordController extends Controller
 
             $this->addFlash('success', 'flash.change_password.success');
 
-            return $this->redirectToRoute('event', [
-                'subdomain' => $subdomain,
-            ]);
+            return $this->redirectToRoute('event');
         }
 
         return $this->render('VimeetAppBundle:Event/ChangePassword:change_password.html.twig', [

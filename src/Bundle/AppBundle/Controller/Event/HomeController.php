@@ -70,10 +70,7 @@ class HomeController extends BaseController
     {
         // Redirect to participate form if the user is already authenticated
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('event_participate', [
-                'typeView'  => $typeView->id,
-                'subdomain' => $request->attributes->get('subdomain'),
-            ]);
+            return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
         }
 
         // Else, create the register form
@@ -81,10 +78,7 @@ class HomeController extends BaseController
         $register->locale = $request->getLocale();
 
         $form = $this->createForm(RegisterType::class, $register, [
-            'action' => $this->generateUrl('event_register', [
-                'typeView'  => $typeView->id,
-                'subdomain' => $request->attributes->get('subdomain'),
-            ]),
+            'action' => $this->generateUrl('event_register', ['typeView'  => $typeView->id]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -97,10 +91,7 @@ class HomeController extends BaseController
                 $this->addFlash('success', 'flash.event.register.success');
 
                 // Go to participate form
-                return $this->redirectToRoute('event_participate', [
-                    'typeView'  => $typeView->id,
-                    'subdomain' => $request->attributes->get('subdomain'),
-                ]);
+                return $this->redirectToRoute('event_participate', ['typeView'  => $typeView->id]);
             } catch (EmailAlreadyExistsException $exception) {
                 $error = new FormError($this->get('translator')->trans('register.email_already_exists'));
                 $form->get('email')->addError($error);
@@ -155,10 +146,7 @@ class HomeController extends BaseController
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $participate->sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form->get('data'));
             }

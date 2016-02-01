@@ -119,10 +119,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.create.success');
 
-            return $this->redirectToRoute('event_catalog_category', [
-                'subdomain'    => $request->attributes->get('subdomain'),
-                'categoryView' => $categoryView->id,
-            ]);
+            return $this->redirectToRoute('event_catalog_category', ['categoryView' => $categoryView->id]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($from);
         $toName   = $sheetInfoGuesser->guessSheetInfo($to);
@@ -168,10 +165,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
@@ -215,10 +209,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.refused.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
@@ -312,10 +303,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.cancelled.success');
 
-            return $this->redirectToRoute('event_meeting_list_request', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
-            ]);
+            return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);
         }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');

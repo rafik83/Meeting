@@ -7,7 +7,7 @@
         {{ form_errors(form) }}
         {{ form_row(form.translations) }}
         <div class="text-right">
-            <a href="{{ path('admin_type_list', { 'id': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
+            <a href="{{ path('admin_type_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
             {{ form_widget(form.submit) }}
         </div>
     {{ form_end(form) }}
