@@ -70,12 +70,14 @@ class CreateRequestHandler
         $this->requestRepository->add($request);
 
         // Add message
-        $this->messageRepository->add(new Message(
-            $request,
-            $request->getFromSheet(),
-            $createRequest->description,
-            $createRequest->createdAt
-        ));
+        if ($createRequest->description) {
+            $this->messageRepository->add(new Message(
+                $request,
+                $request->getFromSheet(),
+                $createRequest->description,
+                $createRequest->createdAt
+            ));
+        }
 
         // Notify request creation
         $this->eventDispatcher->dispatch('meeting_request.sent', new RequestSentEvent(

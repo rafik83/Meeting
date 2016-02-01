@@ -68,12 +68,14 @@ class EditRequestHandler
         $this->requestRepository->set($editRequest->meetingRequest);
 
         // Add message
-        $this->messageRepository->add(new Message(
-          $editRequest->meetingRequest,
-          $editRequest->meetingRequest->getFromSheet(),
-          $editRequest->description,
-          $editRequest->date
-        ));
+        if ($editRequest->description) {
+            $this->messageRepository->add(new Message(
+              $editRequest->meetingRequest,
+              $editRequest->meetingRequest->getFromSheet(),
+              $editRequest->description,
+              $editRequest->date
+            ));
+        }
 
         // Dispatch events
         while ($event = array_shift($this->events)) {
