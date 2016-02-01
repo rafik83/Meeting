@@ -54,7 +54,7 @@ class EditRequestHandler
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         EventDispatcherInterface $eventDispatcher
-    ){
+    ) {
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
@@ -67,17 +67,17 @@ class EditRequestHandler
     public function handle(EditRequest $editRequest, Sheet $sheet)
     {
         if ($sheet === $editRequest->meetingRequest->getFromSheet()) {
-            if ($editRequest->meetingRequest->getState() != Request::STATE_SENT && $editRequest->meetingRequest->getState() != Request::STATE_APPROVED) {
+            if ($editRequest->meetingRequest->getState() !== Request::STATE_SENT
+                && $editRequest->meetingRequest->getState() !== Request::STATE_APPROVED
+            ) {
                 throw new AccessDeniedException('You can not update this data');
-            }
-            else {
+            } else {
                 $this->updateFromParticipants($editRequest);
             }
         } elseif ($sheet === $editRequest->meetingRequest->getToSheet()) {
-            if ($editRequest->meetingRequest->getState() != Request::STATE_APPROVED) {
+            if ($editRequest->meetingRequest->getState() !== Request::STATE_APPROVED) {
                 throw new AccessDeniedException('You can not update this data');
-            }
-            else {
+            } else {
                 $this->updateToParticipants($editRequest);
             }
         }
@@ -85,12 +85,16 @@ class EditRequestHandler
         $this->requestRepository->set($editRequest->meetingRequest);
 
         // Add message
-        $this->messageRepository->add(new Message(
-              $editRequest->meetingRequest,
-              $editRequest->meetingRequest->getFromSheet(),
-              $editRequest->description,
-              $editRequest->date
-         ));
+        if ($editRequest->description) {
+            $this->messageRepository->add(
+                new Message(
+                    $editRequest->meetingRequest,
+                    $editRequest->meetingRequest->getFromSheet(),
+                    $editRequest->description,
+                    $editRequest->date
+                )
+            );
+        }
 
         // Dispatch events
         while ($event = array_shift($this->events)) {
