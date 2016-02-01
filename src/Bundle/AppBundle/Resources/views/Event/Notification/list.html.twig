@@ -17,7 +17,13 @@
         {% for notification in unreadNotifications %}
             <tr>
                 <td>{{ ('notification.' ~ notification.action ~ '.action')|trans }}</td>
-                <td>{{ notification.message }}</td>
+                <td>
+                    {% if notification.url %}
+                        <a href="{{ notification.url }}">{{ notification.message }}</a>
+                    {% else %}
+                        {{ notification.message }}
+                    {% endif %}
+                </td>
                 <td>{{ notification.createdAt|date('d/m/Y H:i') }}</td>
             </tr>
         {% endfor %}
