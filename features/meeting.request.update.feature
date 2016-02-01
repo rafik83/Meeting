@@ -1,9 +1,9 @@
 Feature: Meeting Request Update
   I need to be able update my meeting request and proposition when they are sent or approved
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can update my meeting request that is not yet accepted
     Given the database is empty
-    And the following fixtures files are loaded:
+    Given the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
@@ -11,9 +11,7 @@ Feature: Meeting Request Update
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
       | User.yml                                                  |
       | TwoSheetSeveralParticipantWithData.yml                    |
-      | MeetingRequest.yml                                        |
-
-  Scenario: I can update my meeting request that is not yet accepted
+      | MeetingRequestStateSent.yml                               |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
@@ -27,7 +25,7 @@ Feature: Meeting Request Update
     And I should see "event.meeting.request.state.from.sent"
     And I follow "event.meeting.listRequest.edit"
     Then the response status code should be 200
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/edit/2"
+    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/edit/1"
     And I check "Jean Dutest"
     And I fill in "form.meeting_request_edit.children.description.label" with "ff"
     And I press "form.meeting_request_edit.children.submit.label"
@@ -35,6 +33,16 @@ Feature: Meeting Request Update
     And I should see "flash.meeting_request.edit.success"
 
   Scenario: I can update my meeting request that is accepted
+    Given the database is empty
+    Given the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
+      | User.yml                                                  |
+      | TwoSheetSeveralParticipantWithData.yml                    |
+      | MeetingRequest.yml                                        |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
@@ -56,6 +64,16 @@ Feature: Meeting Request Update
     And I should see "flash.meeting_request.edit.success"
 
   Scenario: I can update my meeting proposition that is accepted
+    Given the database is empty
+    Given the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
+      | User.yml                                                  |
+      | TwoSheetSeveralParticipantWithData.yml                    |
+      | MeetingRequest.yml                                        |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
