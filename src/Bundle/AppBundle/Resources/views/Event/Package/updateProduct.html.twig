@@ -11,8 +11,5 @@
 
     <hr>
 
-    <a href="{{ path('event_sheet', {
-        'id'       : sheet.id,
-        'subdomain': app.request.attributes.get('subdomain')
-    }) }}">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">{{ 'event.link.go_back_to_sheet'|trans }}</a>
 {% endblock %}
