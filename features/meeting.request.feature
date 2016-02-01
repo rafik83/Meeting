@@ -52,7 +52,7 @@ Feature: Meeting Request / Proposition
     Then I follow "event.catalog.sheet.meetingRequest"
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1/sheet/2/meeting/request/from/1"
-    And I check "Dutest Jean"
+    And I check "Jean Dutest"
     And I fill in the following:
     | form.meeting_request_create.children.description.label | This is a test |
     And I press "form.meeting_request_create.children.submit.label"
@@ -62,7 +62,7 @@ Feature: Meeting Request / Proposition
     And the response status code should be 200
     And I should see "event.meeting.request.state.from.sent"
     And I should see "Oale"
-    And I should see "Dutest Jean"
+    And I should see "Jean Dutest"
 
   Scenario: I can accept a rendez-vous
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
@@ -82,7 +82,7 @@ Feature: Meeting Request / Proposition
     Then I follow "event.catalog.sheet.meetingRequest"
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1/sheet/2/meeting/request/from/1"
-    And I check "Dutest Jean"
+    And I check "Jean Dutest"
     And I fill in the following:
       | form.meeting_request_create.children.description.label | This is a test |
     And I press "form.meeting_request_create.children.submit.label"
@@ -92,7 +92,7 @@ Feature: Meeting Request / Proposition
     And the response status code should be 200
     And I should see "event.meeting.request.state.from.sent"
     And I should see "Oale"
-    And I should see "Dutest Jean"
+    And I should see "Jean Dutest"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/logout"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
     And the response status code should be 200
@@ -106,7 +106,7 @@ Feature: Meeting Request / Proposition
     Then I follow "event.meeting.listProposition.accept"
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition/approved/1"
-    And I check "Truc Paul"
+    And I check "Paul Truc"
     Then I press "form.meeting_request_approve.children.submit.label"
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/2/meeting/proposition"
     And I should see "flash.meeting_request.approved.success"
@@ -151,7 +151,7 @@ Feature: Meeting Request / Proposition
     Then I follow "event.catalog.sheet.meetingRequest"
     And the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/catalog/1/sheet/2/meeting/request/from/1"
-    And I check "Dutest Jean"
+    And I check "Jean Dutest"
     And I fill in the following:
       | form.meeting_request_create.children.description.label | This is a test |
     And I press "form.meeting_request_create.children.submit.label"
@@ -161,7 +161,7 @@ Feature: Meeting Request / Proposition
     And the response status code should be 200
     And I should see "event.meeting.request.state.from.sent"
     And I should see "Oale"
-    And I should see "Dutest Jean"
+    And I should see "Jean Dutest"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/logout"
     Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
     And the response status code should be 200
