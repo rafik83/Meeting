@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestEditType;
@@ -242,7 +243,7 @@ class MeetingRequestController extends BaseController
         EventView $eventView,
         Sheet $sheet,
         MeetingRequest $meetingRequest
-    ){
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $toSheet   = $meetingRequest->getToSheet();
@@ -358,13 +359,14 @@ class MeetingRequestController extends BaseController
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if($sheet === $meetingRequest->getFromSheet()) {
-            if($meetingRequest->getState() != MeetingRequest::STATE_SENT && $meetingRequest->getState() != MeetingRequest::STATE_APPROVED) {
+        if ($sheet === $meetingRequest->getFromSheet()) {
+            if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
+                && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
+            ) {
                 throw new AccessDeniedException('You can not update this data');
             }
-        }
-        elseif($sheet === $meetingRequest->getToSheet()) {
-            if($meetingRequest->getState() != MeetingRequest::STATE_APPROVED) {
+        } elseif ($sheet === $meetingRequest->getToSheet()) {
+            if ($meetingRequest->getState() !== MeetingRequest::STATE_APPROVED) {
                 throw new AccessDeniedException('You can not update this data');
             }
         }
@@ -386,21 +388,32 @@ class MeetingRequestController extends BaseController
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler')
-                ->handle($editRequest, $sheet);
+            try {
+                $this->get('vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler')
+                    ->handle($editRequest, $sheet);
 
-            $this->addFlash('success', 'flash.meeting_request.edit.success');
+                $this->addFlash('success', 'flash.meeting_request.edit.success');
 
-            if($sheet === $meetingRequest->getFromSheet())
-                return $this->redirectToRoute('event_meeting_list_request', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId()
-                ]);
-            else
-                return $this->redirectToRoute('event_meeting_list_proposition', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId()
-                ]);
+                if ($sheet === $meetingRequest->getFromSheet()) {
+                    return $this->redirectToRoute(
+                        'event_meeting_list_request',
+                        [
+                            'subdomain' => $request->attributes->get('subdomain'),
+                            'id'        => $sheet->getId()
+                        ]
+                    );
+                } else {
+                    return $this->redirectToRoute(
+                        'event_meeting_list_proposition',
+                        [
+                            'subdomain' => $request->attributes->get('subdomain'),
+                            'id'        => $sheet->getId()
+                        ]
+                    );
+                }
+            } catch (IsNotAllowedToUpdateDataException $exception) {
+                throw new AccessDeniedException('you can not update this data');
+            }
         }
 
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
