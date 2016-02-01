@@ -4,9 +4,6 @@
 
 event:
     path: /
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Home:index }
 
@@ -16,9 +13,6 @@ event:
 
 event_register:
     path: /register/{typeView}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
@@ -28,17 +22,11 @@ event_register:
 
 event_forgotten_password:
     path: /forgotten_password
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:forgottenPassword }
 
 event_create_new_password:
     path: /reset_password/{token}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
 
@@ -48,9 +36,6 @@ event_create_new_password:
 
 event_participate:
     path: /participate/{typeView}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Home:participate }
 
@@ -59,106 +44,67 @@ event_participate:
 #
 
 event_sheet:
-    path: /sheet/{id}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
 
 event_sheet_add_participant:
-    path: /sheet/{id}/add_participant
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/add_participant
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:addParticipant }
 
 event_sheet_update_participant:
-    path: /sheet/{id}/update_participant/{participant_id}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/update_participant/{participant_id}
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:updateParticipant }
 
 event_sheet_update_block:
-    path: /sheet/{id}/update_block/{block}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/update_block/{block}
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:updateBlock }
 
 event_sheet_delete_participant:
-    path: /sheet/{id}/delete_participant/{participant_id}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/delete_participant/{participant_id}
     methods:  [DELETE]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:deleteParticipant }
 
 event_sheet_package_update_step:
-    path: /sheet/{id}/update_step/{step}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/update_step/{step}
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Package:updateStep }
 
 event_sheet_package_products:
-    path: /sheet/{id}/products
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
-    methods: [GET, POST]
+    path:     /sheet/{id}/products
+    methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Package:addProducts }
 
 event_sheet_package_cart:
-    path: /sheet/{id}/cart
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/cart
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Package:cart }
 
 event_sheet_billing:
-    path: /sheet/{id}/billing
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/billing
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Billing:billing }
 
 event_sheet_package_payment_mode:
-    path: /sheet/{id}/payment_mode
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/payment_mode
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Billing:paymentMode }
 
 event_sheet_list_orders:
-    path: /sheet/{id}/orders
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/orders
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Order:listOrder }
 
 event_sheet_summary:
-    path: /sheet/{id}/summary
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:      /sheet/{id}/summary
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Order:summary }
 
 event_sheet_order_pro_forma:
-    path: /sheet/{id}/pro_forma/{order_id}
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /sheet/{id}/pro_forma/{order_id}
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Order:proforma }
 
@@ -167,40 +113,25 @@ event_sheet_order_pro_forma:
 #
 
 event_login:
-    path: /login
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /login
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Security:login }
 
 event_login_check:
-    path: /login_check
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /login_check
     methods:  [POST]
 
 event_logout_confirmation:
-    path: /logout-confirmation
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /logout-confirmation
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Security:logoutConfirmation }
 
 event_logout:
-    path: /logout
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /logout
     methods:  [GET]
 
 event_change_password:
-    path: /change-password
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /change-password
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/ChangePassword:changePassword }
 
@@ -210,36 +141,27 @@ event_change_password:
 
 event_catalog:
     path: /catalog
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Catalog:categories }
 
 event_catalog_category:
     path: /catalog/{categoryView}
-    host: '{subdomain}.%domain%'
     requirements:
         categoryView: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Catalog:category }
 
 event_catalog_sheet:
     path: /catalog/{categoryView}/sheet/{id}
-    host: '{subdomain}.%domain%'
     requirements:
         categoryView: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Catalog:sheet }
 
 event_catalog_sheet_meeting_request:
     path: /catalog/{categoryView}/sheet/{id}/meeting/request/from/{from}
-    host: '{subdomain}.%domain%'
     requirements:
         categoryView: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:createRequest }
 
@@ -249,27 +171,21 @@ event_catalog_sheet_meeting_request:
 
 event_sheet_schedule:
     path: /sheet/{id}/schedule
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
 
 event_sheet_schedule_add_unavailability:
     path: /sheet/{id}/schedule/unavailability/add
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
 
 event_sheet_schedule_update_unavailability:
     path: /sheet/{id}/schedule/unavailability/{unavailability}/update
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         unavailability: \d+
     methods:  [GET, POST]
@@ -277,9 +193,7 @@ event_sheet_schedule_update_unavailability:
 
 event_sheet_schedule_remove_unavailability:
     path: /sheet/{id}/schedule/unavailability/{unavailability}/remove
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         unavailability: \d+
     methods:  [DELETE]
@@ -287,9 +201,7 @@ event_sheet_schedule_remove_unavailability:
 
 event_sheet_schedule_participate_happening:
     path: /sheet/{id}/happening/{happening}/participate
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         happening: \d+
     methods:  [GET, POST]
@@ -297,9 +209,7 @@ event_sheet_schedule_participate_happening:
 
 event_sheet_schedule_unparticipate_happening:
     path: /sheet/{id}/happening/{happening}/unparticipate/{participant}
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         happening: \d+
         participant: \d+
@@ -312,9 +222,7 @@ event_sheet_schedule_unparticipate_happening:
 
 event_sheet_schedule_meeting:
     path: /sheet/{id}/meeting/{meeting}
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         meeting: \d+
     methods:  [GET]
@@ -322,9 +230,7 @@ event_sheet_schedule_meeting:
 
 event_sheet_schedule_meeting_cancel:
     path: /sheet/{id}/meeting/{meeting}/cancel
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         meeting: \d+
     methods:  [GET, DELETE]
@@ -332,9 +238,7 @@ event_sheet_schedule_meeting_cancel:
 
 event_sheet_schedule_meeting_update:
     path: /sheet/{id}/meeting/{meeting}/update
-    host: '{subdomain}.%domain%'
     requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
         id: \d+
         meeting: \d+
     methods:  [GET, POST]
@@ -345,49 +249,39 @@ event_sheet_schedule_meeting_update:
 #
 event_meeting_list_request:
     path: /sheet/{id}/meeting/request
-    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listRequest }
 
 event_meeting_list_proposition:
     path: /sheet/{id}/meeting/proposition
-    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
 
 event_meeting_request_approved:
     path: /sheet/{id}/meeting/proposition/approved/{meetingRequest}
-    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
         meetingRequest: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approvedRequest }
 
 event_meeting_request_refused:
     path: /sheet/{id}/meeting/proposition/refused/{meetingRequest}
-    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
         meetingRequest: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refusedRequest }
 
 event_meeting_request_cancel:
     path: /sheet/{id}/meeting/request/cancel/{meetingRequest}
-    host: '{subdomain}.%domain%'
     requirements:
         id: \d+
         meetingRequest: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
 
@@ -395,9 +289,6 @@ event_meeting_request_cancel:
 # Notification
 #
 event_notification_list:
-    path: /notification
-    host: '{subdomain}.%domain%'
-    requirements:
-        subdomain: '[a-zA-Z0-9\-]+'
+    path:     /notification
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Notification:list }

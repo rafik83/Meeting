@@ -54,8 +54,7 @@ class BillingController extends BaseController
                 $this->addFlash('success', 'flash.sheet.update_billing.success');
 
                 return $this->redirectToRoute('event_sheet_package_payment_mode', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
+                    'id' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
@@ -111,8 +110,7 @@ class BillingController extends BaseController
 
             // Go to the list of orders
             return $this->redirectToRoute('event_sheet_list_orders', [
-                'subdomain' => $request->attributes->get('subdomain'),
-                'id'        => $sheet->getId(),
+                'id' => $sheet->getId(),
             ]);
         }
 

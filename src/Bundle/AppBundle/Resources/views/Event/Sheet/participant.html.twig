@@ -26,7 +26,6 @@
                 <a href="{{ path('event_sheet_update_participant', {
                     'id':             sheetDataView.id,
                     'participant_id': participantView.id,
-                    'subdomain':      app.request.attributes.get('subdomain')
                 }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
             {% endif %}
 

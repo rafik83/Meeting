@@ -5,6 +5,6 @@
 
     {% for sheet in sheets %}
         {{ include(template_from_string(sheet.type.previewTemplate), { 'sheet': sheet }) }}
-        <a href="{{ path('event_catalog_sheet', { 'id': sheet.id, 'categoryView': categoryView.id, 'subdomain': app.request.attributes.get('subdomain') }) }}" class="btn btn-primary">{{ 'event.catalog.category.seeSheet'|trans }}</a>
+        <a href="{{ path('event_catalog_sheet', { 'id': sheet.id, 'categoryView': categoryView.id }) }}" class="btn btn-primary">{{ 'event.catalog.category.seeSheet'|trans }}</a>
     {% endfor %}
 {% endblock %}

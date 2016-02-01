@@ -1,5 +1,5 @@
 {% if unreadNumber > 0 %}
-    <a href="{{ path('event_notification_list', {'subdomain': subdomain}) }}">
+    <a href="{{ path('event_notification_list') }}">
         <span class="label label-danger">{{ unreadNumber }}</span>
     </a>
 {% endif %}

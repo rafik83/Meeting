@@ -8,28 +8,28 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') and sheets is not empty %}
         <ul>
             <li>
-                <a href="{{ path('event_catalog', { 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                <a href="{{ path('event_catalog') }}">
                     {{ 'event.link.see_catalog'|trans }}
                 </a>
             </li>
             {% for sheet in sheets %}
                 <li>
-                    <a href="{{ path('event_sheet', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                    <a href="{{ path('event_sheet', { 'id': sheet.id }) }}">
                         {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
                     </a>
                     <ul>
                         <li>
-                            <a href="{{ path('event_meeting_list_request', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                            <a href="{{ path('event_meeting_list_request', { 'id': sheet.id }) }}">
                                 {{ 'event.link.see_meeting_request'|trans() }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('event_meeting_list_proposition', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                            <a href="{{ path('event_meeting_list_proposition', { 'id': sheet.id }) }}">
                                 {{ 'event.link.see_meeting_proposition'|trans() }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('event_sheet_schedule', { 'id': sheet.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">
+                            <a href="{{ path('event_sheet_schedule', { 'id': sheet.id }) }}">
                                 {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
                             </a>
                         </li>
@@ -42,9 +42,9 @@
             {% for type in types %}
                 <li>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('event_participate', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
+                        <a href="{{ path('event_participate', { 'typeView': type.id }) }}">{{ type.title }}</a>
                     {% else %}
-                        <a href="{{ path('event_register', { 'typeView': type.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ type.title }}</a>
+                        <a href="{{ path('event_register', { 'typeView': type.id }) }}">{{ type.title }}</a>
                     {% endif %}
                 </li>
             {% endfor %}

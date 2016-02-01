@@ -112,10 +112,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['id' => $sheet->getId()]);
             } catch (EmailCanNotBeNullException $exception) {
                 $this->addGivenErrorOnGivenField(
                     $this->get('translator')->trans('validators.field.required', [], 'validators'),
@@ -185,10 +182,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.update_participant.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['id' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -241,10 +235,7 @@ class SheetController extends BaseController
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', [
-                    'subdomain' => $request->attributes->get('subdomain'),
-                    'id'        => $sheet->getId(),
-                ]);
+                return $this->redirectToRoute('event_sheet', ['id' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
                 $form = $this->addRequiredErrorOnForm(
                     $form,
@@ -298,10 +289,7 @@ class SheetController extends BaseController
         }
 
         // Go to the sheet
-        return $this->redirectToRoute('event_sheet', [
-            'subdomain' => $request->attributes->get('subdomain'),
-            'id'        => $sheet->getId(),
-        ]);
+        return $this->redirectToRoute('event_sheet', ['id' => $sheet->getId()]);
     }
 
     /**
@@ -328,7 +316,6 @@ class SheetController extends BaseController
                             'action' => $this->generateUrl(
                                 'event_sheet_delete_participant',
                                 [
-                                    'subdomain'      => $request->attributes->get('subdomain'),
                                     'id'             => $sheet->getId(),
                                     'participant_id' => $participantView->id,
                                 ]

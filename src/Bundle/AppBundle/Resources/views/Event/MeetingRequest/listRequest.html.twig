@@ -31,7 +31,7 @@
                     <td>{{ request_view.createdAt|date('Y-m-d') }}</td>
                     <td>{% if request_view.state in ['sent', 'approved'] %}
                         <a href="{{ path('event_meeting_request_cancel', {
-                            'subdomain': app.request.attributes.get('subdomain'),
+
                             'id': sheet.id,
                             'meetingRequest': request_view.id
                         }) }}" class="btn btn-xs btn-default">{{ 'event.meeting.listRequest.cancel'|trans }}</a>
