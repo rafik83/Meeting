@@ -7,17 +7,14 @@
 
     <ul>
         {% for order in sheet.orders %}
-            <li>{{ order.createdAt|date('Y m d') }} - <a href="{{ path('event_sheet_order_pro_forma', {
-                    'id'       : sheet.id,
-                    'order_id' : order.id,
-                    'subdomain': app.request.attributes.get('subdomain')
-                }) }}" target="_blank" class="btn btn-info">{{ 'event.sheet.listOrders.proForma'|trans }}</a></li>
+            <li>
+                {{ order.createdAt|date('Y m d') }} - <a href="{{ path('event_sheet_order_pro_forma', { 'sheet': sheet.id, 'order': order.id, }) }}" target="_blank" class="btn btn-info">
+                    {{ 'event.sheet.listOrders.proForma'|trans }}
+                </a>
+            </li>
         {% endfor %}
     </ul>
     <hr>
-    <a href="{{ path('event_sheet', {
-        'id'       : sheet.id,
-        'subdomain': app.request.attributes.get('subdomain')
-    }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}" class="btn btn-primary">{{ 'event.link.go_back_to_sheet'|trans }}</a>
 
 {% endblock %}

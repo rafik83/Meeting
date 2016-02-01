@@ -15,7 +15,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Form;
@@ -34,7 +33,7 @@ class RuleController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $form = $this->createForm(WhoSeeWhoType::class, [], [
-            'action' => $this->generateUrl('admin_rule_list', ['id' => $event->getId()]),
+            'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
         ]);
@@ -83,7 +82,7 @@ class RuleController extends Controller
             $this->get('vimeet_infrastructure.repository.rule_repository')->set($rule);
             $this->addFlash('success', 'flash.admin.event.who_see_what.success');
 
-            return $this->redirectToRoute('admin_rule_list', ['id' => $event->getId()]);
+            return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Rule:what.html.twig', [
@@ -95,12 +94,6 @@ class RuleController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "rule",
-     *   class="Proximum\Vimeet\Domain\Model\Rule",
-     *   options={"id" = "rule_id"}
-     * )
-     *
      * @param Event $event
      * @param Rule  $rule
      *
@@ -114,7 +107,7 @@ class RuleController extends Controller
 
         $this->get('vimeet_infrastructure.repository.rule_repository')->remove($rule);
 
-        return $this->redirectToRoute('admin_rule_list', ['id' => $event->getId()]);
+        return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
     }
 
     /**
@@ -185,7 +178,7 @@ class RuleController extends Controller
     private function generateWhatUrl(Rule $rule)
     {
         return $this->generateUrl('admin_who_see_who_dont_see_what', [
-            'id'                => $rule->getEvent()->getId(),
+            'event'             => $rule->getEvent()->getId(),
             'seerIdentifier'    => $rule->getSeer()->getIdentifier(),
             'seerId'            => $rule->getSeer()->getId(),
             'seeableIdentifier' => $rule->getSeeable()->getIdentifier(),

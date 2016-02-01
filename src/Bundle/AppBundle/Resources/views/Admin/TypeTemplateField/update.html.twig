@@ -10,8 +10,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_type_list', { id: event.id }) }}">{{ event.title }}</a></h1>
-    <h2><a href="{{ path('admin_type_template_field_list', { 'id': event.id, 'type_id': type.id }) }}">{{ typeView.title }}</a></h2>
+    <h1><a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ event.title }}</a></h1>
+    <h2><a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}">{{ typeView.title }}</a></h2>
     <h3>{{ ('template.name.' ~ update.templateName)|trans }}</h3>
     <hr>
     {{ form(form) }}

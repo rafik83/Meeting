@@ -3,7 +3,7 @@
 {% block title 'Formulaire type de participation' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_type_list', { id: event.id }) }}">{{ event.title }}</a></h1>
+    <h1><a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ event.title }}</a></h1>
     <h2>{{ typeView.title }}</h2>
 
     <ul>

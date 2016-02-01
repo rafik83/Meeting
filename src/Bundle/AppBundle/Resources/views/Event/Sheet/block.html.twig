@@ -3,11 +3,9 @@
         {{ block['label'][app.request.locale] }}
 
         {% if block.template is defined %}
-            <a href="{{ path('event_sheet_update_block', {
-                'id': sheetDataView.id,
-                'block': i,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
+            <a href="{{ path('event_sheet_update_block', { 'sheet': sheetDataView.id, 'block': i }) }}" class="btn btn-xs btn-default">
+                {{ 'event.sheet.block.edit'|trans }}
+            </a>
         {% endif %}
     </h3>
 
