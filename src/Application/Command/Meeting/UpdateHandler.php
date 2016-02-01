@@ -74,12 +74,14 @@ class UpdateHandler
         $this->meetingRepository->set($update->meeting);
 
         // Add message
-        $this->messageRepository->add(new Message(
-            $update->meeting,
-            $update->sheet,
-            $update->message,
-            $update->date
-        ));
+        if ($update->message) {
+            $this->messageRepository->add(new Message(
+                $update->meeting,
+                $update->sheet,
+                $update->message,
+                $update->date
+            ));
+        }
 
         // Dispatch events
         while ($event = array_shift($this->events)) {

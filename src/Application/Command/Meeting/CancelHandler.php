@@ -59,12 +59,14 @@ class CancelHandler
         $this->meetingRepository->set($cancel->meeting->cancel());
 
         // Add message
-        $this->messageRepository->add(new Message(
-            $cancel->meeting,
-            $cancel->sheet,
-            $cancel->message,
-            $cancel->date
-        ));
+        if ($cancel->message) {
+            $this->messageRepository->add(new Message(
+                $cancel->meeting,
+                $cancel->sheet,
+                $cancel->message,
+                $cancel->date
+            ));
+        }
 
         // Disptach event
         $this->eventDispatcher->dispatch(
