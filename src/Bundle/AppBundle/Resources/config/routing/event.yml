@@ -310,7 +310,7 @@ event_meeting_request_refused:
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refusedRequest }
 
 event_meeting_request_cancel:
-    path: /sheet/{sheet}/meeting/request/cancel/{meetingRequest}
+    path: /meeting/request/{meetingRequest}/cancel
     requirements:
         sheet: \d+
         meetingRequest: \d+
@@ -325,12 +325,9 @@ event_meeting_request_show:
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
 
 event_meeting_request_edit:
-    path: /sheet/{id}/meeting/request/edit/{meetingRequest}
-    host: '{subdomain}.%domain%'
+    path: /meeting/request/{meetingRequest}/edit
     requirements:
-        id: \d+
         meetingRequest: \d+
-        subdomain: '[a-zA-Z0-9\-]+'
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:editRequest }
 
