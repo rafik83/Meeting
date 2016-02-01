@@ -56,4 +56,13 @@ interface RequestRepositoryInterface
      * @return PaginatorInterface
      */
     public function getPendingByEvent(Event $event, $page, $limit);
+
+    /**
+     * @param Sheet $one
+     * @param Sheet $another
+     * @param array $state
+     *
+     * @return Request[]
+     */
+    public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $state);
 }

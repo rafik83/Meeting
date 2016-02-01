@@ -472,6 +472,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
         arguments:
             - '@vimeet_infrastructure.application.components.meeting.request_view_builder'
+    meeting.request_permission_manager:
+        class: Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # DateTime

@@ -29,7 +29,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType;
 
 class MeetingRequestController extends BaseController
@@ -101,8 +100,10 @@ class MeetingRequestController extends BaseController
         Sheet $from
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($from->getParticipants());
-        $this->get('vimeet_infrastructure.application.components.sheet.manager')->isAllowedToRequestMeeting($to, $from);
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate($this->getUser(), $from, $to)) {
+            throw $this->createAccessDeniedException('You are not allowed to create this meeting request.');
+        }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
@@ -135,20 +136,17 @@ class MeetingRequestController extends BaseController
     /**
      * @param Request        $request
      * @param EventView      $eventView
-     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function approvedRequestAction(
-        Request $request,
-        EventView $eventView,
-        Sheet $sheet,
-        MeetingRequest $meetingRequest
-    ) {
+    public function approveRequestAction(Request $request, EventView $eventView, MeetingRequest $meetingRequest)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($meetingRequest->getToSheet()->getParticipants());
-        $this->isAllowedToUpdateMeetingRequest($meetingRequest);
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($this->getUser(), $meetingRequest)) {
+            throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
+        }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
@@ -165,7 +163,7 @@ class MeetingRequestController extends BaseController
 
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
+            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $meetingRequest->getToSheet()->getId()]);
         }
         $fromName = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet());
         $toName   = $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet());
@@ -181,20 +179,17 @@ class MeetingRequestController extends BaseController
     /**
      * @param Request        $request
      * @param EventView      $eventView
-     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function refusedRequestAction(
-        Request $request,
-        EventView $eventView,
-        Sheet $sheet,
-        MeetingRequest $meetingRequest
-    ) {
+    public function refuseRequestAction(Request $request, EventView $eventView, MeetingRequest $meetingRequest)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($meetingRequest->getToSheet()->getParticipants());
-        $this->isAllowedToUpdateMeetingRequest($meetingRequest);
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest)) {
+            throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
+        }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
@@ -232,27 +227,18 @@ class MeetingRequestController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $user      = $this->getUser();
-        $toSheet   = $meetingRequest->getToSheet();
-        $fromSheet = $meetingRequest->getFromSheet();
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToSee($this->getUser(), $meetingRequest)) {
+            throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
+        }
 
-        if ($fromSheet->hasUser($user)) {
-            // Current user is member of the from sheet
-            $canEdit    = !$meetingRequest->isRefused();
-            $canCancel  = $meetingRequest->isSent() || $meetingRequest->isApproved();
-            $canRefuse  = false;
-            $canApprove = false;
+        $canEdit    = $this->get('meeting.request_permission_manager')->isAllowedToEdit($this->getUser(), $meetingRequest);
+        $canCancel  = $this->get('meeting.request_permission_manager')->isAllowedToCancel($this->getUser(), $meetingRequest);
+        $canRefuse  = $this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest);
+        $canApprove = $this->get('meeting.request_permission_manager')->isAllowedToApprove($this->getUser(), $meetingRequest);
 
-            // List from participants
+        if ($meetingRequest->getFromSheet()->hasUser($this->getUser())) {
             $participants = $meetingRequest->getFromParticipants()->toArray();
-        } elseif ($toSheet->hasUser($user)) {
-            // Current user is member of the to sheet
-            $canEdit    = $meetingRequest->isApproved();
-            $canCancel  = $meetingRequest->isApproved();
-            $canRefuse  = $meetingRequest->isSent();
-            $canApprove = $meetingRequest->isSent();
-
-            // List to participant
+        } elseif ($meetingRequest->getToSheet()->hasUser($this->getUser())) {
             $participants = $meetingRequest->getToParticipants()->toArray();
         } else {
             throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
@@ -267,10 +253,10 @@ class MeetingRequestController extends BaseController
 
         $meetingRequestView = new ShowDetailsView(
             $meetingRequest->getId(),
-            $toSheet->getId(),
-            $sheetInfoGuesser->guessSheetInfo($toSheet),
-            $fromSheet->getId(),
-            $sheetInfoGuesser->guessSheetInfo($fromSheet),
+            $meetingRequest->getToSheet()->getId(),
+            $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            $meetingRequest->getFromSheet()->getId(),
+            $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
             array_map(function (Participant $participant) {
                 return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
             }, $participants),
@@ -291,28 +277,28 @@ class MeetingRequestController extends BaseController
     /**
      * @param Request $request
      * @param EventView $eventView
-     * @param Sheet $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function cancelRequestAction(
-        Request $request,
-        EventView $eventView,
-        Sheet $sheet,
-        MeetingRequest $meetingRequest
-    ) {
+    public function cancelRequestAction(Request $request, EventView $eventView, MeetingRequest $meetingRequest)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($meetingRequest->getFromSheet()->getParticipants());
-        if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT
-            && $meetingRequest->getState() !== MeetingRequest::STATE_APPROVED
-        ) {
-            throw $this->createAccessDeniedException('You can not access this meeting request');
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToCancel($this->getUser(), $meetingRequest)) {
+            throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
+        }
+
+        if ($meetingRequest->getFromSheet()->hasUser($this->getUser())) {
+            $sheet = $meetingRequest->getFromSheet();
+        } elseif ($meetingRequest->getToSheet()->hasUser($this->getUser())) {
+            $sheet = $meetingRequest->getToSheet();
+        } else {
+            throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
         }
 
         $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
-
-        $form = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
+        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -338,18 +324,6 @@ class MeetingRequestController extends BaseController
     }
 
     /**
-     * @param MeetingRequest $meetingRequest
-     *
-     * @throws AccessDeniedException
-     */
-    private function isAllowedToUpdateMeetingRequest(MeetingRequest $meetingRequest)
-    {
-        if ($meetingRequest->getState() !== MeetingRequest::STATE_SENT) {
-            throw $this->createAccessDeniedException('You can not access this meeting request');
-        }
-    }
-
-    /**
      * @param Request        $request
      * @param EventView      $eventView
      * @param MeetingRequest $meetingRequest
@@ -364,8 +338,10 @@ class MeetingRequestController extends BaseController
         Sheet $from
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($from->getParticipants());
-        $this->denyAccessForNonParticipant($meetingRequest->getFromSheet()->getParticipants());
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToEdit($this->getUser(), $meetingRequest)) {
+            throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
+        }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 

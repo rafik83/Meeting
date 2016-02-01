@@ -151,4 +151,32 @@ class RequestRepository implements RequestRepositoryInterface
 
         return $pagination;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $states)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request');
+
+        // Between
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->andX('request.fromSheet = :one', 'request.toSheet = :another'),
+                $queryBuilder->expr()->andX('request.fromSheet = :another', 'request.toSheet = :one')
+            ))
+            ->setParameter('one', $one)
+            ->setParameter('another', $another);
+
+        // State
+        $queryBuilder
+            ->andWhere('request.state IN (:states)')
+            ->setParameter('states', $states);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
