@@ -36,6 +36,7 @@ class MeetingRequestCancelType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => CancelRequest::class,
+            'submit'     => true,
         ]);
     }
 }

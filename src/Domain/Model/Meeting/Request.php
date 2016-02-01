@@ -337,4 +337,40 @@ class Request implements MessageSubjectInterface
     {
         return self::STATE_CANCEL === $this->state;
     }
+
+    /**
+     * @param User $user
+     *
+     * @return Sheet
+     */
+    public function getUserSheet(User $user)
+    {
+        if ($this->from->hasUser($user)) {
+            return $this->from;
+        }
+
+        if ($this->to->hasUser($user)) {
+            return $this->to;
+        }
+
+        throw new \DomainException('This user is not related to this request.');
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Participant[]
+     */
+    public function getUserParticpants(User $user)
+    {
+        if ($this->from->hasUser($user)) {
+            return $this->fromParticipants->toArray();
+        }
+
+        if ($this->to->hasUser($user)) {
+            return $this->toParticipants->toArray();
+        }
+
+        throw new \DomainException('This user is not related to this request.');
+    }
 }
