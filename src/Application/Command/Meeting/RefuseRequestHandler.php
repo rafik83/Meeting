@@ -68,12 +68,14 @@ class RefuseRequestHandler
         $this->requestRepository->set($refuseRequest->request->refuse());
 
         // Add message
-        $this->messageRepository->add(new Message(
-            $refuseRequest->request,
-            $refuseRequest->request->getToSheet(),
-            $refuseRequest->message,
-            $this->createdAt
-        ));
+        if ($refuseRequest->message) {
+            $this->messageRepository->add(new Message(
+                $refuseRequest->request,
+                $refuseRequest->request->getToSheet(),
+                $refuseRequest->message,
+                $this->createdAt
+            ));
+        }
 
         // Dispatch event
         $this->eventDispatcher->dispatch(

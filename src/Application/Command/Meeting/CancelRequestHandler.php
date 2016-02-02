@@ -68,12 +68,14 @@ class CancelRequestHandler
         $this->requestRepository->set($cancelRequest->request->cancel());
 
         // Add message
-        $this->messageRepository->add(new Message(
-            $cancelRequest->request,
-            $cancelRequest->request->getFromSheet(),
-            $cancelRequest->message,
-            $this->createdAt
-        ));
+        if ($cancelRequest->message) {
+            $this->messageRepository->add(new Message(
+                $cancelRequest->request,
+                $cancelRequest->request->getFromSheet(),
+                $cancelRequest->message,
+                $this->createdAt
+            ));
+        }
 
         // Dispatch event
         $this->eventDispatcher->dispatch(
