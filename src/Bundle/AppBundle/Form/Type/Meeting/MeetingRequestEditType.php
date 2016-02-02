@@ -24,7 +24,7 @@ class MeetingRequestEditType extends AbstractMeetingRequestType
 
         $resolver->setDefaults([
            'data_class' => EditRequest::class,
-       ])
-        ;
+           'submit'     => true,
+        ]);
     }
 }
