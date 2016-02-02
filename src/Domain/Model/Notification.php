@@ -112,6 +112,8 @@ class Notification
     }
 
     /**
+     * @deprecated Use is read instead
+     *
      * @return boolean
      */
     public function isView()
@@ -151,5 +153,23 @@ class Notification
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRead()
+    {
+        return (bool) $this->view;
+    }
+
+    /**
+     * @return Notification
+     */
+    public function markAsRead()
+    {
+        $this->view = true;
+
+        return $this;
     }
 }
