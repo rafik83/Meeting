@@ -114,6 +114,18 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return Sheet
+     */
+    public function addParticpant(Participant $participant)
+    {
+        $this->participants->add($participant);
+
+        return $this;
+    }
+
+    /**
      * Get data.
      *
      * @return array

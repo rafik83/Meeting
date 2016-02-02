@@ -45,18 +45,13 @@ class EditRequest
      * EditRequest constructor.
      *
      * @param Request            $meetingRequest
-     * @param array              $participants
      * @param \DateTimeInterface $date
      * @param User               $editor
      */
-    public function __construct(
-        Request $meetingRequest,
-        array $participants,
-        \DateTimeInterface $date,
-        User $editor
-    ) {
+    public function __construct(Request $meetingRequest, \DateTimeInterface $date, User $editor)
+    {
         $this->meetingRequest = $meetingRequest;
-        $this->participants   = $participants;
+        $this->participants   = $meetingRequest->getUserSheet($editor)->getParticipants()->toArray();
         $this->description    = null;
         $this->date           = $date;
         $this->editor         = $editor;

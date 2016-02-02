@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -59,22 +60,45 @@ class EditRequestHandler
 
     /**
      * @param EditRequest $editRequest
+     *
+     * @throws IsNotAllowedToUpdateDataException
      */
     public function handle(EditRequest $editRequest)
     {
-        // Update participant
-        $this->updateFromParticipants($editRequest);
+        if ($editRequest->meetingRequest->getFromSheet()->hasUser($editRequest->editor)) {
 
-        $this->requestRepository->set($editRequest->meetingRequest);
+            // From edit
+            $this->updateFromParticipants($editRequest);
+            $this->requestRepository->set($editRequest->meetingRequest);
 
-        // Add message
-        if ($editRequest->description) {
-            $this->messageRepository->add(new Message(
-              $editRequest->meetingRequest,
-              $editRequest->meetingRequest->getFromSheet(),
-              $editRequest->description,
-              $editRequest->date
-            ));
+            // Add message
+            if ($editRequest->description) {
+                $this->messageRepository->add(new Message(
+                  $editRequest->meetingRequest,
+                  $editRequest->meetingRequest->getFromSheet(),
+                  $editRequest->description,
+                  $editRequest->date
+                ));
+            }
+
+        } elseif ($editRequest->meetingRequest->getToSheet()->hasUser($editRequest->editor)) {
+
+            // To edit
+            $this->updateToParticipants($editRequest);
+            $this->requestRepository->set($editRequest->meetingRequest);
+
+            // Add message
+            if ($editRequest->description) {
+                $this->messageRepository->add(new Message(
+                  $editRequest->meetingRequest,
+                  $editRequest->meetingRequest->getToSheet(),
+                  $editRequest->description,
+                  $editRequest->date
+                ));
+            }
+
+        } else {
+            throw new IsNotAllowedToUpdateDataException('You are not allowed to update this meeting request.');
         }
 
         // Dispatch events
@@ -90,7 +114,7 @@ class EditRequestHandler
     {
         // Remove removed participants
         foreach ($editRequest->meetingRequest->getFromParticipants() as $participant) {
-            if (!in_array($participant, $editRequest->fromParticipants)) {
+            if (!in_array($participant, $editRequest->participants)) {
                 $editRequest->meetingRequest->removeFromParticipant($participant);
                 $this->events[] = [
                     'meeting_request.participant.removed',
@@ -106,9 +130,49 @@ class EditRequestHandler
         }
 
         // Add new participants
-        foreach ($editRequest->fromParticipants as $participant) {
+        foreach ($editRequest->participants as $participant) {
             if (!$editRequest->meetingRequest->hasFromParticipant($participant)) {
                 $editRequest->meetingRequest->addFromParticipant($participant);
+                $this->events[] = [
+                    'meeting_request.participant.added',
+                    new ParticipantAddedEvent(
+                        $editRequest->editor,
+                        $participant,
+                        $editRequest->meetingRequest,
+                        $editRequest->description,
+                        $editRequest->date
+                    )
+                ];
+            }
+        }
+    }
+
+    /**
+     * @param EditRequest $editRequest
+     */
+    private function updateToParticipants(EditRequest $editRequest)
+    {
+        // Remove removed participants
+        foreach ($editRequest->meetingRequest->getToParticipants() as $participant) {
+            if (!in_array($participant, $editRequest->participants)) {
+                $editRequest->meetingRequest->removeToParticipant($participant);
+                $this->events[] = [
+                    'meeting_request.participant.removed',
+                    new ParticipantRemovedEvent(
+                        $editRequest->editor,
+                        $participant,
+                        $editRequest->meetingRequest,
+                        $editRequest->description,
+                        $editRequest->date
+                    )
+                ];
+            }
+        }
+
+        // Add new participants
+        foreach ($editRequest->participants as $participant) {
+            if (!$editRequest->meetingRequest->hasToParticipant($participant)) {
+                $editRequest->meetingRequest->addToParticipant($participant);
                 $this->events[] = [
                     'meeting_request.participant.added',
                     new ParticipantAddedEvent(

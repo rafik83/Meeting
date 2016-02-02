@@ -329,6 +329,16 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return Request
+     */
+    public function approve()
+    {
+        $this->state = self::STATE_APPROVED;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isSent()
