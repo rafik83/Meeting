@@ -26,5 +26,5 @@ interface NotificationRepositoryInterface
      *
      * @return Notification[]
      */
-    public function getUnreadByEventAndUser($eventId, User $user);
+    public function getNotificationsByEventAndUser($eventId, User $user);
 }

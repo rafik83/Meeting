@@ -96,8 +96,8 @@ class NotificationViewFactory
      */
     public function getNotificationsByEventAndUser($event, User $user)
     {
-        $unreadNotifications = $this->notificationRepository->getUnreadByEventAndUser($event, $user);
-        $receivedRequest     = $this->requestRepository->getRequestsByEventAndUser($event, $user);
+        $notifications   = $this->notificationRepository->getNotificationsByEventAndUser($event, $user);
+        $receivedRequest = $this->requestRepository->getRequestsByEventAndUser($event, $user);
 
         // Compute notification view
         $notifications = array_map(function (Notification $notification) {
@@ -109,7 +109,7 @@ class NotificationViewFactory
                 $notification->isRead(),
                 $notification->getUrl()
             );
-        }, $unreadNotifications);
+        }, $notifications);
 
         // Add notification views for request, force read to false is request is not accepted, refused or canceled
         $notifications = array_merge($notifications, array_map(function (Request $request) use ($user) {

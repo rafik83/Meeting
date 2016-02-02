@@ -42,7 +42,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUnreadByEventAndUser($eventId, User $user)
+    public function getNotificationsByEventAndUser($eventId, User $user)
     {
         $queryBuilder = $this
             ->entityManager
