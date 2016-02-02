@@ -111,7 +111,7 @@ class EditRequestHandler
     {
         // Remove removed participants
         foreach ($editRequest->meetingRequest->getFromParticipants() as $participant) {
-            if (!in_array($participant, $editRequest->fromParticipants)) {
+            if (!in_array($participant, $editRequest->participants)) {
                 $editRequest->meetingRequest->removeFromParticipant($participant);
                 $this->events[] = [
                     'meeting_request.participant.removed',
@@ -127,7 +127,7 @@ class EditRequestHandler
         }
 
         // Add new participants
-        foreach ($editRequest->fromParticipants as $participant) {
+        foreach ($editRequest->participants as $participant) {
             if (!$editRequest->meetingRequest->hasFromParticipant($participant)) {
                 $editRequest->meetingRequest->addFromParticipant($participant);
                 $this->events[] = [
@@ -151,7 +151,7 @@ class EditRequestHandler
     {
         // Remove removed participants;
         foreach ($editRequest->meetingRequest->getToParticipants() as $participant) {
-            if (!in_array($participant, $editRequest->fromParticipants)) {
+            if (!in_array($participant, $editRequest->participants)) {
                 $editRequest->meetingRequest->removeToParticipant($participant);
                 $this->events[] = [
                     'meeting_request.participant.removed',
@@ -167,7 +167,7 @@ class EditRequestHandler
         }
 
         // Add new participants
-        foreach ($editRequest->fromParticipants as $participant) {
+        foreach ($editRequest->participants as $participant) {
             if (!$editRequest->meetingRequest->hasToParticipant($participant)) {
                 $editRequest->meetingRequest->addToParticipant($participant);
                 $this->events[] = [

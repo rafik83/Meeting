@@ -209,7 +209,7 @@ form:
                 label: Enregistrer
     meeting_request_create:
         children:
-            fromParticipants:
+            participants:
                 label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
             description:
                 label: Motiver votre demande
@@ -217,7 +217,7 @@ form:
                 label: Envoyer
     meeting_request_edit:
         children:
-            fromParticipants:
+            participants:
                 label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
             description:
                 label: Expliquer pourquoi

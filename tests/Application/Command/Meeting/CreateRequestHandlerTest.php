@@ -42,7 +42,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $createRequest = new CreateRequest($sheetFrom, $sheetTo, $dateTime, $user1);
         $createRequest->description = 'test';
-        $createRequest->fromParticipants = [$participant1, $participant2];
+        $createRequest->participants = [$participant1, $participant2];
 
         $participants = [];
         $participants[] = $this->createParticipantMock($sheetFrom, $user1, 1);

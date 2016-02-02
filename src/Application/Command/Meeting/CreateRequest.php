@@ -31,7 +31,7 @@ class CreateRequest
     /**
      * @var Participant[]
      */
-    public $fromParticipants = [];
+    public $participants = [];
 
     /**
      * @var Participant[]
