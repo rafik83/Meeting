@@ -216,7 +216,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.removed',
             $message,
-            null
+            $this->router->generateMeetingRequest($event->getRequest())
         ));
     }
 
@@ -317,9 +317,9 @@ class NotificationEventListener implements EventSubscriberInterface
         foreach ($fromParticipants as $participant) {
             // Translate message
             $message = $this->translator->trans(
-                'notification.meeting_request.canceled.to_message',
+                'notification.meeting_request.canceled.from_message',
                 [
-                    '%sheet_from%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
                 ],
                 'notifications',
                 $participant->getUser()->getLocale()
@@ -333,7 +333,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.canceled',
                 $message,
-                null
+                $this->router->generateMeetingRequest($event->getRequest())
             ));
         }
 
@@ -350,7 +350,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.to_message',
                 [
-                    '%sheet_from%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
                 ],
                 'notifications',
                 $participant->getUser()->getLocale()
@@ -364,7 +364,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.canceled',
                 $message,
-                null
+                $this->router->generateMeetingRequest($event->getRequest())
             ));
         }
     }
