@@ -60,7 +60,7 @@ class CreateRequestHandler
         // Create new request
         $request = new Request(
             $createRequest->from,
-            $createRequest->fromParticipants,
+            $createRequest->participants,
             $createRequest->to,
             [],
             $createRequest->createdAt,
@@ -88,8 +88,7 @@ class CreateRequestHandler
         ));
 
         // Notify participant add
-        $participants = array_merge($createRequest->fromParticipants, $createRequest->toParticipants);
-        foreach ($participants as $participant) {
+        foreach ($createRequest->participants as $participant) {
             $this->eventDispatcher->dispatch('meeting_request.participant.added', new ParticipantAddedEvent(
                 $createRequest->creator,
                 $participant,
