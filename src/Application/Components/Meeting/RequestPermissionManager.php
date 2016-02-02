@@ -33,6 +33,8 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to edit a meeting request
+     *
      * @param User    $user
      * @param Request $request
      *
@@ -52,6 +54,8 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to cancel a meeting request
+     *
      * @param User    $user
      * @param Request $request
      *
@@ -71,6 +75,8 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to refuse a meeting request
+     *
      * @param User    $user
      * @param Request $request
      *
@@ -86,6 +92,8 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to approve a meeting request
+     *
      * @param User    $user
      * @param Request $request
      *
@@ -101,6 +109,8 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to see a meeting request
+     *
      * @param User    $user
      * @param Request $request
      *
@@ -108,10 +118,25 @@ class RequestPermissionManager
      */
     public function isAllowedToSee(User $user, Request $request)
     {
+        return $request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user);
+    }
+
+    /**
+     * Is a user allowed to see a sheet
+     *
+     * @param User  $user
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToSeeSheet(User $user, Sheet $sheet)
+    {
         return true;
     }
 
     /**
+     * Is a user allowed to create a meeting request between these two sheets
+     *
      * @param User  $user
      * @param Sheet $from
      * @param Sheet $to
@@ -122,11 +147,13 @@ class RequestPermissionManager
     {
         return
             $from->hasUser($user) &&
-            $this->isAllowedToSee($user, $to) &&
+            $this->isAllowedToSeeSheet($user, $to) &&
             $this->hasNotLivingRequestsBetween($from, $to);
     }
 
     /**
+     * Hasn't living meeting request between these two sheets
+     *
      * @param Sheet $from
      * @param Sheet $to
      *

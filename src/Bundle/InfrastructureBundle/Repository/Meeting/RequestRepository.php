@@ -166,8 +166,8 @@ class RequestRepository implements RequestRepositoryInterface
         // Between
         $queryBuilder
             ->andWhere($queryBuilder->expr()->orX(
-                $queryBuilder->expr()->andX('request.fromSheet = :one', 'request.toSheet = :another'),
-                $queryBuilder->expr()->andX('request.fromSheet = :another', 'request.toSheet = :one')
+                $queryBuilder->expr()->andX('request.from = :one', 'request.to = :another'),
+                $queryBuilder->expr()->andX('request.from = :another', 'request.to = :one')
             ))
             ->setParameter('one', $one)
             ->setParameter('another', $another);
