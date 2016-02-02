@@ -465,7 +465,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getEmitter(),
             $recipient,
             $event->getDate(),
-            'metting.sent',
+            'meeting_request.receive',
             $message,
             $this->router->generateMeetingRequest($event->getRequest())
         ));
