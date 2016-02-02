@@ -194,6 +194,8 @@ class MeetingRequestController extends BaseController
     }
 
     /**
+     * Display a meeting request
+     *
      * @param EventView      $eventView
      * @param MeetingRequest $meetingRequest
      *
@@ -235,6 +237,8 @@ class MeetingRequestController extends BaseController
     }
 
     /**
+     * Cancel a meeting request
+     *
      * @param Request $request
      * @param EventView $eventView
      * @param MeetingRequest $meetingRequest
@@ -271,6 +275,8 @@ class MeetingRequestController extends BaseController
     }
 
     /**
+     * Edit a meeeting request
+     *
      * @param Request        $request
      * @param EventView      $eventView
      * @param MeetingRequest $meetingRequest
