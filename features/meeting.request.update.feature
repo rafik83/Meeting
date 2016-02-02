@@ -42,7 +42,7 @@ Feature: Meeting Request Update
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
       | User.yml                                                  |
       | TwoSheetSeveralParticipantWithData.yml                    |
-      | MeetingRequest.yml                                        |
+      | MeetingRequestStateApproved.yml                           |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"

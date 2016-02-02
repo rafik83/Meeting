@@ -289,7 +289,7 @@ class Request implements MessageSubjectInterface
      */
     public function hasToParticipant(Participant $participant)
     {
-        return $this->fromParticipants->contains($participant);
+        return $this->toParticipants->contains($participant);
     }
 
     /**

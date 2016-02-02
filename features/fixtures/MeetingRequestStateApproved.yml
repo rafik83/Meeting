@@ -7,4 +7,4 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-3 days', 'now')>
             - @user_1
-        state: 'sent'
+        state: 'approved'
