@@ -168,8 +168,7 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event)
-            ->join('request.from', 'fromSheet')
-            ->join('fromSheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join('toSheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
