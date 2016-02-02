@@ -21,6 +21,11 @@ interface NotificationRepositoryInterface
     public function add(Notification $notification);
 
     /**
+     * @param Notification $notification
+     */
+    public function set(Notification $notification);
+
+    /**
      * @param int  $eventId
      * @param User $user
      *

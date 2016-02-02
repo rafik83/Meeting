@@ -42,6 +42,14 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Notification $notification)
+    {
+        $this->entityManager->flush($notification);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNotificationsByEventAndUser($eventId, User $user)
     {
         $queryBuilder = $this
@@ -49,7 +57,6 @@ class NotificationRepository implements NotificationRepositoryInterface
             ->createQueryBuilder()
             ->select('notification')
             ->from(Notification::class, 'notification')
-            ->where('notification.view = false')
             ->andWhere('notification.recipient = :user')
             ->setParameter('user', $user)
             ->andWhere('notification.event = :eventId')

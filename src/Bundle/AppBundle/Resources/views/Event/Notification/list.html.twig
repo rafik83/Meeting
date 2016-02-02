@@ -19,7 +19,7 @@
                     <td>{{ ('notification.' ~ notification.action ~ '.action')|trans({}, 'notifications') }}</td>
                     <td>
                         {% if notification.url %}
-                            <a href="{{ notification.url }}">{{ notification.message }}</a>
+                            <a href="{{ notification.id ? path('event_notification_read', { 'notification': notification.id }) : notification.url }}">{{ notification.message }}</a>
                         {% else %}
                             {{ notification.message }}
                         {% endif %}
