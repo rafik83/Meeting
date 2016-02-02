@@ -15,8 +15,8 @@
         </thead>
         <tbody>
         {% for notification in unreadNotifications %}
-            <tr>
-                <td>{{ ('notification.' ~ notification.action ~ '.action')|trans }}</td>
+            <tr{% if not notification.isRead %} class="notification-not-read"{% endif %}>
+                <td>{{ ('notification.' ~ notification.action ~ '.action')|trans({}, 'notifications') }}</td>
                 <td>
                     {% if notification.url %}
                         <a href="{{ notification.url }}">{{ notification.message }}</a>
