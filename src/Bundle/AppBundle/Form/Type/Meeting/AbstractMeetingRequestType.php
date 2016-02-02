@@ -39,7 +39,7 @@ abstract class AbstractMeetingRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fromParticipants', ChoiceType::class, [
+            ->add('participants', ChoiceType::class, [
                 'choices'           => $options['sheet']->getParticipants(),
                 'choices_as_values' => true,
                 'choice_label'      => function (Participant $participant) {

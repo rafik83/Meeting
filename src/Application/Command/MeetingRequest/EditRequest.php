@@ -24,7 +24,7 @@ class EditRequest
     /**
      * @var Participant[]
      */
-    public $fromParticipants;
+    public $participants;
 
     /**
      * @var string
@@ -45,15 +45,20 @@ class EditRequest
      * EditRequest constructor.
      *
      * @param Request            $meetingRequest
+     * @param array              $participants
      * @param \DateTimeInterface $date
      * @param User               $editor
      */
-    public function __construct(Request $meetingRequest, \DateTimeInterface $date, User $editor)
-    {
-        $this->meetingRequest   = $meetingRequest;
-        $this->fromParticipants = $meetingRequest->getFromParticipants()->toArray();
-        $this->description      = null;
-        $this->date             = $date;
-        $this->editor           = $editor;
+    public function __construct(
+        Request $meetingRequest,
+        array $participants,
+        \DateTimeInterface $date,
+        User $editor
+    ) {
+        $this->meetingRequest = $meetingRequest;
+        $this->participants   = $participants;
+        $this->description    = null;
+        $this->date           = $date;
+        $this->editor         = $editor;
     }
 }

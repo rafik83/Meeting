@@ -141,7 +141,7 @@ event:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
         editRequest:
-            title: Demande de rendez-vous
+            title: Modifiez une demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
         approvedRequest:
             title: Accepter la proposition de rendez vous
