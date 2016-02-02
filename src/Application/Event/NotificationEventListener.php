@@ -479,7 +479,9 @@ class NotificationEventListener implements EventSubscriberInterface
         return [
             'meeting.participant.added'           => 'onParticipantAddedToMeeting',
             'meeting.participant.removed'         => 'onParticipantRemovedFromMeeting',
-            'meeting_request.sent'                => 'onRequestSent',
+            // Disable notification on new request, these notification are added
+            // in NotificationViewFactory depending on the request state
+            //'meeting_request.sent'                => 'onRequestSent',
             'meeting_request.refused'             => 'onRequestRefused',
             'meeting_request.canceled'            => 'onRequestCanceled',
             'meeting_request.accepted'            => 'onRequestAccepted',

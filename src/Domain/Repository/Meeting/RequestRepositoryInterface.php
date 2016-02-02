@@ -14,6 +14,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface RequestRepositoryInterface
 {
@@ -65,4 +66,12 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $state);
+
+    /**
+     * @param int  $event
+     * @param User $user
+     *
+     * @return Request[]
+     */
+    public function getRequestsByEventAndUser($event, User $user);
 }

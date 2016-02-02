@@ -541,3 +541,15 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
         arguments:
             - '@components.sheet.tagged_info_guesser'
+
+    #
+    # Notification component
+    #
+    notification.notification_view_factory:
+        class: Proximum\Vimeet\Application\Components\Notification\NotificationViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'

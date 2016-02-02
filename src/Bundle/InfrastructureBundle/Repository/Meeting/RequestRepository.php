@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 
@@ -150,6 +151,28 @@ class RequestRepository implements RequestRepositoryInterface
         }, $pagination->getItems()));
 
         return $pagination;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequestsByEventAndUser($event, User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request');
+
+        // By event and user
+        $queryBuilder
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->join('request.from', 'fromSheet')
+            ->join('fromSheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

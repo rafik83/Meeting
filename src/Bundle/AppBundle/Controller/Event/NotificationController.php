@@ -24,12 +24,13 @@ class NotificationController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $unreadNotifications = $this->get('vimeet_infrastructure.repository.notification_repository')
-            ->getUnreadByEventAndUser($eventView->id, $this->getUser());
+        $notifications = $this
+            ->get('notification.notification_view_factory')
+            ->getNotificationsByEventAndUser($eventView->id, $this->getUser());
 
         return $this->render('VimeetAppBundle:Event/Notification:list.html.twig', [
-            'eventView'           => $eventView,
-            'unreadNotifications' => $unreadNotifications,
+            'eventView'     => $eventView,
+            'notifications' => $notifications,
         ]);
     }
 
@@ -42,11 +43,12 @@ class NotificationController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $unreadNotifications = $this->get('vimeet_infrastructure.repository.notification_repository')
-            ->getUnreadByEventAndUser($eventView->id, $this->getUser());
+        $count = $this
+            ->get('notification.notification_view_factory')
+            ->countUnreadNotificationByEventAndUser($eventView->id, $this->getUser());
 
         return $this->render('VimeetAppBundle:Event/Notification:unreadNumber.html.twig', [
-            'unreadNumber' => count($unreadNotifications),
+            'unreadNumber' => $count,
         ]);
     }
 }
