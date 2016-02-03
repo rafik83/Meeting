@@ -55,7 +55,7 @@ class MessageRepository implements MessageRepositoryInterface
             ->from(Message::class, 'message')
             ->where('message.request = :request')
             ->setParameter('request', $request)
-            ->orderBy('message.createdAt')
+            ->orderBy('message.createdAt', 'DESC')
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
