@@ -42,7 +42,7 @@ class RequestPermissionManager
      */
     public function isAllowedToEdit(User $user, Request $request)
     {
-        if ($request->getFromSheet()->hasUser($user) && !$request->isRefused()) {
+        if ($request->getFromSheet()->hasUser($user) && !$request->isRefused() && !$request->isCancelled()) {
             return true;
         }
 
