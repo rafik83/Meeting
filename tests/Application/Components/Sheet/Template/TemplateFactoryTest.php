@@ -26,18 +26,20 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                 'label'    => [],
                 'template' => [
                     '563caf1d9b1cb' => [
-                        'type'     => 'lib_text',
-                        'required' => true,
-                        'private'  => false,
-                        'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-                        'tags'     => ['participant_lastname', 'participant'],
+                        'type'           => 'lib_text',
+                        'required'       => true,
+                        'private'        => false,
+                        'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+                        'tags'           => ['participant_lastname', 'participant'],
+                        'updatableUntil' => null
                     ],
                     '563caf2746398' => [
-                        'type'     => 'lib_text',
-                        'required' => true,
-                        'private'  => false,
-                        'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-                        'tags'     => ['participant_firstname', 'participant'],
+                        'type'           => 'lib_text',
+                        'required'       => true,
+                        'private'        => false,
+                        'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+                        'tags'           => ['participant_firstname', 'participant'],
+                        'updatableUntil' => null
                     ],
                 ],
             ],
@@ -45,20 +47,22 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
 
         $type_563caf1d9b1cb = new LibTextType('563caf1d9b1cb');
         $type_563caf1d9b1cb->setOptions([
-            'type'     => 'lib_text',
-            'required' => true,
-            'private'  => false,
-            'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-            'tags'     => ['participant_lastname', 'participant'],
+            'type'           => 'lib_text',
+            'required'       => true,
+            'private'        => false,
+            'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+            'tags'           => ['participant_lastname', 'participant'],
+            'updatableUntil' => null
         ]);
 
         $type_563caf2746398 = new LibTextType('563caf2746398');
         $type_563caf2746398->setOptions([
-            'type'     => 'lib_text',
-            'required' => true,
-            'private'  => false,
-            'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-            'tags'     => ['participant_firstname', 'participant'],
+            'type'           => 'lib_text',
+            'required'       => true,
+            'private'        => false,
+            'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+            'tags'           => ['participant_firstname', 'participant'],
+            'updatableUntil' => null
         ]);
 
         $group_563caf1d9babc = new Group('563caf1d9babc');
@@ -66,18 +70,20 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'label'    => [],
             'template' => [
                 '563caf1d9b1cb' => [
-                    'type'     => 'lib_text',
-                    'required' => true,
-                    'private'  => false,
-                    'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-                    'tags'     => ['participant_lastname', 'participant'],
+                    'type'           => 'lib_text',
+                    'required'       => true,
+                    'private'        => false,
+                    'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+                    'tags'           => ['participant_lastname', 'participant'],
+                    'updatableUntil' => null
                 ],
                 '563caf2746398' => [
-                    'type'     => 'lib_text',
-                    'required' => true,
-                    'private'  => false,
-                    'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-                    'tags'     => ['participant_firstname', 'participant'],
+                    'type'           => 'lib_text',
+                    'required'       => true,
+                    'private'        => false,
+                    'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+                    'tags'           => ['participant_firstname', 'participant'],
+                    'updatableUntil' => null
                 ],
             ],
         ]);
@@ -102,37 +108,41 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
 
         $actual = $factory->createTemplateFromArray([
             '563caf1d9b1cb' => [
-                'type'     => 'lib_text',
-                'required' => true,
-                'private'  => false,
-                'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-                'tags'     => ['participant_lastname'],
+                'type'           => 'lib_text',
+                'required'       => true,
+                'private'        => false,
+                'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+                'tags'           => ['participant_lastname'],
+                'updatableUntil' => null
             ],
             '563caf2746398' => [
-                'type'     => 'lib_text',
-                'required' => true,
-                'private'  => false,
-                'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-                'tags'     => ['participant_firstname'],
+                'type'           => 'lib_text',
+                'required'       => true,
+                'private'        => false,
+                'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+                'tags'           => ['participant_firstname'],
+                'updatableUntil' => null
             ],
         ]);
 
         $type_563caf1d9b1cb = new LibTextType('563caf1d9b1cb');
         $type_563caf1d9b1cb->setOptions([
-            'type'     => 'lib_text',
-            'required' => true,
-            'private'  => false,
-            'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-            'tags'     => ['participant_lastname'],
+            'type'           => 'lib_text',
+            'required'       => true,
+            'private'        => false,
+            'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+            'tags'           => ['participant_lastname'],
+            'updatableUntil' => null
         ]);
 
         $type_563caf2746398 = new LibTextType('563caf2746398');
         $type_563caf2746398->setOptions([
-            'type'     => 'lib_text',
-            'required' => true,
-            'private'  => false,
-            'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-            'tags'     => ['participant_firstname'],
+            'type'           => 'lib_text',
+            'required'       => true,
+            'private'        => false,
+            'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+            'tags'           => ['participant_firstname'],
+            'updatableUntil' => null
         ]);
 
         $group_563caf1d9babc = new Group('default');
@@ -140,18 +150,20 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'label'    => 'Default',
             'template' => [
                 '563caf1d9b1cb' => [
-                    'type'     => 'lib_text',
-                    'required' => true,
-                    'private'  => false,
-                    'label'    => ['fr' => 'Nom', 'en' => 'Lastname'],
-                    'tags'     => ['participant_lastname'],
+                    'type'           => 'lib_text',
+                    'required'       => true,
+                    'private'        => false,
+                    'label'          => ['fr' => 'Nom', 'en' => 'Lastname'],
+                    'tags'           => ['participant_lastname'],
+                    'updatableUntil' => null
                 ],
                 '563caf2746398' => [
-                    'type'     => 'lib_text',
-                    'required' => true,
-                    'private'  => false,
-                    'label'    => ['fr' => 'Prénom', 'en' => 'Firstname'],
-                    'tags'     => ['participant_firstname'],
+                    'type'           => 'lib_text',
+                    'required'       => true,
+                    'private'        => false,
+                    'label'          => ['fr' => 'Prénom', 'en' => 'Firstname'],
+                    'tags'           => ['participant_firstname'],
+                    'updatableUntil' => null
                 ],
             ],
         ]);

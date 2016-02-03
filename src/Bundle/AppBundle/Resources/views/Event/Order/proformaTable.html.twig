@@ -1,49 +1,29 @@
 <table class="table table-condensed">
     <thead>
     <tr>
-        <th colspan="2">{{ 'event.sheet.summary.product'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.summary.unit_price'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.summary.quantity'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.summary.total'|trans }}</th>
-        <th class="text-right">{{ 'event.sheet.summary.action'|trans }}</th>
+        <th colspan="2">{{ 'event.sheet.cart.column.product'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.cart.column.unitPrice'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.cart.column.quantity'|trans }}</th>
+        <th class="text-right">{{ 'event.sheet.cart.column.total'|trans }}</th>
     </tr>
     </thead>
     <tbody>
     {% for groupName, group in order.groups if group.rows|length %}
         <tr class="active">
-            <th colspan="6">{{ group.label }}</th>
+            <th colspan="5">{{ group.label }}</th>
         </tr>
         {% for rowName, row in group.rows %}
             <tr>
                 <td>&nbsp;</td>
-                <td>
-                    {{ row.label }}
-                    {% if row.updatableUntil %}
-                        <span class="label {{ row.updatable ? 'label-default' : 'label-danger' }}">
-                            {{ row.updatable ? "Modifiable jusqu'au" : "N'est plus modifiable depuis le" }}
-                            {{ row.updatableUntil|date('d/m/Y à H:i') }}
-                        </span>
-                    {% endif %}
-                </td>
+                <td>{{ row.label }}</td>
                 <td class="text-right">{{ row.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                 <td class="text-right">{{ row.quantity }}</td>
                 <td class="text-right">{{ row.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
-                <td class="text-right">
-                    {% if row.updatable %}
-                        <a href="{{ path('event_sheet_product_update', {
-                            'sheet': sheet.id,
-                            'groupId': groupName,
-                            'rowId': rowName
-                        }) }}" class="btn btn-default btn-xs">
-                            {{ 'event.sheet.summary.update_product'|trans }}
-                        </a>
-                    {% endif %}
-                </td>
             </tr>
             {% if row.included is not empty %}
                 <tr>
                     <td>&nbsp;</td>
-                    <th colspan="5">Inclus :</th>
+                    <th colspan="4">Inclus :</th>
                 </tr>
             {% endif %}
             {% for included in row.included %}
@@ -53,7 +33,6 @@
                     <td class="text-right">{{ included.unitPrice|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
                     <td class="text-right">{{ included.quantity }}</td>
                     <td class="text-right">{{ included.total|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</td>
-                    <td></td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -63,7 +42,6 @@
         <th colspan="2"></th>
         <th colspan="2">Total HT</th>
         <th class="text-right">{{ order.totalWithoutTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-        <th></th>
     </tr>
 
     {% if order.vatApplicable %}
@@ -71,29 +49,26 @@
             <th colspan="2"></th>
             <th colspan="2">TVA {{ order.vat }}%</th>
             <th class="text-right">{{ order.taxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-            <th></th>
         </tr>
         <tr>
             <th colspan="2"></th>
             <th colspan="2">Total TTC</th>
             <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-            <th></th>
         </tr>
     {% endif %}
+
     {% if order.vats is defined %}
         {% for vat, amount in order.vats %}
             <tr>
                 <th colspan="2"></th>
                 <th colspan="2">TVA {{ vat }}%</th>
                 <th class="text-right">{{ amount|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-                <th></th>
             </tr>
         {% endfor %}
         <tr>
             <th colspan="2"></th>
             <th colspan="2">Total TTC</th>
             <th class="text-right">{{ order.totalWithTaxes|number_format(2, ',', '&nbsp;')|html }}&nbsp;€</th>
-            <th></th>
         </tr>
     {% endif %}
     </tbody>

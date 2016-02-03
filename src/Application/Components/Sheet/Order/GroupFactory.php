@@ -135,7 +135,7 @@ class GroupFactory
 
         $quantity = isset($rowData['quantity']) ? $rowData['quantity'] : 1;
 
-        $row = new RowView($label, $price, $quantity);
+        $row = new RowView($label, $price, $quantity, $product->getUpdatableUntil(), $product->isUpdatable());
         $row->editable = $product instanceof AddedRowType;
 
         return $row;

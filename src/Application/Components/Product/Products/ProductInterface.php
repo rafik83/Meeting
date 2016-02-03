@@ -34,6 +34,28 @@ interface ProductInterface
     public function getLabel($locale);
 
     /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getDescription($locale);
+
+    /**
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * @return string
+     */
+    public function getRequired();
+
+    /**
+     * @return float
+     */
+    public function getUnitPrice();
+
+    /**
      * @param ProductInterface $includer
      * @param ProductInterface $include
      * @param float            $quantity

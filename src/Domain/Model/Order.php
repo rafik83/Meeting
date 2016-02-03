@@ -219,18 +219,19 @@ class Order implements  BillingInfoInterface
      *
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    public function addRow($group, $row, $label, $description, $unitPrice, $quantity)
+    public function addRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         if ($this->issetRow($group, $row)) {
             throw new RowAlreadyExistsException($group, $row);
         }
 
-        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
     }
 
     /**
@@ -258,12 +259,13 @@ class Order implements  BillingInfoInterface
      *
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    public function updateRow($group, $row, $label, $description, $unitPrice, $quantity)
+    public function updateRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         if (!$this->issetRow($group, $row)) {
             throw new RowNotFoundException($group, $row);
@@ -273,7 +275,7 @@ class Order implements  BillingInfoInterface
             throw new NotAddedRowException($group, $row);
         }
 
-        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
     }
 
     /**
@@ -301,17 +303,18 @@ class Order implements  BillingInfoInterface
     /**
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    private function setRow($group, $row, $label, $description, $unitPrice, $quantity)
+    private function setRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         $this->packageTemplate[$group]['template'][$row] = [
             'label'       => $label,
             'description' => $description,
-            'type'        => 'added_row',
+            'type'        => $type,
             'unitPrice'   => $unitPrice,
         ];
 

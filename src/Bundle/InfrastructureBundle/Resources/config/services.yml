@@ -168,6 +168,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.cart_repository'
             - '@vimeet_infrastructure.application.components.order.order_manager'
+    vimeet_infrastructure.vimeet.application.command.package.update_product_handler:
+        class: Proximum\Vimeet\Application\Command\Package\UpdateProductHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.cart_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.order.order_manager'
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:

@@ -37,6 +37,7 @@ class UpdateRowHandler
         $updateRow->order->updateRow(
             $updateRow->group,
             $updateRow->row,
+            'added_row',
             $updateRow->label,
             $updateRow->description,
             $updateRow->price,

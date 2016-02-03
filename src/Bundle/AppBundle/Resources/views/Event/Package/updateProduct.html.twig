@@ -1,0 +1,15 @@
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
+
+{% form_theme form 'VimeetAppBundle::library.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <h2>{{ 'event.sheet.update_product.title'|trans }}</h2>
+
+    {{ form(form) }}
+
+    <hr>
+
+    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">{{ 'event.link.go_back_to_sheet'|trans }}</a>
+{% endblock %}

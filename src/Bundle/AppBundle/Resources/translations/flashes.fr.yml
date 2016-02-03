@@ -57,6 +57,9 @@ flash:
         add_products:
             success: L'ajout des produits a bien été pris en compte
             empty: Pas de produits ajoutés
+        update_product:
+            added_updated_product_to_cart: La quantité de produit en plus a été ajoutée au panier
+            created_negative_order: Une commande à quantité négative a été créée
         final_step:
             success: Les informations de votre forfait ont bien été enregistrées
         payment_mode:
@@ -85,11 +88,11 @@ flash:
                 success: Le rendez-vous a bien été placé
         order:
             add_row:
-                success: La linge a été ajouté
+                success: La ligne a été ajoutée
             update_row:
                 success: La ligne a été mise à jour
             remove_row:
-                success: La ligne a été supprimé
+                success: La ligne a été supprimée
         transaction:
             create:
                 success: La transaction a été créée

@@ -61,7 +61,7 @@ class Groups
      */
     public function getGroup($name)
     {
-        return $this->groups[$name];
+        return isset($this->groups[$name]) ? $this->groups[$name] : null;
     }
 
     /**

@@ -100,6 +100,7 @@ class TemplateFactory
     private function createTypeFromArray($typeName, array $templateData)
     {
         $resolver = new OptionsResolver();
+
         $type     = $this->getTypeInstance($typeName, $templateData['type']);
         $type->configureOptions($resolver);
         $type->setOptions($resolver->resolve($templateData));

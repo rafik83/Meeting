@@ -42,7 +42,7 @@ class OrderMergeFactory
      * @param Sheet  $sheet
      * @param string $locale
      *
-     * @return OrderView
+     * @return OrderMerge
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
@@ -54,7 +54,7 @@ class OrderMergeFactory
      * @param Order[] $orders
      * @param string  $locale
      *
-     * @return OrderView
+     * @return OrderMerge
      */
     public function createFromOrders(array $orders, $locale)
     {
@@ -92,7 +92,6 @@ class OrderMergeFactory
     {
         foreach ($template as $groupName => $group) {
             if (isset($merge[$groupName])) {
-
                 foreach ($group['template'] as $typeName => $type) {
                     if (!isset($merge[$groupName]['template'][$typeName])) {
                         $merge[$groupName]['template'][$typeName] = $type;
@@ -113,11 +112,8 @@ class OrderMergeFactory
     {
         foreach ($data as $groupName => $group) {
             if (isset($merge[$groupName])) {
-
                 foreach ($group as $typeName => $type) {
-
                     if (isset($merge[$groupName][$typeName])) {
-
                         if (is_array($type)) {
                             if (isset($type['value']) && is_bool($type['value'])) {
                                 $merge[$groupName][$typeName]['value'] |= $type['value'];
@@ -128,6 +124,9 @@ class OrderMergeFactory
                             }
 
                             if (isset($type['quantity'])) {
+                                if (!isset($merge[$groupName][$typeName]['quantity'])) {
+                                    $merge[$groupName][$typeName]['quantity'] = 1;
+                                }
                                 $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
                             }
                         }
@@ -135,7 +134,6 @@ class OrderMergeFactory
                     } else {
                         $merge[$groupName][$typeName] = $type;
                     }
-
                 }
 
             } else {
