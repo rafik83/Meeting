@@ -40,7 +40,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: @user_3
         sheet: @sheet_2
-        owner: false
+        owner: true
         active: true
         data:
             563caf1d9b1cb: "Truc"
