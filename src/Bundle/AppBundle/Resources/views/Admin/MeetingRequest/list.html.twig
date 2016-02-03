@@ -3,13 +3,31 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
 
-    <h2>Liste des demandes de RDV acceptées</h2>
+    <h2>Liste des demandes de RDV</h2>
+
+    <h3>Filtrer par statut</h3>
+    {{ form_start(filter_form) }}
+    <div class="col-md-4">
+        {{ form_row(filter_form.state) }}
+        {% if filtered %}
+            <a href="{{ path('admin_meeting_request_list', {id: event.id}) }}" class="btn btn-link">Vider les filtres</a>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(filter_form.submit) }}
+    </div>
+    {{ form_end(filter_form) }}
+    <div class="col-md-4">
+        <h4 class="text-right">Nombre de demande de rendez-vous: {{ totalRequest }}</h4>
+    </div>
 
     <table class="table">
         <thead>
         <tr>
             <th>De</th>
             <th>à</th>
+            <th>Créé le</th>
+            <th>Statut</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -18,8 +36,13 @@
             <tr>
                 <td>{{ meeting_request.sheetNameFrom }}</td>
                 <td>{{ meeting_request.sheetNameTo }}</td>
+                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ ('admin.meeting_request.list.state.' ~ meeting_request.state)|trans }}</td>
                 <td>
-                    <a href="{{ path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    <a href="{{ path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}) }}" class="btn btn-link">Détails</a>
+                    {% if meeting_request.state == 'approved' %}
+                        <a href="{{ path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

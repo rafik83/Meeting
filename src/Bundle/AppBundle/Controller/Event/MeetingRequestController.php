@@ -136,7 +136,7 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $approveRequest = new ApproveRequest($meetingRequest);
+        $approveRequest = new ApproveRequest($meetingRequest, new \DateTime());
         $sheet          = $meetingRequest->getUserSheet($this->getUser());
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, ['sheet' => $sheet]);
 
@@ -174,7 +174,7 @@ class MeetingRequestController extends BaseController
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
+        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser(), new \DateTime());
         $sheet         = $meetingRequest->getUserSheet($this->getUser());
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
 
@@ -253,7 +253,7 @@ class MeetingRequestController extends BaseController
             throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
         }
 
-        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser());
+        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime());
         $sheet         = $meetingRequest->getUserSheet($this->getUser());
         $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
 

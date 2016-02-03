@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
 /**
  * "Commande"
  */
-class Order implements  BillingInfoInterface
+class Order implements BillingInfoInterface
 {
     const STATE_UNPAID = 'unpaid';
     const STATE_PAID   = 'paid';

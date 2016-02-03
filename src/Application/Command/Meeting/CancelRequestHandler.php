@@ -65,7 +65,7 @@ class CancelRequestHandler
     public function handle(CancelRequest $cancelRequest)
     {
         // Cancel request
-        $this->requestRepository->set($cancelRequest->request->cancel());
+        $this->requestRepository->set($cancelRequest->request->cancel($cancelRequest->date));
 
         // Add message
         if ($cancelRequest->message) {

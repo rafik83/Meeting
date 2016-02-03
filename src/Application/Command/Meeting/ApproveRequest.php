@@ -26,11 +26,17 @@ class ApproveRequest
     public $toParticipants;
 
     /**
-     * @param Request $request
+     * @var \DateTimeInterface
      */
-    public function __construct(Request $request)
+    public $date;
+
+    /**
+     * @param Request            $request
+     * @param \DateTimeInterface $date
+     */
+    public function __construct(Request $request, \DateTimeInterface $date)
     {
         $this->request = $request;
-        $this->request->setState(Request::STATE_APPROVED);
+        $this->date    = $date;
     }
 }

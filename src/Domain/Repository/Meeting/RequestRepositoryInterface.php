@@ -51,6 +51,16 @@ interface RequestRepositoryInterface
 
     /**
      * @param Event $event
+     * @param $page
+     * @param $limit
+     * @param array $filter
+     *
+     * @return PaginatorInterface
+     */
+    public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = []);
+
+    /**
+     * @param Event $event
      * @param int   $page
      * @param int   $limit
      *
