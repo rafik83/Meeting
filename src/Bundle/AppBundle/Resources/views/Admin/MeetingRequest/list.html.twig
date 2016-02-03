@@ -10,7 +10,7 @@
     <div class="col-md-4">
         {{ form_row(filter_form.state) }}
         {% if filtered %}
-            <a href="{{ path('admin_meeting_request_list', {id: event.id}) }}" class="btn btn-link">Vider les filtres</a>
+            <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}" class="btn btn-link">Vider les filtres</a>
         {% endif %}
     </div>
     <div class="col-md-4">
