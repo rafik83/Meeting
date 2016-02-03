@@ -74,7 +74,7 @@ class ProformaViewFactory
         );
 
         // Billing data
-        $billingView = $this->billingViewFactory->createFromSheet($sheet);
+        $billingView = $this->billingViewFactory->createFromOrder($order);
 
         // Participant
         $participants = array_map(function (Participant $participant) {
