@@ -109,7 +109,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Actual
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
-        $request->approve();
+        $request->approve($datetime);
 
         //Command
         $command = new EditRequest($request, $datetime, $user1);
@@ -118,7 +118,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Expected
         $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1);
-        $expectedRequest->approve();
+        $expectedRequest->approve($datetime);
         $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
 
         //Mock
@@ -229,7 +229,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
-        $request->approve();
+        $request->approve($datetime);
 
         //Command
         $command = new EditRequest($request, $datetime, $user1);
@@ -238,7 +238,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Expected
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1);
-        $expectedRequest->approve();
+        $expectedRequest->approve($datetime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
 
         //Mock
