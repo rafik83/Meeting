@@ -36,6 +36,7 @@ class FilterMeetingRequestType extends AbstractType
                     'form.admin.meeting_request.list.filter.state.children.refused'  => Request::STATE_REFUSED,
                     'form.admin.meeting_request.list.filter.state.children.sent'     => Request::STATE_SENT,
                 ],
+                'placeholder' => '',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'form.admin.meeting_request.list.filter.children.submit.label'
