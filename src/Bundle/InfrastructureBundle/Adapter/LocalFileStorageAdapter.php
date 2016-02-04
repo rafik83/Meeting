@@ -55,7 +55,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
 
         $file->move($directory, $filename);
 
-        return $path.$filename;
+        return $path.'/'.$filename;
     }
 
     /**
