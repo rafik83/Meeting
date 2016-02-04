@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTime;
+use DateTimeInterface;
 
 class ForgottenPasswordToken
 {
@@ -30,16 +30,16 @@ class ForgottenPasswordToken
     private $token;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     private $expireDate;
 
     /**
-     * @param User   $user
-     * @param string $token
-     * @param string $expireDate
+     * @param User              $user
+     * @param string            $token
+     * @param DateTimeInterface $expireDate
      */
-    public function __construct(User $user, $token, $expireDate)
+    public function __construct(User $user, $token, DateTimeInterface $expireDate)
     {
         $this->user       = $user;
         $this->token      = $token;
@@ -71,7 +71,7 @@ class ForgottenPasswordToken
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getExpireDate()
     {
