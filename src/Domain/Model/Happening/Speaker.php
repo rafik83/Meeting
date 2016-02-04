@@ -10,12 +10,19 @@
 
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class Speaker
 {
     /**
      * @var int
      */
     private $id;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * @var string
@@ -45,14 +52,16 @@ class Speaker
     /**
      * Speaker constructor.
      *
+     * @param Event  $event
      * @param string $name
      * @param string $function
      * @param string $organization
      * @param string $logo
      * @param string $photo
      */
-    public function __construct($name, $function, $organization, $logo, $photo)
+    public function __construct(Event $event, $name, $function, $organization, $logo, $photo)
     {
+        $this->event        = $event;
         $this->name         = $name;
         $this->function     = $function;
         $this->organization = $organization;

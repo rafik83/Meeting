@@ -17,3 +17,6 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
             type: string
         photo:
             type: string
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
