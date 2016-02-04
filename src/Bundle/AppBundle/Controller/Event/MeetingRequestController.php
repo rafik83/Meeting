@@ -268,7 +268,7 @@ class MeetingRequestController extends BaseController
             throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
         }
 
-        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime());
+        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime(), $sheet);
         $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
