@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 /**
- * "Stand".
+ * "Lieu".
  */
 class Spot
 {

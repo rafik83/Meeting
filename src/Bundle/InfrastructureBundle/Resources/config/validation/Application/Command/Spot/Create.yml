@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Spot\Create:
+    properties:
+        reference:
+            - Type:
+                ctype_: alnum
+                message: The value {{ value }} is not a valid {{ type }}.
+        size:
+            - Type:
+                type: float
+                message: The value {{ value }} is not a valid {{ type }}.

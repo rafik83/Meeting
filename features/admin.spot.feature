@@ -9,9 +9,9 @@ Feature: Create spot
 
   Scenario: I can create spot
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
-    And I follow "Stand"
+    And I follow "message.admin.spot.link"
     Then the response status code should be 200
-    And I follow "Ajouter"
+    And I follow "message.admin.spot.listSpot.add"
     Then the response status code should be 200
     And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/spot/create"
     And I fill in the following:
@@ -26,12 +26,13 @@ Feature: Create spot
     And I should see "flash.admin.spot.create.success"
 
   Scenario: I can list spot
-    Given the following fixtures files are loaded:
+    Given the database is empty
+    And the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
-    And I follow "Stand"
+    And I follow "message.admin.spot.link"
     Then the response status code should be 200
     And I should see "G0345"
