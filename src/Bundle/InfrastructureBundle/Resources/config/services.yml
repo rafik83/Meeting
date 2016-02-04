@@ -489,6 +489,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.manager'
 
     #
     # DateTime

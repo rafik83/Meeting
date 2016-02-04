@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
+use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -23,13 +24,20 @@ class RequestPermissionManager
     private $requestRepository;
 
     /**
+     * @var SheetManager
+     */
+    private $sheetManager;
+
+    /**
      * RequestPermissionManager constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
+     * @param SheetManager               $sheetManager
      */
-    public function __construct(RequestRepositoryInterface $requestRepository)
+    public function __construct(RequestRepositoryInterface $requestRepository, SheetManager $sheetManager)
     {
         $this->requestRepository = $requestRepository;
+        $this->sheetManager      = $sheetManager;
     }
 
     /**
@@ -143,19 +151,6 @@ class RequestPermissionManager
     }
 
     /**
-     * Is a user allowed to see a sheet
-     *
-     * @param User  $user
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    public function isAllowedToSeeSheet(User $user, Sheet $sheet)
-    {
-        return true;
-    }
-
-    /**
      * Is a user allowed to create a meeting request between these two sheets
      *
      * @param User  $user
@@ -168,7 +163,7 @@ class RequestPermissionManager
     {
         return
             $from->hasUser($user) &&
-            $this->isAllowedToSeeSheet($user, $to) &&
+            $this->sheetManager->isAllowedToSee($user, $from, $to) &&
             $this->hasNotLivingRequestsBetween($from, $to);
     }
 
