@@ -71,7 +71,7 @@ class CancelRequestHandler
         if ($cancelRequest->message) {
             $this->messageRepository->add(new Message(
                 $cancelRequest->request,
-                $cancelRequest->request->getFromSheet(),
+                $cancelRequest->request->getFromSheet(), // @todo Fix in case of toSheet
                 $cancelRequest->message,
                 $this->createdAt
             ));

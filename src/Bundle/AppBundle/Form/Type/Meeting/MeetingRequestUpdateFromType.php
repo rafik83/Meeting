@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MeetingRequestEditType extends AbstractMeetingRequestType
+class MeetingRequestUpdateFromType extends AbstractMeetingRequestType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class MeetingRequestEditType extends AbstractMeetingRequestType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-           'data_class' => EditRequest::class,
+           'data_class' => UpdateRequestFrom::class,
            'submit'     => true,
         ]);
     }

@@ -245,8 +245,14 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-    vimeet_infrastructure.vimeet.application.command.meeting.edit_request_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\EditRequestHandler
+    vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_request_to_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'

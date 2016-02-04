@@ -394,6 +394,8 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param User $user
      *
      * @return Sheet
@@ -412,6 +414,8 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @deprecated
+     *
      * @param User $user
      *
      * @return Participant[]

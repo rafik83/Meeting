@@ -10,12 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
-class EditRequest
+class UpdateRequestFrom
 {
     /**
      * @var Request
@@ -43,13 +42,11 @@ class EditRequest
     public $editor;
 
     /**
-     * EditRequest constructor.
+     * UpdateRequestFrom constructor.
      *
      * @param Request            $meetingRequest
      * @param \DateTimeInterface $date
      * @param User               $editor
-     *
-     * @throws IsNotAllowedToUpdateDataException
      */
     public function __construct(Request $meetingRequest, \DateTimeInterface $date, User $editor)
     {
@@ -57,13 +54,6 @@ class EditRequest
         $this->description    = null;
         $this->date           = $date;
         $this->editor         = $editor;
-
-        if ($meetingRequest->getUserSheet($editor) === $this->meetingRequest->getFromSheet()) {
-            $this->participants = $this->meetingRequest->getFromParticipants()->toArray();
-        } elseif ($meetingRequest->getUserSheet($editor) === $this->meetingRequest->getToSheet()) {
-            $this->participants = $this->meetingRequest->getFromParticipants()->toArray();
-        } else {
-            throw new IsNotAllowedToUpdateDataException('You are not allowed to update this meeting request.');
-        }
+        $this->participants   = $meetingRequest->getFromParticipants()->toArray();
     }
 }

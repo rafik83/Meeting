@@ -303,35 +303,35 @@ event_meeting_list_proposition:
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
 
 event_meeting_request_approve:
-    path: /meeting/request/{meetingRequest}/approve
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
     requirements:
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approveRequest }
 
 event_meeting_request_refuse:
-    path: /meeting/request/{meetingRequest}/refuse
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/refuse
     requirements:
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refuseRequest }
 
 event_meeting_request_cancel:
-    path: /meeting/request/{meetingRequest}/cancel
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
     requirements:
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
 
 event_meeting_request_show:
-    path: /meeting/request/{meetingRequest}
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}
     requirements:
         meetingRequest: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
 
 event_meeting_request_edit:
-    path: /meeting/request/{meetingRequest}/edit
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
     requirements:
         meetingRequest: \d+
     methods:  [GET, POST]
