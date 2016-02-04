@@ -68,7 +68,11 @@ class Spot
         $seatCapacity,
         $active
     ) {
-        $this->reference       = $reference;
+        $pattern = '/(\d+)/i';
+        $replacement = '0${0}$3';
+        $newReference = preg_replace($pattern, $replacement, $reference);
+
+        $this->reference       = $newReference;
         $this->event           = $event;
         $this->size            = $size;
         $this->meetingCapacity = $meetingCapacity;
