@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class MeetingRequestController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getRequestSentBySheet($sheet);
-        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest);
+        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest, $this->getUser(), $sheet);
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
@@ -71,7 +72,7 @@ class MeetingRequestController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getPropositionReceivedBySheet($sheet);
-        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition);
+        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition, $this->getUser(), $sheet);
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
