@@ -27,8 +27,8 @@ Feature: Meeting Request Update
     Then the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/1/edit"
     And I check "Jean Dutest"
-    And I fill in "form.meeting_request_edit.children.description.label" with "ff"
-    And I press "form.meeting_request_edit.children.submit.label"
+    And I fill in "form.meeting_request_update_from.children.description.label" with "ff"
+    And I press "form.meeting_request_update_from.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.meeting_request.edit.success"
 
@@ -58,8 +58,8 @@ Feature: Meeting Request Update
     Then the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/1/edit"
     And I check "Jean Dutest"
-    And I fill in "form.meeting_request_edit.children.description.label" with "ff"
-    And I press "form.meeting_request_edit.children.submit.label"
+    And I fill in "form.meeting_request_update_from.children.description.label" with "ff"
+    And I press "form.meeting_request_update_from.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.meeting_request.edit.success"
 
@@ -89,7 +89,7 @@ Feature: Meeting Request Update
     Then the response status code should be 200
     And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/meeting/request/3/edit"
     And I check "Jean Dutest"
-    And I fill in "form.meeting_request_edit.children.description.label" with "ff"
-    And I press "form.meeting_request_edit.children.submit.label"
+    And I fill in "form.meeting_request_update_to.children.description.label" with "ff"
+    And I press "form.meeting_request_update_to.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.meeting_request.edit.success"

@@ -241,6 +241,7 @@ class MeetingRequestController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:showRequest.html.twig', [
             'eventView'          => $eventView,
+            'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestView,
             'canEdit'            => $permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet),
             'canCancel'          => $permissionManager->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet),

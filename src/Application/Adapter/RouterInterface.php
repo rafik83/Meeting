@@ -12,13 +12,15 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface RouterInterface
 {
     /**
+     * @param Sheet   $sheet
      * @param Request $request
      *
      * @return string
      */
-    public function generateMeetingRequest(Request $request);
+    public function generateMeetingRequest(Sheet $sheet, Request $request);
 }

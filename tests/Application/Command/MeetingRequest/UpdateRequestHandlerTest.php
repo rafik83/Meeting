@@ -10,8 +10,10 @@
 
 namespace Tests\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequest;
-use Proximum\Vimeet\Application\Command\MeetingRequest\EditRequestHandler;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
@@ -52,7 +54,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
 
         //Command
-        $command = new EditRequest($request, $datetime, $user1);
+        $command = new UpdateRequestFrom($request, $datetime, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -78,7 +80,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled();
 
         //Handler
-        $handler = new EditRequestHandler(
+        $handler = new UpdateRequestFromHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal()
@@ -112,7 +114,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new EditRequest($request, $datetime, $user1);
+        $command = new UpdateRequestFrom($request, $datetime, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -139,7 +141,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled();
 
         //Handler
-        $handler = new EditRequestHandler(
+        $handler = new UpdateRequestFromHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal()
@@ -172,7 +174,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
 
         //Command
-        $command = new EditRequest($request, $datetime, $user1);
+        $command = new UpdateRequestTo($request, $datetime, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -198,7 +200,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled();
 
         //Handler
-        $handler = new EditRequestHandler(
+        $handler = new UpdateRequestToHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal()
@@ -232,7 +234,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new EditRequest($request, $datetime, $user1);
+        $command = new UpdateRequestTo($request, $datetime, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -259,7 +261,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled();
 
         //Handler
-        $handler = new EditRequestHandler(
+        $handler = new UpdateRequestToHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal()
