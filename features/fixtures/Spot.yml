@@ -1,0 +1,9 @@
+Proximum\Vimeet\Domain\Model\Spot:
+    spot_1:
+        __construct:
+        reference: G0345
+        event: @event_rdv_carnot_2016
+        size: 6
+        meetingCapacity: 3
+        seatCapacity: 4
+        active: true
