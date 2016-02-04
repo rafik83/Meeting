@@ -306,7 +306,7 @@ admin_happening_speaker_read:
     requirements:
         event: \d+
         speaker: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Speaker:read }
 admin_happening_speaker_delete:
     path: /event/{event}/happening/speaker/{speaker}/delete
