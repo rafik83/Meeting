@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Spot:
+    type:  entity
+    table: spot
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        reference:
+            type: string
+        size:
+            type: integer
+        meetingCapacity:
+            type: integer
+        seatCapacity:
+            type: integer
+        active:
+            type: boolean
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event

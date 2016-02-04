@@ -394,3 +394,17 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    spot_create:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer

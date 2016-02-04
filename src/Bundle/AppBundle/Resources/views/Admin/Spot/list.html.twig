@@ -1,0 +1,37 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+    <h2>Liste des spots</h2>
+    <div class="text-right">
+        <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">Ajouter</a>
+    </div>
+    {% set actif = { 1: 'oui', 0: 'non' } %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'message.admin.spot.listSpot.reference'|trans }}</th>
+            <th>{{ 'message.admin.spot.listSpot.size'|trans }}</th>
+            <th>{{ 'message.admin.spot.listSpot.meetingCapacity'|trans }}</th>
+            <th>{{ 'message.admin.spot.listSpot.seatCapacity'|trans }}</th>
+            <th>{{ 'message.admin.spot.listSpot.active'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for spot in spots %}
+            <tr>
+                <td>{{ spot.reference }}</td>
+                <td>{{ spot.size }}</td>
+                <td>{{ spot.meetingCapacity }}</td>
+                <td>{{ spot.seatCapacity }}</td>
+                <td>{{ actif[spot.active] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+
+{% endblock %}

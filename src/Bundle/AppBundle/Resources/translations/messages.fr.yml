@@ -244,3 +244,10 @@ admin:
                 approved: Accepté
                 refused: Refusé
                 cancelled: Annulé
+        spot:
+            listSpot:
+                reference: Référence
+                size: Taille (en m²)
+                meetingCapacity: Capacité de rendez-vous
+                seatCapacity: Capacité de places assises
+                active: Actif
