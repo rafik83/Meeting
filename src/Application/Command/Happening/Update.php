@@ -41,6 +41,11 @@ class Update
     public $translations = [];
 
     /**
+     * @var array
+     */
+    public $talkings = [];
+
+    /**
      * Update constructor.
      *
      * @param Happening $happening
@@ -56,6 +61,13 @@ class Update
             $this->translations[$translation->getLocale()] = [
                 'title'       => $translation->getTitle(),
                 'description' => $translation->getDescription(),
+            ];
+        }
+
+        foreach ($happening->getSpeakers() as $position => $speaker) {
+            $this->talkings[] = [
+                'speaker' => $speaker,
+                'postion' => $position,
             ];
         }
     }

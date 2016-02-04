@@ -189,6 +189,18 @@ class Happening
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getTalkings()
+    {
+        if (null === $this->talkings) {
+            $this->talkings = new ArrayCollection();
+        }
+
+        return $this->talkings;
+    }
+
+    /**
      * @return Speaker[]
      */
     public function getSpeakers()
