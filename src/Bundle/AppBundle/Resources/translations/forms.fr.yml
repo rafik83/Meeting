@@ -394,3 +394,31 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    create_speaker:
+        children:
+            name:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer
+    update_speaker:
+        children:
+            name:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer

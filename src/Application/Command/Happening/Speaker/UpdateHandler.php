@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
-use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 
@@ -50,11 +49,16 @@ class UpdateHandler
             $update->name,
             $update->function,
             $update->organization,
-            $this->fileStorageInterface->upload($update->logo),
-            $this->fileStorageInterface->upload($update->photo)
+            $update->logo ? $this->fileStorageInterface->upload($update->logo) : $logo,
+            $update->photo ? $this->fileStorageInterface->upload($update->photo) : $photo
         ));
 
-        $this->fileStorageInterface->remove($logo);
-        $this->fileStorageInterface->remove($photo);
+        if ($update->logo) {
+            $this->fileStorageInterface->remove($logo);
+        }
+
+        if ($update->photo) {
+            $this->fileStorageInterface->remove($photo);
+        }
     }
 }

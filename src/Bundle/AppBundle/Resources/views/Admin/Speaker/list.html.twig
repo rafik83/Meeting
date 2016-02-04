@@ -1,0 +1,43 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block title 'Liste des intervenants' %}
+
+{% block content %}
+
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ block('title') }}</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Fonction</th>
+            <th>Société</th>
+            <th>
+                {% if speakers is not empty %}
+                    <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter un intervenant</a>
+                {% endif %}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for speaker in speakers %}
+                <tr>
+                    <td>{{ speaker.name }}</td>
+                    <td>{{ speaker.function }}</td>
+                    <td>{{ speaker.organization }}</td>
+                    <td>
+                        <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        Aucun intervenant. <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success">Ajouter un intervenant</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

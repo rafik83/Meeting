@@ -385,7 +385,7 @@ services:
     adapter.local_file_storage:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\LocalFileStorageAdapter
         arguments:
-            - '%kernel.root_dir%/web'
+            - '%kernel.root_dir%/../web'
             - '@datetime'
 
     #

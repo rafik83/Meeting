@@ -78,12 +78,13 @@ class SpeakerController extends Controller
             $this->get('command.happening.speaker.update_handler')->handle($command);
             $this->addFlash('success', 'flash.admin.speaker.create.success');
 
-            return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_happening_speaker_update', ['event' => $event->getId(), 'speaker' => $speaker->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Speaker:update.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
+            'event'   => $event,
+            'speaker' => $speaker,
+            'form'    => $form->createView(),
         ]);
     }
 }

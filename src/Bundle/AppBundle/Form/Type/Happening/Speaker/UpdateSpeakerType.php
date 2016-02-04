@@ -22,6 +22,7 @@ class UpdateSpeakerType extends AbstractSpeakerType
     {
         $resolver->setDefaults([
             'data_class' => Update::class,
+            'submit'     => true,
         ]);
     }
 }
