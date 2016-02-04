@@ -255,6 +255,10 @@ admin_happening_update:
         happening: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:update }
+
+#
+# Happening Category
+#
 admin_happening_category_list:
     path: /event/{event}/happening/category
     requirements:
@@ -274,3 +278,26 @@ admin_happening_category_update:
         category: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Happening:updateCategory }
+
+#
+# Happening Speaker
+#
+admin_happening_speaker_list:
+    path: /event/{event}/happening/speaker
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Speaker:list }
+admin_happening_speaker_create:
+    path: /event/{event}/happening/speaker/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Speaker:create }
+admin_happening_speaker_update:
+    path: /event/{event}/happening/speaker/{speaker}/update
+    requirements:
+        event: \d+
+        speaker: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Speaker:update }

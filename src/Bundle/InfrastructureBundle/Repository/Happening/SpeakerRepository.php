@@ -30,7 +30,7 @@ class SpeakerRepository implements SpeakerRepositoryInterface
     }
 
     /**
-     * @param Speaker $speaker
+     * {@inheritdoc}
      */
     public function add(Speaker $speaker)
     {
@@ -39,10 +39,24 @@ class SpeakerRepository implements SpeakerRepositoryInterface
     }
 
     /**
-     * @param Speaker $speaker
+     * {@inheritdoc}
      */
     public function set(Speaker $speaker)
     {
         $this->entityManager->flush($speaker);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('speaker')
+            ->from(Speaker::class, 'speaker');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

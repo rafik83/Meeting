@@ -80,6 +80,16 @@ class Speaker
     }
 
     /**
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
      * Get name
      *
      * @return string
@@ -127,5 +137,25 @@ class Speaker
     public function getPhoto()
     {
         return $this->photo;
+    }
+
+    /**
+     * @param string $name
+     * @param string $function
+     * @param string $organization
+     * @param string $logo
+     * @param string $photo
+     *
+     * @return Speaker
+     */
+    public function update($name, $function, $organization, $logo, $photo)
+    {
+        $this->name         = $name;
+        $this->function     = $function;
+        $this->organization = $organization;
+        $this->logo         = $logo;
+        $this->photo        = $photo;
+
+        return $this;
     }
 }

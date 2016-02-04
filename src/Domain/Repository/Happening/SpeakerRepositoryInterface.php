@@ -23,4 +23,9 @@ interface SpeakerRepositoryInterface
      * @param Speaker $speaker
      */
     public function set(Speaker $speaker);
+
+    /**
+     * @return Speaker[];
+     */
+    public function all();
 }

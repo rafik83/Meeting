@@ -110,6 +110,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.happening.speaker:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\SpeakerRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -341,6 +345,16 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+    command.happening.speaker.create_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\CreateHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
+    command.happening.speaker.update_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\UpdateHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
 
     #
     # Security
@@ -368,6 +382,11 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\RouterAdapter
         arguments:
             - '@router'
+    adapter.local_file_storage:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\LocalFileStorageAdapter
+        arguments:
+            - '%kernel.root_dir%/web'
+            - '@datetime'
 
     #
     # Components
