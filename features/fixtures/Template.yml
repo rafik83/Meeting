@@ -373,7 +373,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         quantity:
                             min: 0
                             max: 2
-                        updatableUntil: "2016-09-01 09:00:00"
+                        updatableUntil: "2050-09-01 09:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: ~
                     56615feba09a4:
@@ -488,7 +488,6 @@ Proximum\Vimeet\Domain\Model\Template:
                         quantity:
                             min: 0
                             max: 4
-                        updatableUntil: "2016-01-01 09:00:00"
                         includedIn:
                             563cae7496da1.563cae8a5072d.563cb1257722e: 1
                             563cae7496da1.563cae8a5072d.563cb13a4d3de: 1

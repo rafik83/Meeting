@@ -6,9 +6,12 @@
 
 {% block content %}
     <h2>{{ 'event.sheet.package.products.title'|trans }}</h2>
-    <hr>
+
     {{ form(form) }}
-    <a class="btn btn-danger" href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">
+
+    <hr>
+
+    <a class="btn btn-link" href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">
         {{ 'event.link.product.cancel'|trans() }}
     </a>
 {% endblock %}

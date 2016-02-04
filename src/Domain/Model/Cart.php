@@ -99,6 +99,31 @@ class Cart implements BillingInfoInterface
         return $this->createdAt;
     }
 
+    /**
+     * @param string $group
+     * @param string $row
+     * @param int    $quantity
+     */
+    public function setRow($group, $row, $quantity)
+    {
+        if ($this->issetRow($group, $row)) {
+            $this->data[$group][$row] = [
+                'value'    => true,
+                'quantity' => $quantity,
+            ];
+        }
+    }
+
+    /**
+     * @param string $group
+     * @param string $row
+     *
+     * @return bool
+     */
+    private function issetRow($group, $row)
+    {
+        return isset($this->template[$group]['template'][$row]);
+    }
 
     /**
      * {@inheritdoc}

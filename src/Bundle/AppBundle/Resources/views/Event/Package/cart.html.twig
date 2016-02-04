@@ -5,11 +5,15 @@
 {% block content %}
     <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
 
-    {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': cartView, 'show_taxes': false }, false) }}
+    {% if cartView and cartView.groups|length %}
+        {{ include('VimeetAppBundle:Event/Package:table.html.twig', { 'order': cartView }, false) }}
 
-    <div class="text-center">
-        <a href="{{ path('event_sheet_billing', { 'sheet': sheet.id }) }}" class="btn btn-primary">
-            {{ 'event.sheet.cart.label.billingStep'|trans }}
-        </a>
-    </div>
+        <div class="text-center">
+            <a href="{{ path('event_sheet_billing', { 'sheet': sheet.id }) }}" class="btn btn-primary">
+                {{ 'event.sheet.cart.label.billingStep'|trans }}
+            </a>
+        </div>
+    {% else %}
+        <div class="alert alert-danger">{{ 'event.sheet.cart.empty'|trans }}</div>
+    {% endif %}
 {% endblock %}

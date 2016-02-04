@@ -39,8 +39,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h2>Panier</h2>
-            {{ include('VimeetAppBundle:Event/Order:table.html.twig', { 'order': proforma.orderView }, false) }}
+            {{ include('VimeetAppBundle:Event/Order:proformaTable.html.twig', { 'order': proforma.orderView }, false) }}
         </div>
     </div>
     <div class="row">
@@ -76,8 +75,4 @@
         </div>
     </div>
 </div>
-{% block javascripts %}
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-{% endblock %}
 </body>

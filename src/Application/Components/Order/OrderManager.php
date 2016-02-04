@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Order;
 class OrderManager
 {
     /**
+     * Merge products data
+     *
      * @param array $sheetData
      * @param array $packageDataTwo
      *
@@ -22,7 +24,6 @@ class OrderManager
      */
     public function mergeTwoPackageData(array $sheetData, array $packageDataTwo)
     {
-        // merge products data
         $packageDataTwo = $this->cleanFalseOption($packageDataTwo);
 
         foreach ($sheetData as $keyStep => $step) {
