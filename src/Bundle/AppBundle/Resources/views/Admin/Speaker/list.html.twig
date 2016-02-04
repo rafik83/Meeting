@@ -1,5 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
+{% import 'VimeetAppBundle::macro.html.twig' as macro %}
+
 {% block title 'Liste des intervenants' %}
 
 {% block content %}
@@ -30,6 +32,11 @@
                     <td>
                         <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Voir</a>
                         <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        {{ macro.delete_button(
+                            path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
+                            'Supprimer',
+                            { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'Confirmer la suppression' }
+                        ) }}
                     </td>
                 </tr>
             {% else %}

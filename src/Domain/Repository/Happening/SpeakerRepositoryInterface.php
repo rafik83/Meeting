@@ -25,6 +25,11 @@ interface SpeakerRepositoryInterface
     public function set(Speaker $speaker);
 
     /**
+     * @param Speaker $speaker
+     */
+    public function remove(Speaker $speaker);
+
+    /**
      * @return Speaker[];
      */
     public function all();

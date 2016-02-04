@@ -49,6 +49,15 @@ class SpeakerRepository implements SpeakerRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Speaker $speaker)
+    {
+        $this->entityManager->remove($speaker);
+        $this->entityManager->flush($speaker);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function all()
     {
         $queryBuilder = $this

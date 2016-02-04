@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
+use Proximum\Vimeet\Application\Command\Happening\Speaker\Delete;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker\CreateSpeakerType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker\UpdateSpeakerType;
@@ -76,7 +77,7 @@ class SpeakerController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.happening.speaker.update_handler')->handle($command);
-            $this->addFlash('success', 'flash.admin.speaker.create.success');
+            $this->addFlash('success', 'flash.admin.speaker.update.success');
 
             return $this->redirectToRoute('admin_happening_speaker_update', ['event' => $event->getId(), 'speaker' => $speaker->getId()]);
         }
@@ -88,11 +89,31 @@ class SpeakerController extends Controller
         ]);
     }
 
+    /**
+     * @param Event   $event
+     * @param Speaker $speaker
+     *
+     * @return Response
+     */
     public function readAction(Event $event, Speaker $speaker)
     {
         return $this->render('VimeetAppBundle:Admin/Speaker:read.html.twig', [
             'event'   => $event,
             'speaker' => $speaker,
         ]);
+    }
+
+    /**
+     * @param Event   $event
+     * @param Speaker $speaker
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(Event $event, Speaker $speaker)
+    {
+        $this->get('command.happening.speaker.delete_handler')->handle(new Delete($speaker));
+        $this->addFlash('success', 'flash.admin.speaker.delete.success');
+
+        return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
     }
 }

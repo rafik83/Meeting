@@ -355,6 +355,11 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.happening.speaker.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\DeleteHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
 
     #
     # Security
