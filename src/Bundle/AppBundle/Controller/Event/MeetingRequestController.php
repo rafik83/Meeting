@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\EventView;
-use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
