@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class SpotRepository implements SpotRepositoryInterface
 {
@@ -24,24 +23,13 @@ class SpotRepository implements SpotRepositoryInterface
     private $entityManager;
 
     /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
      * SpotRepository constructor.
      *
-     * @param EntityManager           $entityManager
-     * @param TypeRepositoryInterface $typeRepository
+     * @param EntityManager $entityManager
      */
-    public function __construct(
-        EntityManager $entityManager,
-        TypeRepositoryInterface $typeRepository
-    ) {
+    public function __construct(EntityManager $entityManager) {
         $this->entityManager  = $entityManager;
-        $this->typeRepository = $typeRepository;
     }
-
 
     /**
      * @param Spot $spot
