@@ -39,7 +39,7 @@ class SpotCreateType extends AbstractType
                 'required' => true
             ])
             ->add('active', CheckboxType::class, [
-                'required' => true
+                'required' => false
             ])
         ;
     }

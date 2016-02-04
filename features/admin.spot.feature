@@ -6,8 +6,6 @@ Feature: Create spot
     And the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
 
   Scenario: I can create spot
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
@@ -28,12 +26,9 @@ Feature: Create spot
     And I should see "flash.admin.spot.create.success"
 
   Scenario: I can list spot
-    Given the database is empty
     Given the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200

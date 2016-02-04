@@ -51,6 +51,5 @@ class SpotController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
-
     }
 }

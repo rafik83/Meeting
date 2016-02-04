@@ -77,7 +77,7 @@ flash:
                 success: Le type a bien été mis à jour
         spot:
             create:
-                success: Le stand a bien été créé
+                success: Le lieu a bien été créé
         category:
             create:
                 success: La catégorie a bien été créée
