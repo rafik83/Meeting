@@ -3,18 +3,18 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
     <h2>Liste des lieux</h2>
-    <div class="text-right">
-        <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'message.admin.spot.listSpot.add'|trans }}</a>
+    <div>
+        <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
     </div>
     {% set actif = { 1: 'oui', 0: 'non' } %}
     <table class="table">
         <thead>
         <tr>
-            <th>{{ 'message.admin.spot.listSpot.reference'|trans }}</th>
-            <th>{{ 'message.admin.spot.listSpot.size'|trans }}</th>
-            <th>{{ 'message.admin.spot.listSpot.meetingCapacity'|trans }}</th>
-            <th>{{ 'message.admin.spot.listSpot.seatCapacity'|trans }}</th>
-            <th>{{ 'message.admin.spot.listSpot.active'|trans }}</th>
+            <th>{{ 'admin.spot.listSpot.reference'|trans }}</th>
+            <th>{{ 'admin.spot.listSpot.size'|trans }}</th>
+            <th>{{ 'admin.spot.listSpot.meetingCapacity'|trans }}</th>
+            <th>{{ 'admin.spot.listSpot.seatCapacity'|trans }}</th>
+            <th>{{ 'admin.spot.listSpot.active'|trans }}</th>
         </tr>
         </thead>
         <tbody>
