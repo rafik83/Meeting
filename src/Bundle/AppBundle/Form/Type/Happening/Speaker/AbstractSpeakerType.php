@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 abstract class AbstractSpeakerType extends AbstractType
 {
@@ -21,11 +23,11 @@ abstract class AbstractSpeakerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', ['required' => true])
-            ->add('function', 'text', ['required' => true])
-            ->add('organization', 'text', ['required' => true])
-            ->add('logo', 'file', ['required' => false])
-            ->add('photo', 'file', ['required' => false])
+            ->add('name', TextType::class, ['required' => true])
+            ->add('function', TextType::class, ['required' => true])
+            ->add('organization', TextType::class, ['required' => true])
+            ->add('logo', FileType::class, ['required' => false])
+            ->add('photo', FileType::class, ['required' => false])
         ;
     }
 }
