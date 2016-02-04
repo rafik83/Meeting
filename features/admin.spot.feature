@@ -1,17 +1,15 @@
 Feature: Create spot
   I need to be able to create a spot
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can create spot
     Given the database is empty
     And the following fixtures files are loaded:
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
       | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-
-  Scenario: I can create spot
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
-    And I follow "message.admin.spot.link"
+    And I follow "admin.spot.link"
     Then the response status code should be 200
-    And I follow "message.admin.spot.listSpot.add"
+    And I follow "admin.spot.listSpot.add"
     Then the response status code should be 200
     And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/spot/create"
     And I fill in the following:
@@ -33,6 +31,6 @@ Feature: Create spot
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
-    And I follow "message.admin.spot.link"
+    And I follow "admin.spot.link"
     Then the response status code should be 200
     And I should see "G0345"
