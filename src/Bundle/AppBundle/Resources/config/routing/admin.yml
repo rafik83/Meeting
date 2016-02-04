@@ -301,3 +301,10 @@ admin_happening_speaker_update:
         speaker: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Speaker:update }
+admin_happening_speaker_read:
+    path: /event/{event}/happening/speaker/{speaker}/read
+    requirements:
+        event: \d+
+        speaker: \d+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Speaker:read }

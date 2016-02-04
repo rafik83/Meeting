@@ -1,0 +1,33 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block title %}Intevenant {{ speaker.name }}{% endblock %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ block('title') }}</h2>
+
+    <table class="table">
+        <tr>
+            <th>Nom</th>
+            <td>{{ speaker.name }}</td>
+        </tr>
+        <tr>
+            <th>Fonction</th>
+            <td>{{ speaker.function }}</td>
+        </tr>
+        <tr>
+            <th>Société</th>
+            <td>{{ speaker.organization }}</td>
+        </tr>
+        <tr>
+            <th>Logo de la société</th>
+            <td><img src="{{ speaker.logo }}" /></td>
+        </tr>
+        <tr>
+            <th>Photo de l'intervant</th>
+            <td><img src="{{ speaker.photo }}" /></td>
+        </tr>
+    </table>
+
+{% endblock %}

@@ -28,6 +28,7 @@
                     <td>{{ speaker.function }}</td>
                     <td>{{ speaker.organization }}</td>
                     <td>
+                        <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Voir</a>
                         <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                     </td>
                 </tr>

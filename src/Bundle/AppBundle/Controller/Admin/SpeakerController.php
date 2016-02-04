@@ -87,4 +87,12 @@ class SpeakerController extends Controller
             'form'    => $form->createView(),
         ]);
     }
+
+    public function readAction(Event $event, Speaker $speaker)
+    {
+        return $this->render('VimeetAppBundle:Admin/Speaker:read.html.twig', [
+            'event'   => $event,
+            'speaker' => $speaker,
+        ]);
+    }
 }
