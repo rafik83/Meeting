@@ -243,6 +243,20 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    vimeet_infrastructure.vimeet.application.command.meeting.update_request_to_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
         arguments:
@@ -344,12 +358,16 @@ services:
             - '@vimeet_infrastructure.security.user_password_encoder'
 
     #
-    # Translator
+    # Adapters
     #
     vimeet_infrastructure.adapter.translator_adapter:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
         arguments:
             - '@translator'
+    adapter.router:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\RouterAdapter
+        arguments:
+            - '@router'
 
     #
     # Components
@@ -463,10 +481,16 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@meeting.request_permission_manager'
     vimeet_infrastructure.application.components.meeting.request_views_builder:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
         arguments:
             - '@vimeet_infrastructure.application.components.meeting.request_view_builder'
+    meeting.request_permission_manager:
+        class: Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.manager'
 
     #
     # DateTime
@@ -532,3 +556,15 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
         arguments:
             - '@components.sheet.tagged_info_guesser'
+
+    #
+    # Notification component
+    #
+    notification.notification_view_factory:
+        class: Proximum\Vimeet\Application\Components\Notification\NotificationViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'

@@ -31,11 +31,6 @@ class Request implements MessageSubjectInterface
     private $id;
 
     /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * @var Sheet
      */
     private $from;
@@ -81,13 +76,17 @@ class Request implements MessageSubjectInterface
     private $creator;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $stateUpdatedAt;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
      * @param array              $fromParticipants
      * @param Sheet              $to
      * @param array              $toParticipants
-     * @param string             $description
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
      */
@@ -96,17 +95,16 @@ class Request implements MessageSubjectInterface
         array $fromParticipants,
         Sheet $to,
         array $toParticipants,
-        $description,
-        \DateTimeInterface $createdAt,
+        DateTimeInterface $createdAt,
         User $creator
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->to               = $to;
         $this->toParticipants   = new ArrayCollection($toParticipants);
-        $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
     }
 
@@ -116,14 +114,6 @@ class Request implements MessageSubjectInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -175,21 +165,48 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getStateUpdatedAt()
+    {
+        return $this->stateUpdatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
      * @return Request
      */
-    public function refuse()
+    public function refuse(\DateTimeInterface $date)
     {
-        $this->state = self::STATE_REFUSED;
+        $this->state          = self::STATE_REFUSED;
+        $this->stateUpdatedAt = $date;
 
         return $this;
     }
 
     /**
+     * @param \DateTimeInterface $date
+     *
      * @return Request
      */
-    public function cancel()
+    public function cancel(\DateTimeInterface $date)
     {
-        $this->state = self::STATE_CANCEL;
+        $this->state          = self::STATE_CANCEL;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function approve(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_APPROVED;
+        $this->stateUpdatedAt = $date;
 
         return $this;
     }
@@ -289,6 +306,26 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasFromParticipant(Participant $participant)
+    {
+        return $this->fromParticipants->contains($participant);
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasToParticipant(Participant $participant)
+    {
+        return $this->toParticipants->contains($participant);
+    }
+
+    /**
      * @param Participant $fromParticipant
      *
      * @return Request
@@ -298,5 +335,61 @@ class Request implements MessageSubjectInterface
         $this->fromParticipants->add($fromParticipant);
 
         return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeToParticipant(Participant $participant)
+    {
+        $this->toParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSent()
+    {
+        return self::STATE_SENT === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return self::STATE_APPROVED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelled()
+    {
+        return self::STATE_CANCEL === $this->state;
     }
 }

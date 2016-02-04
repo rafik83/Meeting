@@ -53,14 +53,20 @@ class Notification
     private $message;
 
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
      * @param Event             $event
      * @param User               $emitter
      * @param User               $recipient
      * @param \DateTimeInterface $createdAt
      * @param string             $action
      * @param string             $message
+     * @param string             $url
      */
-    public function __construct(Event $event, User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message)
+    public function __construct(Event $event, User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message, $url = null)
     {
         $this->event     = $event;
         $this->emitter   = $emitter;
@@ -70,6 +76,7 @@ class Notification
         $this->message   = $message;
         $this->view      = false;
         $this->message   = $message;
+        $this->url       = $url;
     }
 
     /**
@@ -105,6 +112,8 @@ class Notification
     }
 
     /**
+     * @deprecated Use is read instead
+     *
      * @return boolean
      */
     public function isView()
@@ -134,5 +143,33 @@ class Notification
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRead()
+    {
+        return (bool) $this->view;
+    }
+
+    /**
+     * @return Notification
+     */
+    public function markAsRead()
+    {
+        $this->view = true;
+
+        return $this;
     }
 }

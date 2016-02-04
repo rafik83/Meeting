@@ -114,6 +114,18 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return Sheet
+     */
+    public function addParticpant(Participant $participant)
+    {
+        $this->participants->add($participant);
+
+        return $this;
+    }
+
+    /**
      * Get data.
      *
      * @return array
@@ -233,5 +245,17 @@ class Sheet implements BillingInfoInterface
     public function getBillingTemplate()
     {
         return $this->getEvent()->getBillingTemplate();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasUser(User $user)
+    {
+        return $this->getParticipants()->exists(function ($index, Participant $participant) use ($user) {
+            return $participant->getUser() === $user;
+        });
     }
 }

@@ -36,6 +36,7 @@ class MeetingRequestRefuseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RefuseRequest::class,
+            'submit'     => true,
         ]);
     }
 }

@@ -1,0 +1,81 @@
+Proximum\Vimeet\Domain\Model\Meeting\Message:
+    meeting_message_approved_request_with_participants:
+        __construct:
+            - @meeting_approved_request_with_participants
+            - @sheet_test
+            - 'Bonjour je souhaiterais prendre rendez vous avec vous'
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request1:
+        __construct:
+            - @meeting_request1
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request2:
+        __construct:
+            - @meeting_request2
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request3:
+        __construct:
+            - @meeting_request3
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request4:
+        __construct:
+            - @meeting_request4
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request5:
+        __construct:
+            - @meeting_request5
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_request6:
+        __construct:
+            - @meeting_request6
+            - @sheet_test
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition1:
+        __construct:
+            - @meeting_proposition1
+            - @sheet_exposant1
+            - "Je souhaiterais vous rencontrer au plus vite"
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition2:
+        __construct:
+            - @meeting_proposition2
+            - @sheet_exposant2
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition3:
+        __construct:
+            - @meeting_proposition3
+            - @sheet_exposant3
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition4:
+        __construct:
+            - @meeting_proposition4
+            - @sheet_exposant4
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition5:
+        __construct:
+            - @meeting_proposition5
+            - @sheet_exposant5
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+    meeting_message_proposition6:
+        __construct:
+            - @meeting_proposition6
+            - @sheet_exposant6
+            - <text(100)>
+            - <dateTimeBetween('-3 days', 'now')>
+
+

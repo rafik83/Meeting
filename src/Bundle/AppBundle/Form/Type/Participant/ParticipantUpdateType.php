@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Application\Command\Participant\Update;
 
 class ParticipantUpdateType extends AbstractParticipantType
 {
@@ -22,8 +23,7 @@ class ParticipantUpdateType extends AbstractParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Participant\Update',
-            'csrf_token_id' => 'participant_update',
+            'data_class' => Update::class,
         ]);
     }
 }

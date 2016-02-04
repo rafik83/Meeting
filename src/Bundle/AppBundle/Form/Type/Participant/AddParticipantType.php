@@ -10,19 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Application\Command\Participant\Add;
 
 class AddParticipantType extends AbstractAddParticipantType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        parent::buildForm($builder, $options);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -31,8 +23,7 @@ class AddParticipantType extends AbstractAddParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Participant\Add',
-            'csrf_token_id' => 'add_participant',
+            'data_class' => Add::class,
         ]);
     }
 }

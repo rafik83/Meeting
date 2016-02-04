@@ -302,29 +302,40 @@ event_meeting_list_proposition:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
 
-event_meeting_request_approved:
-    path: /sheet/{sheet}/meeting/proposition/approved/{meetingRequest}
+event_meeting_request_approve:
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approvedRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approveRequest }
 
-event_meeting_request_refused:
-    path: /sheet/{sheet}/meeting/proposition/refused/{meetingRequest}
+event_meeting_request_refuse:
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/refuse
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refusedRequest }
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refuseRequest }
 
 event_meeting_request_cancel:
-    path: /sheet/{sheet}/meeting/request/cancel/{meetingRequest}
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
+
+event_meeting_request_show:
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}
+    requirements:
+        meetingRequest: \d+
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
+
+event_meeting_request_edit:
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
+    requirements:
+        meetingRequest: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:editRequest }
 
 #
 # Notification
@@ -333,3 +344,9 @@ event_notification_list:
     path:     /notification
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Notification:list }
+event_notification_read:
+    path:     /notification/{notification}/read
+    requirements:
+        notification: \d+
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Notification:read }

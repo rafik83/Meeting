@@ -89,7 +89,7 @@ class VatApplicable
         }
 
         // Billing country is in the EU and there is not billing vat number
-        if (in_array($billingCountry, $this->europeanCountries) && !$vatNumber) {
+        if (in_array(strtolower($billingCountry), array_map('strtolower', $this->europeanCountries)) && !$vatNumber) {
             return true;
         }
 

@@ -98,7 +98,7 @@ class UpdateHandler
         foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
-                $this->events[] = ['participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
@@ -106,7 +106,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addFromParticipant($participant);
-                $this->events[] = ['participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
     }
@@ -120,7 +120,7 @@ class UpdateHandler
         foreach ($update->meeting->getToParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeToParticipant($participant);
-                $this->events[] = ['participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
@@ -128,7 +128,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addToParticipant($participant);
-                $this->events[] = ['participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
     }

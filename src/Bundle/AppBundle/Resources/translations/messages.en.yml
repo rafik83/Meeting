@@ -18,6 +18,14 @@ register:
     email_already_exists: An account with this email address already exists
 
 event:
+    meeting:
+        showDetailsRequest:
+            title: Details request for appointment
+            to: To
+            from: From
+            participants: Participants
+            message: Your conversation
+            state: State
     link:
         see_my_sheet: See my %type% sheet
     sheet:

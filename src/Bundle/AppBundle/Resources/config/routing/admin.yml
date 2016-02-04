@@ -141,6 +141,14 @@ admin_meeting_request_position:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:position }
 
+admin_meeting_request_details:
+    path: /event/{event}/meeting-request/{meetingRequest}/details
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/MeetingRequest:showDetail }
+
 admin_meeting_request_slots:
     path: /event/{event}/meeting-request/{meetingRequest}/slots
     requirements:

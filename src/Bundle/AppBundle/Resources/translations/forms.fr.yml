@@ -216,10 +216,26 @@ form:
                 label: Enregistrer
     meeting_request_create:
         children:
-            fromParticipants:
+            participants:
                 label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
             description:
                 label: Motiver votre demande
+            submit:
+                label: Envoyer
+    meeting_request_update_from:
+        children:
+            participants:
+                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
+            description:
+                label: Expliquer pourquoi
+            submit:
+                label: Envoyer
+    meeting_request_update_to:
+        children:
+            participants:
+                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
+            description:
+                label: Expliquer pourquoi
             submit:
                 label: Envoyer
     meeting_request_approve:
@@ -365,3 +381,16 @@ form:
                             label: Description
             submit:
                 label: Envoyer
+    admin:
+        meeting_request:
+            list:
+                filter:
+                    state:
+                        children:
+                            approved: Accepté
+                            refused: Refusé
+                            cancel: Annulé
+                            sent: Envoyé
+                    children:
+                        submit:
+                            label: Filtrer

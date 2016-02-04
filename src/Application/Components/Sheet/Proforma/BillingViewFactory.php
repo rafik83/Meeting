@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 
@@ -36,6 +37,27 @@ class BillingViewFactory
      * @return BillingView
      */
     public function createFromSheet(Sheet $sheet)
+    {
+        return new BillingView(
+            $this->billingInfoGuesser->getName($sheet),
+            $this->billingInfoGuesser->getAddress($sheet),
+            $this->billingInfoGuesser->getCity($sheet),
+            $this->billingInfoGuesser->getZipcode($sheet),
+            $this->billingInfoGuesser->getCountry($sheet),
+            $this->billingInfoGuesser->getPhone($sheet),
+            $this->billingInfoGuesser->getEmail($sheet),
+            $this->billingInfoGuesser->getOrganization($sheet),
+            $this->billingInfoGuesser->getVatNumber($sheet),
+            $this->billingInfoGuesser->getExtra($sheet)
+        );
+    }
+
+    /**
+     * @param Order $sheet
+     *
+     * @return BillingView
+     */
+    public function createFromOrder(Order $sheet)
     {
         return new BillingView(
             $this->billingInfoGuesser->getName($sheet),

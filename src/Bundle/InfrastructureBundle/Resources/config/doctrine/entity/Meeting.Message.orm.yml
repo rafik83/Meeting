@@ -12,6 +12,8 @@ Proximum\Vimeet\Domain\Model\Meeting\Message:
         createdAt:
             type: datetime
     manyToOne:
+        from:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         request:

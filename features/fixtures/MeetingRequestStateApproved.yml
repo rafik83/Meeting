@@ -1,0 +1,10 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_approved_request_with_participants:
+        __construct:
+            - @sheet_1
+            - [@participant_1]
+            - @sheet_2
+            - []
+            - <dateTimeBetween('-3 days', 'now')>
+            - @user_1
+        state: 'approved'

@@ -49,6 +49,8 @@ flash:
             success: Vous avez bien refusé la proposition de rendez-vous
         cancelled:
             success: Vous avez bien annulé la demande de rendez-vous
+        edit:
+            success: Vous avez bien modifié la demande de rendez-vous
     package:
         update_step:
             success: Les informations ont bien été enregistrées

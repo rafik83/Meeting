@@ -6,14 +6,13 @@
     <h2>{{ 'event.meeting.listProposition.title'|trans }}</h2>
     <table class="table table-bordered">
         <thead>
-            <th>{{ 'event.meeting.listProposition.state'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.yourParticipants'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.description'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.informations'|trans }}</th>
-            <th>{{ 'event.meeting.listProposition.actions'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.state'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.from'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.participants'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.yourParticipants'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.createdAt'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.informations'|trans }}</th>
+        <th>{{ 'event.meeting.listProposition.actions'|trans }}</th>
         </thead>
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
@@ -33,19 +32,28 @@
                         {{ participantNameView.participantName }}<br>
                     {% endfor %}
                 </td>
-                <td>{{ proposition_view.description|nl2br }}</td>
                 <td nowrap>{{ proposition_view.createdAt|date('d/m/Y') }}</td>
                 <td>{{ proposition_view.message|nl2br }}</td>
                 <td nowrap>
-                    {% if proposition_view.state == 'sent' %}
-                        <a href="{{ path('event_meeting_request_approved', {
-                            'sheet': sheet.id,
-                            'meetingRequest': proposition_view.id
-                        }) }}" class="btn btn-xs btn-primary">{{ 'event.meeting.listProposition.accept'|trans() }}</a>
-                        <a href="{{ path('event_meeting_request_refused', {
-                            'sheet': sheet.id,
-                            'meetingRequest': proposition_view.id
-                        }) }}" class="btn btn-xs btn-danger">{{ 'event.meeting.listProposition.refuse'|trans() }}</a>
+                    {% if proposition_view.canApprove %}
+                        <a href="{{ path('event_meeting_request_approve', { 'sheet': sheet.id, 'meetingRequest': proposition_view.id }) }}" class="btn btn-xs btn-primary">
+                            {{ 'event.meeting.listProposition.accept'|trans() }}
+                        </a>
+                    {% endif %}
+                    {% if proposition_view.canRefuse %}
+                        <a href="{{ path('event_meeting_request_refuse', { 'sheet': sheet.id, 'meetingRequest': proposition_view.id }) }}" class="btn btn-xs btn-danger">
+                            {{ 'event.meeting.listProposition.refuse'|trans() }}
+                        </a>
+                    {% endif %}
+                    {% if proposition_view.canSee %}
+                        <a href="{{ path('event_meeting_request_show', { 'sheet': sheet.id, 'meetingRequest': proposition_view.id }) }}" class="btn btn-xs btn-default">
+                            {{ 'event.meeting.listProposition.show'|trans }}
+                        </a>
+                    {% endif %}
+                    {% if proposition_view.canEdit %}
+                        <a href="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': proposition_view.id }) }}" class="btn btn-xs btn-default">
+                            {{ 'event.meeting.listProposition.edit'|trans }}
+                        </a>
                     {% endif %}
                 </td>
             </tr>

@@ -7,12 +7,11 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             generator:
                 strategy: AUTO
     fields:
-        description:
-            type: text
-            nullable: true
         state:
             type: string
         createdAt:
+            type: datetime
+        stateUpdatedAt:
             type: datetime
     manyToOne:
         meeting:
