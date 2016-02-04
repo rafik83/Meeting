@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\Talking;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 class Happening
 {
@@ -47,6 +50,11 @@ class Happening
     private $translations;
 
     /**
+     * @var ArrayCollection
+     */
+    private $talkings;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
@@ -61,6 +69,7 @@ class Happening
         $this->end          = $end;
         $this->category     = $category;
         $this->translations = new ArrayCollection();
+        $this->talkings     = new ArrayCollection();
     }
 
     /**
@@ -177,5 +186,16 @@ class Happening
     public function updateTranslation($locale, $title, $description)
     {
         $this->translations->get($locale)->update($title, $description);
+    }
+
+    /**
+     * @return Speaker[]
+     */
+    public function getSpeakers()
+    {
+        return $this
+            ->talkings
+            ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
+            ->map(function (Talking $talking) { return $talking->getSpeaker(); });
     }
 }

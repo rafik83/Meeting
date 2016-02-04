@@ -22,3 +22,7 @@ Proximum\Vimeet\Domain\Model\Happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         category:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Category
+    oneToMany:
+        talkings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
+            mappedBy: happening

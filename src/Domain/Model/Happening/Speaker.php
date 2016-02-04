@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 
 class Speaker
 {
@@ -50,6 +53,11 @@ class Speaker
     private $photo;
 
     /**
+     * @var ArrayCollection
+     */
+    private $talkings;
+
+    /**
      * Speaker constructor.
      *
      * @param Event  $event
@@ -67,6 +75,7 @@ class Speaker
         $this->organization = $organization;
         $this->logo         = $logo;
         $this->photo        = $photo;
+        $this->talkings     = new ArrayCollection();
     }
 
     /**
@@ -157,5 +166,16 @@ class Speaker
         $this->photo        = $photo;
 
         return $this;
+    }
+
+    /**
+     * @return Happening[]
+     */
+    public function getHappenings()
+    {
+        return $this
+            ->talkings
+            ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
+            ->map(function (Talking $talking) { return $talking->getHappening(); });
     }
 }
