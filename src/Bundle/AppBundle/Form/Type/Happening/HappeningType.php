@@ -30,9 +30,9 @@ abstract class HappeningType extends AbstractType
             ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('translations', CollectionType::class, [
-                    'entry_type' => TranslationType::class,
-                    'label'      => false,
-                ]);
+                'entry_type' => TranslationType::class,
+                'label'      => false,
+            ]);
     }
 
     /**
