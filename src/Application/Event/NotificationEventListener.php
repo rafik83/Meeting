@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestAcceptedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
@@ -75,6 +76,11 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantAddedToMeeting(ParticipantAddedEvent $event)
     {
+        // Don't send notification to user when he is the emitter
+        if ($event->getParticipant()->getUser() === $event->getEmitter()) {
+            return;
+        }
+
         // Guess the sheet the participant has meeting with
         if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
             $sheet = $event->getMeeting()->getToSheet();
@@ -113,6 +119,11 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantRemovedFromMeeting(ParticipantRemovedEvent $event)
     {
+        // Don't send notification to user when he is the emitter
+        if ($event->getParticipant()->getUser() === $event->getEmitter()) {
+            return;
+        }
+
         // Guess the sheet the participant has meeting with
         if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
             $sheet = $event->getMeeting()->getToSheet();
@@ -151,6 +162,11 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantAddedToMeetingRequest(MeetingRequestParticipantAddedEvent $event)
     {
+        // Don't send notification to user when he is the emitter
+        if ($event->getParticipant()->getUser() === $event->getEmitter()) {
+            return;
+        }
+
         // Guess the sheet the participant has meeting with
         if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
             $sheet = $event->getMeetingRequest()->getToSheet();
@@ -189,6 +205,11 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onParticipantRemovedFromMeetingRequest(MeetingRequestParticipantRemovedEvent $event)
     {
+        // Don't send notification to user when he is the emitter
+        if ($event->getParticipant()->getUser() === $event->getEmitter()) {
+            return;
+        }
+
         // Guess the sheet the participant has meeting with
         if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
             $sheet = $event->getMeetingRequest()->getToSheet();
@@ -315,6 +336,12 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($fromParticipants as $participant) {
+
+            // Don't send notification to user when he is the emitter
+            if ($participant->getUser() === $event->getEmitter()) {
+                continue;
+            }
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.from_message',
@@ -346,6 +373,12 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($toParticipants as $participant) {
+
+            // Don't send notification to user when he is the emitter
+            if ($participant->getUser() === $event->getEmitter()) {
+                return;
+            }
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.to_message',
@@ -385,6 +418,12 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($fromParticipants as $participant) {
+
+            // Don't send notification to user when he is the emitter
+            if ($participant->getUser() === $event->getEmitter()) {
+                return;
+            }
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting.canceled.message',
@@ -416,6 +455,12 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         foreach ($toParticipants as $participant) {
+
+            // Don't send notification to user when he is the emitter
+            if ($participant->getUser() === $event->getEmitter()) {
+                return;
+            }
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting.canceled',
@@ -472,6 +517,14 @@ class NotificationEventListener implements EventSubscriberInterface
     }
 
     /**
+     * @param MessageEvent $event
+     */
+    public function onMessage(MessageEvent $event)
+    {
+
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -488,6 +541,7 @@ class NotificationEventListener implements EventSubscriberInterface
             'meeting.canceled'                    => 'onMeetingCanceled',
             'meeting_request.participant.removed' => 'onParticipantRemovedFromMeetingRequest',
             'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
+            'meeting_request.message'             => 'onMessage',
         ];
     }
 }
