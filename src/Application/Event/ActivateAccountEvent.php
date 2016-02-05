@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Event;
 use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Event as ProximumEvent;
-use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\Event;
 
 class ActivateAccountEvent extends Event
