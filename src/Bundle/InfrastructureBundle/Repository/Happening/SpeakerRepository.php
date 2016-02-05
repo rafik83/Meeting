@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 
@@ -58,13 +59,15 @@ class SpeakerRepository implements SpeakerRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function all()
+    public function allByEvent(Event $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('speaker')
-            ->from(Speaker::class, 'speaker');
+            ->from(Speaker::class, 'speaker')
+            ->andWhere('speaker.event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
