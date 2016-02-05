@@ -21,8 +21,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
-use Proximum\Vimeet\Domain\Model\Happening\Speaker;
-use Proximum\Vimeet\Domain\View\HappeningListView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,23 +38,8 @@ class HappeningController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $happenings = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findListByEvent($event, $request->getLocale());
-
-        $idsAllowedToBeModified = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findIdsWithoutParticipationByEvent($event, $happenings);
-
-        $happenings = array_map(function (Happening $happening) use ($request, $idsAllowedToBeModified) {
-            return new HappeningListView(
-                $happening->getId(),
-                $happening->getBegin(),
-                $happening->getEnd(),
-                $happening->getTitle($request->getLocale()),
-                array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-                in_array($happening->getId(), $idsAllowedToBeModified)
-            );
-        }, $happenings);
+            ->get('happening.happening_list_view_factory')
+            ->getListByEventAndLocale($event, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
             'event'      => $event,

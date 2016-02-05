@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\View;
+namespace Proximum\Vimeet\Application\Components\Happening;
 
 class HappeningListView
 {
@@ -52,8 +52,14 @@ class HappeningListView
      * @param array              $speakers
      * @param bool               $canUpdate
      */
-    public function __construct($id, \DateTimeInterface $begin, \DateTimeInterface $end, $title, array $speakers, $canUpdate)
-    {
+    public function __construct(
+        $id,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        $title,
+        array $speakers,
+        $canUpdate
+    ) {
         $this->id        = $id;
         $this->begin     = $begin;
         $this->end       = $end;

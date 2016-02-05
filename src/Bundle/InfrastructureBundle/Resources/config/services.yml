@@ -592,3 +592,11 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
+
+    #
+    # Happening component
+    #
+    happening.happening_list_view_factory:
+        class: Proximum\Vimeet\Application\Components\Happening\HappeningListViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
