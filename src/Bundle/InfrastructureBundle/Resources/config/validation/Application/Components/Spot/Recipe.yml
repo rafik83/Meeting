@@ -1,0 +1,13 @@
+Proximum\Vimeet\Application\Components\Spot\Recipe:
+    constraints:
+        - Expression:
+            expression: "this.start < this.end"
+            message: "validators.constraint.spot_reference_recipe.range"
+    properties:
+        prefix:
+            - NotBlank: ~
+            - Type: { type: string }
+        start:
+            - Type: { type: integer }
+        end:
+            - Type: { type: integer }

@@ -14,7 +14,8 @@ validators:
             alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
     constraint:
         daterange: L'heure de début doit être antérieure à l'heure de fin
-
+        spot_reference_recipe:
+            range: La valeur de début doit être inférieure à la valeur de fin
     position_meeting:
         fromParticipants:
             count:

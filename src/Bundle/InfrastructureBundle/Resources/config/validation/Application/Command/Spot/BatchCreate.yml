@@ -1,8 +1,8 @@
-Proximum\Vimeet\Application\Command\Spot\Create:
+Proximum\Vimeet\Application\Command\Spot\BatchCreate:
     properties:
-        reference:
-            - NotBlank: ~
-            - Type: { type: string }
+        recipes:
+            - Count: { min: 1 }
+            - Valid: ~
         size:
             - NotBlank: ~
             - Type: { type: integer }

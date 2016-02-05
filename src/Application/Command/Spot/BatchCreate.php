@@ -33,12 +33,12 @@ class BatchCreate
     /**
      * @var float
      */
-    public $meetingCapacity;
+    public $meetingCapacity = 1;
 
     /**
      * @var float
      */
-    public $seatCapacity;
+    public $seatCapacity = 3;
 
     /**
      * @var bool
