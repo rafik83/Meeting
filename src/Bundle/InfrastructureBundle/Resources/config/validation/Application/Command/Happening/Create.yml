@@ -1,6 +1,6 @@
 Proximum\Vimeet\Application\Command\Happening\Category\Create:
     properties:
-        titleTranslations:
+        translations:
             - All:
                 - Collection:
                     fields:
