@@ -319,7 +319,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.from_message',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getToSheet()),
                 ],
                 'notifications',
                 $participant->getUser()->getLocale()
