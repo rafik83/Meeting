@@ -23,7 +23,7 @@ class HappeningPermissionManager
     /**
      * @var array
      */
-    private $ids = [];
+    private $allowedToBeModified = [];
 
     /**
      * HappeningPermissionManager constructor.
@@ -36,28 +36,35 @@ class HappeningPermissionManager
     }
 
     /**
-     * @param Happening $happening
-     * @param array     $happenings
+     * @param array      $happenings
+     * @param bool|false $force
      *
-     * @return bool
+     * @return HappeningPermissionManager
      */
-    public function isAllowedToBeModified(Happening $happening, array $happenings = [])
+    public function loadAllowedToBeModified(array $happenings = [], $force = false)
     {
-        $this->updateAllowedIds(empty($happenings) ? [$happening] : $happenings);
+        $ids  = array_map(function (Happening $happening) { return $happening->getId(); }, $happenings);
+        $diff = $force ? $ids : array_diff($ids, array_keys($this->allowedToBeModified));
 
-        return in_array($happening->getId(), $this->ids);
+        $allowedToBeModified = empty($diff) ? [] : $this->happeningRepository->findIdsWithoutParticipation($diff);
+
+        foreach ($diff as $id) {
+            $this->allowedToBeModified[$id] = in_array($id, $allowedToBeModified);
+        }
+
+        return $this;
     }
 
     /**
-     * @param array $happenings
+     * @param Happening  $happening
+     * @param bool|false $force
+     *
+     * @return bool
      */
-    private function updateAllowedIds(array $happenings)
+    public function isAllowedToBeModified(Happening $happening, $force = false)
     {
-        $ids  = array_map(function (Happening $happening) { return $happening->getId(); }, $happenings);
-        $diff = array_diff($ids, $this->ids);
+        $this->loadAllowedToBeModified([$happening], $force);
 
-        if (!empty($diff)) {
-            $this->ids = array_merge($this->ids, $this->happeningRepository->findIdsWithoutParticipation($diff));
-        }
+        return in_array($happening->getId(), $this->allowedToBeModified);
     }
 }

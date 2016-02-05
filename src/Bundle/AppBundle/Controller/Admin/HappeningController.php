@@ -85,7 +85,7 @@ class HappeningController extends Controller
      */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
-        if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening)) {
+        if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening, true)) {
             throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
         }
 

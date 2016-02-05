@@ -49,16 +49,20 @@ class HappeningListViewFactory
      */
     public function getListByEventAndLocale(Event $event, $locale)
     {
+        // Get happenings
         $happenings = $this->happeningRepository->findListByEvent($event, $locale);
 
-        return array_map(function (Happening $happening) use ($locale, $happenings) {
+        // Load permissions
+        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
+
+        return array_map(function (Happening $happening) use ($locale) {
             return new HappeningListView(
                 $happening->getId(),
                 $happening->getBegin(),
                 $happening->getEnd(),
                 $happening->getTitle($locale),
                 array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-                $this->happeningPermissionManager->isAllowedToBeModified($happening, $happenings)
+                $this->happeningPermissionManager->isAllowedToBeModified($happening)
             );
         }, $happenings);
     }
