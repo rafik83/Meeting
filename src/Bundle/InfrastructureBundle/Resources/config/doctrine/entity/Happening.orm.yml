@@ -21,6 +21,7 @@ Proximum\Vimeet\Domain\Model\Happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
             mappedBy: happening
             cascade: ['persist', 'remove']
+            orphanRemoval: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
