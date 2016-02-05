@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\View\HappeningListView;
 
 interface HappeningRepositoryInterface
 {
