@@ -43,6 +43,10 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function upload($file)
     {
+        if (null === $file) {
+            return null;
+        }
+
         if (!$file instanceof UploadedFile) {
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }

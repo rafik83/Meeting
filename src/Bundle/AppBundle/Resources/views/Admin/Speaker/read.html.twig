@@ -22,11 +22,11 @@
         </tr>
         <tr>
             <th>Logo de la société</th>
-            <td><img src="{{ speaker.logo }}" class="img-responsive" /></td>
+            <td>{% if speaker.logo %}<img src="{{ speaker.logo }}" class="img-responsive" />{% endif %}</td>
         </tr>
         <tr>
             <th>Photo de l'intervant</th>
-            <td><img src="{{ speaker.photo }}" class="img-responsive" /></td>
+            <td>{% if speaker.photo %}<img src="{{ speaker.photo }}" class="img-responsive" />{% endif %}</td>
         </tr>
     </table>
 
