@@ -31,7 +31,7 @@ class SpeakerController extends Controller
      */
     public function listAction(Event $event)
     {
-        $speakers = $this->get('repository.happening.speaker')->all();
+        $speakers = $this->get('repository.happening.speaker')->allByEvent($event);
 
         return $this->render('VimeetAppBundle:Admin/Speaker:list.html.twig', [
             'event'    => $event,

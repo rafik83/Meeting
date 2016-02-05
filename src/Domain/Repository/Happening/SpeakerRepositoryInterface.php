@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Happening;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 interface SpeakerRepositoryInterface
@@ -30,7 +31,9 @@ interface SpeakerRepositoryInterface
     public function remove(Speaker $speaker);
 
     /**
+     * @param Event $event
+     *
      * @return Speaker[];
      */
-    public function all();
+    public function allByEvent(Event $event);
 }
