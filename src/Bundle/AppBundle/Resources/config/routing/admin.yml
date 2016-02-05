@@ -123,6 +123,24 @@ admin_meeting_list:
     defaults: { _controller: VimeetAppBundle:Admin/Meeting:list }
 
 #
+# Spot
+#
+
+admin_spot_list:
+    path: /event/{event}/spot
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Spot:list }
+
+admin_spot_create:
+    path: /event/{event}/spot/create
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Spot:create }
+
+#
 # Meeting Request
 #
 

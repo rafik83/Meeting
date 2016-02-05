@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Spot\Create:
+    properties:
+        reference:
+            - NotBlank: ~
+        size:
+            - NotBlank: ~
+        meetingCapacity:
+            - NotBlank: ~
+        seatCapacity:
+            - NotBlank: ~
