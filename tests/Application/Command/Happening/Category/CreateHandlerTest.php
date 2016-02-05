@@ -24,7 +24,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $event->setLocales(['fr', 'en']);
 
-        $expectedCategory     = new Category($event, 'picto1');
+        $expectedCategory     = new Category($event, 'picto1', 3);
         $expectedTranslation1 = new CategoryTranslation($expectedCategory, 'fr', 'truc');
         $expectedTranslation2 = new CategoryTranslation($expectedCategory, 'en', 'trac');
         $expectedCategory->setTranslation($expectedTranslation1);
@@ -35,6 +35,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $create  = new Create($event);
         $create->picto = 'picto1';
+        $create->position = 3;
         $create->translations = [
             'fr' => ['title' => 'truc'],
             'en' => ['title' => 'trac'],
