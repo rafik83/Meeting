@@ -21,12 +21,13 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\View\HappeningListView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HappeningController extends Controller
 {
@@ -42,19 +43,24 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository.happening_repository')
             ->findListByEvent($event, $request->getLocale());
 
-        $happeningsAllowedToBeModifiedArray = [];
-        $happeningsAllowedToBeModified      = $this
+        $idsAllowedToBeModified = $this
             ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findByEventWithoutParticipation($event);
+            ->findIdsWithoutParticipationByEvent($event, $happenings);
 
-        foreach ($happeningsAllowedToBeModified as $happening) {
-            $happeningsAllowedToBeModifiedArray[$happening->getId()] = $happening->getId();
-        }
+        $happenings = array_map(function (Happening $happening) use ($request, $idsAllowedToBeModified) {
+            return new HappeningListView(
+                $happening->getId(),
+                $happening->getBegin(),
+                $happening->getEnd(),
+                $happening->getTitle($request->getLocale()),
+                array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
+                in_array($happening->getId(), $idsAllowedToBeModified)
+            );
+        }, $happenings);
 
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
-            'event'           => $event,
-            'happenings'      => $happenings,
-            'allowToModified' => $happeningsAllowedToBeModifiedArray,
+            'event'      => $event,
+            'happenings' => $happenings,
         ]);
     }
 
@@ -96,12 +102,12 @@ class HappeningController extends Controller
      */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
-        $happeningsAllowedToBeModified      = $this
+        $idsAllowedToBeModified = $this
             ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findByEventWithoutParticipation($event);
+            ->findIdsWithoutParticipationByEvent($event, [$happening]);
 
-        if (!in_array($happening, $happeningsAllowedToBeModified)) {
-            throw new NotFoundHttpException('This happpening can not be modified as it has participant');
+        if (!in_array($happening, $idsAllowedToBeModified)) {
+            throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
         }
 
         $update = new UpdateHappening($happening);

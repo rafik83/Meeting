@@ -33,16 +33,32 @@ class HappeningListView
     public $title;
 
     /**
+     * @var array
+     */
+    public $speakers;
+
+    /**
+     * @var bool
+     */
+    public $canUpdate;
+
+    /**
+     * HappeningListView constructor.
+     *
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string             $title
+     * @param array              $speakers
+     * @param bool               $canUpdate
      */
-    public function __construct($id, \DateTimeInterface $begin, \DateTimeInterface $end, $title)
+    public function __construct($id, \DateTimeInterface $begin, \DateTimeInterface $end, $title, array $speakers, $canUpdate)
     {
-        $this->id    = $id;
-        $this->begin = $begin;
-        $this->end   = $end;
-        $this->title = $title;
+        $this->id        = $id;
+        $this->begin     = $begin;
+        $this->end       = $end;
+        $this->title     = $title;
+        $this->speakers  = $speakers;
+        $this->canUpdate = $canUpdate;
     }
 }

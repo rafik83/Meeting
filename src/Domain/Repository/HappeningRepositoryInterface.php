@@ -30,16 +30,17 @@ interface HappeningRepositoryInterface
      * @param Event  $event
      * @param string $locale
      *
-     * @return HappeningListView[]
+     * @return Happening[]
      */
     public function findListByEvent(Event $event, $locale);
 
     /**
      * @param Event $event
+     * @param array $happenings
      *
-     * @return Happening[]
+     * @return mixed
      */
-    public function findByEventWithoutParticipation(Event $event);
+    public function findIdsWithoutParticipationByEvent(Event $event, array $happenings);
 
     /**
      * @param Event  $event

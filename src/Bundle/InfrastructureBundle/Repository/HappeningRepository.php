@@ -67,7 +67,7 @@ class HappeningRepository implements HappeningRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\HappeningListView(happening.id, happening.begin, happening.end, translation.title)')
+            ->select('happening, translation')
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->where('happening.event = :event')
@@ -80,18 +80,20 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventWithoutParticipation(Event $event)
+    public function findIdsWithoutParticipationByEvent(Event $event, array $happenings)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('happening')
-            ->from(Happening::class, 'happening')
+            ->select('happening.id')
+            ->from(Happening::class, 'happening', 'happening.id')
             ->where('happening.event = :event')
-            ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->andWhere('happening IN (:happenings)')
+            ->setParameter('happenings', $happenings)
+            ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)');
 
-        return $queryBuilder->getQuery()->getResult();
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 
 
