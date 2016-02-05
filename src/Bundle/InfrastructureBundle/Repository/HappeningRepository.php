@@ -57,8 +57,6 @@ class HappeningRepository implements HappeningRepositoryInterface
         foreach ($happening->getTalkings() as $talking) {
             $this->entityManager->flush($talking);
         }
-
-        $this->entityManager->flush();
     }
 
     /**
