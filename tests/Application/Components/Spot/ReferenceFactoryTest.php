@@ -34,6 +34,10 @@ class ReferenceFactoryTest extends \PHPUnit_Framework_TestCase
                 new Recipe('A', 5, 10),
                 ['A05', 'A06', 'A07', 'A08', 'A09', 'A10'],
             ],
+            [
+                new Recipe('A', 95, 100),
+                ['A095', 'A096', 'A097', 'A098', 'A099', 'A100'],
+            ],
         ];
     }
 
