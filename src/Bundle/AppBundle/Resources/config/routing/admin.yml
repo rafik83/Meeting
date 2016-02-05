@@ -140,6 +140,13 @@ admin_spot_create:
     methods: [GET , POST]
     defaults: { _controller: VimeetAppBundle:Admin/Spot:create }
 
+admin_spot_batch_create:
+    path: /event/{event}/spot/create/batch
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Spot:batchCreate }
+
 #
 # Meeting Request
 #

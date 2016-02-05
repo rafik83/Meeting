@@ -20,7 +20,7 @@ class Recipe
     /**
      * @var int
      */
-    public $begin;
+    public $start;
 
     /**
      * @var int
@@ -31,13 +31,13 @@ class Recipe
      * Recipe constructor.
      *
      * @param string $prefix
-     * @param int    $begin
+     * @param int    $start
      * @param int    $end
      */
-    public function __construct($prefix, $begin = null, $end = null)
+    public function __construct($prefix, $start = null, $end = null)
     {
         $this->prefix = $prefix;
-        $this->begin  = $begin;
+        $this->start  = $start;
         $this->end    = $end;
     }
 }

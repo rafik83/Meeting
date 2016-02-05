@@ -10,15 +10,24 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends Controller
 {
+    /**
+     * @param Event $event
+     *
+     * @return Response
+     */
     public function listAction(Event $event)
     {
         $spots = $this
@@ -31,6 +40,12 @@ class SpotController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
@@ -48,6 +63,30 @@ class SpotController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Spot:create.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function batchCreateAction(Request $request, Event $event)
+    {
+        $batchCreate = new BatchCreate($event);
+        $form        = $this->createForm(BatchCreateType::class, $batchCreate);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.spot.batch_create_handler')->handle($batchCreate);
+            $this->addFlash('success', 'flash.admin.spot.batch_create.success');
+
+            return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Spot:batchCreate.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

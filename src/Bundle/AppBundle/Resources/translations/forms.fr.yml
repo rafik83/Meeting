@@ -446,3 +446,27 @@ form:
                 label: Actif
             submit:
                 label: Envoyer
+    spot_batch_create:
+        children:
+            recipes:
+                label: Vos identifiants
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        prefix:
+                            label: Préfix
+                        start:
+                            label: Début
+                        end:
+                            label: Fin
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer

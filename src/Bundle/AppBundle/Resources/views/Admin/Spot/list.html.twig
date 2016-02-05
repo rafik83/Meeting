@@ -5,6 +5,7 @@
     <h2>Liste des lieux</h2>
     <div>
         <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
+        <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
     </div>
     {% set actif = { 1: 'oui', 0: 'non' } %}
     <table class="table">

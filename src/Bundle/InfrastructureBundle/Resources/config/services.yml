@@ -204,6 +204,11 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.batch_create_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
+        arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
+            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -614,3 +619,9 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@happening.happening_permission_manager'
+
+    #
+    # Spot component
+    #
+    spot.reference_factory:
+        class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory
