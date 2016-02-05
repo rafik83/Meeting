@@ -67,7 +67,7 @@ class Update
         foreach ($happening->getSpeakers() as $position => $speaker) {
             $this->talkings[] = [
                 'speaker' => $speaker,
-                'postion' => $position,
+                'position' => $position,
             ];
         }
     }

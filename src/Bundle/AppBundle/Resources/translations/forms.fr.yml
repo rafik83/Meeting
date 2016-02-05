@@ -379,6 +379,16 @@ form:
                             label: Titre
                         description:
                             label: Description
+            talkings:
+                label: Intervenants
+                prototype:
+                    children:
+                        speaker:
+                            label: Intervenant
+                        position:
+                            label: Position
+                label_add: Ajouter
+                label_delete: Supprimer
             submit:
                 label: Envoyer
     admin:

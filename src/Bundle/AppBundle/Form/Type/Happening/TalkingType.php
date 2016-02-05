@@ -19,7 +19,7 @@ class TalkingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('skeaker', SpeakerEntityType::class, ['placeholder' => ''])
+            ->add('speaker', SpeakerEntityType::class, ['placeholder' => ''])
             ->add('position', IntegerType::class, ['empty_data' => 0])
         ;
     }

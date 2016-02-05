@@ -119,7 +119,7 @@ class HappeningController extends Controller
             $this->get('command.happening.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.update.success');
 
-            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_happening_update', ['event' => $event->getId(), 'happening' => $happening->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [

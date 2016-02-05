@@ -206,4 +206,31 @@ class Happening
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
             ->map(function (Talking $talking) { return $talking->getSpeaker(); });
     }
+
+    /**
+     * @param array $speakers
+     *
+     * @return Happening
+     */
+    public function setSpeakers(array $speakers)
+    {
+        // Make sure a speaker doesn't appear more than once
+        $speakers = array_unique($speakers, SORT_REGULAR);
+
+        // Remove surplus of talking
+        while ($this->talkings->count() > count($speakers)) {
+            $this->talkings->removeElement($this->talkings->last());
+        }
+
+        // Add / update talking with speakers and positions
+        foreach ($speakers as $position => $speaker) {
+            if ($this->talkings->get($position)) {
+                $this->talkings->get($position)->update($speaker, $position);
+            } else {
+                $this->talkings->add(new Talking($speaker, $this, $position));
+            }
+        }
+
+        return $this;
+    }
 }

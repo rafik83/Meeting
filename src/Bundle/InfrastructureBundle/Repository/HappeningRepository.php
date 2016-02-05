@@ -37,6 +37,10 @@ class HappeningRepository implements HappeningRepositoryInterface
     {
         $this->entityManager->persist($happening);
         $this->entityManager->flush($happening);
+
+        foreach ($happening->getTalkings() as $talking) {
+            $this->entityManager->flush($talking);
+        }
     }
 
     /**
@@ -49,6 +53,12 @@ class HappeningRepository implements HappeningRepositoryInterface
         foreach ($happening->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
+
+        foreach ($happening->getTalkings() as $talking) {
+            $this->entityManager->flush($talking);
+        }
+
+        $this->entityManager->flush();
     }
 
     /**

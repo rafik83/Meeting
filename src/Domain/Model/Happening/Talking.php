@@ -87,4 +87,14 @@ class Talking
     {
         return $this->position;
     }
+
+    /**
+     * @param Speaker $speaker
+     * @param int     $position
+     */
+    public function update(Speaker $speaker, $position)
+    {
+        $this->speaker  = $speaker;
+        $this->position = $position;
+    }
 }
