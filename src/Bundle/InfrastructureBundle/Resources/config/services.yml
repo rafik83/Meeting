@@ -348,6 +348,13 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+    command.user.activate_account_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\ActivateAccountPasswordHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.activate_account_token_repository'
 
     #
     # Security
