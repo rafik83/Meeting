@@ -193,10 +193,6 @@ class Happening
      */
     public function getTalkings()
     {
-        if (null === $this->talkings) {
-            $this->talkings = new ArrayCollection();
-        }
-
         return $this->talkings;
     }
 

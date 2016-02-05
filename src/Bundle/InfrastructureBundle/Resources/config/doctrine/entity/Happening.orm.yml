@@ -17,12 +17,11 @@ Proximum\Vimeet\Domain\Model\Happening:
             mappedBy: happening
             indexBy: locale
             cascade: ["persist"]
+        talkings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
+            mappedBy: happening
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         category:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Category
-    oneToMany:
-        talkings:
-            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
-            mappedBy: happening
