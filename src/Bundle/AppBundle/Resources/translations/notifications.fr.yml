@@ -23,7 +23,7 @@ notification:
                 message: Vous avez été retiré de la demande de rendez-vous à %sheet%
         canceled:
             action: Demande annulé
-            to_message: Votre demande de rendez-vous de %sheet% a été annulé.
+            to_message: Votre proposition de rendez-vous de %sheet% a été annulé.
             from_message: Votre demande de rendez-vous à %sheet% a été annulé.
         refused:
             action: Demande refusé
