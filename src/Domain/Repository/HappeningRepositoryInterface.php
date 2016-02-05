@@ -34,12 +34,11 @@ interface HappeningRepositoryInterface
     public function findListByEvent(Event $event, $locale);
 
     /**
-     * @param Event $event
      * @param array $happenings
      *
      * @return mixed
      */
-    public function findIdsWithoutParticipationByEvent(Event $event, array $happenings);
+    public function findIdsWithoutParticipation(array $happenings);
 
     /**
      * @param Event  $event

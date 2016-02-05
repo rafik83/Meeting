@@ -87,7 +87,7 @@ class HappeningController extends Controller
     {
         $idsAllowedToBeModified = $this
             ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findIdsWithoutParticipationByEvent($event, [$happening]);
+            ->findIdsWithoutParticipation([$happening]);
 
         if (!in_array($happening, $idsAllowedToBeModified)) {
             throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');

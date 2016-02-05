@@ -80,15 +80,13 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findIdsWithoutParticipationByEvent(Event $event, array $happenings)
+    public function findIdsWithoutParticipation(array $happenings)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('happening.id')
             ->from(Happening::class, 'happening', 'happening.id')
-            ->where('happening.event = :event')
-            ->setParameter('event', $event)
             ->andWhere('happening IN (:happenings)')
             ->setParameter('happenings', $happenings)
             ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)');

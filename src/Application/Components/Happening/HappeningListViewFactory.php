@@ -41,7 +41,7 @@ class HappeningListViewFactory
     public function getListByEventAndLocale(Event $event, $locale)
     {
         $happenings             = $this->happeningRepository->findListByEvent($event, $locale);
-        $idsAllowedToBeModified = $this->happeningRepository->findIdsWithoutParticipationByEvent($event, $happenings);
+        $idsAllowedToBeModified = $this->happeningRepository->findIdsWithoutParticipation($happenings);
 
         return array_map(function (Happening $happening) use ($locale, $idsAllowedToBeModified) {
             return new HappeningListView(
