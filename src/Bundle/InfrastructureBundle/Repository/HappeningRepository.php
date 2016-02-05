@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Application\Components\Happening\HappeningTitleView;
 
 class HappeningRepository implements HappeningRepositoryInterface
 {
@@ -110,6 +112,25 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('happening.translations', 'translations')
             ->where('happening.event = :event')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpeaker(Speaker $speaker, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translation')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->join('happening.talkings', 'talking')
+            ->join('talking.speaker', 'speaker', 'WITH', 'talking.speaker = :speaker')
+            ->setParameter('speaker', $speaker);
 
         return $queryBuilder->getQuery()->getResult();
     }

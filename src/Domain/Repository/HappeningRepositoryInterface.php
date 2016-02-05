@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 interface HappeningRepositoryInterface
 {
@@ -46,4 +47,12 @@ interface HappeningRepositoryInterface
      * @return Happening[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Speaker $speaker
+     * @param string  $locale
+     *
+     * @return Happening[]
+     */
+    public function findBySpeaker(Speaker $speaker, $locale);
 }

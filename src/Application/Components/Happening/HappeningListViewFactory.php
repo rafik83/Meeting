@@ -55,15 +55,54 @@ class HappeningListViewFactory
         // Load permissions
         $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
 
+        return $this->createFromHappenings($locale, $happenings);
+    }
+
+    /**
+     * @param Speaker $speaker
+     * @param string  $locale
+     *
+     * @return HappeningListView[]
+     */
+    public function getListBySpeakerAndLocale(Speaker $speaker, $locale)
+    {
+        // Get happenings
+        $happenings = $this->happeningRepository->findBySpeaker($speaker, $locale);
+
+        // Load permissions
+        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
+
+        return $this->createFromHappenings($happenings, $locale);
+    }
+
+    /**
+     * @param array  $happenings
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function createFromHappenings(array $happenings, $locale)
+    {
         return array_map(function (Happening $happening) use ($locale) {
-            return new HappeningListView(
-                $happening->getId(),
-                $happening->getBegin(),
-                $happening->getEnd(),
-                $happening->getTitle($locale),
-                array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-                $this->happeningPermissionManager->isAllowedToBeModified($happening)
-            );
+            return $this->createFromHappening($happening, $locale);
         }, $happenings);
+    }
+
+    /**
+     * @param Happening $happening
+     * @param string    $locale
+     *
+     * @return array
+     */
+    private function createFromHappening(Happening $happening, $locale)
+    {
+        return new HappeningListView(
+            $happening->getId(),
+            $happening->getBegin(),
+            $happening->getEnd(),
+            $happening->getTitle($locale),
+            array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
+            $this->happeningPermissionManager->isAllowedToBeModified($happening)
+        );
     }
 }

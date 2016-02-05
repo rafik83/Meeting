@@ -95,11 +95,16 @@ class SpeakerController extends Controller
      *
      * @return Response
      */
-    public function readAction(Event $event, Speaker $speaker)
+    public function readAction(Request $request, Event $event, Speaker $speaker)
     {
+        $happenings = $this
+            ->get('happening.happening_list_view_factory')
+            ->getListBySpeakerAndLocale($speaker, $request->getLocale());
+
         return $this->render('VimeetAppBundle:Admin/Speaker:read.html.twig', [
-            'event'   => $event,
-            'speaker' => $speaker,
+            'event'      => $event,
+            'speaker'    => $speaker,
+            'happenings' => $happenings,
         ]);
     }
 
