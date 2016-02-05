@@ -15,8 +15,10 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
             type: string
         logo:
             type: string
+            nullable: true
         photo:
             type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
