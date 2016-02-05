@@ -34,6 +34,7 @@ class UpdateHandler
     {
         $category = $update->category;
         $category->setPicto($update->picto);
+        $category->setPosition($update->position);
 
         foreach ($update->translations as $locale => $translation) {
             $category->getTranslations()->get($locale)->update($translation['title']);

@@ -31,17 +31,25 @@ class Category
     private $picto;
 
     /**
+     * @var int
+     */
+    private $position;
+
+    /**
      * @var ArrayCollection
      */
     private $translations;
 
     /**
      * Category constructor.
-     * @param Event  $event
-     * @param string $picto
+     *
+     * @param Event $event
+     * @param       $picto
+     * @param       $position
      */
-    public function __construct(Event $event, $picto)
+    public function __construct(Event $event, $picto, $position)
     {
+        $this->position     = $position;
         $this->event        = $event;
         $this->picto        = $picto;
         $this->translations = new ArrayCollection();
@@ -77,6 +85,30 @@ class Category
     public function getPicto()
     {
         return $this->picto;
+    }
+
+    /**
+     * Get position
+     *
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set position
+     *
+     * @param int $position
+     *
+     * @return Category
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
     }
 
     /**

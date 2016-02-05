@@ -7,6 +7,7 @@
     <table class="table">
         <thead>
         <tr>
+            <th>Position</th>
             <th>Titre</th>
             <th>Picto</th>
             <th><a href="{{ path('admin_happening_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a></th>
@@ -15,6 +16,7 @@
         <tbody>
         {% for category in categories %}
             <tr>
+                <td>{{ category.position }}</td>
                 <td>{{ category.title }}</td>
                 <td>{{ category.picto }}</td>
                 <td>
