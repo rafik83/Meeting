@@ -596,7 +596,12 @@ services:
     #
     # Happening component
     #
+    happening.happening_permission_manager:
+        class: Proximum\Vimeet\Application\Components\Happening\HappeningPermissionManager
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
     happening.happening_list_view_factory:
         class: Proximum\Vimeet\Application\Components\Happening\HappeningListViewFactory
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@happening.happening_permission_manager'

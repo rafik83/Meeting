@@ -85,11 +85,7 @@ class HappeningController extends Controller
      */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
-        $idsAllowedToBeModified = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findIdsWithoutParticipation([$happening]);
-
-        if (!in_array($happening, $idsAllowedToBeModified)) {
+        if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening)) {
             throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
         }
 

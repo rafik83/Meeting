@@ -67,11 +67,13 @@ class HappeningRepository implements HappeningRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('happening, translation')
+            ->select('happening, translation, talking, speaker')
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->where('happening.event = :event')
             ->setParameter('locale', $locale)
+            ->leftJoin('happening.talkings', 'talking')
+            ->leftJoin('talking.speaker', 'speaker')
+            ->where('happening.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

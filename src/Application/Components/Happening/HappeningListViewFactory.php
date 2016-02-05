@@ -23,13 +23,22 @@ class HappeningListViewFactory
     private $happeningRepository;
 
     /**
-     * HappeningPermissionManager constructor.
+     * @var HappeningPermissionManager
+     */
+    private $happeningPermissionManager;
+
+    /**
+     * HappeningListViewFactory constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
+     * @param HappeningPermissionManager   $happeningPermissionManager
      */
-    public function __construct(HappeningRepositoryInterface $happeningRepository)
-    {
-        $this->happeningRepository = $happeningRepository;
+    public function __construct(
+        HappeningRepositoryInterface $happeningRepository,
+        HappeningPermissionManager $happeningPermissionManager
+    ) {
+        $this->happeningRepository        = $happeningRepository;
+        $this->happeningPermissionManager = $happeningPermissionManager;
     }
 
     /**
@@ -40,17 +49,16 @@ class HappeningListViewFactory
      */
     public function getListByEventAndLocale(Event $event, $locale)
     {
-        $happenings             = $this->happeningRepository->findListByEvent($event, $locale);
-        $idsAllowedToBeModified = $this->happeningRepository->findIdsWithoutParticipation($happenings);
+        $happenings = $this->happeningRepository->findListByEvent($event, $locale);
 
-        return array_map(function (Happening $happening) use ($locale, $idsAllowedToBeModified) {
+        return array_map(function (Happening $happening) use ($locale, $happenings) {
             return new HappeningListView(
                 $happening->getId(),
                 $happening->getBegin(),
                 $happening->getEnd(),
                 $happening->getTitle($locale),
                 array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-                in_array($happening->getId(), $idsAllowedToBeModified)
+                $this->happeningPermissionManager->isAllowedToBeModified($happening, $happenings)
             );
         }, $happenings);
     }
