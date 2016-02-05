@@ -252,6 +252,16 @@ services:
             - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
+    event_listener.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ActivateAccountEventListener
+        arguments:
+            - '@mailer'
+            - '@templating.engine.twig'
+            - '@translator.default'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'activate_account', method: 'sendToken' }
+
 
     #
     # Twig extension
