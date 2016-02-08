@@ -56,11 +56,11 @@ class RouterAdapter implements RouterInterface
     public function generateSubject(Sheet $sheet, MessageSubjectInterface $subject)
     {
         if ($subject instanceof Request) {
-            return $this->generateMeetingRequest($subject);
+            return $this->generateMeetingRequest($sheet, $subject);
         }
 
         if ($subject instanceof Meeting) {
-            return $this->generateMeeting($subject);
+            return $this->generateMeeting($sheet, $subject);
         }
 
         throw new \RuntimeException('Unknown subject type.');

@@ -115,6 +115,16 @@ class Message
     }
 
     /**
+     * @return Sheet
+     */
+    public function getTo()
+    {
+        return $this->from === $this->getSubject()->getFromSheet() ?
+            $this->getSubject()->getToSheet() :
+            $this->getSubject()->getFromSheet();
+    }
+
+    /**
      * Get request
      *
      * @return Request

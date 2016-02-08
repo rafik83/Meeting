@@ -522,8 +522,8 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onMessage(MessageEvent $event)
     {
         // Get sheet owner and subject participants
-        $toSheetOwner   = $event->getMessage()->getSubject()->getToSheet()->getOwner();
-        $toParticipants = $event->getMessage()->getSubject()->getToParticipants()->toArray();
+        $toSheetOwner   = $event->getMessage()->getTo()->getOwner();
+        $toParticipants = $event->getMessage()->getTo()->getParticipants()->toArray();
 
         if (!in_array($toSheetOwner, $toParticipants)) {
             array_push($toParticipants, $toSheetOwner);
@@ -541,6 +541,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $participant->getUser()->getLocale()
             );
 
+
             // Send notification
             $this->notificationRepository->add(new Notification(
                 $event->getMessage()->getFrom()->getEvent(),
@@ -549,7 +550,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getMessage()->getCreatedAt(),
                 'message.received',
                 $message,
-                $this->router->generateSubject($event->getRequest()->getToSheet(), $event->getMessage()->getSubject())
+                $this->router->generateSubject($event->getMessage()->getTo(), $event->getMessage()->getSubject())
             ));
         }
     }
