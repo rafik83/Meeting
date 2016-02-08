@@ -55,7 +55,7 @@ class HappeningListViewFactory
         // Load permissions
         $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
 
-        return $this->createFromHappenings($locale, $happenings);
+        return $this->createFromHappenings($happenings, $locale);
     }
 
     /**
