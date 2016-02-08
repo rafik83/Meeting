@@ -1,5 +1,5 @@
 {{ 'mail.activateAccount.body'|trans({'%event%': event.title}, 'mail')|html|nl2br }}
-<a href="{{ url('event_create_new_password', {'token': token}) }}">
-    {{ url('event_create_new_password', {'token': token}) }}
+<a href="{{ url('event_activate_account', {'token': token}) }}">
+    {{ url('event_activate_account', {'token': token}) }}
 </a><br>
 {{ 'mail.activateAccount.end'|trans({}, 'mail')|html|nl2br }}
