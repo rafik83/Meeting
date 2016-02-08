@@ -3,7 +3,16 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
     <h2>Liste des lieux</h2>
-    <div>
+
+    <h3>Filtrer par statut</h3>
+    {{ form(filter_form) }}
+    <div class="col-md-4">
+        {% if filtered %}
+            <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-link">Vider les filtres</a>
+        {% endif %}
+    </div>
+
+    <div class="text-right">
         <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
     </div>
     {% set actif = { 1: 'oui', 0: 'non' } %}
