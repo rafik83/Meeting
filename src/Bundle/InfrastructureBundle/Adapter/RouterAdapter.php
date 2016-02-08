@@ -47,7 +47,7 @@ class RouterAdapter implements RouterInterface
      */
     public function generateMeeting(Sheet $sheet, Meeting $meeting)
     {
-        throw new \RuntimeException('Not implemented yet.');
+        return null; // Not implemented yet
     }
 
     /**
