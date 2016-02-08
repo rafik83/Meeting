@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
+use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -32,9 +33,15 @@ class CreateHandler
 
     /**
      * @param Create $create
+     *
+     * @throws UniqueReferenceViolationException
      */
     public function handle(Create $create)
     {
+        if (null !== $this->spotRepository->findByReference($create->event, $create->reference)) {
+            throw new UniqueReferenceViolationException($create->reference);
+        }
+
         $spot = new Spot(
             $create->reference,
             $create->event,

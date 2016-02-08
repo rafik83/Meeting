@@ -28,3 +28,6 @@ validators:
         participants:
             count:
                 min: Vous devez choisir au moins {{ limit }} participant
+    spot:
+        reference:
+            unique: Cette identifiant est déjà utilisé
