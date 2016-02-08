@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
+use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
@@ -86,8 +87,15 @@ class SpotController extends Controller
         $form        = $this->createForm(BatchCreateType::class, $batchCreate);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.spot.batch_create_handler')->handle($batchCreate);
-            $this->addFlash('success', 'flash.admin.spot.batch_create.success');
+            try {
+                $this->get('command.spot.batch_create_handler')->handle($batchCreate);
+                $this->addFlash('success', 'flash.admin.spot.batch_create.success');
+            } catch (MultipleUniqueReferenceViolationException $exception) {
+                $this->addFlash('warning', [
+                    'message'   => 'flash.admin.spot.batch_create.duplicate',
+                    'arguments' => ['%references%' => $exception->getReferencesAsString()],
+                ]);
+            }
 
             return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
         }

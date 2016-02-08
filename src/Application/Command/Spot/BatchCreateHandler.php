@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
+use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
+use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 
 class BatchCreateHandler
 {
@@ -38,20 +40,31 @@ class BatchCreateHandler
 
     /**
      * @param BatchCreate $batchCreate
+     *
+     * @throws MultipleUniqueReferenceViolationException
      */
     public function handle(BatchCreate $batchCreate)
     {
         $references = $this->referenceFactory->createFromRecipes($batchCreate->recipes);
+        $duplicates = [];
 
         foreach ($references as $reference) {
-            $create                  = new Create($batchCreate->event);
-            $create->reference       = $reference;
-            $create->size            = $batchCreate->size;
-            $create->meetingCapacity = $batchCreate->meetingCapacity;
-            $create->seatCapacity    = $batchCreate->seatCapacity;
-            $create->active          = $batchCreate->active;
+            try {
+                $create                  = new Create($batchCreate->event);
+                $create->reference       = $reference;
+                $create->size            = $batchCreate->size;
+                $create->meetingCapacity = $batchCreate->meetingCapacity;
+                $create->seatCapacity    = $batchCreate->seatCapacity;
+                $create->active          = $batchCreate->active;
 
-            $this->createHandler->handle($create);
+                $this->createHandler->handle($create);
+            } catch (UniqueReferenceViolationException $exception) {
+                $duplicates[] = $exception->getReference();
+            }
+        }
+
+        if (!empty($duplicates)) {
+            throw new MultipleUniqueReferenceViolationException($duplicates);
         }
     }
 }

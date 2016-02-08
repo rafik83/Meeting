@@ -78,6 +78,9 @@ flash:
         spot:
             create:
                 success: Le lieu a bien été créé
+            batch_create:
+                success: Les lieux ont été créés
+                duplicate: Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%
         category:
             create:
                 success: La catégorie a bien été créée
