@@ -1,0 +1,49 @@
+Proximum\Vimeet\Domain\Model\User:
+    user_1:
+        __construct: false
+        email: "test@test.com"
+        salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
+        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
+        locale: "fr"
+    user_2:
+        __construct: false
+        email: "test-2@test.com"
+        salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
+        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
+        locale: "fr"
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_1:
+        __construct: false
+        event: @event_rdv_carnot_2016
+        type: @type_exposant
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_1:
+        __construct: false
+        user: @user_1
+        sheet: @sheet_1
+        owner: true
+        active: true
+        data:
+            563caf1d9b1cb: "Dutest"
+            563caf2746398: "Jean"
+            563caf2f0ddbd: "0909090909"
+    participant_2:
+        __construct: false
+        user: @user_2
+        sheet: @sheet_1
+        owner: false
+        active: true
+        data:
+            563caf1d9b1cb: "Voltaire"
+            563caf2746398: "Michel"
+            563caf2f0ddbd: "0101010101"
+
+Proximum\Vimeet\Domain\Model\ActivateAccountToken:
+    activate_account_token_1:
+        __construct:
+             - @user_2
+             - azertyuiopqsdfghjklmwxcvbn
+             - @sheet_1
+             - <dateTimeBetween('+1 days', '+2 days')>
