@@ -194,7 +194,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.added',
             $message,
-            $this->router->generateMeetingRequest($event->getMeetingRequest())
+            $this->router->generateMeetingRequest($sheet, $event->getMeetingRequest())
         ));
     }
 
@@ -237,7 +237,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.removed',
             $message,
-            $this->router->generateMeetingRequest($event->getRequest())
+            $this->router->generateMeetingRequest($sheet, $event->getRequest())
         ));
     }
 
@@ -275,7 +275,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.refused',
                 $message,
-                $this->router->generateMeetingRequest($event->getRequest())
+                $this->router->generateMeetingRequest($event->getRequest()->getFromSheet(), $event->getRequest())
             ));
         }
     }
@@ -314,7 +314,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.accepted',
                 $message,
-                $this->router->generateMeetingRequest($event->getRequest())
+                $this->router->generateMeetingRequest($event->getRequest()->getFromSheet(), $event->getRequest())
             ));
         }
     }
@@ -360,7 +360,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.canceled',
                 $message,
-                $this->router->generateMeetingRequest($event->getRequest())
+                $this->router->generateMeetingRequest($event->getRequest()->getFromSheet(), $event->getRequest())
             ));
         }
 
@@ -397,7 +397,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getDate(),
                 'meeting_request.canceled',
                 $message,
-                $this->router->generateMeetingRequest($event->getRequest())
+                $this->router->generateMeetingRequest($event->getRequest()->getToSheet(), $event->getRequest())
             ));
         }
     }
@@ -512,7 +512,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.receive',
             $message,
-            $this->router->generateMeetingRequest($event->getRequest())
+            $this->router->generateMeetingRequest($event->getRequest()->getToSheet(), $event->getRequest())
         ));
     }
 
@@ -549,7 +549,7 @@ class NotificationEventListener implements EventSubscriberInterface
                 $event->getMessage()->getCreatedAt(),
                 'message.received',
                 $message,
-                $this->router->generateSubject($event->getMessage()->getSubject())
+                $this->router->generateSubject($event->getRequest()->getToSheet(), $event->getMessage()->getSubject())
             ));
         }
     }

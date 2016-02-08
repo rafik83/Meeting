@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Routing\RouterInterface as SymfonyRouterInterface;
 
 class RouterAdapter implements RouterInterface
@@ -36,15 +37,15 @@ class RouterAdapter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateMeetingRequest(Request $request)
+    public function generateMeetingRequest(Sheet $sheet, Request $request)
     {
-        return $this->router->generate('event_meeting_request_show', ['meetingRequest' => $request->getId()]);
+        return $this->router->generate('event_meeting_request_show', ['sheet' => $sheet->getId(), 'meetingRequest' => $request->getId()]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateMeeting(Meeting $meeting)
+    public function generateMeeting(Sheet $sheet, Meeting $meeting)
     {
         throw new \RuntimeException('Not implemented yet.');
     }
@@ -52,7 +53,7 @@ class RouterAdapter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateSubject(MessageSubjectInterface $subject)
+    public function generateSubject(Sheet $sheet, MessageSubjectInterface $subject)
     {
         if ($subject instanceof Request) {
             return $this->generateMeetingRequest($subject);

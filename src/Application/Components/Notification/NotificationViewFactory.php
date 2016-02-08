@@ -126,7 +126,7 @@ class NotificationViewFactory
                 $message,
                 $request->getCreatedAt(),
                 !$request->isSent(),
-                $this->router->generateMeetingRequest($request)
+                $this->router->generateMeetingRequest($request->getFromSheet(), $request)
             );
         }, $receivedRequest));
 
