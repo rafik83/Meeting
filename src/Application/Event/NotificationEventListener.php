@@ -237,7 +237,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.removed',
             $message,
-            $this->router->generateMeetingRequest($sheet, $event->getRequest())
+            $this->router->generateMeetingRequest($sheet, $event->getMeetingRequest())
         ));
     }
 
@@ -506,7 +506,7 @@ class NotificationEventListener implements EventSubscriberInterface
 
         // Send notification
         $this->notificationRepository->add(new Notification(
-            $event->getRequest()->getFromSheet()->getEvent(),
+            $event->getRequest()->getToSheet()->getEvent(),
             $event->getEmitter(),
             $recipient,
             $event->getDate(),
