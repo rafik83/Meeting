@@ -19,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FilterMeetingRequestType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
