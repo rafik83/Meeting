@@ -428,7 +428,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $message = $this->translator->trans(
                 'notification.meeting.canceled.message',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getToSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeeting()->getToSheet()),
                 ],
                 'notifications',
                 $participant->getUser()->getLocale()
@@ -447,8 +447,8 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // To : Get sheet owner and meeting participants
-        $toSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $toParticipants = $event->getRequest()->getFromParticipants()->toArray();
+        $toSheetOwner   = $event->getMeeting()->getFromSheet()->getOwner();
+        $toParticipants = $event->getMeeting()->getFromParticipants()->toArray();
 
         if (!in_array($toSheetOwner, $toParticipants)) {
             array_push($toParticipants, $toSheetOwner);
@@ -465,7 +465,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $message = $this->translator->trans(
                 'notification.meeting.canceled',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getRequest()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMeeting()->getFromSheet()),
                 ],
                 'notifications',
                 $participant->getUser()->getLocale()

@@ -481,6 +481,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@meeting.request_permission_manager'
     vimeet_infrastructure.application.components.meeting.request_views_builder:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestViewsBuilder
         arguments:
@@ -489,6 +490,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.manager'
 
     #
     # DateTime

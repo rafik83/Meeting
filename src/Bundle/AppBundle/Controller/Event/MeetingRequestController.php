@@ -48,7 +48,7 @@ class MeetingRequestController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getRequestSentBySheet($sheet);
-        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest);
+        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest, $this->getUser(), $sheet);
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
@@ -71,7 +71,7 @@ class MeetingRequestController extends BaseController
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
         $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getPropositionReceivedBySheet($sheet);
-        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition);
+        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition, $this->getUser(), $sheet);
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
@@ -270,7 +270,7 @@ class MeetingRequestController extends BaseController
             throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
         }
 
-        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime());
+        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime(), $sheet);
         $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

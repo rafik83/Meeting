@@ -18,24 +18,24 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 interface RouterInterface
 {
     /**
-     * @param Request $request
      * @param Sheet   $sheet
+     * @param Request $request
      *
      * @return string
      */
     public function generateMeetingRequest(Sheet $sheet, Request $request);
 
     /**
-     * @param Meeting $meeting
      * @param Sheet   $sheet
+     * @param Meeting $meeting
      *
      * @return string
      */
     public function generateMeeting(Sheet $sheet, Meeting $meeting);
 
     /**
-     * @param MessageSubjectInterface $subject
      * @param Sheet                   $sheet
+     * @param MessageSubjectInterface $subject
      *
      * @return string
      */
