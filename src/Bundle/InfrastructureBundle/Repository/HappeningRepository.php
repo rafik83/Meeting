@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
-use Proximum\Vimeet\Application\Components\Happening\HappeningTitleView;
 
 class HappeningRepository implements HappeningRepositoryInterface
 {
