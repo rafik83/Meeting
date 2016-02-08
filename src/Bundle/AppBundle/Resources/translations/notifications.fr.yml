@@ -31,3 +31,7 @@ notification:
         accepted:
             action: Demande accepté
             message: Votre demande de rendez-vous à destination de %to_sheet% a été accepté
+    message:
+        received:
+            message: Vous avez reçu un nouveau message de la part de %from_sheet%
+            action: Nouveau message

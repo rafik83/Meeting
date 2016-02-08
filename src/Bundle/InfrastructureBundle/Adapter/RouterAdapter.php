@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Symfony\Component\Routing\RouterInterface as SymfonyRouterInterface;
 
 class RouterAdapter implements RouterInterface
@@ -38,5 +39,29 @@ class RouterAdapter implements RouterInterface
     public function generateMeetingRequest(Request $request)
     {
         return $this->router->generate('event_meeting_request_show', ['meetingRequest' => $request->getId()]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateMeeting(Meeting $meeting)
+    {
+        throw new \RuntimeException('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateSubject(MessageSubjectInterface $subject)
+    {
+        if ($subject instanceof Request) {
+            return $this->generateMeetingRequest($subject);
+        }
+
+        if ($subject instanceof Meeting) {
+            return $this->generateMeeting($subject);
+        }
+
+        throw new \RuntimeException('Unknown subject type.');
     }
 }

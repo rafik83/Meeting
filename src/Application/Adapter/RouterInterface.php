@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 
 interface RouterInterface
 {
@@ -21,4 +22,18 @@ interface RouterInterface
      * @return string
      */
     public function generateMeetingRequest(Request $request);
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return string
+     */
+    public function generateMeeting(Meeting $meeting);
+
+    /**
+     * @param MessageSubjectInterface $subject
+     *
+     * @return string
+     */
+    public function generateSubject(MessageSubjectInterface $subject);
 }

@@ -77,6 +77,14 @@ class Message
     }
 
     /**
+     * @return MessageSubjectInterface
+     */
+    public function getSubject()
+    {
+        return $this->meeting ? $this->meeting : $this->request;
+    }
+
+    /**
      * Get content
      *
      * @return string

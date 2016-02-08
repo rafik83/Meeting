@@ -96,7 +96,7 @@ class UpdateRequestToHandler
 
             $this->messageRepository->add($message);
 
-            $event[] = ['meeting_request.message', new MessageEvent($message, $updateRequestTo->editor)];
+            $event[] = ['meeting_request.update.message', new MessageEvent($message, $updateRequestTo->editor)];
         }
 
         // Dispatch events

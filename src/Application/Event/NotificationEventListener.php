@@ -521,7 +521,37 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     public function onMessage(MessageEvent $event)
     {
+        // Get sheet owner and subject participants
+        $toSheetOwner   = $event->getMessage()->getSubject()->getToSheet()->getOwner();
+        $toParticipants = $event->getMessage()->getSubject()->getToParticipants()->toArray();
 
+        if (!in_array($toSheetOwner, $toParticipants)) {
+            array_push($toParticipants, $toSheetOwner);
+        }
+
+        foreach ($toParticipants as $participant) {
+
+            // Translate message
+            $message = $this->translator->trans(
+                'notification.message.received.message',
+                [
+                    '%from_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($event->getMessage()->getFrom()),
+                ],
+                'notifications',
+                $participant->getUser()->getLocale()
+            );
+
+            // Send notification
+            $this->notificationRepository->add(new Notification(
+                $event->getMessage()->getFrom()->getEvent(),
+                $event->getEmitter(),
+                $participant->getUser(),
+                $event->getMessage()->getCreatedAt(),
+                'message.received',
+                $message,
+                $this->router->generateSubject($event->getMessage()->getSubject())
+            ));
+        }
     }
 
     /**
@@ -541,7 +571,8 @@ class NotificationEventListener implements EventSubscriberInterface
             'meeting.canceled'                    => 'onMeetingCanceled',
             'meeting_request.participant.removed' => 'onParticipantRemovedFromMeetingRequest',
             'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
-            'meeting_request.message'             => 'onMessage',
+            'meeting_request.update.message'      => 'onMessage',
+            'meeting.update.message'              => 'onMessage',
         ];
     }
 }
