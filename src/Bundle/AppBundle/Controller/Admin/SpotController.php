@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Spot\Create;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\DeleteSpotBatchType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,6 +42,20 @@ class SpotController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $spotsToDelete = $request->request->get('ids', []);
+        $deleteButton  = $request->request->getBoolean('delete');
+        $disableButton = $request->request->getBoolean('disable');
+
+//        if (!empty($spotsToDelete)) {
+//            if ($deleteButton)
+//            {
+//
+//            } elseif() {
+//
+//            }
+//        }
+
+
         $filter   = [];
         $filtered = false;
 
@@ -66,10 +82,10 @@ class SpotController extends Controller
 
         return $this->render(
             'VimeetAppBundle:Admin/Spot:list.html.twig', [
-            'spots'       => $spots,
-            'event'       => $event,
-            'filter_form' => $filterForm->createView(),
-            'filtered'    => $filtered,
+            'spots'               => $spots,
+            'event'               => $event,
+            'filter_form'         => $filterForm->createView(),
+            'filtered'            => $filtered,
         ]);
     }
 
