@@ -114,6 +114,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.change_mail_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ChangeMailTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -230,7 +234,7 @@ services:
             - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
-            - '@event_dispatcher'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
@@ -355,6 +359,13 @@ services:
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@repository.activate_account_token_repository'
+    command.user.change_mail_handler:
+        class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+            - '@components.token.change_mail_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
     #
     # Security
@@ -465,6 +476,10 @@ services:
             - '@datetime'
     components.token.activate_account_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator
+        arguments:
+            - '@datetime'
+    components.token.change_mail_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator
         arguments:
             - '@datetime'
 
