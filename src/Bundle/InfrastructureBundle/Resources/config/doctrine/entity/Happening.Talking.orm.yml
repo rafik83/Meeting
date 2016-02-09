@@ -13,6 +13,10 @@ Proximum\Vimeet\Domain\Model\Happening\Talking:
         speaker:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Speaker
             inversedBy: talkings
+            joinColumn:
+                onDelete: CASCADE
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
             inversedBy: talkings
+            joinColumn:
+                onDelete: CASCADE
