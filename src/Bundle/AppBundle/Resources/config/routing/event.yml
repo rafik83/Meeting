@@ -17,6 +17,14 @@ event_register:
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
 #
+# Change mail
+#
+event_account:
+    path: /account
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Account:update }
+
+#
 # Forgot password
 #
 
