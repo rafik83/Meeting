@@ -30,12 +30,13 @@ class ChangeMailAddressMail extends Mail
      * @param string $receiver
      * @param string $template
      * @param string $messageId
+     * @param string $locale
      * @param Event  $event
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, Event $event, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
     {
-        parent::__construct($sender, $receiver, $template, $messageId);
+        parent::__construct($sender, $receiver, $template, $messageId, $locale);
         $this->event = $event;
         $this->token = $token;
     }
