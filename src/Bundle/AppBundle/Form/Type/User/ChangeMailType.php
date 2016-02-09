@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
 
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,7 +23,10 @@ class ChangeMailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        $builder
+            ->add('mail', EmailType::class, [
+                'required' => true
+            ]);
     }
 
     /**
