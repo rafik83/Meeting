@@ -38,10 +38,7 @@ class ActivateAccountController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->get('security.token_storage')->setToken(null);
-            $request->getSession()->invalidate();
-        }
+        $this->disconnet($request);
 
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();

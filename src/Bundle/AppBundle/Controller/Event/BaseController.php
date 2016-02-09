@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
@@ -206,5 +207,16 @@ class BaseController extends Controller
     {
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
+    }
+
+    /**
+     * @param Request $request
+     */
+    protected function disconnet(Request $request)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->get('security.token_storage')->setToken(null);
+            $request->getSession()->invalidate();
+        }
     }
 }

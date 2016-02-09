@@ -10,19 +10,22 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
+use DateTime;
+use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
+use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ChangeMailType;
+use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\View\EventView;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountController extends Controller
+class AccountController extends BaseController
 {
     /**
      * @param Request   $request
@@ -68,14 +71,28 @@ class AccountController extends Controller
             'form'      => $form->createView(),
         ]);
     }
+
     /**
-     * @param Request   $request
+     * @param Request $request
      * @param EventView $eventView
+     * @param ChangeMailToken $changeMailToken
      *
      * @return RedirectResponse
      */
-    public function activateNewMailAction(Request $request, EventView $eventView)
+    public function activateNewMailAction(Request $request, EventView $eventView, ChangeMailToken $changeMailToken)
     {
+        if (new DateTime() > $changeMailToken->getExpireDate()) {
+            throw new NotFoundException('Date of the token expired');
+        }
+
+        $this->disconnet($request);
+
+        $user = $changeMailToken->getUser();
+        $changeMailActivation = new ChangeMailActivation($changeMailToken);
+        $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
+
+        $this->authenticate($user);
+
         return $this->redirectToRoute('event');
     }
 }
