@@ -29,4 +29,9 @@ interface SpotRepositoryInterface
      * {@inheritdoc}
      */
     public function removeBatchSpot(array $ids, Event $event);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBatchSpot(array $ids, Event $event);
 }

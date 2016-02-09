@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
-class DeleteBatchHandler
+class DisableBatchHandler
 {
     /**
      * @var SpotRepositoryInterface
@@ -29,8 +29,8 @@ class DeleteBatchHandler
         $this->spotRepository = $spotRepository;
     }
 
-    public function handle(DeleteBatch $deleteBatch)
+    public function handle(DisableBatch $disableBatch)
     {
-        $this->spotRepository->removeBatchSpot($deleteBatch->idsSpot, $deleteBatch->event);
+        $this->spotRepository->disableBatchSpot($disableBatch->idsSpot, $disableBatch->event);
     }
 }

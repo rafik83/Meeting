@@ -111,13 +111,32 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->delete('spot')
-            ->from(Spot::class, 'spot')
+            ->delete()
+            ->from('Proximum\Vimeet\Domain\Model\Spot', 'spot')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
             ->setParameter('ids', $ids)
             ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->set('spot.active', '0')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
 
         $queryBuilder->getQuery()->execute();
     }
