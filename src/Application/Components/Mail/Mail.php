@@ -33,17 +33,24 @@ class Mail
     private $messageId;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @param string $sender
      * @param string $receiver
      * @param string $template
      * @param string $messageId
+     * @param string $locale
      */
-    public function __construct($sender, $receiver, $template, $messageId)
+    public function __construct($sender, $receiver, $template, $messageId, $locale)
     {
         $this->sender    = $sender;
         $this->receiver  = $receiver;
         $this->template  = $template;
         $this->messageId = $messageId;
+        $this->locale    = $locale;
     }
 
     /**
@@ -76,5 +83,13 @@ class Mail
     public function getMessageId()
     {
         return $this->messageId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 }
