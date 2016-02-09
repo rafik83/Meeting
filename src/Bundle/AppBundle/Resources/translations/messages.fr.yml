@@ -245,7 +245,7 @@ admin:
                 refused: Refusé
                 cancelled: Annulé
     spot:
-        link: Lieu
+        link: Lieux
         listSpot:
             reference: Référence
             size: Taille (en m²)
@@ -255,3 +255,5 @@ admin:
             add: Ajouter
         createSpot:
             title: Créer un lieu
+        batch_create:
+            title: Créer des lieux par lot
