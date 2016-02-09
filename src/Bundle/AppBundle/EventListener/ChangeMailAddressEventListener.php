@@ -1,0 +1,66 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
+
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\ChangeNewMailAddressMail;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\ChangeOldMailAddressMail;
+
+class ChangeMailAddressEventListener
+{
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
+     * @var string
+     */
+    private $sender;
+
+    /**
+     * @param MailerInterface $mailer
+     * @param string          $sender
+     */
+    public function __construct(MailerInterface $mailer, $sender)
+    {
+        $this->mailer = $mailer;
+        $this->sender = $sender;
+    }
+
+    /**
+     * @param ChangeMailAddressEvent $event
+     */
+    public function sendToken(ChangeMailAddressEvent $event)
+    {
+        $oldMail = new ChangeOldMailAddressMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'VimeetAppBundle:Mail:ChangeMail/oldMail.html.twig',
+            'activate_account',
+            $event->getUser()->getLocale(),
+            $event->getChangeMailToken()->getMail()
+        );
+
+        $newMail = new ChangeNewMailAddressMail(
+            $this->sender,
+            $event->getChangeMailToken()->getMail(),
+            'VimeetAppBundle:Mail:ChangeMail/newMail.html.twig',
+            'activate_account',
+            $event->getUser()->getLocale(),
+            $event->getChangeMailToken()->getToken()
+        );
+
+        $this->mailer->send($oldMail);
+        $this->mailer->send($newMail);
+    }
+}

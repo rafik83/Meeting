@@ -46,6 +46,7 @@ class ActivateAccountEventListener
             $event->getUser()->getEmail(),
             'VimeetAppBundle:Mail:activateAccount.html.twig',
             'activate_account',
+            $event->getUser()->getLocale(),
             $event->getEvent(),
             $event->getActivateAccountToken()->getToken()
         );

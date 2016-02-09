@@ -46,6 +46,7 @@ class ResetPasswordEventListener
             $event->getUser()->getEmail(),
             'VimeetAppBundle:Mail:resetPassword.html.twig',
             'forgot_password',
+            $event->getUser()->getLocale(),
             $event->getEventView()->title,
             $event->getForgottenPasswordToken()->getToken()
         );
