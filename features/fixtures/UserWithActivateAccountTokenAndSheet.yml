@@ -47,3 +47,11 @@ Proximum\Vimeet\Domain\Model\ActivateAccountToken:
              - azertyuiopqsdfghjklmwxcvbn
              - @sheet_1
              - <dateTimeBetween('+1 days', '+2 days')>
+
+Proximum\Vimeet\Domain\Model\ChangeMailToken:
+    change_mail_token:
+        __construct:
+            - @user_1
+            - 'toto@tata.fr'
+            - 'azertyuiopqsdfghjklmwxcvbn'
+            - <dateTimeBetween('+1 days', '+2 days')>
