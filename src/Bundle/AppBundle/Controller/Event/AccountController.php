@@ -85,7 +85,7 @@ class AccountController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $this->disconnet($request);
+        $this->disconnect($request);
 
         $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);

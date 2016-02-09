@@ -38,7 +38,7 @@ class ActivateAccountController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $this->disconnet($request);
+        $this->disconnect($request);
 
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();

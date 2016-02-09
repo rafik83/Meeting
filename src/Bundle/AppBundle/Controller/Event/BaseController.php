@@ -212,7 +212,7 @@ class BaseController extends Controller
     /**
      * @param Request $request
      */
-    protected function disconnet(Request $request)
+    protected function disconnect(Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $this->get('security.token_storage')->setToken(null);
