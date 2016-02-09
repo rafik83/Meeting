@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
 
-use Proximum\Vimeet\Application\Command\User\NewPassword;
+use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class NewPasswordType extends AbstractPasswordType
+class ActivateAccountPasswordType extends AbstractPasswordType
 {
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class NewPasswordType extends AbstractPasswordType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => NewPassword::class,
+            'data_class' => ActivateAccountPassword::class,
         ]);
     }
 }

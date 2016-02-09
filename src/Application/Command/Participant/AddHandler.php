@@ -12,13 +12,17 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandler extends BaseHandler
 {
@@ -38,18 +42,42 @@ class AddHandler extends BaseHandler
     private $participantRepository;
 
     /**
+     * @var ActivateAccountTokenGenerator
+     */
+    private $activateAccountTokenGenerator;
+
+    /**
+     * @var ActivateAccountTokenRepository
+     */
+    private $activateAccountTokenRepository;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param UserRepositoryInterface        $userRepository
      * @param ParticipantManager             $participantManager
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
+     * @param ActivateAccountTokenRepository $activateAccountTokenRepository
+     * @param EventDispatcherInterface       $eventDispatcher
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         ParticipantManager $participantManager,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        ActivateAccountTokenGenerator $activateAccountTokenGenerator,
+        ActivateAccountTokenRepository $activateAccountTokenRepository,
+        EventDispatcherInterface $eventDispatcher
     ) {
-        $this->userRepository        = $userRepository;
-        $this->participantManager    = $participantManager;
-        $this->participantRepository = $participantRepository;
+        $this->userRepository                 = $userRepository;
+        $this->participantManager             = $participantManager;
+        $this->participantRepository          = $participantRepository;
+        $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
+        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
+        $this->eventDispatcher                = $eventDispatcher;
     }
 
     /**
@@ -61,6 +89,8 @@ class AddHandler extends BaseHandler
      */
     public function handle(Add $add)
     {
+        $addNewUser = false;
+
         // Check the constraint on the data (required) before
         $this->checkDataConstraint($add->data, $add->sheet->getType()->getParticipantTemplate());
 
@@ -75,6 +105,8 @@ class AddHandler extends BaseHandler
         if (null === $user) {
             $user = new User($add->email, '', '', $add->locale);
             $this->userRepository->add($user);
+
+            $addNewUser = true;
         }
 
         foreach ($add->sheet->getParticipants() as $participant) {
@@ -98,5 +130,22 @@ class AddHandler extends BaseHandler
         $this->participantRepository->add($participant);
 
         $add->participant = $participant;
+
+        // Send activation event
+        if ($addNewUser) {
+            $activateAccountToken = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
+
+            $this->activateAccountTokenRepository->deleteAllForUser($user);
+            $this->activateAccountTokenRepository->create($activateAccountToken);
+
+            $activateAccountEvent = new ActivateAccountEvent(
+                $user,
+                $add->sheet->getEvent(),
+                $activateAccountToken,
+                $add->locale
+            );
+
+            $this->eventDispatcher->dispatch('activate_account', $activateAccountEvent);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
 
-class ForgottenPasswordToken
+class ActivateAccountToken
 {
     /**
      * @var int
@@ -30,6 +30,11 @@ class ForgottenPasswordToken
     private $token;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @var DateTimeInterface
      */
     private $expireDate;
@@ -37,12 +42,14 @@ class ForgottenPasswordToken
     /**
      * @param User              $user
      * @param string            $token
+     * @param Sheet             $sheet
      * @param DateTimeInterface $expireDate
      */
-    public function __construct(User $user, $token, DateTimeInterface $expireDate)
+    public function __construct(User $user, $token, Sheet $sheet, DateTimeInterface $expireDate)
     {
         $this->user       = $user;
         $this->token      = $token;
+        $this->sheet      = $sheet;
         $this->expireDate = $expireDate;
     }
 
@@ -68,6 +75,14 @@ class ForgottenPasswordToken
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
     }
 
     /**

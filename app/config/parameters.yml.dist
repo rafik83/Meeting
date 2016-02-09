@@ -15,6 +15,7 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
+    mailer_sender:     ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1
     mailer_error_user:      ~

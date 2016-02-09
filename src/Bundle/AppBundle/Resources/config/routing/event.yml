@@ -39,6 +39,15 @@ event_create_new_password:
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
 
 #
+# Activate account
+#
+
+event_activate_account:
+    path: /activate/{token}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/ActivateAccount:password }
+
+#
 # Join event
 #
 
