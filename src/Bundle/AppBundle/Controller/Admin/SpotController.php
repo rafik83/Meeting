@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Spot\Create;
+use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\DeleteSpotBatchType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
@@ -46,14 +47,17 @@ class SpotController extends Controller
         $deleteButton  = $request->request->getBoolean('delete');
         $disableButton = $request->request->getBoolean('disable');
 
-//        if (!empty($spotsToDelete)) {
-//            if ($deleteButton)
-//            {
-//
-//            } elseif() {
-//
-//            }
-//        }
+        if (!empty($spotsToDelete)) {
+            if ($deleteButton) {
+                $deleteBatch = new DeleteBatch($spotsToDelete, $event);
+                $this->get('vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler')
+                    ->handle($deleteBatch);
+                $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+
+            } elseif($disableButton) {
+
+            }
+        }
 
 
         $filter   = [];

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -23,4 +24,9 @@ interface SpotRepositoryInterface
      * @param Spot $spot
      */
     public function set(Spot $spot);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatchSpot(array $ids, Event $event);
 }

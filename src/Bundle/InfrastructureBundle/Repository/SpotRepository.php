@@ -102,4 +102,23 @@ class SpotRepository implements SpotRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ;
+
+        $queryBuilder->getQuery()->execute();
+    }
 }

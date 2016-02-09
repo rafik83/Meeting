@@ -78,6 +78,9 @@ flash:
         spot:
             create:
                 success: Le lieu a bien été créé
+        spot_batch:
+            delete:
+                success: Votre lot a bien était supprimer
         category:
             create:
                 success: La catégorie a bien été créée

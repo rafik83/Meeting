@@ -200,6 +200,10 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler:
+            class: Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.spot_repository'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
