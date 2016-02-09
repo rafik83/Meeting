@@ -366,6 +366,11 @@ services:
             - '@repository.change_mail_token_repository'
             - '@components.token.change_mail_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.user.change_mail_activation_handler:
+        class: Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
 
     #
     # Security
