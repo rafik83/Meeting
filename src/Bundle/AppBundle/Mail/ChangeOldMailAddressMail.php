@@ -11,19 +11,13 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Event;
 
-class ActivateAccountMail extends Mail
+class ChangeOldMailAddressMail extends Mail
 {
-    /**
-     * @var Event
-     */
-    private $event;
-
     /**
      * @var string
      */
-    private $token;
+    private $newMail;
 
     /**
      * @param string $sender
@@ -31,29 +25,19 @@ class ActivateAccountMail extends Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
-     * @param Event  $event
-     * @param string $token
+     * @param string $newMail
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $newMail)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
-        $this->event = $event;
-        $this->token = $token;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
+        $this->newMail = $newMail;
     }
 
     /**
      * @return string
      */
-    public function getToken()
+    public function getNewMail()
     {
-        return $this->token;
+        return $this->newMail;
     }
 }

@@ -29,12 +29,13 @@ class ResetPasswordMail extends Mail
      * @param string $receiver
      * @param string $template
      * @param string $messageId
+     * @param string $locale
      * @param string $eventTitle
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $eventTitle, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $eventTitle, $token)
     {
-        parent::__construct($sender, $receiver, $template, $messageId);
+        parent::__construct($sender, $receiver, $template, $messageId, $locale);
         $this->eventTitle = $eventTitle;
         $this->token      = $token;
     }

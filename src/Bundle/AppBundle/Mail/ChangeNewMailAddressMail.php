@@ -13,13 +13,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ChangeMailAddressMail extends Mail
+class ChangeNewMailAddressMail extends Mail
 {
-    /**
-     * @var Event
-     */
-    private $event;
-
     /**
      * @var string
      */
@@ -31,22 +26,12 @@ class ChangeMailAddressMail extends Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
-     * @param Event  $event
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
-        $this->event = $event;
         $this->token = $token;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
     }
 
     /**
