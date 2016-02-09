@@ -516,6 +516,14 @@ services:
     datetime:
         class: DateTimeImmutable
 
+    #
+    # Mailer
+    #
+    adapter.mailer_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\MailerAdapter
+        arguments:
+            - '@mailer'
+            - '@twig'
 
 
     #
