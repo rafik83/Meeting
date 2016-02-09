@@ -7,57 +7,48 @@
     <h2>{{ typeView.title }}</h2>
 
     <ul>
-        {% for templateName, template in type.templates %}
+        {% for templateName, template in templates %}
             <li><a href="#{{ templateName }}">{{ ('template.name.' ~ templateName)|trans }}</a></li>
         {% endfor %}
     </ul>
 
     <table class="table table-striped table-hover">
-        {% for templateName, template in type.templates %}
+        {% for templateName, template in templates %}
             <tr>
                 <th colspan="6">
                     <h3 id="{{ templateName }}">{{ ('template.name.' ~ templateName)|trans }}</h3>
                 </th>
             </tr>
-            {% if templateName != 'packageTemplate' %}
-                {% for blocks in template %}
-                    {% if not (blocks['template'] is not defined and blocks['linkTo'] is not defined) %}
+            {% if templateName != 'package' %}
+                {% for groupKey, group in template.groups %}
+                    {% if group.label(app.request.locale) != 'Default' %}
                         <tr>
                             <th colspan="6" class="info">
-                                {{ blocks['label'][app.request.locale] }}
+                                {{ group.label(app.request.locale) }}
                             </th>
                         </tr>
-                        {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
-                            templateName: templateName,
-                            template: blocks['template'] is defined ? blocks['template'] : null,
-                            linkTo: blocks['linkTo'] is defined ? blocks['linkTo'] : null
-                        } %}
-                    {% elseif loop.first %}
-                        {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
-                            templateName: templateName,
-                            template: template
-                        } %}
                     {% endif %}
+
+                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
+                        typeId: typeView.id,
+                        templateName: templateName,
+                        types: group.types
+                    } %}
                 {% else %}
                     <tr>
                         <td colspan="6">Aucun champ</td>
                     </tr>
                 {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </table>
-        {% if packageObject %}
-            <table class="table table-striped table-hover">
+            {% elseif packageObject %}
                 {% for step in packageObject.steps %}
                     <tr>
-                        <th colspan="5" class="info">
+                        <th colspan="6" class="info">
                             {{ step.label(app.request.locale) }}
                         </th>
                     </tr>
-                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {
-                        'step': step
-                    } %}
+                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {step: step} %}
                 {% endfor %}
-            </table>
-        {% endif %}
+            {% endif %}
+        {% endfor %}
+    </table>
 {% endblock %}

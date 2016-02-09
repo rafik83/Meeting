@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType;
+use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibChoice;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\ChoiceType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,11 +38,18 @@ class TypeTemplateFieldController extends Controller
         $packageObject = $this->get('vimeet_infrastructure.application.components.product.product_builder')
             ->createFromType($type);
 
+        $templateFactory = $this->container->get('components.sheet.template_factory');
+        $templates = [
+            'participant' => $templateFactory->createTemplateFromArray($type->getParticipantTemplate()),
+            'sheet'       => $templateFactory->createTemplateFromArray($type->getSheetTemplate()),
+            'package'     => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
+        ];
+
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
             'event'         => $event,
             'typeView'      => $typeView,
-            'type'          => $type,
             'packageObject' => $packageObject,
+            'templates'     => $templates,
         ]);
     }
 
@@ -50,22 +57,31 @@ class TypeTemplateFieldController extends Controller
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
-     * @param string  $template
-     * @param string  $key
+     * @param         $templateName
+     * @param         $group
+     * @param         $row
      *
+     * @return RedirectResponse|Response
      * @throws \Exception
-     *
-     * @return Response|RedirectResponse
      */
-    public function fieldUpdateAction(Request $request, Event $event, Type $type, $template, $key)
+    public function fieldUpdateAction(Request $request, Event $event, Type $type, $templateName, $group, $row)
     {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
-        $update = new UpdateChoice($type, $template, $key);
+        $templateFactory = $this->container->get('components.sheet.template_factory');
+        $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
+        $group = $template->getGroup($group);
+        $field = $group->getType($row);
 
-        $form = $this->createForm(TypeTemplateFieldUpdateLibChoiceType::class, $update, [
+        if (!$field->isEditable()) {
+            throw $this->createAccessDeniedException('This field is not editable');
+        }
+
+        $update = new UpdateLibChoice($type, $templateName, $field);
+
+        $form = $this->createForm(ChoiceType::class, $update, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
@@ -73,7 +89,7 @@ class TypeTemplateFieldController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler')
+                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler')
                 ->handle($update);
 
             $this->addFlash('success', 'flash.admin.type_template_field.update.success');

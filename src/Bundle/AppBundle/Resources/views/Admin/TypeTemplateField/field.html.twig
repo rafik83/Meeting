@@ -1,18 +1,20 @@
 <tr>
-    <th>Libellé</th>
-    <th>Type de champ</th>
-    <th>Requis</th>
-    <th>Privé</th>
-    <th>Contenu</th>
-    <th>Action</th>
+    <td>{{ type.label(app.request.locale) }}</td>
+    <td>{{ type.rawType }}</td>
+    <td>{{ type.required|boolean_tick }}</td>
+    <td>{{ type.private|boolean_tick }}</td>
+    <td>
+        {{ type.rawType == 'lib_choice' ? type.choices|choices_list(app.request.locale) : '' }}
+    </td>
+    <td>
+        {% if type.isEditable %}
+            <a href="{{ path('admin_type_template_field_update', {
+                event: event.id,
+                type: typeId,
+                templateName: templateName,
+                group: type.group.name,
+                row: type.name
+            }) }}" class="btn btn-default btn-xs">Modifier</a>
+        {% endif %}
+    </td>
 </tr>
-
-{% for key, field in template %}
-    {% include 'VimeetAppBundle:Admin/TypeTemplateField:fieldRow.html.twig' with {
-        event: event,
-        type: type,
-        templateName: templateName,
-        field: field,
-        key: key
-    } %}
-{% endfor %}

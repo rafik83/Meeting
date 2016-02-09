@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChoiceLabelTranslationsType extends AbstractType
+class LabelTranslationsType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -36,5 +36,13 @@ class ChoiceLabelTranslationsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['locales']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'admin_label_translation';
     }
 }

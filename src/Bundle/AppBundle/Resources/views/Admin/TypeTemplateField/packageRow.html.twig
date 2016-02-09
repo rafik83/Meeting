@@ -5,6 +5,7 @@
         <th>Requis</th>
         <th>Contenu</th>
         <th>Inclus dans</th>
+        <th>Action</th>
     </tr>
     {% for product in step.products %}
         <tr>
@@ -26,10 +27,9 @@
                     {% endfor %}
                 </ul>
             </td>
+            <td></td>
         </tr>
-
     {% endfor %}
-
 {% else %}
     <tr>
         <td colspan="6">Aucun champ</td>

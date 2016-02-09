@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
-class UpdateHandler
+class UpdateChoiceHandler
 {
     /**
      * @var TypeRepositoryInterface
@@ -28,17 +28,24 @@ class UpdateHandler
     }
 
     /**
-     * @param Update $update
+     * @param UpdateLibChoice $update
      *
      * @throws \Exception
      */
-    public function handle(Update $update)
+    public function handle(UpdateLibChoice $update)
     {
-        $update->type->setTemplateRow(
+        $options = $update->field->getOptions();
+
+        $options['label'] = $update->label;
+        $options['required'] = $update->required;
+        $options['private'] = $update->private;
+        $options['choices'] = $update->choices;
+
+        $update->type->updateTemplateRow(
             $update->templateName,
             $update->field->getGroup()->getName(),
             $update->field->getName(),
-            $update->field->getOptions()
+            $options
         );
 
         $this->typeRepository->set($update->type);

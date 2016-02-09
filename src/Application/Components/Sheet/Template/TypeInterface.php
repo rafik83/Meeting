@@ -27,11 +27,21 @@ interface TypeInterface
     public function setOptions(array $options);
 
     /**
+     * @return array
+     */
+    public function getOptions();
+
+    /**
      * @param string $locale
      *
      * @return string
      */
     public function getLabel($locale);
+
+    /**
+     * @return string
+     */
+    public function getRawType();
 
     /**
      * @param string $locale
@@ -53,7 +63,17 @@ interface TypeInterface
     /**
      * @return bool
      */
+    public function isEditable();
+
+    /**
+     * @return bool
+     */
     public function isRequired();
+
+    /**
+     * @return bool
+     */
+    public function isPrivate();
 
     /**
      * @return array

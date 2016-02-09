@@ -78,22 +78,6 @@ abstract class AbstractType implements TypeInterface
     }
 
     /**
-     * @param string $option
-     *
-     * @throws UnknownOptionException
-     * @return mixed
-     *
-     */
-    protected function getOption($option)
-    {
-        if (!array_key_exists($option, $this->options)) {
-            throw new UnknownOptionException($option, array_keys($this->options));
-        }
-
-        return $this->options[$option];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getLabel($locale)
@@ -111,6 +95,14 @@ abstract class AbstractType implements TypeInterface
         $description = $this->getOption('description');
 
         return (string) (is_array($description) ? $description[$locale] : $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRawType()
+    {
+        return $this->getOption('type');
     }
 
     /**
@@ -135,6 +127,14 @@ abstract class AbstractType implements TypeInterface
     public function isRequired()
     {
         return (bool) $this->getOption('required');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isPrivate()
+    {
+        return (bool) $this->getOption('private');
     }
 
     /**
@@ -169,5 +169,37 @@ abstract class AbstractType implements TypeInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEditable()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string $option
+     *
+     * @throws UnknownOptionException
+     * @return mixed
+     *
+     */
+    protected function getOption($option)
+    {
+        if (!array_key_exists($option, $this->options)) {
+            throw new UnknownOptionException($option, array_keys($this->options));
+        }
+
+        return $this->options[$option];
     }
 }

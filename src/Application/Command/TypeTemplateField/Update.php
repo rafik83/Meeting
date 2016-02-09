@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Group;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Update
@@ -20,19 +22,9 @@ class Update
     public $type;
 
     /**
-     * @var array|null
+     * @var TypeInterface
      */
     public $field;
-
-    /**
-     * @var string
-     */
-    public $fieldType;
-
-    /**
-     * @var string
-     */
-    public $key;
 
     /**
      * @var string
@@ -55,76 +47,29 @@ class Update
     public $private;
 
     /**
-     * @param Type   $type
-     * @param string $templateName
-     * @param string $key
+     * @param Type               $type
+     * @param string             $templateName
+     * @param TypeInterface      $field
      *
      * @throws \Exception
      */
-    public function __construct(Type $type, $templateName, $key)
+    public function __construct(Type $type, $templateName, TypeInterface $field)
     {
         $this->type         = $type;
         $this->templateName = $templateName;
-        $this->key          = $key;
-        $this->field        = null;
+        $this->field        = $field;
 
         $templates = $type->getTemplates();
 
-        if (!isset($templates[$templateName])) {
+        if (!isset($templates[$this->templateName . 'Template'])) {
             throw new \Exception("Template $templateName invalid");
         }
 
-        $template    = $templates[$templateName];
-        $this->field = $this->getArrayByKey($key, $template);
-
-        if (null === $this->field) {
-            throw new \Exception("Field key not found in template $templateName");
-        }
-
-        $this->fieldType = $this->field['type'];
-        $this->required  = isset($this->field['required']) ? $this->field['required'] : false;
-        $this->private   = isset($this->field['private']) ? $this->field['private'] : false;
+        $this->required = $field->isRequired();
+        $this->private  = $field->isPrivate();
 
         foreach ($type->getEvent()->getLocales() as $locale) {
-            $this->label[$locale] = isset($this->field['label'][$locale]) ? $this->field['label'][$locale] : '';
+            $this->label[$locale] = $field->getLabel($locale);
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function getFieldTemplate()
-    {
-        return [
-            'type'     => $this->fieldType,
-            'label'    => $this->label,
-            'required' => $this->required,
-            'private'  => $this->private,
-        ];
-    }
-
-    /**
-     * @param string $key
-     * @param array  $array
-     *
-     * @return null|array
-     */
-    private function getArrayByKey($key, $array)
-    {
-        foreach ($array as $index => $value) {
-            if ($index === $key) {
-                return $value;
-            }
-
-            if (is_array($value)) {
-                $subValue = $this->getArrayByKey($key, $value);
-
-                if (null !== $subValue) {
-                    return $subValue;
-                }
-            }
-        }
-
-        return;
     }
 }

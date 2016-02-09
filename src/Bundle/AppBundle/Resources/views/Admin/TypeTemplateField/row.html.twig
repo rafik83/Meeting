@@ -1,14 +1,21 @@
-{% if template is not null %}
+<tr>
+    <th>Libellé</th>
+    <th>Type de champ</th>
+    <th>Requis</th>
+    <th>Privé</th>
+    <th>Contenu</th>
+    <th>Action</th>
+</tr>
+
+{% for type in types %}
     {% include 'VimeetAppBundle:Admin/TypeTemplateField:field.html.twig' with {
         event: event,
+        typeId: typeId,
         type: type,
-        template: template,
-        templateName: templateName
+        templateName: templateName,
     } %}
-{% elseif linkTo is defined and linkTo is not null %}
-    {% include 'VimeetAppBundle:Admin/TypeTemplateField:linkTo.html.twig' with { type: type, linkTo: linkTo } %}
 {% else %}
     <tr>
         <td colspan="6">Aucun champ</td>
     </tr>
-{% endif %}
+{% endfor %}

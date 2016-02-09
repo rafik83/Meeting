@@ -14,5 +14,6 @@
     <h2><a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}">{{ typeView.title }}</a></h2>
     <h3>{{ ('template.name.' ~ update.templateName)|trans }}</h3>
     <hr>
+
     {{ form(form) }}
 {% endblock %}
