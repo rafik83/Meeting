@@ -4,7 +4,7 @@
 
 {% block body %}
     {{ 'mail.changeMailNew.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
-    <a href="{{ url('event_activate_account', {'token': mail.token}) }}">
+    <a href="{{ url('event_activate_new_mail', {'token': mail.token}) }}">
         {{ url('event_activate_new_mail', {'token': mail.token}) }}
     </a><br>
     {{ 'mail.changeMailNew.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
