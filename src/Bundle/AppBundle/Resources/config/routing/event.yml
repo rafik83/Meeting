@@ -24,6 +24,13 @@ event_account:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Account:update }
 
+event_activate_new_mail:
+    path: /account/change_mail/{token}
+    methods: [GET]
+    requirements:
+        token: \w+
+    defaults: { _controller: VimeetAppBundle:Event/Account:activateNewMail }
+
 #
 # Forgot password
 #
@@ -36,6 +43,8 @@ event_forgotten_password:
 event_create_new_password:
     path: /reset_password/{token}
     methods:  [GET, POST]
+    requirements:
+        token: \w+
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
 
 #
@@ -45,6 +54,8 @@ event_create_new_password:
 event_activate_account:
     path: /activate/{token}
     methods: [GET, POST]
+    requirements:
+        token: \w+
     defaults: { _controller: VimeetAppBundle:Event/ActivateAccount:password }
 
 #
