@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class ChangeNewMailAddressMail extends Mail
 {
