@@ -170,4 +170,12 @@ class User implements UserInterface, EquatableInterface, \Serializable
         $this->salt     = $salt;
         $this->password = $password;
     }
+
+    /**
+     * @param string $email
+     */
+    public function updateEmail($email)
+    {
+        $this->email = $email;
+    }
 }
