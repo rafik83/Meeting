@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8d04ce32ec1f8d4129d560f65dec1716",
-    "content-hash": "9895b0f196b518432da25ed18f07d482",
+    "hash": "97447603bd0fd7aaedfc22a884d7fdeb",
+    "content-hash": "54ebba8cd5af9dd369e4da07fe7fefd0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -943,16 +943,16 @@
         },
         {
             "name": "elao/form-bundle",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormBundle.git",
-                "reference": "8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4"
+                "reference": "b985eda8023a5ee770e73b2bc4d377de227a9177"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4",
-                "reference": "8374a38dd5bb744478bbb7b9aa5f9f69e2e5e1d4",
+                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/b985eda8023a5ee770e73b2bc4d377de227a9177",
+                "reference": "b985eda8023a5ee770e73b2bc4d377de227a9177",
                 "shasum": ""
             },
             "require": {
@@ -996,7 +996,7 @@
                 "form",
                 "javascript"
             ],
-            "time": "2015-12-11 09:11:39"
+            "time": "2016-02-09 10:31:10"
         },
         {
             "name": "elao/form-translation-bundle",
@@ -2005,7 +2005,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/93152592e62902f6852223c50bee712eabdf05f8",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/97c2f5cd2a3f09ddd5c79725e91ab4ac46729950",
                 "reference": "6ba617ef740b496439b1bc84344963421174a78e",
                 "shasum": ""
             },
@@ -3780,7 +3780,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/9407348551767dda2ba005ef7fe5dc29e6b750c1",
+                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/e3f776e30b6ab60a3f57ac7264a6eac6262165fd",
                 "reference": "9407348551767dda2ba005ef7fe5dc29e6b750c1",
                 "shasum": ""
             },
@@ -4993,6 +4993,62 @@
             ],
             "description": "This bundle generates code for you",
             "time": "2015-03-17 06:36:52"
+        },
+        {
+            "name": "symfony/polyfill-apcu",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-apcu.git",
+                "reference": "d1911e6caeb4b6a4c8e2d5c46b978a66b3745e4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-apcu/zipball/d1911e6caeb4b6a4c8e2d5c46b978a66b3745e4c",
+                "reference": "d1911e6caeb4b6a4c8e2d5c46b978a66b3745e4c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting apcu_* functions to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "apcu",
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-01-20 09:13:37"
         },
         {
             "name": "theofidry/alice-bundle-extension",
