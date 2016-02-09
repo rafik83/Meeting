@@ -10,45 +10,30 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\Translation\Translator;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\ActivateAccountMail;
 
 class ActivateAccountEventListener
 {
     /**
-     * @var \Swift_Mailer
+     * @var MailerInterface
      */
     private $mailer;
-
-    /**
-     * @var EngineInterface
-     */
-    private $templating;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
 
     /**
      * @var string
      */
     private $sender;
 
-
     /**
-     * @param \Swift_Mailer   $mailer
-     * @param EngineInterface $templating
+     * @param MailerInterface $mailer
      * @param string          $sender
-     * @param Translator      $translator
      */
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, Translator $translator, $sender)
+    public function __construct(MailerInterface $mailer, $sender)
     {
-        $this->mailer     = $mailer;
-        $this->templating = $templating;
-        $this->translator = $translator;
-        $this->sender     = $sender;
+        $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     /**
@@ -56,24 +41,15 @@ class ActivateAccountEventListener
      */
     public function sendToken(ActivateAccountEvent $event)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($this->translator->trans('mail.activateAccount.subject', ['%event%' => $event->getEvent()->getTitle()], 'mail'))
-            ->setFrom($this->sender)
-            ->setTo($event->getUser()->getEmail())
-            ->setBody(
-                $this->templating->render(
-                    'VimeetAppBundle:Mail:activateAccount.html.twig',
-                    [
-                        'token'  => $event->getActivateAccountToken()->getToken(),
-                        'event'  => $event->getEvent(),
-                        'locale' => $event->getLocale()
-                    ]
-                )
-            )
-            ->setContentType('text/html');
+        $mail = new ActivateAccountMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'VimeetAppBundle:Mail:activateAccount.html.twig',
+            'activate_account',
+            $event->getEvent(),
+            $event->getActivateAccountToken()->getToken()
+        );
 
-        $message->getHeaders()->addTextHeader('X-Message-ID', 'activate_account');
-
-        $this->mailer->send($message);
+        $this->mailer->send($mail);
     }
 }

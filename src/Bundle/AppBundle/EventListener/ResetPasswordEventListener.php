@@ -10,29 +10,30 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\ResetPasswordMail;
 
 class ResetPasswordEventListener
 {
     /**
-     * @var \Swift_Mailer
+     * @var MailerInterface
      */
     private $mailer;
 
     /**
-     * @var EngineInterface
+     * @var string
      */
-    private $templating;
+    private $sender;
 
     /**
-     * @param \Swift_Mailer   $mailer
-     * @param EngineInterface $templating
+     * @param MailerInterface $mailer
+     * @param string          $sender
      */
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating)
+    public function __construct(MailerInterface $mailer, $sender)
     {
-        $this->mailer     = $mailer;
-        $this->templating = $templating;
+        $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     /**
@@ -40,23 +41,15 @@ class ResetPasswordEventListener
      */
     public function sendToken(ResetPasswordEvent $event)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject(sprintf('[%s] Reset password', $event->getEventView()->title))
-            ->setFrom('vimeet@vimeet.proximum.elao.ninja')
-            ->setTo($event->getUser()->getEmail())
-            ->setBody(
-                $this->templating->render(
-                    'VimeetAppBundle:Mail:resetPassword.html.twig',
-                    [
-                        'token'     => $event->getForgottenPasswordToken()->getToken(),
-                        'eventView' => $event->getEventView(),
-                    ]
-                )
-            )
-            ->setContentType('text/html');
+        $mail = new ResetPasswordMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'VimeetAppBundle:Mail:resetPassword.html.twig',
+            'forgot_password',
+            $event->getEventView()->title,
+            $event->getForgottenPasswordToken()->getToken()
+        );
 
-        $message->getHeaders()->addTextHeader('X-Message-ID', 'forgot_password');
-
-        $this->mailer->send($message);
+        $this->mailer->send($mail);
     }
 }
