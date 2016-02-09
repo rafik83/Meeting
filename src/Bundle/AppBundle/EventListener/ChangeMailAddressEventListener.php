@@ -46,7 +46,7 @@ class ChangeMailAddressEventListener
             $this->sender,
             $event->getUser()->getEmail(),
             'VimeetAppBundle:Mail:ChangeMail/oldMail.html.twig',
-            'activate_account',
+            'change_mail_old',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
         );
@@ -55,7 +55,7 @@ class ChangeMailAddressEventListener
             $this->sender,
             $event->getChangeMailToken()->getMail(),
             'VimeetAppBundle:Mail:ChangeMail/newMail.html.twig',
-            'activate_account',
+            'change_mail_new',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken()
         );
