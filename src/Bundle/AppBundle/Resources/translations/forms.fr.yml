@@ -408,6 +408,12 @@ form:
                     label: Actif
                 submit:
                     label: Envoyer
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
     spot_create:
         children:
             reference:

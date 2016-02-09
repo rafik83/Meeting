@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,8 +37,14 @@ class FilterSpotType extends AbstractType
             ->add('size', NumberType::class, [
                 'label' => 'form.admin.filter_spot_type.children.size.label'
             ])
-            ->add('active', CheckboxType::class, [
-                'label' => 'form.admin.filter_spot_type.children.active.label'
+            ->add('active', ChoiceType::class, [
+                'label'             => 'form.admin.filter_spot_type.children.active.label',
+                'choices_as_values' => true,
+                'choices'           => [
+                    'form.admin.filter_spot_type.children.all.label' => '',
+                    'form.admin.filter_spot_type.children.yes.label'  => 1,
+                    'form.admin.filter_spot_type.children.no.label'  => 0,
+                ],
             ])
         ;
     }

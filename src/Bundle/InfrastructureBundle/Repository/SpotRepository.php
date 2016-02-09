@@ -78,22 +78,23 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event);
 
         if (!empty($filter)) {
-            $queryBuilder
-                ->andWhere('spot.active = :active')
-                ->setParameter('active', intval($filter['active']));
-            if($filter['reference'] !== null && !empty($filter['reference'])) {
+            if ($filter['active'] === 0 or $filter['active'] === 1) {
+                $queryBuilder
+                    ->andWhere('spot.active = :active')
+                    ->setParameter('active', $filter['active']);
+            } if ($filter['reference'] !== null && !empty($filter['reference'])) {
                 $queryBuilder
                     ->andWhere('spot.reference LIKE :reference')
                     ->setParameter('reference', '%'.$filter['reference'].'%');
-            } if($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
+            } if ($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
                 $queryBuilder
                     ->andWhere('spot.meetingCapacity = :meetingCapacity')
                     ->setParameter('meetingCapacity', $filter['meetingCapacity']);
-            } if($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
+            } if ($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
                 $queryBuilder
                     ->andWhere('spot.seatCapacity = :seatCapacity')
                     ->setParameter('seatCapacity', $filter['seatCapacity']);
-            } if($filter['size'] !== 0 && !empty($filter['size'])) {
+            } if ($filter['size'] !== 0 && !empty($filter['size'])) {
                 $queryBuilder
                     ->andWhere('spot.size = :size')
                     ->setParameter('size', $filter['size']);
