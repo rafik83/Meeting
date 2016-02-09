@@ -26,7 +26,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HappeningController extends Controller
 {
@@ -39,22 +38,12 @@ class HappeningController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $happenings = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findListByEvent($event, $request->getLocale());
-
-        $happeningsAllowedToBeModifiedArray = [];
-        $happeningsAllowedToBeModified      = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findByEventWithoutParticipation($event);
-
-        foreach ($happeningsAllowedToBeModified as $happening) {
-            $happeningsAllowedToBeModifiedArray[$happening->getId()] = $happening->getId();
-        }
+            ->get('happening.happening_list_view_factory')
+            ->getListByEventAndLocale($event, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
-            'event'           => $event,
-            'happenings'      => $happenings,
-            'allowToModified' => $happeningsAllowedToBeModifiedArray,
+            'event'      => $event,
+            'happenings' => $happenings,
         ]);
     }
 
@@ -96,12 +85,8 @@ class HappeningController extends Controller
      */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
-        $happeningsAllowedToBeModified      = $this
-            ->get('vimeet_infrastructure.repository.happening_repository')
-            ->findByEventWithoutParticipation($event);
-
-        if (!in_array($happening, $happeningsAllowedToBeModified)) {
-            throw new NotFoundHttpException('This happpening can not be modified as it has participant');
+        if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening, true)) {
+            throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
         }
 
         $update = new UpdateHappening($happening);
@@ -119,7 +104,7 @@ class HappeningController extends Controller
             $this->get('command.happening.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.update.success');
 
-            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_happening_update', ['event' => $event->getId(), 'happening' => $happening->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [

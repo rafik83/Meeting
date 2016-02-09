@@ -5,14 +5,15 @@
     <h2>Modifier un sous-événement</h2>
 
     {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.begin) }}
-    {{ form_row(form.end) }}
-    {{ form_row(form.translations) }}
-    <div class="text-right">
-        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
-        {{ form_widget(form.submit) }}
-    </div>
+        {{ form_errors(form) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.begin) }}
+        {{ form_row(form.end) }}
+        {{ form_row(form.translations) }}
+        {{ form_row(form.talkings) }}
+        <div class="text-right">
+            <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
+            {{ form_widget(form.submit) }}
+        </div>
     {{ form_end(form) }}
 {% endblock %}
