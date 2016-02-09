@@ -10,24 +10,23 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ActivateAccountTokenGenerator extends AbstractTokenGenerator
+class ChangeMailTokenGenerator extends AbstractTokenGenerator
 {
     /**
      * @param User  $user
-     * @param Sheet $sheet
+     * @param string $mail
      *
-     * @return ActivateAccountToken
+     * @return ChangeMailToken
      */
-    public function generate(User $user, Sheet $sheet)
+    public function generate(User $user, $mail)
     {
-        return new ActivateAccountToken(
+        return new ChangeMailToken(
             $user,
+            $mail,
             $this->generateToken($user),
-            $sheet,
             $this->expirateDate
         );
     }
