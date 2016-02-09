@@ -11,13 +11,14 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class ResetPasswordMail extends Mail
+class ActivateAccountMail extends Mail
 {
     /**
-     * @var string
+     * @var Event
      */
-    private $eventTitle;
+    private $event;
 
     /**
      * @var string
@@ -29,22 +30,22 @@ class ResetPasswordMail extends Mail
      * @param string $receiver
      * @param string $template
      * @param string $messageId
-     * @param string $eventTitle
+     * @param Event  $event
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $eventTitle, $token)
+    public function __construct($sender, $receiver, $template, $messageId, Event $event, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId);
-        $this->eventTitle = $eventTitle;
-        $this->token      = $token;
+        $this->event = $event;
+        $this->token = $token;
     }
 
     /**
-     * @return string
+     * @return Event
      */
-    public function getEventTitle()
+    public function getEvent()
     {
-        return $this->eventTitle;
+        return $this->event;
     }
 
     /**
