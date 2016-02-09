@@ -78,7 +78,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event);
 
         if (!empty($filter)) {
-            if ($filter['active'] === 0 or $filter['active'] === 1) {
+            if ($filter['active'] === 0 || $filter['active'] === 1) {
                 $queryBuilder
                     ->andWhere('spot.active = :active')
                     ->setParameter('active', $filter['active']);
