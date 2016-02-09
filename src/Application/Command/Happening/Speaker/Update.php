@@ -23,7 +23,12 @@ class Update
     /**
      * @var string
      */
-    public $name;
+    public $firstname;
+
+    /**
+     * @var string
+     */
+    public $lastname;
 
     /**
      * @var string
@@ -53,7 +58,8 @@ class Update
     public function __construct(Speaker $speaker)
     {
         $this->speaker      = $speaker;
-        $this->name         = $speaker->getName();
+        $this->firstname    = $speaker->getFirstname();
+        $this->lastname     = $speaker->getLastname();
         $this->function     = $speaker->getFunction();
         $this->organization = $speaker->getOrganization();
     }

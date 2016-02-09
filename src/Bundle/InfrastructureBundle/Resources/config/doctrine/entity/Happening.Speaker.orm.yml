@@ -7,7 +7,9 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
             generator:
                 strategy: AUTO
     fields:
-        name:
+        firstname:
+            type: string
+        lastname:
             type: string
         function:
             type: string

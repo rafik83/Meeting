@@ -45,7 +45,8 @@ class CreateHandler
     {
         $this->speakerRepository->add(new Speaker(
             $create->event,
-            $create->name,
+            $create->firstname,
+            $create->lastname,
             $create->function,
             $create->organization,
             $this->fileStorageInterface->upload($create->logo),
