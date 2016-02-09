@@ -81,6 +81,8 @@ flash:
         spot_batch:
             delete:
                 success: Votre lot a bien était supprimer
+            disable:
+                success: Votre lot a bien était désactiver
         category:
             create:
                 success: La catégorie a bien été créée
