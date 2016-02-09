@@ -404,3 +404,9 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    change_mail:
+        children:
+            mail:
+                label: Saisir votre nouvel email
+            submit:
+                label: Envoyer
