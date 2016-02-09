@@ -197,7 +197,8 @@ class Speaker
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) { return $talking->getHappening(); });
+            ->map(function (Talking $talking) { return $talking->getHappening(); })
+            ->toArray();
     }
 
 
