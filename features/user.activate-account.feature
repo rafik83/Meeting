@@ -1,5 +1,5 @@
 Feature: Activate Account
-  I need to be able to change my password if I forgot it
+  I need to be able to activate my account
 
   Background: Re-init the database and load the fixtures
     Given the database is empty
