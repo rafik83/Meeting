@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
+use Proximum\Vimeet\Application\Exception\Field\EmptyFieldException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
@@ -61,17 +62,22 @@ class ChangeMailHandler
     /**
      * @param ChangeMail $changeMail
      * @throws EmailAlreadyExistsException
+     * @throws EmptyFieldException
      * @throws SameEmailException
      */
     public function handle(ChangeMail $changeMail)
     {
         $user = $changeMail->user;
 
-        if ($changeMail->mail !== null && $user->getEmail() === $changeMail->mail) {
+        if ($changeMail->mail === null) {
+            throw new EmptyFieldException();
+        }
+
+        if ($user->getEmail() === $changeMail->mail) {
             throw new SameEmailException();
         }
 
-        if ($changeMail->mail !== null && $this->userRepository->findByEmail($changeMail->mail)) {
+        if ($this->userRepository->findByEmail($changeMail->mail)) {
             throw new EmailAlreadyExistsException();
         }
 
