@@ -23,7 +23,12 @@ class Create
     /**
      * @var string
      */
-    public $name;
+    public $firstname;
+
+    /**
+     * @var string
+     */
+    public $lastname;
 
     /**
      * @var string

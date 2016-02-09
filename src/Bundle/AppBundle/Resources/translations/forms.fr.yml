@@ -406,7 +406,9 @@ form:
                             label: Filtrer
     create_speaker:
         children:
-            name:
+            firstname:
+                label: Prénom
+            lastname:
                 label: Nom
             function:
                 label: Function
@@ -420,7 +422,9 @@ form:
                 label: Enregistrer
     update_speaker:
         children:
-            name:
+            firstname:
+                label: Prénom
+            lastname:
                 label: Nom
             function:
                 label: Function

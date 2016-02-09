@@ -30,7 +30,12 @@ class Speaker
     /**
      * @var string
      */
-    private $name;
+    private $firstname;
+
+    /**
+     * @var string
+     */
+    private $lastname;
 
     /**
      * @var string
@@ -61,16 +66,18 @@ class Speaker
      * Speaker constructor.
      *
      * @param Event  $event
-     * @param string $name
+     * @param string $firstname
+     * @param string $lastname
      * @param string $function
      * @param string $organization
      * @param string $logo
      * @param string $photo
      */
-    public function __construct(Event $event, $name, $function, $organization, $logo, $photo)
+    public function __construct(Event $event, $firstname, $lastname, $function, $organization, $logo, $photo)
     {
         $this->event        = $event;
-        $this->name         = $name;
+        $this->firstname    = $firstname;
+        $this->lastname     = $lastname;
         $this->function     = $function;
         $this->organization = $organization;
         $this->logo         = $logo;
@@ -99,13 +106,23 @@ class Speaker
     }
 
     /**
-     * Get name
+     * Get firstname
      *
      * @return string
      */
-    public function getName()
+    public function getFirstname()
     {
-        return $this->name;
+        return $this->firstname;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
     }
 
     /**
@@ -149,7 +166,10 @@ class Speaker
     }
 
     /**
-     * @param string $name
+     * Update speaker.
+     *
+     * @param string $firstname
+     * @param string $lastname
      * @param string $function
      * @param string $organization
      * @param string $logo
@@ -157,9 +177,10 @@ class Speaker
      *
      * @return Speaker
      */
-    public function update($name, $function, $organization, $logo, $photo)
+    public function update($firstname, $lastname, $function, $organization, $logo, $photo)
     {
-        $this->name         = $name;
+        $this->firstname    = $firstname;
+        $this->lastname     = $lastname;
         $this->function     = $function;
         $this->organization = $organization;
         $this->logo         = $logo;
@@ -177,5 +198,14 @@ class Speaker
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
             ->map(function (Talking $talking) { return $talking->getHappening(); });
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->firstname . ' ' . strtoupper($this->lastname);
     }
 }
