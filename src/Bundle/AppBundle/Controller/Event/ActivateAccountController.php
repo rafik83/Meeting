@@ -33,7 +33,7 @@ class ActivateAccountController extends BaseController
     public function passwordAction(Request $request, EventView $eventView, ActivateAccountToken $activateAccountToken)
     {
         if (new DateTime() > $activateAccountToken->getExpireDate()
-        || null === $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($activateAccountToken->getUser(), $activateAccountToken->getSheet())
+            || null === $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($activateAccountToken->getUser(), $activateAccountToken->getSheet())
         ) {
             throw new NotFoundException('Date of the token expired');
         }
