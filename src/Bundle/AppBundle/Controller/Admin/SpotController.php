@@ -61,7 +61,7 @@ class SpotController extends Controller
 
                 return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
 
-            } elseif($disableButton) {
+            } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($spotsToDelete, $event);
                 $this->get('vimeet_infrastructure.vimeet.application.command.spot.disable_batch_handler')->handle($disableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
