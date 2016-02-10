@@ -34,6 +34,6 @@ class EnableBatchHandler
      */
     public function handle(EnableBatch $enableBatch)
     {
-        $this->spotRepository->enableBatchSpot($enableBatch->idsSpot, $enableBatch->event);
+        $this->spotRepository->enableBatchSpot($enableBatch->ids, $enableBatch->event);
     }
 }

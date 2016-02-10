@@ -34,6 +34,6 @@ class DisableBatchHandler
      */
     public function handle(DisableBatch $disableBatch)
     {
-        $this->spotRepository->disableBatchSpot($disableBatch->idsSpot, $disableBatch->event);
+        $this->spotRepository->disableBatchSpot($disableBatch->ids, $disableBatch->event);
     }
 }

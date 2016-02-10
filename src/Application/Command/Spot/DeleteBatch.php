@@ -22,18 +22,18 @@ class DeleteBatch
     /**
      * @var array
      */
-    public $idsSpot;
+    public $ids;
 
     /**
      * DeleteBatch constructor.
      *
-     * @param       $idsSpot
+     * @param array $ids
      * @param Event $event
      */
-    public function __construct($idsSpot, Event $event)
+    public function __construct(array $ids, Event $event)
     {
-        $this->idsSpot = $idsSpot;
-        $this->event   = $event;
+        $this->ids   = $ids;
+        $this->event = $event;
     }
 
 }
