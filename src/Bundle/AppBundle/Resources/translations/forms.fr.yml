@@ -436,6 +436,20 @@ form:
                 label: Photo de l'intervenant
             submit:
                 label: Enregistrer
+    filter_spot_type:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer
     spot_create:
         children:
             reference:

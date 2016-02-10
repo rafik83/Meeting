@@ -3,34 +3,48 @@
 {% block content %}
     <h1>{{ event.title }}</h1>
     <h2>Liste des lieux</h2>
-    <div>
+
+    <h3>Filtrer par statut</h3>
+    {{ form(filter_form) }}
+    <div class="col-md-4">
+        {% if filtered %}
+            <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-link">Vider les filtres</a>
+        {% endif %}
+    </div>
+
+    <div class="text-right">
         <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
         <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
     </div>
     {% set actif = { 1: 'oui', 0: 'non' } %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>{{ 'admin.spot.listSpot.reference'|trans }}</th>
-            <th>{{ 'admin.spot.listSpot.size'|trans }}</th>
-            <th>{{ 'admin.spot.listSpot.meetingCapacity'|trans }}</th>
-            <th>{{ 'admin.spot.listSpot.seatCapacity'|trans }}</th>
-            <th>{{ 'admin.spot.listSpot.active'|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for spot in spots %}
+    <form action="{{ path('admin_spot_list', { 'event': event.id }) }}" method="POST">
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ spot.reference }}</td>
-                <td>{{ spot.size }}</td>
-                <td>{{ spot.meetingCapacity }}</td>
-                <td>{{ spot.seatCapacity }}</td>
-                <td>{{ actif[spot.active] }}</td>
+                <th></th>
+                <th>{{ 'admin.spot.listSpot.reference'|trans }}</th>
+                <th>{{ 'admin.spot.listSpot.size'|trans }}</th>
+                <th>{{ 'admin.spot.listSpot.meetingCapacity'|trans }}</th>
+                <th>{{ 'admin.spot.listSpot.seatCapacity'|trans }}</th>
+                <th>{{ 'admin.spot.listSpot.active'|trans }}</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                {% for spot in spots %}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{{ spot.id }}"></td>
+                        <td>{{ spot.reference }}</td>
+                        <td>{{ spot.size }}</td>
+                        <td>{{ spot.meetingCapacity }}</td>
+                        <td>{{ spot.seatCapacity }}</td>
+                        <td>{{ actif[spot.active] }}</td>
+                    </tr>
+                {% endfor %}
+                <button class="btn btn-primary" name="delete" value="1" type="submit">Delete</button>
+                <button class="btn btn-primary" name="disable" value="1" type="submit">Disable</button>
+            </tbody>
+        </table>
+    </form>
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>
