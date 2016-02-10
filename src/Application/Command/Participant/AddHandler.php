@@ -109,7 +109,9 @@ class AddHandler extends BaseHandler
             $addNewUser = true;
         }
 
-        $this->checkIfParticipantAlreadyExists($add, $user);
+        if ($add->sheet->hasUser($user)) {
+            throw new ParticipantAlreadyExistException('User already linked to this sheet');
+        }
 
         $participant = new Participant($add->sheet, $user, $add->data, $add->owner, false);
 
@@ -152,20 +154,5 @@ class AddHandler extends BaseHandler
         );
 
         $this->eventDispatcher->dispatch('activate_account', $activateAccountEvent);
-    }
-
-    /**
-     * @param Add  $add
-     * @param User $user
-     *
-     * @throws ParticipantAlreadyExistException
-     */
-    public function checkIfParticipantAlreadyExists(Add $add, User $user)
-    {
-        foreach ($add->sheet->getParticipants() as $participant) {
-            if ($participant->getUser() == $user) {
-                throw new ParticipantAlreadyExistException('User already linked to this sheet');
-            }
-        }
     }
 }
