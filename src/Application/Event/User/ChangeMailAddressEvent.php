@@ -32,7 +32,6 @@ class ChangeMailAddressEvent extends Event
      */
     private $changeMailToken;
 
-
     /**
      * @param User            $user
      * @param EventView       $eventView
