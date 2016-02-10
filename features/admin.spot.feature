@@ -44,9 +44,9 @@ Feature: Spot feature
     And I follow "admin.spot.link"
     Then the response status code should be 200
     And I fill in the following:
-      | form.admin.filter_spot_type.children.reference.label | A |
-    And I check "form.admin.filter_spot_type.children.active.label"
-    And I press "form.admin.filter_spot_type.children.submit.label"
+      | form.filter_spot_type.children.reference.label | A |
+    And I select "form.filter_spot_type.children.filters.yes.label" from "form.filter_spot_type.children.active.label"
+    And I press "form.filter_spot_type.children.submit.label"
     Then the response status code should be 200
     And I should see "A008"
     And I should see "A100"
@@ -65,9 +65,9 @@ Feature: Spot feature
     And I follow "admin.spot.link"
     Then the response status code should be 200
     And I fill in the following:
-      | form.admin.filter_spot_type.children.meetingCapacity.label | 5 |
-    And I check "form.admin.filter_spot_type.children.active.label"
-    And I press "form.admin.filter_spot_type.children.submit.label"
+      | form.filter_spot_type.children.meetingCapacity.label | 5 |
+    And I select "form.filter_spot_type.children.filters.yes.label" from "form.filter_spot_type.children.active.label"
+    And I press "form.filter_spot_type.children.submit.label"
     Then the response status code should be 200
     And I should see "F098"
     And I should see "B090"
@@ -86,12 +86,12 @@ Feature: Spot feature
     And I follow "admin.spot.link"
     Then the response status code should be 200
     And I fill in the following:
-      | form.admin.filter_spot_type.children.reference.label       | A |
-      | form.admin.filter_spot_type.children.meetingCapacity.label | 3 |
-      | form.admin.filter_spot_type.children.seatCapacity.label    | 4 |
-      | form.admin.filter_spot_type.children.size.label            | 6 |
-    And I check "form.admin.filter_spot_type.children.active.label"
-    And I press "form.admin.filter_spot_type.children.submit.label"
+      | form.filter_spot_type.children.reference.label       | A |
+      | form.filter_spot_type.children.meetingCapacity.label | 3 |
+      | form.filter_spot_type.children.seatCapacity.label    | 4 |
+      | form.filter_spot_type.children.size.label            | 6 |
+    And I select "form.filter_spot_type.children.filters.yes.label" from "form.filter_spot_type.children.active.label"
+    And I press "form.filter_spot_type.children.submit.label"
     Then the response status code should be 200
     And I should see "A008"
     And I should see "A100"
@@ -111,7 +111,7 @@ Feature: Spot feature
     And I check "admin.spot.list.checkbox"
     And I press "admin.spot.disable"
     Then the response status code should be 200
-    And I should see "non"
+    And I should see "admin.spot.active.no"
 
   Scenario: I can remove spot in batch
     Given the database is empty
