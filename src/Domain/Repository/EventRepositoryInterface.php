@@ -17,12 +17,9 @@ use Proximum\Vimeet\Domain\View\EventView;
 interface EventRepositoryInterface
 {
     /**
-     * @param int $page
-     * @param int $limit
-     *
      * @return EventListView[]
      */
-    public function paginate($page, $limit);
+    public function getList();
 
     /**
      * @param Event $event

@@ -52,7 +52,7 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit)
+    public function getList()
     {
         $queryBuilder = $this
             ->entityManager
@@ -60,7 +60,7 @@ class EventRepository implements EventRepositoryInterface
             ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
             ->from('Entity:Event', 'event');
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit);
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
