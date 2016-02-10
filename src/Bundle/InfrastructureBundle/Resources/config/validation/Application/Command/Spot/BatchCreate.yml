@@ -5,7 +5,7 @@ Proximum\Vimeet\Application\Command\Spot\BatchCreate:
             - Valid: ~
         size:
             - NotBlank: ~
-            - Type: { type: integer }
+            - Type: { type: float }
         meetingCapacity:
             - NotBlank: ~
             - Type: { type: integer }

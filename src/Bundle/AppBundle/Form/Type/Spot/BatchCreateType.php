@@ -14,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
@@ -32,7 +33,7 @@ class BatchCreateType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
             ])
-            ->add('size', IntegerType::class, [
+            ->add('size', NumberType::class, [
                 'required' => true
             ])
             ->add('meetingCapacity', IntegerType::class, [

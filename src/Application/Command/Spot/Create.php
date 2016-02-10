@@ -25,7 +25,7 @@ class Create
     public $event;
 
     /**
-     * @var int
+     * @var float
      */
     public $size;
 
