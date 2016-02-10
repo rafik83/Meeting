@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibChoice;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\ChoiceType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -79,9 +77,17 @@ class TypeTemplateFieldController extends Controller
             throw $this->createAccessDeniedException('This field is not editable');
         }
 
-        $update = new UpdateLibChoice($type, $templateName, $field);
+        $command = $this
+            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory')
+            ->getCommand($field->getRawType());
 
-        $form = $this->createForm(ChoiceType::class, $update, [
+        $update = new $command($type, $templateName, $field);
+
+        $formClassType = $this
+            ->get('vimeet_app.form_type_admin.library.type_factory')
+            ->getForm($field->getRawType());
+
+        $form = $this->createForm($formClassType, $update, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
@@ -89,7 +95,8 @@ class TypeTemplateFieldController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler')
+                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory')
+                ->getHandler($field->getRawType())
                 ->handle($update);
 
             $this->addFlash('success', 'flash.admin.type_template_field.update.success');

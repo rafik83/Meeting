@@ -253,8 +253,20 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
-    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
-        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateFactory
+        arguments:
+            -
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibText'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibChoice'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandlerFactory
+        arguments:
+            -
+                lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler'
+                lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateTextHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler:

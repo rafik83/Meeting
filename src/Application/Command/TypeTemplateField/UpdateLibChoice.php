@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Group;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibChoiceType;
 use Proximum\Vimeet\Domain\Model\Type;
 
