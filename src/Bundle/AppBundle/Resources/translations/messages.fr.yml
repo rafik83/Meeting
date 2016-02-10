@@ -261,6 +261,7 @@ admin:
         batch_create:
             title: Créer des lieux par lot
         delete: Supprimer
+        enable: Activer
         disable: Désactiver
         list:
             checkbox: Case à cocher

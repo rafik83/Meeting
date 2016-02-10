@@ -150,7 +150,26 @@ class SpotRepository implements SpotRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
-            ->set('spot.active', '0')
+            ->set('spot.active', 'FALSE')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->set('spot.active', 'TRUE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
