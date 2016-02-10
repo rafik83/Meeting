@@ -14,6 +14,7 @@
 
     <div class="text-right">
         <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
+        <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
     </div>
     {% set actif = { 1: 'oui', 0: 'non' } %}
     <form action="{{ path('admin_spot_list', { 'event': event.id }) }}" method="POST">

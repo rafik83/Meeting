@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
@@ -37,6 +38,10 @@ class HappeningRepository implements HappeningRepositoryInterface
     {
         $this->entityManager->persist($happening);
         $this->entityManager->flush($happening);
+
+        foreach ($happening->getTalkings() as $talking) {
+            $this->entityManager->flush($talking);
+        }
     }
 
     /**
@@ -49,6 +54,10 @@ class HappeningRepository implements HappeningRepositoryInterface
         foreach ($happening->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
+
+        foreach ($happening->getTalkings() as $talking) {
+            $this->entityManager->flush($talking);
+        }
     }
 
     /**
@@ -59,11 +68,13 @@ class HappeningRepository implements HappeningRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\HappeningListView(happening.id, happening.begin, happening.end, translation.title)')
+            ->select('happening, translation, talking, speaker')
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->where('happening.event = :event')
             ->setParameter('locale', $locale)
+            ->leftJoin('happening.talkings', 'talking')
+            ->leftJoin('talking.speaker', 'speaker')
+            ->where('happening.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -72,18 +83,18 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventWithoutParticipation(Event $event)
+    public function findIdsWithoutParticipation(array $happenings)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('happening')
-            ->from(Happening::class, 'happening')
-            ->where('happening.event = :event')
-            ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)')
-            ->setParameter('event', $event);
+            ->select('happening.id')
+            ->from(Happening::class, 'happening', 'happening.id')
+            ->andWhere('happening IN (:happenings)')
+            ->setParameter('happenings', $happenings)
+            ->andWhere('NOT EXISTS(SELECT hp.id FROM Entity:HappeningParticipation hp where hp.happening = happening)');
 
-        return $queryBuilder->getQuery()->getResult();
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 
 
@@ -100,6 +111,25 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('happening.translations', 'translations')
             ->where('happening.event = :event')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpeaker(Speaker $speaker, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translation')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->join('happening.talkings', 'talking')
+            ->join('talking.speaker', 'speaker', 'WITH', 'talking.speaker = :speaker')
+            ->setParameter('speaker', $speaker);
 
         return $queryBuilder->getQuery()->getResult();
     }

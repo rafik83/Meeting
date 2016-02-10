@@ -32,12 +32,12 @@ class Create
     /**
      * @var int
      */
-    public $meetingCapacity;
+    public $meetingCapacity = 1;
 
     /**
      * @var int
      */
-    public $seatCapacity;
+    public $seatCapacity = 3;
 
     /**
      * @var boolean
