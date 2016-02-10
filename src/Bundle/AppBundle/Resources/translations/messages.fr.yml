@@ -246,6 +246,9 @@ admin:
                 cancelled: Annulé
     spot:
         link: Lieux
+        active:
+            yes: Oui
+            no: Non
         listSpot:
             reference: Référence
             size: Taille (en m²)
