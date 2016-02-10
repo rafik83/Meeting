@@ -43,7 +43,7 @@ class Create
     /**
      * @var array
      */
-    public $talking = [];
+    public $talkings = [];
 
     /**
      * Create constructor.
