@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -170,16 +171,25 @@ class SpotController extends Controller
     /**
      * @param Request $request
      * @param Event   $event
-     * @param Spot    $spot
      *
      * @return Response
      */
-    public function updateAction(Request $request, Event $event, Spot $spot)
+    public function updateAction(Request $request, Event $event)
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException('XHR support only.');
         }
 
+        $data = json_decode($request->getContent(), true);
+
+        $this
+            ->get('vimeet_infrastructure.repository.spot_repository')
+            ->update($data['id'], $data['property'], $data['value']);
+
+        return new JsonResponse();
+
+
+        /*
         $update = new Update($spot);
         $form   = $this->createForm(SpotUpdateType::class, $update, [
             'action' => $this->generateUrl('admin_spot_update', ['event' => $event->getId(), 'spot' => $spot->getId()]),
@@ -196,5 +206,6 @@ class SpotController extends Controller
         return $this->render('VimeetAppBundle:Admin/Spot:update.html.twig', [
             'form' => $form->createView(),
         ]);
+        */
     }
 }

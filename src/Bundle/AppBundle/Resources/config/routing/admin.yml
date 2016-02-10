@@ -155,7 +155,7 @@ admin_spot_batch_create:
     defaults: { _controller: VimeetAppBundle:Admin/Spot:batchCreate }
 
 admin_spot_update:
-    path: /event/{event}/spot/{spot}/update
+    path: /event/{event}/spot/update
     requirements:
         event: \d+
         spot: \d+

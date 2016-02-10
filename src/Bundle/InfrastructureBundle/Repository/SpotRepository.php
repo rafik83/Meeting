@@ -120,7 +120,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->delete()
-            ->from('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
@@ -138,7 +138,7 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->update(Spot::class, 'spot')
             ->set('spot.active', 'FALSE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
@@ -157,7 +157,7 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->update(Spot::class, 'spot')
             ->set('spot.active', 'TRUE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
@@ -166,5 +166,23 @@ class SpotRepository implements SpotRepositoryInterface
         ;
 
         $queryBuilder->getQuery()->execute();
+    }
+
+    public function update($id, $property, $value)
+    {
+        if (!in_array($property, ['reference', 'size', 'meetingCapacity', 'seatCapacity'])) {
+            throw new \Exception('Invalid property');
+        }
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update(Spot::class, 'spot')
+            ->set(sprintf('spot.%s', $property), ':value')
+            ->setParameter('value', $value)
+            ->where('sport.id = :id')
+            ->setParameter('id', $id);
+
+        $queryBuilder->getQuery()->getResult();
     }
 }
