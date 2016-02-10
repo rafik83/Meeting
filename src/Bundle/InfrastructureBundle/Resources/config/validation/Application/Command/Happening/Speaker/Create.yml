@@ -1,6 +1,8 @@
 Proximum\Vimeet\Application\Command\Happening\Speaker\Create:
     properties:
-        name:
+        firstname:
+            - NotBlank: ~
+        lastname:
             - NotBlank: ~
         function:
             - NotBlank: ~

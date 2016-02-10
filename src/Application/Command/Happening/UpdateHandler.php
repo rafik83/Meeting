@@ -39,6 +39,10 @@ class UpdateHandler
             $happening->updateTranslation($locale, $translation['title'], $translation['description']);
         }
 
+        array_walk($update->talkings, function (array &$talking, $key) {
+            $talking['position'] += $key;
+        });
+
         // Sort speakers by position
         usort($update->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
 

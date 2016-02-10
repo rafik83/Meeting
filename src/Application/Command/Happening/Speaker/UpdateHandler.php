@@ -46,7 +46,8 @@ class UpdateHandler
         $photo = $update->speaker->getPhoto();
 
         $this->speakerRepository->set($update->speaker->update(
-            $update->name,
+            $update->firstname,
+            $update->lastname,
             $update->function,
             $update->organization,
             $update->logo ? $this->fileStorageInterface->upload($update->logo) : $logo,

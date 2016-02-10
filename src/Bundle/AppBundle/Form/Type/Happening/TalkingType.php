@@ -16,11 +16,22 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class TalkingType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('speaker', SpeakerEntityType::class, ['placeholder' => ''])
             ->add('position', IntegerType::class, ['empty_data' => 0])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'happening_talking';
     }
 }
