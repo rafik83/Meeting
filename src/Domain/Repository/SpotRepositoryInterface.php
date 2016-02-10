@@ -34,17 +34,20 @@ interface SpotRepositoryInterface
     public function findByReference(Event $event, $reference);
 
     /**
-     * {@inheritdoc}
+     * @param array $ids
+     * @param Event $event
      */
     public function removeBatchSpot(array $ids, Event $event);
 
     /**
-     * {@inheritdoc}
+     * @param array $ids
+     * @param Event $event
      */
     public function disableBatchSpot(array $ids, Event $event);
 
     /**
-     * {@inheritdoc}
+     * @param array $ids
+     * @param Event $event
      */
     public function enableBatchSpot(array $ids, Event $event);
 
