@@ -27,6 +27,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 
 class SpotController extends Controller
 {
@@ -35,7 +36,7 @@ class SpotController extends Controller
      * @param string $data
      * @param array  $options
      *
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
     private function createFilterForm($type, $data, array $options = [])
     {
@@ -46,7 +47,7 @@ class SpotController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event)
     {

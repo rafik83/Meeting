@@ -256,6 +256,8 @@ admin:
             seatCapacity: Capacité de places assises
             active: Actif
             add: Ajouter
+            yes: Oui
+            no: Non
         createSpot:
             title: Créer un lieu
         batch_create:
