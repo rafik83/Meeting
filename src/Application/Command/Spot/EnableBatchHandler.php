@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
-class DisableBatchHandler
+class EnableBatchHandler
 {
     /**
      * @var SpotRepositoryInterface
@@ -30,10 +30,10 @@ class DisableBatchHandler
     }
 
     /**
-     * @param DisableBatch $disableBatch
+     * @param EnableBatch $enableBatch
      */
-    public function handle(DisableBatch $disableBatch)
+    public function handle(EnableBatch $enableBatch)
     {
-        $this->spotRepository->disableBatchSpot($disableBatch->ids, $disableBatch->event);
+        $this->spotRepository->enableBatchSpot($enableBatch->ids, $enableBatch->event);
     }
 }

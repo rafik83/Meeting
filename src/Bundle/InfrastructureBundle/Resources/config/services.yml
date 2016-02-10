@@ -220,6 +220,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Spot\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
+    vimeet_infrastructure.vimeet.application.command.spot.enable_batch_handler:
+            class: Proximum\Vimeet\Application\Command\Spot\EnableBatchHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.spot_repository'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:

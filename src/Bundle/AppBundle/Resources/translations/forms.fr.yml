@@ -448,6 +448,13 @@ form:
                 label: Capacité du nombre de places assises
             active:
                 label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
             submit:
                 label: Envoyer
     spot_create:
@@ -462,6 +469,13 @@ form:
                 label: Capacité du nombre de places assises
             active:
                 label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
             submit:
                 label: Envoyer
     spot_batch_create:

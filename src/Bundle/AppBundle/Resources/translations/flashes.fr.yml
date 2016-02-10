@@ -83,9 +83,9 @@ flash:
                 duplicate: Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%
         spot_batch:
             delete:
-                success: Votre lot a bien était supprimer
+                success: Les lieux sélectionnés ont bien été supprimés
             disable:
-                success: Votre lot a bien était désactiver
+                success: Les lieux sélectionnés ont bien été désactivés
         category:
             create:
                 success: La catégorie a bien été créée

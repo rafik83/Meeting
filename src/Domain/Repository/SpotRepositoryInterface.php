@@ -27,13 +27,6 @@ interface SpotRepositoryInterface
 
     /**
      * @param Event $event
-     *
-     * @return Spot[]
-     */
-    public function getByEvent(Event $event);
-
-    /**
-     * @param Event $event
      * @param array $filter
      *
      * @return Spot[]
@@ -59,4 +52,9 @@ interface SpotRepositoryInterface
      * @param Event $event
      */
     public function disableBatchSpot(array $ids, Event $event);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBatchSpot(array $ids, Event $event);
 }

@@ -51,22 +51,6 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('spot')
-            ->from(Spot::class, 'spot')
-            ->where('spot.event = :event')
-            ->setParameter('event', $event);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findByReference(Event $event, $reference)
     {
         $queryBuilder = $this
@@ -97,22 +81,27 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event);
 
         if (!empty($filter)) {
-            $queryBuilder
-                ->andWhere('spot.active = :active')
-                ->setParameter('active', intval($filter['active']));
+            if ($filter['active'] === 0 || $filter['active'] === 1) {
+                $queryBuilder
+                    ->andWhere('spot.active = :active')
+                    ->setParameter('active', $filter['active']);
+            }
             if ($filter['reference'] !== null && !empty($filter['reference'])) {
                 $queryBuilder
                     ->andWhere('spot.reference LIKE :reference')
                     ->setParameter('reference', '%'.$filter['reference'].'%');
-            } if($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
+            }
+            if ($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
                 $queryBuilder
                     ->andWhere('spot.meetingCapacity = :meetingCapacity')
                     ->setParameter('meetingCapacity', $filter['meetingCapacity']);
-            } if($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
+            }
+            if ($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
                 $queryBuilder
                     ->andWhere('spot.seatCapacity = :seatCapacity')
                     ->setParameter('seatCapacity', $filter['seatCapacity']);
-            } if($filter['size'] !== 0 && !empty($filter['size'])) {
+            }
+            if ($filter['size'] !== 0 && !empty($filter['size'])) {
                 $queryBuilder
                     ->andWhere('spot.size = :size')
                     ->setParameter('size', $filter['size']);
@@ -150,7 +139,26 @@ class SpotRepository implements SpotRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
-            ->set('spot.active', '0')
+            ->set('spot.active', 'FALSE')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->set('spot.active', 'TRUE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')

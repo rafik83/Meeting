@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\Update;
+use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
@@ -29,6 +30,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 
 class SpotController extends Controller
 {
@@ -37,7 +39,7 @@ class SpotController extends Controller
      * @param string $data
      * @param array  $options
      *
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
     private function createFilterForm($type, $data, array $options = [])
     {
@@ -48,62 +50,58 @@ class SpotController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event)
     {
-        $spotsToDelete = $request->request->get('ids', []);
-        $deleteButton  = $request->request->getBoolean('delete');
-        $disableButton = $request->request->getBoolean('disable');
-
-        if (!empty($spotsToDelete)) {
-            if ($deleteButton) {
-                $deleteBatch = new DeleteBatch($spotsToDelete, $event);
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler')->handle($deleteBatch);
-                $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
-
-                return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
-
-            } elseif ($disableButton) {
-                $disableBatch = new DisableBatch($spotsToDelete, $event);
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.disable_batch_handler')->handle($disableBatch);
-                $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
-
-                return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
-            }
-        }
-
-        $filter   = [];
-        $filtered = false;
-
-        $filterForm = $this->createFilterForm(FilterSpotType::class, [
-            'reference'       => $request->query->get('reference'),
-            'meetingCapacity' => intval($request->query->get('meetingCapacity')),
-            'seatCapacity'    => intval($request->query->get('seatCapacity')),
-            'size'            => intval($request->query->get('size')),
-            'active'          => boolval($request->query->get('active'))
-        ]);
-
-        $filterForm->add('submit', SubmitType::class, [
-            'label' => 'form.admin.filter_spot_type.children.submit.label'
-        ]);
+        $filter     = [];
+        $filterForm = $this->createFilterForm(FilterSpotType::class, $filter);
 
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filter   = $filterForm->getData();
-            $filtered = true;
+            $filter = $filterForm->getData();
         }
 
-        $spots = $this
-            ->get('vimeet_infrastructure.repository.spot_repository')
-            ->getSpotFilter($event, $filter);
+        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filter);
 
         return $this->render(
             'VimeetAppBundle:Admin/Spot:list.html.twig', [
             'spots'               => $spots,
             'event'               => $event,
             'filter_form'         => $filterForm->createView(),
-            'filtered'            => $filtered,
+            'filtered'            => $filterForm->isSubmitted() && $filterForm->isValid(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse
+     */
+    public function batchAction(Request $request, Event $event)
+    {
+        $spotsToDelete = $request->request->get('ids', []);
+        $deleteButton  = $request->request->getBoolean('delete');
+        $disableButton = $request->request->getBoolean('disable');
+        $enableButton  = $request->request->getBoolean('enable');
+
+        if (!empty($spotsToDelete)) {
+            if ($deleteButton) {
+                $deleteBatch = new DeleteBatch($spotsToDelete, $event);
+                $this->get('vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler')->handle($deleteBatch);
+                $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+            } elseif ($disableButton) {
+                $disableBatch = new DisableBatch($spotsToDelete, $event);
+                $this->get('vimeet_infrastructure.vimeet.application.command.spot.disable_batch_handler')->handle($disableBatch);
+                $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
+            } elseif ($enableButton) {
+                $enableBatch = new EnableBatch($spotsToDelete, $event);
+                $this->get('vimeet_infrastructure.vimeet.application.command.spot.enable_batch_handler')->handle($enableBatch);
+                $this->addFlash('success', 'flash.admin.spot_batch.enable.success');
+            }
+        }
+
+        return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
     }
 
     /**

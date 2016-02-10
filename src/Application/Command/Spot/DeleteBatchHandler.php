@@ -29,8 +29,11 @@ class DeleteBatchHandler
         $this->spotRepository = $spotRepository;
     }
 
+    /**
+     * @param DeleteBatch $deleteBatch
+     */
     public function handle(DeleteBatch $deleteBatch)
     {
-        $this->spotRepository->removeBatchSpot($deleteBatch->idsSpot, $deleteBatch->event);
+        $this->spotRepository->removeBatchSpot($deleteBatch->ids, $deleteBatch->event);
     }
 }

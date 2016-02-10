@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class DeleteBatch
+class EnableBatch
 {
     /**
      * @var Event

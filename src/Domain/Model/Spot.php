@@ -31,7 +31,7 @@ class Spot
     private $event;
 
     /**
-     * @var int
+     * @var float
      */
     private $size;
 
@@ -109,7 +109,7 @@ class Spot
     /**
      * Get size
      *
-     * @return int
+     * @return float
      */
     public function getSize()
     {
