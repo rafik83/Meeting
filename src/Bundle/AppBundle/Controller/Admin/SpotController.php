@@ -16,7 +16,9 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends Controller
 {
@@ -25,7 +27,7 @@ class SpotController extends Controller
      * @param string $data
      * @param array  $options
      *
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
     private function createFilterForm($type, $data, array $options = [])
     {
@@ -36,7 +38,7 @@ class SpotController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event)
     {
@@ -73,6 +75,12 @@ class SpotController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);

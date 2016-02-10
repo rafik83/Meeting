@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot;
 use Proximum\Vimeet\Application\Command\Spot\Create;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,10 +33,10 @@ class SpotCreateType extends AbstractType
             ->add('size', NumberType::class, [
                 'required' => true
             ])
-            ->add('meetingCapacity', NumberType::class, [
+            ->add('meetingCapacity', IntegerType::class, [
                 'required' => true
             ])
-            ->add('seatCapacity', NumberType::class, [
+            ->add('seatCapacity', IntegerType::class, [
                 'required' => true
             ])
             ->add('active', CheckboxType::class, [

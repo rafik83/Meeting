@@ -15,7 +15,7 @@
     <div class="text-right">
         <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
     </div>
-    {% set actif = { 1: 'oui', 0: 'non' } %}
+    {% set actif = { 1: 'admin.spot.listSpot.yes'|trans, 0: 'admin.spot.listSpot.no'|trans } %}
     <table class="table">
         <thead>
         <tr>

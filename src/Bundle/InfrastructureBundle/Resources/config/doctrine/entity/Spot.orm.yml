@@ -10,7 +10,7 @@ Proximum\Vimeet\Domain\Model\Spot:
         reference:
             type: string
         size:
-            type: integer
+            type: float
         meetingCapacity:
             type: integer
         seatCapacity:

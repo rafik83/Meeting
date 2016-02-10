@@ -52,6 +52,9 @@ Feature: Create spot
     Then the response status code should be 200
     And I should see "A008"
     And I should see "A100"
+    And I should not see "G0345"
+    And I should not see "B090"
+    And I should not see "F098"
 
   Scenario: I can filter out spot with just one other filter (meetingCapacity)
     Given the database is empty
@@ -70,6 +73,9 @@ Feature: Create spot
     Then the response status code should be 200
     And I should see "F098"
     And I should see "B090"
+    And I should not see "A100"
+    And I should not see "A008"
+    And I should not see "G0345"
 
   Scenario: I can filter out spot with all champ fill in
     Given the database is empty
@@ -90,3 +96,7 @@ Feature: Create spot
     And I press "form.admin.filter_spot_type.children.submit.label"
     Then the response status code should be 200
     And I should see "A008"
+    And I should see "A100"
+    And I should not see "G0345"
+    And I should not see "F098"
+    And I should not see "B090"
