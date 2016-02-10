@@ -52,6 +52,7 @@ interface SpotRepositoryInterface
     public function enableBatchSpot(array $ids, Event $event);
 
     /**
+     * @param Event $event
      * @param array $filter
      *
      * @return mixed
