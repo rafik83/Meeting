@@ -62,10 +62,10 @@ class SpotController extends Controller
 
         return $this->render(
             'VimeetAppBundle:Admin/Spot:list.html.twig', [
-            'spots'               => $spots,
-            'event'               => $event,
-            'filter_form'         => $filterForm->createView(),
-            'filtered'            => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'spots'       => $spots,
+            'event'       => $event,
+            'filter_form' => $filterForm->createView(),
+            'filtered'    => $filterForm->isSubmitted() && $filterForm->isValid(),
         ]);
     }
 
