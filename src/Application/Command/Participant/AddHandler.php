@@ -109,11 +109,7 @@ class AddHandler extends BaseHandler
             $addNewUser = true;
         }
 
-        foreach ($add->sheet->getParticipants() as $participant) {
-            if ($participant->getUser() == $user) {
-                throw new ParticipantAlreadyExistException('User already linked to this sheet');
-            }
-        }
+        $this->checkIfParticipantAlreadyExists($add, $user);
 
         $participant = new Participant($add->sheet, $user, $add->data, $add->owner, false);
 
@@ -133,19 +129,43 @@ class AddHandler extends BaseHandler
 
         // Send activation event
         if ($addNewUser) {
-            $activateAccountToken = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
+            $this->sendActivationEvent($add, $user);
+        }
+    }
 
-            $this->activateAccountTokenRepository->deleteAllForUser($user);
-            $this->activateAccountTokenRepository->create($activateAccountToken);
+    /**
+     * @param Add $add
+     * @param User $user
+     */
+    private function sendActivationEvent(Add $add, User $user)
+    {
+        $activateAccountToken = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
 
-            $activateAccountEvent = new ActivateAccountEvent(
-                $user,
-                $add->sheet->getEvent(),
-                $activateAccountToken,
-                $add->locale
-            );
+        $this->activateAccountTokenRepository->deleteAllForUser($user);
+        $this->activateAccountTokenRepository->create($activateAccountToken);
 
-            $this->eventDispatcher->dispatch('activate_account', $activateAccountEvent);
+        $activateAccountEvent = new ActivateAccountEvent(
+            $user,
+            $add->sheet->getEvent(),
+            $activateAccountToken,
+            $add->locale
+        );
+
+        $this->eventDispatcher->dispatch('activate_account', $activateAccountEvent);
+    }
+
+    /**
+     * @param Add  $add
+     * @param User $user
+     *
+     * @throws ParticipantAlreadyExistException
+     */
+    public function checkIfParticipantAlreadyExists(Add $add, User $user)
+    {
+        foreach ($add->sheet->getParticipants() as $participant) {
+            if ($participant->getUser() == $user) {
+                throw new ParticipantAlreadyExistException('User already linked to this sheet');
+            }
         }
     }
 }
