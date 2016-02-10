@@ -83,7 +83,6 @@ class SpotRepository implements SpotRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-
     /**
      * {@inheritdoc}
      */

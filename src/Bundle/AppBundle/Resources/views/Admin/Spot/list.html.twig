@@ -16,8 +16,8 @@
         <div class="text-right">
             <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
             <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
-            <button class="btn btn-primary" name="delete" value="1" type="submit">Supprimer</button>
-            <button class="btn btn-primary" name="disable" value="1" type="submit">Désactiver</button>
+            <button class="btn btn-primary" name="delete" value="1" type="submit">{{ 'admin.spot.delete'|trans }}</button>
+            <button class="btn btn-primary" name="disable" value="1" type="submit">{{ 'admin.spot.disable'|trans }}</button>
         </div>
 
         <table class="table">
@@ -34,7 +34,7 @@
             <tbody>
                 {% for spot in spots %}
                     <tr>
-                        <td><input type="checkbox" name="ids[]" value="{{ spot.id }}"></td>
+                        <td><input id="{{ 'admin.spot.list.checkbox'|trans }}" type="checkbox" name="ids[]" value="{{ spot.id }}" title="{{ spot.reference }}" /></td>
                         <td>{{ spot.reference }}</td>
                         <td>{{ spot.size }}</td>
                         <td>{{ spot.meetingCapacity }}</td>

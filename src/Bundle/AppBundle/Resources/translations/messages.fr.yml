@@ -260,3 +260,7 @@ admin:
             title: Créer un lieu
         batch_create:
             title: Créer des lieux par lot
+        delete: Supprimer
+        disable: Désactiver
+        list:
+            checkbox: Case à cocher
