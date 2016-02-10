@@ -43,9 +43,9 @@ class Category
     /**
      * Category constructor.
      *
-     * @param Event $event
-     * @param       $picto
-     * @param       $position
+     * @param Event  $event
+     * @param string $picto
+     * @param int    $position
      */
     public function __construct(Event $event, $picto, $position)
     {

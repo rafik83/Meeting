@@ -35,10 +35,10 @@ class CategoryListView
     /**
      * CategoryListView constructor.
      *
-     * @param $id
-     * @param $title
-     * @param $picto
-     * @param $position
+     * @param int    $id
+     * @param string $title
+     * @param string $picto
+     * @param int    $position
      */
     public function __construct($id, $title, $picto, $position)
     {
