@@ -75,6 +75,12 @@ flash:
                 success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour
+        spot:
+            create:
+                success: Le lieu a bien été créé
+            batch_create:
+                success: Les lieux ont été créés
+                duplicate: Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%
         category:
             create:
                 success: La catégorie a bien été créée
@@ -114,3 +120,5 @@ flash:
         success: Votre compte a été activé avec succès
     change_mail:
         success: Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l'activer
+    change_mail_activate:
+        success: Votre nouveau mail est maintenant associé à votre compte

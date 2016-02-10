@@ -92,6 +92,7 @@ class AccountController extends BaseController
         $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
 
         $this->authenticate($user);
+        $this->addFlash('success', 'flash.change_mail_activate.success');
 
         return $this->redirectToRoute('event');
     }
