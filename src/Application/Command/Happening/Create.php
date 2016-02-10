@@ -41,6 +41,11 @@ class Create
     public $translations = [];
 
     /**
+     * @var array
+     */
+    public $talking = [];
+
+    /**
      * Create constructor.
      *
      * @param Event $event

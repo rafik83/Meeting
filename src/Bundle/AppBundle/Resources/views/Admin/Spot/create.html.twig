@@ -1,0 +1,12 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ 'admin.spot.createSpot.title'|trans }}</h2>
+
+    {{ form(form) }}
+
+{% endblock %}
+

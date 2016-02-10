@@ -42,6 +42,11 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@knp_paginator'
+    vimeet_infrastructure.repository.spot_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SpotRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.rule_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\RuleRepository
         arguments:
@@ -116,6 +121,10 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.change_mail_token_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ChangeMailTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.happening.speaker:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\SpeakerRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -202,6 +211,15 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.spot.create_handler:
+            class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.batch_create_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
+        arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
+            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -371,6 +389,21 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.change_mail_token_repository'
+    command.happening.speaker.create_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\CreateHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
+    command.happening.speaker.update_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\UpdateHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
+    command.happening.speaker.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Happening\Speaker\DeleteHandler
+        arguments:
+            - '@repository.happening.speaker'
+            - '@adapter.local_file_storage'
 
     #
     # Security
@@ -398,6 +431,11 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\RouterAdapter
         arguments:
             - '@router'
+    adapter.local_file_storage:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\LocalFileStorageAdapter
+        arguments:
+            - '%kernel.root_dir%/../web'
+            - '@datetime'
 
     #
     # Components
@@ -614,3 +652,22 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
+
+    #
+    # Happening component
+    #
+    happening.happening_permission_manager:
+        class: Proximum\Vimeet\Application\Components\Happening\HappeningPermissionManager
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+    happening.happening_list_view_factory:
+        class: Proximum\Vimeet\Application\Components\Happening\HappeningListViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@happening.happening_permission_manager'
+
+    #
+    # Spot component
+    #
+    spot.reference_factory:
+        class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory
