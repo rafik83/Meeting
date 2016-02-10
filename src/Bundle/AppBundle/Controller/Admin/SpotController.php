@@ -12,14 +12,17 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
+use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -163,6 +166,37 @@ class SpotController extends Controller
         return $this->render('VimeetAppBundle:Admin/Spot:batchCreate.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Spot    $spot
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Event $event, Spot $spot)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('XHR support only.');
+        }
+
+        $update = new Update($spot);
+        $form   = $this->createForm(SpotUpdateType::class, $update, [
+            'action' => $this->generateUrl('admin_spot_update', ['event' => $event->getId(), 'spot' => $spot->getId()]),
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.spot.update_handler')->handle($update);
+
+            return $this->render('VimeetAppBundle:Admin/Spot:row.html.twig', [
+                'spot' => $spot,
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Spot:update.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

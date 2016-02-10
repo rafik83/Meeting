@@ -145,4 +145,22 @@ class Spot
     {
         return $this->active;
     }
+
+    /**
+     * @param string $reference
+     * @param int    $size
+     * @param int    $meetingCapacity
+     * @param int    $seatCapacity
+     *
+     * @return Spot
+     */
+    public function update($reference, $size, $meetingCapacity, $seatCapacity)
+    {
+        $this->reference       = $reference;
+        $this->size            = $size;
+        $this->meetingCapacity = $meetingCapacity;
+        $this->seatCapacity    = $seatCapacity;
+
+        return $this;
+    }
 }
