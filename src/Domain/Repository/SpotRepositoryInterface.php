@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -23,4 +24,12 @@ interface SpotRepositoryInterface
      * @param Spot $spot
      */
     public function set(Spot $spot);
+
+    /**
+     * @param Event $event
+     * @param array $filter
+     *
+     * @return mixed
+     */
+    public function getSpotFilter(Event $event, array $filter = []);
 }
