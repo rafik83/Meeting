@@ -36,6 +36,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $spotRepository->add($expectedSpot)->shouldBeCalled();
+        $spotRepository->findByReference($event, 'test013')->shouldBeCalled()->willReturn(null);
 
         //Handler
         $handle = new CreateHandler($spotRepository->reveal());
