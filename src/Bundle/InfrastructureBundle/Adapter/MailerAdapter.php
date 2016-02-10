@@ -35,6 +35,11 @@ class MailerAdapter implements MailerInterface
         $this->twig   = $twig;
     }
 
+    /**
+     * Send Mail via Swift Mailer
+     *
+     * @param Mail $mail
+     */
     public function send(Mail $mail)
     {
         $message = \Swift_Message::newInstance()
