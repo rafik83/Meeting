@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -23,18 +22,11 @@ class EventRepository implements EventRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
+     * @param EntityManager $entityManager
      */
-    private $paginator;
-
-    /**
-     * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
-     */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
     }
 
     /**
