@@ -1,5 +1,5 @@
-Feature: Create spot
-  I need to be able to create a spot
+Feature: Spot feature
+  I need to be able to create, list, filter, a spot and disable and remove them in batch
 
   Scenario: I can create spot
     Given the database is empty
@@ -88,3 +88,31 @@ Feature: Create spot
     And I press "form.admin.filter_spot_type.children.submit.label"
     Then the response status code should be 200
     And I should see "A008"
+
+  Scenario: I can disable spot in batch
+    Given the database is empty
+    And the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | Spot.yml                                                  |
+    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+    Then the response status code should be 200
+    And I follow "admin.spot.link"
+    Then the response status code should be 200
+    And I check "admin.spot.list.checkbox"
+    And I press "admin.spot.disable"
+    Then the response status code should be 200
+    And I should see "non"
+
+  Scenario: I can remove spot in batch
+    Given the database is empty
+    And the following fixtures files are loaded:
+      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | Spot.yml                                                  |
+    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+    Then the response status code should be 200
+    And I follow "admin.spot.link"
+    Then the response status code should be 200
+    And I check "admin.spot.list.checkbox"
+    And I press "admin.spot.delete"
+    Then the response status code should be 200
+    And I should not see "G0345"
