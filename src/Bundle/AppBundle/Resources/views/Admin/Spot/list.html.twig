@@ -5,12 +5,24 @@
     <h2>Liste des lieux</h2>
 
     <h3>Filtrer par statut</h3>
-    {{ form(filter_form) }}
-    <div class="col-md-4">
-        {% if filtered %}
-            <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-link">Vider les filtres</a>
-        {% endif %}
-    </div>
+
+    {{ form_start(filter_form) }}
+        <div class="row">
+            {{ form_row(filter_form.reference, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.meetingCapacity, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.seatCapacity, { 'group_attr': { 'class': 'col-md-4' } }) }}
+        </div>
+        <div class="row">
+            {{ form_row(filter_form.size, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.active, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            <div class="col-md-4 text-right">
+                {% if filtered %}
+                    <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
+                {% endif %}
+                {{ form_widget(filter_form.submit) }}
+            </div>
+        </div>
+    {{ form_end(filter_form) }}
 
     <form action="{{ path('admin_spot_list', { 'event': event.id }) }}" method="POST">
         <div class="text-right">
