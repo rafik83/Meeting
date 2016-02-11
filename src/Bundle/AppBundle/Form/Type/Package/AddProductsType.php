@@ -21,7 +21,6 @@ class AddProductsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('packageData', AddProductsByStepType::class, [
                 'packageTemplate' => $options['packageTemplate'],

@@ -86,8 +86,9 @@ class Group
     /**
      * @param string $option
      *
-     * @return mixed
      * @throws UnknownOptionException
+     * @return mixed
+     *
      */
     private function getOption($option)
     {
@@ -111,8 +112,9 @@ class Group
     /**
      * @param string $name
      *
-     * @return TypeInterface
      * @throws UnknownTypeException
+     * @return TypeInterface
+     *
      */
     public function getType($name)
     {

@@ -105,7 +105,7 @@ class ProductBuilder
     /**
      * Create a product from the productTemplate and the key
      *
-     * @param array $productTemplate
+     * @param array     $productTemplate
      * @param string    $productKey
      * @param Type|null $type
      *

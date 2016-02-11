@@ -244,3 +244,16 @@ admin:
                 approved: Accepté
                 refused: Refusé
                 cancelled: Annulé
+    spot:
+        link: Lieux
+        listSpot:
+            reference: Référence
+            size: Taille (en m²)
+            meetingCapacity: Capacité de rendez-vous simultané
+            seatCapacity: Capacité de places assises
+            active: Actif
+            add: Ajouter
+        createSpot:
+            title: Créer un lieu
+        batch_create:
+            title: Créer des lieux par lot

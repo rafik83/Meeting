@@ -73,6 +73,7 @@ class OrderManager
 
     /**
      * @param Order $order
+     *
      * @return int
      */
     public function getParticipantBoughtForOrder(Order $order)

@@ -164,10 +164,14 @@ class User implements UserInterface, EquatableInterface, \Serializable
     /**
      * @param string $salt
      * @param string $password
+     *
+     * @return User
      */
     public function updatePassword($salt, $password)
     {
         $this->salt     = $salt;
         $this->password = $password;
+
+        return $this;
     }
 }

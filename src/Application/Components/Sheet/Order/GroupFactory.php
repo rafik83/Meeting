@@ -10,15 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\WrongTypeException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\InvalidDataException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownGroupException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownTypeException;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\InvalidDataException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\WrongTypeException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AbstractProductType;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\AddedRowType;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibRadioType;
-use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
 
 class GroupFactory
 {
@@ -42,8 +42,9 @@ class GroupFactory
      * @param array  $data
      * @param string $locale
      *
-     * @return array
      * @throws InvalidDataException
+     * @return array
+     *
      */
     public function createGroupsFromArray(array $template, array $data, $locale)
     {
@@ -93,7 +94,7 @@ class GroupFactory
                 isset($rowData['participant']) && $rowData['participant'] === false ||
                 isset($rowData['planning']) && $rowData['planning'] === false ||
                 isset($rowData['quantity']) && $rowData['quantity'] === 0
-            )  {
+            ) {
                 continue;
             }
 
@@ -112,10 +113,11 @@ class GroupFactory
      * @param array    $rowData
      * @param          $locale
      *
-     * @return RowView
      * @throws WrongTypeException
      * @throws UnknownGroupException
      * @throws UnknownTypeException
+     * @return RowView
+     *
      */
     private function createRowViewFromArray(Template $template, $groupName, $rowName, array $rowData, $locale)
     {
@@ -135,7 +137,7 @@ class GroupFactory
 
         $quantity = isset($rowData['quantity']) ? $rowData['quantity'] : 1;
 
-        $row = new RowView($label, $price, $quantity, $product->getUpdatableUntil(), $product->isUpdatable());
+        $row           = new RowView($label, $price, $quantity, $product->getUpdatableUntil(), $product->isUpdatable());
         $row->editable = $product instanceof AddedRowType;
 
         return $row;

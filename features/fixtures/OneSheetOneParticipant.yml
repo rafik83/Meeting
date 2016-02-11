@@ -1,8 +1,8 @@
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
         __construct: false
-        user: @user_1
-        sheet: @sheet_1
+        user: "@user_1"
+        sheet: "@sheet_1"
         owner: true
         active: true
         data:

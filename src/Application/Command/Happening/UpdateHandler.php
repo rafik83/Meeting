@@ -39,6 +39,12 @@ class UpdateHandler
             $happening->updateTranslation($locale, $translation['title'], $translation['description']);
         }
 
+        // Sort speakers by position
+        usort($update->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
+
+        // Set speakers
+        $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
+
         $this->happeningRepository->set($happening);
     }
 }

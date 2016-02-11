@@ -16,7 +16,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class Transaction
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 

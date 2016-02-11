@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Happening\Speaker\Create:
+    properties:
+        name:
+            - NotBlank: ~
+        function:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+        logo:
+            - Image: ~
+        photo:
+            - Image: ~

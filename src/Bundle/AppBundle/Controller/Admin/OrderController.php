@@ -17,8 +17,8 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Domain\Model\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -96,7 +96,7 @@ class OrderController extends Controller
         ;
 
         $updateRow = new UpdateRow($order, $group, $row);
-        $form   = $this->createForm(UpdateRowType::class, $updateRow);
+        $form      = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.order.update_row_handler')->handle($updateRow);

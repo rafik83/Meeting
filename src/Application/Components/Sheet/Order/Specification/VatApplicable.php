@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Order\Specification;
 
+use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 
 class VatApplicable
 {
@@ -31,12 +31,12 @@ class VatApplicable
      * VatApplicable constructor.
      *
      * @param BillingInfoGuesser $billingInfoGuesser
-     * @param array             $europeanCountries
+     * @param array              $europeanCountries
      */
     public function __construct(BillingInfoGuesser $billingInfoGuesser, array $europeanCountries)
     {
         $this->billingInfoGuesser = $billingInfoGuesser;
-        $this->europeanCountries = $europeanCountries;
+        $this->europeanCountries  = $europeanCountries;
     }
 
     /**
