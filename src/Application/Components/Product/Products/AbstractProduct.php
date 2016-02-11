@@ -72,7 +72,7 @@ abstract class AbstractProduct implements ProductInterface
     public function getLabel($locale)
     {
         if (!isset($this->options['label'])) {
-            return null;
+            return;
         }
 
         $label = $this->options['label'];
@@ -242,6 +242,7 @@ abstract class AbstractProduct implements ProductInterface
 
     /**
      * @param array $packageData
+     *
      * @return float
      */
     public function getRemainingQuantityMax(array $packageData)
@@ -267,6 +268,7 @@ abstract class AbstractProduct implements ProductInterface
 
     /**
      * @param array $packageData
+     *
      * @return float
      */
     public function getQuantityMaxWithoutPurchased(array $packageData)
@@ -319,7 +321,7 @@ abstract class AbstractProduct implements ProductInterface
 
         foreach ($includings as $including) {
             if ($including->getQuantity() === null) {
-                return null;
+                return;
             } else {
                 $quantity += $including->getQuantity();
             }
@@ -392,7 +394,7 @@ abstract class AbstractProduct implements ProductInterface
     private function isIncludedIn(ProductInterface $product, ProductInterface $productToCheck, array $productData)
     {
         if ($product->getIncludedIn() === null || !isset($productData['value'])) {
-            return null;
+            return;
         }
 
         // This use case is working for LibChoiceWithDescriptionProduct and LibOptionProduct
@@ -405,7 +407,8 @@ abstract class AbstractProduct implements ProductInterface
                         return $includedIn;
                     }
                 }
-                return null;
+
+                return;
             }
         }
 
@@ -415,6 +418,6 @@ abstract class AbstractProduct implements ProductInterface
             }
         }
 
-        return null;
+        return;
     }
 }

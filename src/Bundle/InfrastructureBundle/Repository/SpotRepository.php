@@ -27,7 +27,8 @@ class SpotRepository implements SpotRepositoryInterface
      *
      * @param EntityManager $entityManager
      */
-    public function __construct(EntityManager $entityManager) {
+    public function __construct(EntityManager $entityManager)
+    {
         $this->entityManager  = $entityManager;
     }
 

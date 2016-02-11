@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Components\Participant;
 
+use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
 
 class ParticipantInfoGuesser
 {

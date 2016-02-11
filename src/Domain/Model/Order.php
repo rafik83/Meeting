@@ -250,8 +250,8 @@ class Order implements BillingInfoInterface
             throw new NotAddedRowException($group, $row);
         }
 
-        unset ($this->packageTemplate[$group]['template'][$row]);
-        unset ($this->packageData[$group][$row]);
+        unset($this->packageTemplate[$group]['template'][$row]);
+        unset($this->packageData[$group][$row]);
     }
 
     /**

@@ -47,7 +47,7 @@ class Spot
     private $seatCapacity;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $active;
 
@@ -140,7 +140,7 @@ class Spot
     /**
      * Get active
      *
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {

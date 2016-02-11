@@ -14,8 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
-use Proximum\Vimeet\Domain\Model\Happening\Talking;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\Talking;
 
 class Happening
 {

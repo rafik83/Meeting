@@ -42,7 +42,7 @@ interface SpotRepositoryInterface
     public function getSpotFilter(Event $event, array $filter = []);
 
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $reference
      *
      * @return Spot
