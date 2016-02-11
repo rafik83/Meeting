@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CancelType extends AbstractType
 {
@@ -39,7 +39,7 @@ class CancelType extends AbstractType
     {
         $resolver->setDefaults([
             'method'     => 'DELETE',
-            'data_class' => Cancel::class
+            'data_class' => Cancel::class,
         ]);
     }
 

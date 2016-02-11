@@ -27,19 +27,19 @@ class SpotCreateType extends AbstractType
     {
         $builder
             ->add('reference', TextType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('size', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('meetingCapacity', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('seatCapacity', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('active', CheckboxType::class, [
-                'required' => false
+                'required' => false,
             ])
         ;
     }

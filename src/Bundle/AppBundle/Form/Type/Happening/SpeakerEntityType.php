@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SpeakerEntityType extends AbstractType
 {
@@ -23,7 +23,6 @@ class SpeakerEntityType extends AbstractType
             'class'        => Speaker::class,
             'choice_label' => 'name',
         ]);
-
     }
 
     public function getParent()

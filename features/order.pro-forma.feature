@@ -5,9 +5,9 @@ Feature: Pro-forma
     Given the database is empty
     And the following fixtures files are loaded:
       | Template.yml                                                  |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml         |
+      | app/Event.yml        |
+      | app/Nomenclature.yml |
+      | app/Type.yml         |
       | User.yml                                                      |
       | OneSheetOneParticipantWithBillingDataForProForma.yml          |
     Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"

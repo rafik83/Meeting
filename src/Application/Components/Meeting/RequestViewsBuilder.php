@@ -34,8 +34,8 @@ class RequestViewsBuilder
 
     /**
      * @param Request[] $requests
-     * @param User  $user
-     * @param Sheet $sheet
+     * @param User      $user
+     * @param Sheet     $sheet
      *
      * @return RequestView[]
      */

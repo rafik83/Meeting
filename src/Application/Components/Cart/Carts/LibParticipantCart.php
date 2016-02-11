@@ -44,7 +44,6 @@ class LibParticipantCart extends LibAbstractCart
             }
         }
 
-
         return $cartRow;
     }
 }

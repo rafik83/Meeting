@@ -123,4 +123,12 @@ class DelayedEventDispatcher implements EventDispatcherInterface
     {
         return $this->eventDispatcher->hasListeners($eventName);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        return $this->eventDispatcher->getListenerPriority($eventName, $listener);
+    }
 }

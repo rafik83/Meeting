@@ -4,7 +4,7 @@ Feature: Create spot
   Scenario: I can create spot
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | app/Event.yml |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -25,7 +25,7 @@ Feature: Create spot
   Scenario: I can list spot
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | app/Event.yml |
       | Spot.yml                                               |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200

@@ -44,7 +44,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     public function upload($file)
     {
         if (null === $file) {
-            return null;
+            return;
         }
 
         if (!$file instanceof UploadedFile) {
@@ -52,14 +52,14 @@ class LocalFileStorageAdapter implements FileStorageInterface
         }
 
         $path      = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
-        $directory = $this->publicDir.$path;
-        $extension = '.'.$file->getClientOriginalExtension();
-        $prefix    = uniqid().'_';
-        $filename  = $prefix.Transliterator::urlize(basename($file->getClientOriginalName(), $extension)).$extension;
+        $directory = $this->publicDir . $path;
+        $extension = '.' . $file->getClientOriginalExtension();
+        $prefix    = uniqid() . '_';
+        $filename  = $prefix . Transliterator::urlize(basename($file->getClientOriginalName(), $extension)) . $extension;
 
         $file->move($directory, $filename);
 
-        return $path.'/'.$filename;
+        return $path . '/' . $filename;
     }
 
     /**
@@ -67,7 +67,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function remove($identifier)
     {
-        $filepath = $this->publicDir.$identifier;
+        $filepath = $this->publicDir . $identifier;
 
         if (file_exists($filepath) && is_writable($filepath)) {
             unlink($filepath);

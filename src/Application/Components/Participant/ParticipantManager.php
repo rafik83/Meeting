@@ -33,7 +33,7 @@ class ParticipantManager
     /**
      * @param CartRepositoryInterface        $cartRepository
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param OrderManager                    $orderManager
+     * @param OrderManager                   $orderManager
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -52,6 +52,7 @@ class ParticipantManager
      * In another story
      *
      * @param Sheet $sheet
+     *
      * @return bool
      */
     public function getNewParticipantState(Sheet $sheet)
@@ -324,7 +325,7 @@ class ParticipantManager
             }
         }
 
-        return null;
+        return;
     }
 
     private function countNumberOfParticipantAttachedToAnOrder(Sheet $sheet, Order $order)

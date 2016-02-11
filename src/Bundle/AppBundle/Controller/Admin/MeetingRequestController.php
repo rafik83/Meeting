@@ -39,7 +39,6 @@ class MeetingRequestController extends Controller
         return $this->get('form.factory')->createNamed('', $type, $data, $options);
     }
 
-
     /**
      * @param Request $request
      * @param Event   $event
@@ -72,7 +71,6 @@ class MeetingRequestController extends Controller
             'filtered'         => $filtered,
         ]);
     }
-
 
     /**
      * @param Event          $event
@@ -122,7 +120,7 @@ class MeetingRequestController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $command = new PositionMeeting($meetingRequest, new \DateTime);
+        $command = new PositionMeeting($meetingRequest, new \DateTime());
         $form    = $this->createForm(PositionMeetingType::class, $command, [
             'event'           => $event,
             'meeting_request' => $meetingRequest,
