@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Update
+abstract class AbstractUpdate
 {
     /**
      * @var Type

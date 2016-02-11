@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
+namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Choice;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
-class UpdateTextHandler
+class UpdateHandler
 {
     /**
      * @var TypeRepositoryInterface
@@ -28,19 +28,18 @@ class UpdateTextHandler
     }
 
     /**
-     * @param UpdateLibText $update
+     * @param Update $update
      *
      * @throws \Exception
      */
-    public function handle(UpdateLibText $update)
+    public function handle(Update $update)
     {
         $options = $update->field->getOptions();
 
         $options['label'] = $update->label;
         $options['required'] = $update->required;
         $options['private'] = $update->private;
-        $options['translatable'] = $update->translatable;
-        $options['translationRequired'] = $update->translationRequired;
+        $options['choices'] = $update->choices;
 
         $update->type->updateTemplateRow(
             $update->templateName,

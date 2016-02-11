@@ -257,8 +257,8 @@ services:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateFactory
         arguments:
             -
-                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibText'
-                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateLibChoice'
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\Text\Update'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Update'
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandlerFactory
         arguments:
@@ -266,11 +266,11 @@ services:
                 lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler'
                 lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler'
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler:
-        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateTextHandler
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Text\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler:
-        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoiceHandler
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:

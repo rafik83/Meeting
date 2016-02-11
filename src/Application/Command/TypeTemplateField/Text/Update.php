@@ -8,12 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
+namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Text;
 
+use Proximum\Vimeet\Application\Command\TypeTemplateField\AbstractUpdate;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibTextType;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class UpdateLibText extends Update
+class Update extends AbstractUpdate
 {
     /**
      * @var bool
