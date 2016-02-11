@@ -10,7 +10,7 @@ Proximum\Vimeet\Domain\Model\Spot:
     spot_2:
         __construct:
         reference: A008
-        event: @event_rdv_carnot_2016
+        event: "@event_rdv_carnot_2016"
         size: 6
         meetingCapacity: 3
         seatCapacity: 4
@@ -18,7 +18,7 @@ Proximum\Vimeet\Domain\Model\Spot:
     spot_3:
         __construct:
         reference: B090
-        event: @event_rdv_carnot_2016
+        event: "@event_rdv_carnot_2016"
         size: 6
         meetingCapacity: 5
         seatCapacity: 4
@@ -26,7 +26,7 @@ Proximum\Vimeet\Domain\Model\Spot:
     spot_4:
         __construct:
         reference: A100
-        event: @event_rdv_carnot_2016
+        event: "@event_rdv_carnot_2016"
         size: 6
         meetingCapacity: 3
         seatCapacity: 4
@@ -34,7 +34,7 @@ Proximum\Vimeet\Domain\Model\Spot:
     spot_5:
         __construct:
         reference: F098
-        event: @event_rdv_carnot_2016
+        event: "@event_rdv_carnot_2016"
         size: 6
         meetingCapacity: 5
         seatCapacity: 4

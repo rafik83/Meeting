@@ -56,7 +56,7 @@ class Spot
      *
      * @param string $reference
      * @param Event  $event
-     * @param int    $size
+     * @param float  $size
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
