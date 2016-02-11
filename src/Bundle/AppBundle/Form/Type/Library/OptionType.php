@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
 
+use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
@@ -18,21 +19,37 @@ use Symfony\Component\Form\FormInterface;
 class OptionType extends AbstractLocalizedType
 {
     /**
+     * @var OrderManager
+     */
+    private $orderManager;
+
+    /**
+     * @param OrderManager $orderManager
+     */
+    public function __construct(OrderManager $orderManager)
+    {
+        $this->orderManager = $orderManager;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         parent::finishView($view, $form, $options);
 
-        $view->vars['quantity_allowed'] = 1;
         $view->vars['display_price']    = true;
         $view->vars['is_included']      = false;
 
-        if (null !== $options['product'] && isset($options['sheet']) && null !== $options['sheet']) {
+        if (null !== $options['product']
+            && isset($options['sheet'])
+            && null !== $options['sheet']
+            && null !== $options['cart']
+        ) {
             $product = $options['product'];
-            $sheet   = $options['sheet'];
+            $cart    = $options['cart'];
 
-            $includeds = $product->getIncludingFromPurchase($sheet->getPackageData());
+            $includeds = $product->getIncludingFromPurchase($cart->getData());
 
             $view->vars['is_included']       = !empty($includeds);
             $view->vars['quantity_included'] = 0;
@@ -46,12 +63,7 @@ class OptionType extends AbstractLocalizedType
                 }
             }
 
-            $view->vars['quantity_allowed'] = $product->getRemainingQuantityMax($sheet->getPackageData());
-
-            if ($view->vars['quantity_allowed'] === 0
-                && null === $view->vars['quantity_included']
-                && true === $view->vars['is_included']
-            ) {
+            if ($view->vars['is_included'] && $view->vars['quantity_included'] === null) {
                 $view->vars['display_price'] = false;
             }
         }
@@ -63,6 +75,7 @@ class OptionType extends AbstractLocalizedType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $sheet    = isset($options['sheet']) && $options['sheet'] !== null ? $options['sheet'] : null;
+        $cart     = $options['cart'];
         $product  = $options['product'];
         $template = $options['template'];
         $locale   = $options['locale'];
@@ -70,13 +83,19 @@ class OptionType extends AbstractLocalizedType
 
         if ($sheet !== null
             && $product !== null
-            && !empty($product->getIncludingFromPurchase($sheet->getPackageData()))
+            && $cart !== null
+            && (!empty($product->getIncludingFromPurchase($sheet->getPackageData()))
+                || !empty($product->getIncludingFromPurchase($cart->getData()))
+            )
         ) {
-            foreach ($product->getIncludingFromPurchase($sheet->getPackageData()) as $includedIn) {
+            $packageData = $this->orderManager->mergeTwoPackageData($sheet->getPackageData(), $cart->getData());
+
+            foreach ($product->getIncludingFromPurchase($packageData) as $includedIn) {
                 if (null === $includedIn->getQuantity()) {
                     $checked = true;
                 }
             }
+
             if ($checked === false) {
                 $checked = $product->getRemainingQuantityMax($sheet->getPackageData()) === 0;
             }
@@ -95,12 +114,13 @@ class OptionType extends AbstractLocalizedType
         if ($sheet !== null
             && false === $checked
             && $product !== null
-            && $product->hasQuantity()
-            && 0 !== $product->getRemainingQuantityMax($sheet->getPackageData())
+            && ($product->allowQuantity($sheet->getPackageData())
+                || (empty($sheet->getPackageData()) && $product->allowQuantity($cart->getData()))
+            )
         ) {
             $builder->add('quantity', QuantityType::class, [
                 'min'   => $product->getQuantityMin(),
-                'max'   => $product->getRemainingQuantityMax($sheet->getPackageData()),
+                'max'   => $product->getRemainingQuantityMax($sheet->getPackageData()) - $product->getQuantityIncludedWithPurchase($cart->getData()),
                 'range' => $product->getQuantityRange(),
             ]);
         }

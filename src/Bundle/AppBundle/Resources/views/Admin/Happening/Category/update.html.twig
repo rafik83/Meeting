@@ -1,0 +1,16 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+    <h2>Modifier une catégorie</h2>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.picto) }}
+    {{ form_row(form.translations) }}
+    <div class="text-right">
+        <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
+        {{ form_widget(form.submit) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -36,7 +36,7 @@ set :cache_path,      "var/cache"
 
 # Shared
 set :shared_files,    [app_config_path + "/" + app_config_file]
-set :shared_children, ["node_modules", log_path]
+set :shared_children, ["web/uploads", ""node_modules", log_path]
 
 # Assets
 set :dump_assetic_assets,        false
@@ -48,7 +48,7 @@ set :permission_method,   :acl
 set :use_set_permissions, true
 set :group_writable,      true
 set :webserver_user,      "www-data"
-set :writable_dirs,       [log_path, cache_path]
+set :writable_dirs,       [log_path, cache_path, "web/uploads"]
 
 # Database
 set :model_manager, "doctrine"
@@ -58,12 +58,16 @@ set :backup_path,   "var/backups"
 set :keep_releases, 3
 
 # Tasks
-
 after 'symfony:cache:warmup', 'app_tasks:install'
 after :deploy, 'app_tasks:php'
 after :deploy, 'deploy:cleanup'
 
 namespace :app_tasks do
+  task :initdb do
+      capifony_pretty_print "--> Init DB"
+      invoke_command "cd #{latest_release} && make init-db", :via => run_method
+      capifony_puts_ok
+  end
   task :php do
       capifony_pretty_print "--> Restarting PHP"
       invoke_command "sudo service php5-fpm restart", :via => run_method

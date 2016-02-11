@@ -1,11 +1,19 @@
 Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_approved_request_with_participants:
+        __construct:
+            - @sheet_test
+            - [@participant_test]
+            - @sheet_exposant2
+            - [@participant_random_2]
+            - <dateTimeBetween('-3 days', 'now')>
+            - @user_test
+        state: 'approved'
     meeting_request1:
         __construct:
             - @sheet_test
-            - [@participant_test, @participant_test_2]
+            - [@participant_test]
             - @sheet_exposant1
             - []
-            - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'sent'
@@ -14,8 +22,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - @sheet_test
             - [@participant_test]
             - @sheet_exposant2
-            - []
-            - <text(100)>
+            - [@participant_random_1]
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'approved'
@@ -25,7 +32,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - @sheet_exposant5
             - []
-            - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'refused'
@@ -35,7 +41,6 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - @sheet_exposant4
             - []
-            - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'cancelled'
@@ -45,17 +50,69 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - [@participant_test]
             - @sheet_exposant6
             - []
-            - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'sent'
     meeting_request6:
         __construct:
             - @sheet_test
-            - [@participant_test, @participant_test_2, @participant_test_3, @participant_test_4]
+            - [@participant_test]
             - @sheet_exposant7
             - []
-            - <text(100)>
             - <dateTimeBetween('-100 days', 'now')>
             - @user_test
         state: 'approved'
+    meeting_proposition1:
+        __construct:
+            - @sheet_exposant1
+            - []
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: 'sent'
+    meeting_proposition2:
+        __construct:
+            - @sheet_exposant2
+            - [@participant_random_1, @participant_random_2]
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+    meeting_proposition3:
+        __construct:
+            - @sheet_exposant3
+            - []
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+    meeting_proposition4:
+        __construct:
+            - @sheet_exposant4
+            - [@participant_random_3]
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+    meeting_proposition5:
+        __construct:
+            - @sheet_exposant5
+            - [@participant_random_4]
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+    meeting_proposition6:
+        __construct:
+            - @sheet_exposant6
+            - []
+            - @sheet_test
+            - []
+            - <dateTimeBetween('-100 days', 'now')>
+            - @user_random_2
+        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>

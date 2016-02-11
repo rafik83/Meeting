@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 
-class Meeting
+class Meeting implements MessageSubjectInterface
 {
+    const STATE_SCHEDULED = 'scheduled';
+    const STATE_CANCELED  = 'canceled';
+
     /**
      * @var int
      */
@@ -45,19 +49,24 @@ class Meeting
     private $toParticipants;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private $state = self::STATE_SCHEDULED;
+
+    /**
      * Meeting constructor.
      *
-     * @param MeetingSlot $slot
-     * @param Sheet       $fromSheet
-     * @param array       $fromParticipants
-     * @param Sheet       $toSheet
-     * @param array       $toParticipants
-     * @param \DateTime   $createdAt
+     * @param MeetingSlot        $slot
+     * @param Sheet              $fromSheet
+     * @param array              $fromParticipants
+     * @param Sheet              $toSheet
+     * @param array              $toParticipants
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         MeetingSlot $slot,
@@ -65,7 +74,7 @@ class Meeting
         array $fromParticipants,
         Sheet $toSheet,
         array $toParticipants,
-        \DateTime $createdAt
+        \DateTimeInterface $createdAt
     ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
@@ -86,6 +95,72 @@ class Meeting
     }
 
     /**
+     * @return Sheet
+     */
+    public function getFromSheet()
+    {
+        return $this->fromSheet;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFromParticipants()
+    {
+        return $this->fromParticipants;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function addFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants[$participant->getId()] = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting
+     */
+    public function removeFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasFromParticipant(Participant $participant)
+    {
+        return $this->fromParticipants->contains($participant);
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getToSheet()
+    {
+        return $this->toSheet;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getToParticipants()
+    {
+        return $this->toParticipants;
+    }
+
+    /**
      * Get slot
      *
      * @return MeetingSlot
@@ -96,50 +171,64 @@ class Meeting
     }
 
     /**
-     * Get fromSheet
+     * @param Participant $participant
      *
-     * @return Sheet
+     * @return Meeting
      */
-    public function getFromSheet()
+    public function addToParticipant(Participant $participant)
     {
-        return $this->fromSheet;
+        $this->toParticipants[] = $participant;
+
+        return $this;
     }
 
     /**
-     * Get fromParticipants
+     * @param Participant $participant
      *
-     * @return ArrayCollection
+     * @return Meeting
      */
-    public function getFromParticipants()
+    public function removeToParticipant(Participant $participant)
     {
-        return $this->fromParticipants;
+        $this->toParticipants->removeElement($participant);
+
+        return $this;
     }
 
     /**
-     * Get toSheet
+     * @param Participant $participant
      *
-     * @return Sheet
+     * @return bool
      */
-    public function getToSheet()
+    public function hasToParticipant(Participant $participant)
     {
-        return $this->toSheet;
+        return $this->toParticipants->contains($participant);
     }
 
     /**
-     * Get toParticipants
-     *
-     * @return ArrayCollection
-     */
-    public function getToParticipants()
-    {
-        return $this->toParticipants;
-    }
-
-    /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @return Meeting
+     */
+    public function cancel()
+    {
+        $this->state = self::STATE_CANCELED;
+
+        return $this;
     }
 }

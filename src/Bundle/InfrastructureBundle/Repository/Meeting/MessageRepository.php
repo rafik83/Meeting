@@ -1,0 +1,81 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+
+class MessageRepository implements MessageRepositoryInterface
+{
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * MessageRepository constructor.
+     *
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Message $message)
+    {
+        $this->entityManager->persist($message);
+        $this->entityManager->flush($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastMessageByRequest(Request $request)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('message.content')
+            ->from(Message::class, 'message')
+            ->where('message.request = :request')
+            ->setParameter('request', $request)
+            ->orderBy('message.createdAt', 'DESC')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessagesByMeetingRequest(Request $request)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('message')
+            ->from(Message::class, 'message')
+            ->where('message.request = :request')
+            ->setParameter('request', $request)
+            ->orderBy('message.createdAt', 'ASC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+}

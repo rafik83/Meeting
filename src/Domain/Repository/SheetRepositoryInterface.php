@@ -29,6 +29,16 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
+     * @param int    $page
+     * @param int    $limit
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return mixed
+     */
+    public function paginate($page, $limit, Event $event, $locale);
+
+    /**
      * @param int|User  $user
      * @param int|Event $event
      * @param string    $locale

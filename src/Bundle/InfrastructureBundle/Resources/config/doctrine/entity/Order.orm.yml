@@ -9,18 +9,22 @@ Proximum\Vimeet\Domain\Model\Order:
     fields:
         state:
             type: string
-        proFormaTemplate:
-            type: text
         packageData:
             type: json_array
         packageTemplate:
             type: json_array
         billingData:
             type: json_array
+        billingTemplate:
+            type: json_array
         createdAt:
             type: datetime
         paymentMode:
             type: string
+        vatMode:
+            type: string
+        vatRate:
+            type: float
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

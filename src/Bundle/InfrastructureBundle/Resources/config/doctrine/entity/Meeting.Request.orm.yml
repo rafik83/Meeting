@@ -7,20 +7,19 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             generator:
                 strategy: AUTO
     fields:
-        description:
-            type: text
-            nullable: true
         state:
             type: string
         createdAt:
             type: datetime
+        stateUpdatedAt:
+            type: datetime
     manyToOne:
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-        meeting:
-            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         creator:
             targetEntity: Proximum\Vimeet\Domain\Model\User
     manyToMany:
@@ -32,7 +31,3 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             joinTable:
                 name: meeting_request_to_participants
-        notifications:
-            targetEntity: Proximum\Vimeet\Domain\Model\Notification
-            joinTable:
-                name: meeting_request_notifications

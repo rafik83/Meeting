@@ -80,7 +80,7 @@ class SheetManager
             $sheet->getId(),
             $sheet->getEvent(),
             $sheet->getType(),
-            $sheet->getParticipants(),
+            $sheet->getParticipants()->toArray(),
             $sheet->getData(),
             $sheet->getPackageData(),
             $sheet->getBillingData(),
@@ -178,5 +178,19 @@ class SheetManager
         }
 
         return $allowedSheets;
+    }
+
+    /**
+     * Is a user can see a $seebale sheet using $seet sheet
+     *
+     * @param User  $user    The user
+     * @param Sheet $seer    The sheet used to see
+     * @param Sheet $seeable The sheet the user want to see
+     *
+     * @return bool
+     */
+    public function isAllowedToSee(User $user, Sheet $seer, Sheet $seeable)
+    {
+        return in_array($seer, $this->getUserSheetsThatCanSeeTheGivenSheet($user, $seeable));
     }
 }

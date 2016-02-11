@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
-use Proximum\Vimeet\Application\Event\ApplicationEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordHandler
 {
@@ -35,26 +35,26 @@ class ForgottenPasswordHandler
     private $forgottenPasswordRepository;
 
     /**
-     * @var ApplicationEventDispatcherInterface
+     * @var EventDispatcherInterface
      */
-    private $applicationEventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
      * @param UserRepositoryInterface                   $userRepository
      * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
-     * @param ApplicationEventDispatcherInterface       $applicationEventDispatcher
+     * @param EventDispatcherInterface                  $eventDispatcher
      */
     public function __construct(
         ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
         UserRepositoryInterface $userRepository,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository,
-        ApplicationEventDispatcherInterface $applicationEventDispatcher
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->forgottenPasswordTokenGenerator = $forgottenPasswordTokenGenerator;
         $this->userRepository                  = $userRepository;
         $this->forgottenPasswordRepository     = $forgottenPasswordTokenRepository;
-        $this->applicationEventDispatcher      = $applicationEventDispatcher;
+        $this->eventDispatcher                 = $eventDispatcher;
     }
 
     /**
@@ -82,6 +82,6 @@ class ForgottenPasswordHandler
             $forgottenPassword->locale
         );
 
-        $this->applicationEventDispatcher->dispatch('reset_password', $event);
+        $this->eventDispatcher->dispatch('reset_password', $event);
     }
 }

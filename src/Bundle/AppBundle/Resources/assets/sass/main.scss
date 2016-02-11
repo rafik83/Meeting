@@ -5,3 +5,11 @@ body {
 .required:after {
     content: '*';
 }
+
+.btn-np {
+    padding: 0px;
+}
+
+.notification-not-read {
+    font-weight: bold;
+}

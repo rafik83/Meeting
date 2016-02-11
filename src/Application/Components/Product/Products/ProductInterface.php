@@ -17,6 +17,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface ProductInterface
 {
     /**
+     * @return string
+     */
+    public function getKey();
+
+    /**
      * @param OptionsResolver $optionsResolver
      */
     public function configure(OptionsResolver $optionsResolver);
@@ -27,6 +32,28 @@ interface ProductInterface
      * @return string|null
      */
     public function getLabel($locale);
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getDescription($locale);
+
+    /**
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * @return string
+     */
+    public function getRequired();
+
+    /**
+     * @return float
+     */
+    public function getUnitPrice();
 
     /**
      * @param ProductInterface $includer
@@ -71,4 +98,14 @@ interface ProductInterface
      * @param array $packageData
      */
     public function getIncludingFromPurchase(array $packageData);
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options);
+
+    /**
+     * @return array
+     */
+    public function getOptionsIncludedIn();
 }

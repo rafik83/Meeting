@@ -26,7 +26,15 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('vimeet_app');
+        $rootNode    = $treeBuilder->root('vimeet_app');
+
+        $rootNode
+            ->children()
+                ->arrayNode('eu_countries')
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

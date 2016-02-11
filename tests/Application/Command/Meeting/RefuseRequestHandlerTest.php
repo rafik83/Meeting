@@ -11,123 +11,66 @@
 namespace Tests\Application\Command\Meeting;
 
 use DateTime;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
+use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        // Context
+
         $event     = new Event();
         $type      = new Type($event);
         $sheetTo   = new Sheet($event, $type, [], []);
         $sheetFrom = new Sheet($event, $type, [], []);
         $dateTime  = new DateTime();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
-        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user, 2));
+        // Request to refuse
 
-        $expectedNotification = new Notification($user2, $user, $dateTime, 'meeting_request.refuse');
-        $expectedNotification->setMessage('this is a test');
+        $request = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $refuseRequest = new RefuseRequest($request, $user, $dateTime);
+        $refuseRequest->message = 'this is a test';
 
-        $request         = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
+        // Expceted
 
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], 'test', $dateTime, $user);
-        $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->addNotifications($expectedNotification);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $expectedRequest->refuse($dateTime);
+        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'this is a test', $dateTime);
+        $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');
 
-
-        $refusedRequest = new RefuseRequest($request, $user2);
-        $refusedRequest->message = 'this is a test';
-
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $requestRepository->set($expectedRequest)->shouldBeCalled();
-
-        $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
-        $notificationRepository->add($expectedNotification)->shouldBeCalled();
-
-
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
-        $handler->handle($refusedRequest);
-    }
-
-    public function testHandleWithNotification()
-    {
-        $event     = new Event();
-        $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
-        $dateTime  = new DateTime();
-        $user      = new User('test@test.fr', 'test', 'test', 'fr');
-        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
-
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
-
-        $expectedNotification = new Notification($user, $user2, $dateTime, 'meeting_request.refuse');
-        $expectedNotification->setMessage('this is a test');
-
-        $request = new Request(
-            $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
-            $sheetTo,
-            [],
-            'test',
-            $dateTime,
-            $user
-        );
-
-        $expectedRequest = new Request(
-            $sheetFrom,
-            [$this->createParticipantMock($sheetFrom, $user2, 2)],
-            $sheetTo,
-            [],
-            'test',
-            $dateTime,
-            $user
-        );
-        $expectedRequest->setState(Request::STATE_REFUSED);
-        $expectedRequest->addNotifications($expectedNotification);
-
-        $refusedRequest = new RefuseRequest($request, $user);
-        $refusedRequest->message = 'this is a test';
-
-
-        $notificationRepository = $this->prophesize(NotificationRepositoryInterface::class);
-        $notificationRepository->add($expectedNotification)->shouldBeCalled();
+        // Dependencies
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $handler = new RefuseRequestHandler($requestRepository->reveal(), $notificationRepository->reveal(), $dateTime);
-        $handler->handle($refusedRequest);
-    }
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-    /**
-     * @param Sheet $sheet
-     * @param User $user
-     * @param $id
-     *
-     * @return Participant
-     */
-    public function createParticipantMock(Sheet $sheet, User $user, $id)
-    {
-        $participant = new Participant($sheet, $user, [], true);
-        $reflection  = new \ReflectionClass(Participant::class);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch('meeting_request.refused', $exectedEvent);
 
-        $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($participant, $id);
+        // Handle
 
-        return $participant;
+        $handler = new RefuseRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $dateTime
+        );
+
+        $handler->handle($refuseRequest);
     }
 }

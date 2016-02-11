@@ -90,7 +90,7 @@ class BaseController extends Controller
                 if (isset($template['template'][$key])
                     && isset($value['participant'])
                     && $value['participant'] === true
-                    && (!isset($value['participant_bought']) || (isset($value['participant_bought']) && $value['participant_bought'] === 0))
+                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
                 ) {
                     $error = new FormError(
                         $this
@@ -101,7 +101,7 @@ class BaseController extends Controller
                 } elseif (isset($template['template'][$key])
                     && isset($value['planning'])
                     && $value['planning'] === true
-                    && (!isset($value['planning_bought']) || (isset($value['planning_bought']) && $value['planning_bought'] === 0))
+                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
                 ) {
                     $error = new FormError(
                         $this
@@ -114,6 +114,57 @@ class BaseController extends Controller
         }
 
         return $form;
+    }
+
+    protected function addErrorOnFormPackage(PackageException $exception, array $data, Form $form)
+    {
+        if ($exception instanceof BoughtParticipantAlreadyAddedException) {
+            foreach ($data as $stepKey => $step) {
+                foreach ($step as $productKey => $product) {
+                    if (isset($product['participant'])) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
+                        );
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                    } elseif (isset($product['participant']) && $product['participant'] === false) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
+                        );
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                    }
+                }
+            }
+        } elseif ($exception instanceof ForgotToAddQuantityException) {
+            foreach ($data as $stepKey => $step) {
+                foreach ($step as $productKey => $product) {
+                    if (isset($product['planning'])
+                        && $product['planning'] === true
+                        && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.option.quantityMustBeAdded', [], 'validators')
+                        );
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('planning')->addError($error);
+                    } elseif (isset($product['participant'])
+                        && $product['participant'] === true
+                        && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))
+                    ) {
+                        $error = new FormError(
+                            $this
+                                ->get('translator')
+                                ->trans('validators.option.quantityMustBeAdded', [], 'validators')
+                        );
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -67,12 +67,11 @@ class UnavailabilityTest extends \PHPUnit_Framework_TestCase
         $type                  = new Type($event);
         $sheet                 = new Sheet($event, $type, [], []);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
-        $participant           = new Participant($sheet, $user, [], true);
-        $schedule              = new Schedule($event, new \DateTime('2015-11-25 12:00:00'));
+        $participant           = new Participant($sheet, $user, [], true, true);
 
-        $expected      = new Unavailability($schedule, $participant, $e, $f);
-        $unvailability = new Unavailability($schedule, $participant, $a, $b);
-        $unvailability->merge(new Unavailability($schedule, $participant, $c, $d));
+        $expected      = new Unavailability($participant, $e, $f);
+        $unvailability = new Unavailability($participant, $a, $b);
+        $unvailability->merge(new Unavailability($participant, $c, $d));
 
         $this->assertEquals($expected, $unvailability);
     }

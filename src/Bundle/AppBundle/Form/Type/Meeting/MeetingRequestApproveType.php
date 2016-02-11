@@ -59,6 +59,7 @@ class MeetingRequestApproveType extends AbstractType
         $resolver->setRequired(['sheet']);
         $resolver->setDefaults([
             'data_class' => ApproveRequest::class,
+            'submit'     => true,
         ]);
     }
 }

@@ -9,7 +9,6 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: @template_exhibitor->sheet
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
-        proFormaTemplate: @template_exhibitor->proForma
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -21,7 +20,6 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: @template_exhibitor->sheet
         packageTemplate: @template_exhibitor->package
         previewTemplate: @template_exhibitor->preview
-        proFormaTemplate: @template_exhibitor->proForma
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -34,7 +32,6 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: @template_visitor->package
         previewTemplate: @template_visitor->preview
         viewTemplate: @template_visitor->view
-        proFormaTemplate: @template_visitor->proForma
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -47,22 +44,36 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: @template_visitor->package
         previewTemplate: @template_visitor->preview
         viewTemplate: @template_visitor->view
-        proFormaTemplate: @template_visitor->proForma
+
+    type_institute_carnot:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 4
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: @template_exhibitor->participant
+        sheetTemplate: @template_exhibitor->sheet
+        packageTemplate: @template_exhibitor->package
+        previewTemplate: @template_exhibitor->preview
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
-    exposant_type_exposant_fr:
+    type_exposant_fr:
         __construct: [@type_exposant, fr, "Exposant"]
-    exposant_type_exposant_en:
+    type_exposant_en:
         __construct: [@type_exposant, en, "Exhibitor"]
-    exposant_type_investisseur_fr:
+    type_investisseur_fr:
         __construct: [@type_investisseur, fr, "Investisseur"]
-    exposant_type_investisseur_en:
+    type_investisseur_en:
         __construct: [@type_investisseur, en, "Investor"]
-    exposant_type_visiteur_fr:
+    type_visiteur_fr:
         __construct: [@type_visiteur, fr, "Visiteur"]
-    exposant_type_visiteur_en:
+    type_visiteur_en:
         __construct: [@type_visiteur, en, "Visitor"]
-    exposant_type_visiteur_visio_fr:
+    type_visiteur_visio_fr:
         __construct: [@type_visiteur_visio, fr, "Visio"]
-    exposant_type_visiteur_visio_en:
+    type_visiteur_visio_en:
         __construct: [@type_visiteur_visio, en, "Visio"]
+    type_institute_carnot_fr:
+        __construct: [@type_institute_carnot, fr, "Institut Carnot"]
+    type_institute_carnot_en:
+        __construct: [@type_institute_carnot, en, "Carnot Institute"]

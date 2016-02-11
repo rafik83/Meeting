@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
@@ -27,19 +28,27 @@ class AddHandler extends BaseHandler
     private $userRepository;
 
     /**
+     * @var ParticipantManager
+     */
+    private $participantManager;
+
+    /**
      * @var ParticipantRepositoryInterface
      */
     private $participantRepository;
 
     /**
      * @param UserRepositoryInterface        $userRepository
+     * @param ParticipantManager             $participantManager
      * @param ParticipantRepositoryInterface $participantRepository
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
+        ParticipantManager $participantManager,
         ParticipantRepositoryInterface $participantRepository
     ) {
         $this->userRepository        = $userRepository;
+        $this->participantManager    = $participantManager;
         $this->participantRepository = $participantRepository;
     }
 
@@ -74,8 +83,18 @@ class AddHandler extends BaseHandler
             }
         }
 
+        $participant = new Participant($add->sheet, $user, $add->data, $add->owner, false);
+
+        // Find an order to attach the participant
+        $orderToAttach = $this->participantManager->findOrdertoAttach($add->sheet);
+
+        // If there is an order, attach it and active the participant
+        if ($orderToAttach) {
+            $participant->setOrder($orderToAttach);
+            $participant->setActive(true);
+        }
+
         // Add the new participant
-        $participant = new Participant($add->sheet, $user, $add->data, $add->owner);
         $this->participantRepository->add($participant);
 
         $add->participant = $participant;

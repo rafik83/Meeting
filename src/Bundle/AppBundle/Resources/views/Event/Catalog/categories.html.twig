@@ -5,7 +5,7 @@
 
     <ul>
         {% for category in categories %}
-            <li><a href="{{ path('event_catalog_category', { 'categoryView': category.id, 'subdomain': app.request.attributes.get('subdomain') }) }}">{{ category.title }}</a></li>
+            <li><a href="{{ path('event_catalog_category', { 'categoryView': category.id }) }}">{{ category.title }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

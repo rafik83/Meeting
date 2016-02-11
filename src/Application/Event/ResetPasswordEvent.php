@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Application\Event;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Component\EventDispatcher\Event;
 
-class ResetPasswordEvent extends ApplicationEvent
+class ResetPasswordEvent extends Event
 {
     /**
      * @var User

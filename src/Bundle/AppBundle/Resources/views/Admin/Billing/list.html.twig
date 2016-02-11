@@ -1,0 +1,103 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% import 'VimeetAppBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <div class="jumbotron pull-right">
+        <h2>Balance : <strong class="{{ balance < 0 ? 'text-danger' : 'text-success' }}">{{ balance|number_format(2, ',', ' ') }} €</strong></h2>
+    </div>
+
+    <h1>{{ sheet_info }}</h1>
+
+    <address class="clearfix">
+        <p>{{ billing.organization }}</p>
+        <p>{{ billing.name }}</p>
+        <p>
+            {{ billing.address }}<br>
+            {{ billing.zipcode }} {{ billing.city }}<br>
+            {{ billing.country|country }}
+        </p>
+        <p>N° de TVA intracommunautaire : {{ billing.vat_number }}</p>
+    </address>
+
+    <h2>Liste des commandes</h2>
+
+    {% if orders is empty %}
+        <p class="alert alert-info">Aucune commande pour cette fiche.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Date</th>
+                    <th>Mode de paiement</th>
+                    <th class="text-right">Montant</th>
+                    <th class="text-right" width="200"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <th colspan="3" class="text-right">Total :</th>
+                <th class="text-right">{{ orders_total|number_format(2, ',', ' ') }} €</th>
+                <th></th>
+            </tfoot>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.reference }}</td>
+                        <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ order.paymentMode }}</td>
+                        <td class="text-right">{{ (order.total)|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">
+                            <a href="{{ path('admin_sheet_order_edit', { 'order': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h2>Liste des transactions</h2>
+
+    {% if transactions is empty %}
+        <p class="alert alert-info">
+            Aucune transaction pour cette fiche.
+            <a href="{{ path('admin_sheet_transaction_create', { 'sheet': sheet.id }) }}" class="btn btn-success">Ajouter une transaction</a>
+        </p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Mode de paiement</th>
+                <th class="text-right">Montant</th>
+                <th class="text-right" width="200">
+                    <a href="{{ path('admin_sheet_transaction_create', { 'sheet': sheet.id }) }}" class="btn btn-success btn-sm">Ajouter une transaction</a>
+                </th>
+            </thead>
+            <tfoot>
+                <th colspan="3" class="text-right">Total :</th>
+                <th class="text-right">{{ transactions_total|number_format(2, ',', ' ') }} €</th>
+                <th></th>
+            </tfoot>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.reference }}</td>
+                        <td>{{ transaction.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ transaction.mode }}</td>
+                        <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">
+                            <a href="{{ path('admin_sheet_transaction_update', { 'sheet': sheet.id, 'transaction': transaction.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                            {{ macro.button(path('admin_sheet_transaction_remove', { 'sheet': sheet.id, 'transaction': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'message.admin.transaction.remove.confirm'|trans }) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <div class="text-left">
+        <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour aux fiches</a>
+    </div>
+
+{% endblock %}

@@ -29,36 +29,25 @@ class LibOptionProduct extends AbstractProduct
     }
 
     /**
-     * @param string $locale
+     * @param array $packageData
+     * @param array $data
      *
-     * @return string|null
+     * @return bool
      */
-    public function getDescription($locale)
+    public function isAvailableToPurchase(array $packageData, array $data)
     {
-        return isset($this->options['description'][$locale]) ? $this->options['description'][$locale] : null;
-    }
+        if (null === $this->getQuantityIncludedWithPurchase($packageData)) {
+            return false;
+        }
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->options['type'];
-    }
+        if (empty($data) || !isset($data['value']) || false === $data['value']) {
+            return true;
+        }
 
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return isset($this->options['required']) ? $this->options['required'] : false;
-    }
+        if ($this->hasQuantity() && $this->getRemainingQuantityMax($packageData) > 0) {
+            return true;
+        }
 
-    /**
-     * @return float
-     */
-    public function getUnitPrice()
-    {
-        return $this->options['unitPrice'];
+        return false;
     }
 }

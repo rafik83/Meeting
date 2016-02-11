@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Transaction;
+
+use Proximum\Vimeet\Domain\Model\Transaction;
+
+class Update
+{
+    /**
+     * @var Transaction
+     */
+    public $transaction;
+
+    /**
+     * @var float
+     */
+    public $amount;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $date;
+
+    /**
+     * @var string
+     */
+    public $mode;
+
+    /**
+     * @var string
+     */
+    public $reference;
+
+    /**
+     * Create constructor.
+     *
+     * @param Transaction        $transaction
+     */
+    public function __construct(Transaction $transaction)
+    {
+        $this->transaction = $transaction;
+        $this->amount      = $transaction->getAmount();
+        $this->date        = $transaction->getDate();
+        $this->mode        = $transaction->getMode();
+        $this->reference   = $transaction->getReference();
+    }
+}

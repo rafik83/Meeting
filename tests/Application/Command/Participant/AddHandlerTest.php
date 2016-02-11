@@ -10,9 +10,12 @@
 
 namespace Tests\Application\Command\Participant;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -35,8 +38,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], []);
         $owner = false;
 
+        $expectedSheet       = new Sheet($event, $type, [], []);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
-        $expectedParticipant = new Participant($sheet, $expectedUser, ['foobar' => 'barfoo'], $owner);
+        $expectedParticipant = new Participant($expectedSheet, $expectedUser, ['foobar' => 'barfoo'], $owner, false);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
@@ -45,11 +49,17 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
+        $participantManager = $this->prophesize(ParticipantManager::class);
+
         $add = new Add($sheet, 'fr');
         $add->email = 'test@test.com';
         $add->data  = ['foobar' => 'barfoo'];
 
-        $handler = new AddHandler($userRepository->reveal(), $participantRepository->reveal());
+        $handler = new AddHandler(
+            $userRepository->reveal(),
+            $participantManager->reveal(),
+            $participantRepository->reveal()
+        );
         $handler->handle($add);
     }
 
@@ -67,7 +77,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
 
-        $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner);
+        $expectedSheet       = new Sheet($event, $type, [], []);
+        $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo'], $owner, false);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
@@ -75,11 +86,64 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
+        $participantManager = $this->prophesize(ParticipantManager::class);
+
+
         $add = new Add($sheet, 'fr');
         $add->email = 'test@test.com';
         $add->data  = ['foobar' => 'barfoo'];
 
-        $handler = new AddHandler($userRepository->reveal(), $participantRepository->reveal());
+        $handler = new AddHandler(
+            $userRepository->reveal(),
+            $participantManager->reveal(),
+            $participantRepository->reveal()
+        );
+        $handler->handle($add);
+    }
+
+    public function testHandleWithOrder()
+    {
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setParticipantTemplate(['foobar' => ['required' => true, 'private'  => false]]);
+        $sheet = new Sheet($event, $type, [], []);
+
+        $userRepository        = $this->prophesize(UserRepositoryInterface::class);
+        $participantManager    = $this->prophesize(ParticipantManager::class);
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $createdAt             = new \DateTime;
+
+        // 1
+        $user = new User('test@test.com', '__SALT__', 'password', 'fr');
+        $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
+
+        // 2
+        $expectedSheetWithParticipant = new Sheet($event, $type, [], []);
+        $expectedParticipant          = new Participant($expectedSheetWithParticipant, $user, ['foobar' => 'barfoo'], false, false);
+        $expectedOrder                = new Order($expectedSheetWithParticipant, 'unpaid', [], [], [], [], $createdAt, 'toto');
+        $participantManager->findOrderToAttach(Argument::that(function (Sheet $sheet) {
+            return true;
+        }))->shouldBeCalled()->willReturn($expectedOrder);
+
+        // 3
+        $expectedSheetWithParticipant2 = new Sheet($event, $type, [], []);
+        $expectedParticipant2          = new Participant($expectedSheetWithParticipant2, $user, ['foobar' => 'barfoo'], false, false);
+        $expectedOrder2                = new Order($expectedSheetWithParticipant2, 'unpaid', [], [], [], [], $createdAt, 'toto');
+        $expectedParticipant2->setActive(true);
+        $expectedParticipant2->setOrder($expectedOrder2);
+        $participantRepository->add(Argument::that(function (Participant $participant) {
+            return $participant->isActive();
+        }))->shouldBeCalled();
+
+        $add = new Add($sheet, 'fr');
+        $add->email = 'test@test.com';
+        $add->data  = ['foobar' => 'barfoo'];
+
+        $handler = new AddHandler(
+            $userRepository->reveal(),
+            $participantManager->reveal(),
+            $participantRepository->reveal()
+        );
         $handler->handle($add);
     }
 }

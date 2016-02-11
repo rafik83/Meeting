@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface NotificationRepositoryInterface
 {
@@ -18,4 +19,17 @@ interface NotificationRepositoryInterface
      * @param Notification $notification
      */
     public function add(Notification $notification);
+
+    /**
+     * @param Notification $notification
+     */
+    public function set(Notification $notification);
+
+    /**
+     * @param int  $eventId
+     * @param User $user
+     *
+     * @return Notification[]
+     */
+    public function getNotificationsByEventAndUser($eventId, User $user);
 }

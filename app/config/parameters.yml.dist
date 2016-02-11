@@ -15,6 +15,12 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
+    mailer_error_transport: smtp
+    mailer_error_host:      127.0.0.1
+    mailer_error_user:      ~
+    mailer_error_password:  ~
+    mailer_error_from:      "vimeet@proximum.com"
+
 
     # A secret key that's used to generate certain security-related tokens
     secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
@@ -22,3 +28,5 @@ parameters:
     domain: vimeet.proximum.dev
 
     timezone_default: Europe/Paris
+
+    trusted_proxies: []

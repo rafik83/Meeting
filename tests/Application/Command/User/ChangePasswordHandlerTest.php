@@ -21,11 +21,15 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $user = new User('test@test.com', '__salt__', 'encoded_password', 'fr');
-        $expectedUser = new User('test@test.com', '__new_salt__', 'encoded_new_password', 'fr');
+        // Actual user
+        $user         = new User('test@test.com', '__salt__', 'encoded_password', 'fr');
 
-        $command = new ChangePassword($user);
+        // Command
+        $command                = new ChangePassword($user);
         $command->plainPassword = 'new-password';
+
+        // Expected user after password update
+        $expectedUser = new User('test@test.com', '__new_salt__', 'encoded_new_password', 'fr');
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__new_salt__');

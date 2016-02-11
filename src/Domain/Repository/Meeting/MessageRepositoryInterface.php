@@ -1,0 +1,38 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository\Meeting;
+
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+
+interface MessageRepositoryInterface
+{
+    /**
+     * @param Message $message
+     *
+     * @return mixed
+     */
+    public function add(Message $message);
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function getLastMessageByRequest(Request $request);
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function getMessagesByMeetingRequest(Request $request);
+}

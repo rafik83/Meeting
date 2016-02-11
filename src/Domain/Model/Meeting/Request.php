@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Request
+class Request implements MessageSubjectInterface
 {
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
@@ -29,11 +29,6 @@ class Request
      * @var int
      */
     private $id;
-
-    /**
-     * @var string
-     */
-    private $description;
 
     /**
      * @var Sheet
@@ -61,14 +56,14 @@ class Request
     private $state;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var Notification[]
+     * @var MeetingSlot
      */
-    private $notifications;
+    private $meetingSlot;
 
     /**
      * @var Meeting
@@ -81,20 +76,25 @@ class Request
     private $creator;
 
     /**
-     * @param Sheet             $from
-     * @param array             $fromParticipants
-     * @param Sheet             $to
-     * @param array             $toParticipants
-     * @param string            $description
-     * @param DateTimeInterface $createdAt
-     * @param User              $creator
+     * @var \DateTimeInterface
+     */
+    private $stateUpdatedAt;
+
+    /**
+     * Request constructor.
+     *
+     * @param Sheet              $from
+     * @param array              $fromParticipants
+     * @param Sheet              $to
+     * @param array              $toParticipants
+     * @param \DateTimeInterface $createdAt
+     * @param User               $creator
      */
     public function __construct(
         Sheet $from,
         array $fromParticipants,
         Sheet $to,
         array $toParticipants,
-        $description,
         DateTimeInterface $createdAt,
         User $creator
     ) {
@@ -102,11 +102,10 @@ class Request
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->to               = $to;
         $this->toParticipants   = new ArrayCollection($toParticipants);
-        $this->description      = $description;
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
-        $this->notifications    = new ArrayCollection();
     }
 
     /**
@@ -118,14 +117,6 @@ class Request
     }
 
     /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
      * @return Sheet
      */
     public function getFromSheet()
@@ -134,7 +125,7 @@ class Request
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getFromParticipants()
     {
@@ -150,7 +141,7 @@ class Request
     }
 
     /**
-     * @return Participant[]
+     * @return ArrayCollection
      */
     public function getToParticipants()
     {
@@ -166,7 +157,7 @@ class Request
     }
 
     /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -174,6 +165,55 @@ class Request
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getStateUpdatedAt()
+    {
+        return $this->stateUpdatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function refuse(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_REFUSED;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function cancel(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_CANCEL;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function approve(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_APPROVED;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     *
      * @param string $state
      */
     public function setState($state)
@@ -194,27 +234,51 @@ class Request
     }
 
     /**
-     * @param Participant $fromParticipant
+     * Get meetingSlot
+     *
+     * @return MeetingSlot
      */
-    public function addFromParticipant(Participant $fromParticipant)
+    public function getMeetingSlot()
     {
-        $this->fromParticipants->add($fromParticipant);
+        return $this->meetingSlot;
     }
 
     /**
-     * @return Notification[]
+     * Set meetingSlot
+     *
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return Request
      */
-    public function getNotifications()
+    public function setMeetingSlot($meetingSlot)
     {
-        return $this->notifications;
+        $this->meetingSlot = $meetingSlot;
+
+        return $this;
     }
 
     /**
-     * @param Notification $notification
+     * Get meeting
+     *
+     * @return Meeting
      */
-    public function addNotifications(Notification $notification)
+    public function getMeeting()
     {
-        $this->notifications[] = $notification;
+        return $this->meeting;
+    }
+
+    /**
+     * Set meeting
+     *
+     * @param Meeting $meeting
+     *
+     * @return Request
+     */
+    public function setMeeting($meeting)
+    {
+        $this->meeting = $meeting;
+
+        return $this;
     }
 
     /**
@@ -242,26 +306,90 @@ class Request
     }
 
     /**
-     * Get meeting
+     * @param Participant $participant
      *
-     * @return null|Meeting
+     * @return bool
      */
-    public function getMeeting()
+    public function hasFromParticipant(Participant $participant)
     {
-        return $this->meeting;
+        return $this->fromParticipants->contains($participant);
     }
 
     /**
-     * Set meeting
+     * @param Participant $participant
      *
-     * @param Meeting $meeting
+     * @return bool
+     */
+    public function hasToParticipant(Participant $participant)
+    {
+        return $this->toParticipants->contains($participant);
+    }
+
+    /**
+     * @param Participant $fromParticipant
      *
      * @return Request
      */
-    public function setMeeting($meeting)
+    public function addFromParticipant(Participant $fromParticipant)
     {
-        $this->meeting = $meeting;
+        $this->fromParticipants->add($fromParticipant);
 
         return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeToParticipant(Participant $participant)
+    {
+        $this->toParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Request
+     */
+    public function removeFromParticipant(Participant $participant)
+    {
+        $this->fromParticipants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSent()
+    {
+        return self::STATE_SENT === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return self::STATE_APPROVED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelled()
+    {
+        return self::STATE_CANCEL === $this->state;
     }
 }

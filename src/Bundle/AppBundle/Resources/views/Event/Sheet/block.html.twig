@@ -2,22 +2,10 @@
     <h3>
         {{ block['label'][app.request.locale] }}
 
-        {% if block.linkTo is defined and 'packageTemplate' == block.linkTo['template'] %}
-            <a href="{{ path('event_sheet_package_update_step', {
-                'id': sheetDataView.id,
-                'step': block.linkTo['index'],
-                'subdomain': app.request.attributes.get('subdomain'),
-                'redirect_to': path(
-                    app.request.attributes.get('_route'),
-                    app.request.attributes.get('_route_params')
-                )
-            }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
-        {% elseif block.template is defined %}
-            <a href="{{ path('event_sheet_update_block', {
-                'id': sheetDataView.id,
-                'block': i,
-                'subdomain': app.request.attributes.get('subdomain')
-            }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.edit'|trans }}</a>
+        {% if block.template is defined %}
+            <a href="{{ path('event_sheet_update_block', { 'sheet': sheetDataView.id, 'block': i }) }}" class="btn btn-xs btn-default">
+                {{ 'event.sheet.block.edit'|trans }}
+            </a>
         {% endif %}
     </h3>
 

@@ -6,6 +6,7 @@
 /var/logs
 /vendor/
 /bin/*
+/build/
 !bin/console
 !bin/symfony_requirements
 /composer.phar
@@ -35,3 +36,4 @@ ansible.cfg
 
 # App
 .openl10n.yml
+/web/uploads/*

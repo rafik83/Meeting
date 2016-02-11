@@ -52,29 +52,47 @@ class RequestView
     /**
      * @var string
      */
-    public $description;
+    public $message;
 
     /**
-     * @var string
+     * @var bool
      */
-    public $message;
+    public $canSee = false;
+
+    /**
+     * @var bool
+     */
+    public $canEdit = false;
+
+    /**
+     * @var bool
+     */
+    public $canCancel = false;
+
+    /**
+     * @var bool
+     */
+    public $canRefuse = false;
+
+    /**
+     * @var bool
+     */
+    public $canApprove = false;
 
     /**
      * @param int                $id
      * @param string             $sheetNameFrom
      * @param string             $sheetNameTo
      * @param string             $state
-     * @param string             $description
      * @param \DateTimeInterface $createdAt
      * @param string             $message
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, $description, \DateTimeInterface $createdAt, $message)
+    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, \DateTimeInterface $createdAt, $message)
     {
         $this->id               = $id;
         $this->sheetNameFrom    = $sheetNameFrom;
         $this->sheetNameTo      = $sheetNameTo;
         $this->state            = $state;
-        $this->description      = $description;
         $this->createdAt        = $createdAt;
         $this->fromParticipants = new ArrayCollection();
         $this->toParticipants   = new ArrayCollection();

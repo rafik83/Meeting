@@ -1,4 +1,5 @@
 greetings: 'Bonjour !'
+greetings: 'Bonjour !'
 
 login:
     title: Connexion
@@ -32,6 +33,8 @@ event:
         see_meeting_request: Voir mes demandes de rendez-vous
         see_meeting_proposition: Voir mes propositions de rendez-vous
         go_back_to_sheet: Retourner à la fiche
+        product:
+            cancel: Annuler
     sheet:
         participant:
             already_exists: Ce participant est déjà ajouté
@@ -54,6 +57,8 @@ event:
         add_participant:
             title: Ajouter un participant
         package:
+            products:
+                title: Sélectionner des produits à ajouter à ma fiche
             include: Inclus avec votre forfait
             includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
             step:
@@ -86,6 +91,18 @@ event:
                 billingStep: Passer à l'étape de facturation
             includeTitle: Inclus avec %product%
             include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
+            empty: Aucun produit dans le panier
+            totalWithoutTaxes: Total HT
+        summary:
+            title: Récapitulatif de participation
+            update_product: Modifier
+            product: Produit
+            unit_price: Prix unitaire
+            quantity: Quantité
+            total: Total
+            action: Action
+        update_product:
+            title: Modifier un produit commandé
     meeting:
         listRequest:
             title: Liste de vos demandes de rendez-vous
@@ -96,6 +113,8 @@ event:
             createdAt: Envoyé le
             actions: Actions
             cancel: Annuler
+            show: Voir
+            edit: Modifier
         listProposition:
             title: Liste de vos propositions de rendez-vous
             state: Statut
@@ -108,6 +127,15 @@ event:
             accept: Accepter
             refuse: Refuser
             actions: Actions
+            show: Voir
+            edit: Modifier
+        showDetailsRequest:
+            title: Détails de la demande de rendez-vous
+            to: A destination de
+            from: Provenant de
+            participants: Les participants
+            message: Votre conversation
+            state: Statut
         request:
             state:
                 from:
@@ -123,6 +151,9 @@ event:
         createRequest:
             title: Demande de rendez-vous
             destination: Pour %toName% avec la fiche %fromName%
+        editRequest:
+            title: Modifiez une demande de rendez-vous
+            destination: Pour %toName% avec la fiche %fromName%
         approvedRequest:
             title: Accepter la proposition de rendez vous
             label: De %fromName% pour %toName%
@@ -133,7 +164,10 @@ event:
             title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
         refusedRequest:
-            title: Refuser la demande de rendez vous
+            title: Refuser la proposition de rendez vous
+            label: De %fromName% pour %toName%
+        cancelRequest:
+            title: Annuler la demande de rendez-vous
             label: De %fromName% pour %toName%
     schedule:
         columns:
@@ -167,7 +201,59 @@ template:
             choice_with_description: Choix avec description
 
 who:
-    see_who_but_dont_see: %seer% voit %seeable% mais ne voit pas :
+    see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
     the:
         category: la catégorie
         type: le type
+
+notification:
+    participant:
+        added:
+            action: Participant ajouté
+        removed:
+            action: Participant retiré
+    meeting_request:
+        canceled:
+            withoutMessage: Demande annulée par %sheetName%
+            withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
+            action: Demande de RDV annulée
+        refused:
+            withoutMessage: Demande refusée par %sheetName%
+            withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
+            action: Demande de RDV refusée
+        participant:
+            removed:
+                message: 'Participant retiré par %sheetName% pour le motif suivant : "%message%"'
+            added:
+                message: 'Participant ajouté par %sheetName% pour le motif suivant : "%message%"'
+
+message:
+    admin:
+        order:
+            remove_row:
+                confirm: Confirmer la suppression
+        transaction:
+            remove:
+                confirm: Confirmer la suppression
+
+admin:
+    meeting_request:
+        list:
+            state:
+                sent: Envoyé
+                approved: Accepté
+                refused: Refusé
+                cancelled: Annulé
+    spot:
+        link: Lieux
+        listSpot:
+            reference: Référence
+            size: Taille (en m²)
+            meetingCapacity: Capacité de rendez-vous simultané
+            seatCapacity: Capacité de places assises
+            active: Actif
+            add: Ajouter
+        createSpot:
+            title: Créer un lieu
+        batch_create:
+            title: Créer des lieux par lot

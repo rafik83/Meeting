@@ -13,11 +13,19 @@ namespace Proximum\Vimeet\Application\Components\Meeting;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
 class RequestViewBuilder
 {
+    /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
+
     /**
      * @var SheetInfoGuesser
      */
@@ -29,21 +37,38 @@ class RequestViewBuilder
     private $participantInfoGuesser;
 
     /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @var RequestPermissionManager
      */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->participantInfoGuesser = $participantInfoGuesser;
+    private $requestPermissionManager;
+
+    /**
+     * RequestViewBuilder constructor.
+     *
+     * @param MessageRepositoryInterface $messageRepository
+     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
+     * @param RequestPermissionManager   $requestPermissionManager
+     */
+    public function __construct(
+        MessageRepositoryInterface $messageRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        RequestPermissionManager $requestPermissionManager
+    ) {
+        $this->messageRepository        = $messageRepository;
+        $this->sheetInfoGuesser         = $sheetInfoGuesser;
+        $this->participantInfoGuesser   = $participantInfoGuesser;
+        $this->requestPermissionManager = $requestPermissionManager;
     }
 
     /**
      * @param Request $request
+     * @param User    $user
+     * @param Sheet   $sheet
      *
      * @return RequestView
      */
-    public function generate(Request $request)
+    public function generate(Request $request, User $user, Sheet $sheet)
     {
         $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet());
         $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet());
@@ -53,10 +78,15 @@ class RequestViewBuilder
             $sheetNameFrom,
             $sheetNameTo,
             $request->getState(),
-            $request->getDescription(),
             $request->getCreatedAt(),
-            $request->getRefuseMessage()
+            $this->messageRepository->getLastMessageByRequest($request)
         );
+
+        $requestView->canSee     = $this->requestPermissionManager->isAllowedToSee($user, $request, $sheet);
+        $requestView->canEdit    = $this->requestPermissionManager->isAllowedToEdit($user, $request, $sheet);
+        $requestView->canCancel  = $this->requestPermissionManager->isAllowedToCancel($user, $request, $sheet);
+        $requestView->canRefuse  = $this->requestPermissionManager->isAllowedToRefuse($user, $request, $sheet);
+        $requestView->canApprove = $this->requestPermissionManager->isAllowedToApprove($user, $request, $sheet);
 
         foreach ($request->getFromParticipants() as $participant) {
             $participantInfo                 = $this->participantInfoGuesser->guessParticipantInfo($participant);

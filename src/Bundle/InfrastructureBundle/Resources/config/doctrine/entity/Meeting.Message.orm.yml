@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Meeting\Message:
+    type: entity
+    table: meeting_message
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        content:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        from:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+        request:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request

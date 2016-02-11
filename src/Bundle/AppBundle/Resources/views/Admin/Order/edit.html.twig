@@ -1,0 +1,90 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% import 'VimeetAppBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <h1>{{ sheet_info }}</h1>
+
+    <h2>Commande {{ order.id }}</h2>
+
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th colspan="2">Produit</th>
+                <th class="text-right">Prix unitaire</th>
+                <th class="text-right">Quantité</th>
+                <th class="text-right">Total</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for groupName, group in order_view.groups %}
+                <tr class="active">
+                    <th colspan="5">{{ group.label }}</th>
+                    <td class="text-right">
+                        <a href="{{ path('admin_sheet_order_add_row', { 'order': order.id, 'group': groupName }) }}"><i class="glyphicon glyphicon-plus"></i></a>
+                    </td>
+                </tr>
+                {% for rowName, row in group.rows %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>{{ row.label }}</td>
+                        <td class="text-right">{{ row.unitPrice|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ row.quantity }}</td>
+                        <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">
+                            {% if row.editable %}
+                                <a href="{{ path('admin_sheet_order_update_row', { 'order': order.id, 'group': groupName, 'row': rowName }) }}"><i class="glyphicon glyphicon-pencil"></i></a>
+                                {{ macro.button(path('admin_sheet_order_remove_row', { 'order': order.id, 'group': groupName, 'row': rowName }), 'DELETE', '<i class="glyphicon glyphicon-trash"></i>', { 'class': 'btn btn-link btn-np', 'data-confirm': 'message.admin.order.remove_row.confirm'|trans }) }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if row.included is not empty %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <th colspan="5">Inclus :</th>
+                        </tr>
+                    {% endif %}
+                    {% for included in row.included %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&gt; {{ included.label }}</td>
+                            <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-right">{{ included.quantity }}</td>
+                            <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+
+            <tr class="info">
+                <th colspan="2"></th>
+                <th colspan="2">Total HT</th>
+                <th class="text-right">{{ order_view.totalWithoutTaxes|number_format(2, ',', ' ') }} €</th>
+                <th></th>
+            </tr>
+            {% if order_view.vatApplicable %}
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">TVA</th>
+                    <th class="text-right">{{ order_view.vat }}%</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2">Total TTC</th>
+                    <th class="text-right">{{ order_view.totalWithTaxes|number_format(2, ',', ' ') }} €</th>
+                    <th></th>
+                </tr>
+            {% endif %}
+        </tbody>
+
+    </table>
+
+    <div class="text-left">
+        <a href="{{ path('admin_sheet_billing', { 'event': order.sheet.event.id, 'sheet': order.sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
+    </div>
+
+{% endblock %}
+
