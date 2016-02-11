@@ -30,10 +30,10 @@ class FilterSpotType extends AbstractType
             ->add('reference', TextType::class, [
                 'label' => 'form.filter_spot_type.children.reference.label'
             ])
-            ->add('meetingCapacity', NumberType::class, [
+            ->add('meetingCapacity', IntegerType::class, [
                 'label' => 'form.filter_spot_type.children.meetingCapacity.label'
             ])
-            ->add('seatCapacity', NumberType::class, [
+            ->add('seatCapacity', IntegerType::class, [
                 'label' => 'form.filter_spot_type.children.seatCapacity.label'
             ])
             ->add('size', NumberType::class, [
