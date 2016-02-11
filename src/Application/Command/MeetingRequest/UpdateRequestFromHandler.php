@@ -37,7 +37,6 @@ class UpdateRequestFromHandler
     private $eventDispatcher;
 
     /**
-     *
      * EditRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
@@ -121,7 +120,7 @@ class UpdateRequestFromHandler
                 $updateRequestFrom->meetingRequest,
                 $updateRequestFrom->description,
                 $updateRequestFrom->date
-            )
+            ),
         ];
     }
 
@@ -141,7 +140,7 @@ class UpdateRequestFromHandler
                 $updateRequestFrom->meetingRequest,
                 $updateRequestFrom->description,
                 $updateRequestFrom->date
-            )
+            ),
         ];
     }
 }

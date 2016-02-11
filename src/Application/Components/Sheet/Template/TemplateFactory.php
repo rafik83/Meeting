@@ -94,8 +94,9 @@ class TemplateFactory
      * @param string $typeName
      * @param array  $templateData
      *
-     * @return TypeInterface
      * @throws UnknownTypeException
+     * @return TypeInterface
+     *
      */
     private function createTypeFromArray($typeName, array $templateData)
     {
@@ -112,8 +113,9 @@ class TemplateFactory
      * @param string $typeName
      * @param string $type
      *
-     * @return TypeInterface
      * @throws UnknownTypeException
+     * @return TypeInterface
+     *
      */
     private function getTypeInstance($typeName, $type)
     {

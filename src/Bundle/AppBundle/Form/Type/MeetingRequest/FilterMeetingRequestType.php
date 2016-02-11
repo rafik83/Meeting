@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FilterMeetingRequestType extends AbstractType
 {
@@ -38,7 +38,7 @@ class FilterMeetingRequestType extends AbstractType
                 'placeholder' => '',
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'form.admin.meeting_request.list.filter.children.submit.label'
+                'label' => 'form.admin.meeting_request.list.filter.children.submit.label',
             ]);
     }
 

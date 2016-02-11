@@ -25,7 +25,7 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * OrderRepository constructor.
      *
-     * @param EntityManager      $entityManager
+     * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {

@@ -77,6 +77,10 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type_spot.spot_create_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType
+        tags:
+            - { name: 'form.type' }
     vimeet_app.form_type_participant.participant_entity_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType
         arguments:

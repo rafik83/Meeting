@@ -139,7 +139,7 @@ class RequestPermissionManager
     /**
      * Is a user allowed to see a meeting request
      *
-     * @param User $user
+     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *

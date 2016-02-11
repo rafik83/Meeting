@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Message
 {

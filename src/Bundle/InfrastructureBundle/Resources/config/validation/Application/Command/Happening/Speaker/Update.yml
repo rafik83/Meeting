@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Happening\Speaker\Update:
+    properties:
+        speaker:
+            - NotBlank: ~
+        name:
+            - NotBlank: ~
+        function:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+        logo:
+            - Image: ~
+        photo:
+            - Image: ~

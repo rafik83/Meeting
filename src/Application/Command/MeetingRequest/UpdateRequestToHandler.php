@@ -37,7 +37,6 @@ class UpdateRequestToHandler
     private $eventDispatcher;
 
     /**
-     *
      * EditRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
@@ -107,7 +106,7 @@ class UpdateRequestToHandler
 
     /**
      * @param UpdateRequestTo $updateRequestTo
-     * @param Participant       $participant
+     * @param Participant     $participant
      *
      * @return array
      */
@@ -121,13 +120,13 @@ class UpdateRequestToHandler
                 $updateRequestTo->meetingRequest,
                 $updateRequestTo->description,
                 $updateRequestTo->date
-            )
+            ),
         ];
     }
 
     /**
      * @param UpdateRequestTo $updateRequestTo
-     * @param Participant       $participant
+     * @param Participant     $participant
      *
      * @return array
      */
@@ -141,7 +140,7 @@ class UpdateRequestToHandler
                 $updateRequestTo->meetingRequest,
                 $updateRequestTo->description,
                 $updateRequestTo->date
-            )
+            ),
         ];
     }
 }

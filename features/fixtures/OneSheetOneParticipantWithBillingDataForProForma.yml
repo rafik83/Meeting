@@ -1,8 +1,8 @@
 Proximum\Vimeet\Domain\Model\Participant:
     participant_3:
         __construct: false
-        user: @user_3
-        sheet: @sheet_2
+        user: "@user_3"
+        sheet: "@sheet_2"
         owner: true
         active: true
         data:
@@ -14,8 +14,8 @@ Proximum\Vimeet\Domain\Model\Participant:
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_2:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_exposant
+        event: "@event_rdv_carnot_2016"
+        type: "@type_exposant"
         packageData:
             "563cae7496da1":
                 "563cae8a5072d":
@@ -45,7 +45,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             "5645e6067f46a": "test"
             "5645e5fd8f6a7": "FR"
             "5645e610e0e1b": "test"
-        orders: [@order_1]
+        orders: ["@order_1"]
 
 Proximum\Vimeet\Domain\Model\Order:
     order_1:
@@ -545,4 +545,4 @@ Proximum\Vimeet\Domain\Model\Order:
                 tags: ["billing_vat_number"]
         createdAt: <dateTimeBetween('-2 days', 'now')>
         paymentMode: 'credit-card'
-        sheet: @sheet_2
+        sheet: "@sheet_2"

@@ -379,6 +379,16 @@ form:
                             label: Titre
                         description:
                             label: Description
+            talkings:
+                label: Intervenants
+                prototype:
+                    children:
+                        speaker:
+                            label: Intervenant
+                        position:
+                            label: Position
+                label_add: Ajouter
+                label_delete: Supprimer
             submit:
                 label: Envoyer
     admin:
@@ -394,3 +404,69 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    create_speaker:
+        children:
+            name:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer
+    update_speaker:
+        children:
+            name:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer
+    spot_create:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer
+    spot_batch_create:
+        children:
+            recipes:
+                label: Vos identifiants
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        prefix:
+                            label: Préfix
+                        start:
+                            label: Début
+                        end:
+                            label: Fin
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer
