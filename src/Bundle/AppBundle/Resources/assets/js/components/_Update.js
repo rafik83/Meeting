@@ -10,6 +10,7 @@ function Update(element)
     this.element = element;
     this.data    = JSON.parse(element.getAttribute('data-update'));
     this.url     = element.getAttribute('data-url');
+    this.type    = element.getAttribute('data-type');
     this.editing = false;
     this.old     = null;
     this.input   = document.createElement('input');
@@ -46,6 +47,24 @@ Update.prototype.close = function ()
     this.element.innerHTML = this.data.value;
 };
 
+Update.prototype.getInputValue = function ()
+{
+    return this.parseValue(this.input.value);
+};
+
+Update.prototype.parseValue = function (value)
+{
+    if (this.type === 'int') {
+        return parseInt(value, 10);
+    }
+
+    if (this.type === 'float') {
+        return parseFloat(value);
+    }
+
+    return value;
+};
+
 Update.prototype.save = function ()
 {
     if (this.editing === false) {
@@ -54,8 +73,8 @@ Update.prototype.save = function ()
 
     if (this.data.value != this.input.value) {
 
-        this.old = this.data.value;
-        this.data.value = this.input.value;
+        this.old        = this.data.value;
+        this.data.value = this.getInputValue();
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', this.url);

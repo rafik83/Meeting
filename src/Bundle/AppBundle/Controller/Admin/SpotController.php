@@ -196,6 +196,10 @@ class SpotController extends Controller
             return new JsonResponse(['error' => $exception->getMessage()], 500);
         }
 
-        return new JsonResponse();
+        return new JsonResponse([
+            'id'       => $command->id,
+            'property' => $command->property,
+            'value'    => $command->value
+        ]);
     }
 }

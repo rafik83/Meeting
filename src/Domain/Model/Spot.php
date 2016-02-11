@@ -162,4 +162,18 @@ class Spot
 
         return $this;
     }
+
+    /**
+     * @param $property
+     *
+     * @return mixed
+     */
+    public function value($property)
+    {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+
+        return null;
+    }
 }
