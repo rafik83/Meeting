@@ -1,0 +1,11 @@
+{% block subject %}
+{{ 'mail.activateAccount.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html }}
+{% endblock %}
+
+{% block body %}
+{{ 'mail.activateAccount.body'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html|nl2br }}
+<a href="{{ url('event_activate_account', {'token': mail.token}) }}">
+    {{ url('event_activate_account', {'token': mail.token}) }}
+</a><br>
+{{ 'mail.activateAccount.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

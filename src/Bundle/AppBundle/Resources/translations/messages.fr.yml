@@ -25,6 +25,10 @@ reset_password:
 new_password:
     title: Créer un nouveau mot de passe
 
+account:
+    update:
+        title: Modifier mon compte
+
 event:
     link:
         see_my_sheet: Voir ma fiche %type%
@@ -182,6 +186,8 @@ event:
             meetingRequest: Demander un rendez-vous
         category:
             seeSheet: Voir la fiche
+    activateAccount:
+        password: Créer un nouveau mot de passe
 
 template:
     name:
