@@ -4,9 +4,9 @@ Feature: Update type template field nomenclature
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | app/Template.yml |
+      | app/Event.yml    |
+      | app/Type.yml     |
 
   Scenario: I can update an item in a nomenclature collection
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event/1/type/1/form"

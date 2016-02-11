@@ -39,6 +39,11 @@ class CreateHandler
             $happening->setTranslation(new Happening\HappeningTranslation($happening, $locale, $translation['title'], $translation['description']));
         }
 
+        // Sort speakers by position
+        usort($create->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
+
+        // Set speakers
+        $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
 
         $this->happeningRepository->add($happening);
     }

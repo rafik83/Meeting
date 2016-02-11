@@ -1,0 +1,18 @@
+Proximum\Vimeet\Application\Command\Spot\BatchCreate:
+    properties:
+        recipes:
+            - Count: { min: 1 }
+            - Valid: ~
+        size:
+            - NotBlank: ~
+            - Type: { type: integer }
+        meetingCapacity:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 1 }
+        seatCapacity:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 2 }
+        active:
+            - Type: { type: boolean }

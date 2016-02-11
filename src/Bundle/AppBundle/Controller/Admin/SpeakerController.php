@@ -18,9 +18,9 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker\UpdateSpeakerTy
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SpeakerController extends Controller
 {
@@ -95,11 +95,16 @@ class SpeakerController extends Controller
      *
      * @return Response
      */
-    public function readAction(Event $event, Speaker $speaker)
+    public function readAction(Request $request, Event $event, Speaker $speaker)
     {
+        $happenings = $this
+            ->get('happening.happening_list_view_factory')
+            ->getListBySpeakerAndLocale($speaker, $request->getLocale());
+
         return $this->render('VimeetAppBundle:Admin/Speaker:read.html.twig', [
-            'event'   => $event,
-            'speaker' => $speaker,
+            'event'      => $event,
+            'speaker'    => $speaker,
+            'happenings' => $happenings,
         ]);
     }
 

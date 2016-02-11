@@ -17,17 +17,17 @@ use Proximum\Vimeet\Application\Components\Product\Products\ProductInterface;
 interface LibCartInterface
 {
     /**
-     * @param ProductInterface  $product
-     * @param array             $dataValue
-     * @param string            $locale
+     * @param ProductInterface $product
+     * @param array            $dataValue
+     * @param string           $locale
      *
      * @return CartRow|null
      */
     public function prepare(ProductInterface $product, array $dataValue, $locale);
 
     /**
-     * @param Including        $including
-     * @param string           $locale
+     * @param Including $including
+     * @param string    $locale
      *
      * @return CartRow|null
      */

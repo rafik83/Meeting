@@ -80,8 +80,9 @@ abstract class AbstractType implements TypeInterface
     /**
      * @param string $option
      *
-     * @return mixed
      * @throws UnknownOptionException
+     * @return mixed
+     *
      */
     protected function getOption($option)
     {

@@ -24,3 +24,7 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        talkings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
+            mappedBy: speaker

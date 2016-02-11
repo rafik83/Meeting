@@ -21,7 +21,7 @@ class LibAbstractCart implements LibCartInterface
      */
     public function prepare(ProductInterface $product, array $dataValue, $locale)
     {
-        return null;
+        return;
     }
 
     /**

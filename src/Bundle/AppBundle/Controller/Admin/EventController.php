@@ -15,21 +15,32 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
-    public function listAction(Request $request)
+    /**
+     * @return Response
+     */
+    public function listAction()
     {
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
-            ->paginate($request->query->get('page', 1), 10);
+            ->getList();
 
         return $this->render('VimeetAppBundle:Admin/Event:list.html.twig', [
             'events' => $events,
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
     public function updateAction(Request $request, Event $event)
     {
         $update = new Update($event);

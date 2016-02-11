@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\Talking;
 
 class Happening
 {
@@ -47,6 +50,11 @@ class Happening
     private $translations;
 
     /**
+     * @var ArrayCollection
+     */
+    private $talkings;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
@@ -61,6 +69,7 @@ class Happening
         $this->end          = $end;
         $this->category     = $category;
         $this->translations = new ArrayCollection();
+        $this->talkings     = new ArrayCollection();
     }
 
     /**
@@ -177,5 +186,52 @@ class Happening
     public function updateTranslation($locale, $title, $description)
     {
         $this->translations->get($locale)->update($title, $description);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTalkings()
+    {
+        return $this->talkings;
+    }
+
+    /**
+     * @return Speaker[]
+     */
+    public function getSpeakers()
+    {
+        return $this
+            ->talkings
+            ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
+            ->map(function (Talking $talking) { return $talking->getSpeaker(); })
+            ->toArray();
+    }
+
+    /**
+     * @param array $speakers
+     *
+     * @return Happening
+     */
+    public function setSpeakers(array $speakers)
+    {
+        // Make sure a speaker doesn't appear more than once
+        $speakers = array_unique($speakers, SORT_REGULAR);
+
+        // Remove surplus of talking
+        while ($this->talkings->count() > count($speakers)) {
+            $this->talkings->removeElement($this->talkings->last());
+        }
+
+        // Add / update talking with speakers and positions
+        foreach ($speakers as $position => $speaker) {
+            if ($this->talkings->get($position)) {
+                $this->talkings->get($position)->update($speaker, $position);
+            } else {
+                $this->talkings->add(new Talking($speaker, $this, $position));
+            }
+        }
+
+        return $this;
     }
 }

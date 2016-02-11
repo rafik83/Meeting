@@ -20,7 +20,7 @@ interface TranslatorInterface
      *
      * @return string
      */
-    public function trans($id, array $parameters = array(), $domain = null, $locale = null);
+    public function trans($id, array $parameters = [], $domain = null, $locale = null);
 
     /**
      * @param string $id
@@ -31,5 +31,5 @@ interface TranslatorInterface
      *
      * @return string
      */
-    public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null);
+    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null);
 }

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\View\HappeningListView;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 interface HappeningRepositoryInterface
 {
@@ -30,21 +30,29 @@ interface HappeningRepositoryInterface
      * @param Event  $event
      * @param string $locale
      *
-     * @return HappeningListView[]
+     * @return Happening[]
      */
     public function findListByEvent(Event $event, $locale);
+
+    /**
+     * @param array $happenings
+     *
+     * @return mixed
+     */
+    public function findIdsWithoutParticipation(array $happenings);
 
     /**
      * @param Event $event
      *
      * @return Happening[]
      */
-    public function findByEventWithoutParticipation(Event $event);
+    public function findByEvent(Event $event);
 
     /**
-     * @param Event  $event
+     * @param Speaker $speaker
+     * @param string  $locale
      *
      * @return Happening[]
      */
-    public function findByEvent(Event $event);
+    public function findBySpeaker(Speaker $speaker, $locale);
 }

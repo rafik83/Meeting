@@ -171,7 +171,7 @@ class ScheduleBuilder
         $meetings = $this->meetingRepository->findByParticipant($participant);
 
         foreach ($meetings as $meeting) {
-            $sheet = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();
+            $sheet     = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();
             $beginDate = clone $meetingSlot->getBegin();
             $beginDate->setTimeZone(new \DateTimeZone($participant->getSheet()->getEvent()->getTimeZone()));
 
@@ -271,7 +271,6 @@ class ScheduleBuilder
 
         return $scheduleViews;
     }
-
 
     /**
      * @param array       $scheduleViews

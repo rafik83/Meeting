@@ -16,7 +16,12 @@ Proximum\Vimeet\Domain\Model\Happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation
             mappedBy: happening
             indexBy: locale
-            cascade: ["persist"]
+            cascade: ['persist']
+        talkings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
+            mappedBy: happening
+            cascade: ['persist', 'remove']
+            orphanRemoval: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Transaction\Update;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateTransactionType extends AbstractTransactionType
 {
