@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractProductType extends AbstractType
 {
@@ -30,8 +30,9 @@ abstract class AbstractProductType extends AbstractType
     }
 
     /**
-     * @return float
      * @throws UnknownOptionException
+     * @return float
+     *
      */
     public function getUnitPrice()
     {
@@ -39,8 +40,9 @@ abstract class AbstractProductType extends AbstractType
     }
 
     /**
-     * @return array
      * @throws UnknownOptionException
+     * @return array
+     *
      */
     public function getIncludedIn()
     {

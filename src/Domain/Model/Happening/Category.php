@@ -37,6 +37,7 @@ class Category
 
     /**
      * Category constructor.
+     *
      * @param Event  $event
      * @param string $picto
      */

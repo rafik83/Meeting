@@ -53,5 +53,4 @@ class CreateHandler
 
         $this->spotRepository->add($spot);
     }
-
 }

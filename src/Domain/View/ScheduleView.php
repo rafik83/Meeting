@@ -40,7 +40,7 @@ class ScheduleView
     /**
      * ScheduleView constructor.
      *
-     * @param int       $id
+     * @param int                $id
      * @param \DateTimeInterface $date
      */
     public function __construct($id, \DateTimeInterface $date)

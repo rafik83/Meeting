@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\View\EventView;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class NotificationController extends BaseController
 {

@@ -28,6 +28,7 @@ interface CategoryRepositoryInterface
     /**
      * @param Event  $event
      * @param string $locale
+     *
      * @return Category[]
      */
     public function findByEvent(Event $event, $locale);

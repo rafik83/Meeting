@@ -119,7 +119,7 @@ class PackageController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessForNonParticipant($sheet->getParticipants());
 
-        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
+        $cart     = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
         $cartView = null;
 
         if ($cart !== null) {
@@ -370,6 +370,6 @@ class PackageController extends BaseController
             }
         }
 
-        return null;
+        return;
     }
 }

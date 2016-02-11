@@ -42,7 +42,7 @@ interface HappeningRepositoryInterface
     public function findIdsWithoutParticipation(array $happenings);
 
     /**
-     * @param Event  $event
+     * @param Event $event
      *
      * @return Happening[]
      */

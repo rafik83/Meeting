@@ -22,7 +22,7 @@ class UpdateStepHandler
     private $cartRepository;
 
     /**
-     * @param CartRepositoryInterface  $cartRepository
+     * @param CartRepositoryInterface $cartRepository
      */
     public function __construct(CartRepositoryInterface $cartRepository)
     {

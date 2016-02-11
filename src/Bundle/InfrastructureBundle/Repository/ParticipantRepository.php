@@ -157,7 +157,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
      */
     public function getInactiveParticipantForSheet(Sheet $sheet)
     {
-            $queryBuilder = $this
+        $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
