@@ -45,7 +45,6 @@ class CreateHandler
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
 
-
         $this->happeningRepository->add($happening);
     }
 }

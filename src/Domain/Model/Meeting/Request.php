@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Request implements MessageSubjectInterface

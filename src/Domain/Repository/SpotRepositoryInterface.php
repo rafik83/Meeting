@@ -55,7 +55,7 @@ interface SpotRepositoryInterface
      * @param Event $event
      * @param array $filter
      *
-     * @return mixed
+     * @return Event[]
      */
     public function getSpotFilter(Event $event, array $filter = []);
 }

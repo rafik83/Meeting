@@ -46,7 +46,7 @@ class Spot
     private $seatCapacity;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $active;
 
@@ -55,7 +55,7 @@ class Spot
      *
      * @param string $reference
      * @param Event  $event
-     * @param int    $size
+     * @param float  $size
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
@@ -139,7 +139,7 @@ class Spot
     /**
      * Get active
      *
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {

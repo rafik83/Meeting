@@ -43,9 +43,9 @@ class MeetingView
     public $createdAt;
 
     /**
-     * @param int      $id
-     * @param string   $sheetNameFrom
-     * @param string   $sheetNameTo
+     * @param int                $id
+     * @param string             $sheetNameFrom
+     * @param string             $sheetNameTo
      * @param \DateTimeInterface $createdAt
      * @param \DateTimeInterface $slotBegin
      * @param \DateTimeInterface $slotEnd

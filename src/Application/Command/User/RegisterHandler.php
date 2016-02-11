@@ -60,8 +60,9 @@ class RegisterHandler
         }
 
         $salt     = $this->saltGenerator->generate();
-        $password = $this->encoder->encode($register->password, $salt);
-        $user     = new User($register->email, $salt, $password, $register->locale);
+        $user     = new User($register->email, $salt, null, $register->locale);
+        $password = $this->encoder->encode($user, $register->password);
+        $user->updatePassword($salt, $password);
 
         $this->userRepository->add($user);
 

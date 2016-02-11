@@ -41,6 +41,7 @@ class PlanningType extends AbstractLocalizedType
 
     /**
      * @param Sheet $sheet
+     *
      * @return array
      */
     private function getPlanningChoice(Sheet $sheet)

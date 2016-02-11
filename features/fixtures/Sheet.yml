@@ -1,5 +1,5 @@
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_1:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_exposant
+        event: "@event_rdv_carnot_2016"
+        type: "@type_exposant"

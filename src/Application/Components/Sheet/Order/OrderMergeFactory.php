@@ -49,7 +49,6 @@ class OrderMergeFactory
         return $this->createFromOrders($sheet->getOrders()->toArray(), $locale);
     }
 
-
     /**
      * @param Order[] $orders
      * @param string  $locale
@@ -97,7 +96,6 @@ class OrderMergeFactory
                         $merge[$groupName]['template'][$typeName] = $type;
                     }
                 }
-
             } else {
                 $merge[$groupName] = $group;
             }
@@ -130,12 +128,10 @@ class OrderMergeFactory
                                 $merge[$groupName][$typeName]['quantity'] += $type['quantity'];
                             }
                         }
-
                     } else {
                         $merge[$groupName][$typeName] = $type;
                     }
                 }
-
             } else {
                 $merge[$groupName] = $group;
             }

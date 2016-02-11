@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class TalkingType extends AbstractType
 {

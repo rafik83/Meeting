@@ -40,7 +40,7 @@ class Create
     public $seatCapacity = 3;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $active;
 

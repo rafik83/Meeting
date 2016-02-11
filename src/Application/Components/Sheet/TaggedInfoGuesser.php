@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 
 class TaggedInfoGuesser
 {

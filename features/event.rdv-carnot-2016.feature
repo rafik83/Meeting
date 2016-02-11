@@ -3,7 +3,7 @@ Feature: Show the homepage of an event
 
   Background: Re-init the database and load the fixtures
     Given the database is empty
-    And the fixtures "@VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml" are loaded
+    And the fixtures "app/Event.yml" are loaded
 
   Scenario: Show the homepage of 'Les rendez-vous Carnot 2016' in French
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"

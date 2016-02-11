@@ -64,8 +64,8 @@ class RuleManager
      * @param User  $user
      *
      * @throws NoRuleFoundException
-     * @return Rule
      *
+     * @return Rule
      */
     public function getRule(Sheet $sheet, User $user)
     {

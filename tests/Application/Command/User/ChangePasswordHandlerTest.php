@@ -36,7 +36,7 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
         $passwordEncoder
-            ->encode($command->plainPassword, '__new_salt__')
+            ->encode($user, $command->plainPassword)
             ->shouldBeCalled()
             ->willReturn('encoded_new_password');
 

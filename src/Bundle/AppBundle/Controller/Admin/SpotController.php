@@ -17,17 +17,17 @@ use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationE
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends Controller
 {
@@ -110,9 +110,9 @@ class SpotController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form = $this->createForm(SpotCreateType::class, $create, [
+        $form   = $this->createForm(SpotCreateType::class, $create, [
             'action' => $this->generateUrl('admin_spot_create', ['event' => $event->getId()]),
-            'method'=> 'POST'
+            'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
 
