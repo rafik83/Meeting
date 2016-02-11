@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
