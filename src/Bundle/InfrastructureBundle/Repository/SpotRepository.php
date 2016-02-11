@@ -168,6 +168,9 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder->getQuery()->execute();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function update($id, $property, $value)
     {
         if (!in_array($property, ['reference', 'size', 'meetingCapacity', 'seatCapacity'])) {
@@ -180,7 +183,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->update(Spot::class, 'spot')
             ->set(sprintf('spot.%s', $property), ':value')
             ->setParameter('value', $value)
-            ->where('sport.id = :id')
+            ->where('spot.id = :id')
             ->setParameter('id', $id);
 
         $queryBuilder->getQuery()->getResult();

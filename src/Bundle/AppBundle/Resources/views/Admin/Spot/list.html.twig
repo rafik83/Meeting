@@ -48,10 +48,10 @@
                 {% for spot in spots %}
                     <tr>
                         <td><input id="{{ 'admin.spot.list.checkbox'|trans }}" type="checkbox" name="ids[]" value="{{ spot.id }}" title="{{ spot.reference }}" /></td>
-                        <td data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
-                        <td data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
-                        <td data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
-                        <td data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
+                        <td class="updatable" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
+                        <td class="updatable" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
+                        <td class="updatable" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
+                        <td class="updatable" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
                         <td>{{ spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans }}</td>
                     </tr>
                 {% endfor %}
@@ -61,88 +61,5 @@
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    <script type="text/javascript">
-
-        function Update(element)
-        {
-            this.element = element;
-            this.data    = JSON.parse(element.getAttribute('data-update'));
-            this.input   = document.createElement('input');
-            this.editing = false;
-            this.element.addEventListener('click', this.clicked.bind(this), false);
-            this.input.addEventListener('blur', this.blured.bind(this));
-            this.input.addEventListener('keypress', this.keyupped.bind(this));
-            this.input.addEventListener('keyup', this.keyupped.bind(this));
-        }
-
-        Update.prototype.clicked = function (event)
-        {
-            if (this.editing) {
-                return;
-            }
-
-            event.preventDefault();
-
-            this.editing           = true;
-            this.input.value       = this.data.value;
-            this.element.innerHTML = null;
-            this.element.appendChild(this.input);
-            this.input.focus();
-        };
-
-        Update.prototype.blured = function (event)
-        {
-            this.save();
-
-            /*
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/app_dev.php/admin/event/1/spot');
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.send(JSON.stringify());
-            */
-        };
-
-        Update.prototype.close = function ()
-        {
-            this.editing           = false;
-            this.element.innerHTML = this.data.value;
-        };
-
-        Update.prototype.save = function ()
-        {
-            if (this.editing === false) {
-                return;
-            }
-
-            this.data.value = this.input.value;
-
-            this.close();
-        };
-
-        Update.prototype.keyupped = function (event)
-        {
-            if (this.editing === false) {
-                return;
-            }
-
-            var code = event.keyCode || event.which;
-
-            if (code === 27) {
-                this.close();
-            } else if (code === 13) {
-                event.preventDefault();
-                this.save();
-                return false;
-            }
-        };
-
-        [].forEach.call(document.querySelectorAll('[data-update]'), function (element) { new Update(element); });
-    </script>
 
 {% endblock %}

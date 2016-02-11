@@ -54,7 +54,17 @@ interface SpotRepositoryInterface
     public function disableBatchSpot(array $ids, Event $event);
 
     /**
-     * {@inheritdoc}
+     * @param array $ids
+     * @param Event $event
      */
     public function enableBatchSpot(array $ids, Event $event);
+
+    /**
+     * @param int    $id
+     * @param string $property
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function update($id, $property, $value);
 }

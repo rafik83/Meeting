@@ -70,6 +70,7 @@ class SpotController extends Controller
             'event'               => $event,
             'filter_form'         => $filterForm->createView(),
             'filtered'            => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'update_url'          => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);
     }
 
@@ -176,36 +177,16 @@ class SpotController extends Controller
      */
     public function updateAction(Request $request, Event $event)
     {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('XHR support only.');
-        }
-
         $data = json_decode($request->getContent(), true);
 
-        $this
-            ->get('vimeet_infrastructure.repository.spot_repository')
-            ->update($data['id'], $data['property'], $data['value']);
-
-        return new JsonResponse();
-
-
-        /*
-        $update = new Update($spot);
-        $form   = $this->createForm(SpotUpdateType::class, $update, [
-            'action' => $this->generateUrl('admin_spot_update', ['event' => $event->getId(), 'spot' => $spot->getId()]),
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.spot.update_handler')->handle($update);
-
-            return $this->render('VimeetAppBundle:Admin/Spot:row.html.twig', [
-                'spot' => $spot,
-            ]);
+        try {
+            $this
+                ->get('vimeet_infrastructure.repository.spot_repository')
+                ->update($data['id'], $data['property'], $data['value']);
+        } catch (\Exception $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 500);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Spot:update.html.twig', [
-            'form' => $form->createView(),
-        ]);
-        */
+        return new JsonResponse();
     }
 }
