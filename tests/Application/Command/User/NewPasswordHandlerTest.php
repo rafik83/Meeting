@@ -34,7 +34,7 @@ class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('test');
 
         $encoder = $this->prophesize(PasswordEncoderInterface::class);
-        $encoder->encode($command->password, 'test')->shouldBeCalled()->willReturn('tatatata');
+        $encoder->encode($user, $command->password)->shouldBeCalled()->willReturn('tatatata');
 
         $forgottenPasswordToken = $this->prophesize(ForgottenPasswordTokenRepositoryInterface::class);
         $forgottenPasswordToken->deleteAllForUser($user)->shouldBeCalled();
