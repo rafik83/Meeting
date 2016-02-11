@@ -49,7 +49,7 @@ class HappeningController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -77,8 +77,8 @@ class HappeningController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event $event
+     * @param Request   $request
+     * @param Event     $event
      * @param Happening $happening
      *
      * @return RedirectResponse|Response

@@ -21,7 +21,7 @@ class Template
     private $groups = [];
 
     /**
-     * @param Group  $group
+     * @param Group $group
      *
      * @return Template
      */
@@ -35,8 +35,9 @@ class Template
     /**
      * @param $name
      *
-     * @return Group
      * @throws UnknownGroupException
+     * @return Group
+     *
      */
     public function getGroup($name = 'default')
     {

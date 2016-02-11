@@ -136,7 +136,7 @@ class Step
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -168,6 +168,6 @@ class Step
      */
     public function removeProduct(ProductInterface $product)
     {
-        unset ($this->products[$product->getKey()]);
+        unset($this->products[$product->getKey()]);
     }
 }

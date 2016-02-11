@@ -18,7 +18,7 @@ class PaymentMode
     const LATER      = 'later';
     const NOPAYMENT  = 'no-payment';
 
-    static public $modes = [
+    public static $modes = [
         'Carte bancaire'  => self::CREDITCARD,
         'Virement'        => self::TRANSFER,
         'Chèque'          => self::CHECK,

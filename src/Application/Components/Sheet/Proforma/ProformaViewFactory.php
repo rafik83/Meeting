@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
-use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 

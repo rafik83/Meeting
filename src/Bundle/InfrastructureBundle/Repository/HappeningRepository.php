@@ -97,7 +97,6 @@ class HappeningRepository implements HappeningRepositoryInterface
         return array_keys($queryBuilder->getQuery()->getResult());
     }
 
-
     /**
      * {@inheritdoc}
      */
