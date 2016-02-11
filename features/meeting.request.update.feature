@@ -4,11 +4,11 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting request that is not yet accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
+      | app/Template.yml |
+      | app/Event.yml    |
+      | app/Type.yml     |
+      | app/Category.yml |
+      | app/Rule.yml     |
       | User.yml                                                  |
       | TwoSheetSeveralParticipantWithData.yml                    |
       | MeetingRequestStateSent.yml                               |
@@ -35,11 +35,11 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting request that is accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
+      | app/Template.yml |
+      | app/Event.yml    |
+      | app/Type.yml     |
+      | app/Category.yml |
+      | app/Rule.yml     |
       | User.yml                                                  |
       | TwoSheetSeveralParticipantWithData.yml                    |
       | MeetingRequestStateApproved.yml                           |
@@ -66,11 +66,11 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting proposition that is accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Rule.yml     |
+      | app/Template.yml |
+      | app/Event.yml    |
+      | app/Type.yml     |
+      | app/Category.yml |
+      | app/Rule.yml     |
       | User.yml                                                  |
       | TwoSheetSeveralParticipantWithData.yml                    |
       | MeetingRequest.yml                                        |

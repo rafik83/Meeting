@@ -4,9 +4,9 @@ Feature: Forgot Password
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml     |
+      | app/Template.yml |
+      | app/Event.yml    |
+      | app/Type.yml     |
       | User.yml                                                  |
       | Sheet.yml                                                 |
       | OneSheetSeveralParticipants.yml                           |

@@ -96,7 +96,7 @@ class LibChoiceWithDescriptionProduct extends AbstractProduct
             }
         }
 
-        return null;
+        return;
     }
 
     /**

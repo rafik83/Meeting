@@ -95,7 +95,6 @@ class HappeningTranslation
         $this->happening = $happening;
     }
 
-
     /**
      * @return string
      */

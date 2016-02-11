@@ -4,7 +4,7 @@ Feature: Change password
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml |
+      | app/Event.yml |
       | User.yml                                               |
 
   Scenario: Change the password successfully

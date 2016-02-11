@@ -15,10 +15,10 @@ interface PasswordEncoderInterface
     /**
      * Encode password.
      *
+     * @param mixed  $user
      * @param string $password
-     * @param string $salt
      *
      * @return string
      */
-    public function encode($password, $salt);
+    public function encode($user, $password);
 }

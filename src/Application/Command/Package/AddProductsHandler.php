@@ -89,6 +89,7 @@ class AddProductsHandler
 
     /**
      * @param AddProducts $addProducts
+     *
      * @return int
      */
     private function getParticipantBought(AddProducts $addProducts)
@@ -107,6 +108,7 @@ class AddProductsHandler
 
     /**
      * @param AddProducts $addProducts
+     *
      * @return int
      */
     public function getParticipantBoughtForPackageData(AddProducts $addProducts)

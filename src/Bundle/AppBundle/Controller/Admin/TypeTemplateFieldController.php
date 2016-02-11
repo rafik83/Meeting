@@ -54,8 +54,8 @@ class TypeTemplateFieldController extends Controller
      * @param string  $key
      *
      * @throws \Exception
-     * @return Response|RedirectResponse
      *
+     * @return Response|RedirectResponse
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $template, $key)
     {

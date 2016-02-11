@@ -42,7 +42,7 @@ class Update
     /**
      * Create constructor.
      *
-     * @param Transaction        $transaction
+     * @param Transaction $transaction
      */
     public function __construct(Transaction $transaction)
     {

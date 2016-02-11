@@ -34,11 +34,11 @@ class ReferenceFactory
         if ($recipe->start) {
             if ($recipe->end) {
                 return array_map(function ($number) use ($recipe) {
-                    return $recipe->prefix.str_pad($number, strlen($recipe->end), 0, STR_PAD_LEFT);
+                    return $recipe->prefix . str_pad($number, strlen($recipe->end), 0, STR_PAD_LEFT);
                 }, range($recipe->start, $recipe->end, 1));
             }
 
-            return [$recipe->prefix.$recipe->start];
+            return [$recipe->prefix . $recipe->start];
         }
 
         return [$recipe->prefix];

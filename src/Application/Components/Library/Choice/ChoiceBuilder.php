@@ -42,8 +42,8 @@ class ChoiceBuilder
      * @param string $locale
      *
      * @throws LanguageNotFoundException
-     * @return array
      *
+     * @return array
      */
     public function buildGroupedChoices(array $choices, $locale)
     {
