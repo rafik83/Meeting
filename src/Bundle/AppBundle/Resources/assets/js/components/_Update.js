@@ -11,8 +11,9 @@ function Update(element)
     this.data    = JSON.parse(element.getAttribute('data-update'));
     this.url     = element.getAttribute('data-url');
     this.editing = false;
+    this.old     = null;
     this.input   = document.createElement('input');
-    this.input.setAttribute('size', 5);
+    this.input.setAttribute('size', '6');
     this.element.addEventListener('click', this.clicked.bind(this), false);
     this.input.addEventListener('blur', this.blured.bind(this));
     this.input.addEventListener('keypress', this.keyupped.bind(this));
@@ -52,14 +53,28 @@ Update.prototype.save = function ()
     }
 
     if (this.data.value != this.input.value) {
+
+        this.old = this.data.value;
         this.data.value = this.input.value;
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', this.url);
+        xhr.onload = function (event) {
+            if (event.target.status !== 200) {
+                alert(JSON.parse(event.target.response).error);
+                this.revert();
+            }
+        }.bind(this);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         xhr.send(JSON.stringify(this.data));
     }
 
+    this.close();
+};
+
+Update.prototype.revert = function ()
+{
+    this.data.value = this.old;
     this.close();
 };
 

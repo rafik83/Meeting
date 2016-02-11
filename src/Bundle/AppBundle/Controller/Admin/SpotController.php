@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
@@ -180,9 +182,16 @@ class SpotController extends Controller
         $data = json_decode($request->getContent(), true);
 
         try {
-            $this
-                ->get('vimeet_infrastructure.repository.spot_repository')
-                ->update($data['id'], $data['property'], $data['value']);
+            $command = new Update($event, $data['id'], $data['property'], $data['value']);
+            $this->get('command.spot.update_handler')->handle($command);
+        } catch (SpotNotFoundException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 404);
+        } catch (UniqueReferenceViolationException $exception) {
+            $error = $this->get('translator')->trans('validators.spot.reference.unique', [], 'validators');
+
+            return new JsonResponse(['error' => $error], 403);
+        } catch (SpotException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
         } catch (\Exception $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 500);
         }

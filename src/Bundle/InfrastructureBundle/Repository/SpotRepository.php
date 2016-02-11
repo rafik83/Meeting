@@ -32,7 +32,7 @@ class SpotRepository implements SpotRepositoryInterface
     }
 
     /**
-     * @param Spot $spot
+     * {@inheritdoc}
      */
     public function add(Spot $spot)
     {
@@ -41,11 +41,30 @@ class SpotRepository implements SpotRepositoryInterface
     }
 
     /**
-     * @param Spot $spot
+     * {@inheritdoc}
      */
     public function set(Spot $spot)
     {
         $this->entityManager->flush($spot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find(Event $event, $id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -166,26 +185,5 @@ class SpotRepository implements SpotRepositoryInterface
         ;
 
         $queryBuilder->getQuery()->execute();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function update($id, $property, $value)
-    {
-        if (!in_array($property, ['reference', 'size', 'meetingCapacity', 'seatCapacity'])) {
-            throw new \Exception('Invalid property');
-        }
-
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->update(Spot::class, 'spot')
-            ->set(sprintf('spot.%s', $property), ':value')
-            ->setParameter('value', $value)
-            ->where('spot.id = :id')
-            ->setParameter('id', $id);
-
-        $queryBuilder->getQuery()->getResult();
     }
 }

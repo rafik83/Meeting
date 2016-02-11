@@ -25,7 +25,7 @@
     {{ form_end(filter_form) }}
 
     <form action="{{ path('admin_spot_batch', { 'event': event.id }) }}" method="POST">
-        <div class="text-right">
+        <div class="text-right mg-bt">
             <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
             <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
             <button class="btn btn-primary" name="delete" value="1" type="submit">{{ 'admin.spot.delete'|trans }}</button>
@@ -33,7 +33,7 @@
             <button class="btn btn-primary" name="disable" value="1" type="submit">{{ 'admin.spot.disable'|trans }}</button>
         </div>
 
-        <table class="table" data-form="<input />">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th></th>

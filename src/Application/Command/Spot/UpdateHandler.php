@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
+use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -34,16 +36,30 @@ class UpdateHandler
      * @param Update $update
      *
      * @throws UniqueReferenceViolationException
+     * @throws PropertyNotSupportedException
+     * @throws SpotNotFoundException
      */
     public function handle(Update $update)
     {
-        if ($update->referenceHasChanged() && null !== $this->spotRepository->findByReference($update->spot->getEvent(), $update->reference)) {
-            throw new UniqueReferenceViolationException($update->reference);
+        if (!in_array($update->property, ['reference', 'size', 'meetingCapacity', 'seatCapacity'])) {
+            throw new PropertyNotSupportedException($update->property);
         }
 
-        $update->spot->update($update->reference, $update->size, $update->meetingCapacity, $update->seatCapacity);
+        $spot = $this->spotRepository->find($update->event, $update->id);
 
-        $this->spotRepository->set($update->spot);
+        if (null === $spot) {
+            throw new SpotNotFoundException();
+        }
+
+        if (
+            $update->property === 'reference' &&
+            $update->value !== $spot->getReference() &&
+            null !== $this->spotRepository->findByReference($update->event, $update->value)
+        ) {
+            throw new UniqueReferenceViolationException($update->value);
+        }
+
+        $this->spotRepository->set($spot->update($update->property, $update->value));
     }
 
 }

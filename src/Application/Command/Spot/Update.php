@@ -10,54 +10,43 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
-use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Update
 {
     /**
-     * @var Spot
+     * @var Event
      */
-    public $spot;
+    public $event;
+
+    /**
+     * @var int
+     */
+    public $id;
 
     /**
      * @var string
      */
-    public $reference;
+    public $property;
 
     /**
-     * @var int
+     * @var mixed
      */
-    public $size;
-
-    /**
-     * @var int
-     */
-    public $meetingCapacity;
-
-    /**
-     * @var int
-     */
-    public $seatCapacity;
+    public $value;
 
     /**
      * Update constructor.
      *
-     * @param Spot $spot
+     * @param Event  $event
+     * @param int    $id
+     * @param string $property
+     * @param mixed  $value
      */
-    public function __construct(Spot $spot)
+    public function __construct(Event $event, $id, $property, $value)
     {
-        $this->spot            = $spot;
-        $this->reference       = $spot->getReference();
-        $this->size            = $spot->getSize();
-        $this->meetingCapacity = $spot->getMeetingCapacity();
-        $this->seatCapacity    = $spot->getSeatCapacity();
-    }
-
-    /**
-     * @return bool
-     */
-    public function referenceHasChanged()
-    {
-        return $this->reference !== $this->spot->getReference();
+        $this->event    = $event;
+        $this->id       = $id;
+        $this->property = $property;
+        $this->value    = $value;
     }
 }

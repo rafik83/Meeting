@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
 
 /**
  * "Lieu".
@@ -147,19 +148,17 @@ class Spot
     }
 
     /**
-     * @param string $reference
-     * @param int    $size
-     * @param int    $meetingCapacity
-     * @param int    $seatCapacity
+     * @param string $property
+     * @param int    $value
      *
      * @return Spot
+     * @throws PropertyNotSupportedException
      */
-    public function update($reference, $size, $meetingCapacity, $seatCapacity)
+    public function update($property, $value)
     {
-        $this->reference       = $reference;
-        $this->size            = $size;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->seatCapacity    = $seatCapacity;
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
+        }
 
         return $this;
     }
