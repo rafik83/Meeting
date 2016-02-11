@@ -15,14 +15,14 @@ Proximum\Vimeet\Domain\Model\User:
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_1:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_exposant
+        event: "@event_rdv_carnot_2016"
+        type: "@type_exposant"
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
         __construct: false
-        user: @user_1
-        sheet: @sheet_1
+        user: "@user_1"
+        sheet: "@sheet_1"
         owner: true
         active: true
         data:
@@ -31,8 +31,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2f0ddbd: "0909090909"
     participant_2:
         __construct: false
-        user: @user_2
-        sheet: @sheet_1
+        user: "@user_2"
+        sheet: "@sheet_1"
         owner: false
         active: true
         data:
@@ -43,15 +43,15 @@ Proximum\Vimeet\Domain\Model\Participant:
 Proximum\Vimeet\Domain\Model\ActivateAccountToken:
     activate_account_token_1:
         __construct:
-             - @user_2
+             - "@user_2"
              - azertyuiopqsdfghjklmwxcvbn
-             - @sheet_1
+             - "@sheet_1"
              - <dateTimeBetween('+1 days', '+2 days')>
 
 Proximum\Vimeet\Domain\Model\ChangeMailToken:
     change_mail_token:
         __construct:
-            - @user_1
+            - "@user_1"
             - 'toto@tata.fr'
             - 'azertyuiopqsdfghjklmwxcvbn'
             - <dateTimeBetween('+1 days', '+2 days')>

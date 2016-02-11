@@ -10,6 +10,7 @@
 
 namespace Tests\Application\Command\User;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenR
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class ActivteAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
+class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -34,7 +35,9 @@ class ActivteAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
 
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__SALT__');
-        $encoder->encode('TOTO', '__SALT__')->shouldBeCalled()->willReturn('__TEST__');
+        $encoder->encode(Argument::that(function (User $encodedUser) use ($user) {
+            return $user->getEmail() === $encodedUser->getEmail();
+        }), 'TOTO')->shouldBeCalled()->willReturn('__TEST__');
         $userRepository->set($expectedUser)->shouldBeCalled();
         $activateAccountTokenRepository->deleteAllForUser($expectedUser)->shouldBeCalled();
 

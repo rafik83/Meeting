@@ -62,7 +62,7 @@ class ActivateAccountPasswordHandler
     {
         $user     = $activateAccountPassword->user;
         $salt     = $this->saltGenerator->generate();
-        $password = $this->encoder->encode($activateAccountPassword->password, $salt);
+        $password = $this->encoder->encode($user->updatePassword($salt, null), $activateAccountPassword->password);
 
         $user->updatePassword($salt, $password);
         $this->userRepository->set($user);
