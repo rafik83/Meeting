@@ -36,8 +36,8 @@ Feature: Spot feature
   Scenario: I can filter out spot with just one filter (reference)
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | app/Template.yml |
+      | app/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
@@ -57,8 +57,8 @@ Feature: Spot feature
   Scenario: I can filter out spot with just one other filter (meetingCapacity)
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | app/Template.yml |
+      | app/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
@@ -78,8 +78,8 @@ Feature: Spot feature
   Scenario: I can filter out spot with all champ fill in
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | app/Template.yml |
+      | app/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
@@ -102,7 +102,7 @@ Feature: Spot feature
   Scenario: I can disable spot in batch
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | app/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
@@ -116,7 +116,7 @@ Feature: Spot feature
   Scenario: I can remove spot in batch
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml    |
+      | app/Event.yml    |
       | Spot.yml                                                  |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
