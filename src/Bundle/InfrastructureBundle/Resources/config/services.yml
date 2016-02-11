@@ -16,7 +16,6 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
     vimeet_infrastructure.repository.type_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
@@ -42,6 +41,11 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@knp_paginator'
+    vimeet_infrastructure.repository.spot_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SpotRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.rule_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\RuleRepository
         arguments:
@@ -195,6 +199,15 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.spot.create_handler:
+            class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.batch_create_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
+        arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
+            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -364,17 +377,12 @@ services:
     #
     # Security
     #
-    vimeet_infrastructure.security.user_password_encoder:
-        class: Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
-        factory: ['@security.encoder_factory', 'getEncoder']
-        arguments:
-            - Proximum\Vimeet\Domain\Model\User
     vimeet_infrastructure.adapter.salt_generator:
         class: Proximum\Vimeet\Application\Adapter\SaltGenerator
     vimeet_infrastructure.adapter.encoder_adapter:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
         arguments:
-            - '@vimeet_infrastructure.security.user_password_encoder'
+            - '@security.password_encoder'
 
     #
     # Adapters
@@ -605,3 +613,9 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@happening.happening_permission_manager'
+
+    #
+    # Spot component
+    #
+    spot.reference_factory:
+        class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory

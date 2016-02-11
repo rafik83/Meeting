@@ -11,19 +11,19 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface as SymfonyPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class EncoderAdapter implements PasswordEncoderInterface
 {
     /**
-     * @var SymfonyPasswordEncoderInterface
+     * @var UserPasswordEncoderInterface
      */
     private $encoder;
 
     /**
-     * @param SymfonyPasswordEncoderInterface $encoder
+     * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(SymfonyPasswordEncoderInterface $encoder)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
@@ -31,8 +31,8 @@ class EncoderAdapter implements PasswordEncoderInterface
     /**
      * {@inheritdoc}
      */
-    public function encode($password, $salt)
+    public function encode($user, $password)
     {
-        return $this->encoder->encodePassword($password, $salt);
+        return $this->encoder->encodePassword($user, $password);
     }
 }

@@ -11,15 +11,15 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest;
 
 use Doctrine\ORM\EntityRepository;
+use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class PositionMeetingType extends AbstractType
 {
@@ -68,8 +68,8 @@ class PositionMeetingType extends AbstractType
                 },
             ])
             ->add('slot', EntityType::class, [
-                'class' => MeetingSlot::class,
-                'expanded' => true,
+                'class'         => MeetingSlot::class,
+                'expanded'      => true,
                 'query_builder' => function (EntityRepository $repository) use ($options) {
                     return $repository
                         ->createQueryBuilder('slot')

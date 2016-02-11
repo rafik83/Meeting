@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -23,18 +22,11 @@ class EventRepository implements EventRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
+     * @param EntityManager $entityManager
      */
-    private $paginator;
-
-    /**
-     * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
-     */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
     }
 
     /**
@@ -52,7 +44,7 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit)
+    public function getList()
     {
         $queryBuilder = $this
             ->entityManager
@@ -60,7 +52,7 @@ class EventRepository implements EventRepositoryInterface
             ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
             ->from('Entity:Event', 'event');
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit);
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

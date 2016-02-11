@@ -1,36 +1,36 @@
 Proximum\Vimeet\Domain\Model\Meeting\Request:
     meeting_approved_request_with_participants:
         __construct:
-            - @sheet_1
-            - [@participant_1]
-            - @sheet_2
+            - "@sheet_1"
+            - ["@participant_1"]
+            - "@sheet_2"
             - []
             - <dateTimeBetween('-3 days', 'now')>
-            - @user_1
+            - "@user_1"
         state: 'sent'
     meeting_approved_request_with_participants2:
         __construct:
-            - @sheet_1
-            - [@participant_1]
-            - @sheet_2
+            - "@sheet_1"
+            - ["@participant_1"]
+            - "@sheet_2"
             - []
             - <dateTimeBetween('-3 days', 'now')>
-            - @user_1
+            - "@user_1"
         state: 'approved'
     meeting_approved_request_with_participants3:
         __construct:
-            - @sheet_2
-            - [@participant_1]
-            - @sheet_1
+            - "@sheet_2"
+            - ["@participant_1"]
+            - "@sheet_1"
             - []
             - <dateTimeBetween('-3 days', 'now')>
-            - @user_1
+            - "@user_1"
         state: 'approved'
 
 Proximum\Vimeet\Domain\Model\Meeting\Message:
     meeting_message_approved_request_with_participants:
         __construct:
-            - @meeting_approved_request_with_participants
-            - @sheet_1
+            - "@meeting_approved_request_with_participants"
+            - "@sheet_1"
             - 'Bonjour je souhaiterais prendre rendez vous avec vous'
             - <dateTimeBetween('-3 days', 'now')>

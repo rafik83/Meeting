@@ -1,0 +1,11 @@
+{% block spot_reference_recipe_row %}
+    {% set group_attr = group_attr|default({})|merge({ 'class': group_attr.class|default('') ~ ' row' }) %}
+    <div {{ block('row_container_attributes') }}>
+        {{ form_row(form.prefix, { 'group_attr': { 'class': 'col-md-3' } }) }}
+        {{ form_row(form.start, { 'group_attr': { 'class': 'col-md-3' } }) }}
+        {{ form_row(form.end, { 'group_attr': { 'class': 'col-md-3' } }) }}
+        <div class="col-md-3 text-right">
+            {{ block('collection_delete_button') }}
+        </div>
+    </div>
+{% endblock %}

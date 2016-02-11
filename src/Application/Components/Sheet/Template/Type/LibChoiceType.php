@@ -23,7 +23,7 @@ class LibChoiceType extends AbstractType
 
         $resolver->setDefaults([
             'placeholder' => false,
-            'choices'     => []
+            'choices'     => [],
         ]);
     }
 }

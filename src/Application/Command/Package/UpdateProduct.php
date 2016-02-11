@@ -58,12 +58,12 @@ class UpdateProduct
     private $previousQuantity;
 
     /**
-     * @param Sheet            $sheet
-     * @param Cart             $cart
-     * @param ProductInterface $product
+     * @param Sheet             $sheet
+     * @param Cart              $cart
+     * @param ProductInterface  $product
      * @param DateTimeInterface $createdAt
-     * @param string           $locale
-     * @param int              $quantity
+     * @param string            $locale
+     * @param int               $quantity
      */
     public function __construct(
         Sheet $sheet,
@@ -84,7 +84,7 @@ class UpdateProduct
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isChecked()
     {
@@ -92,7 +92,7 @@ class UpdateProduct
     }
 
     /**
-     * @param boolean $checked
+     * @param bool $checked
      */
     public function setChecked($checked)
     {

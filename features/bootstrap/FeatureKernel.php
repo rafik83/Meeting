@@ -1,7 +1,5 @@
 <?php
 
-include __DIR__ . '/../../app/AppKernel.php';
-
 /**
  * See: https://github.com/Behat/Symfony2Extension/issues/69
  */

@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
+use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser;
 
 class BillingViewFactory
 {
