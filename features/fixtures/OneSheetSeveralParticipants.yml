@@ -1,8 +1,8 @@
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
         __construct: false
-        user: @user_1
-        sheet: @sheet_1
+        user: "@user_1"
+        sheet: "@sheet_1"
         owner: true
         active: true
         data:
@@ -11,8 +11,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2f0ddbd: "0909090909"
     participant_2:
         __construct: false
-        user: @user_2
-        sheet: @sheet_1
+        user: "@user_2"
+        sheet: "@sheet_1"
         owner: false
         active: true
         data:

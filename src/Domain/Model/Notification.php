@@ -58,7 +58,7 @@ class Notification
     private $url;
 
     /**
-     * @param Event             $event
+     * @param Event              $event
      * @param User               $emitter
      * @param User               $recipient
      * @param \DateTimeInterface $createdAt
@@ -114,7 +114,7 @@ class Notification
     /**
      * @deprecated Use is read instead
      *
-     * @return boolean
+     * @return bool
      */
     public function isView()
     {

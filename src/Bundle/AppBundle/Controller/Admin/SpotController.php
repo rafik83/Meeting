@@ -14,14 +14,14 @@ use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\BatchCreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SpotController extends Controller
@@ -39,7 +39,7 @@ class SpotController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Spot:list.html.twig', [
             'spots' => $spots,
-            'event' => $event
+            'event' => $event,
         ]);
     }
 
@@ -52,9 +52,9 @@ class SpotController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
-        $form = $this->createForm(SpotCreateType::class, $create, [
+        $form   = $this->createForm(SpotCreateType::class, $create, [
             'action' => $this->generateUrl('admin_spot_create', ['event' => $event->getId()]),
-            'method'=> 'POST'
+            'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
 

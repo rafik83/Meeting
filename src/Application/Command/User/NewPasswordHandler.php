@@ -62,7 +62,7 @@ class NewPasswordHandler
     {
         $user     = $newPassword->user;
         $salt     = $this->saltGenerator->generate();
-        $password = $this->encoder->encode($newPassword->password, $salt);
+        $password = $this->encoder->encode($user->updatePassword($salt, null), $newPassword->password);
 
         $user->updatePassword($salt, $password);
         $this->userRepository->set($user);

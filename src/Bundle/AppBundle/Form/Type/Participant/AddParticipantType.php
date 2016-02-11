@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Participant\Add;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AddParticipantType extends AbstractAddParticipantType
 {

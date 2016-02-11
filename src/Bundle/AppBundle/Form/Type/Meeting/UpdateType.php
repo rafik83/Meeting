@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Update;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType;
 
 class UpdateType extends AbstractType
 {
@@ -44,7 +44,7 @@ class UpdateType extends AbstractType
     {
         $resolver->setDefaults([
             'method'     => 'POST',
-            'data_class' => Update::class
+            'data_class' => Update::class,
         ]);
     }
 

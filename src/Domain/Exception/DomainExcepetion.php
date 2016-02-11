@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model\Exception;
 
-class DomainException extends \DomainException
+class DomainExcepetion extends \DomainException
 {
 }

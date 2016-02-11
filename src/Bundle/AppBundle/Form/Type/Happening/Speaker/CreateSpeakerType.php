@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateSpeakerType extends AbstractSpeakerType
 {

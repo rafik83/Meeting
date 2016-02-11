@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template\Type;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\NotAvailableException;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\UnknownOptionException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LibRadioType extends AbstractProductType
@@ -38,8 +38,9 @@ class LibRadioType extends AbstractProductType
     /**
      * @param $value
      *
-     * @return string
      * @throws UnknownOptionException
+     * @return string
+     *
      */
     public function getChoiceUnitPrice($value)
     {
@@ -52,8 +53,9 @@ class LibRadioType extends AbstractProductType
      * @param string $value
      * @param string $locale
      *
-     * @return string
      * @throws UnknownOptionException
+     * @return string
+     *
      */
     public function getChoiceLabel($value, $locale)
     {

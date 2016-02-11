@@ -1,0 +1,187 @@
+Proximum\Vimeet\Domain\Model\MeetingSlot:
+    meeting_slot_day_one_1:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 09:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_2:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_3:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_4:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 11:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_5:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_6:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_7:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_8:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_9:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 14:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_10:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_11:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_12:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 16:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_13:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_one_14:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_1:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 09:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 09:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_2:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_3:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_4:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 11:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_5:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_6:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_7:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 13:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_8:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 13:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_9:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 14:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_10:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_11:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:55:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_12:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 16:35:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_13:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:15:00', 'Europe/Paris', 'UTC')>"]
+    meeting_slot_day_two_14:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 17:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:55:00', 'Europe/Paris', 'UTC')>"]
+
+Proximum\Vimeet\Domain\Model\Happening:
+    happening_day_one_1:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_2:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_3:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_4:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_5:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_6:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_7:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_8:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 15:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_9:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_10:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 16:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 17:50:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_11:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 18:15:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_one_12:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-18 12:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-18 13:30:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_1:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 09:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_2:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 10:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_3:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_4:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 11:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_5:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 12:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_6:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 14:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_7:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 14:40:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 15:20:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_8:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 17:30:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+    happening_day_two_9:
+        __construct: ["@event_rdv_carnot_2016", "<date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>", "<date('2016-10-19 13:30:00', 'Europe/Paris', 'UTC')>", "@category_workshop"]
+
+Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
+    happening_day_one_1_trans_fr:
+        __construct: ["@happening_day_one_1", 'fr', 'PME : comment tirer profit des programmes européens', "Présentation des différents programmes européens et des structures d'accompagnement"]
+    happening_day_one_1_trans_en:
+        __construct: ["@happening_day_one_1", 'en', 'PME : comment tirer profit des programmes européens en anglais', "Présentation des différents programmes européens et des structures d'accompagnement en anglais"]
+    happening_day_one_2_trans_fr:
+        __construct: ["@happening_day_one_2", 'fr', 'Intensification des procédés au service de la chimie durable', "L'illustration par quelques exemples industriels: bio-solvants et procédés séparatifs"]
+    happening_day_one_2_trans_en:
+        __construct: ["@happening_day_one_2", 'en', 'Intensification des procédés au service de la chimie durable en anglais', "L'illustration par quelques exemples industriels: bio-solvants et procédés séparatifs en anglais"]
+    happening_day_one_3_trans_fr:
+        __construct: ["@happening_day_one_3", 'fr', 'La robotique collaborative : application en polissage', ""]
+    happening_day_one_3_trans_en:
+        __construct: ["@happening_day_one_3", 'en', 'La robotique collaborative : application en polissage en anglais', ""]
+    happening_day_one_4_trans_fr:
+        __construct: ["@happening_day_one_4", 'fr', 'Les grands enjeux de la filière électronique', 'Perspectives des industries électrotechnologiques présentées par la FIEEC']
+    happening_day_one_4_trans_en:
+        __construct: ["@happening_day_one_4", 'en', 'Les grands enjeux de la filière électronique en anglais', 'Perspectives des industries électrotechnologiques présentées par la FIEEC en anglais']
+    happening_day_one_5_trans_fr:
+        __construct: ["@happening_day_one_5", 'fr', 'Remise du Prix FIEEC de la Recherche appliquée', 'Animée par Jacques MAROUANI, ElectroniqueS']
+    happening_day_one_5_trans_en:
+        __construct: ["@happening_day_one_5", 'en', 'Remise du Prix FIEEC de la Recherche appliquée en anglais', 'Animée par Jacques MAROUANI, ElectroniqueS en anglais']
+    happening_day_one_6_trans_fr:
+        __construct: ["@happening_day_one_6", 'fr', 'De jeunes chercheurs dans les entreprises : les doctorants CIFRE', '']
+    happening_day_one_6_trans_en:
+        __construct: ["@happening_day_one_6", 'en', 'De jeunes chercheurs dans les entreprises : les doctorants CIFRE en anglais', '']
+    happening_day_one_7_trans_fr:
+        __construct: ["@happening_day_one_7", 'fr', 'Matériaux fonctionnels - Revêtements et traitements de surface', 'Fonctionnaliser les surfaces pour améliorer le comportement en service des matériaux']
+    happening_day_one_7_trans_en:
+        __construct: ["@happening_day_one_7", 'en', 'Matériaux fonctionnels - Revêtements et traitements de surface en anglais', 'Fonctionnaliser les surfaces pour améliorer le comportement en service des matériaux en anglais']
+    happening_day_one_8_trans_fr:
+        __construct: ["@happening_day_one_8", 'fr', 'La médecine personnalisée', 'Le traitement à la carte en cancérologie : espoir ou réalité ?']
+    happening_day_one_8_trans_en:
+        __construct: ["@happening_day_one_8", 'en', 'La médecine personnalisée en anglais', 'Le traitement à la carte en cancérologie : espoir ou réalité ? en anglais']
+    happening_day_one_9_trans_fr:
+        __construct: ["@happening_day_one_9", 'fr', 'Climat et risques hydrologiques', 'Gestion des risques en domaine montagneux : de la recherche à l’application']
+    happening_day_one_9_trans_en:
+        __construct: ["@happening_day_one_9", 'en', 'Climat et risques hydrologiques en anglais', 'Gestion des risques en domaine montagneux : de la recherche à l’application en anglais']
+    happening_day_one_10_trans_fr:
+        __construct: ["@happening_day_one_10", 'fr', 'Table ronde : Peut-on innover dans l’Ecosystème français ?', '']
+    happening_day_one_10_trans_en:
+        __construct: ["@happening_day_one_10", 'en', 'Table ronde : Peut-on innover dans l’Ecosystème français ? en anglais', '']
+    happening_day_one_11_trans_fr:
+        __construct: ["@happening_day_one_11", 'fr', 'Séance inaugurale', '']
+    happening_day_one_11_trans_en:
+        __construct: ["@happening_day_one_11", 'en', 'Séance inaugurale en anglais', '']
+    happening_day_one_12_trans_fr:
+        __construct: ["@happening_day_one_12", 'fr', 'Pause déjeunée', '']
+    happening_day_one_12_trans_en:
+        __construct: ["@happening_day_one_12", 'en', 'Pause déjeunée en anglais', '']
+    happening_day_two_1_trans_fr:
+        __construct: ["@happening_day_two_1", 'fr', 'Ile de France : les appuis aux entreprises innovantes', '']
+    happening_day_two_1_trans_en:
+        __construct: ["@happening_day_two_1", 'en', 'Ile de France : les appuis aux entreprises innovantes en anglais', '']
+    happening_day_two_2_trans_fr:
+        __construct: ["@happening_day_two_2", 'fr', 'Matériaux architecturés pour les véhicules', 'Perspectives des industries électrotechnologiques présentées par la FIEEC']
+    happening_day_two_2_trans_en:
+        __construct: ["@happening_day_two_2", 'en', 'Matériaux architecturés pour les véhicules en anglais', 'Perspectives des industries électrotechnologiques présentées par la FIEEC en anglais']
+    happening_day_two_3_trans_fr:
+        __construct: ["@happening_day_two_3", 'fr', 'Des PME mieux armées en Propriété Intellectuelle', '']
+    happening_day_two_3_trans_en:
+        __construct: ["@happening_day_two_3", 'en', 'Des PME mieux armées en Propriété Intellectuelle en anglais', '']
+    happening_day_two_4_trans_fr:
+        __construct: ["@happening_day_two_4", 'fr', 'Méthodes pour l’efficacité énergétique des procédés industriels', 'De l’audit avancé à l’innovation technologique']
+    happening_day_two_4_trans_en:
+        __construct: ["@happening_day_two_4", 'en', 'Méthodes pour l’efficacité énergétique des procédés industriels en anglais', 'De l’audit avancé à l’innovation technologique en anglais']
+    happening_day_two_5_trans_fr:
+        __construct: ["@happening_day_two_5", 'fr', 'Remise du Prix FIEEC de la Recherche appliquée', '']
+    happening_day_two_5_trans_en:
+        __construct: ["@happening_day_two_5", 'en', 'Remise du Prix FIEEC de la Recherche appliquée en anglais', '']
+    happening_day_two_6_trans_fr:
+        __construct: ["@happening_day_two_6", 'fr', 'Radiocommunications M2M, sûreté de connexion', 'Déploiements de réseaux sans-fil en environnements difficiles et pour applications critiques']
+    happening_day_two_6_trans_en:
+        __construct: ["@happening_day_two_6", 'en', 'Radiocommunications M2M, sûreté de connexion en anglais', 'Déploiements de réseaux sans-fil en environnements difficiles et pour applications critiques en anglais']
+    happening_day_two_7_trans_fr:
+        __construct: ["@happening_day_two_7", 'fr', "Innover en s'ouvrant à l'international", '']
+    happening_day_two_7_trans_en:
+        __construct: ["@happening_day_two_7", 'en', "Innover en s'ouvrant à l'international en anglais", '']
+    happening_day_two_8_trans_fr:
+        __construct: ["@happening_day_two_8", 'fr', 'Clôture', '']
+    happening_day_two_8_trans_en:
+        __construct: ["@happening_day_two_8", 'en', 'Clôture en anglais', '']
+    happening_day_two_9_trans_fr:
+        __construct: ["@happening_day_two_9", 'fr', 'Pause déjeunée', '']
+    happening_day_two_9_trans_en:
+        __construct: ["@happening_day_two_9", 'en', 'Pause déjeunée en anglais', '']

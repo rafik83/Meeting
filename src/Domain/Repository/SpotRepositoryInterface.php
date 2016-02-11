@@ -33,7 +33,7 @@ interface SpotRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $reference
      *
      * @return Spot
