@@ -16,6 +16,7 @@
             <th>Nom</th>
             <th>Fonction</th>
             <th>Société</th>
+            <th>Sous-événements</th>
             <th>
                 {% if speakers is not empty %}
                     <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter un intervenant</a>
@@ -29,6 +30,13 @@
                     <td>{{ speaker.name }}</td>
                     <td>{{ speaker.function }}</td>
                     <td>{{ speaker.organization }}</td>
+                    <td>
+                        <ul>
+                            {% for happening in speaker.happenings %}
+                                <li><a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}">{{ happening.title(app.request.locale) }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
                     <td>
                         <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Voir</a>
                         <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
