@@ -252,6 +252,9 @@ admin:
                 cancelled: Annulé
     spot:
         link: Lieux
+        active:
+            yes: Oui
+            no: Non
         listSpot:
             reference: Référence
             size: Taille (en m²)
@@ -259,7 +262,14 @@ admin:
             seatCapacity: Capacité de places assises
             active: Actif
             add: Ajouter
+            yes: Oui
+            no: Non
         createSpot:
             title: Créer un lieu
         batch_create:
             title: Créer des lieux par lot
+        delete: Supprimer
+        enable: Activer
+        disable: Désactiver
+        list:
+            checkbox: Case à cocher

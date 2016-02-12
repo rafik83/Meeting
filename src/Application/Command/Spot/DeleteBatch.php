@@ -12,45 +12,27 @@ namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class DeleteBatch
 {
-    /**
-     * @var string
-     */
-    public $reference;
-
     /**
      * @var Event
      */
     public $event;
 
     /**
-     * @var float
+     * @var array
      */
-    public $size;
+    public $ids;
 
     /**
-     * @var int
-     */
-    public $meetingCapacity = 1;
-
-    /**
-     * @var int
-     */
-    public $seatCapacity = 3;
-
-    /**
-     * @var bool
-     */
-    public $active;
-
-    /**
-     * Create constructor.
+     * DeleteBatch constructor.
      *
+     * @param array $ids
      * @param Event $event
      */
-    public function __construct(Event $event)
+    public function __construct(array $ids, Event $event)
     {
+        $this->ids   = $ids;
         $this->event = $event;
     }
 }

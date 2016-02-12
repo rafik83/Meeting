@@ -81,6 +81,11 @@ flash:
             batch_create:
                 success: Les lieux ont été créés
                 duplicate: "Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%"
+        spot_batch:
+            delete:
+                success: Les lieux sélectionnés ont bien été supprimés
+            disable:
+                success: Les lieux sélectionnés ont bien été désactivés
         category:
             create:
                 success: La catégorie a bien été créée

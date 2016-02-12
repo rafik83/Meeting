@@ -26,7 +26,7 @@ class BatchCreate
     public $recipes;
 
     /**
-     * @var int
+     * @var float
      */
     public $size;
 
