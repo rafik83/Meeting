@@ -54,11 +54,11 @@ class UpdateHandler
             $update->photo ? $this->fileStorageInterface->upload($update->photo) : $photo
         ));
 
-        if ($logo !== $update->logo) {
+        if ($logo !== $update->speaker->getLogo()) {
             $this->fileStorageInterface->remove($logo);
         }
 
-        if ($photo !== $update->photo) {
+        if ($photo !== $update->speaker->getPhoto()) {
             $this->fileStorageInterface->remove($photo);
         }
     }
