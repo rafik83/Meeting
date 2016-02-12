@@ -1,16 +1,16 @@
 Proximum\Vimeet\Domain\Model\Happening\Category:
     category_conference:
-        __construct: ['@event_rdv_carnot_2016', 'picto1']
+        __construct: ['@event_rdv_carnot_2016', 'picto1', 1]
     category_flash:
-        __construct: ['@event_rdv_carnot_2016', 'picto2']
+        __construct: ['@event_rdv_carnot_2016', 'picto2', 2]
     category_workshop:
-        __construct: ['@event_rdv_carnot_2016', 'picto3']
+        __construct: ['@event_rdv_carnot_2016', 'picto3', 3]
     category_cocktail:
-        __construct: ['@event_rdv_carnot_2016', 'picto4']
+        __construct: ['@event_rdv_carnot_2016', 'picto4', 4]
     category_meeting:
-        __construct: ['@event_rdv_carnot_2016', 'picto1']
+        __construct: ['@event_rdv_carnot_2016', 'picto1', 5]
     category_round_table:
-        __construct: ['@event_rdv_carnot_2016', 'picto2']
+        __construct: ['@event_rdv_carnot_2016', 'picto2', 6]
 
 Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
     category_conference_fr:

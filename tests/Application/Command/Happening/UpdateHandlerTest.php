@@ -32,7 +32,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $newEnd   = new \DateTime('2016-01-29 19:00:00');
 
         // Current
-        $category        = new Category($event, 'picto1');
+        $category        = new Category($event, 'picto1', 0);
         $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
@@ -45,7 +45,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $happening->setTranslation($happeningTranslation);
         $happening->setTranslation($happeningTranslation2);
 
-        $newCategory        = new Category($event, 'picto3');
+        $newCategory        = new Category($event, 'picto3', 0);
         $newCatTranslation1 = new CategoryTranslation($newCategory, 'fr', 'trec');
         $newCatTranslation2 = new CategoryTranslation($newCategory, 'en', 'troc');
         $newCategory->setTranslation($newCatTranslation1);
