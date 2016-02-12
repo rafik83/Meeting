@@ -12,7 +12,16 @@
             {% endif %}
 
             {{ form(form) }}
-            <a href="{{ path('event_forgotten_password', {'subdomain': app.request.attributes.get('subdomain')}) }}">{{ 'login.forgotPassword'|trans }}</a>
+            <a href="{{ path('event_forgotten_password') }}">{{ 'login.forgotPassword'|trans }}</a>
+
+            {% if users is not empty %}
+                <h3>1-click login</h3>
+                <ul>
+                    {% for user in users %}
+                        <li><a href="{{ path('event_login_user', { 'user': user.id }) }}">{{ user.username }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

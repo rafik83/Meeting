@@ -15,54 +15,14 @@ use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order\UpdateRowType;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
-    /**
-     * @ParamConverter(
-     *   "sheet",
-     *   class="Proximum\Vimeet\Domain\Model\Sheet",
-     *   options={"id" = "sheet_id"}
-     * )
-     *
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event, Sheet $sheet)
-    {
-        $orders = $this
-            ->get('vimeet_infrastructure.repository.order_repository')
-            ->paginate($request->query->getInt('page', 1), 20, $sheet);
-
-        $orders->setItems(array_map(function (Order $order) use ($request) {
-            return $this->get('components.sheet.order_view_factory')->createFromOrder($order, $request->getLocale());
-        }, $orders->getItems()));
-
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
-
-        return $this->render(
-            'VimeetAppBundle:Admin/Order:list.html.twig', [
-            'event'      => $event,
-            'sheet'      => $sheet,
-            'sheet_info' => $sheetInfo,
-            'orders'     => $orders,
-        ]
-        );
-    }
-
     /**
      * @param Request $request
      * @param Order   $order
@@ -108,7 +68,7 @@ class OrderController extends Controller
             $this->get('command.order.add_row_handler')->handle($addRow);
             $this->addFlash('success', 'flash.admin.order.add_row.success');
 
-            return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
         }
 
         return $this->render(
@@ -136,13 +96,13 @@ class OrderController extends Controller
         ;
 
         $updateRow = new UpdateRow($order, $group, $row);
-        $form   = $this->createForm(UpdateRowType::class, $updateRow);
+        $form      = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.order.update_row_handler')->handle($updateRow);
             $this->addFlash('success', 'flash.admin.order.update_row.success');
 
-            return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+            return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
         }
 
         return $this->render(
@@ -166,6 +126,6 @@ class OrderController extends Controller
         $this->get('command.order.remove_row_handler')->handle(new RemoveRow($order, $group, $row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
-        return $this->redirectToRoute('admin_sheet_order_edit', ['id' => $order->getId()]);
+        return $this->redirectToRoute('admin_sheet_order_edit', ['order' => $order->getId()]);
     }
 }

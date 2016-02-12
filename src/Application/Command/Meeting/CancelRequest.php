@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class CancelRequest
@@ -31,12 +32,28 @@ class CancelRequest
     public $emitter;
 
     /**
-     * @param Request $request
-     * @param User $emitter
+     * @var \DateTimeInterface
      */
-    public function __construct(Request $request, User $emitter)
+    public $date;
+
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * CancelRequest constructor.
+     *
+     * @param Request            $request
+     * @param User               $emitter
+     * @param \DateTimeInterface $date
+     * @param Sheet              $sheet
+     */
+    public function __construct(Request $request, User $emitter, \DateTimeInterface $date, Sheet $sheet)
     {
         $this->request = $request;
         $this->emitter = $emitter;
+        $this->date    = $date;
+        $this->sheet   = $sheet;
     }
 }

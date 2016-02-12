@@ -13,6 +13,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 {
     private $kernel;
 
+    private $baseUrl;
+
     /**
      * Initializes context.
      *
@@ -55,13 +57,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @param string $string
-     *
-     * @return string
+     * @param $string
+     * @return mixed
+     * @throws Exception
      */
     public function getLinkFromA($string)
     {
         preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
+
+        if (!isset($result[2][0])) {
+            throw new \Exception(sprintf("The link was not found in \"%s\"", $string));
+        }
 
         return $result[2][0];
     }
@@ -129,11 +135,19 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                $result = $this->getLinkFromA($message->getBody());
+                $headers = $message->getHeaders();
+                if ($headers->has('X-Message-ID')) {
+                    $messageId = $headers->get('X-Message-ID')->getValue();
 
-                if (substr($result, 0, strlen($contain)) === $contain) {
-                    return;
+                    if ($messageId == $type) {
+                        $result = $this->getLinkFromA($message->getBody());
+
+                        if (substr($result, 0, strlen($contain)) === $contain) {
+                            return;
+                        }
+                    }
                 }
+
             }
         }
 
@@ -161,12 +175,20 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                $result = $this->getLinkFromA($message->getBody());
+                $headers = $message->getHeaders();
+                if ($headers->has('X-Message-ID')) {
+                    $messageId = $headers->get('X-Message-ID')->getValue();
 
-                if (substr($result, 0, strlen($link)) === $link) {
-                    $this->visitPath($result);
-                    return;
+                    if ($messageId == $type) {
+                        $result = $this->getLinkFromA($message->getBody());
+
+                        if (substr($result, 0, strlen($link)) === $link) {
+                            $this->visitPath($result);
+                            return;
+                        }
+                    }
                 }
+
             }
         }
 
@@ -235,14 +257,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($tbody as $key => $tr) {
                 if (null !== $numColumnCheckbox) {
                     if (null !== $tr->find(
-                            'css',
-                            sprintf(
-                                'td:nth-child(%s):contains("%s")',
-                                $numColumnCheckbox,
-                                $checkbox
-                            )
+                        'css',
+                        sprintf(
+                            'td:nth-child(%s):contains("%s")',
+                            $numColumnCheckbox,
+                            $checkbox
                         )
-                    ) {
+                    )) {
                         $numLine = $key + 1;
                         break;
                     }
@@ -258,6 +279,51 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 return;
             }
 
+        }
+
+        throw new \Exception('Element not found');
+    }
+
+    /**
+     * @When I should see :something in the column :column for the row containing :row
+     */
+    public function iShouldSeeInTheRowAndColumn($something, $column, $row)
+    {
+        $tables = $this->getSession()->getPage()->findAll('css', 'table');
+
+        foreach ($tables as $table) {
+            $numColumn = null;
+
+            $ths = $table->findAll('css', 'thead th');
+
+            $cols = 0;
+            foreach ($ths as $th) {
+                // calculate col num depending on colspan
+                $colspan = $th->getAttribute('colspan');
+                $cols += $colspan !== null ? $colspan : 1;
+                if (strpos($th->getText(), $column) !== false) {
+                    $numColumn = $cols;
+                }
+            }
+
+            if (null !== $numColumn) {
+                $trs = $table->findAll('css', 'tbody tr');
+                foreach ($trs as $tr) {
+                    if (strpos($tr->getText(), $row) !== false) {
+                        $tds = $tr->findAll('css', 'td');
+                        $cols = 0;
+                        foreach ($tds as $td) {
+                            // calculate col num depending on colspan
+                            $colspan = $td->getAttribute('colspan');
+                            $cols += $colspan !== null ? $colspan : 1;
+
+                            if ($cols == $numColumn && false !== strpos($td->getText(), $something)) {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         throw new \Exception('Element not found');
@@ -285,6 +351,42 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @Given I am logged with :email and :password on event :event
+     */
+    public function iAmLoggedOnEvent($email, $password, $eventUrl)
+    {
+        $this->setBaseUrl($eventUrl);
+        $this->visit('/fr/login');
+        $this->fillField('form.login.children.username.label', $email);
+        $this->fillField('form.login.children.password.label', $password);
+        $this->pressButton('form.login.children.submit.label');
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * Opens specified page.
+     *
+     * @Given /^(?:|I )am on this page "(?P<page>[^"]+)"$/
+     * @When /^(?:|I )go to this page "(?P<page>[^"]+)"$/
+     */
+    public function visit($page)
+    {
+        parent::visit($this->baseUrl . $page);
+        $this->assertResponseStatus(200);
+    }
+
+    /**
+     * Checks, that current page PATH is equal to specified.
+     *
+     * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
+     */
+    public function assertPageAddress($page)
+    {
+        parent::assertPageAddress($this->baseUrl . $page);
+        $this->assertResponseStatus(200);
+    }
+
+    /**
      * This step help to debug tests
      *
      * @When I dump the page
@@ -292,5 +394,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function iDumpThePage()
     {
         echo $this->getSession()->getPage()->getOuterHtml();
+    }
+
+    /**
+     * @param $url
+     */
+    private function setBaseUrl($url)
+    {
+        $this->baseUrl = $url . '/app_test.php';
     }
 }

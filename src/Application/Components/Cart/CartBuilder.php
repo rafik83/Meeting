@@ -42,7 +42,7 @@ class CartBuilder
 
         foreach ($productData as $stepKey => $step) {
             $stepObject = $template->getStep($stepKey);
-            $cartStep = new CartStep(
+            $cartStep   = new CartStep(
                 $stepObject->getLabel($locale),
                 0
             );

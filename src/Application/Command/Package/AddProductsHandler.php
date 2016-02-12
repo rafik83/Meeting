@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
+use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 
@@ -42,8 +43,9 @@ class AddProductsHandler
     /**
      * @param AddProducts $addProducts
      *
-     * @throws ForgotToAddQuantityException
      * @throws BoughtParticipantAlreadyAddedException
+     * @throws EmptyPackageException
+     * @throws ForgotToAddQuantityException
      */
     public function handle(AddProducts $addProducts)
     {
@@ -77,12 +79,17 @@ class AddProductsHandler
             }
         }
 
+        if (empty($this->orderManager->cleanFalseOption($addProducts->packageData))) {
+            throw new EmptyPackageException();
+        }
+
         $addProducts->cart->setData($addProducts->packageData);
         $this->cartRepository->set($addProducts->cart);
     }
 
     /**
      * @param AddProducts $addProducts
+     *
      * @return int
      */
     private function getParticipantBought(AddProducts $addProducts)
@@ -101,6 +108,7 @@ class AddProductsHandler
 
     /**
      * @param AddProducts $addProducts
+     *
      * @return int
      */
     public function getParticipantBoughtForPackageData(AddProducts $addProducts)

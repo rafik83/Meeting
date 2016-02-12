@@ -33,7 +33,6 @@ class LibParticipantProduct extends AbstractDescriptionTypeUnitPriceOptions
 
         $this->maxParticipant  = 0;
         $this->freeParticipant = 0;
-
     }
 
     /**

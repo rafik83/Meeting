@@ -10,7 +10,7 @@
         <tr>
             <th>Titre</th>
             <th>
-                <a href="{{ path('admin_type_create', { 'id': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
+                <a href="{{ path('admin_type_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
             </th>
         </tr>
         </thead>
@@ -19,8 +19,8 @@
             <tr>
                 <td>{{ type.title }}</td>
                 <td>
-                    <a href="{{ path('admin_type_update', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                    <a href="{{ path('admin_type_template_field_list', { 'id': event.id, 'type_id': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>
+                    <a href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>
                 </td>
             </tr>
         {% endfor %}

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -75,12 +76,9 @@ class UpdateHandler
 
         // Add message
         if ($update->message) {
-            $this->messageRepository->add(new Message(
-                $update->meeting,
-                $update->sheet,
-                $update->message,
-                $update->date
-            ));
+            $message = new Message($update->meeting, $update->sheet, $update->message, $update->date);
+            $this->messageRepository->add($message);
+            $this->events[] = ['meeting.update.message', new MessageEvent($message, $update->user)];
         }
 
         // Dispatch events
@@ -98,7 +96,7 @@ class UpdateHandler
         foreach ($update->meeting->getFromParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeFromParticipant($participant);
-                $this->events[] = ['participant.removed', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
@@ -106,7 +104,7 @@ class UpdateHandler
         foreach ($update->participants as $participant) {
             if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addFromParticipant($participant);
-                $this->events[] = ['participant.added', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
     }
@@ -120,15 +118,15 @@ class UpdateHandler
         foreach ($update->meeting->getToParticipants() as $participant) {
             if (!in_array($participant, $update->participants)) {
                 $update->meeting->removeToParticipant($participant);
-                $this->events[] = ['participant.removed', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.added', new ParticipantRemovedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
 
         // Add new participants
         foreach ($update->participants as $participant) {
-            if (!$update->meeting->hasToParticipant($participant)) {
+            if (!$update->meeting->hasFromParticipant($participant)) {
                 $update->meeting->addToParticipant($participant);
-                $this->events[] = ['participant.added', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
+                $this->events[] = ['meeting.participant.removed', new ParticipantAddedEvent($update->user, $participant, $update->meeting, $update->message, $update->date)];
             }
         }
     }

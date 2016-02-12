@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Request implements MessageSubjectInterface
@@ -76,6 +76,11 @@ class Request implements MessageSubjectInterface
     private $creator;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $stateUpdatedAt;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
@@ -99,6 +104,7 @@ class Request implements MessageSubjectInterface
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->state            = self::STATE_SENT;
         $this->createdAt        = $createdAt;
+        $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
     }
 
@@ -159,21 +165,48 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getStateUpdatedAt()
+    {
+        return $this->stateUpdatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
      * @return Request
      */
-    public function refuse()
+    public function refuse(\DateTimeInterface $date)
     {
-        $this->state = self::STATE_REFUSED;
+        $this->state          = self::STATE_REFUSED;
+        $this->stateUpdatedAt = $date;
 
         return $this;
     }
 
     /**
+     * @param \DateTimeInterface $date
+     *
      * @return Request
      */
-    public function cancel()
+    public function cancel(\DateTimeInterface $date)
     {
-        $this->state = self::STATE_CANCEL;
+        $this->state          = self::STATE_CANCEL;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function approve(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_APPROVED;
+        $this->stateUpdatedAt = $date;
 
         return $this;
     }
@@ -326,5 +359,37 @@ class Request implements MessageSubjectInterface
         $this->fromParticipants->removeElement($participant);
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSent()
+    {
+        return self::STATE_SENT === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return self::STATE_APPROVED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelled()
+    {
+        return self::STATE_CANCEL === $this->state;
     }
 }

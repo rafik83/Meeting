@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 
 class RequestViewsBuilder
@@ -32,13 +34,15 @@ class RequestViewsBuilder
 
     /**
      * @param Request[] $requests
+     * @param User      $user
+     * @param Sheet     $sheet
      *
      * @return RequestView[]
      */
-    public function generate($requests)
+    public function generate(array $requests, User $user, Sheet $sheet)
     {
-        return array_map(function (Request $request) {
-            return $this->requestViewBuilder->generate($request);
+        return array_map(function (Request $request) use ($user, $sheet) {
+            return $this->requestViewBuilder->generate($request, $user, $sheet);
         }, $requests);
     }
 }

@@ -1,0 +1,37 @@
+notification:
+    meeting:
+        canceled:
+            action: Rendez-vous annulé
+            message: Votre rendez-vous avec %sheet% a été annulé
+        participant:
+            added:
+                action: Participant ajouté
+                message: Vous avez été ajouté au rendez-vous avec %sheet%
+            removed:
+                action: Participant retiré
+                message: Vous avez été retiré du rendez-vous avec %sheet%
+    meeting_request:
+        receive:
+            action: Nouvelle proposition
+            message: Vous avez une nouvelle proposition de rendez-vous de la part de %from_sheet%
+        participant:
+            added:
+                action: Participant ajouté
+                message: Vous avez été ajouté à la demande de rendez-vous à %sheet%
+            removed:
+                action: Participant retiré
+                message: Vous avez été retiré de la demande de rendez-vous à %sheet%
+        canceled:
+            action: Demande annulé
+            to_message: Votre proposition de rendez-vous de %sheet% a été annulé.
+            from_message: Votre demande de rendez-vous à %sheet% a été annulé.
+        refused:
+            action: Demande refusé
+            message: Votre demande de rendez-vous à destination de %to_sheet% a été refusée
+        accepted:
+            action: Demande accepté
+            message: Votre demande de rendez-vous à destination de %to_sheet% a été accepté
+    message:
+        received:
+            message: Vous avez reçu un nouveau message de la part de %from_sheet%
+            action: Nouveau message

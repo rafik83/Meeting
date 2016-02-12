@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\Notification:
             type: string
         message:
             type: text
+        url:
+            type: text
             nullable: true
         createdAt:
             type: datetime

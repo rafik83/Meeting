@@ -11,20 +11,11 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 interface MeetingRepositoryInterface
 {
-    /**
-     * @param Schedule    $schedule
-     * @param Participant $participant
-     *
-     * @return Meeting
-     */
-    public function findScheduledByScheduleAndParticipant(Schedule $schedule, Participant $participant);
-
     /**
      * @param Meeting $meeting
      */
@@ -43,4 +34,11 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function getByEvent(Event $event, $page, $limit);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return Meeting[]
+     */
+    public function findByParticipant(Participant $participant);
 }

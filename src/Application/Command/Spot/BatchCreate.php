@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Spot;
+
+use Proximum\Vimeet\Application\Components\Spot\Recipe;
+use Proximum\Vimeet\Domain\Model\Event;
+
+class BatchCreate
+{
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var Recipe[]
+     */
+    public $recipes;
+
+    /**
+     * @var float
+     */
+    public $size;
+
+    /**
+     * @var float
+     */
+    public $meetingCapacity = 1;
+
+    /**
+     * @var float
+     */
+    public $seatCapacity = 3;
+
+    /**
+     * @var bool
+     */
+    public $active;
+
+    /**
+     * BatchCreate constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
+}

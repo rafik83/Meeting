@@ -13,7 +13,6 @@ namespace Tests\Application\Command\Unavailability;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -28,14 +27,13 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
 
         // Context
         $event       = new Event();
-        $schedule    = new Schedule($event, new \DateTime('2016-01-15 12:00:00'));
         $type        = new Type($event);
         $sheet       = new Sheet($event, $type, [], []);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, true);
 
         //Actual unavailability
-        $unavailability = new Unavailability($schedule, $participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 11:00:00'));
+        $unavailability = new Unavailability($participant, new \DateTime('2016-01-15 09:00:00'), new \DateTime('2016-01-15 11:00:00'));
 
         //Expected
         $remove = new Remove($unavailability);

@@ -10,6 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
+use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\Talking;
+
 class Happening
 {
     /**
@@ -18,53 +25,51 @@ class Happening
     private $id;
 
     /**
-     * @var Schedule
+     * @var Event
      */
-    private $schedule;
+    private $event;
 
     /**
-     * @var \DateTime
+     * @var CategoryHappening
+     */
+    private $category;
+
+    /**
+     * @var \DateTimeInterface
      */
     private $begin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $end;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
-    private $title;
+    private $translations;
 
     /**
-     * @var string
+     * @var ArrayCollection
      */
-    private $description;
-
-    /**
-     * @var bool
-     */
-    private $blocking;
+    private $talkings;
 
     /**
      * Happening constructor.
      *
-     * @param Schedule  $schedule
-     * @param \DateTime $begin
-     * @param \DateTime $end
-     * @param string    $title
-     * @param string    $description
-     * @param bool      $blocking
+     * @param Event              $event
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param CategoryHappening  $category
      */
-    public function __construct(Schedule $schedule, \DateTime $begin, \DateTime $end, $title, $description, $blocking)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
     {
-        $this->schedule    = $schedule;
-        $this->begin       = $begin;
-        $this->end         = $end;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->blocking    = $blocking;
+        $this->event        = $event;
+        $this->begin        = $begin;
+        $this->end          = $end;
+        $this->category     = $category;
+        $this->translations = new ArrayCollection();
+        $this->talkings     = new ArrayCollection();
     }
 
     /**
@@ -78,19 +83,33 @@ class Happening
     }
 
     /**
-     * Get schedule.
-     *
-     * @return Schedule
+     * @return Event
      */
-    public function getSchedule()
+    public function getEvent()
     {
-        return $this->schedule;
+        return $this->event;
+    }
+
+    /**
+     * @return CategoryHappening
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param CategoryHappening $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
     /**
      * Get begin.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getBegin()
     {
@@ -98,9 +117,17 @@ class Happening
     }
 
     /**
+     * @param \DateTimeInterface $begin
+     */
+    public function setBegin($begin)
+    {
+        $this->begin = $begin;
+    }
+
+    /**
      * Get end.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getEnd()
     {
@@ -108,32 +135,103 @@ class Happening
     }
 
     /**
-     * Get title.
-     *
-     * @return string
+     * @param \DateTimeInterface $end
      */
-    public function getTitle()
+    public function setEnd($end)
     {
-        return $this->title;
+        $this->end = $end;
     }
 
     /**
-     * Get description.
-     *
-     * @return string
+     * @param string $locale
      */
-    public function getDescription()
+    public function getTitle($locale)
     {
-        return $this->description;
+        return $this->getTranslations()->get($locale)->getTitle();
     }
 
     /**
-     * Get blocking.
-     *
-     * @return bool
+     * @param HappeningTranslation $translation
      */
-    public function getBlocking()
+    public function setTranslation(HappeningTranslation $translation)
     {
-        return $this->blocking;
+        $this->translations->set($translation->getLocale(), $translation);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param CategoryHappening  $category
+     */
+    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
+    {
+        $this->begin    = $begin;
+        $this->end      = $end;
+        $this->category = $category;
+    }
+
+    /**
+     * @param string $locale
+     * @param string $title
+     * @param string $description
+     */
+    public function updateTranslation($locale, $title, $description)
+    {
+        $this->translations->get($locale)->update($title, $description);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTalkings()
+    {
+        return $this->talkings;
+    }
+
+    /**
+     * @return Speaker[]
+     */
+    public function getSpeakers()
+    {
+        return $this
+            ->talkings
+            ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
+            ->map(function (Talking $talking) { return $talking->getSpeaker(); })
+            ->toArray();
+    }
+
+    /**
+     * @param array $speakers
+     *
+     * @return Happening
+     */
+    public function setSpeakers(array $speakers)
+    {
+        // Make sure a speaker doesn't appear more than once
+        $speakers = array_unique($speakers, SORT_REGULAR);
+
+        // Remove surplus of talking
+        while ($this->talkings->count() > count($speakers)) {
+            $this->talkings->removeElement($this->talkings->last());
+        }
+
+        // Add / update talking with speakers and positions
+        foreach ($speakers as $position => $speaker) {
+            if ($this->talkings->get($position)) {
+                $this->talkings->get($position)->update($speaker, $position);
+            } else {
+                $this->talkings->add(new Talking($speaker, $this, $position));
+            }
+        }
+
+        return $this;
     }
 }

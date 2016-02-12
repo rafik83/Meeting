@@ -1,0 +1,25 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block title 'Ajouter un intervenant' %}
+
+{% block content %}
+
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ block('title') }}</h2>
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.firstname) }}
+        {{ form_row(form.lastname) }}
+        {{ form_row(form.function) }}
+        {{ form_row(form.organization) }}
+        {{ form_row(form.logo) }}
+        {{ form_row(form.photo) }}
+        <div class="form-group">
+            <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">← Retour à la liste</a>
+            {{ form_widget(form.submit) }}
+        </div>
+    {{ form_end(form) }}
+
+{% endblock %}

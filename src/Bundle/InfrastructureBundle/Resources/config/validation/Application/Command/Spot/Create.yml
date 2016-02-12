@@ -1,0 +1,18 @@
+Proximum\Vimeet\Application\Command\Spot\Create:
+    properties:
+        reference:
+            - NotBlank: ~
+            - Type: { type: string }
+        size:
+            - NotBlank: ~
+            - Type: { type: float }
+        meetingCapacity:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 1 }
+        seatCapacity:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 2 }
+        active:
+            - Type: { type: boolean }

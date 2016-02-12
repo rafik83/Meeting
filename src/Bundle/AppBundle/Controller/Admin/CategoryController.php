@@ -16,7 +16,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -63,9 +62,7 @@ class CategoryController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.category.create_handler')->handle($create);
             $this->addFlash('success', 'flash.admin.category.create.success');
 
-            return $this->redirectToRoute('admin_category_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Category:create.html.twig', [
@@ -75,12 +72,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "category",
-     *   class="Proximum\Vimeet\Domain\Model\Category",
-     *   options={"id" = "category_id"}
-     * )
-     *
      * @param Request  $request
      * @param Event    $event
      * @param Category $category
@@ -105,9 +96,7 @@ class CategoryController extends Controller
             $this->get('vimeet_infrastructure.vimeet.application.command.category.update_handler')->handle($update);
             $this->addFlash('success', 'flash.admin.category.update.success');
 
-            return $this->redirectToRoute('admin_category_list', [
-                'id' => $event->getId(),
-            ]);
+            return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
         }
 
         return $this->render('VimeetAppBundle:Admin/Category:update.html.twig', [

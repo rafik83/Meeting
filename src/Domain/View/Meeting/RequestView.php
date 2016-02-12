@@ -55,6 +55,31 @@ class RequestView
     public $message;
 
     /**
+     * @var bool
+     */
+    public $canSee = false;
+
+    /**
+     * @var bool
+     */
+    public $canEdit = false;
+
+    /**
+     * @var bool
+     */
+    public $canCancel = false;
+
+    /**
+     * @var bool
+     */
+    public $canRefuse = false;
+
+    /**
+     * @var bool
+     */
+    public $canApprove = false;
+
+    /**
      * @param int                $id
      * @param string             $sheetNameFrom
      * @param string             $sheetNameTo

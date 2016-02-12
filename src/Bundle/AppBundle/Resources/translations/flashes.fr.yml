@@ -56,6 +56,10 @@ flash:
             success: Les informations ont bien été enregistrées
         add_products:
             success: L'ajout des produits a bien été pris en compte
+            empty: Pas de produits ajoutés
+        update_product:
+            added_updated_product_to_cart: La quantité de produit en plus a été ajoutée au panier
+            created_negative_order: Une commande à quantité négative a été créée
         final_step:
             success: Les informations de votre forfait ont bien été enregistrées
         payment_mode:
@@ -71,6 +75,17 @@ flash:
                 success: Le type a bien été créé
             update:
                 success: Le type a bien été mis à jour
+        spot:
+            create:
+                success: Le lieu a bien été créé
+            batch_create:
+                success: Les lieux ont été créés
+                duplicate: "Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%"
+        spot_batch:
+            delete:
+                success: Les lieux sélectionnés ont bien été supprimés
+            disable:
+                success: Les lieux sélectionnés ont bien été désactivés
         category:
             create:
                 success: La catégorie a bien été créée
@@ -84,8 +99,31 @@ flash:
                 success: Le rendez-vous a bien été placé
         order:
             add_row:
-                success: La linge a été ajouté
+                success: La ligne a été ajoutée
             update_row:
                 success: La ligne a été mise à jour
             remove_row:
-                success: La ligne a été supprimé
+                success: La ligne a été supprimée
+        transaction:
+            create:
+                success: La transaction a été créée
+            update:
+                success: La transaction a été mise à jour
+            remove:
+                success: La transaction a été supprimée
+        happening:
+            category:
+                update:
+                    success: La catégorie de sous événement a bien été mise à jour
+                create:
+                    success: La catégorie de sous événement a bien été créée
+            create:
+                success: Le sous événement a bien été créé
+            update:
+                success: Le sous événement a bien été mis à jour
+    activate_account:
+        success: Votre compte a été activé avec succès
+    change_mail:
+        success: Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l'activer
+    change_mail_activate:
+        success: Votre nouveau mail est maintenant associé à votre compte

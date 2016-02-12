@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Order;
 class OrderManager
 {
     /**
+     * Merge products data
+     *
      * @param array $sheetData
      * @param array $packageDataTwo
      *
@@ -22,7 +24,6 @@ class OrderManager
      */
     public function mergeTwoPackageData(array $sheetData, array $packageDataTwo)
     {
-        // merge products data
         $packageDataTwo = $this->cleanFalseOption($packageDataTwo);
 
         foreach ($sheetData as $keyStep => $step) {
@@ -72,6 +73,7 @@ class OrderManager
 
     /**
      * @param Order $order
+     *
      * @return int
      */
     public function getParticipantBoughtForOrder(Order $order)
@@ -107,7 +109,17 @@ class OrderManager
                 }
 
                 foreach ($product as $keyField => $field) {
+                    // If option is not taken
                     if (is_bool($field) && false === $field) {
+                        return false;
+                    }
+
+                    // if option is taken but the quantity set is 0
+                    if ($keyField === 'quantity'
+                        && $field === 0
+                        && isset($product['value'])
+                        && $product['value'] === true
+                    ) {
                         return false;
                     }
                 }

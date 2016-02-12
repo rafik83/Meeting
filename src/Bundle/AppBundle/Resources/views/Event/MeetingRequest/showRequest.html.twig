@@ -13,7 +13,6 @@
             <th>{{ 'event.meeting.showDetailsRequest.state'|trans }}</th>
         </thead>
         <tbody>
-        {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
         <tr>
             <td>{{ meetingRequestView.toSheetName }}</td>
             <td>{{ meetingRequestView.fromSheetName }}</td>
@@ -23,6 +22,7 @@
                 {% endfor %}
             </td>
             <td>
+                {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
                 <span class="btn-xs alert-{{ state[meetingRequestView.state] }}">
                     {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
@@ -30,6 +30,32 @@
         </tr>
         </tbody>
     </table>
+
+    <p>
+        {% if canEdit %}
+            <a href="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-default">
+                {{ 'event.meeting.listRequest.edit'|trans }}
+            </a>
+        {% endif %}
+
+        {% if canCancel %}
+            <a href="{{ path('event_meeting_request_cancel', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-default">
+                {{ 'event.meeting.listRequest.cancel'|trans }}
+            </a>
+        {% endif %}
+
+        {% if canApprove %}
+            <a href="{{ path('event_meeting_request_approve', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-primary">
+                {{ 'event.meeting.listProposition.accept'|trans() }}
+            </a>
+        {% endif %}
+
+        {% if canRefuse %}
+            <a href="{{ path('event_meeting_request_refuse', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequestId }) }}" class="btn btn-xs btn-danger">
+                {{ 'event.meeting.listProposition.refuse'|trans() }}
+            </a>
+        {% endif %}
+    </p>
 
     <h3>{{ 'event.meeting.showDetailsRequest.message'|trans }}</h3>
     {% for message in meetingRequestView.messages %}

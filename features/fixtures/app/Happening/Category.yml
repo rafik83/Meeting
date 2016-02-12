@@ -1,0 +1,39 @@
+Proximum\Vimeet\Domain\Model\Happening\Category:
+    category_conference:
+        __construct: ['@event_rdv_carnot_2016', 'picto1', 1]
+    category_flash:
+        __construct: ['@event_rdv_carnot_2016', 'picto2', 2]
+    category_workshop:
+        __construct: ['@event_rdv_carnot_2016', 'picto3', 3]
+    category_cocktail:
+        __construct: ['@event_rdv_carnot_2016', 'picto4', 4]
+    category_meeting:
+        __construct: ['@event_rdv_carnot_2016', 'picto1', 5]
+    category_round_table:
+        __construct: ['@event_rdv_carnot_2016', 'picto2', 6]
+
+Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
+    category_conference_fr:
+        __construct: ["@category_conference", "fr", "Conférence"]
+    category_conference_en:
+        __construct: ["@category_conference", "en", "Conference"]
+    category_flash_fr:
+        __construct: ["@category_flash", "fr", "Présentation flash"]
+    category_flash_en:
+        __construct: ["@category_flash", "en", "Flash"]
+    category_workshop_fr:
+        __construct: ["@category_workshop", "fr", "Atelier"]
+    category_workshop_en:
+        __construct: ["@category_workshop", "en", "Workshop"]
+    category_cocktail_fr:
+        __construct: ["@category_cocktail", "fr", "Cocktail"]
+    category_cocktail_en:
+        __construct: ["@category_cocktail", "en", "Cocktail"]
+    category_meeting_fr:
+        __construct: ["@category_meeting", "fr", "Réunion"]
+    category_meeting_en:
+        __construct: ["@category_meeting", "en", "Meeting"]
+    category_round_table_fr:
+        __construct: ["@category_round_table", "fr", "Table ronde"]
+    category_round_table_en:
+        __construct: ["@category_round_table", "en", "Round table"]

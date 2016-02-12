@@ -2,8 +2,8 @@ Proximum\Vimeet\Domain\Model\Participant:
     # Elao participant
     participant_test:
         __construct: false
-        user: @user_test
-        sheet: @sheet_test
+        user: '@user_test'
+        sheet: '@sheet_test'
         owner: true
         active: true
         data:
@@ -14,8 +14,8 @@ Proximum\Vimeet\Domain\Model\Participant:
     # Proximum participants
     proximum_participant_visiteur:
         __construct: false
-        user: @proximum_user_visiteur
-        sheet: @proximum_sheet_visiteur
+        user: '@proximum_user_visiteur'
+        sheet: '@proximum_sheet_visiteur'
         owner: true
         active: true
         data:
@@ -23,8 +23,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563cb05cb81ec: Jean
     proximum_participant_exposant:
         __construct: false
-        user: @proximum_user_exposant
-        sheet: @proximum_sheet_exposant
+        user: '@proximum_user_exposant'
+        sheet: '@proximum_sheet_exposant'
         owner: true
         active: true
         data:
@@ -32,8 +32,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: François
     proximum_participant_carnot:
         __construct: false
-        user: @proximum_user_carnot
-        sheet: @proximum_sheet_carnot
+        user: '@proximum_user_carnot'
+        sheet: '@proximum_sheet_carnot'
         owner: true
         active: true
         data:
@@ -41,8 +41,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: Isabelle
     proximum_participant_admin:
         __construct: false
-        user: @proximum_user_admin
-        sheet: @proximum_sheet_admin
+        user: '@proximum_user_admin'
+        sheet: '@proximum_sheet_admin'
         owner: true
         active: true
         data:
@@ -50,8 +50,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: Layla
     proximum_participant_test:
         __construct: false
-        user: @proximum_user_test
-        sheet: @proximum_sheet_test
+        user: '@proximum_user_test'
+        sheet: '@proximum_sheet_test'
         owner: true
         active: true
         data:
@@ -59,8 +59,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf1d9b1cb: Vincent
     proximum_participant_ui:
         __construct: false
-        user: @proximum_user_ui
-        sheet: @proximum_sheet_ui
+        user: '@proximum_user_ui'
+        sheet: '@proximum_sheet_ui'
         owner: true
         active: true
         data:
@@ -70,8 +70,8 @@ Proximum\Vimeet\Domain\Model\Participant:
     # Random
     participant_random_1:
         __construct: false
-        user: @user_random_1
-        sheet: @sheet_exposant2
+        user: '@user_random_1'
+        sheet: '@sheet_exposant2'
         owner: false
         active: true
         data:
@@ -79,8 +79,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2746398: <lastName()>
     participant_random_2:
         __construct: false
-        user: @user_random_1
-        sheet: @sheet_exposant2
+        user: '@user_random_1'
+        sheet: '@sheet_exposant2'
         owner: false
         active: true
         data:
@@ -88,8 +88,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2746398: <lastName()>
     participant_random_3:
         __construct: false
-        user: @user_random_1
-        sheet: @sheet_exposant4
+        user: '@user_random_1'
+        sheet: '@sheet_exposant4'
         owner: false
         active: true
         data:
@@ -97,8 +97,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2746398: <lastName()>
     participant_random_4:
         __construct: false
-        user: @user_random_1
-        sheet: @sheet_exposant5
+        user: '@user_random_1'
+        sheet: '@sheet_exposant5'
         owner: false
         active: true
         data:
@@ -106,8 +106,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2746398: <lastName()>
     participant_random_1{10..30}:
         __construct: false
-        user: @user_random_1
-        sheet: @sheet_exposant*
+        user: '@user_random_1'
+        sheet: '@sheet_exposant*'
         owner: false
         active: true
         data:

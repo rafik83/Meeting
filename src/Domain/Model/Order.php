@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
 /**
  * "Commande"
  */
-class Order
+class Order implements BillingInfoInterface
 {
     const STATE_UNPAID = 'unpaid';
     const STATE_PAID   = 'paid';
@@ -69,6 +69,16 @@ class Order
     private $paymentMode;
 
     /**
+     * @var string
+     */
+    private $vatMode;
+
+    /**
+     * @var float
+     */
+    private $vatRate;
+
+    /**
      * @param Sheet             $sheet
      * @param string            $state
      * @param array             $packageData
@@ -96,6 +106,8 @@ class Order
         $this->billingTemplate  = $billingTemplate;
         $this->createdAt        = $createdAt;
         $this->paymentMode      = $paymentMode;
+        $this->vatMode          = $sheet->getEvent()->getMode();
+        $this->vatRate          = $sheet->getEvent()->getVat();
     }
 
     /**
@@ -171,22 +183,55 @@ class Order
     }
 
     /**
+     * @deprecated Use getVatRate instead
+     *
+     * Get vat
+     *
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->getVatRate();
+    }
+
+    /**
+     * Get vatMode
+     *
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
+
+    /**
+     * Get vatRate
+     *
+     * @return float
+     */
+    public function getVatRate()
+    {
+        return $this->vatRate;
+    }
+
+    /**
      * Add row to the order
      *
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    public function addRow($group, $row, $label, $description, $unitPrice, $quantity)
+    public function addRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         if ($this->issetRow($group, $row)) {
             throw new RowAlreadyExistsException($group, $row);
         }
 
-        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
     }
 
     /**
@@ -205,8 +250,8 @@ class Order
             throw new NotAddedRowException($group, $row);
         }
 
-        unset ($this->packageTemplate[$group]['template'][$row]);
-        unset ($this->packageData[$group][$row]);
+        unset($this->packageTemplate[$group]['template'][$row]);
+        unset($this->packageData[$group][$row]);
     }
 
     /**
@@ -214,12 +259,13 @@ class Order
      *
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    public function updateRow($group, $row, $label, $description, $unitPrice, $quantity)
+    public function updateRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         if (!$this->issetRow($group, $row)) {
             throw new RowNotFoundException($group, $row);
@@ -229,7 +275,7 @@ class Order
             throw new NotAddedRowException($group, $row);
         }
 
-        $this->setRow($group, $row, $label, $description, $unitPrice, $quantity);
+        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
     }
 
     /**
@@ -257,17 +303,18 @@ class Order
     /**
      * @param string $group
      * @param string $row
+     * @param string $type
      * @param string $label
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
      */
-    private function setRow($group, $row, $label, $description, $unitPrice, $quantity)
+    private function setRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {
         $this->packageTemplate[$group]['template'][$row] = [
             'label'       => $label,
             'description' => $description,
-            'type'        => 'added_row',
+            'type'        => $type,
             'unitPrice'   => $unitPrice,
         ];
 

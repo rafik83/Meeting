@@ -157,7 +157,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
      */
     public function getInactiveParticipantForSheet(Sheet $sheet)
     {
-            $queryBuilder = $this
+        $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
@@ -189,7 +189,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 // Participant have not unavailability during this slot
                 'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :slot_begin AND :slot_end OR u.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN u.begin AND u.end OR :slot_end BETWEEN u.begin AND u.end))',
                 // Participant have not blocking participation
-                'NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE h.blocking = true AND hp.participant = participant AND (h.begin BETWEEN :slot_begin AND :slot_end OR h.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN h.begin AND h.end OR :slot_end BETWEEN h.begin AND h.end))'
+                'NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant = participant AND (h.begin BETWEEN :slot_begin AND :slot_end OR h.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN h.begin AND h.end OR :slot_end BETWEEN h.begin AND h.end))'
             )
         );
 

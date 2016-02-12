@@ -36,6 +36,6 @@ class ApproveRequestHandler
             $approveRequest->request->addToParticipant($participant);
         }
 
-        $this->requestRepository->set($approveRequest->request);
+        $this->requestRepository->set($approveRequest->request->approve($approveRequest->date));
     }
 }

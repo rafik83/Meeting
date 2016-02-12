@@ -41,13 +41,13 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Request to cancel
 
         $request = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
-        $cancelRequest = new CancelRequest($request, $user);
+        $cancelRequest = new CancelRequest($request, $user, $dateTime, $sheetFrom);
         $cancelRequest->message = 'this is a test';
 
         // Expceted
 
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
-        $expectedRequest->cancel();
+        $expectedRequest->cancel($dateTime);
         $expectedMessage = new Message($expectedRequest, $sheetFrom, 'this is a test', $dateTime);
         $exectedEvent    = new RequestCanceledEvent($user, $request, $dateTime, 'this is a test');
 

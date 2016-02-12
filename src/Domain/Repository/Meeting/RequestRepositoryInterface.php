@@ -14,6 +14,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface RequestRepositoryInterface
 {
@@ -50,10 +51,37 @@ interface RequestRepositoryInterface
 
     /**
      * @param Event $event
+     * @param $page
+     * @param $limit
+     * @param array $filter
+     *
+     * @return PaginatorInterface
+     */
+    public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = []);
+
+    /**
+     * @param Event $event
      * @param int   $page
      * @param int   $limit
      *
      * @return PaginatorInterface
      */
     public function getPendingByEvent(Event $event, $page, $limit);
+
+    /**
+     * @param Sheet $one
+     * @param Sheet $another
+     * @param array $state
+     *
+     * @return Request[]
+     */
+    public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $state);
+
+    /**
+     * @param int  $event
+     * @param User $user
+     *
+     * @return Request[]
+     */
+    public function getRequestsByEventAndUser($event, User $user);
 }

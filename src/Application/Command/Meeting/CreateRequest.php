@@ -34,11 +34,6 @@ class CreateRequest
     public $participants = [];
 
     /**
-     * @var Participant[]
-     */
-    public $toParticipants = [];
-
-    /**
      * @var string
      */
     public $description;

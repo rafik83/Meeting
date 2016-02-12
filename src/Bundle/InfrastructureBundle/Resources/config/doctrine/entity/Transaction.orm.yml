@@ -1,0 +1,21 @@
+Proximum\Vimeet\Domain\Model\Transaction:
+    type:  entity
+    table: transaction
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        amount:
+            type: float
+        date:
+            type: datetime
+        mode:
+            type: string
+        reference:
+            type: string
+            nullable: true
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet

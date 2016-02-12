@@ -46,7 +46,7 @@ class MeetingParticipantChoiceType extends ParticipantChoiceType
                 return $this
                     ->participantRepository
                     ->findAvailableBySheetAndMeeting($options['sheet'], $options['meeting']);
-            }
+            },
         ]);
         $resolver->setRequired('meeting');
     }

@@ -8,7 +8,7 @@
         {{ form_errors(form) }}
         {{ form_row(form.message) }}
         <div>
-            <a href="{{ path('event_sheet_schedule_meeting', { 'subdomain': app.request.attributes.get('subdomain'), 'id': sheet.id, 'schedule_id': schedule.id, 'meeting_id': meeting.id }) }}" class="btn btn-text">Retour</a>
+            <a href="{{ path('event_sheet_schedule_meeting', {  'sheet': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-text">Retour</a>
             {{ form_widget(form.submit) }}
         </div>
     {{ form_end(form) }}

@@ -48,9 +48,9 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1);
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
-        $expectedRequest->setState(Request::STATE_APPROVED);
+        $expectedRequest->approve($dateTime);
 
-        $approveRequest = new ApproveRequest($request);
+        $approveRequest = new ApproveRequest($request, $dateTime);
         $approveRequest->toParticipants = [$toParticipant3, $toParticipant4];
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);

@@ -45,6 +45,16 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    activate_account_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer
     forgotten_password:
         children:
             email:
@@ -97,6 +107,10 @@ form:
         children:
             submit:
                 label: Valider les produits
+    update_product:
+        children:
+            submit:
+                label: Valider
     billing_update:
         children:
             submit:
@@ -113,6 +127,10 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            mode:
+                label: Mode
+            vat:
+                label: TVA
             translations:
                 prototype:
                     children:
@@ -130,7 +148,6 @@ form:
                 label: Ajouter
     planning:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
-
     type_update:
         children:
             translations:
@@ -162,6 +179,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     category_update:
         children:
             translations:
@@ -173,6 +194,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     type_template_field_update:
         children:
             label:
@@ -215,7 +240,15 @@ form:
                 label: Motiver votre demande
             submit:
                 label: Envoyer
-    meeting_request_edit:
+    meeting_request_update_from:
+        children:
+            participants:
+                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
+            description:
+                label: Expliquer pourquoi
+            submit:
+                label: Envoyer
+    meeting_request_update_to:
         children:
             participants:
                 label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
@@ -307,3 +340,189 @@ form:
                 label: Quantité
             submit:
                 label: Enregistrer
+    create_transaction:
+        children:
+            amount:
+                label: Montant
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
+            submit:
+                label: Enregistrer
+    update_transaction:
+        children:
+            amount:
+                label: Montant
+
+            date:
+                label: Date
+            mode:
+                label: Mode de paiement
+            reference:
+                label: Référence
+            submit:
+                label: Enregistrer
+    happening_create:
+        children:
+            category:
+                label: Catégorie
+            begin:
+                label: Date de début
+            end:
+                label: Date de fin
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+            submit:
+                label: Envoyer
+    happening_update:
+        children:
+            category:
+                label: Catégorie
+            begin:
+                label: Date de début
+            end:
+                label: Date de fin
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+            talkings:
+                label: Intervenants
+                prototype:
+                    children:
+                        speaker:
+                            label: Intervenant
+                        position:
+                            label: Position
+                label_add: Ajouter
+                label_delete: Supprimer
+            submit:
+                label: Envoyer
+    admin:
+        meeting_request:
+            list:
+                filter:
+                    state:
+                        children:
+                            approved: Accepté
+                            refused: Refusé
+                            cancel: Annulé
+                            sent: Envoyé
+                    children:
+                        submit:
+                            label: Filtrer
+    change_mail:
+        children:
+            mail:
+                label: Saisir votre nouvel email
+            submit:
+                label: Envoyer
+    create_speaker:
+        children:
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer
+    update_speaker:
+        children:
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            function:
+                label: Function
+            organization:
+                label: Société
+            logo:
+                label: Logo de la société
+            photo:
+                label: Photo de l'intervenant
+            submit:
+                label: Enregistrer
+    filter_spot_type:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
+            submit:
+                label: Envoyer
+    spot_create:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
+            submit:
+                label: Envoyer
+    spot_batch_create:
+        children:
+            recipes:
+                label: Vos identifiants
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        prefix:
+                            label: Préfix
+                        start:
+                            label: Début
+                        end:
+                            label: Fin
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            submit:
+                label: Envoyer

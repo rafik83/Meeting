@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 
 class TaggedInfoGuesser
 {
@@ -50,5 +50,20 @@ class TaggedInfoGuesser
         }, $types);
 
         return $values;
+    }
+
+    /**
+     * @param array      $template
+     * @param array      $data
+     * @param string     $tag
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    public function guessFirst(array $template, array $data, $tag, $default = null)
+    {
+        $info = $this->guess($template, $data, $tag);
+
+        return !empty($info) ? $info[0] : $default;
     }
 }

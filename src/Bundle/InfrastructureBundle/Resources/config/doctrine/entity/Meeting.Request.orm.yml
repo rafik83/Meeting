@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: string
         createdAt:
             type: datetime
+        stateUpdatedAt:
+            type: datetime
     manyToOne:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting

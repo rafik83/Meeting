@@ -37,6 +37,7 @@ class AddRowHandler
         $addRow->order->addRow(
             $addRow->group,
             uniqid(),
+            'added_row',
             $addRow->label,
             $addRow->description,
             $addRow->price,

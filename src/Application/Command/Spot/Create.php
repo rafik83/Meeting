@@ -1,0 +1,56 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Spot;
+
+use Proximum\Vimeet\Domain\Model\Event;
+
+class Create
+{
+    /**
+     * @var string
+     */
+    public $reference;
+
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var float
+     */
+    public $size;
+
+    /**
+     * @var int
+     */
+    public $meetingCapacity = 1;
+
+    /**
+     * @var int
+     */
+    public $seatCapacity = 3;
+
+    /**
+     * @var bool
+     */
+    public $active;
+
+    /**
+     * Create constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
+}

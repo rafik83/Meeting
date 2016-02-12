@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField\TypeTemplateFieldUpdateLibChoiceType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,12 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 class TypeTemplateFieldController extends Controller
 {
     /**
-     * @ParamConverter(
-     *   "type",
-     *   class="Proximum\Vimeet\Domain\Model\Type",
-     *   options={"id" = "type_id"}
-     * )
-     *
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
@@ -54,12 +47,6 @@ class TypeTemplateFieldController extends Controller
     }
 
     /**
-     * @ParamConverter(
-     *   "type",
-     *   class="Proximum\Vimeet\Domain\Model\Type",
-     *   options={"id" = "type_id"}
-     * )
-     *
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
@@ -67,8 +54,8 @@ class TypeTemplateFieldController extends Controller
      * @param string  $key
      *
      * @throws \Exception
-     * @return Response|RedirectResponse
      *
+     * @return Response|RedirectResponse
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $template, $key)
     {
@@ -92,8 +79,8 @@ class TypeTemplateFieldController extends Controller
             $this->addFlash('success', 'flash.admin.type_template_field.update.success');
 
             return $this->redirectToRoute('admin_type_template_field_list', [
-                'id'      => $event->getId(),
-                'type_id' => $type->getId(),
+                'event' => $event->getId(),
+                'type'  => $type->getId(),
             ]);
         }
 

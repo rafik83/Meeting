@@ -1,0 +1,30 @@
+Proximum\Vimeet\Domain\Model\Happening\Speaker:
+    type:  entity
+    table: happening_speaker
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        firstname:
+            type: string
+        lastname:
+            type: string
+        function:
+            type: string
+        organization:
+            type: string
+        logo:
+            type: string
+            nullable: true
+        photo:
+            type: string
+            nullable: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        talkings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
+            mappedBy: speaker
