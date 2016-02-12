@@ -333,6 +333,7 @@ event_meeting_list_proposition:
 event_meeting_request_approve:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approveRequest }
@@ -340,6 +341,7 @@ event_meeting_request_approve:
 event_meeting_request_refuse:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/refuse
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refuseRequest }
@@ -347,6 +349,7 @@ event_meeting_request_refuse:
 event_meeting_request_cancel:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
@@ -354,6 +357,7 @@ event_meeting_request_cancel:
 event_meeting_request_show:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
@@ -361,6 +365,7 @@ event_meeting_request_show:
 event_meeting_request_edit:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:editRequest }

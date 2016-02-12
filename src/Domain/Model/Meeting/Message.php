@@ -77,6 +77,14 @@ class Message
     }
 
     /**
+     * @return MessageSubjectInterface
+     */
+    public function getSubject()
+    {
+        return $this->meeting ? $this->meeting : $this->request;
+    }
+
+    /**
      * Get content
      *
      * @return string
@@ -104,6 +112,16 @@ class Message
     public function getFrom()
     {
         return $this->from;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getTo()
+    {
+        return $this->from === $this->getSubject()->getFromSheet() ?
+            $this->getSubject()->getToSheet() :
+            $this->getSubject()->getFromSheet();
     }
 
     /**
