@@ -14,9 +14,9 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler;
+use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateDataException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -77,6 +77,10 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch(
             'meeting_request.participant.added',
             new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            'meeting_request.update.message',
+            new MessageEvent($expectedMessage, $user1)
         )->shouldBeCalled();
 
         //Handler
@@ -139,6 +143,10 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
             'meeting_request.participant.added',
             new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
         )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            'meeting_request.update.message',
+            new MessageEvent($expectedMessage, $user1)
+        )->shouldBeCalled();
 
         //Handler
         $handler = new UpdateRequestFromHandler(
@@ -197,6 +205,10 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch(
             'meeting_request.participant.added',
             new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            'meeting_request.update.message',
+            new MessageEvent($expectedMessage, $user1)
         )->shouldBeCalled();
 
         //Handler
@@ -258,6 +270,10 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch(
             'meeting_request.participant.added',
             new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            'meeting_request.update.message',
+            new MessageEvent($expectedMessage, $user1)
         )->shouldBeCalled();
 
         //Handler

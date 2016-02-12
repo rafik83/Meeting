@@ -1,19 +1,19 @@
 Proximum\Vimeet\Domain\Model\Category:
     category_exposant:
-        __construct: [@event_rdv_carnot_2016]
-        types: [@type_exposant, @type_investisseur, @type_institute_carnot]
-        event: @event_rdv_carnot_2016
+        __construct: ['@event_rdv_carnot_2016']
+        types: ['@type_exposant', '@type_investisseur', '@type_institute_carnot']
+        event: '@event_rdv_carnot_2016'
     category_visiteur:
-        __construct: [@event_rdv_carnot_2016]
-        types: [@type_visiteur, @type_visiteur_visio]
-        event: @event_rdv_carnot_2016
+        __construct: ['@event_rdv_carnot_2016']
+        types: ['@type_visiteur', '@type_visiteur_visio']
+        event: '@event_rdv_carnot_2016'
 
 Proximum\Vimeet\Domain\Model\CategoryTranslation:
     category_exposant_fr:
-        __construct: [@category_exposant, "fr", "Exposant"]
+        __construct: ['@category_exposant', "fr", "Exposant"]
     category_exposant_en:
-        __construct: [@category_exposant, "en", "Exposant"]
+        __construct: ['@category_exposant', "en", "Exposant"]
     category_visiteur_fr:
-        __construct: [@category_visiteur, "fr", "Visiteur"]
+        __construct: ['@category_visiteur', "fr", "Visiteur"]
     category_visiteur_en:
-        __construct: [@category_visiteur, "en", "Visitor"]
+        __construct: ['@category_visiteur', "en", "Visitor"]

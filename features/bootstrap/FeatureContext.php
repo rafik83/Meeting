@@ -57,13 +57,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @param string $string
-     *
-     * @return string
+     * @param $string
+     * @return mixed
+     * @throws Exception
      */
     public function getLinkFromA($string)
     {
         preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
+
+        if (!isset($result[2][0])) {
+            throw new \Exception(sprintf("The link was not found in \"%s\"", $string));
+        }
 
         return $result[2][0];
     }
@@ -131,11 +135,19 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                $result = $this->getLinkFromA($message->getBody());
+                $headers = $message->getHeaders();
+                if ($headers->has('X-Message-ID')) {
+                    $messageId = $headers->get('X-Message-ID')->getValue();
 
-                if (substr($result, 0, strlen($contain)) === $contain) {
-                    return;
+                    if ($messageId == $type) {
+                        $result = $this->getLinkFromA($message->getBody());
+
+                        if (substr($result, 0, strlen($contain)) === $contain) {
+                            return;
+                        }
+                    }
                 }
+
             }
         }
 
@@ -163,12 +175,20 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($finder as $file) {
                 $message = unserialize(file_get_contents($file));
 
-                $result = $this->getLinkFromA($message->getBody());
+                $headers = $message->getHeaders();
+                if ($headers->has('X-Message-ID')) {
+                    $messageId = $headers->get('X-Message-ID')->getValue();
 
-                if (substr($result, 0, strlen($link)) === $link) {
-                    $this->visitPath($result);
-                    return;
+                    if ($messageId == $type) {
+                        $result = $this->getLinkFromA($message->getBody());
+
+                        if (substr($result, 0, strlen($link)) === $link) {
+                            $this->visitPath($result);
+                            return;
+                        }
+                    }
                 }
+
             }
         }
 

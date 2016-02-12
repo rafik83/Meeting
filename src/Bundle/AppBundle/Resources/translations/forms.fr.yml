@@ -45,6 +45,16 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    activate_account_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer
     forgotten_password:
         children:
             email:
@@ -404,6 +414,12 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    change_mail:
+        children:
+            mail:
+                label: Saisir votre nouvel email
+            submit:
+                label: Envoyer
     create_speaker:
         children:
             firstname:

@@ -79,4 +79,18 @@ class UserRepository implements UserRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

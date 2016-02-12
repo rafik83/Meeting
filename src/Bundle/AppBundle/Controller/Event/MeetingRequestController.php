@@ -151,6 +151,7 @@ class MeetingRequestController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:approvedRequest.html.twig', [
             'eventView' => $eventView,
+            'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
             'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
             'form'      => $form->createView(),
@@ -189,6 +190,7 @@ class MeetingRequestController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:refusedRequest.html.twig', [
             'eventView' => $eventView,
+            'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
             'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
             'form'      => $form->createView(),
@@ -282,6 +284,7 @@ class MeetingRequestController extends BaseController
 
         return $this->render('VimeetAppBundle:Event/MeetingRequest:cancelRequest.html.twig', [
             'eventView' => $eventView,
+            'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
             'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
             'form'      => $form->createView(),

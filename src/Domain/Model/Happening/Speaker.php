@@ -190,6 +190,14 @@ class Speaker
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->firstname . ' ' . strtoupper($this->lastname);
+    }
+
+    /**
      * @return Happening[]
      */
     public function getHappenings()
@@ -199,14 +207,5 @@ class Speaker
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
             ->map(function (Talking $talking) { return $talking->getHappening(); })
             ->toArray();
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->firstname . ' ' . strtoupper($this->lastname);
     }
 }

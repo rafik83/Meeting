@@ -10,5 +10,10 @@ _errors:
     resource: "@TwigBundle/Resources/config/routing/errors.xml"
     prefix:   /_error
 
+event_login_user:
+    path:     /login/{user}
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Security:loginUser }
+
 _main:
     resource: routing.yml

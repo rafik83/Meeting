@@ -45,6 +45,16 @@ form:
                         label: Refill the new password
             submit:
                 label: Submit
+    activate_account_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Submit
     add_participant:
         children:
             email:

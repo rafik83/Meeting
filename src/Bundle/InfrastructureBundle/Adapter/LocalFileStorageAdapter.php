@@ -69,7 +69,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     {
         $filepath = $this->publicDir . $identifier;
 
-        if (file_exists($filepath) && is_writable($filepath)) {
+        if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
             unlink($filepath);
         }
     }

@@ -1,6 +1,6 @@
 <p>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {{ 'login.logged_as'|trans({'%email%': app.user.email}) }}
+        <a href="{{ path('event_account') }}">{{ 'login.logged_as'|trans({'%email%': app.user.email}) }}</a>
 
         {{ render(controller('VimeetAppBundle:Event/Notification:unreadNumber')) }}
 

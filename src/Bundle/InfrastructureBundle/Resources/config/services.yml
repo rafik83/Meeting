@@ -114,6 +114,14 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.change_mail_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ChangeMailTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.happening.speaker:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\SpeakerRepository
         arguments:
@@ -159,6 +167,9 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.token.activate_account_token_generator'
+            - '@repository.activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
@@ -256,7 +267,7 @@ services:
             - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
-            - '@event_dispatcher'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
@@ -374,6 +385,25 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+    command.user.activate_account_password_handler:
+        class: Proximum\Vimeet\Application\Command\User\ActivateAccountPasswordHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.activate_account_token_repository'
+    command.user.change_mail_handler:
+        class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+            - '@components.token.change_mail_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.user.change_mail_activation_handler:
+        class: Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
     command.happening.speaker.create_handler:
         class: Proximum\Vimeet\Application\Command\Happening\Speaker\CreateHandler
         arguments:
@@ -497,6 +527,14 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
+    components.token.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator
+        arguments:
+            - '@datetime'
+    components.token.change_mail_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator
+        arguments:
+            - '@datetime'
 
     #
     # Participant component
@@ -546,6 +584,14 @@ services:
     datetime:
         class: DateTimeImmutable
 
+    #
+    # Mailer
+    #
+    adapter.mailer_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\MailerAdapter
+        arguments:
+            - '@mailer'
+            - '@twig'
 
 
     #
