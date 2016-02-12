@@ -35,5 +35,4 @@ class DeleteBatch
         $this->ids   = $ids;
         $this->event = $event;
     }
-
 }

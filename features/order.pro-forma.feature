@@ -4,12 +4,12 @@ Feature: Pro-forma
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | Template.yml                                                  |
-      | app/Event.yml        |
-      | app/Nomenclature.yml |
-      | app/Type.yml         |
-      | User.yml                                                      |
-      | OneSheetOneParticipantWithBillingDataForProForma.yml          |
+      | Template.yml                                         |
+      | app/Event.yml                                        |
+      | app/Nomenclature.yml                                 |
+      | app/Type.yml                                         |
+      | User.yml                                             |
+      | OneSheetOneParticipantWithBillingDataForProForma.yml |
     Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can see a valid pro-forma

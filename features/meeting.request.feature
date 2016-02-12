@@ -4,13 +4,13 @@ Feature: Meeting Request / Proposition
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | app/Rule.yml     |
-      | User.yml                                                  |
-      | TwoSheetSeveralParticipantWithData.yml                    |
+      | app/Template.yml                       |
+      | app/Event.yml                          |
+      | app/Type.yml                           |
+      | app/Category.yml                       |
+      | app/Rule.yml                           |
+      | User.yml                               |
+      | TwoSheetSeveralParticipantWithData.yml |
 
   Scenario: I can see my meeting request
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

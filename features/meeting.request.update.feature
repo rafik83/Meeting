@@ -4,14 +4,14 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting request that is not yet accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | app/Rule.yml     |
-      | User.yml                                                  |
-      | TwoSheetSeveralParticipantWithData.yml                    |
-      | MeetingRequestStateSent.yml                               |
+      | app/Template.yml                       |
+      | app/Event.yml                          |
+      | app/Type.yml                           |
+      | app/Category.yml                       |
+      | app/Rule.yml                           |
+      | User.yml                               |
+      | TwoSheetSeveralParticipantWithData.yml |
+      | MeetingRequestStateSent.yml            |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
@@ -35,14 +35,14 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting request that is accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | app/Rule.yml     |
-      | User.yml                                                  |
-      | TwoSheetSeveralParticipantWithData.yml                    |
-      | MeetingRequestStateApproved.yml                           |
+      | app/Template.yml                       |
+      | app/Event.yml                          |
+      | app/Type.yml                           |
+      | app/Category.yml                       |
+      | app/Rule.yml                           |
+      | User.yml                               |
+      | TwoSheetSeveralParticipantWithData.yml |
+      | MeetingRequestStateApproved.yml        |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"
@@ -66,14 +66,14 @@ Feature: Meeting Request Update
   Scenario: I can update my meeting proposition that is accepted
     Given the database is empty
     Given the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | app/Rule.yml     |
-      | User.yml                                                  |
-      | TwoSheetSeveralParticipantWithData.yml                    |
-      | MeetingRequest.yml                                        |
+      | app/Template.yml                       |
+      | app/Event.yml                          |
+      | app/Type.yml                           |
+      | app/Category.yml                       |
+      | app/Rule.yml                           |
+      | User.yml                               |
+      | TwoSheetSeveralParticipantWithData.yml |
+      | MeetingRequest.yml                     |
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I fill in "form.login.children.username.label" with "test@test.com"

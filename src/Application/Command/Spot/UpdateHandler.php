@@ -61,5 +61,4 @@ class UpdateHandler
 
         $this->spotRepository->set($spot->update($update->property, $update->value));
     }
-
 }

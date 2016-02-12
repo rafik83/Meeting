@@ -35,5 +35,4 @@ class EnableBatch
         $this->ids   = $ids;
         $this->event = $event;
     }
-
 }
