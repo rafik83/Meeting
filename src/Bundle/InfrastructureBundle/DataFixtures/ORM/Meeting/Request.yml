@@ -1,118 +1,118 @@
 Proximum\Vimeet\Domain\Model\Meeting\Request:
     meeting_approved_request_with_participants:
         __construct:
-            - @sheet_test
-            - [@participant_test]
-            - @sheet_exposant2
-            - [@participant_random_2]
+            - '@sheet_test'
+            - ['@participant_test']
+            - '@sheet_exposant2'
+            - ['@participant_random_2']
             - <dateTimeBetween('-3 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'approved'
     meeting_request1:
         __construct:
-            - @sheet_test
-            - [@participant_test]
-            - @sheet_exposant1
+            - '@sheet_test'
+            - ['@participant_test']
+            - '@sheet_exposant1'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'sent'
     meeting_request2:
         __construct:
-            - @sheet_test
-            - [@participant_test]
-            - @sheet_exposant2
-            - [@participant_random_1]
+            - '@sheet_test'
+            - ['@participant_test']
+            - '@sheet_exposant2'
+            - ['@participant_random_1']
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'approved'
     meeting_request3:
         __construct:
-            - @sheet_test
+            - '@sheet_test'
             - []
-            - @sheet_exposant5
+            - '@sheet_exposant5'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'refused'
     meeting_request4:
         __construct:
-            - @sheet_test
+            - '@sheet_test'
             - []
-            - @sheet_exposant4
+            - '@sheet_exposant4'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'cancelled'
     meeting_request5:
         __construct:
-            - @sheet_test
-            - [@participant_test]
-            - @sheet_exposant6
+            - '@sheet_test'
+            - ['@participant_test']
+            - '@sheet_exposant6'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'sent'
     meeting_request6:
         __construct:
-            - @sheet_test
-            - [@participant_test]
-            - @sheet_exposant7
+            - '@sheet_test'
+            - ['@participant_test']
+            - '@sheet_exposant7'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_test
+            - '@user_test'
         state: 'approved'
     meeting_proposition1:
         __construct:
-            - @sheet_exposant1
+            - '@sheet_exposant1'
             - []
-            - @sheet_test
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: 'sent'
     meeting_proposition2:
         __construct:
-            - @sheet_exposant2
-            - [@participant_random_1, @participant_random_2]
-            - @sheet_test
+            - '@sheet_exposant2'
+            - ['@participant_random_1', '@participant_random_2']
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
     meeting_proposition3:
         __construct:
-            - @sheet_exposant3
+            - '@sheet_exposant3'
             - []
-            - @sheet_test
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
     meeting_proposition4:
         __construct:
-            - @sheet_exposant4
-            - [@participant_random_3]
-            - @sheet_test
+            - '@sheet_exposant4'
+            - ['@participant_random_3']
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
     meeting_proposition5:
         __construct:
-            - @sheet_exposant5
-            - [@participant_random_4]
-            - @sheet_test
+            - '@sheet_exposant5'
+            - ['@participant_random_4']
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
     meeting_proposition6:
         __construct:
-            - @sheet_exposant6
+            - '@sheet_exposant6'
             - []
-            - @sheet_test
+            - '@sheet_test'
             - []
             - <dateTimeBetween('-100 days', 'now')>
-            - @user_random_2
+            - '@user_random_2'
         state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
