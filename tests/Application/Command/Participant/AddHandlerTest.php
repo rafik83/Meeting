@@ -14,6 +14,10 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -22,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,6 +55,28 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
         $participantManager = $this->prophesize(ParticipantManager::class);
+        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+
+        $expectedActivateAccountToken = new ActivateAccountToken(
+            $expectedUser,
+            'STRING',
+            $sheet,
+            new \DateTime()
+        );
+
+        $activateAccountEvent = new ActivateAccountEvent(
+            $expectedUser,
+            $event,
+            $expectedActivateAccountToken,
+            'fr'
+        );
+
+        $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
+        $activateAccountTokenRepository->deleteAllForUser($expectedUser)->shouldBeCalled();
+        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
+        $eventDispatcher->dispatch('activate_account', $activateAccountEvent)->shouldBeCalled();
 
         $add = new Add($sheet, 'fr');
         $add->email = 'test@test.com';
@@ -58,7 +85,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $activateAccountTokenGenerator->reveal(),
+            $activateAccountTokenRepository->reveal(),
+            $eventDispatcher->reveal()
         );
         $handler->handle($add);
     }
@@ -87,6 +117,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
         $participantManager = $this->prophesize(ParticipantManager::class);
+        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
 
         $add = new Add($sheet, 'fr');
@@ -96,7 +129,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $activateAccountTokenGenerator->reveal(),
+            $activateAccountTokenRepository->reveal(),
+            $eventDispatcher->reveal()
         );
         $handler->handle($add);
     }
@@ -135,6 +171,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             return $participant->isActive();
         }))->shouldBeCalled();
 
+        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+
         $add = new Add($sheet, 'fr');
         $add->email = 'test@test.com';
         $add->data  = ['foobar' => 'barfoo'];
@@ -142,7 +182,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $activateAccountTokenGenerator->reveal(),
+            $activateAccountTokenRepository->reveal(),
+            $eventDispatcher->reveal()
         );
         $handler->handle($add);
     }

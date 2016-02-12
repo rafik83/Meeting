@@ -17,6 +17,21 @@ event_register:
     defaults: { _controller: VimeetAppBundle:Event/Home:register }
 
 #
+# Change mail
+#
+event_account:
+    path: /account
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Account:update }
+
+event_activate_new_mail:
+    path: /account/change_mail/{token}
+    methods: [GET]
+    requirements:
+        token: \w+
+    defaults: { _controller: VimeetAppBundle:Event/Account:activateNewMail }
+
+#
 # Forgot password
 #
 
@@ -28,7 +43,20 @@ event_forgotten_password:
 event_create_new_password:
     path: /reset_password/{token}
     methods:  [GET, POST]
+    requirements:
+        token: \w+
     defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
+
+#
+# Activate account
+#
+
+event_activate_account:
+    path: /activate/{token}
+    methods: [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: VimeetAppBundle:Event/ActivateAccount:password }
 
 #
 # Join event
@@ -305,6 +333,7 @@ event_meeting_list_proposition:
 event_meeting_request_approve:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approveRequest }
@@ -312,6 +341,7 @@ event_meeting_request_approve:
 event_meeting_request_refuse:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/refuse
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refuseRequest }
@@ -319,6 +349,7 @@ event_meeting_request_refuse:
 event_meeting_request_cancel:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
@@ -326,6 +357,7 @@ event_meeting_request_cancel:
 event_meeting_request_show:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
@@ -333,6 +365,7 @@ event_meeting_request_show:
 event_meeting_request_edit:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
     requirements:
+        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:editRequest }

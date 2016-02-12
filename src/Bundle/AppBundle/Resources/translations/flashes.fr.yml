@@ -116,3 +116,9 @@ flash:
                 success: Le sous événement a bien été créé
             update:
                 success: Le sous événement a bien été mis à jour
+    activate_account:
+        success: Votre compte a été activé avec succès
+    change_mail:
+        success: Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l'activer
+    change_mail_activate:
+        success: Votre nouveau mail est maintenant associé à votre compte

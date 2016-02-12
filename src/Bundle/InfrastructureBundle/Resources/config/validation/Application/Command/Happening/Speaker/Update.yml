@@ -2,7 +2,9 @@ Proximum\Vimeet\Application\Command\Happening\Speaker\Update:
     properties:
         speaker:
             - NotBlank: ~
-        name:
+        firstname:
+            - NotBlank: ~
+        lastname:
             - NotBlank: ~
         function:
             - NotBlank: ~

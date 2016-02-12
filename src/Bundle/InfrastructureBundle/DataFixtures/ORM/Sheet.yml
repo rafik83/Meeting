@@ -2,8 +2,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
     # Elao sheet
     sheet_test:
         __construct: false
-        type: @type_exposant
-        event: @event_rdv_carnot_2016
+        type: '@type_exposant'
+        event: '@event_rdv_carnot_2016'
         data:
             563cae566af03:
                 563cb103926e6: Elao
@@ -18,16 +18,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
     # Proximum sheets
     proximum_sheet_visiteur:
         __construct: false
-        type: @type_visiteur
-        event: @event_rdv_carnot_2016
+        type: '@type_visiteur'
+        event: '@event_rdv_carnot_2016'
         data:
             563cb00c629d8:
                 563cb02125c23: "Martin & Associés"
         packageData: []
     proximum_sheet_exposant:
         __construct: false
-        type: @type_exposant
-        event: @event_rdv_carnot_2016
+        type: '@type_exposant'
+        event: '@event_rdv_carnot_2016'
         data:
             563cae566af03:
                 563cb103926e6: "BIOTECH"
@@ -35,8 +35,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     proximum_sheet_carnot:
         __construct: false
-        type: @type_institute_carnot
-        event: @event_rdv_carnot_2016
+        type: '@type_institute_carnot'
+        event: '@event_rdv_carnot_2016'
         data:
             563cae566af03:
                 563cb103926e6: "ASSOCIATION DES INSTITUTS CARNOT"
@@ -44,8 +44,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     proximum_sheet_admin:
         __construct: false
-        type: @type_exposant
-        event: @event_rdv_carnot_2016
+        type: '@type_exposant'
+        event: '@event_rdv_carnot_2016'
         data:
             563cae566af03:
                 563cb103926e6: "Vimeet"
@@ -53,8 +53,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     proximum_sheet_test:
         __construct: false
-        type: @type_exposant
-        event: @event_rdv_carnot_2016
+        type: '@type_exposant'
+        event: '@event_rdv_carnot_2016'
         data:
             563cae566af03:
                 563cb103926e6: "Proximum"
@@ -63,7 +63,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         billingData:
             5645e4242d3df: LAROSE
             5645e47e7e499: Proximum
-            5645e52f445d1: test_proximum@proximum.com
+            5645e52f445d1: test_proximum'@proximum'.com
             5645e534daa0b: Proximum
             5645e54061ff2: Chaville
             5645e5f35a9e0: 92370
@@ -72,8 +72,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             5645e610e0e1b: ""
     proximum_sheet_ui:
         __construct: false
-        type: @type_visiteur
-        event: @event_rdv_carnot_2016
+        type: '@type_visiteur'
+        event: '@event_rdv_carnot_2016'
         data:
             563cb00c629d8:
                 563cb02125c23: "CREA"
@@ -82,8 +82,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
     # Random
     sheet_exposant{1..20}:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_exposant
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
         data:
             563cae566af03:
                 563cb103926e6: <company()>
@@ -95,8 +95,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     sheet_investisseur{1..20}:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_investisseur
+        event: '@event_rdv_carnot_2016'
+        type: '@type_investisseur'
         data:
             563cae566af03:
                 563cb103926e6: <company()>
@@ -108,8 +108,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     sheet_visiteur{1..20}:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_visiteur
+        event: '@event_rdv_carnot_2016'
+        type: '@type_visiteur'
         data:
             563cb00c629d8:
                 563cb02125c23: <company()>
@@ -121,8 +121,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
     sheet_visiteur_visio{1..20}:
         __construct: false
-        event: @event_rdv_carnot_2016
-        type: @type_visiteur_visio
+        event: '@event_rdv_carnot_2016'
+        type: '@type_visiteur_visio'
         data:
             563cb00c629d8:
                 563cb02125c23: <company()>

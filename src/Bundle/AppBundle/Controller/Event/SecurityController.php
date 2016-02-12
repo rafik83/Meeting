@@ -11,11 +11,14 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class SecurityController extends Controller
 {
@@ -41,10 +44,15 @@ class SecurityController extends Controller
             'action' => $this->generateUrl('event_login_check'),
         ]);
 
+        $users = $this->get('kernel')->getEnvironment() === 'dev' ?
+            $this->get('vimeet_infrastructure.repository.user_repository')->all() :
+            [];
+
         return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [
             'eventView' => $eventView,
             'error'     => $error,
             'form'      => $form->createView(),
+            'users'     => $users,
         ]);
     }
 
@@ -61,5 +69,22 @@ class SecurityController extends Controller
         return $this->render('VimeetAppBundle:Event/Security:logout_confirmation.html.twig', [
             'eventView' => $eventView,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return RedirectResponse
+     */
+    public function loginUserAction(Request $request, User $user)
+    {
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+
+        $event = new InteractiveLoginEvent($request, $token);
+        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+
+        return $this->redirectToRoute('event');
     }
 }

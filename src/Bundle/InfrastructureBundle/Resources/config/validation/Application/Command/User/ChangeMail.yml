@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\User\ChangeMail:
+    properties:
+        mail:
+            - NotBlank: ~
+            - Email:
+                message: validators.email

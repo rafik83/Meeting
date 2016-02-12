@@ -56,7 +56,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
-            - { name: 'form.type' }
+            - { name: form.type }
+    vimeet_app.form_type_meeting.meeting_request_update_to_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestUpdateToType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
         arguments:
@@ -243,8 +249,8 @@ services:
     vimeet_app.reset_password_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ResetPasswordEventListener
         arguments:
-            - '@mailer'
-            - '@templating.engine.twig'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
         tags:
             - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
     vimeet_app.vimeet.application.event.notification_event_listener:
@@ -256,6 +262,21 @@ services:
             - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
+    event_listener.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ActivateAccountEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'activate_account', method: 'sendToken' }
+    event_listener.change_mail_address_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ChangeMailAddressEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'change_mail', method: 'sendToken' }
+
 
     #
     # Twig extension

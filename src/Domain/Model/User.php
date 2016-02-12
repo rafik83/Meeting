@@ -174,4 +174,12 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @param string $email
+     */
+    public function updateEmail($email)
+    {
+        $this->email = $email;
+    }
 }
