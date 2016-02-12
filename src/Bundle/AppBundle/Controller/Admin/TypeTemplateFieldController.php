@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\AddType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,15 +34,32 @@ class TypeTemplateFieldController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
 
-        $packageObject = $this->get('vimeet_infrastructure.application.components.product.product_builder')
+        $packageObject = $this
+            ->get('vimeet_infrastructure.application.components.product.product_builder')
             ->createFromType($type);
 
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $templates = [
-            'participant' => $templateFactory->createTemplateFromArray($type->getParticipantTemplate()),
-            'sheet'       => $templateFactory->createTemplateFromArray($type->getSheetTemplate()),
-            'package'     => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
+            'participant' => [
+                'template' => $templateFactory->createTemplateFromArray($type->getParticipantTemplate()),
+            ],
+            'sheet'       => [
+                'template' => $templateFactory->createTemplateFromArray($type->getSheetTemplate()),
+            ],
+            'package'     => [
+                'template' => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
+            ],
         ];
+
+        foreach ($templates as $name => $template) {
+            foreach ($template['template']->getGroups() as $group) {
+                $addForm = $this->createForm(AddType::class);
+                $templates[$name]['add'][$group->getName()] = [
+                    'form'     => $addForm,
+                    'formView' => $addForm->createView(),
+                ];
+            }
+        }
 
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
             'event'         => $event,

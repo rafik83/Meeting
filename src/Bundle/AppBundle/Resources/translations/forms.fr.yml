@@ -526,3 +526,12 @@ form:
                 label: Actif
             submit:
                 label: Envoyer
+    admin_lib_add:
+        children:
+            submit:
+                label: Ajouter
+    template:
+        field:
+            type:
+                lib_text: Texte
+                lib_choice: Choix
