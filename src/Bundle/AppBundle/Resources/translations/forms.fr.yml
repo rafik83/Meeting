@@ -179,6 +179,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     category_update:
         children:
             translations:
@@ -190,6 +194,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     type_template_field_update:
         children:
             label:

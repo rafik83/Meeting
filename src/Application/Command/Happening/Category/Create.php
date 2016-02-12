@@ -15,6 +15,11 @@ use Proximum\Vimeet\Domain\Model\Event;
 class Create
 {
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * @var Event
      */
     public $event;
