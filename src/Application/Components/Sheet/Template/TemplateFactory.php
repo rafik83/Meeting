@@ -71,6 +71,24 @@ class TemplateFactory
     }
 
     /**
+     * @param string $typeName
+     *
+     * @return TypeInterface
+     * @throws UnknownTypeException
+     */
+    public function createType($typeName)
+    {
+        $name = sha1(uniqid());
+        $type = $this->getTypeInstance($name, $typeName);
+
+        $resolver = new OptionsResolver();
+        $type->configureOptions($resolver);
+        $type->setOptions($resolver->resolve(['label' => [], 'type' => $typeName]));
+
+        return $type;
+    }
+
+    /**
      * @param string $groupName
      * @param array  $templateData
      *

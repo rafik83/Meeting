@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\AddType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,26 +39,10 @@ class TypeTemplateFieldController extends Controller
 
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $templates = [
-            'participant' => [
-                'template' => $templateFactory->createTemplateFromArray($type->getParticipantTemplate()),
-            ],
-            'sheet'       => [
-                'template' => $templateFactory->createTemplateFromArray($type->getSheetTemplate()),
-            ],
-            'package'     => [
-                'template' => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
-            ],
+            'participant' => $templateFactory->createTemplateFromArray($type->getParticipantTemplate()),
+            'sheet'       => $templateFactory->createTemplateFromArray($type->getSheetTemplate()),
+            'package'     => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
         ];
-
-        foreach ($templates as $name => $template) {
-            foreach ($template['template']->getGroups() as $group) {
-                $addForm = $this->createForm(AddType::class);
-                $templates[$name]['add'][$group->getName()] = [
-                    'form'     => $addForm,
-                    'formView' => $addForm->createView(),
-                ];
-            }
-        }
 
         return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
             'event'         => $event,
@@ -73,9 +56,75 @@ class TypeTemplateFieldController extends Controller
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
-     * @param         $templateName
-     * @param         $group
-     * @param         $row
+     * @param string  $templateName
+     * @param string  $group
+     * @param string  $libType
+     *
+     * @return RedirectResponse|Response
+     * @throws \Exception
+     */
+    public function fieldAddAction(Request $request, Event $event, Type $type, $templateName, $group, $libType)
+    {
+        $typeView = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getTypeViewById($type->getId(), $request->getLocale());
+
+        $templateFactory = $this->get('components.sheet.template_factory');
+        $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
+        $group = $template->getGroup($group);
+
+        $field = $templateFactory->createType($libType);
+        $field->setGroup($group);
+
+        foreach ($event->getLocales() as $locale) {
+            $field->setLocaleLabel($locale, '');
+        }
+
+        $command = $this
+            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory')
+            ->getCommand($field->getRawType());
+
+        $update = new $command($type, $templateName, $field);
+
+        $formClassType = $this
+            ->get('vimeet_app.form_type_admin.library.type_factory')
+            ->getForm($libType);
+
+        $form = $this->createForm($formClassType, $update, [
+            'method'  => 'POST',
+            'locales' => $event->getLocales(),
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this
+                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory')
+                ->getHandler($field->getRawType())
+                ->handle($update);
+
+            $this->addFlash('success', 'flash.admin.type_template_field.update.success');
+
+            return $this->redirectToRoute('admin_type_template_field_list', [
+                'event' => $event->getId(),
+                'type'  => $type->getId(),
+            ]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:add.html.twig', [
+            'event'    => $event,
+            'typeView' => $typeView,
+            'type'     => $type,
+            'form'     => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Type    $type
+     * @param string  $templateName
+     * @param string  $group
+     * @param string  $row
      *
      * @return RedirectResponse|Response
      * @throws \Exception

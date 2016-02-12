@@ -39,6 +39,12 @@ interface TypeInterface
     public function getLabel($locale);
 
     /**
+     * @param string $locale
+     * @param string $label
+     */
+    public function setLocaleLabel($locale, $label);
+
+    /**
      * @return string
      */
     public function getRawType();

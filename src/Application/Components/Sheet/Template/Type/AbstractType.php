@@ -90,6 +90,14 @@ abstract class AbstractType implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function setLocaleLabel($locale, $label)
+    {
+        $this->options['label'][$locale] = $label;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDescription($locale)
     {
         $description = $this->getOption('description');

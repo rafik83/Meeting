@@ -195,6 +195,7 @@ template:
         sheet: Fiche de participation
         package: Forfait
     field:
+        add: Ajouter un champ
         type:
             lib_country: Pays
             lib_text: Texte

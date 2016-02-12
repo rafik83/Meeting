@@ -20,7 +20,7 @@
                 </th>
             </tr>
             {% if templateName != 'package' %}
-                {% for group in template.template.groups %}
+                {% for group in template.groups %}
                     {% if group.label(app.request.locale) != 'Default' %}
                         <tr>
                             <th colspan="6" class="info">
@@ -29,13 +29,11 @@
                         </tr>
                     {% endif %}
 
-                    {% if template.add[group.name].formView is defined %}
-                        <tr>
-                            <td colspan="6">
-                                {% include 'VimeetAppBundle:Admin/TypeTemplateField:addForm.html.twig' with {form: template.add[group.name].formView} %}
-                            </td>
-                        </tr>
-                    {% endif %}
+                    <tr>
+                        <td colspan="6">
+                            {% include 'VimeetAppBundle:Admin/TypeTemplateField:addLinks.html.twig' with {event: event, type: typeView, templateName: templateName, group: group} %}
+                        </td>
+                    </tr>
 
                     {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
                         typeId: typeView.id,
@@ -54,14 +52,6 @@
                             {{ step.label(app.request.locale) }}
                         </th>
                     </tr>
-
-                    {% if template.add[step.key].formView is defined %}
-                        <tr>
-                            <td colspan="6">
-                                {% include 'VimeetAppBundle:Admin/TypeTemplateField:addForm.html.twig' with {form: template.add[step.key].formView} %}
-                            </td>
-                        </tr>
-                    {% endif %}
 
                     {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {step: step} %}
                 {% endfor %}

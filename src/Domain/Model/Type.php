@@ -367,18 +367,10 @@ class Type implements WhoInterface
         $template = $this->getTemplate($templateName);
 
         if ($group == 'default') {
-            if (!isset($template[$row])) {
-                throw new \Exception("$row do not exists in template $templateName");
-            }
-
             $template[$row] = $options;
         } else {
             if (!isset($template[$group])) {
                 throw new \Exception("$group do not exists in template $templateName");
-            }
-
-            if (!isset($template[$group]['template'][$row])) {
-                throw new \Exception("$group / $row do not exists in template $templateName");
             }
 
             $template[$group]['template'][$row] = $options;
