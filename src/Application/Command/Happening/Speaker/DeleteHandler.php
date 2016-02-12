@@ -46,7 +46,13 @@ class DeleteHandler
         $photo = $delete->speaker->getPhoto();
 
         $this->speakerRepository->remove($delete->speaker);
-        $this->fileStorageInterface->remove($logo);
-        $this->fileStorageInterface->remove($photo);
+
+        if ($logo) {
+            $this->fileStorageInterface->remove($logo);
+        }
+
+        if ($photo) {
+            $this->fileStorageInterface->remove($photo);
+        }
     }
 }

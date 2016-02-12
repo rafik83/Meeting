@@ -46,18 +46,19 @@ class UpdateHandler
         $photo = $update->speaker->getPhoto();
 
         $this->speakerRepository->set($update->speaker->update(
-            $update->name,
+            $update->firstname,
+            $update->lastname,
             $update->function,
             $update->organization,
             $update->logo ? $this->fileStorageInterface->upload($update->logo) : $logo,
             $update->photo ? $this->fileStorageInterface->upload($update->photo) : $photo
         ));
 
-        if ($update->logo) {
+        if ($logo !== $update->speaker->getLogo()) {
             $this->fileStorageInterface->remove($logo);
         }
 
-        if ($update->photo) {
+        if ($photo !== $update->speaker->getPhoto()) {
             $this->fileStorageInterface->remove($photo);
         }
     }
