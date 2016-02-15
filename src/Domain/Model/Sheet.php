@@ -250,11 +250,23 @@ class Sheet implements BillingInfoInterface
     /**
      * @param User $user
      *
+     * @return Participant
+     */
+    public function getUserParticipant(User $user)
+    {
+        return $this->participants->filter(function (Participant $participant) use ($user) {
+            return $participant->getUser() === $user;
+        })->first();
+    }
+
+    /**
+     * @param User $user
+     *
      * @return bool
      */
     public function hasUser(User $user)
     {
-        return $this->getParticipants()->exists(function ($index, Participant $participant) use ($user) {
+        return $this->participants->exists(function ($index, Participant $participant) use ($user) {
             return $participant->getUser() === $user;
         });
     }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,10 +42,15 @@ class SecurityController extends Controller
             'action' => $this->generateUrl('event_login_check'),
         ]);
 
+        $users = $this->get('kernel')->getEnvironment() === 'dev' ?
+            $this->get('vimeet_infrastructure.repository.user_repository')->all() :
+            [];
+
         return $this->render('VimeetAppBundle:Event/Security:login.html.twig', [
             'eventView' => $eventView,
             'error'     => $error,
             'form'      => $form->createView(),
+            'users'     => $users,
         ]);
     }
 
@@ -61,5 +67,17 @@ class SecurityController extends Controller
         return $this->render('VimeetAppBundle:Event/Security:logout_confirmation.html.twig', [
             'eventView' => $eventView,
         ]);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function loginUserAction(User $user)
+    {
+        $this->get('adapter.authentication_manager')->authenticate($user);
+
+        return $this->redirectToRoute('event');
     }
 }

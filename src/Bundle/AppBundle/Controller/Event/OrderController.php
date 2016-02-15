@@ -13,10 +13,11 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderController extends BaseController
+class OrderController extends Controller
 {
     /**
      * @param EventView $eventView
@@ -63,7 +64,10 @@ class OrderController extends BaseController
     public function proformaAction(Request $request, EventView $eventView, Sheet $sheet, Order $order)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         if ($order->getSheet() !== $sheet) {
             throw $this->createNotFoundException();

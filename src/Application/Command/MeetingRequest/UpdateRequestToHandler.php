@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
+use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
@@ -85,12 +86,16 @@ class UpdateRequestToHandler
 
         // Add message
         if ($updateRequestTo->description) {
-            $this->messageRepository->add(new Message(
-              $updateRequestTo->meetingRequest,
-              $updateRequestTo->meetingRequest->getToSheet(),
-              $updateRequestTo->description,
-              $updateRequestTo->date
-            ));
+            $message = new Message(
+                $updateRequestTo->meetingRequest,
+                $updateRequestTo->meetingRequest->getToSheet(),
+                $updateRequestTo->description,
+                $updateRequestTo->date
+            );
+
+            $this->messageRepository->add($message);
+
+            $events[] = ['meeting_request.update.message', new MessageEvent($message, $updateRequestTo->editor)];
         }
 
         // Dispatch events

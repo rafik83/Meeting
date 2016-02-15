@@ -52,22 +52,6 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('spot')
-            ->from(Spot::class, 'spot')
-            ->where('spot.event = :event')
-            ->setParameter('event', $event);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findByReference(Event $event, $reference)
     {
         $queryBuilder = $this
@@ -82,5 +66,106 @@ class SpotRepository implements SpotRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotFilter(Event $event, array $filter = [])
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        if (!empty($filter)) {
+            if ($filter['active'] === 0 || $filter['active'] === 1) {
+                $queryBuilder
+                    ->andWhere('spot.active = :active')
+                    ->setParameter('active', $filter['active']);
+            }
+            if ($filter['reference'] !== null && !empty($filter['reference'])) {
+                $queryBuilder
+                    ->andWhere('spot.reference LIKE :reference')
+                    ->setParameter('reference', '%'.$filter['reference'].'%');
+            }
+            if ($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
+                $queryBuilder
+                    ->andWhere('spot.meetingCapacity = :meetingCapacity')
+                    ->setParameter('meetingCapacity', $filter['meetingCapacity']);
+            }
+            if ($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
+                $queryBuilder
+                    ->andWhere('spot.seatCapacity = :seatCapacity')
+                    ->setParameter('seatCapacity', $filter['seatCapacity']);
+            }
+            if ($filter['size'] !== 0 && !empty($filter['size'])) {
+                $queryBuilder
+                    ->andWhere('spot.size = :size')
+                    ->setParameter('size', $filter['size']);
+            }
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->set('spot.active', 'FALSE')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBatchSpot(array $ids, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->set('spot.active', 'TRUE')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        $queryBuilder->getQuery()->execute();
     }
 }

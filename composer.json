@@ -30,7 +30,6 @@
         "elao/error-notifier-bundle": "1.0.7",
         "nelmio/alice": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "~2.3",
-        "maximecolin/satisfaction": "~1.0",
         "knplabs/knp-paginator-bundle": "^2.5"
     },
     "require-dev": {

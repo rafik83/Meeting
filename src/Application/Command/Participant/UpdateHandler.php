@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\UnknownParticipantException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
-class UpdateHandler extends BaseHandler
+class UpdateHandler
 {
     /**
      * @var ParticipantRepositoryInterface
@@ -45,7 +45,7 @@ class UpdateHandler extends BaseHandler
         }
 
         // Check the constraint on the data (required)
-        $this->checkDataConstraint($update->data, $participant->getSheet()->getType()->getParticipantTemplate());
+        (new DataConstraintChecker())->check($update->data, $participant->getSheet()->getType()->getParticipantTemplate());
 
         $participant->setData($update->data);
 

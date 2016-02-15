@@ -133,6 +133,13 @@ admin_spot_list:
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Spot:list }
 
+admin_spot_batch:
+    path: /event/{event}/batch
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Spot:batch }
+
 admin_spot_create:
     path: /event/{event}/spot/create
     requirements:

@@ -45,6 +45,16 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    activate_account_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer
     forgotten_password:
         children:
             email:
@@ -169,6 +179,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     category_update:
         children:
             translations:
@@ -180,6 +194,10 @@ form:
                 label: Sélectionner les types de participation
             submit:
                 label: Enregistrer
+            position:
+                label: Position
+            picto:
+                label: Picto
     type_template_field_update:
         children:
             label:
@@ -404,6 +422,12 @@ form:
                     children:
                         submit:
                             label: Filtrer
+    change_mail:
+        children:
+            mail:
+                label: Saisir votre nouvel email
+            submit:
+                label: Envoyer
     create_speaker:
         children:
             firstname:
@@ -436,6 +460,27 @@ form:
                 label: Photo de l'intervenant
             submit:
                 label: Enregistrer
+    filter_spot_type:
+        children:
+            reference:
+                label: Votre identifiant alphanumérique
+            size:
+                label: Taille en m²
+            meetingCapacity:
+                label: Capacité du nombre de RDV
+            seatCapacity:
+                label: Capacité du nombre de places assises
+            active:
+                label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
+            submit:
+                label: Envoyer
     spot_create:
         children:
             reference:
@@ -448,6 +493,13 @@ form:
                 label: Capacité du nombre de places assises
             active:
                 label: Actif
+            filters:
+                all:
+                    label: Tous
+                yes:
+                    label: Oui
+                no:
+                    label: Non
             submit:
                 label: Envoyer
     spot_batch_create:

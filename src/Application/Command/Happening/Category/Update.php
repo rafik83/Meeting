@@ -15,6 +15,11 @@ use Proximum\Vimeet\Domain\Model\Happening\Category;
 class Update
 {
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * @var Category
      */
     public $category;
@@ -38,6 +43,7 @@ class Update
     {
         $this->category = $category;
         $this->picto    = $category->getPicto();
+        $this->position = $category->getPosition();
 
         foreach ($category->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

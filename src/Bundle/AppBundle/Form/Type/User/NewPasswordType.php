@@ -10,23 +10,20 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Proximum\Vimeet\Application\Command\User\NewPassword;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class NewPasswordType extends AbstractType
+class NewPasswordType extends AbstractPasswordType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $builder
-            ->add('password', RepeatedType::class, [
-                'type'            => PasswordType::class,
-                'invalid_message' => 'validators.password.mismatch',
-            ])
-        ;
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'data_class' => NewPassword::class,
+        ]);
     }
 }

@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+*/
+
+namespace Proximum\Vimeet\Application\Command\Spot;
+
+use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+
+class DeleteBatchHandler
+{
+    /**
+     * @var SpotRepositoryInterface
+     */
+    private $spotRepository;
+
+    /**
+     * DeleteBatchHandler constructor.
+     *
+     * @param SpotRepositoryInterface $spotRepository
+     */
+    public function __construct(SpotRepositoryInterface $spotRepository)
+    {
+        $this->spotRepository = $spotRepository;
+    }
+
+    /**
+     * @param DeleteBatch $deleteBatch
+     */
+    public function handle(DeleteBatch $deleteBatch)
+    {
+        $this->spotRepository->removeBatchSpot($deleteBatch->ids, $deleteBatch->event);
+    }
+}
