@@ -19,13 +19,14 @@ use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountController extends BaseController
+class AccountController extends Controller
 {
     /**
      * @param Request   $request
