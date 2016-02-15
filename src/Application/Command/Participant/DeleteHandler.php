@@ -40,9 +40,7 @@ class DeleteHandler
      */
     public function handle(Delete $delete)
     {
-        $sheetSpecification = new CanAccess($delete->requester);
-
-        if (!$sheetSpecification->isSatisfiedBy($delete->sheet)) {
+        if (!$delete->sheet->hasUser($delete->requester)) {
             throw new IsNotLinkedToSheetException('No participant for this user attached on this sheet');
         }
 

@@ -26,7 +26,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -50,9 +49,7 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheetSpecification = new CanAccess($this->getUser());
-
-        if (!$sheetSpecification->isSatisfiedBy($sheet)) {
+        if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
 
