@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "59ed120122cc5ed594519409aee94cb4",
-    "content-hash": "5cfca386f87fed64b9a7bcbadecf5e5c",
+    "hash": "38c533a5656188f1118ab7c6d98f9258",
+    "content-hash": "637c146898d24cb94f69ce1552ca8d86",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1475,51 +1475,6 @@
             "time": "2015-11-23 17:51:40"
         },
         {
-            "name": "maximecolin/satisfaction",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/maximecolin/satisfaction.git",
-                "reference": "4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/maximecolin/satisfaction/zipball/4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e",
-                "reference": "4ac568cd4f30ad6529dd25f3ae3f37c6b95f231e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.3.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Satisfaction": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Maxime Colin",
-                    "email": "contact@maximecolin.fr"
-                }
-            ],
-            "description": "A PHP implementation of the specification pattern for DDD",
-            "homepage": "http://www.maximecolin.fr",
-            "keywords": [
-                "ddd",
-                "pattern",
-                "specification"
-            ],
-            "time": "2015-10-22 13:34:06"
-        },
-        {
             "name": "monolog/monolog",
             "version": "1.17.2",
             "source": {
@@ -1958,7 +1913,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/97c2f5cd2a3f09ddd5c79725e91ab4ac46729950",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/e72a636faba613807e0d531d5c805e165aa6b87f",
                 "reference": "97c2f5cd2a3f09ddd5c79725e91ab4ac46729950",
                 "shasum": ""
             },
@@ -2664,7 +2619,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/718159921b1d844b8805b5ab2e7d1be34ca323cb",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/e080d0be50fdeb00ee8df23fb585577ca031a628",
                 "reference": "718159921b1d844b8805b5ab2e7d1be34ca323cb",
                 "shasum": ""
             },
@@ -2916,7 +2871,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/296445cec02e36836a6298452631be8e00b1e13a",
+                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/5b4bda64ff456104564317e212c823e45cad9d59",
                 "reference": "296445cec02e36836a6298452631be8e00b1e13a",
                 "shasum": ""
             },
@@ -3465,7 +3420,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/e3f776e30b6ab60a3f57ac7264a6eac6262165fd",
+                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/635318b246ce2cd6a5d22b2118fb02fd1dd99e22",
                 "reference": "e3f776e30b6ab60a3f57ac7264a6eac6262165fd",
                 "shasum": ""
             },

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Command\BaseHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
 use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
@@ -24,7 +24,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AddHandler extends BaseHandler
+class AddHandler
 {
     /**
      * @var UserRepositoryInterface
@@ -92,7 +92,7 @@ class AddHandler extends BaseHandler
         $addNewUser = false;
 
         // Check the constraint on the data (required) before
-        $this->checkDataConstraint($add->data, $add->sheet->getType()->getParticipantTemplate());
+        (new DataConstraintChecker())->check($add->data, $add->sheet->getType()->getParticipantTemplate());
 
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();

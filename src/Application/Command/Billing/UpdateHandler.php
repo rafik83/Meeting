@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Billing;
 
-use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class UpdateHandler extends BaseHandler
+class UpdateHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -37,7 +37,7 @@ class UpdateHandler extends BaseHandler
     public function handle(Update $update)
     {
         // Check the constraint on the data (required)
-        $this->checkDataConstraint($update->billingData, $update->sheet->getEvent()->getBillingTemplate());
+        (new DataConstraintChecker())->check($update->billingData, $update->sheet->getEvent()->getBillingTemplate());
 
         $update->sheet->setBillingData($update->billingData);
 

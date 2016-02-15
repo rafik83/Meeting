@@ -18,12 +18,14 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Billing\BillingUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class BillingController extends BaseController
+class BillingController extends Controller
 {
     /**
      * @param Request   $request
@@ -35,7 +37,10 @@ class BillingController extends BaseController
     public function billingAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $update = new Update($sheet, $sheet->getBillingData());
 
@@ -57,12 +62,9 @@ class BillingController extends BaseController
                     'sheet' => $sheet->getId(),
                 ]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getEvent()->getBillingTemplate(),
-                    $update->billingData,
-                    'billingData'
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -83,7 +85,11 @@ class BillingController extends BaseController
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
+
         $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
 
         if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {

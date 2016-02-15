@@ -442,6 +442,13 @@ services:
         arguments:
             - '%kernel.root_dir%/../web'
             - '@datetime'
+    adapter.authentication_manager:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\AuthenticationManager
+        arguments:
+            - '@security.token_storage'
+            - '@session'
+            - '@event_dispatcher'
+            - '@request_stack'
 
     #
     # Components

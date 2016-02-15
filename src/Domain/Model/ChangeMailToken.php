@@ -92,4 +92,14 @@ class ChangeMailToken
     {
         return $this->expireDate;
     }
+
+    /**
+     * @param DateTimeInterface $dateTime
+     *
+     * @return bool
+     */
+    public function isExpired(\DateTimeInterface $dateTime)
+    {
+        return $dateTime > $this->expireDate;
+    }
 }

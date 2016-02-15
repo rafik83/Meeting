@@ -26,15 +26,15 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class SheetController extends BaseController
+class SheetController extends Controller
 {
     /**
      * Sheet.
@@ -49,10 +49,8 @@ class SheetController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheetSpecification = new CanAccess($this->getUser());
-
-        if (!$sheetSpecification->isSatisfiedBy($sheet)) {
-            throw new AccessDeniedException('No participant for this user attached on this sheet');
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
 
         $typeView = $this
@@ -95,7 +93,7 @@ class SheetController extends BaseController
         $participantManager = $this->get('vimeet_infrastructure.application.components.participant.participant_manager');
 
         if ($participantManager->canAddParticipant($sheet) <= 0) {
-            throw new AccessDeniedException('You can not add a new participant');
+            throw $this->createAccessDeniedException('You can not add a new participant');
         }
 
         $add  = new Add($sheet, $request->getLocale());
@@ -113,22 +111,13 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (EmailCanNotBeNullException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('validators.field.required', [], 'validators'),
-                    $form->get('email')
-                );
+                $form->get('email')->addError(new FormError('validators.field.required'));
             } catch (ParticipantAlreadyExistException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('event.sheet.participant.already_exists'),
-                    $form->get('email')
-                );
+                $form->get('email')->addError(new FormError('event.sheet.participant.already_exists'));
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $add->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -147,24 +136,20 @@ class SheetController extends BaseController
      *
      * @return Response
      */
-    public function updateParticipantAction(
-        Request $request,
-        EventView $eventView,
-        Sheet $sheet,
-        Participant $participant
-    ) {
+    public function updateParticipantAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
-            throw new AccessDeniedException('You can not update other participant');
+            throw $this->createAccessDeniedException('You can not update other participant');
         }
 
         $updateParticipant = new Update($participant->getId(), $participant->getData());
         $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
+            'submit'   => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -177,12 +162,9 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $updateParticipant->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -204,7 +186,10 @@ class SheetController extends BaseController
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
 
@@ -221,21 +206,15 @@ class SheetController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
-                    ->handle($updateBlock);
-
+                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getSheetTemplate()[$block]['template'],
-                    $updateBlock->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -262,9 +241,7 @@ class SheetController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')
-                    ->handle($delete);
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
                 $this->addFlash('success', 'flash.sheet.delete_participant.success');
             } catch (IsNotLinkedToSheetException $exception) {
                 $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');

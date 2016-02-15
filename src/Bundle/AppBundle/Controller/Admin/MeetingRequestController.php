@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeetingRequestController extends Controller
 {
@@ -116,8 +115,8 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        if ($meetingRequest->getState() !== MeetingRequest::STATE_APPROVED) {
-            throw new NotFoundHttpException();
+        if (!$meetingRequest->isApproved()) {
+            throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
         }
 
         $command = new PositionMeeting($meetingRequest, new \DateTime());
