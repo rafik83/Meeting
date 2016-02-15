@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
 
 /**
  * "Lieu".
@@ -144,5 +145,35 @@ class Spot
     public function isActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @param string $property
+     * @param int    $value
+     *
+     * @return Spot
+     * @throws PropertyNotSupportedException
+     */
+    public function update($property, $value)
+    {
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $property
+     *
+     * @return mixed
+     */
+    public function value($property)
+    {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+
+        return null;
     }
 }

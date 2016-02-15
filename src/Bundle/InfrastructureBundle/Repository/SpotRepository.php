@@ -33,7 +33,7 @@ class SpotRepository implements SpotRepositoryInterface
     }
 
     /**
-     * @param Spot $spot
+     * {@inheritdoc}
      */
     public function add(Spot $spot)
     {
@@ -42,11 +42,30 @@ class SpotRepository implements SpotRepositoryInterface
     }
 
     /**
-     * @param Spot $spot
+     * {@inheritdoc}
      */
     public function set(Spot $spot)
     {
         $this->entityManager->flush($spot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find(Event $event, $id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('spot.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -121,7 +140,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->delete()
-            ->from('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
@@ -139,7 +158,7 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->update(Spot::class, 'spot')
             ->set('spot.active', 'FALSE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
@@ -158,7 +177,7 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->update('Proximum\Vimeet\Domain\Model\Spot', 'spot')
+            ->update(Spot::class, 'spot')
             ->set('spot.active', 'TRUE')
             ->where('spot.event = :event')
             ->setParameter('event', $event)
