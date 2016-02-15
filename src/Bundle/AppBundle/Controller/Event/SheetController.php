@@ -139,12 +139,8 @@ class SheetController extends Controller
      *
      * @return Response
      */
-    public function updateParticipantAction(
-        Request $request,
-        EventView $eventView,
-        Sheet $sheet,
-        Participant $participant
-    ) {
+    public function updateParticipantAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
