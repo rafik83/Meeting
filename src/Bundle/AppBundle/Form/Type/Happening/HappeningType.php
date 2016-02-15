@@ -34,10 +34,11 @@ abstract class HappeningType extends AbstractType
                 'label'      => false,
             ])
             ->add('talkings', CollectionType::class, [
-                'entry_type'    => TalkingType::class,
-                'entry_options' => ['label' => false],
-                'allow_add'     => true,
-                'allow_delete'  => true,
+                'entry_type'     => TalkingType::class,
+                'entry_options'  => ['label' => false],
+                'prototype_data' => ['speaker' => null, 'position' => 0],
+                'allow_add'      => true,
+                'allow_delete'   => true,
             ])
         ;
     }
