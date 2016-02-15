@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -28,60 +29,26 @@ class BaseController extends Controller
      * @param Form             $form
      * @param array            $template
      * @param array            $data
-     * @param $formData
+     * @param FormInterface    $formData
      *
      * @return Form
      */
-    protected function addErrorOnForm(PackageException $exception, Form $form, array $template, array $data, $formData)
+    protected function addErrorOnForm(PackageException $exception, Form $form, array $template, array $data, FormInterface $formData)
     {
         if ($exception instanceof BoughtParticipantAlreadyAddedException) {
             foreach ($data as $key => $value) {
-                if (isset($template['template'][$key])
-                    && isset($value['participant'])
-                    && $value['participant'] === false
-                ) {
-                    $error = new FormError(
-                        $this
-                            ->get('translator')
-                            ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
-                    );
-                    $formData->get($key)->addError($error);
-                } elseif (isset($template['template'][$key])
-                    && isset($value['participant'])
-                    && $value['participant'] === true
-                ) {
-                    $error = new FormError(
-                        $this
-                            ->get('translator')
-                            ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
-                    );
-                    $formData->get($key)->addError($error);
+                if (isset($template['template'][$key]) && isset($value['participant']) && $value['participant'] === false) {
+                    $formData->get($key)->addError(new FormError('validators.option.participant.optionCanNotBeUnselected'));
+                } elseif (isset($template['template'][$key]) && isset($value['participant']) && $value['participant'] === true) {
+                    $formData->get($key)->addError(new FormError('validators.option.participant.alreadyAddedBoughtParticipant'));
                 }
             }
         } elseif ($exception instanceof ForgotToAddQuantityException) {
             foreach ($data as $key => $value) {
-                if (isset($template['template'][$key])
-                    && isset($value['participant'])
-                    && $value['participant'] === true
-                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
-                ) {
-                    $error = new FormError(
-                        $this
-                            ->get('translator')
-                            ->trans('validators.option.quantityMustBeAdded', [], 'validators')
-                    );
-                    $formData->get($key)->get('participant')->addError($error);
-                } elseif (isset($template['template'][$key])
-                    && isset($value['planning'])
-                    && $value['planning'] === true
-                    && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))
-                ) {
-                    $error = new FormError(
-                        $this
-                            ->get('translator')
-                            ->trans('validators.option.quantityMustBeAdded', [], 'validators')
-                    );
-                    $formData->get($key)->get('planning')->addError($error);
+                if (isset($template['template'][$key]) && isset($value['participant']) && $value['participant'] === true && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))) {
+                    $formData->get($key)->get('participant')->addError(new FormError('validators.option.quantityMustBeAdded'));
+                } elseif (isset($template['template'][$key]) && isset($value['planning']) && $value['planning'] === true && (!isset($value['quantity']) || (isset($value['quantity']) && $value['quantity'] === 0))) {
+                    $formData->get($key)->get('planning')->addError(new FormError('validators.option.quantityMustBeAdded'));
                 }
             }
         }
@@ -95,45 +62,19 @@ class BaseController extends Controller
             foreach ($data as $stepKey => $step) {
                 foreach ($step as $productKey => $product) {
                     if (isset($product['participant'])) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.option.participant.optionCanNotBeUnselected', [], 'validators')
-                        );
-                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError(new FormError('validators.option.participant.optionCanNotBeUnselected'));
                     } elseif (isset($product['participant']) && $product['participant'] === false) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.option.participant.alreadyAddedBoughtParticipant', [], 'validators')
-                        );
-                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError(new FormError('validators.option.participant.alreadyAddedBoughtParticipant'));
                     }
                 }
             }
         } elseif ($exception instanceof ForgotToAddQuantityException) {
             foreach ($data as $stepKey => $step) {
                 foreach ($step as $productKey => $product) {
-                    if (isset($product['planning'])
-                        && $product['planning'] === true
-                        && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.option.quantityMustBeAdded', [], 'validators')
-                        );
-                        $form->get('packageData')->get($stepKey)->get($productKey)->get('planning')->addError($error);
-                    } elseif (isset($product['participant'])
-                        && $product['participant'] === true
-                        && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))
-                    ) {
-                        $error = new FormError(
-                            $this
-                                ->get('translator')
-                                ->trans('validators.option.quantityMustBeAdded', [], 'validators')
-                        );
-                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError($error);
+                    if (isset($product['planning']) && $product['planning'] === true && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))) {
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('planning')->addError(new FormError('validators.option.quantityMustBeAdded'));
+                    } elseif (isset($product['participant']) && $product['participant'] === true && (!isset($product['quantity']) || (isset($product['quantity']) && $product['quantity'] === 0))) {
+                        $form->get('packageData')->get($stepKey)->get($productKey)->get('participant')->addError(new FormError('validators.option.quantityMustBeAdded'));
                     }
                 }
             }
