@@ -165,7 +165,7 @@ class HomeController extends BaseController
             ->getAllParticipantForUser($userId);
 
         if (1 <= count($participants)) {
-            throw new AccessDeniedException('Participation already created');
+            throw $this->createAccessDeniedException('Participation already created');
         }
     }
 }

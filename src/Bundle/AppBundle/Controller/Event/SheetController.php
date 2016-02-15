@@ -53,7 +53,7 @@ class SheetController extends BaseController
         $sheetSpecification = new CanAccess($this->getUser());
 
         if (!$sheetSpecification->isSatisfiedBy($sheet)) {
-            throw new AccessDeniedException('No participant for this user attached on this sheet');
+            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
 
         $typeView = $this
@@ -96,7 +96,7 @@ class SheetController extends BaseController
         $participantManager = $this->get('vimeet_infrastructure.application.components.participant.participant_manager');
 
         if ($participantManager->canAddParticipant($sheet) <= 0) {
-            throw new AccessDeniedException('You can not add a new participant');
+            throw $this->createAccessDeniedException('You can not add a new participant');
         }
 
         $add  = new Add($sheet, $request->getLocale());
@@ -148,7 +148,7 @@ class SheetController extends BaseController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
-            throw new AccessDeniedException('You can not update other participant');
+            throw $this->createAccessDeniedException('You can not update other participant');
         }
 
         $updateParticipant = new Update($participant->getId(), $participant->getData());
