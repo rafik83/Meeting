@@ -22,17 +22,9 @@ class BaseHandler
      */
     public function checkDataConstraint(array $data, array $template)
     {
-        $keys = [];
-
-        foreach ($data as $key => $value) {
-            if (isset($template[$key])
-                && isset($template[$key]['required'])
-                && $template[$key]['required'] === true
-                && $value === null
-            ) {
-                $keys[] = $key;
-            }
-        }
+        $keys = array_keys(array_filter($data, function ($value, $key) use ($template) {
+            return isset($template[$key]) && isset($template[$key]['required']) && $template[$key]['required'] === true && $value === null;
+        }, ARRAY_FILTER_USE_BOTH));
 
         if (!empty($keys)) {
             throw new RequiredDataEmptyException($keys);
