@@ -214,6 +214,11 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.batch_create_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
+        arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
+            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler:
             class: Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler
             arguments:
@@ -222,15 +227,14 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\DisableBatchHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.update_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
     vimeet_infrastructure.vimeet.application.command.spot.enable_batch_handler:
             class: Proximum\Vimeet\Application\Command\Spot\EnableBatchHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
-    command.spot.batch_create_handler:
-        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
-        arguments:
-            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
-            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:

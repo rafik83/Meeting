@@ -4,12 +4,12 @@ Feature: Update a sheet block
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | User.yml                                                  |
-      | Sheet.yml                                                 |
-      | OneSheetSeveralParticipants.yml                           |
+      | app/Template.yml                |
+      | app/Event.yml                   |
+      | app/Type.yml                    |
+      | User.yml                        |
+      | Sheet.yml                       |
+      | OneSheetSeveralParticipants.yml |
 
   Scenario: I can set my company informations
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"

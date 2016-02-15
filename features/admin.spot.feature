@@ -26,7 +26,7 @@ Feature: Spot feature
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml |
-      | Spot.yml                                               |
+      | Spot.yml      |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
@@ -38,7 +38,7 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
-      | Spot.yml                                                  |
+      | Spot.yml         |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
@@ -59,7 +59,7 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
-      | Spot.yml                                                  |
+      | Spot.yml         |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
@@ -80,7 +80,7 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
-      | Spot.yml                                                  |
+      | Spot.yml         |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
@@ -103,7 +103,7 @@ Feature: Spot feature
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml    |
-      | Spot.yml                                                  |
+      | Spot.yml         |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
@@ -117,7 +117,7 @@ Feature: Spot feature
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml    |
-      | Spot.yml                                                  |
+      | Spot.yml         |
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"

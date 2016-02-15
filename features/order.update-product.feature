@@ -5,8 +5,8 @@ Feature: Update a product purchased
     Given the database is empty
     And the following fixtures files are loaded:
       | Template.yml                                           |
-      | app/Event.yml |
-      | app/Type.yml  |
+      | app/Event.yml                                          |
+      | app/Type.yml                                           |
       | User.yml                                               |
       | OneSheetOneParticipantWithBillingDataForProForma.yml   |
     Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"

@@ -31,13 +31,13 @@ class FilterSpotType extends AbstractType
                 'label' => 'form.filter_spot_type.children.reference.label'
             ])
             ->add('meetingCapacity', IntegerType::class, [
-                'label' => 'form.filter_spot_type.children.meetingCapacity.label',
+                'label' => 'form.filter_spot_type.children.meetingCapacity.label'
             ])
             ->add('seatCapacity', IntegerType::class, [
-                'label' => 'form.filter_spot_type.children.seatCapacity.label',
+                'label' => 'form.filter_spot_type.children.seatCapacity.label'
             ])
             ->add('size', NumberType::class, [
-                'label' => 'form.filter_spot_type.children.size.label',
+                'label' => 'form.filter_spot_type.children.size.label'
             ])
             ->add('active', ChoiceType::class, [
                 'label'             => 'form.filter_spot_type.children.active.label',

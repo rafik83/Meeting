@@ -27,6 +27,22 @@ interface SpotRepositoryInterface
 
     /**
      * @param Event $event
+     * @param integer $id
+     *
+     * @return Spot
+     */
+    public function find(Event $event, $id);
+
+    /**
+     * @param Event $event
+     * @param array $filter
+     *
+     * @return Spot[]
+     */
+    public function getSpotFilter(Event $event, array $filter = []);
+
+    /**
+     * @param Event  $event
      * @param string $reference
      *
      * @return Spot
@@ -50,12 +66,4 @@ interface SpotRepositoryInterface
      * @param Event $event
      */
     public function enableBatchSpot(array $ids, Event $event);
-
-    /**
-     * @param Event $event
-     * @param array $filter
-     *
-     * @return Event[]
-     */
-    public function getSpotFilter(Event $event, array $filter = []);
 }

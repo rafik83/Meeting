@@ -5,7 +5,7 @@ Feature: Change password
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml |
-      | User.yml                                               |
+      | User.yml      |
 
   Scenario: Change the password successfully
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
