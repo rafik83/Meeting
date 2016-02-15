@@ -36,7 +36,10 @@ class BillingController extends BaseController
     public function billingAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $update = new Update($sheet, $sheet->getBillingData());
 
@@ -81,7 +84,11 @@ class BillingController extends BaseController
     public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
+
         $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
 
         if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {

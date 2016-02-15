@@ -193,7 +193,10 @@ class SheetController extends BaseController
     public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
 

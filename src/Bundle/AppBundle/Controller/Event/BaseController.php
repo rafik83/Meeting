@@ -82,26 +82,6 @@ class BaseController extends Controller
     }
 
     /**
-     * @param \Traversable|array $participants
-     *
-     * @throws AccessDeniedException
-     */
-    protected function denyAccessForNonParticipant($participants)
-    {
-        $isUserParticipant = false;
-
-        foreach ($participants as $participant) {
-            if ($this->getUser() === $participant->getUser()) {
-                $isUserParticipant = true;
-            }
-        }
-
-        if (!$isUserParticipant) {
-            throw new AccessDeniedException('You can not update this data');
-        }
-    }
-
-    /**
      * Authenticate user.
      *
      * @param User $user

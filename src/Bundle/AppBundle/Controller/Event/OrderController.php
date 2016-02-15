@@ -63,7 +63,10 @@ class OrderController extends BaseController
     public function proformaAction(Request $request, EventView $eventView, Sheet $sheet, Order $order)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         if ($order->getSheet() !== $sheet) {
             throw $this->createNotFoundException();

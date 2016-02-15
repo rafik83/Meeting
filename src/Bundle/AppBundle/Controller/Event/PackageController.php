@@ -45,7 +45,11 @@ class PackageController extends BaseController
     public function updateStepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
+
         $this->denyAccessPackageStepNotExists($sheet, $step);
         $this->denyAccessAfterFirstOrderGenerated($sheet);
 
@@ -117,7 +121,10 @@ class PackageController extends BaseController
     public function cartAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $cart     = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
         $cartView = null;
@@ -143,7 +150,10 @@ class PackageController extends BaseController
     public function addProductsAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $cart = $this
             ->get('vimeet_infrastructure.application.components.cart.cart_manager')
@@ -208,7 +218,10 @@ class PackageController extends BaseController
     public function updateProductAction(Request $request, EventView $eventView, Sheet $sheet, $groupId, $rowId)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessForNonParticipant($sheet->getParticipants());
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('You can not update this data');
+        }
 
         $orderMerge = $this
             ->get('components.sheet.order_merge_factory')
