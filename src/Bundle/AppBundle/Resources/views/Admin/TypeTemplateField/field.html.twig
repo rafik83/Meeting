@@ -3,9 +3,7 @@
     <td>{{ ('template.field.type.' ~ type.rawType)|trans  }}</td>
     <td>{{ type.required|boolean_tick }}</td>
     <td>{{ type.private|boolean_tick }}</td>
-    <td>
-        {{ type.rawType == 'lib_choice' ? type.choices|choices_list(app.request.locale) : '' }}
-    </td>
+    <td></td>
     <td>
         {% if type.isEditable %}
             <a href="{{ path('admin_type_template_field_update', {
