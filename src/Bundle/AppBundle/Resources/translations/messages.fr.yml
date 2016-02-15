@@ -243,6 +243,8 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    sheet:
+        link: Fiches
     meeting_request:
         list:
             state:
