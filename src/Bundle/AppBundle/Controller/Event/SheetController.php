@@ -61,27 +61,21 @@ class SheetController extends Controller
 
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
+            ->getTypeViewById($sheet->getType()->getId(), $locale);
 
         $sheetDataView = $this
             ->get('vimeet_infrastructure.application.components.sheet.manager')
-            ->getSheetDataView($sheet, $this->getUser());
+            ->getSheetDataView($sheet, $this->getUser(), $locale);
 
-        $buttonParticipant = $this->get('vimeet_infrastructure.application.components.participant.participant_manager')->canBuyOrAddParticipant($sheet);
-
-        $participantDeleteForms = $this->addDeleteParticipantForm(
-            $request,
-            $sheet,
-            $sheetDataView->currentUserParticipant,
-            $sheetDataView->participantViews
-        );
+        $buttonParticipant = $this
+            ->get('vimeet_infrastructure.application.components.participant.participant_manager')
+            ->canBuyOrAddParticipant($sheet);
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'sheet'                    => $sheet,
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheetDataView'            => $sheetDataView,
-            'participant_delete_forms' => $participantDeleteForms,
             'buttonParticipant'        => $buttonParticipant,
         ]);
     }
@@ -261,42 +255,5 @@ class SheetController extends Controller
 
         // Go to the sheet
         return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
-    }
-
-    /**
-     * @param Request     $request
-     * @param Sheet       $sheet
-     * @param Participant $userParticipant
-     * @param array       $participantViews
-     *
-     * @return array
-     */
-    private function addDeleteParticipantForm(Request $request, Sheet $sheet, Participant $userParticipant, array $participantViews)
-    {
-        $participantDeleteForms = [];
-
-        if ($userParticipant->isOwner()) {
-            foreach ($participantViews as $participantView) {
-                if (!$participantView->owner) {
-                    $delete = new Delete($sheet, $this->getUser(), $participantView->id);
-
-                    $participantDeleteForms[$participantView->id] = $this->createForm(
-                        DeleteParticipantType::class,
-                        $delete,
-                        [
-                            'action' => $this->generateUrl(
-                                'event_sheet_delete_participant',
-                                [
-                                    'sheet'       => $sheet->getId(),
-                                    'participant' => $participantView->id,
-                                ]
-                            ),
-                        ]
-                    )->createView();
-                }
-            }
-        }
-
-        return $participantDeleteForms;
     }
 }

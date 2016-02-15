@@ -1,3 +1,5 @@
+{% import 'VimeetAppBundle::macro.html.twig' as macro %}
+
 <table class="table table-bordered table-condensed">
     {% for key, field in template %}
         {% if field['private'] == false %}
@@ -23,16 +25,13 @@
         </td>
         <td>
             {% if participantView.userId == app.user.id %}
-                <a href="{{ path('event_sheet_update_participant', {
-                    'sheet': sheetDataView.id,
-                    'participant': participantView.id,
-                }) }}" class="btn btn-xs btn-default">{{ 'event.sheet.block.update_participant.title'|trans }}</a>
+                <a href="{{ path('event_sheet_update_participant', { 'sheet': sheetDataView.id, 'participant': participantView.id }) }}" class="btn btn-xs btn-default">
+                    {{ 'event.sheet.block.update_participant.title'|trans }}
+                </a>
             {% endif %}
 
-            {% if participant_delete_form is not null %}
-                {{ form_start(participant_delete_form) }}
-                {{ form_widget(participant_delete_form.submit, {attr: {class: 'btn btn-xs btn-danger'}}) }}
-                {{ form_end(participant_delete_form) }}
+            {% if not participantView.owner %}
+                {{ macro.delete_button(path('event_sheet_delete_participant', { 'sheet': sheet.id, 'participant': participantView.id }), 'Supprimer', { 'class': 'btn btn-danger btn-xs' }) }}
             {% endif %}
         </td>
     </tr>

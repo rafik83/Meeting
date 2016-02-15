@@ -68,12 +68,13 @@ class SheetManager
     }
 
     /**
-     * @param Sheet $sheet
-     * @param User  $user
+     * @param Sheet  $sheet
+     * @param User   $user
+     * @param string $locale
      *
      * @return SheetDataView
      */
-    public function getSheetDataView(Sheet $sheet, User $user)
+    public function getSheetDataView(Sheet $sheet, User $user, $locale)
     {
         return new SheetDataView(
             $sheet->getId(),
