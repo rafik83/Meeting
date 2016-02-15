@@ -3,6 +3,12 @@
 {% block title eventView.title %}
 
 {% block content %}
+    <ul>
+        {% for locale in eventView.locales %}
+            <li><a href="{{ path('event_sheet', { 'sheet': sheet.id, 'locale': locale }) }}">{{ locale|locale }}</a></li>
+        {% endfor %}
+    </ul>
+
     <h2>{{ typeView.title }}</h2>
 
     <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>

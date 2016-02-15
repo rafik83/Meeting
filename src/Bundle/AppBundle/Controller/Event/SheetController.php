@@ -53,6 +53,12 @@ class SheetController extends Controller
             throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
 
+        $locale = $request->query->get('locale', $request->getLocale());
+
+        if (!$eventView->hasLocale($locale)) {
+            throw $this->createNotFoundException('Locale not available for this event.');
+        }
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($sheet->getType()->getId(), $request->getLocale());
@@ -71,6 +77,7 @@ class SheetController extends Controller
         );
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
+            'sheet'                    => $sheet,
             'eventView'                => $eventView,
             'typeView'                 => $typeView,
             'sheetDataView'            => $sheetDataView,
