@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetExceptio
 use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 
 class DeleteHandler
 {
