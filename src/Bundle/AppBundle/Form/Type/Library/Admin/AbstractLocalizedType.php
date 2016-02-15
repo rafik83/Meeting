@@ -29,12 +29,15 @@ class AbstractLocalizedType extends AbstractType
         $builder
             ->add('label', CollectionType::class, [
                 'entry_type' => TextType::class,
+                'label' => 'form.admin_lib.children.label.label',
             ])
             ->add('required', CheckboxType::class, [
                 'required' => false,
+                'label' => 'form.admin_lib.children.required.label',
             ])
             ->add('private', CheckboxType::class, [
                 'required' => false,
+                'label' => 'form.admin_lib.children.private.label',
             ])
         ;
     }

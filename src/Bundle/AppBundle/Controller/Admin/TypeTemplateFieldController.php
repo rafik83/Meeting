@@ -90,7 +90,7 @@ class TypeTemplateFieldController extends Controller
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
-        $form->add('submit', SubmitType::class);
+        $form->add('submit', SubmitType::class, ['label' => 'form.admin_lib.children.submit.label']);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
@@ -155,7 +155,7 @@ class TypeTemplateFieldController extends Controller
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
-        $form->add('submit', SubmitType::class);
+        $form->add('submit', SubmitType::class, ['label' => 'form.admin_lib.children.submit.label']);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
