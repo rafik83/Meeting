@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
 use Proximum\Vimeet\Domain\Model\Type;
 
-abstract class AbstractUpdate
+abstract class AbstractCommand
 {
     /**
      * @var Type
@@ -68,7 +68,8 @@ abstract class AbstractUpdate
         $this->private  = $field->isPrivate();
 
         foreach ($type->getEvent()->getLocales() as $locale) {
-            $this->label[$locale] = $field->getLabel($locale);
+            $label = $field->getLabel($locale);
+            $this->label[$locale] = null !== $label ? $label : '';
         }
     }
 }

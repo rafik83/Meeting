@@ -14,33 +14,6 @@ use Proximum\Vimeet\Application\Command\TypeTemplateField\AbstractUpdate;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibChoiceType;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Update extends AbstractUpdate
+class Update extends AbstractChoice
 {
-    /**
-     * @var array
-     */
-    public $choices = [];
-
-    /**
-     * UpdateLibChoice constructor.
-     *
-     * @param Type          $type
-     * @param string        $templateName
-     * @param LibChoiceType $field
-     */
-    public function __construct(Type $type, $templateName, LibChoiceType $field)
-    {
-        parent::__construct($type, $templateName, $field);
-
-        $this->choices = $field->getChoices();
-
-        // ensure that all choices has all event locales label translations
-        foreach ($this->choices as $key => $choice) {
-            foreach ($type->getEvent()->getLocales() as $locale) {
-                $this->choices[$key]['label'][$locale] = isset($choice['label'][$locale])
-                    ? $choice['label'][$locale]
-                    : '';
-            }
-        }
-    }
 }

@@ -76,21 +76,17 @@ class TypeTemplateFieldController extends Controller
         $field = $templateFactory->createType($libType);
         $field->setGroup($group);
 
-        foreach ($event->getLocales() as $locale) {
-            $field->setLocaleLabel($locale, '');
-        }
-
         $command = $this
-            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory')
+            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.create_factory')
             ->getCommand($field->getRawType());
 
-        $update = new $command($type, $templateName, $field);
+        $create = new $command($type, $templateName, $field);
 
         $formClassType = $this
             ->get('vimeet_app.form_type_admin.library.type_factory')
             ->getForm($libType);
 
-        $form = $this->createForm($formClassType, $update, [
+        $form = $this->createForm($formClassType, $create, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
@@ -98,11 +94,11 @@ class TypeTemplateFieldController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this
-                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory')
+                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.create_handler_factory')
                 ->getHandler($field->getRawType())
-                ->handle($update);
+                ->handle($create);
 
-            $this->addFlash('success', 'flash.admin.type_template_field.update.success');
+            $this->addFlash('success', 'flash.admin.type_template_field.create.success');
 
             return $this->redirectToRoute('admin_type_template_field_list', [
                 'event' => $event->getId(),
@@ -114,6 +110,7 @@ class TypeTemplateFieldController extends Controller
             'event'    => $event,
             'typeView' => $typeView,
             'type'     => $type,
+            'create'   => $create,
             'form'     => $form->createView(),
         ]);
     }

@@ -10,18 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
 
-class UpdateHandlerFactory
+class CommandFactory
 {
     /**
      * @var array
      */
-    private $handlers;
+    private $types;
 
     /**
-     * @param array $handlers
+     * @param array $types
      */
-    public function __construct(array $handlers) {
-        $this->handlers = $handlers;
+    public function __construct(array $types)
+    {
+        $this->types = $types;
     }
 
     /**
@@ -30,12 +31,12 @@ class UpdateHandlerFactory
      * @return mixed
      * @throws \Exception
      */
-    public function getHandler($type)
+    public function getCommand($type)
     {
-        if (!array_key_exists($type, $this->handlers)) {
+        if (!array_key_exists($type, $this->types)) {
             throw new \Exception("$type not known");
         }
 
-        return $this->handlers[$type];
+        return $this->types[$type];
     }
 }
