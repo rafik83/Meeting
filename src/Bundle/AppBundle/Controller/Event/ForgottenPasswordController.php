@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
-use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
@@ -72,8 +70,8 @@ class ForgottenPasswordController extends Controller
      */
     public function createNewPasswordAction(Request $request, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken)
     {
-        if (new DateTime() > $forgottenPasswordToken->getExpireDate()) {
-            throw new NotFoundException('Date of the token expired');
+        if ($forgottenPasswordToken->isExpired(new \DateTime())) {
+            throw $this->createNotFoundException('The token expired.');
         }
 
         $newPassword = new NewPassword($forgottenPasswordToken->getUser());

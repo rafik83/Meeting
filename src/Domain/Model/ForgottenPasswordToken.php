@@ -71,10 +71,12 @@ class ForgottenPasswordToken
     }
 
     /**
-     * @return DateTimeInterface
+     * @param DateTimeInterface $dateTime
+     *
+     * @return bool
      */
-    public function getExpireDate()
+    public function isExpired(\DateTimeInterface $dateTime)
     {
-        return $this->expireDate;
+        return $dateTime > $this->expireDate;
     }
 }

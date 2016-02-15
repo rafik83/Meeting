@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
-use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
@@ -20,7 +18,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,12 +36,10 @@ class AccountController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $changeMail = new ChangeMail($this->getUser(), $eventView);
-
-        $form = $this->createForm(ChangeMailType::class, $changeMail, [
+        $form       = $this->createForm(ChangeMailType::class, $changeMail, [
             'action' => $this->generateUrl('event_account'),
-            'method' => 'POST',
+            'submit' => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -53,17 +48,9 @@ class AccountController extends Controller
 
                 return $this->redirectToRoute('event');
             } catch (EmailAlreadyExistsException $exception) {
-                $form->get('mail')->addError(new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.emailAlreadyExist', [], 'validators')
-                ));
+                $form->get('mail')->addError(new FormError('validators.emailAlreadyExist'));
             } catch (SameEmailException $exception) {
-                $form->get('mail')->addError(new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.sameEmail', [], 'validators')
-                ));
+                $form->get('mail')->addError(new FormError('validators.sameEmail'));
             }
         }
 
@@ -74,26 +61,25 @@ class AccountController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param EventView $eventView
      * @param ChangeMailToken $changeMailToken
      *
      * @return RedirectResponse
      */
-    public function activateNewMailAction(Request $request, EventView $eventView, ChangeMailToken $changeMailToken)
+    public function activateNewMailAction(EventView $eventView, ChangeMailToken $changeMailToken)
     {
-        if (new DateTime() > $changeMailToken->getExpireDate()) {
-            throw new NotFoundException('Date of the token expired');
+        if ($changeMailToken->isExpired(new \DateTime())) {
+            throw $this->createNotFoundException('The token expired.');
         }
 
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $user = $changeMailToken->getUser();
+        $user                 = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
-        $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
 
+        $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
         $this->get('adapter.authentication_manager')->authenticate($user);
         $this->addFlash('success', 'flash.change_mail_activate.success');
 
