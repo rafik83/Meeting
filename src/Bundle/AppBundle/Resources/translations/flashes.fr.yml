@@ -96,6 +96,8 @@ flash:
                 success: Le champ a bien été créé
             update:
                 success: Le champ a bien été mis à jour
+            order:
+                success: L'ordre des champs a bien été enregistré
         meeting_request:
             position:
                 success: Le rendez-vous a bien été placé

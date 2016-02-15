@@ -420,4 +420,37 @@ class Type implements WhoInterface
 
         return $this->setTemplateByName($templateName, $template);
     }
+
+    /**
+     * @param string $templateName
+     * @param string $group
+     * @param array  $rows
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function setTemplateRows($templateName, $group, array $rows)
+    {
+        $template = $this->getTemplate($templateName);
+
+        if ('default' === $group) {
+            $template = [];
+
+            foreach ($rows as $row => $options) {
+                $template[$row] = $options;
+            }
+        } else {
+            if (!isset($template[$group])) {
+                throw new \Exception("$group do not exists in template $templateName");
+            }
+
+            $template[$group]['template'] = [];
+
+            foreach ($rows as $row => $options) {
+                $template[$group]['template'][$row] = $options;
+            }
+        }
+
+        return $this->setTemplateByName($templateName, $template);
+    }
 }

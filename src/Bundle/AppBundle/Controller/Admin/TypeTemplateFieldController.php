@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\TypeTemplateField\Order\Order;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -178,5 +179,39 @@ class TypeTemplateFieldController extends Controller
             'update'   => $update,
             'form'     => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Type    $type
+     * @param string  $templateName
+     * @param string  $group
+     *
+     * @return RedirectResponse|Response
+     * @throws \Exception
+     */
+    public function fieldOrderAction(Request $request, Event $event, Type $type, $templateName, $group)
+    {
+        $fieldsOrder     = $request->request->get('order', []);
+        $templateFactory = $this->container->get('components.sheet.template_factory');
+        $template        = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
+        $group           = $template->getGroup($group);
+
+        $order = new Order($type, $templateName, $group, $fieldsOrder);
+
+        $this
+            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.order_handler')
+            ->handle($order);
+
+        $this->addFlash('success', 'flash.admin.type_template_field.order.success');
+
+        return $this->redirectToRoute(
+            'admin_type_template_field_list',
+            [
+                'event' => $event->getId(),
+                'type'  => $type->getId(),
+            ]
+        );
     }
 }

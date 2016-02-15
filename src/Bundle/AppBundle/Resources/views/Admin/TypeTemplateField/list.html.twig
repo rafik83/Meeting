@@ -38,7 +38,8 @@
                     {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
                         typeId: typeView.id,
                         templateName: templateName,
-                        types: group.types
+                        types: group.types,
+                        group: group
                     } %}
                 {% else %}
                     <tr>

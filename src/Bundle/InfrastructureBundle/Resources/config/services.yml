@@ -293,6 +293,10 @@ services:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.order_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Order\OrderHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:

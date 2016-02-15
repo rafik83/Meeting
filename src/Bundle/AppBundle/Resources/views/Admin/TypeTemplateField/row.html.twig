@@ -3,19 +3,41 @@
     <th>Type de champ</th>
     <th>Requis</th>
     <th>Privé</th>
-    <th></th>
+    <th>Ordre</th>
     <th>Action</th>
 </tr>
-
-{% for type in types %}
-    {% include 'VimeetAppBundle:Admin/TypeTemplateField:field.html.twig' with {
-        event: event,
-        typeId: typeId,
-        type: type,
+{% if types|length %}
+    <form method="post" action="{{ path('admin_type_template_field_order', {
+        event: event.id,
+        type: typeId,
         templateName: templateName,
-    } %}
+        group: group.name
+    }) }}">
+        {% for type in types %}
+            {% include 'VimeetAppBundle:Admin/TypeTemplateField:field.html.twig' with {
+                event: event,
+                typeId: typeId,
+                type: type,
+                templateName: templateName,
+                loopIndex: loop.index
+            } %}
+        {% endfor %}
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <button class="btn btn-primary btn-xs" name="reorder" value="1" type="submit">
+                    {{ 'template.updateOrder'|trans }}
+                </button>
+            </td>
+            <td></td>
+        </tr>
+    </form>
 {% else %}
     <tr>
         <td colspan="6">Aucun champ</td>
     </tr>
-{% endfor %}
+{% endif %}
