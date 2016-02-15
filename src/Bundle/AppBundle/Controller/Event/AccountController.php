@@ -86,7 +86,9 @@ class AccountController extends Controller
             throw new NotFoundException('Date of the token expired');
         }
 
-        $this->get('adapter.authentication_manager')->disconnect();
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->get('adapter.authentication_manager')->disconnect();
+        }
 
         $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);

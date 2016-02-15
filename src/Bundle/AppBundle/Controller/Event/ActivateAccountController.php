@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
-use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
@@ -32,25 +30,22 @@ class ActivateAccountController extends Controller
      */
     public function passwordAction(Request $request, EventView $eventView, ActivateAccountToken $activateAccountToken)
     {
-        if (new DateTime() > $activateAccountToken->getExpireDate()
-            || null === $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($activateAccountToken->getUser(), $activateAccountToken->getSheet())
-        ) {
-            throw new NotFoundException('Date of the token expired');
+        $sheet = $activateAccountToken->getSheet();
+        $user  = $activateAccountToken->getUser();
+
+        // We must refresh sheet to make behat feature working ...
+        $this->getDoctrine()->getManager()->refresh($sheet);
+
+        if ($activateAccountToken->isExpired(new \DateTime()) || !$sheet->hasUser($user)) {
+            throw $this->createNotFoundException('The token is expired.');
         }
 
-        $this->get('adapter.authentication_manager')->disconnect();
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->get('adapter.authentication_manager')->disconnect();
+        }
 
-        $sheet   = $activateAccountToken->getSheet();
-        $user    = $activateAccountToken->getUser();
         $command = new ActivateAccountPassword($user);
-
-        $form = $this->createForm(ActivateAccountPasswordType::class, $command, [
-            'action' => $this->generateUrl('event_activate_account', [
-                'token' => $activateAccountToken->getToken(),
-            ]),
-            'method' => 'POST',
-            'submit' => true,
-        ]);
+        $form    = $this->createForm(ActivateAccountPasswordType::class, $command, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.user.activate_account_password_handler')->handle($command);
@@ -59,7 +54,7 @@ class ActivateAccountController extends Controller
 
             return $this->redirectToRoute('event_sheet_update_participant', [
                 'sheet'       => $sheet->getId(),
-                'participant' => $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($user, $sheet)->getId()
+                'participant' => $sheet->getUserParticipant($user)->getId()
             ]);
         }
 
