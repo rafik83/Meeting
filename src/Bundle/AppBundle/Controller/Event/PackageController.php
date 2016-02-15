@@ -399,7 +399,7 @@ class PackageController extends Controller
      *
      * @return Form
      */
-    protected function addErrorOnForm(PackageException $exception, Form $form, array $template, array $data, FormInterface $formData)
+    private function addErrorOnForm(PackageException $exception, Form $form, array $template, array $data, FormInterface $formData)
     {
         if ($exception instanceof BoughtParticipantAlreadyAddedException) {
             foreach ($data as $key => $value) {
@@ -427,7 +427,7 @@ class PackageController extends Controller
      * @param array            $data
      * @param Form             $form
      */
-    protected function addErrorOnFormPackage(PackageException $exception, array $data, Form $form)
+    private function addErrorOnFormPackage(PackageException $exception, array $data, Form $form)
     {
         if ($exception instanceof BoughtParticipantAlreadyAddedException) {
             foreach ($data as $stepKey => $step) {
