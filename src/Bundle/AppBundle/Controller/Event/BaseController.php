@@ -24,34 +24,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class BaseController extends Controller
 {
     /**
-     * @param Form  $form
-     * @param array $template
-     * @param array $data
-     * @param $formData
-     *
-     * @return Form
-     */
-    protected function addRequiredErrorOnForm(Form $form, array $template, array $data, $formData)
-    {
-        foreach ($data as $key => $value) {
-            if (isset($template[$key])
-                && isset($template[$key]['required'])
-                && $template[$key]['required'] === true
-                && $value === null
-            ) {
-                $error = new FormError(
-                    $this
-                        ->get('translator')
-                        ->trans('validators.field.required', [], 'validators')
-                );
-                $formData->get($key)->addError($error);
-            }
-        }
-
-        return $form;
-    }
-
-    /**
      * @param PackageException $exception
      * @param Form             $form
      * @param array            $template
@@ -186,16 +158,6 @@ class BaseController extends Controller
         if (!$isUserParticipant) {
             throw new AccessDeniedException('You can not update this data');
         }
-    }
-
-    /**
-     * @param $error
-     * @param $field
-     */
-    protected function addGivenErrorOnGivenField($error, $field)
-    {
-        $error = new FormError($error);
-        $field->addError($error);
     }
 
     /**

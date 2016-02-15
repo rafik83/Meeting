@@ -22,14 +22,20 @@ class BaseHandler
      */
     public function checkDataConstraint(array $data, array $template)
     {
+        $keys = [];
+
         foreach ($data as $key => $value) {
             if (isset($template[$key])
                 && isset($template[$key]['required'])
                 && $template[$key]['required'] === true
                 && $value === null
             ) {
-                throw new RequiredDataEmptyException('A required field is empty');
+                $keys[] = $key;
             }
+        }
+
+        if (!empty($keys)) {
+            throw new RequiredDataEmptyException($keys);
         }
     }
 }

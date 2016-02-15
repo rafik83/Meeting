@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Specification\Sheet\CanAccess;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -113,22 +114,13 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (EmailCanNotBeNullException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('validators.field.required', [], 'validators'),
-                    $form->get('email')
-                );
+                $form->get('email')->addError(new FormError('validators.field.required'));
             } catch (ParticipantAlreadyExistException $exception) {
-                $this->addGivenErrorOnGivenField(
-                    $this->get('translator')->trans('event.sheet.participant.already_exists'),
-                    $form->get('email')
-                );
+                $form->get('email')->addError(new FormError('event.sheet.participant.already_exists'));
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $add->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -163,8 +155,8 @@ class SheetController extends BaseController
         $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
+            'submit'   => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -177,12 +169,9 @@ class SheetController extends BaseController
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getParticipantTemplate(),
-                    $updateParticipant->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -221,21 +210,15 @@ class SheetController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')
-                    ->handle($updateBlock);
-
+                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm(
-                    $form,
-                    $sheet->getType()->getSheetTemplate()[$block]['template'],
-                    $updateBlock->data,
-                    $form->get('data')
-                );
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -262,9 +245,7 @@ class SheetController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')
-                    ->handle($delete);
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
                 $this->addFlash('success', 'flash.sheet.delete_participant.success');
             } catch (IsNotLinkedToSheetException $exception) {
                 $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
