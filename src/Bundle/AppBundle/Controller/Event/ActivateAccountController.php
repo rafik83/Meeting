@@ -40,11 +40,11 @@ class ActivateAccountController extends Controller
 
         $this->get('adapter.authentication_manager')->disconnect();
 
-        $sheet = $activateAccountToken->getSheet();
-        $user  = $activateAccountToken->getUser();
-        $activateAccountPassword = new ActivateAccountPassword($user);
+        $sheet   = $activateAccountToken->getSheet();
+        $user    = $activateAccountToken->getUser();
+        $command = new ActivateAccountPassword($user);
 
-        $form = $this->createForm(ActivateAccountPasswordType::class, $activateAccountPassword, [
+        $form = $this->createForm(ActivateAccountPasswordType::class, $command, [
             'action' => $this->generateUrl('event_activate_account', [
                 'token' => $activateAccountToken->getToken(),
             ]),
@@ -53,8 +53,8 @@ class ActivateAccountController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.user.activate_account_password_handler')->handle($activateAccountPassword);
-            $this->get('adapter.authentication_manager')->authenticate($activateAccountPassword->user);
+            $this->get('command.user.activate_account_password_handler')->handle($command);
+            $this->get('adapter.authentication_manager')->authenticate($command->user);
             $this->addFlash('success', 'flash.activate_account.success');
 
             return $this->redirectToRoute('event_sheet_update_participant', [
