@@ -17,7 +17,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,8 +49,8 @@ class ActivateAccountController extends Controller
                 'token' => $activateAccountToken->getToken(),
             ]),
             'method' => 'POST',
+            'submit' => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.user.activate_account_password_handler')->handle($activateAccountPassword);
