@@ -86,7 +86,7 @@ class HomeController extends BaseController
             try {
                 // Register and authenticate the user
                 $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
-                $this->authenticate($register->user);
+                $this->get('adapter.authentication_manager')->authenticate($register->user);
                 $this->addFlash('success', 'flash.event.register.success');
 
                 // Go to participate form

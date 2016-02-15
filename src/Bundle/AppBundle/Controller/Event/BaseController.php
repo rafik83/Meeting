@@ -13,14 +13,10 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Application\Exception\Package\PackageException;
-use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BaseController extends Controller
 {
@@ -78,28 +74,6 @@ class BaseController extends Controller
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Authenticate user.
-     *
-     * @param User $user
-     */
-    protected function authenticate(User $user)
-    {
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-    }
-
-    /**
-     * @param Request $request
-     */
-    protected function disconnect(Request $request)
-    {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->get('security.token_storage')->setToken(null);
-            $request->getSession()->invalidate();
         }
     }
 }

@@ -85,13 +85,13 @@ class AccountController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $this->disconnect($request);
+        $this->get('adapter.authentication_manager')->disconnect();
 
         $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
         $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
 
-        $this->authenticate($user);
+        $this->get('adapter.authentication_manager')->authenticate($user);
         $this->addFlash('success', 'flash.change_mail_activate.success');
 
         return $this->redirectToRoute('event');

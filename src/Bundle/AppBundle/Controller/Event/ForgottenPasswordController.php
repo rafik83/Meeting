@@ -86,7 +86,7 @@ class ForgottenPasswordController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.vimeet.application.command.user.new_password_handler')->handle($newPassword);
-            $this->authenticate($forgottenPasswordToken->getUser());
+            $this->get('adapter.authentication_manager')->authenticate($forgottenPasswordToken->getUser());
             $this->addFlash('success', 'flash.new_password.success');
 
             return $this->redirectToRoute('event');

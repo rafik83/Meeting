@@ -38,7 +38,7 @@ class ActivateAccountController extends BaseController
             throw new NotFoundException('Date of the token expired');
         }
 
-        $this->disconnect($request);
+        $this->get('adapter.authentication_manager')->disconnect();
 
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
@@ -54,7 +54,7 @@ class ActivateAccountController extends BaseController
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('command.user.activate_account_password_handler')->handle($activateAccountPassword);
-            $this->authenticate($activateAccountPassword->user);
+            $this->get('adapter.authentication_manager')->authenticate($activateAccountPassword->user);
 
             $this->addFlash('success', 'flash.activate_account.success');
 
