@@ -4,13 +4,13 @@ Feature: List sheet
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml       |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/User.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Participant.yml |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Sheet.yml       |
+      | app/Template.yml    |
+      | app/Event.yml       |
+      | app/Type.yml        |
+      | app/Category.yml    |
+      | app/User.yml        |
+      | app/Sheet.yml       |
+      | app/Participant.yml |
 
   Scenario: I can list sheet of an event
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"

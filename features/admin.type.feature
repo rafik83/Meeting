@@ -4,10 +4,10 @@ Feature: add type
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Template.yml    |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Event.yml       |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Type.yml        |
-      | @VimeetInfrastructureBundle/DataFixtures/ORM/Category.yml    |
+      | app/Template.yml    |
+      | app/Event.yml       |
+      | app/Type.yml        |
+      | app/Category.yml    |
 
   Scenario: add a type
     When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"

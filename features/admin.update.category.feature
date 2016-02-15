@@ -2,7 +2,8 @@ Feature: Update category
   I need to be able to update category title and types
 
   Background: Re-init the database and load the fixtures
-    Given the database is empty
+    Given the cache is clear
+    And the database is empty
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
@@ -10,8 +11,11 @@ Feature: Update category
       | app/Category.yml |
 
   Scenario: I can list event categories
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event/1/category"
+    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
     Then the response status code should be 200
+    And I follow "Catégories"
+    Then I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/category"
+    And the response status code should be 200
     And I should see "Exposant"
     And I should see "Visiteur"
 
