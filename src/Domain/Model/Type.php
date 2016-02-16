@@ -317,4 +317,14 @@ class Type implements WhoInterface
             'packageTemplate'     => $this->getPackageTemplate(),
         ];
     }
+
+    /**
+     * @param $locale
+     *
+     * @return string
+     */
+    public function getTitle($locale)
+    {
+        return $this->translations->get($locale)->getTitle();
+    }
 }

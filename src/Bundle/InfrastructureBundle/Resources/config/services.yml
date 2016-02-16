@@ -515,6 +515,11 @@ services:
             - '@components.sheet.tagged_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
 
+    sheet.sheet_preview_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
+        arguments:
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
+
     #
     # Rule Component
     #

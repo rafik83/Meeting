@@ -60,25 +60,10 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
-        $typeView = $this
-            ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($sheet->getType()->getId(), $locale);
-
-        $sheetDataView = $this
-            ->get('vimeet_infrastructure.application.components.sheet.manager')
-            ->getSheetDataView($sheet, $this->getUser(), $locale);
-
-        $canAdd = $this
-            ->get('vimeet_infrastructure.application.components.participant.participant_manager')
-            ->canAddParticipant($sheet);
-
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'sheet'         => $sheet,
             'eventView'     => $eventView,
-            'typeView'      => $typeView,
-            'sheetDataView' => $sheetDataView,
-            'canAdd'        => $canAdd,
-            'locale'        => $locale,
+            'preview'       => $this->get('sheet.sheet_preview_factory')->createFromSheet($sheet, $this->getUser(), $locale),
         ]);
     }
 
