@@ -96,7 +96,7 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         //Command
-        $command       = new UpdateBlock($sheet, '563cae566af03');
+        $command       = new UpdateBlock($sheet, '563cae566af03', 'fr');
         $command->data = [
             '563cb103926e6' => 'titi',
             '563cb10a524c5' => 'toto'
