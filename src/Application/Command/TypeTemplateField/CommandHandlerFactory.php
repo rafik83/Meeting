@@ -20,7 +20,8 @@ class CommandHandlerFactory
     /**
      * @param array $handlers
      */
-    public function __construct(array $handlers) {
+    public function __construct(array $handlers)
+    {
         $this->handlers = $handlers;
     }
 

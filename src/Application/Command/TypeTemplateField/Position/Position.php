@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Order;
+namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Position;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Group;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Order
+class Position
 {
     /**
      * @var Type

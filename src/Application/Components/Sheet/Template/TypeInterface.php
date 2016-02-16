@@ -109,4 +109,14 @@ interface TypeInterface
      * @return Group
      */
     public function getGroup();
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position);
+
+    /**
+     * @return integer
+     */
+    public function getPosition();
 }

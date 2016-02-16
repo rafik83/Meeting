@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Order;
+namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Position;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
-class OrderHandler
+class PositionHandler
 {
     /**
      * @var TypeRepositoryInterface
@@ -28,19 +28,22 @@ class OrderHandler
     }
 
     /**
-     * @param Order $order
+     * @param Position $position
      */
-    public function handle(Order $order)
+    public function handle(Position $position)
     {
         $rows  = [];
-        $types = $order->group->getTypes();
-        asort($order->fieldsOrder);
+        $types = $position->group->getTypes();
+        asort($position->fieldsOrder);
 
-        foreach ($order->fieldsOrder as $fieldName => $value) {
+        $loop = 1;
+        foreach ($position->fieldsOrder as $fieldName => $value) {
+            $types[$fieldName]->setPosition($loop);
             $rows[$fieldName] = $types[$fieldName]->getOptions();
+            $loop++;
         }
 
-        $order->type->setTemplateRows($order->templateName, $order->group->getName(), $rows);
-        $this->typeRepository->set($order->type);
+        $position->type->setTemplateRows($position->templateName, $position->group->getName(), $rows);
+        $this->typeRepository->set($position->type);
     }
 }

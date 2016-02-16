@@ -97,15 +97,15 @@ admin_type_template_field_update:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldUpdate }
 
-admin_type_template_field_order:
-    path: /event/{event}/type/{type}/form/field/order/{templateName}/{group}
+admin_type_template_field_position:
+    path: /event/{event}/type/{type}/form/field/position/{templateName}/{group}
     requirements:
         event: \d+
         type: \d+
         templateName: \w+
         group: \w+
     methods: [POST]
-    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldOrder }
+    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldPosition }
 
 #
 # Category

@@ -7,7 +7,7 @@
     <th>Action</th>
 </tr>
 {% if types|length %}
-    <form method="post" action="{{ path('admin_type_template_field_order', {
+    <form method="post" action="{{ path('admin_type_template_field_position', {
         event: event.id,
         type: typeId,
         templateName: templateName,

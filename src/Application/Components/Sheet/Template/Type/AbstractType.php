@@ -62,6 +62,7 @@ abstract class AbstractType implements TypeInterface
                 'private'        => false,
                 'tags'           => [],
                 'updatableUntil' => null,
+                'position'       => 1,
             ]
         );
         $optionsResolver->setDefined(['description']);
@@ -177,6 +178,22 @@ abstract class AbstractType implements TypeInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPosition($position)
+    {
+        $this->options['position'] = $position;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPosition()
+    {
+        return (int) $this->getOption('position');
     }
 
     /**
