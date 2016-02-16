@@ -21,7 +21,6 @@ use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
 use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\DeleteParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -221,30 +220,26 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request     $request
      * @param Sheet       $sheet
      * @param Participant $participant
      *
      * @return RedirectResponse
      */
-    public function deleteParticipantAction(Request $request, Sheet $sheet, Participant $participant)
+    public function deleteParticipantAction(Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $delete = new Delete($sheet, $this->getUser(), $participant->getId());
-        $form   = $this->createForm(DeleteParticipantType::class, $delete);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
-                $this->addFlash('success', 'flash.sheet.delete_participant.success');
-            } catch (IsNotLinkedToSheetException $exception) {
-                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
-            } catch (OwnerCanNotBeDeletedException $exception) {
-                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
-            } catch (IsNotOwnerException $exception) {
-                $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
-            }
+        try {
+            $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
+            $this->addFlash('success', 'flash.sheet.delete_participant.success');
+        } catch (IsNotLinkedToSheetException $exception) {
+            $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
+        } catch (OwnerCanNotBeDeletedException $exception) {
+            $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
+        } catch (IsNotOwnerException $exception) {
+            $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
         }
 
         // Go to the sheet

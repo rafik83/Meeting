@@ -1,5 +1,7 @@
 {% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
+{% import 'VimeetAppBundle::macro.html.twig' as macro %}
+
 {% block title eventView.title %}
 
 {% block content %}
@@ -41,7 +43,7 @@
                             {% endif %}
 
                             {% if not participant.owner %}
-                                {{ macro.delete_button(path('event_sheet_delete_participant', { 'sheet': preview.id, 'participant': participant.id }), 'Supprimer', { 'class': 'btn btn-danger btn-xs' }) }}
+                                {{ macro.delete_button(path('event_sheet_delete_participant', { 'sheet': preview.id, 'participant': participant.id }), 'form.delete_participant.children.submit.label'|trans({}, 'forms'), { 'class': 'btn btn-danger btn-xs' }) }}
                             {% endif %}
                         </td>
                     </tr>
