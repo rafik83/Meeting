@@ -32,7 +32,7 @@ abstract class AbstractHandler
      *
      * @return array
      */
-    public function getOptions($command)
+    public function getOptions(AbstractCommand $command)
     {
         $options = $command->field->getOptions();
 
