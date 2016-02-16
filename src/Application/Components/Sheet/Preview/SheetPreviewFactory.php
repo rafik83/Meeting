@@ -67,7 +67,7 @@ class SheetPreviewFactory
     {
         $template = $sheet->getType()->getParticipantTemplate();
 
-        return array_map(function (Participant $participant) use ($template, $user, $locale) {
+        return array_map(function (Participant $participant) use ($template, $sheet, $user, $locale) {
             $data     = $participant->getData();
             $rowViews = [];
 
@@ -83,7 +83,8 @@ class SheetPreviewFactory
                 $participant->getUser()->getEmail(),
                 $rowViews,
                 $participant->isOwner(),
-                $participant->getUser()->getId() === $user->getId() || $participant->isOwner()
+                $participant->getUser()->getId() === $user->getId() || $participant->isOwner(),
+                !$participant->isOwner() && $sheet->getUserParticipant($user)->isOwner()
             );
         }, $sheet->getParticipants()->toArray());
     }

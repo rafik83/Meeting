@@ -38,6 +38,11 @@ class ParticipantDataView
     public $editable;
 
     /**
+     * @var bool
+     */
+    public $deletable;
+
+    /**
      * ParticpantView constructor.
      *
      * @param int    $id
@@ -45,13 +50,15 @@ class ParticipantDataView
      * @param array  $rows
      * @param bool   $owner
      * @param bool   $editable
+     * @param bool   $deletable
      */
-    public function __construct($id, $email, array $rows, $owner, $editable)
+    public function __construct($id, $email, array $rows, $owner, $editable, $deletable)
     {
-        $this->id       = $id;
-        $this->email    = $email;
-        $this->rows     = $rows;
-        $this->owner    = $owner;
-        $this->editable = $editable;
+        $this->id        = $id;
+        $this->email     = $email;
+        $this->rows      = $rows;
+        $this->owner     = $owner;
+        $this->editable  = $editable;
+        $this->deletable = $deletable;
     }
 }
