@@ -23,7 +23,7 @@ class CreateHandler extends AbstractHandler
     {
         $options = $this->getOptions($create);
 
-        $options['choices']  = $create->choices;
+        $options['choices'] = $create->choices;
 
         $create->type->addTemplateRow(
             $create->templateName,
