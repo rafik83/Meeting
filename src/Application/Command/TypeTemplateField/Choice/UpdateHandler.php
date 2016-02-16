@@ -24,6 +24,7 @@ class UpdateHandler extends AbstractHandler
         $options = $this->getOptions($update);
 
         $options['choices'] = $update->choices;
+        $options['placeholder'] = $update->placeholder;
 
         $update->type->updateTemplateRow(
             $update->templateName,

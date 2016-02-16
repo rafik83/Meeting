@@ -54,7 +54,9 @@ class ChoiceBuilder
                 throw new LanguageNotFoundException($locale, array_keys($choice['label']));
             }
 
-            $translatedChoices[$choice['label'][$locale]] = $this->buildChoices($choice['choices'], $locale);
+            if (isset($choice['choices'])) {
+                $translatedChoices[$choice['label'][$locale]] = $this->buildChoices($choice['choices'], $locale);
+            }
         }
 
         ksort($translatedChoices);

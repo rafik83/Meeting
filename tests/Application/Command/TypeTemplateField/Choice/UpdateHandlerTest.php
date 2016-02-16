@@ -51,7 +51,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'private'        => false,
                 'tags'           => [],
                 'updatableUntil' => null,
-                'placeholder'    => false,
+                'placeholder'    => ['fr' => 'Sélectionner', 'en' => 'Select'],
                 'position'       => 1,
                 'choices'        => [
                     'item1' => ['label' => ['fr' => '1labelFr', 'en' => '1labelEn']],
@@ -68,6 +68,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $update = new Update($type, 'participant', $field);
 
+        $update->placeholder = ['fr' => 'Sélectionner', 'en' => 'Select'];
         $update->choices = [
             'item1' => ['label' => ['fr' => '1labelFr', 'en' => '1labelEn']],
             'item2' => ['label' => ['fr' => '2labelFr', 'en' => '2labelEn']],

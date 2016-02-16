@@ -22,6 +22,11 @@ abstract class AbstractChoice extends AbstractCommand
     public $choices = [];
 
     /**
+     * @var array
+     */
+    public $placeholder = [];
+
+    /**
      * UpdateLibChoice constructor.
      *
      * @param Type          $type
@@ -41,6 +46,11 @@ abstract class AbstractChoice extends AbstractCommand
                     ? $choice['label'][$locale]
                     : '';
             }
+        }
+
+        foreach ($type->getEvent()->getLocales() as $locale) {
+            $placeholder = $field->getPlaceholder();
+            $this->placeholder[$locale] = null !== $placeholder[$locale] ? $placeholder[$locale] : '';
         }
     }
 }
