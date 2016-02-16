@@ -8,11 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\TypeTemplateField;
+namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Choice;
 
+use Proximum\Vimeet\Application\Command\TypeTemplateField\AbstractCommand;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Type\LibChoiceType;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class UpdateChoice extends Update
+abstract class AbstractChoice extends AbstractCommand
 {
     /**
      * @var array
@@ -20,17 +22,17 @@ class UpdateChoice extends Update
     public $choices = [];
 
     /**
-     * @param Type   $type
-     * @param string $templateName
-     * @param string $key
+     * UpdateLibChoice constructor.
      *
-     * @throws \Exception
+     * @param Type          $type
+     * @param string        $templateName
+     * @param LibChoiceType $field
      */
-    public function __construct(Type $type, $templateName, $key)
+    public function __construct(Type $type, $templateName, LibChoiceType $field)
     {
-        parent::__construct($type, $templateName, $key);
+        parent::__construct($type, $templateName, $field);
 
-        $this->choices = $this->field['choices'];
+        $this->choices = $field->getChoices();
 
         // ensure that all choices has all event locales label translations
         foreach ($this->choices as $key => $choice) {
@@ -40,17 +42,5 @@ class UpdateChoice extends Update
                     : '';
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function getFieldTemplate()
-    {
-        $fieldTemplate = parent::getFieldTemplate();
-
-        $fieldTemplate['choices'] = $this->choices;
-
-        return $fieldTemplate;
     }
 }

@@ -257,8 +257,48 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
-    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
-        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandFactory
+        arguments:
+            -
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\Text\Create'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Create'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_handler_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandHandlerFactory
+        arguments:
+            -
+                lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.create_text_handler'
+                lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.create_choice_handler'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_text_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Text\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_choice_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandFactory
+        arguments:
+            -
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\Text\Update'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Update'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandHandlerFactory
+        arguments:
+            -
+                lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler'
+                lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Text\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.position_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Position\PositionHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:

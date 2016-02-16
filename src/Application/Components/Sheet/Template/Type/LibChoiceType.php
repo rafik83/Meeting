@@ -26,4 +26,20 @@ class LibChoiceType extends AbstractType
             'choices'     => [],
         ]);
     }
+
+    /**
+     * return []
+     */
+    public function getChoices()
+    {
+        return $this->getOption('choices');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEditable()
+    {
+        return true;
+    }
 }

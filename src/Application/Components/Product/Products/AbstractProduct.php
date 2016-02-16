@@ -64,6 +64,7 @@ abstract class AbstractProduct implements ProductInterface
             'updatableUntil',
             'quantity',
         ]);
+        $optionsResolver->setDefault('position', 1);
     }
 
     /**

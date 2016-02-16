@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin;
 
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
+class ChoiceType extends AbstractLocalizedType
 {
     /**
      * {@inheritdoc}
@@ -24,13 +24,16 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('choices', CollectionType::class, [
-                'entry_type'    => ChoiceType::class,
-                'entry_options' => ['locales' => $options['locales']],
-                'allow_add'     => true,
-                'allow_delete'  => true,
-            ])
-        ;
+            ->add(
+                'choices',
+                CollectionType::class,
+                [
+                    'entry_type'    => ChoiceItemType::class,
+                    'entry_options' => ['locales' => $options['locales']],
+                    'allow_add'     => true,
+                    'allow_delete'  => true,
+                ]
+            );
     }
 
     /**
@@ -38,11 +41,6 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateChoice',
-            'csrf_token_id' => 'type_template_field_update_lib_choice',
-        ]);
-
         $resolver->setRequired(['locales']);
     }
 
@@ -51,6 +49,6 @@ class TypeTemplateFieldUpdateLibChoiceType extends TypeTemplateFieldUpdateType
      */
     public function getBlockPrefix()
     {
-        return 'type_template_field_update_lib_choice';
+        return 'admin_lib_choice';
     }
 }

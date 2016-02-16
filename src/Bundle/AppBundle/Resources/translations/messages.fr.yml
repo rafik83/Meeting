@@ -191,10 +191,13 @@ event:
 
 template:
     name:
-        participantTemplate: Template formulaire fiche participant
-        sheetTemplate: Template formulaire fiche de participation
-        packageTemplate: Template formulaire forfait
+        participant: Participant
+        sheet: Fiche de participation
+        package: Forfait
+    updateOrder: Enregistrer l'ordre
     field:
+        add: Ajouter un champ
+        update: Modifier
         type:
             lib_country: Pays
             lib_text: Texte

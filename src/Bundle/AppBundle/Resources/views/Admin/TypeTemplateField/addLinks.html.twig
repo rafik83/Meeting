@@ -1,0 +1,10 @@
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        {{ 'template.field.add'|trans }}
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a href="{{ path('admin_type_template_field_add', {event: event.id, type: typeView.id, templateName: templateName, group: group.name, libType: 'lib_text'}) }}">{{ 'template.field.type.lib_text'|trans }}</a></li>
+        <li><a href="{{ path('admin_type_template_field_add', {event: event.id, type: typeView.id, templateName: templateName, group: group.name, libType: 'lib_choice'}) }}">{{ 'template.field.type.lib_choice'|trans }}</a></li>
+    </ul>
+</div>

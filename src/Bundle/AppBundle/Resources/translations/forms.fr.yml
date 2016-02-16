@@ -526,3 +526,36 @@ form:
                 label: Actif
             submit:
                 label: Envoyer
+    admin_lib_add:
+        children:
+            submit:
+                label: Ajouter
+    template:
+        field:
+            type:
+                lib_text: Texte
+                lib_choice: Choix
+    admin_lib:
+        children:
+            label:
+                label: Titre du champ
+            required:
+                label: Requis
+            private:
+                label: Privé
+            submit:
+                label: Enregistrer
+    admin_lib_text:
+        children:
+            translatable:
+                label: Traductible
+            translationRequired:
+                label: Traduction requise
+    admin_lib_choice:
+        children:
+            choices:
+                label: Choix
+                label_add: Ajouter un item
+                label_delete: Supprimer cet item
+                prototype:
+                    label: Libellé
