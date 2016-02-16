@@ -50,7 +50,7 @@ class SheetPreviewFactory
             $sheet->getType()->getTitle($locale),
             $this->createParticipantView($sheet, $user, $locale),
             $this->participantManager->canAddParticipant($sheet),
-            $this->createBlockViews($sheet, $user, $locale),
+            $this->createBlockViews($sheet, $locale),
             $sheet->getOrders()->count(),
             current($steps)
         );
@@ -97,12 +97,11 @@ class SheetPreviewFactory
 
     /**
      * @param Sheet  $sheet
-     * @param User   $user
      * @param string $locale
      *
      * @return BlockDataView[]
      */
-    private function createBlockViews(Sheet $sheet, User $user, $locale)
+    private function createBlockViews(Sheet $sheet, $locale)
     {
         $data     = $sheet->getData();
         $template = $sheet->getType()->getSheetTemplate();

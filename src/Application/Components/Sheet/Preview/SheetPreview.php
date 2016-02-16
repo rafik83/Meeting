@@ -66,12 +66,13 @@ class SheetPreview
      */
     public function __construct($locale, $id, $typeTitle, array $participants, $remainingParticipants, array $blocks, $orders, $step)
     {
-        $this->locale       = $locale;
-        $this->id           = $id;
-        $this->typeTitle    = $typeTitle;
-        $this->participants = $participants;
-        $this->blocks       = $blocks;
-        $this->orders       = $orders;
-        $this->step         = $step;
+        $this->locale                = $locale;
+        $this->id                    = $id;
+        $this->typeTitle             = $typeTitle;
+        $this->participants          = $participants;
+        $this->remainingParticipants = $remainingParticipants;
+        $this->blocks                = $blocks;
+        $this->orders                = $orders;
+        $this->step                  = $step;
     }
 }
