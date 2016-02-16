@@ -60,10 +60,12 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
+        $preview = $this->get('sheet.sheet_preview_factory')->createFromSheet($sheet, $this->getUser(), $locale);
+
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
             'sheet'         => $sheet,
             'eventView'     => $eventView,
-            'preview'       => $this->get('sheet.sheet_preview_factory')->createFromSheet($sheet, $this->getUser(), $locale),
+            'preview'       => $preview,
         ]);
     }
 
