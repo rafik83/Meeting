@@ -188,12 +188,12 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Block not found.');
         }
 
-        $updateBlock = new UpdateBlock($sheet, $block);
+        $updateBlock = new UpdateBlock($sheet, $block, $locale);
         $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
             'template' => $sheetTemplate[$block]['template'],
             'locale'   => $request->getLocale(),
+            'submit'   => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -201,7 +201,7 @@ class SheetController extends Controller
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
+                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } catch (RequiredDataEmptyException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));

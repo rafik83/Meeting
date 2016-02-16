@@ -9,7 +9,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 563cb103926e6: Elao
                 563cb10a524c5: <address()>
                 563cb10fcc9fe: <url()>
-                563cb115bbeb9: <text(100)>
+                563cb115bbeb9:
+                    fr: <text(100)>
+                    en: <text(100)>
                 563ccd1fe3a81: FR
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>

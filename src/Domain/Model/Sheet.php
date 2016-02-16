@@ -139,10 +139,14 @@ class Sheet implements BillingInfoInterface
      * Set data.
      *
      * @param array $data
+     *
+     * @return Sheet
      */
     public function setData(array $data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**

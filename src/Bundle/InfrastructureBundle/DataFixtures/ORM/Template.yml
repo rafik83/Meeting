@@ -110,7 +110,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     563cb10a524c5: { type: lib_text, required: false, private: false, label: { fr: "Adresse", en: "Address" }, position: 2 }
                     563ccd1fe3a81: { type: lib_country, required: true, private: false, label: { fr: "Pays", en: "Country" }, placeholder: { fr: "--- Sélectionner un pays  ---", en: "--- Sélectionner un pays  ---" }, position: 3 }
                     563cb10fcc9fe: { type: lib_text, required: false, private: false, label: { fr: "Site web", en: "Website" }, position: 4 }
-                    563cb115bbeb9: { type: lib_text, required: false, private: false, label: { fr: "Descriptif", en: "Description" }, position: 5 }
+                    563cb115bbeb9: { type: lib_text, required: false, private: false, label: { fr: "Descriptif", en: "Description" }, translatable: true, position: 5 }
                     563cb1036EB88:
                         type: lib_choice
                         label: { fr: "Activité", en: "Activity" }
