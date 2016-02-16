@@ -142,10 +142,7 @@ class SheetController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')
-                    ->handle($updateParticipant);
-
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')->handle($updateParticipant);
                 $this->addFlash('success', 'flash.sheet.update_participant.success');
 
                 // Go to the sheet
