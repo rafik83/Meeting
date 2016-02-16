@@ -185,7 +185,7 @@ class SheetController extends Controller
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
 
         if (!isset($sheetTemplate[$block])) {
-            throw new \InvalidArgumentException();
+            throw $this->createNotFoundException('Block not found.');
         }
 
         $updateBlock = new UpdateBlock($sheet, $block);
