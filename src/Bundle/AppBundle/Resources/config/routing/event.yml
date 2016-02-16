@@ -78,6 +78,14 @@ event_sheet:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
 
+event_sheet_locale:
+    path:     /sheet/{sheet}/{locale}
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
+
 event_sheet_add_participant:
     path:     /sheet/{sheet}/add_participant
     requirements:
@@ -94,9 +102,11 @@ event_sheet_update_participant:
     defaults: { _controller: VimeetAppBundle:Event/Sheet:updateParticipant }
 
 event_sheet_update_block:
-    path:     /sheet/{sheet}/update_block/{block}
+    path:     /sheet/{sheet}/{locale}/update_block/{block}
     requirements:
         sheet: \d+
+        locale: '[a-z]{2}'
+        block: \w+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:updateBlock }
 

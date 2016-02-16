@@ -42,18 +42,19 @@ class SheetController extends Controller
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
+     * @param string    $locale
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function sheetAction(Request $request, EventView $eventView, Sheet $sheet, $locale = null)
     {
+        $locale = $locale ? : $request->getLocale();
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
-
-        $locale = $request->query->get('locale', $request->getLocale());
 
         if (!$eventView->hasLocale($locale)) {
             throw $this->createNotFoundException('Locale not available for this event.');
@@ -77,6 +78,7 @@ class SheetController extends Controller
             'typeView'                 => $typeView,
             'sheetDataView'            => $sheetDataView,
             'buttonParticipant'        => $buttonParticipant,
+            'locale'                   => $locale,
         ]);
     }
 
@@ -180,13 +182,18 @@ class SheetController extends Controller
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
+     * @param string    $locale
      * @param int       $block
      *
      * @return Response
      */
-    public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $block)
+    public function updateBlockAction(Request $request, EventView $eventView, Sheet $sheet, $locale, $block)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$eventView->hasLocale($locale)) {
+            throw $this->createNotFoundException('This locale is not available.');
+        }
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('You can not update this data');
