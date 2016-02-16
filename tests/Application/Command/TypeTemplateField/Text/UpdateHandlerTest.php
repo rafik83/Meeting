@@ -35,6 +35,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'updatableUntil'      => null,
                 'translationRequired' => false,
                 'translatable'        => false,
+                'position'            => 1,
             ]
         ]);
 
@@ -49,6 +50,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'updatableUntil'      => null,
                 'translationRequired' => true,
                 'translatable'        => true,
+                'position'            => 1,
             ]
         ]);
 

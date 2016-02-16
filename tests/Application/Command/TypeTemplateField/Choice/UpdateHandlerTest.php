@@ -34,6 +34,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'tags'           => [],
                 'updatableUntil' => null,
                 'placeholder'    => false,
+                'position'       => 1,
                 'choices'        => [
                     'item1' => ['label' => ['fr' => '1labelFr', 'en' => '1labelEn']],
                     'item2' => ['label' => ['fr' => '2labelFr', 'en' => '2labelEn']],
@@ -44,14 +45,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedType = new Type($event);
         $expectedType->setParticipantTemplate([
             'foobar' => [
-                'label'    => ['fr' => 'foobar', 'en' => 'barfoo'],
-                'type'     => 'lib_choice',
-                'required' => true,
-                'private'  => false,
+                'label'          => ['fr' => 'foobar', 'en' => 'barfoo'],
+                'type'           => 'lib_choice',
+                'required'       => true,
+                'private'        => false,
                 'tags'           => [],
                 'updatableUntil' => null,
                 'placeholder'    => false,
-                'choices'  => [
+                'position'       => 1,
+                'choices'        => [
                     'item1' => ['label' => ['fr' => '1labelFr', 'en' => '1labelEn']],
                     'item2' => ['label' => ['fr' => '2labelFr', 'en' => '2labelEn']],
                     'item3' => ['label' => ['fr' => '3labelFr', 'en' => '3labelEn']],
