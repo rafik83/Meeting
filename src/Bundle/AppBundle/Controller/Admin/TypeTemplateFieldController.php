@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
-use Proximum\Vimeet\Application\Command\TypeTemplateField\Order\Order;
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Position\Position;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
