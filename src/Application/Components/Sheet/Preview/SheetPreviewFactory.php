@@ -72,6 +72,12 @@ class SheetPreviewFactory
             $rowViews = [];
 
             foreach ($template as $rowKey => $rowValue) {
+
+                // Don't add private data
+                if (isset($rowValue['private']) && $rowValue['private'] === true) {
+                    continue;
+                }
+
                 $rowViews[] = new RowDataView(
                     $rowValue['label'][$locale],
                     isset($data[$rowKey]) ? $data[$rowKey] : '...'
