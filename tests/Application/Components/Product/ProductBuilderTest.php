@@ -10,7 +10,6 @@
 
 namespace Tests\Application\Components\Product;
 
-use Proximum\Vimeet\Application\Components\Product\Including;
 use Proximum\Vimeet\Application\Components\Product\ProductBuilder;
 use Proximum\Vimeet\Application\Components\Product\Products\LibChoiceProduct;
 use Proximum\Vimeet\Application\Components\Product\Products\LibChoiceWithDescriptionProduct;
@@ -49,6 +48,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'step1' => [
                 'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
                 'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'position'    => 1,
                 'template'    => [
                     'option1' => [
                         'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
@@ -56,6 +56,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 1,
                     ],
                     'option2' => [
                         'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -63,6 +64,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 2,
                     ],
                     'option3' => [
                         'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -70,6 +72,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 3,
                     ],
                 ]
             ]
@@ -82,6 +85,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $step1->setOptions([
             'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
             'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'position'    => 1,
             'template'    => [
                'option1' => [
                    'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
@@ -89,6 +93,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 1,
                ],
                'option2' => [
                    'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -96,6 +101,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 2,
                ],
                'option3' => [
                    'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -103,6 +109,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 3,
                ],
             ]
         ]);
@@ -115,6 +122,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 1,
         ]);
         $step1->addProduct($product1);
 
@@ -125,6 +133,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 2,
         ]);
         $step1->addProduct($product2);
 
@@ -135,6 +144,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 3,
         ]);
         $step1->addProduct($product3);
 
@@ -154,6 +164,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'step1' => [
                 'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
                 'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'position'    => 1,
                 'template'    => [
                     'option1' => [
                         'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
@@ -161,12 +172,14 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 1,
                     ],
                 ],
             ],
             'step2' => [
                 'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
                 'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+                'position'    => 1,
                 'template'    => [
                     'option2' => [
                         'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -174,6 +187,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 1,
                     ],
                     'option3' => [
                         'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -181,6 +195,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
+                        'position'    => 2,
                     ],
                 ],
             ],
@@ -193,6 +208,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $step1->setOptions([
             'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
             'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'position'    => 1,
             'template'    => [
                'option1' => [
                    'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
@@ -200,6 +216,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 1,
                ],
             ]
         ]);
@@ -212,6 +229,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 2,
         ]);
         $step1->addProduct($product1);
 
@@ -219,6 +237,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $step2->setOptions([
             'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
             'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
+            'position'    => 1,
             'template'    => [
                'option2' => [
                    'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -226,6 +245,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 1,
                ],
                'option3' => [
                    'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -233,6 +253,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
+                   'position'    => 2,
                ],
             ]
         ]);
@@ -245,6 +266,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 3,
         ]);
         $step2->addProduct($product2);
 
@@ -255,6 +277,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
+            'position'    => 4,
         ]);
         $step2->addProduct($product3);
 
@@ -285,42 +308,43 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedStep       = new Step('563cae7496da1');
         $expectedStepOption = [
             'label'       => ['fr' => 'Forfait de participation'],
-                'description' => [
-                   'fr' => 'Description de l\'étape en français'],
-                'template'    => [
-                    '563cae8a5072d' => [
-                    'label'       =>
-                       ['fr' => 'Forfait'],
-                    'description' =>
-                       ['fr' => 'Description forfait fr'],
+            'description' => ['fr' => 'Description de l\'étape en français'],
+            'position'    => 1,
+            'template'    => [
+                '563cae8a5072d' => [
+                    'label'       => ['fr' => 'Forfait'],
+                    'description' => ['fr' => 'Description forfait fr'],
                     'type'        => 'choice_with_description',
                     'required'    => true,
+                    'position'    => 1,
                     'choices'     => [
                         '563cb13a4d3de' => [
-                           'label'       =>
-                               [
-                                   'fr' => 'Forfait Silver',
-                                   'en' => 'Silver formula',
-                               ],
-                           'description' =>
-                               [
-                                   'fr' => 'Description forfait  Silver',
-                                   'en' => 'Description Silver',
-                               ],
-                           'unitPrice'   => 3990,
+                            'label'       =>
+                                [
+                                    'fr' => 'Forfait Silver',
+                                    'en' => 'Silver formula',
+                                ],
+                            'description' =>
+                                [
+                                    'fr' => 'Description forfait  Silver',
+                                    'en' => 'Description Silver',
+                                ],
+                            'unitPrice'   => 3990,
+                            'position'    => 1,
                         ],
                         '563cb1546dd70' => [
-                           'label'       =>
-                               [
-                                   'fr' => 'Forfait Gold',
-                                   'en' => 'Gold formula',
-                               ],
-                           'description' =>
-                               [
-                                   'fr' => 'Description forfait  Gold',
-                                   'en' => 'Description Gold',
-                               ],
-                           'unitPrice'   => 5990,
+                            'label'       =>
+                                [
+                                    'fr' => 'Forfait Gold',
+                                    'en' => 'Gold formula',
+                                ],
+                            'description' =>
+                                [
+                                    'fr' => 'Description forfait  Gold',
+                                    'en' => 'Description Gold',
+                                ],
+                            'unitPrice'   => 5990,
+                            'position'    => 2,
                         ],
                     ],
                 ],
@@ -329,12 +353,11 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedStep->setOptions($expectedStepOption);
         $expectedProduct  = new LibChoiceWithDescriptionProduct('563cae8a5072d');
         $expectedProductOption = [
-            'label'       =>
-                ['fr' => 'Forfait'],
-            'description' =>
-                ['fr' => 'Description forfait fr'],
+            'label'       => ['fr' => 'Forfait'],
+            'description' => ['fr' => 'Description forfait fr'],
             'type'        => 'choice_with_description',
             'required'    => true,
+            'position'    => 1,
             'choices'     => [
                 '563cb13a4d3de' => [
                     'label'       =>
@@ -348,6 +371,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             'en' => 'Description Silver',
                         ],
                     'unitPrice'   => 3990,
+                    'position'    => 1,
                 ],
                 '563cb1546dd70' => [
                     'label'       =>
@@ -361,6 +385,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             'en' => 'Description Gold',
                         ],
                     'unitPrice'   => 5990,
+                    'position'    => 2,
                 ],
             ],
         ];
@@ -378,6 +403,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                     'en' => 'Description Silver',
                 ],
             'unitPrice'   => 3990,
+            'position'    => 1,
         ];
         $expectedChoiceProduct->setOptions($expectedChoiceProductOption);
         $expectedChoiceProduct2 = new LibChoiceProduct('563cb1546dd70');
@@ -393,6 +419,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                     'en' => 'Description Gold',
                 ],
             'unitPrice'   => 5990,
+            'position'    => 1,
         ];
         $expectedChoiceProduct2->setOptions($expectedChoiceProduct2Option);
         $expectedChoiceProduct2->setChoiceParent($expectedProduct);
@@ -404,12 +431,15 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
 
         $productBuilder   = new ProductBuilder();
-        $packageTemplate  = [
+        $packageTemplate = [
             '563cae7496da1' => [
                 'label'       => [
-                    'fr' => 'Forfait de participation'],
+                    'fr' => 'Forfait de participation'
+                ],
                 'description' => [
-                    'fr' => 'Description de l\'étape en français'],
+                    'fr' => 'Description de l\'étape en français'
+                ],
+                'position'    => 1,
                 'template'    => [
                     '563cae8a5072d' => [
                         'label'       =>
@@ -418,6 +448,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             ['fr' => 'Description forfait fr'],
                         'type'        => 'choice_with_description',
                         'required'    => true,
+                        'position'    => 1,
                         'choices'     => [
                             '563cb13a4d3de' => [
                                 'label'       =>
@@ -431,6 +462,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                         'en' => 'Description Silver',
                                     ],
                                 'unitPrice'   => 3990,
+                                'position'    => 1,
                             ],
                             '563cb1546dd70' => [
                                 'label'       =>
@@ -444,6 +476,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                         'en' => 'Description Gold',
                                     ],
                                 'unitPrice'   => 5990,
+                                'position'    => 2,
                             ],
                         ],
                     ],
@@ -467,7 +500,9 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedStepOption = [
             'label'       => ['fr' => 'Forfait de participation'],
             'description' => [
-                'fr' => 'Description de l\'étape en français'],
+                'fr' => 'Description de l\'étape en français'
+            ],
+            'position'    => 1,
             'template'    => [
                 '563cae8a5072d' => [
                     'label'       =>
@@ -476,6 +511,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         ['fr' => 'Description forfait fr'],
                     'type'        => 'choice_with_description',
                     'required'    => true,
+                    'position'    => 1,
                     'choices'     => [
                         '563cb13a4d3de' => [
                             'label'       =>
@@ -489,6 +525,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                     'en' => 'Description Silver',
                                 ],
                             'unitPrice'   => 3990,
+                            'position'    => 1,
                         ],
                         '563cb1546dd70' => [
                             'label'       =>
@@ -502,6 +539,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                     'en' => 'Description Gold',
                                 ],
                             'unitPrice'   => 5990,
+                            'position'    => 2,
                         ],
                     ],
                 ],
@@ -510,12 +548,11 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedStep->setOptions($expectedStepOption);
         $expectedProduct  = new LibChoiceWithDescriptionProduct('563cae8a5072d');
         $expectedProductOption = [
-            'label'       =>
-                ['fr' => 'Forfait'],
-            'description' =>
-                ['fr' => 'Description forfait fr'],
+            'label'       => ['fr' => 'Forfait'],
+            'description' => ['fr' => 'Description forfait fr'],
             'type'        => 'choice_with_description',
             'required'    => true,
+            'position'    => 1,
             'choices'     => [
                 '563cb13a4d3de' => [
                     'label'       =>
@@ -529,6 +566,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             'en' => 'Description Silver',
                         ],
                     'unitPrice'   => 3990,
+                    'position'    => 1,
                 ],
                 '563cb1546dd70' => [
                     'label'       =>
@@ -542,6 +580,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             'en' => 'Description Gold',
                         ],
                     'unitPrice'   => 5990,
+                    'position'    => 2,
                 ],
             ],
         ];
@@ -559,6 +598,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                     'en' => 'Description Silver',
                 ],
             'unitPrice'   => 3990,
+            'position'    => 1,
         ];
         $expectedChoiceProduct->setOptions($expectedChoiceProductOption);
         $expectedChoiceProduct2 = new LibChoiceProduct('563cb1546dd70');
@@ -574,44 +614,48 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                     'en' => 'Description Gold',
                 ],
             'unitPrice'   => 5990,
+            'position'    => 2,
         ];
 
         $expectedStep2 = new Step('56407fa453f4e');
         $expectedStep2Option = [
-                'label'       => ['fr' => "Options proposées pour optimiser votre participation"],
-                'description' => ['fr' => "Publicité et prommotion"],
-                'template' => [
-                    '56615a0ab3f9f' => [
-                        'label' => [
-                            'fr' => "Affichage logo sur site événement et supports de communication",
-                        ],
-                        'description' => [
-                            'fr' => "test",
-                        ],
-                        'type' => "lib_option",
-                        'unitPrice' => 200,
-                        'includedIn' => [
-                            '563cae7496da1.563cae8a5072d.563cb13a4d3de' => null,
-                            '563cae7496da1.563cae8a5072d.563cb1546dd70' => null,
-                        ],
+            'label'       => ['fr' => "Options proposées pour optimiser votre participation"],
+            'description' => ['fr' => "Publicité et prommotion"],
+            'position'    => 1,
+            'template'    => [
+                '56615a0ab3f9f' => [
+                    'label'       => [
+                        'fr' => "Affichage logo sur site événement et supports de communication",
                     ],
+                    'description' => [
+                        'fr' => "test",
+                    ],
+                    'type'        => "lib_option",
+                    'unitPrice'   => 200,
+                    'includedIn'  => [
+                        '563cae7496da1.563cae8a5072d.563cb13a4d3de' => null,
+                        '563cae7496da1.563cae8a5072d.563cb1546dd70' => null,
+                    ],
+                    'position'    => 1,
                 ],
+            ],
         ];
 
         $expectedProduct2 = new LibOptionProduct('56615a0ab3f9f');
         $expectedProduct2Option = [
-            'label' => [
+            'label'       => [
                 'fr' => "Affichage logo sur site événement et supports de communication",
             ],
             'description' => [
                 'fr' => "test",
             ],
-            'type' => "lib_option",
-            'unitPrice' => 200,
-            'includedIn' => [
+            'type'        => "lib_option",
+            'unitPrice'   => 200,
+            'includedIn'  => [
                 '563cae7496da1.563cae8a5072d.563cb13a4d3de' => null,
                 '563cae7496da1.563cae8a5072d.563cb1546dd70' => null,
             ],
+            'position'    => 1,
         ];
 
         $expectedProduct2->setOptions($expectedProduct2Option);
@@ -632,12 +676,15 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
 
         $productBuilder   = new ProductBuilder();
-        $packageTemplate  = [
+        $packageTemplate = [
             '563cae7496da1' => [
                 'label'       => [
-                    'fr' => 'Forfait de participation'],
+                    'fr' => 'Forfait de participation'
+                ],
                 'description' => [
-                    'fr' => 'Description de l\'étape en français'],
+                    'fr' => 'Description de l\'étape en français'
+                ],
+                'position'    => 1,
                 'template'    => [
                     '563cae8a5072d' => [
                         'label'       =>
@@ -646,6 +693,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                             ['fr' => 'Description forfait fr'],
                         'type'        => 'choice_with_description',
                         'required'    => true,
+                        'position'    => 1,
                         'choices'     => [
                             '563cb13a4d3de' => [
                                 'label'       =>
@@ -659,6 +707,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                         'en' => 'Description Silver',
                                     ],
                                 'unitPrice'   => 3990,
+                                'position'    => 1,
                             ],
                             '563cb1546dd70' => [
                                 'label'       =>
@@ -672,6 +721,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                                         'en' => 'Description Gold',
                                     ],
                                 'unitPrice'   => 5990,
+                                'position'    => 2,
                             ],
                         ],
                     ],
@@ -680,20 +730,22 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             '56407fa453f4e' => [
                 'label'       => ['fr' => "Options proposées pour optimiser votre participation"],
                 'description' => ['fr' => "Publicité et prommotion"],
-                'template' => [
+                'position'    => 1,
+                'template'    => [
                     '56615a0ab3f9f' => [
-                        'label' => [
+                        'label'       => [
                             'fr' => "Affichage logo sur site événement et supports de communication",
                         ],
                         'description' => [
                             'fr' => "test",
                         ],
-                        'type' => "lib_option",
-                        'unitPrice' => 200,
-                        'includedIn' => [
+                        'type'        => "lib_option",
+                        'unitPrice'   => 200,
+                        'includedIn'  => [
                             '563cae7496da1.563cae8a5072d.563cb13a4d3de' => null,
                             '563cae7496da1.563cae8a5072d.563cb1546dd70' => null,
                         ],
+                        'position'    => 1,
                     ],
                 ],
             ]
