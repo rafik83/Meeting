@@ -36,7 +36,7 @@
                         <td>
                             {% if participant.editable %}
                                 <a href="{{ path('event_sheet_update_participant', { 'sheet': preview.id, 'participant': participant.id }) }}" class="btn btn-xs btn-default">
-                                    {{ 'event.sheet.block.update_participant.title'|locale|trans }}
+                                    {{ 'event.sheet.block.update_participant.title'|trans }}
                                 </a>
                             {% endif %}
 
