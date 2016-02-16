@@ -10,23 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Choice;
 
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Application\Command\TypeTemplateField\AbstractHandler;
 
-class UpdateHandler
+class UpdateHandler extends AbstractHandler
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
-     * @param TypeRepositoryInterface $typeRepository
-     */
-    public function __construct(TypeRepositoryInterface $typeRepository)
-    {
-        $this->typeRepository = $typeRepository;
-    }
-
     /**
      * @param Update $update
      *
@@ -34,11 +21,8 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $options = $update->field->getOptions();
+        $options = $this->getOptions($update);
 
-        $options['label'] = $update->label;
-        $options['required'] = $update->required;
-        $options['private'] = $update->private;
         $options['choices'] = $update->choices;
 
         $update->type->updateTemplateRow(

@@ -46,6 +46,11 @@ abstract class AbstractCommand
     public $private;
 
     /**
+     * @var array
+     */
+    public $tags;
+
+    /**
      * @param Type               $type
      * @param string             $templateName
      * @param TypeInterface      $field
@@ -57,6 +62,7 @@ abstract class AbstractCommand
         $this->type         = $type;
         $this->templateName = $templateName;
         $this->field        = $field;
+        $this->tags         = $field->getTags();
 
         $templates = $type->getTemplates();
 

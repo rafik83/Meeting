@@ -10,23 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\TypeTemplateField\Choice;
 
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Application\Command\TypeTemplateField\AbstractHandler;
 
-class CreateHandler
+class CreateHandler extends AbstractHandler
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
-     * @param TypeRepositoryInterface $typeRepository
-     */
-    public function __construct(TypeRepositoryInterface $typeRepository)
-    {
-        $this->typeRepository = $typeRepository;
-    }
-
     /**
      * @param Create $create
      *
@@ -34,11 +21,8 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $options = $create->field->getOptions();
+        $options = $this->getOptions($create);
 
-        $options['label'] = $create->label;
-        $options['required'] = $create->required;
-        $options['private'] = $create->private;
         $options['choices'] = $create->choices;
 
         $create->type->addTemplateRow(

@@ -543,6 +543,8 @@ form:
                 label: Requis
             private:
                 label: Privé
+            tags:
+                label: Tags
             submit:
                 label: Enregistrer
     admin_lib_text:
