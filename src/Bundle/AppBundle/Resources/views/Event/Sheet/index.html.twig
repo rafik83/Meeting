@@ -24,21 +24,19 @@
             </div>
         {% endfor %}
 
-        {% if buttonParticipant.canAddParticipant >= 1 %}
-            {% for i in 1..buttonParticipant.canAddParticipant %}
-                <div class="col-md-4">
-                    <table class="table table-bordered table-condensed" style="height: 160px;">
-                        <tr>
-                            <td class="text-center">
-                                <a href="{{ path('event_sheet_add_participant', { 'sheet': sheetDataView.id }) }}" class="btn btn-default">
-                                    {{ 'event.sheet.block.add_participant.title'|trans }}
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            {% endfor %}
-        {% endif %}
+        {% for i in 0..canAdd %}
+            <div class="col-md-4">
+                <table class="table table-bordered table-condensed" style="height: 160px;">
+                    <tr>
+                        <td class="text-center">
+                            <a href="{{ path('event_sheet_add_participant', { 'sheet': sheetDataView.id }) }}" class="btn btn-default">
+                                {{ 'event.sheet.block.add_participant.title'|trans }}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
     </div>
 
     {% include 'VimeetAppBundle:Event/Sheet:block.html.twig' with {

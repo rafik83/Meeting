@@ -68,17 +68,17 @@ class SheetController extends Controller
             ->get('vimeet_infrastructure.application.components.sheet.manager')
             ->getSheetDataView($sheet, $this->getUser(), $locale);
 
-        $buttonParticipant = $this
+        $canAdd = $this
             ->get('vimeet_infrastructure.application.components.participant.participant_manager')
-            ->canBuyOrAddParticipant($sheet);
+            ->canAddParticipant($sheet);
 
         return $this->render('VimeetAppBundle:Event/Sheet:index.html.twig', [
-            'sheet'                    => $sheet,
-            'eventView'                => $eventView,
-            'typeView'                 => $typeView,
-            'sheetDataView'            => $sheetDataView,
-            'buttonParticipant'        => $buttonParticipant,
-            'locale'                   => $locale,
+            'sheet'         => $sheet,
+            'eventView'     => $eventView,
+            'typeView'      => $typeView,
+            'sheetDataView' => $sheetDataView,
+            'canAdd'        => $canAdd,
+            'locale'        => $locale,
         ]);
     }
 

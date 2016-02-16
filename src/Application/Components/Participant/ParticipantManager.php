@@ -105,9 +105,9 @@ class ParticipantManager
             return 0;
         }
 
-        return $this->getBoughtParticipantWithCart($sheet)
-        + $sheet->getType()->getFreeParticipant()
-        - count($sheet->getParticipants());
+        $count = $this->getBoughtParticipantWithCart($sheet) + $sheet->getType()->getFreeParticipant() - count($sheet->getParticipants());
+
+        return max([0, $count]);
     }
 
     /**
