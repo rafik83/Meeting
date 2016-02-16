@@ -108,10 +108,17 @@ class SheetPreviewFactory
             foreach ($blockValue['template'] as $rowKey => $rowValue) {
                 $value = isset($data[$blockKey][$rowKey]) ? $data[$blockKey][$rowKey] : null;
 
+                // i18n value : get localized value
+                if (is_array($value)) {
+                    $value = isset($value[$locale]) ? $value[$locale] : null;
+                }
+
+                // choices : get choice label
                 if ($value && isset($rowValue['choices'][$value]['label'][$locale])) {
                     $value = $rowValue['choices'][$value]['label'][$locale];
                 }
 
+                // country : get country name
                 if ($value && $rowValue['type'] === 'lib_country') {
                     $value = Intl::getRegionBundle()->getCountryName($value, $locale);
                 }
