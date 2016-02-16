@@ -164,7 +164,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'step1' => [
                 'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
                 'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-                'position'    => 1,
+                'position'    => 10,
                 'template'    => [
                     'option1' => [
                         'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
@@ -172,14 +172,14 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
-                        'position'    => 1,
+                        'position'    => 100,
                     ],
                 ],
             ],
             'step2' => [
                 'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
                 'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-                'position'    => 1,
+                'position'    => 20,
                 'template'    => [
                     'option2' => [
                         'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -187,7 +187,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
-                        'position'    => 1,
+                        'position'    => 9,
                     ],
                     'option3' => [
                         'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -195,7 +195,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                         'type'        => 'lib_option',
                         'unitPrice'   => 300,
                         'quantity'    => ['min' => 0, 'max' => 2],
-                        'position'    => 2,
+                        'position'    => 99,
                     ],
                 ],
             ],
@@ -208,16 +208,16 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $step1->setOptions([
             'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
             'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-            'position'    => 1,
+            'position'    => 10,
             'template'    => [
-               'option1' => [
-                   'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
-                   'description' => ['fr' => '', 'en' => ''],
-                   'type'        => 'lib_option',
-                   'unitPrice'   => 300,
-                   'quantity'    => ['min' => 0, 'max' => 2],
-                   'position'    => 1,
-               ],
+                'option1' => [
+                    'label'       => ['fr' => 'Option 1', 'en' => 'Option 1'],
+                    'description' => ['fr' => '', 'en' => ''],
+                    'type'        => 'lib_option',
+                    'unitPrice'   => 300,
+                    'quantity'    => ['min' => 0, 'max' => 2],
+                    'position'    => 100,
+                ],
             ]
         ]);
         $template->addStep($step1);
@@ -229,7 +229,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
-            'position'    => 2,
+            'position'    => 100,
         ]);
         $step1->addProduct($product1);
 
@@ -237,7 +237,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $step2->setOptions([
             'label'       => ['fr' => 'Etape 1', 'en' => 'Step 1'],
             'description' => ['fr' => 'Lorem ipsum fr', 'en' => 'Lorem ipsum en'],
-            'position'    => 1,
+            'position'    => 20,
             'template'    => [
                'option2' => [
                    'label'       => ['fr' => 'Option 2', 'en' => 'Option 2'],
@@ -245,7 +245,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
-                   'position'    => 1,
+                   'position'    => 9,
                ],
                'option3' => [
                    'label'       => ['fr' => 'Option 3', 'en' => 'Option 3'],
@@ -253,7 +253,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                    'type'        => 'lib_option',
                    'unitPrice'   => 300,
                    'quantity'    => ['min' => 0, 'max' => 2],
-                   'position'    => 2,
+                   'position'    => 99,
                ],
             ]
         ]);
@@ -266,7 +266,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
-            'position'    => 3,
+            'position'    => 9,
         ]);
         $step2->addProduct($product2);
 
@@ -277,7 +277,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             'type'        => 'lib_option',
             'unitPrice'   => 300,
             'quantity'    => ['min' => 0, 'max' => 2],
-            'position'    => 4,
+            'position'    => 99,
         ]);
         $step2->addProduct($product3);
 
@@ -419,7 +419,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
                     'en' => 'Description Gold',
                 ],
             'unitPrice'   => 5990,
-            'position'    => 1,
+            'position'    => 2,
         ];
         $expectedChoiceProduct2->setOptions($expectedChoiceProduct2Option);
         $expectedChoiceProduct2->setChoiceParent($expectedProduct);
