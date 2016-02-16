@@ -24,6 +24,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
         $actual = $factory->createTemplateFromArray([
             '563caf1d9babc' => [
                 'label'    => [],
+                'position' => 1,
                 'template' => [
                     '563caf1d9b1cb' => [
                         'type'                => 'lib_text',
@@ -34,6 +35,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                         'updatableUntil'      => null,
                         'translationRequired' => false,
                         'translatable'        => false,
+                        'position'            => 1,
                     ],
                     '563caf2746398' => [
                         'type'                => 'lib_text',
@@ -44,6 +46,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                         'updatableUntil'      => null,
                         'translationRequired' => false,
                         'translatable'        => false,
+                        'position'            => 2,
                     ],
                 ],
             ],
@@ -59,6 +62,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'updatableUntil'      => null,
             'translationRequired' => false,
             'translatable'        => false,
+            'position'            => 1,
         ]);
 
         $type_563caf2746398 = new LibTextType('563caf2746398');
@@ -71,11 +75,13 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'updatableUntil'      => null,
             'translationRequired' => false,
             'translatable'        => false,
+            'position'            => 2,
         ]);
 
         $group_563caf1d9babc = new Group('563caf1d9babc');
         $group_563caf1d9babc->setOptions([
             'label'    => [],
+            'position' => 1,
             'template' => [
                 '563caf1d9b1cb' => [
                     'type'                => 'lib_text',
@@ -86,6 +92,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                     'updatableUntil'      => null,
                     'translationRequired' => false,
                     'translatable'        => false,
+                    'position'            => 1,
                 ],
                 '563caf2746398' => [
                     'type'                => 'lib_text',
@@ -96,6 +103,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                     'updatableUntil'      => null,
                     'translationRequired' => false,
                     'translatable'        => false,
+                    'position'            => 2,
                 ],
             ],
         ]);
@@ -128,6 +136,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                 'updatableUntil'      => null,
                 'translationRequired' => false,
                 'translatable'        => false,
+                'position'            => 1,
             ],
             '563caf2746398' => [
                 'type'                => 'lib_text',
@@ -138,6 +147,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                 'updatableUntil'      => null,
                 'translationRequired' => false,
                 'translatable'        => false,
+                'position'            => 2,
             ],
 
         ]);
@@ -152,6 +162,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'updatableUntil'      => null,
             'translationRequired' => false,
             'translatable'        => false,
+            'position'            => 1,
         ]);
 
         $type_563caf2746398 = new LibTextType('563caf2746398');
@@ -164,11 +175,13 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
             'updatableUntil'      => null,
             'translationRequired' => false,
             'translatable'        => false,
+            'position'            => 2,
         ]);
 
         $group_563caf1d9babc = new Group('default');
         $group_563caf1d9babc->setOptions([
             'label'    => 'Default',
+            'position' => 1,
             'template' => [
                 '563caf1d9b1cb' => [
                     'type'                => 'lib_text',
@@ -179,6 +192,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                     'updatableUntil'      => null,
                     'translationRequired' => false,
                     'translatable'        => false,
+                    'position'            => 1,
                 ],
                 '563caf2746398' => [
                     'type'                => 'lib_text',
@@ -189,6 +203,7 @@ class TemplateFactoryTest extends \PHPUnit_Framework_TestCase
                     'updatableUntil'      => null,
                     'translationRequired' => false,
                     'translatable'        => false,
+                    'position'            => 2,
                 ],
             ],
         ]);
