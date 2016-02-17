@@ -557,6 +557,7 @@ form:
         children:
             placeholder:
                 label: Placeholder
+                help: "Exemple : \"Sélectionner un item\""
             choices:
                 label: Choix
                 label_add: Ajouter un item

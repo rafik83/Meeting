@@ -30,6 +30,7 @@ class ChoiceType extends AbstractLocalizedType
         $builder
             ->add('placeholder', CollectionType::class, [
                 'entry_type' => TextType::class,
+                'help' => 'form.admin_lib_choice.children.placeholder.help',
             ])
             ->add(
                 'choices',
