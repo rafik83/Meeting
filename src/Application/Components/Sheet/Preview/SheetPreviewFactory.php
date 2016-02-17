@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Component\Intl\Intl;
 
 class SheetPreviewFactory
 {
@@ -65,33 +66,34 @@ class SheetPreviewFactory
      */
     private function createParticipantView(Sheet $sheet, User $user, $locale)
     {
-        $template = $sheet->getType()->getParticipantTemplate();
+        $template = (new TemplateFactory())->createTemplateFromArray($sheet->getType()->getParticipantTemplate());
 
         return array_map(function (Participant $participant) use ($template, $sheet, $user, $locale) {
-            $data     = $participant->getData();
-            $rowViews = [];
+            $data  = new ArrayCollection($participant->getData());
+            $views = [];
 
-            foreach ($template as $rowKey => $rowValue) {
+            foreach ($template->getRows() as $key => $row) {
 
                 // Don't add private data
-                if (isset($rowValue['private']) && $rowValue['private'] === true) {
+                if ($row->isPrivate()) {
                     continue;
                 }
 
-                $rowViews[] = new RowDataView(
-                    $rowValue['label'][$locale],
-                    isset($data[$rowKey]) ? $data[$rowKey] : '...'
+                $views[] = new RowDataView(
+                    $row->getLabel($locale),
+                    $row->getDisplayableValue($data->get($key), $locale) ? : '...'
                 );
             }
 
             return new ParticipantDataView(
                 $participant->getId(),
                 $participant->getUser()->getEmail(),
-                $rowViews,
+                $views,
                 $participant->isOwner(),
                 $participant->getUser()->getId() === $user->getId() || $participant->isOwner(),
                 !$participant->isOwner() && $sheet->getUserParticipant($user)->isOwner()
             );
+
         }, $sheet->getParticipants()->toArray());
     }
 
@@ -103,36 +105,29 @@ class SheetPreviewFactory
      */
     private function createBlockViews(Sheet $sheet, $locale)
     {
-        $data     = $sheet->getData();
-        $template = $sheet->getType()->getSheetTemplate();
-
+        //*
         $blocksViews = [];
+        $data        = new ArrayCollection($sheet->getData());
+        $templates   = (new TemplateFactory())->createTemplatesFromArray($sheet->getType()->getSheetTemplate());
 
-        foreach ($template as $blockKey => $blockValue) {
-            $rowViews = [];
+        foreach ($templates->getTemplates() as $templateKey => $template) {
+            $rowViews  = [];
+            $blockData = new ArrayCollection($data->containsKey($templateKey) ? $data->get($templateKey) : []);
 
-            foreach ($blockValue['template'] as $rowKey => $rowValue) {
-                $value = isset($data[$blockKey][$rowKey]) ? $data[$blockKey][$rowKey] : null;
+            foreach ($template->getRows() as $rowKey => $row) {
 
-                // i18n value : get localized value
-                if (is_array($value)) {
-                    $value = isset($value[$locale]) ? $value[$locale] : null;
+                // Don't add private data
+                if ($row->isPrivate()) {
+                    continue;
                 }
 
-                // choices : get choice label
-                if ($value && isset($rowValue['choices'][$value]['label'][$locale])) {
-                    $value = $rowValue['choices'][$value]['label'][$locale];
-                }
-
-                // country : get country name
-                if ($value && $rowValue['type'] === 'lib_country') {
-                    $value = Intl::getRegionBundle()->getCountryName($value, $locale);
-                }
-
-                $rowViews[$rowKey] = new RowDataView($rowValue['label'][$locale], $value ? $value : '...');
+                $rowViews[$rowKey] = new RowDataView(
+                    $row->getLabel($locale),
+                    $row->getDisplayableValue($blockData->get($rowKey), $locale) ? : '...'
+                );
             }
 
-            $blocksViews[$blockKey] = new BlockDataView($blockValue['label'][$locale], $rowViews);
+            $blocksViews[$templateKey] = new BlockDataView($template->getLabel($locale), $rowViews);
         }
 
         return $blocksViews;
