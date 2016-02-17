@@ -64,7 +64,7 @@ class SheetInfoGuesser
         $info     = $this->taggedInfoGuesser->guess($template, $data, Tag::SHEET_ORGANIZATION);
 
         if (!empty($info)) {
-            return $info[0];
+            return reset($info);
         }
 
         $owner = $this->guessOwnerInfo($sheet);

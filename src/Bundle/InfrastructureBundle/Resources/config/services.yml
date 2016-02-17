@@ -697,7 +697,7 @@ services:
     components.sheet.tagged_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser
         arguments:
-            - '@components.sheet.template_factory'
+            - '@template.template_factory'
     components.sheet.billing_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
         arguments:
@@ -727,6 +727,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@happening.happening_permission_manager'
+
+    #
+    # Template component
+    #
+    template.template_factory:
+        class: Proximum\Vimeet\Application\Components\Template\TemplateFactory
 
     #
     # Spot component

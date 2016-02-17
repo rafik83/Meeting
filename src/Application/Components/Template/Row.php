@@ -64,13 +64,13 @@ abstract class Row
         $resolver->setRequired([
             'type',
             'label',
-            'position',
         ]);
 
         $resolver->setDefaults([
             'required'     => false,
             'private'      => false,
             'translatable' => false,
+            'position'     => 0,
             'tags'         => [],
         ]);
 
