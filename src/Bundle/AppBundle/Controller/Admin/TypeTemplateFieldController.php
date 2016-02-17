@@ -57,6 +57,7 @@ class TypeTemplateFieldController extends Controller
      * @param Request $request
      * @param Event   $event
      * @param Type    $type
+     * @param int     $position
      * @param string  $templateName
      * @param string  $group
      * @param string  $libType
@@ -64,8 +65,15 @@ class TypeTemplateFieldController extends Controller
      * @return RedirectResponse|Response
      * @throws \Exception
      */
-    public function fieldAddAction(Request $request, Event $event, Type $type, $templateName, $group, $libType)
-    {
+    public function fieldAddAction(
+        Request $request,
+        Event $event,
+        Type $type,
+        $position,
+        $templateName,
+        $group,
+        $libType
+    ) {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
@@ -76,6 +84,7 @@ class TypeTemplateFieldController extends Controller
 
         $field = $templateFactory->createType($libType);
         $field->setGroup($group);
+        $field->setPosition($position);
 
         $command = $this
             ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.create_factory')
