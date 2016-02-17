@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Template;
 use Proximum\Vimeet\Application\Components\Template\Exception\InvalidTypeException;
 use Proximum\Vimeet\Application\Components\Template\Exception\NoTypeDefinedException;
 use Proximum\Vimeet\Application\Components\Template\Row\LibTextRow;
+use Proximum\Vimeet\Application\Components\Template\Row\LibEmailRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibTextAreaRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibChoiceRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibCountryRow;
@@ -37,6 +38,7 @@ class TemplateFactory
         $this->types = [
             // Lib
             'lib_text'        => LibTextRow::class,
+            'lib_email'       => LibEmailRow::class,
             'lib_textarea'    => LibTextAreaRow::class,
             'lib_choice'      => LibChoiceRow::class,
             'lib_country'     => LibCountryRow::class,

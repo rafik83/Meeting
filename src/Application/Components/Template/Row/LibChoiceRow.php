@@ -47,7 +47,17 @@ class LibChoiceRow extends AbstractLib
      */
     public function getChoices()
     {
-        return $this->options['choices'];
+        $choices = [];
+
+        foreach ($this->options['choices'] as $key => $choice) {
+            if (isset($choice['choices'])) {
+                $choices = array_merge($choices, $choice['choices']);
+            } else {
+                $choices[$key] = $choice;
+            }
+        }
+
+        return $choices;
     }
 
     /**
