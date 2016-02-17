@@ -87,7 +87,7 @@ class NotificationEventListener implements EventSubscriberInterface
         } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
             $sheet = $event->getMeeting()->getFromSheet();
         } else {
-            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
         // Translate message
@@ -130,7 +130,7 @@ class NotificationEventListener implements EventSubscriberInterface
         } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
             $sheet = $event->getMeeting()->getFromSheet();
         } else {
-            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
         // Translate message
@@ -173,7 +173,7 @@ class NotificationEventListener implements EventSubscriberInterface
         } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
             $sheet = $event->getMeetingRequest()->getFromSheet();
         } else {
-            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
         // Translate message
@@ -194,7 +194,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.added',
             $message,
-            $this->router->generateMeetingRequest($sheet, $event->getMeetingRequest())
+            $this->router->generateMeetingRequest($event->getParticipant()->getSheet(), $event->getMeetingRequest())
         ));
     }
 
@@ -216,7 +216,7 @@ class NotificationEventListener implements EventSubscriberInterface
         } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
             $sheet = $event->getMeetingRequest()->getFromSheet();
         } else {
-            throw new \RuntimeException('Unable to dertimine the sheet the participant has meeting with.');
+            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
         // Translate message
@@ -237,7 +237,7 @@ class NotificationEventListener implements EventSubscriberInterface
             $event->getDate(),
             'meeting_request.participant.removed',
             $message,
-            $this->router->generateMeetingRequest($sheet, $event->getMeetingRequest())
+            $this->router->generateMeetingRequest($event->getParticipant()->getSheet(), $event->getMeetingRequest())
         ));
     }
 
