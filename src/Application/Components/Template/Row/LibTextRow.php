@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Template\Row;
 
-use Proximum\Vimeet\Application\Components\Template\Row;
-
-class LibTextRow extends Row
+class LibTextRow extends AbstractLib
 {
 }

@@ -61,26 +61,21 @@ abstract class Row
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
-            'type',
-            'label',
-        ]);
-
+        $resolver->setRequired(['type', 'label']);
         $resolver->setDefaults([
-            'required'     => false,
-            'private'      => false,
-            'translatable' => false,
-            'position'     => 0,
-            'tags'         => [],
+            'required'       => false,
+            'private'        => false,
+            'tags'           => [],
+            'position'       => 0,
+            'description'    => '',
         ]);
-
         $resolver->setAllowedTypes('type', ['string']);
         $resolver->setAllowedTypes('label', ['string', 'array']);
-        $resolver->setAllowedTypes('position', ['int']);
         $resolver->setAllowedTypes('required', ['bool']);
         $resolver->setAllowedTypes('private', ['bool']);
-        $resolver->setAllowedTypes('translatable', ['bool']);
         $resolver->setAllowedTypes('tags', ['array']);
+        $resolver->setAllowedTypes('position', ['int']);
+        $resolver->setAllowedTypes('description', ['string', 'array']);
     }
 
     /**
@@ -94,17 +89,6 @@ abstract class Row
         return is_array($this->options[$option]) ?
             (isset($this->options[$option][$locale]) ? $this->options[$option][$locale] : '') :
             $this->options[$option];
-    }
-
-    /**
-     * @param mixed  $value
-     * @param string $locale
-     *
-     * @return mixed
-     */
-    public function getDisplayableValue($value, $locale)
-    {
-        return is_array($value) && $this->isTranslatable() ? $value[$locale] : $value;
     }
 
     /**
@@ -126,14 +110,6 @@ abstract class Row
     }
 
     /**
-     * @return int
-     */
-    public function getPosition()
-    {
-        return $this->options['position'];
-    }
-
-    /**
      * @return bool
      */
     public function isRequired()
@@ -147,14 +123,6 @@ abstract class Row
     public function isPrivate()
     {
         return $this->options['private'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTranslatable()
-    {
-        return $this->options['translatable'];
     }
 
     /**
@@ -173,5 +141,34 @@ abstract class Row
     public function hasTag($tag)
     {
         return in_array($tag, $this->getTags());
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->options['position'];
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->getLocalizedOption('description', $locale);
+    }
+
+    /**
+     * @param mixed  $value
+     * @param string $locale
+     *
+     * @return mixed
+     */
+    public function getDisplayableValue($value, $locale)
+    {
+        return $value;
     }
 }

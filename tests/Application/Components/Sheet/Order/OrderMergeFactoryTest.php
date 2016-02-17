@@ -13,7 +13,7 @@ namespace Tests\Application\Components\Sheet\Order;
 use Proximum\Vimeet\Application\Components\Sheet\Order\GroupFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMerge;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMergeFactory;
-use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;

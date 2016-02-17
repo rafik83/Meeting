@@ -11,10 +11,9 @@
 namespace Proximum\Vimeet\Application\Components\Template\Row;
 
 use Proximum\Vimeet\Application\Components\Template\Exception\ChoiceNotFoundException;
-use Proximum\Vimeet\Application\Components\Template\Row;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibChoiceRow extends Row
+class LibChoiceRow extends AbstractLib
 {
     /**
      * {@inheritdoc}

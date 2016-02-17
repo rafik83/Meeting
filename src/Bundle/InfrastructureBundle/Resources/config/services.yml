@@ -663,7 +663,7 @@ services:
     components.sheet.group_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\GroupFactory
         arguments:
-            - '@components.sheet.template_factory'
+            - '@template.template_factory'
     components.sheet.order_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory
         arguments:

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Template\Row;
 
+use Proximum\Vimeet\Application\Components\Template\Exception\ChoiceNotFoundException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Choice
@@ -34,10 +35,32 @@ class Choice
     {
         $resolver = new OptionsResolver();
         $resolver->setRequired(['label']);
+        $resolver->setDefaults([
+            'unitPrice'   => 0,
+            'description' => '',
+        ]);
         $resolver->setAllowedTypes('label', ['string', 'array']);
+        $resolver->setAllowedTypes('unitPrice', ['int', 'float']);
+        $resolver->setAllowedTypes('description', ['string', 'array']);
 
         $this->value   = $value;
         $this->options = $resolver->resolve($template);
+    }
+
+    /**
+     * @param array  $choices
+     * @param string $key
+     *
+     * @return Choice
+     * @throws ChoiceNotFoundException
+     */
+    public static function createFromChoices(array $choices, $key)
+    {
+        if (!isset($choices[$key])) {
+            throw new ChoiceNotFoundException($key, array_keys($choices));
+        }
+
+        return new Choice($key, $choices[$key]);
     }
 
     /**
@@ -58,6 +81,24 @@ class Choice
     public function getLabel($locale)
     {
         return $this->getLocalizedOption('label', $locale);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->getLocalizedOption('description', $locale);
+    }
+
+    /**
+     * @return float
+     */
+    public function getUnitPrice()
+    {
+        return $this->options['unitPrice'];
     }
 
     /**

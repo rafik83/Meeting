@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Template\Row;
 
-class LibTextAreaRow extends AbstractLib
+class ProductOptionRow extends AbstractProduct
 {
 }

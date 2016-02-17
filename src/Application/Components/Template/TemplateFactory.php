@@ -16,6 +16,10 @@ use Proximum\Vimeet\Application\Components\Template\Row\LibTextRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibTextAreaRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibChoiceRow;
 use Proximum\Vimeet\Application\Components\Template\Row\LibCountryRow;
+use Proximum\Vimeet\Application\Components\Template\Row\ProductOptionRow;
+use Proximum\Vimeet\Application\Components\Template\Row\ProductPlaningRow;
+use Proximum\Vimeet\Application\Components\Template\Row\ProductParticipantRow;
+use Proximum\Vimeet\Application\Components\Template\Row\ProductRadioRow;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TemplateFactory
@@ -31,10 +35,18 @@ class TemplateFactory
     public function __construct()
     {
         $this->types = [
-            'lib_text'     => LibTextRow::class,
-            'lib_textarea' => LibTextAreaRow::class,
-            'lib_choice'   => LibChoiceRow::class,
-            'lib_country'  => LibCountryRow::class,
+            // Lib
+            'lib_text'        => LibTextRow::class,
+            'lib_textarea'    => LibTextAreaRow::class,
+            'lib_choice'      => LibChoiceRow::class,
+            'lib_country'     => LibCountryRow::class,
+            // Product
+            'lib_option'      => ProductOptionRow::class,
+            'lib_participant' => ProductParticipantRow::class,
+            'lib_planning'    => ProductPlaningRow::class,
+            'lib_radio'       => ProductRadioRow::class,
+            // BC
+            'choice_with_description' => ProductRadioRow::class,
         ];
     }
 

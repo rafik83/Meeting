@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Template\Row;
+namespace Proximum\Vimeet\Application\Components\Template\Exception;
 
-class LibTextAreaRow extends AbstractLib
+class NotAvailableException extends TemplateException
 {
 }

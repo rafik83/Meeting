@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Template\Row;
 
-use Proximum\Vimeet\Application\Components\Template\Row;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LibCountryRow extends Row
+class LibCountryRow extends AbstractLib
 {
     /**
      * {@inheritdoc}
