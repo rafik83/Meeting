@@ -7,6 +7,13 @@ admin_event_list:
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Event:list }
 
+admin_event_read:
+    path: /event/{event}
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Event:read }
+
 admin_event_update:
     path: /event/{event}/update
     requirements:
