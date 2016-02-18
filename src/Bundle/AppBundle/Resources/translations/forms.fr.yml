@@ -555,6 +555,9 @@ form:
                 label: Traduction requise
     admin_lib_choice:
         children:
+            placeholder:
+                label: Placeholder
+                help: "Exemple : \"Sélectionner un item\""
             choices:
                 label: Choix
                 label_add: Ajouter un item

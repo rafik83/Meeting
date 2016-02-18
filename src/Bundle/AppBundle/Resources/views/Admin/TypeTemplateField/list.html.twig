@@ -29,21 +29,27 @@
                         </tr>
                     {% endif %}
 
-                    <tr>
-                        <td colspan="6">
-                            {% include 'VimeetAppBundle:Admin/TypeTemplateField:addLinks.html.twig' with {event: event, type: typeView, templateName: templateName, group: group} %}
-                        </td>
-                    </tr>
-
                     {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
                         typeId: typeView.id,
                         templateName: templateName,
                         types: group.types,
                         group: group
                     } %}
+
+                    <tr>
+                        <td colspan="6">
+                            {% include 'VimeetAppBundle:Admin/TypeTemplateField:addLinks.html.twig' with {
+                                event: event,
+                                type: typeView,
+                                templateName: templateName,
+                                group: group,
+                                position: group.types|length + 1
+                            } %}
+                        </td>
+                    </tr>
                 {% else %}
                     <tr>
-                        <td colspan="6">Aucun champ</td>
+                        <td colspan="6">Aucun groupe de champ</td>
                     </tr>
                 {% endfor %}
             {% elseif packageObject %}

@@ -36,6 +36,14 @@ class LibChoiceType extends AbstractType
     }
 
     /**
+     * return []
+     */
+    public function getPlaceholder()
+    {
+        return $this->getOption('placeholder');
+    }
+
+    /**
      * @return bool
      */
     public function isEditable()

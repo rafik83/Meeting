@@ -11,7 +11,11 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin;
 
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChoiceType extends AbstractLocalizedType
@@ -24,6 +28,10 @@ class ChoiceType extends AbstractLocalizedType
         parent::buildForm($builder, $options);
 
         $builder
+            ->add('placeholder', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'help' => 'form.admin_lib_choice.children.placeholder.help',
+            ])
             ->add(
                 'choices',
                 CollectionType::class,
@@ -34,6 +42,19 @@ class ChoiceType extends AbstractLocalizedType
                     'allow_delete'  => true,
                 ]
             );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::finishView($view, $form, $options);
+
+        foreach ($view->children['placeholder'] as $labelTranslation) {
+            $localeLabel = Intl::getLocaleBundle()->getLocaleName($labelTranslation->vars['name']);
+            $labelTranslation->vars['label'] = ucfirst($localeLabel);
+        }
     }
 
     /**
