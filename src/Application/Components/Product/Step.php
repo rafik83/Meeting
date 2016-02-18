@@ -59,6 +59,7 @@ class Step
     {
         $optionsResolver->setRequired(['label', 'template']);
         $optionsResolver->setDefined(['description']);
+        $optionsResolver->setDefault('position', 1);
     }
 
     /**

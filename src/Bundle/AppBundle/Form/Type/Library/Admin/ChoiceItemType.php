@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeTemplateField;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChoiceType extends AbstractType
+class ChoiceItemType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class ChoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', ChoiceLabelTranslationsType::class, [
+            ->add('label', LabelTranslationsType::class, [
                 'locales' => $options['locales'],
                 'label'   => false,
             ]);
@@ -31,16 +31,16 @@ class ChoiceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return 'type_template_field_update_choice';
+        $resolver->setRequired(['locales']);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function getBlockPrefix()
     {
-        $resolver->setRequired(['locales']);
+        return 'admin_lib_choice_item';
     }
 }

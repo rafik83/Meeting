@@ -7,6 +7,13 @@ admin_event_list:
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Event:list }
 
+admin_event_read:
+    path: /event/{event}
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Event:read }
+
 admin_event_update:
     path: /event/{event}/update
     requirements:
@@ -75,15 +82,38 @@ admin_type_template_field_list:
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:list }
 
-admin_type_template_field_update:
-    path: /event/{event}/type/{type}/form/field/update/{template}/{key}
+admin_type_template_field_add:
+    path: /event/{event}/type/{type}/form/field/add/{libType}/{position}/to/{templateName}/{group}
     requirements:
         event: \d+
         type: \d+
-        template: \w+
-        key: \w+
+        position: \d+
+        templateName: \w+
+        group: \w+
+        libType: \w+
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldAdd }
+
+admin_type_template_field_update:
+    path: /event/{event}/type/{type}/form/field/update/{templateName}/{group}/{row}
+    requirements:
+        event: \d+
+        type: \d+
+        templateName: \w+
+        group: \w+
+        row: \w+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldUpdate }
+
+admin_type_template_field_position:
+    path: /event/{event}/type/{type}/form/field/position/{templateName}/{group}
+    requirements:
+        event: \d+
+        type: \d+
+        templateName: \w+
+        group: \w+
+    methods: [POST]
+    defaults: { _controller: VimeetAppBundle:Admin/TypeTemplateField:fieldPosition }
 
 #
 # Category
