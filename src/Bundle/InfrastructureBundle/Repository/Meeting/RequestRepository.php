@@ -15,6 +15,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -129,11 +130,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
+            ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event)
             ->where('request.meeting IS NULL');
+
+        $resultQueryBuilder = clone $queryBuilder;
 
         if (!empty($filter) && isset($filter['state'])) {
             $queryBuilder
@@ -144,9 +147,17 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder
             ->orderBy('request.createdAt', 'DESC');
 
-        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
+        $countQueryBuilder = clone $queryBuilder;
+        $countQueryBuilder->select('COUNT(request.id)');
+        $count = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
-        $pagination->setItems(array_map(function (Request $request) {
+        $idsQueryBuilder = clone $queryBuilder;
+        $idsQueryBuilder->select('request.id')->setFirstResult(($page - 1) * $limit)->setMaxResults($limit);
+        $ids = array_keys($idsQueryBuilder->getQuery()->getResult());
+
+        $results = $resultQueryBuilder->andWhere('request.id IN (:ids)')->setParameter('ids', $ids)->getQuery()->getResult();
+
+        return new PaginatedResult(array_map(function (Request $request) {
             return new RequestView(
                 $request->getId(),
                 $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
@@ -155,9 +166,7 @@ class RequestRepository implements RequestRepositoryInterface
                 $request->getCreatedAt(),
                 ''
             );
-        }, $pagination->getItems()));
-
-        return $pagination;
+        }, $results), $page, $limit, $count);
     }
 
     /**

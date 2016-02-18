@@ -65,7 +65,7 @@ class MeetingRequestController extends Controller
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequests->getTotalItemCount(),
+            'totalRequest'     => $meetingRequests->total,
             'filter_form'      => $filterForm->createView(),
             'filtered'         => $filtered,
         ]);
