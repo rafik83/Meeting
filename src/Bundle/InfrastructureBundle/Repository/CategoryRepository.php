@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -91,16 +92,33 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\CategoryListView(category.id, translation.title)')
-            ->from('Entity:Category', 'category')
+            ->from('Entity:Category', 'category', 'category.id')
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->join('category.event', 'event', 'WITH', 'event.id = :eventId')
             ->setParameter('locale', $locale)
-            ->setParameter('eventId', $eventId);
+            ->setParameter('eventId', $eventId)
+            ->orderBy('category.id', 'ASC');
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, [
-            'defaultSortFieldName' => 'category.id',
-            'defaultSortDirection' => 'ASC',
-        ]);
+        $resultQueryBuilder = clone $queryBuilder;
+        $countQueryBuilder  = clone $queryBuilder;
+        $countQueryBuilder->select('COUNT(category.id)');
+        $count = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
+
+        $idsQueryBuilder = clone $queryBuilder;
+        $idsQueryBuilder->select('category.id')->setFirstResult(($page - 1) * $limit)->setMaxResults($limit);
+        $ids = array_keys($idsQueryBuilder->getQuery()->getResult());
+
+        $results = $resultQueryBuilder
+            ->andWhere('category.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        return new PaginatedResult($results, $page, $limit, $count);
+        //return $this->paginator->paginate($queryBuilder, $page, $limit, [
+        //    'defaultSortFieldName' => 'category.id',
+        //    'defaultSortDirection' => 'ASC',
+        //]);
     }
 
     /**
