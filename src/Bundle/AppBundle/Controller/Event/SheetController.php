@@ -88,7 +88,7 @@ class SheetController extends Controller
         $updateBlock = new UpdateBlock($sheet, $block, $locale);
         $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
             'template' => $sheetTemplate[$block]['template'],
-            'locale'   => $request->getLocale(),
+            'locale'   => $locale,
             'submit'   => true,
         ]);
 
