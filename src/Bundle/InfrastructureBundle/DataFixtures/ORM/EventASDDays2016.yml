@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
-        title: "ASD Days 2016"
+        title: "ASD Days"
         domain: asddays-2016.<domain()>
         timeZone: 'Europe/Paris'
         locales: [fr, en]
