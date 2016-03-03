@@ -76,7 +76,7 @@ class SheetController extends Controller
         }
 
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
+            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
         }
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
