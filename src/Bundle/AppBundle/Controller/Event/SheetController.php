@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SheetController extends Controller
 {
     /**
-     * Sheet.
+     * Display the sheet in the choosen locale (independently from the interface locale).
      *
      * @param Request   $request
      * @param EventView $eventView
@@ -161,6 +161,8 @@ class SheetController extends Controller
     }
 
     /**
+     * Update sheet part in the choosen locale (independently from the interface locale)
+     *
      * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
