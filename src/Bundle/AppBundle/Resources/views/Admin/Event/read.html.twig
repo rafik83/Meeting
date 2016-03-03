@@ -1,0 +1,7 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    {% include 'VimeetAppBundle:Admin/Event:links.html.twig' with {event: event} %}
+{% endblock %}
