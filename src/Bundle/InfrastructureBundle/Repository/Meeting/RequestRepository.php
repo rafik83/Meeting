@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -29,7 +29,7 @@ class RequestRepository implements RequestRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
+     * @var Paginator
      */
     private $paginator;
 
@@ -41,11 +41,11 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * RequestRepository constructor.
      *
-     * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
-     * @param SheetInfoGuesser   $sheetInfoGuesser
+     * @param EntityManager    $entityManager
+     * @param Paginator        $paginator
+     * @param SheetInfoGuesser $sheetInfoGuesser
      */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator, SheetInfoGuesser $sheetInfoGuesser)
+    public function __construct(EntityManager $entityManager, Paginator $paginator, SheetInfoGuesser $sheetInfoGuesser)
     {
         $this->entityManager    = $entityManager;
         $this->paginator        = $paginator;
@@ -124,6 +124,24 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countAllByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(request)')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->where('request.meeting IS NULL');
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = [])
     {
         $queryBuilder = $this
@@ -134,9 +152,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event)
-            ->where('request.meeting IS NULL');
-
-        $resultQueryBuilder = clone $queryBuilder;
+            ->where('request.meeting IS NULL')
+            ->orderBy('request.createdAt', 'DESC');
 
         if (!empty($filter) && isset($filter['state'])) {
             $queryBuilder
@@ -144,18 +161,7 @@ class RequestRepository implements RequestRepositoryInterface
                 ->setParameter('state', $filter['state']);
         }
 
-        $queryBuilder
-            ->orderBy('request.createdAt', 'DESC');
-
-        $countQueryBuilder = clone $queryBuilder;
-        $countQueryBuilder->select('COUNT(request.id)');
-        $count = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
-
-        $idsQueryBuilder = clone $queryBuilder;
-        $idsQueryBuilder->select('request.id')->setFirstResult(($page - 1) * $limit)->setMaxResults($limit);
-        $ids = array_keys($idsQueryBuilder->getQuery()->getResult());
-
-        $results = $resultQueryBuilder->andWhere('request.id IN (:ids)')->setParameter('ids', $ids)->getQuery()->getResult();
+        list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
 
         return new PaginatedResult(array_map(function (Request $request) {
             return new RequestView(
@@ -167,39 +173,6 @@ class RequestRepository implements RequestRepositoryInterface
                 ''
             );
         }, $results), $page, $limit, $count);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPendingByEvent(Event $event, $page, $limit)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event)
-            ->where('request.state = :state')
-            ->setParameter('state', Request::STATE_APPROVED)
-            ->andWhere('request.meeting IS NULL');
-
-        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
-
-        $pagination->setItems(array_map(function (Request $request) {
-            return new RequestView(
-                $request->getId(),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
-                $request->getState(),
-                $request->getCreatedAt(),
-                ''
-            );
-        }, $pagination->getItems()));
-
-        return $pagination;
     }
 
     /**

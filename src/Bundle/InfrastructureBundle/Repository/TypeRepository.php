@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -26,15 +26,15 @@ class TypeRepository implements TypeRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
+     * @var Paginator
      */
     private $paginator;
 
-    /**
-     * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
+    /**s
+     * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(EntityManager $entityManager, PaginatorInterface $paginator)
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
         $this->paginator     = $paginator;
@@ -53,12 +53,10 @@ class TypeRepository implements TypeRepositoryInterface
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
             ->setParameter('locale', $locale)
-            ->setParameter('eventId', $eventId);
+            ->setParameter('eventId', $eventId)
+            ->orderBy('type.id', 'ASC');
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, [
-            'defaultSortFieldName' => 'type.id',
-            'defaultSortDirection' => 'ASC',
-        ]);
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'type', 'id');
     }
 
     /**

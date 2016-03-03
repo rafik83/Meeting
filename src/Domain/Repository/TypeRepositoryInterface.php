@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -26,7 +27,7 @@ interface TypeRepositoryInterface
      * @param int    $eventId
      * @param string $locale
      *
-     * @return TypeListView[]
+     * @return PaginatedResult
      */
     public function paginate($page, $limit, $eventId, $locale);
 
