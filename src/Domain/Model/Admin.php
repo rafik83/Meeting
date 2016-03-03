@@ -10,34 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * "Compte admin/organisateur/collaborateur".
  */
-class Admin implements UserInterface, EquatableInterface, \Serializable
+class Admin extends AbstractUser
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $email;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
-     * @var string
-     */
-    private $salt;
-
     /**
      * @var string
      */
@@ -49,50 +26,18 @@ class Admin implements UserInterface, EquatableInterface, \Serializable
     private $lastname;
 
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @param string $email
      * @param string $salt
      * @param string $password
      * @param string $firstname
      * @param string $lastname
-     * @param string $locale
      */
-    public function __construct($email, $salt, $password, $firstname, $lastname, $locale)
+    public function __construct($email, $salt, $password, $firstname, $lastname)
     {
-        $this->email     = $email;
-        $this->salt      = $salt;
-        $this->password  = $password;
+        parent::__construct($email, $salt, $password);
+
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
-        $this->locale    = $locale;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**
@@ -101,30 +46,6 @@ class Admin implements UserInterface, EquatableInterface, \Serializable
     public function getRoles()
     {
         return ['ROLE_ADMIN'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUsername()
-    {
-        return $this->email;
     }
 
     /**
@@ -141,14 +62,6 @@ class Admin implements UserInterface, EquatableInterface, \Serializable
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function eraseCredentials()
-    {
-        $this->password = null;
     }
 
     /**
@@ -179,39 +92,5 @@ class Admin implements UserInterface, EquatableInterface, \Serializable
             $this->lastname,
             $this->salt
             ) = unserialize($serialized);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEqualTo(UserInterface $user)
-    {
-        return $this->getUsername() === $user->getUsername();
-    }
-
-    /**
-     * @param string $salt
-     * @param string $password
-     *
-     * @return User
-     */
-    public function updatePassword($salt, $password)
-    {
-        $this->salt     = $salt;
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
-    public function updateEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
     }
 }
