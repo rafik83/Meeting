@@ -1,17 +1,17 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
-        title: ASD Days 2016
+        title: "ASD Days 2016"
         domain: asddays-2016.<domain()>
         timeZone: 'Europe/Paris'
         locales: [fr, en]
         fallback: fr
-        organiserName: PROXIMUM
+        organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
-        organiserEmail: accounts@proximumgroup.com
+        organiserEmail: "accounts@proximumgroup.com"
         bankInfo: |+
-            'HSBC Issy les Moulineaux
+            HSBC Issy les Moulineaux
             IBAN: FR76 3005 6006 4306 4332 4153 439
-            SWIFT (BIC): CCFRFRPP'
+            SWIFT (BIC): CCFRFRPP
         legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
