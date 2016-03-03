@@ -35,6 +35,7 @@ class Choice
     {
         $resolver = new OptionsResolver();
         $resolver->setRequired(['label']);
+        $resolver->setDefined(['position']);
         $resolver->setDefaults([
             'unitPrice'   => 0,
             'description' => '',
@@ -42,6 +43,7 @@ class Choice
         $resolver->setAllowedTypes('label', ['string', 'array']);
         $resolver->setAllowedTypes('unitPrice', ['int', 'float']);
         $resolver->setAllowedTypes('description', ['string', 'array']);
+        $resolver->setAllowedTypes('position', ['int']);
 
         $this->value   = $value;
         $this->options = $resolver->resolve($template);
