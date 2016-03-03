@@ -645,7 +645,6 @@ services:
             - '@mailer'
             - '@twig'
 
-
     #
     # Template component
     #
