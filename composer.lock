@@ -1119,7 +1119,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/ec53cd0805d0ba53a98f70a91a760071d19f66dc",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/1e3df90e92db524c70218ee3133b09ff7d4edd57",
                 "reference": "ec53cd0805d0ba53a98f70a91a760071d19f66dc",
                 "shasum": ""
             },
@@ -1913,7 +1913,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/e72a636faba613807e0d531d5c805e165aa6b87f",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/d49bb8156466a9396e186610fe19d62a50c76202",
                 "reference": "97c2f5cd2a3f09ddd5c79725e91ab4ac46729950",
                 "shasum": ""
             },
@@ -2419,16 +2419,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.0.2",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "18c3d4f356931a5b6a4afb0cc679a2c58931c795"
+                "reference": "09ae53562ce8b7842206efa217ec81442975f055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/18c3d4f356931a5b6a4afb0cc679a2c58931c795",
-                "reference": "18c3d4f356931a5b6a4afb0cc679a2c58931c795",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/09ae53562ce8b7842206efa217ec81442975f055",
+                "reference": "09ae53562ce8b7842206efa217ec81442975f055",
                 "shasum": ""
             },
             "require": {
@@ -2498,7 +2498,7 @@
                 "doctrine/orm": "~2.4,>=2.4.5",
                 "egulias/email-validator": "~1.2",
                 "monolog/monolog": "~1.11",
-                "ocramius/proxy-manager": "~0.4|~1.0",
+                "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
                 "phpdocumentor/reflection": "^1.0.7",
                 "symfony/polyfill-apcu": "~1.1",
                 "symfony/security-acl": "~2.8|~3.0"
@@ -2544,7 +2544,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-02-03 12:42:23"
+            "time": "2016-02-28 21:33:29"
         },
         {
             "name": "twig/twig",
@@ -2619,7 +2619,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/e080d0be50fdeb00ee8df23fb585577ca031a628",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/264dea6cfb667fd63649d61e8c4c0b36f6612164",
                 "reference": "718159921b1d844b8805b5ab2e7d1be34ca323cb",
                 "shasum": ""
             },
@@ -2757,7 +2757,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/Mink/zipball/309421c76ce991dbaad91baab07f7fafec761c7e",
+                "url": "https://api.github.com/repos/minkphp/Mink/zipball/fa2216de9527dcbaef695aec8d3700facf8c9afc",
                 "reference": "309421c76ce991dbaad91baab07f7fafec761c7e",
                 "shasum": ""
             },
@@ -2815,7 +2815,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/2650f5420e713e3807c7f09a07370a4f48367bf9",
+                "url": "https://api.github.com/repos/minkphp/MinkBrowserKitDriver/zipball/10aacb4350d258e53a0f7a4ff86d6e362660224f",
                 "reference": "2650f5420e713e3807c7f09a07370a4f48367bf9",
                 "shasum": ""
             },
@@ -2871,7 +2871,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/5b4bda64ff456104564317e212c823e45cad9d59",
+                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/c9adb3230128ef91fde624f91b551a672f835e9e",
                 "reference": "296445cec02e36836a6298452631be8e00b1e13a",
                 "shasum": ""
             },
@@ -2930,7 +2930,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkGoutteDriver/zipball/c8e254f127d6f2242b994afd4339fb62d471df3f",
+                "url": "https://api.github.com/repos/minkphp/MinkGoutteDriver/zipball/66ff549ea1f9c96e24ce557ae60d3cbade55263f",
                 "reference": "c8e254f127d6f2242b994afd4339fb62d471df3f",
                 "shasum": ""
             },
@@ -2985,7 +2985,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkSelenium2Driver/zipball/943536170fe63e6a9ead12b7ac0b17560664d3cf",
+                "url": "https://api.github.com/repos/minkphp/MinkSelenium2Driver/zipball/f5237f06fcf5e19d57832051b3bd23237ab31dea",
                 "reference": "943536170fe63e6a9ead12b7ac0b17560664d3cf",
                 "shasum": ""
             },
@@ -3420,7 +3420,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/635318b246ce2cd6a5d22b2118fb02fd1dd99e22",
+                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/744f6710a56ee4f3b61e7d59f7cf86b9d2a0eea5",
                 "reference": "e3f776e30b6ab60a3f57ac7264a6eac6262165fd",
                 "shasum": ""
             },
