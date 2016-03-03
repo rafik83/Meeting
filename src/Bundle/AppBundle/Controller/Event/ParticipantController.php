@@ -14,10 +14,9 @@ use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
+use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
-use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
-use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
-use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
+use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantUpdateType;
@@ -97,7 +96,7 @@ class ParticipantController extends Controller
             throw $this->createAccessDeniedException('You are not allowed to update this participant');
         }
 
-        $updateParticipant = new Update($participant->getId(), $participant->getData());
+        $updateParticipant = new Update($sheet, $this->getUser(), $participant);
         $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
             'template' => $sheet->getType()->getParticipantTemplate(),
             'locale'   => $request->getLocale(),
@@ -111,6 +110,8 @@ class ParticipantController extends Controller
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
+            } catch (UpdateNotAllowedException $exception) {
+                $this->addFlash('error', 'flash.sheet.update_participant.access_denied');
             } catch (RequiredDataEmptyException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
@@ -139,16 +140,12 @@ class ParticipantController extends Controller
             throw $this->createAccessDeniedException('You are not allowed to delete this participant');
         }
 
-        $delete = new Delete($sheet, $this->getUser(), $participant->getId());
+        $delete = new Delete($sheet, $this->getUser(), $participant);
 
         try {
             $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
             $this->addFlash('success', 'flash.sheet.delete_participant.success');
-        } catch (IsNotLinkedToSheetException $exception) {
-            $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
-        } catch (OwnerCanNotBeDeletedException $exception) {
-            $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
-        } catch (IsNotOwnerException $exception) {
+        } catch (DeleteNotAllowedException $exception) {
             $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');
         }
 

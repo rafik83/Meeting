@@ -161,6 +161,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
@@ -178,6 +179,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
     vimeet_infrastructure.vimeet.application.command.package.update_step_handler:
         class: Proximum\Vimeet\Application\Command\Package\UpdateStepHandler
         arguments:

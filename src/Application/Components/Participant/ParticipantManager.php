@@ -357,7 +357,7 @@ class ParticipantManager
     }
 
     /**
-     * A user is allowed to delete a participant if he is allowed to edit it and the participant is not the sheet owner
+     * A user is allowed to delete a participant if he is the sheet owner and the participant is not the sheet owner
      *
      * @param Sheet       $sheet
      * @param Participant $participant
@@ -367,6 +367,6 @@ class ParticipantManager
      */
     public function isUserAllowedToDeleteParticipant(Sheet $sheet, Participant $participant, User $user)
     {
-        return $this->isUserAllowedToDeleteParticipant($sheet, $participant, $user) && !$participant->isOwner();
+        return $sheet->hasParticipant($participant) && $sheet->getUserParticipant($user)->isOwner() && !$participant->isOwner();
     }
 }

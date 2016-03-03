@@ -12,6 +12,8 @@ namespace Tests\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\UpdateHandler;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -39,11 +41,44 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedParticipant = new Participant($sheet, $user, ['foobar' => 'foobar'], $owner, true);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->findById(1)->shouldBeCalled()->willReturn($participant);
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
-        $update  = new Update(1, ['foobar' => 'foobar']);
-        $handler = new UpdateHandler($participantRepository->reveal());
+        $participantManager = $this->prophesize(ParticipantManager::class);
+        $participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)->shouldBeCalled()->willReturn(true);
+
+        $update  = new Update($sheet, $user, $participant);
+        $update->data = ['foobar' => 'foobar'];
+        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal());
+        $handler->handle($update);
+    }
+
+    public function testUpdateNotAllowedException()
+    {
+        $this->expectException(UpdateNotAllowedException::class);
+
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $event = new Event();
+        $type  = new Type($event);
+        $type->setParticipantTemplate([
+            'foobar' => [
+                'required' => true,
+                'private'  => false,
+            ]
+        ]);
+        $sheet = new Sheet($event, $type, [], []);
+        $owner = true;
+
+        $participant = new Participant($sheet, $user, ['foobar' => 'barfoo'], $owner, true);
+
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->set()->shouldNotBeCalled();
+
+        $participantManager = $this->prophesize(ParticipantManager::class);
+        $participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)->shouldBeCalled()->willReturn(false);
+
+        $update  = new Update($sheet, $user, $participant);
+        $update->data = ['foobar' => 'foobar'];
+        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal());
         $handler->handle($update);
     }
 }
