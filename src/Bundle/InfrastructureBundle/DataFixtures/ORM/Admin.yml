@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    user_admin:
+        __construct: false
+        email: "goi@proximumgroup.com"
+        salt: "4/CiKqpS3JTxE7RJZ+qDT50J0+zC3bhBWX0Uog82"
+        password: "EPsSLiRRBVveJU892hb3CMV+bz4=" #vimeet_admin
+        firstname: "Layla"
+        lastname: "GOI"
+
+    user_orga:
+        __construct: false
+        email: "larose@proximumgroup.com"
+        salt: "b21f0e9ecc60233ae5f9d64d878748a4c715e8c9"
+        password: "7oHMj2wak/EN0Kg74uWIpqRrhT8=" #vimeet_orga
+        firstname: "Vincent"
+        lastname: "LAROSE"
+
+    user_co:
+        __construct: false
+        email: "gagnard@proximumgroup.com"
+        salt: "927f28daa8fee88026e30a4660e3baea077d579c"
+        password: "IS+6G2rSP7rSHnC6rvJs30XQEn8=" #vimeet_co
+        firstname: "Julien"
+        lastname: "GAGNARD"
