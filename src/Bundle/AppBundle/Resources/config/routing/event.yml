@@ -86,21 +86,6 @@ event_sheet_locale:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
 
-event_sheet_add_participant:
-    path:     /sheet/{sheet}/add_participant
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:addParticipant }
-
-event_sheet_update_participant:
-    path:     /sheet/{sheet}/update_participant/{participant}
-    requirements:
-        sheet: \d+
-        participant: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:updateParticipant }
-
 event_sheet_update_block:
     path:     /sheet/{sheet}/{locale}/update_block/{block}
     requirements:
@@ -108,7 +93,26 @@ event_sheet_update_block:
         locale: '[a-z]{2}'
         block: \w+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:updateBlock }
+    defaults: { _controller: VimeetAppBundle:Event/Sheet:block }
+
+#
+# Sheet - Participant
+#
+
+event_sheet_add_participant:
+    path:     /sheet/{sheet}/add_participant
+    requirements:
+        sheet: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Participant:add }
+
+event_sheet_update_participant:
+    path:     /sheet/{sheet}/update_participant/{participant}
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Event/Participant:update }
 
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}
@@ -116,7 +120,11 @@ event_sheet_delete_participant:
         sheet: \d+
         participant: \d+
     methods:  [DELETE]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:deleteParticipant }
+    defaults: { _controller: VimeetAppBundle:Event/Participant:delete }
+
+#
+# Sheet - Package
+#
 
 event_sheet_package_update_step:
     path:     /sheet/{sheet}/update_step/{step}
@@ -148,6 +156,10 @@ event_sheet_package_cart:
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Package:cart }
 
+#
+# Sheet Billing
+#
+
 event_sheet_billing:
     path:     /sheet/{sheet}/billing
     requirements:
@@ -161,6 +173,10 @@ event_sheet_package_payment_mode:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: VimeetAppBundle:Event/Billing:paymentMode }
+
+#
+# Sheet - Order
+#
 
 event_sheet_list_orders:
     path:     /sheet/{sheet}/orders
