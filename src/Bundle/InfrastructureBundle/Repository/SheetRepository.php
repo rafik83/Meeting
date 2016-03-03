@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -32,7 +33,7 @@ class SheetRepository implements SheetRepositoryInterface
     private $typeRepository;
 
     /**
-     * @var PaginatorInterface
+     * @var Paginator
      */
     private $paginator;
 
@@ -40,17 +41,19 @@ class SheetRepository implements SheetRepositoryInterface
      * SheetRepository constructor.
      *
      * @param EntityManager           $entityManager
+     * @param Paginator               $paginator
      * @param TypeRepositoryInterface $typeRepository
-     * @param PaginatorInterface      $paginator
+     *
      */
     public function __construct(
         EntityManager $entityManager,
-        TypeRepositoryInterface $typeRepository,
-        PaginatorInterface $paginator
+        Paginator $paginator,
+        TypeRepositoryInterface $typeRepository
     ) {
         $this->entityManager  = $entityManager;
-        $this->typeRepository = $typeRepository;
         $this->paginator      = $paginator;
+        $this->typeRepository = $typeRepository;
+
     }
 
     /**
@@ -86,7 +89,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('locale', $locale)
             ->join('sheet.participants', 'participant', 'WITH', 'participant.owner = TRUE');
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit);
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }
 
     /**

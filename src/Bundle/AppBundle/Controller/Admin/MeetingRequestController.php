@@ -62,10 +62,14 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filter);
 
+        $meetingRequestsAll = $this
+            ->get('vimeet_infrastructure.repository.meeting.request_repository')
+            ->countAllByEvent($event);
+
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequests->total,
+            'totalRequest'     => $meetingRequestsAll,
             'filter_form'      => $filterForm->createView(),
             'filtered'         => $filtered,
         ]);

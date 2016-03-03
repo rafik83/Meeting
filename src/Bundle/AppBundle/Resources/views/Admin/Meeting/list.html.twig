@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for meeting in meetings %}
+            {% for meeting in meetings.results %}
                 <tr>
                     <td>{{ meeting.sheetNameFrom }}</td>
                     <td>{{ meeting.sheetNameTo }}</td>
@@ -34,7 +34,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-    {{ knp_pagination_render(meetings) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': meetings}) }}
 
 {% endblock %}
