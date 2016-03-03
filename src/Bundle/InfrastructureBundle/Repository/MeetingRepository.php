@@ -77,7 +77,7 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('meeting')
-            ->from(Meeting::class, 'meeting')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event);

@@ -38,9 +38,7 @@ class Paginator
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
-        $ids = array_filter($idsQueryBuilder->getQuery()->getResult(), function ($id) {
-            return isset($id['id']) ? $id['id'] : $id;
-        });
+        $ids = array_keys($idsQueryBuilder->getQuery()->getResult());
 
         $results = $resultQueryBuilder
             ->andWhere($selector .'.' . $element . ' IN (:ids)')
