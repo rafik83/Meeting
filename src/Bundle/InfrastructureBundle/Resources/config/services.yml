@@ -126,6 +126,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\SpeakerRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.admin_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\AdminRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
