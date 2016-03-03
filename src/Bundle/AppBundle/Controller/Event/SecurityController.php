@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -76,7 +77,7 @@ class SecurityController extends Controller
      */
     public function loginUserAction(User $user)
     {
-        $this->get('adapter.authentication_manager')->authenticate($user);
+        $this->get('adapter.authentication_manager')->authenticate($user, 'main');
 
         return $this->redirectToRoute('event');
     }
