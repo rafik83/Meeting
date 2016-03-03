@@ -274,4 +274,14 @@ class Sheet implements BillingInfoInterface
             return $participant->getUser() === $user;
         });
     }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasParticipant(Participant $participant)
+    {
+        return $this->participants->contains($participant);
+    }
 }

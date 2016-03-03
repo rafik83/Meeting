@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Application\Components\Participant;
 
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -325,7 +327,7 @@ class ParticipantManager
             }
         }
 
-        return;
+        return null;
     }
 
     private function countNumberOfParticipantAttachedToAnOrder(Sheet $sheet, Order $order)
@@ -338,5 +340,33 @@ class ParticipantManager
         }
 
         return $numberOfParticipantAttached;
+    }
+
+    /**
+     * A user is allowed to edit a participant if he is the sheet owner or if he is the participant himself
+     *
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     * @param User        $user
+     *
+     * @return bool
+     */
+    public function isUserAllowedToEditParticipant(Sheet $sheet, Participant $participant, User $user)
+    {
+        return $sheet->hasParticipant($participant) && ($sheet->getUserParticipant($user)->isOwner() || $participant->getUser() === $user);
+    }
+
+    /**
+     * A user is allowed to delete a participant if he is allowed to edit it and the participant is not the sheet owner
+     *
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     * @param User        $user
+     *
+     * @return bool
+     */
+    public function isUserAllowedToDeleteParticipant(Sheet $sheet, Participant $participant, User $user)
+    {
+        return $this->isUserAllowedToDeleteParticipant($sheet, $participant, $user) && !$participant->isOwner();
     }
 }

@@ -93,8 +93,8 @@ class ParticipantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($this->getUser()->getId() !== $participant->getUser()->getId()) {
-            throw $this->createAccessDeniedException('You can not update other participant');
+        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
+            throw $this->createAccessDeniedException('You are not allowed to update this participant');
         }
 
         $updateParticipant = new Update($participant->getId(), $participant->getData());
@@ -134,6 +134,10 @@ class ParticipantController extends Controller
     public function deleteAction(Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
+            throw $this->createAccessDeniedException('You are not allowed to delete this participant');
+        }
 
         $delete = new Delete($sheet, $this->getUser(), $participant->getId());
 

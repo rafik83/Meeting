@@ -49,7 +49,7 @@ class SheetPreviewFactory
             $locale,
             $sheet->getId(),
             $sheet->getType()->getTitle($locale),
-            $this->createParticipantView($sheet, $user, $locale),
+            $this->createParticipantViews($sheet, $user, $locale),
             $this->participantManager->canAddParticipant($sheet),
             $this->createBlockViews($sheet, $locale),
             $sheet->getOrders()->count(),
@@ -64,7 +64,7 @@ class SheetPreviewFactory
      *
      * @return ParticipantDataView[]
      */
-    private function createParticipantView(Sheet $sheet, User $user, $locale)
+    private function createParticipantViews(Sheet $sheet, User $user, $locale)
     {
         $template = (new TemplateFactory())->createTemplateFromArray($sheet->getType()->getParticipantTemplate());
 
@@ -90,8 +90,8 @@ class SheetPreviewFactory
                 $participant->getUser()->getEmail(),
                 $views,
                 $participant->isOwner(),
-                $participant->getUser()->getId() === $user->getId() || $participant->isOwner(),
-                !$participant->isOwner() && $sheet->getUserParticipant($user)->isOwner()
+                $this->participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user),
+                $this->participantManager->isUserAllowedToDeleteParticipant($sheet, $participant, $user)
             );
 
         }, $sheet->getParticipants()->toArray());
