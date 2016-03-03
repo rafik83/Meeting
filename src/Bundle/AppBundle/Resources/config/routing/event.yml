@@ -14,7 +14,7 @@ event:
 event_register:
     path: /register/{typeView}
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Home:register }
+    defaults: { _controller: VimeetAppBundle:Event/Register:register }
 
 #
 # Change mail
@@ -65,7 +65,7 @@ event_activate_account:
 event_participate:
     path: /participate/{typeView}
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Home:participate }
+    defaults: { _controller: VimeetAppBundle:Event/Register:participate }
 
 #
 # Sheet
