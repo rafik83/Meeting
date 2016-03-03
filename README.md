@@ -1,6 +1,6 @@
 # Proximum - Vimeet
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f/big.png)](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f/small.png)](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f)
 
 ## Development
 
