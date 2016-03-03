@@ -831,11 +831,44 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
+        participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
         sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
         previewTemplate: '@event_asddays_2016_template_investisseur->preview'
 
+    event_asddays_2016_type_donneur_ordre:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_investisseur->package'
+        previewTemplate: '@event_asddays_2016_template_investisseur->preview'
+        
+    event_asddays_2016_type_structure_de_recherche:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_fournisseur->package'
+        previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
+    
+    event_asddays_2016_type_delegation:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_fournisseur->package'
+        previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
+        
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_fournisseur_fr:
         __construct: ['@event_asddays_2016_type_fournisseur', fr, "Fournisseur"]
@@ -845,3 +878,15 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         __construct: ['@event_asddays_2016_type_investisseur', fr, "Investisseur"]
     event_asddays_2016_type_investisseur_en:
         __construct: ['@event_asddays_2016_type_investisseur', en, "Investor"]
+    event_asddays_2016_type_donneur_ordre_fr:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', fr, "Donneur d'ordre"]
+    event_asddays_2016_type_donneur_ordre_en:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', en, "Contractor"]
+    event_asddays_2016_type_structure_de_recherche_fr:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', fr, "Structure de recherche"]
+    event_asddays_2016_type_structure_de_recherche_en:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', en, "Research entity"]
+    event_asddays_2016_type_delegation_fr:
+        __construct: ['@event_asddays_2016_type_delegation', fr, "Délégation"]
+    event_asddays_2016_type_delegation_en:
+    __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]
