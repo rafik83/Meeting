@@ -59,7 +59,7 @@ class Template
      */
     public function getLabel($locale)
     {
-        return is_array($this->label) ? $this->label[$locale] : $this->label;
+        return is_array($this->label) ? (isset($this->label[$locale]) ? $this->label[$locale] : null) : $this->label;
     }
 
     /**
@@ -71,7 +71,7 @@ class Template
      */
     public function getDescription($locale)
     {
-        return is_array($this->description) ? $this->description[$locale] : $this->description;
+        return is_array($this->description) ? (isset($this->description[$locale]) ? $this->description[$locale] : null) : $this->description;
     }
 
     /**
