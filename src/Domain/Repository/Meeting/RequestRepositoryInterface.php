@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
-use Knp\Component\Pager\PaginatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -51,22 +51,19 @@ interface RequestRepositoryInterface
 
     /**
      * @param Event $event
+     * @return int
+     */
+    public function countAllByEvent(Event $event);
+
+    /**
+     * @param Event $event
      * @param $page
      * @param $limit
      * @param array $filter
      *
-     * @return PaginatorInterface
+     * @return PaginatedResult
      */
     public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = []);
-
-    /**
-     * @param Event $event
-     * @param int   $page
-     * @param int   $limit
-     *
-     * @return PaginatorInterface
-     */
-    public function getPendingByEvent(Event $event, $page, $limit);
 
     /**
      * @param Sheet $one

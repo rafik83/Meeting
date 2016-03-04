@@ -30,13 +30,13 @@ class SheetController extends Controller
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->paginate($request->query->getInt('page', 1), 20, $event, $request->getLocale());
 
-        $sheets->setItems(array_map(function (Sheet $sheet) use ($request) {
+        $sheets->results = array_map(function (Sheet $sheet) use ($request) {
             return new SheetListView(
                 $sheet->getId(),
                 $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($sheet),
                 $sheet->getType()->getTranslations()->get($request->getLocale())->getTitle()
             );
-        }, $sheets->getItems()));
+        }, $sheets->results);
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'  => $event,

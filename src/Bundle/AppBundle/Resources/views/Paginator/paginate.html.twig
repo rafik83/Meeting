@@ -1,0 +1,37 @@
+{% if paginator.pages > 1 %}
+    <nav class="text-center">
+        <ul class="pagination">
+            {% if paginator.page > 1 %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.page - 1 })|url_encode }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.page })|url_encode }}" aria-label="Next">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in 1..paginator.pages %}
+                <li{% if page == paginator.page %} class="active"{% endif %}>
+                    <a href="?{{ app.request.query.all|merge({ 'page': page })|url_encode }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            {% if paginator.page < paginator.pages %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.page + 1 })|url_encode }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.page })|url_encode }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
