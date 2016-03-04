@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for category in categories %}
+        {% for category in categories.results %}
             <tr>
                 <td>{{ category.title }}</td>
                 <td>
@@ -28,7 +28,7 @@
         </tbody>
     </table>
 
-    {{ knp_pagination_render(categories) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': categories}) }}
 
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>

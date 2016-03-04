@@ -19,14 +19,13 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantCreateType
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class HomeController extends BaseController
+class HomeController extends Controller
 {
     /**
      * Event home.
@@ -80,14 +79,14 @@ class HomeController extends BaseController
         $form = $this->createForm(RegisterType::class, $register, [
             'action' => $this->generateUrl('event_register', ['typeView'  => $typeView->id]),
             'method' => 'POST',
+            'submit' => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 // Register and authenticate the user
                 $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
-                $this->authenticate($register->user);
+                $this->get('adapter.authentication_manager')->authenticate($register->user);
                 $this->addFlash('success', 'flash.event.register.success');
 
                 // Go to participate form
@@ -122,14 +121,13 @@ class HomeController extends BaseController
         $this->hasUserAlreadyCreatedParticipant($this->getUser()->getId());
 
         // Create participate form
-        $create = new Create();
-        $form   = $this->createForm(ParticipantCreateType::class, $create, [
+        $create   = new Create();
+        $template = $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($typeView->id);
+        $form     = $this->createForm(ParticipantCreateType::class, $create, [
             'locale'   => $eventView->locale,
-            'template' => $this
-                ->get('vimeet_infrastructure.repository.type_repository')
-                ->getParticipantTemplate($typeView->id),
+            'template' => $template,
+            'submit'   => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
@@ -138,17 +136,15 @@ class HomeController extends BaseController
             try {
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $create->data);
-
-                $this
-                    ->get('vimeet_infrastructure.application.command.user.participate_handler')
-                    ->handle($participate);
-
+                $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
             } catch (RequiredDataEmptyException $exception) {
-                $form = $this->addRequiredErrorOnForm($form, $type->getParticipantTemplate(), $create->data, $form->get('data'));
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
             }
         }
 
@@ -169,7 +165,7 @@ class HomeController extends BaseController
             ->getAllParticipantForUser($userId);
 
         if (1 <= count($participants)) {
-            throw new AccessDeniedException('Participation already created');
+            throw $this->createAccessDeniedException('Participation already created');
         }
     }
 }

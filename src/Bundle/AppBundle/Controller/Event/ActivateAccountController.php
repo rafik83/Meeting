@@ -10,18 +10,16 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
-use DateTime;
-use Elastica\Exception\NotFoundException;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
 use Proximum\Vimeet\Domain\View\EventView;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ActivateAccountController extends BaseController
+class ActivateAccountController extends Controller
 {
     /**
      * @param Request              $request
@@ -32,35 +30,31 @@ class ActivateAccountController extends BaseController
      */
     public function passwordAction(Request $request, EventView $eventView, ActivateAccountToken $activateAccountToken)
     {
-        if (new DateTime() > $activateAccountToken->getExpireDate()
-            || null === $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($activateAccountToken->getUser(), $activateAccountToken->getSheet())
-        ) {
-            throw new NotFoundException('Date of the token expired');
-        }
-
-        $this->disconnect($request);
-
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
-        $activateAccountPassword = new ActivateAccountPassword($user);
 
-        $form = $this->createForm(ActivateAccountPasswordType::class, $activateAccountPassword, [
-            'action' => $this->generateUrl('event_activate_account', [
-                'token' => $activateAccountToken->getToken(),
-            ]),
-            'method' => 'POST',
-        ]);
-        $form->add('submit', SubmitType::class);
+        // We must refresh sheet to make behat feature working ...
+        $this->getDoctrine()->getManager()->refresh($sheet);
+
+        if ($activateAccountToken->isExpired(new \DateTime()) || !$sheet->hasUser($user)) {
+            throw $this->createNotFoundException('The token is expired.');
+        }
+
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->get('adapter.authentication_manager')->disconnect();
+        }
+
+        $command = new ActivateAccountPassword($user);
+        $form    = $this->createForm(ActivateAccountPasswordType::class, $command, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.user.activate_account_password_handler')->handle($activateAccountPassword);
-            $this->authenticate($activateAccountPassword->user);
-
+            $this->get('command.user.activate_account_password_handler')->handle($command);
+            $this->get('adapter.authentication_manager')->authenticate($command->user);
             $this->addFlash('success', 'flash.activate_account.success');
 
             return $this->redirectToRoute('event_sheet_update_participant', [
                 'sheet'       => $sheet->getId(),
-                'participant' => $this->get('vimeet_infrastructure.repository.participant_repository')->getParticipantForUserAndSheet($user, $sheet)->getId()
+                'participant' => $sheet->getUserParticipant($user)->getId()
             ]);
         }
 

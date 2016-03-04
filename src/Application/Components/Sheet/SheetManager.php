@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\SheetCatalogView;
 use Proximum\Vimeet\Domain\View\SheetDataView;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SheetManager
 {
@@ -140,19 +139,6 @@ class SheetManager
         });
 
         return $this->getSheetsWithoutMeetingRequestForTheGivenSheet($sheet, $sheets);
-    }
-
-    /**
-     * @param Sheet $to
-     * @param Sheet $from
-     *
-     * @throws AccessDeniedException
-     */
-    public function isAllowedToRequestMeeting(Sheet $to, Sheet $from)
-    {
-        if (empty($this->getSheetsWithoutMeetingRequestForTheGivenSheet($to, [$from]))) {
-            throw new AccessDeniedException('You are not allowed to request a meeting with this sheet');
-        }
     }
 
     /**

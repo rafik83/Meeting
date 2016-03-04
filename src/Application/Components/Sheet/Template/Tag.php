@@ -25,4 +25,26 @@ final class Tag
     const BILLING_VAT_NUMBER    = 'billing_vat_number';
     const BILLING_EXTRA         = 'billing_extra';
     const SHEET_ORGANIZATION    = 'sheet_organization';
+
+    /**
+     * @return array
+     */
+    public static function getAll()
+    {
+        return [
+            self::PARTICIPANT_FIRSTNAME,
+            self::PARTICIPANT_LASTNAME,
+            self::BILLING_NAME,
+            self::BILLING_ADDRESS,
+            self::BILLING_CITY,
+            self::BILLING_ZIPCODE,
+            self::BILLING_COUNTRY,
+            self::BILLING_PHONE,
+            self::BILLING_EMAIL,
+            self::BILLING_ORGANIZATION,
+            self::BILLING_VAT_NUMBER,
+            self::BILLING_EXTRA,
+            self::SHEET_ORGANIZATION,
+        ];
+    }
 }

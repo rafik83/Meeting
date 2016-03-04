@@ -17,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class SecurityController extends Controller
 {
@@ -72,18 +70,13 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User    $user
+     * @param User $user
      *
      * @return RedirectResponse
      */
-    public function loginUserAction(Request $request, User $user)
+    public function loginUserAction(User $user)
     {
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-
-        $event = new InteractiveLoginEvent($request, $token);
-        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+        $this->get('adapter.authentication_manager')->authenticate($user);
 
         return $this->redirectToRoute('event');
     }

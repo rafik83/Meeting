@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
+use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
@@ -24,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,10 +66,11 @@ class SpotController extends Controller
 
         return $this->render(
             'VimeetAppBundle:Admin/Spot:list.html.twig', [
-            'spots'       => $spots,
-            'event'       => $event,
-            'filter_form' => $filterForm->createView(),
-            'filtered'    => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'spots'               => $spots,
+            'event'               => $event,
+            'filter_form'         => $filterForm->createView(),
+            'filtered'            => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'update_url'          => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);
     }
 
@@ -161,6 +166,38 @@ class SpotController extends Controller
         return $this->render('VimeetAppBundle:Admin/Spot:batchCreate.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Event $event)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            $command = new Update($event, $data['id'], $data['property'], $data['value']);
+            $this->get('command.spot.update_handler')->handle($command);
+        } catch (SpotNotFoundException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 404);
+        } catch (UniqueReferenceViolationException $exception) {
+            $error = $this->get('translator')->trans('validators.spot.reference.unique', [], 'validators');
+
+            return new JsonResponse(['error' => $error], 403);
+        } catch (SpotException $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 403);
+        } catch (\Exception $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()], 500);
+        }
+
+        return new JsonResponse([
+            'id'       => $command->id,
+            'property' => $command->property,
+            'value'    => $command->value
         ]);
     }
 }

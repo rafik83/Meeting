@@ -20,12 +20,12 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
+            - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.category_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
+            - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
@@ -39,8 +39,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@knp_paginator'
     vimeet_infrastructure.repository.spot_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SpotRepository
         arguments:
@@ -70,7 +70,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
+            - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
@@ -92,7 +92,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@knp_paginator'
+            - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.meeting_slot_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
@@ -214,6 +214,11 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.batch_create_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
+        arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
+            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler:
             class: Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler
             arguments:
@@ -222,15 +227,14 @@ services:
             class: Proximum\Vimeet\Application\Command\Spot\DisableBatchHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
+    command.spot.update_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
     vimeet_infrastructure.vimeet.application.command.spot.enable_batch_handler:
             class: Proximum\Vimeet\Application\Command\Spot\EnableBatchHandler
             arguments:
                 - '@vimeet_infrastructure.repository.spot_repository'
-    command.spot.batch_create_handler:
-        class: Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler
-        arguments:
-            - '@vimeet_infrastructure.vimeet.application.command.spot.create_handler'
-            - '@spot.reference_factory'
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -253,8 +257,48 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
-    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler:
-        class: Proximum\Vimeet\Application\Command\TypeTemplateField\UpdateHandler
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandFactory
+        arguments:
+            -
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\Text\Create'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Create'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_handler_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandHandlerFactory
+        arguments:
+            -
+                lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.create_text_handler'
+                lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.create_choice_handler'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_text_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Text\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.create_choice_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandFactory
+        arguments:
+            -
+                lib_text:   'Proximum\Vimeet\Application\Command\TypeTemplateField\Text\Update'
+                lib_choice: 'Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Update'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\CommandHandlerFactory
+        arguments:
+            -
+                lib_text:   '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler'
+                lib_choice: '@vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_text_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Text\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.update_choice_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.vimeet.application.command.type_template_field.position_handler:
+        class: Proximum\Vimeet\Application\Command\TypeTemplateField\Position\PositionHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
@@ -442,6 +486,13 @@ services:
         arguments:
             - '%kernel.root_dir%/../web'
             - '@datetime'
+    adapter.authentication_manager:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\AuthenticationManager
+        arguments:
+            - '@security.token_storage'
+            - '@session'
+            - '@event_dispatcher'
+            - '@request_stack'
 
     #
     # Components
@@ -539,6 +590,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
         arguments:
             - '@components.sheet.tagged_info_guesser'
+
+    #
+    # Paginator Component
+    #
+    vimeet.components.paginator:
+        class: Proximum\Vimeet\Application\Components\Paginator\Paginator
 
     #
     # Schedule component

@@ -1,0 +1,10 @@
+{% block happening_talking_row %}
+    {% set group_attr = group_attr|default({})|merge({ 'class': group_attr.class|default('') ~ ' row' }) %}
+    <div {{ block('row_container_attributes') }}>
+        {{ form_row(form.speaker, { 'group_attr': { 'class': 'col-md-5' } }) }}
+        {{ form_row(form.position, { 'group_attr': { 'class': 'col-md-5' } }) }}
+        <div class="col-md-2 text-right">
+            {{ block('collection_delete_button') }}
+        </div>
+    </div>
+{% endblock %}

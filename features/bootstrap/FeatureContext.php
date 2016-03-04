@@ -362,6 +362,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @Given I am on Admin
+     */
+    public function iAmOnAdmin()
+    {
+        $this->setBaseUrl('http://vimeet.proximum.dev');
+    }
+
+    /**
      * @Given I am logged with :email and :password on event :event
      */
     public function iAmLoggedOnEvent($email, $password, $eventUrl)

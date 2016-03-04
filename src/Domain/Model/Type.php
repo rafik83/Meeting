@@ -199,7 +199,7 @@ class Type implements WhoInterface
     /**
      * @param array $participantTemplate
      *
-     * @return Type
+     * @return self
      */
     public function setParticipantTemplate(array $participantTemplate)
     {
@@ -211,7 +211,7 @@ class Type implements WhoInterface
     /**
      * @param array $sheetTemplate
      *
-     * @return Type
+     * @return self
      */
     public function setSheetTemplate(array $sheetTemplate)
     {
@@ -259,7 +259,7 @@ class Type implements WhoInterface
     /**
      * Get preview.
      *
-     * @return mixed
+     * @return string
      */
     public function getPreviewTemplate()
     {
@@ -307,6 +307,41 @@ class Type implements WhoInterface
     }
 
     /**
+     * @param $templateName
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getTemplate($templateName)
+    {
+        $getter = 'get' . ucfirst($templateName) . 'Template';
+
+        if (!method_exists($this, $getter)) {
+            throw new \Exception("Method $getter not exists");
+        }
+
+        return $this->$getter();
+    }
+
+    /**
+     * @param string $name
+     * @param array $template
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function setTemplateByName($name, array $template)
+    {
+        $setter = 'set' . ucfirst($name) . 'Template';
+
+        if (!method_exists($this, $setter)) {
+            throw new \Exception("Method $setter not exists");
+        }
+
+        return $this->$setter($template);
+    }
+
+    /**
      * @return array
      */
     public function getTemplates()
@@ -316,5 +351,106 @@ class Type implements WhoInterface
             'sheetTemplate'       => $this->getSheetTemplate(),
             'packageTemplate'     => $this->getPackageTemplate(),
         ];
+    }
+
+    /**
+     * @param string $templateName
+     * @param string $group
+     * @param string $row
+     * @param array  $options
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function updateTemplateRow($templateName, $group, $row, array $options)
+    {
+        $template = $this->getTemplate($templateName);
+
+        if ('default' === $group) {
+            if (!isset($template[$row])) {
+                throw new \Exception("$row do not exists in template $templateName");
+            }
+
+            $template[$row] = $options;
+        } else {
+            if (!isset($template[$group])) {
+                throw new \Exception("$group do not exists in template $templateName");
+            }
+
+            if (!isset($template[$group]['template'][$row])) {
+                throw new \Exception("$group / $row do not exists in template $templateName");
+            }
+
+            $template[$group]['template'][$row] = $options;
+        }
+
+        return $this->setTemplateByName($templateName, $template);
+    }
+
+    /**
+     * @param string $templateName
+     * @param string $group
+     * @param string $row
+     * @param array  $options
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function addTemplateRow($templateName, $group, $row, array $options)
+    {
+        $template = $this->getTemplate($templateName);
+
+        if ('default' === $group) {
+            if (isset($template[$row])) {
+                throw new \Exception("$row already exists in template $templateName");
+            }
+
+            $template[$row] = $options;
+        } else {
+            if (!isset($template[$group])) {
+                throw new \Exception("$group do not exists in template $templateName");
+            }
+
+            if (isset($template[$group]['template'][$row])) {
+                throw new \Exception("$group / $row already exists in template $templateName");
+            }
+
+            $template[$group]['template'][$row] = $options;
+        }
+
+        return $this->setTemplateByName($templateName, $template);
+    }
+
+    /**
+     * @param string $templateName
+     * @param string $group
+     * @param array  $rows
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public function setTemplateRows($templateName, $group, array $rows)
+    {
+        $template = $this->getTemplate($templateName);
+
+        if ('default' === $group) {
+            $template = [];
+
+            foreach ($rows as $row => $options) {
+                $template[$row] = $options;
+            }
+        } else {
+            if (!isset($template[$group])) {
+                throw new \Exception("$group do not exists in template $templateName");
+            }
+
+            $template[$group]['template'] = [];
+
+            foreach ($rows as $row => $options) {
+                $template[$group]['template'][$row] = $options;
+            }
+        }
+
+        return $this->setTemplateByName($templateName, $template);
     }
 }

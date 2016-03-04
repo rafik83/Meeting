@@ -35,6 +35,7 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
         $packageTemplate = [
             'group1' => [
                 'label' => 'group1-label',
+                'position' => 1,
                 'template' => [
                     'row1' => [
                         'label' => ['fr' => 'row1-label'],
@@ -45,6 +46,7 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
                             'min' => 0,
                             'max' => 4
                         ],
+                        'position' => 1,
                         'updatableUntil' => (new \DateTime("+1 week"))->format('Y-m-d H:i:s'),
                     ]
                 ]
@@ -89,12 +91,13 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 'group1' => [
                     'label' => 'group1-label',
+                    'position' => 1,
                     'template' => [
                         'row1' => [
                             'label' => 'row1-label',
                             'description' => 'row1-description',
                             'type' => 'lib_option',
-                            'unitPrice' => 100,
+                            'unitPrice' => 100
                         ],
                     ],
                 ],
@@ -140,6 +143,7 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
                             'min' => 0,
                             'max' => 4
                         ],
+                        'position' => 1,
                         'updatableUntil' => (new \DateTime("+1 week"))->format('Y-m-d H:i:s'),
                     ]
                 ]

@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Command\BaseHandler;
+use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class ParticipateHandler extends BaseHandler
+class ParticipateHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -49,7 +49,7 @@ class ParticipateHandler extends BaseHandler
     public function handle(Participate $participate)
     {
         // Check the constraint on the data (required)
-        $this->checkDataConstraint($participate->data, $participate->type->getParticipantTemplate());
+        (new DataConstraintChecker())->check($participate->data, $participate->type->getParticipantTemplate());
 
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], []);

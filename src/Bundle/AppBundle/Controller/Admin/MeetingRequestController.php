@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeetingRequestController extends Controller
 {
@@ -63,10 +62,14 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filter);
 
+        $meetingRequestsAll = $this
+            ->get('vimeet_infrastructure.repository.meeting.request_repository')
+            ->countAllByEvent($event);
+
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequests->getTotalItemCount(),
+            'totalRequest'     => $meetingRequestsAll,
             'filter_form'      => $filterForm->createView(),
             'filtered'         => $filtered,
         ]);
@@ -116,8 +119,8 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        if ($meetingRequest->getState() !== MeetingRequest::STATE_APPROVED) {
-            throw new NotFoundHttpException();
+        if (!$meetingRequest->isApproved()) {
+            throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
         }
 
         $command = new PositionMeeting($meetingRequest, new \DateTime());

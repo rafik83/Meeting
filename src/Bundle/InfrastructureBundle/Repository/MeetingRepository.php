@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\PaginatorInterface;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -27,7 +27,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     private $entityManager;
 
     /**
-     * @var PaginatorInterface
+     * @var Paginator
      */
     private $paginator;
 
@@ -37,13 +37,13 @@ class MeetingRepository implements MeetingRepositoryInterface
     private $sheetInfoGuesser;
 
     /**
-     * @param EntityManager      $entityManager
-     * @param PaginatorInterface $paginator
-     * @param SheetInfoGuesser   $sheetInfoGuesser
+     * @param EntityManager    $entityManager
+     * @param Paginator        $paginator
+     * @param SheetInfoGuesser $sheetInfoGuesser
      */
     public function __construct(
         EntityManager $entityManager,
-        PaginatorInterface $paginator,
+        Paginator $paginator,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
         $this->entityManager    = $entityManager;
@@ -77,14 +77,14 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('meeting')
-            ->from(Meeting::class, 'meeting')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event);
 
-        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit);
+        $pagination = $this->paginator->paginate($queryBuilder, $page, $limit, 'meeting', 'id');
 
-        $pagination->setItems(array_map(function (Meeting $meeting) {
+        $pagination->results = array_map(function (Meeting $meeting) {
             return new MeetingView(
                 $meeting->getId(),
                 $this->sheetInfoGuesser->guessSheetInfo($meeting->getFromSheet()),
@@ -93,7 +93,7 @@ class MeetingRepository implements MeetingRepositoryInterface
                 $meeting->getSlot()->getBegin(),
                 $meeting->getSlot()->getEnd()
             );
-        }, $pagination->getItems()));
+        }, $pagination->results);
 
         return $pagination;
     }
