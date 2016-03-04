@@ -13,12 +13,12 @@ Feature: Update category
 
   Scenario: I can list event categories
     When I go to "/admin/event/1/category"
-    And I should see "Exposant"
+    Then I should see "Exposant"
     And I should see "Visiteur"
 
   Scenario: I can add a category
     When I go to "/admin/event/1/category/create"
-    And I fill in the following:
+    Then I fill in the following:
       | category_create_translations_fr_title | category title fr |
       | category_create_translations_en_title | category title en |
     And I check "category_create_types_0"
@@ -28,7 +28,7 @@ Feature: Update category
 
   Scenario: I can add a type in a category
     When I go to "/admin/event/1/category/1/update"
-    And the "category_update_types_0" checkbox should be checked
+    Then the "category_update_types_0" checkbox should be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should not be checked
     And I check "category_update_types_2"
@@ -41,7 +41,7 @@ Feature: Update category
 
   Scenario: I can remove a type in a category
     When I go to "/admin/event/1/category/1/update"
-    And the "category_update_types_0" checkbox should be checked
+    Then the "category_update_types_0" checkbox should be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should not be checked
     And I uncheck "category_update_types_0"
