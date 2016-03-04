@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
