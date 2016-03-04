@@ -85,6 +85,23 @@ class Category implements WhoInterface
     }
 
     /**
+     * @param string $locale
+     * @param string $fallbackLocale
+     *
+     * @return string
+     */
+    public function getTitle($locale, $fallbackLocale)
+    {
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            $translation = $this->translations->get($fallbackLocale);
+        };
+
+        return $translation->getTitle();
+    }
+
+    /**
      * Get filters.
      *
      * @return array

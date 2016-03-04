@@ -29,12 +29,14 @@ class DontSeeWhatType extends AbstractType
 
         $builder
             ->add('participant', WhatCheckboxesType::class, [
-                'template' => $participantTemplate,
-                'locale'   => $options['locale'],
+                'template'       => $participantTemplate,
+                'locale'         => $options['locale'],
+                'fallbackLocale' => $options['fallbackLocale'],
             ])
             ->add('sheet', WhatCheckboxesType::class, [
-                'template' => $sheetTemplate,
-                'locale'   => $options['locale'],
+                'template'       => $sheetTemplate,
+                'locale'         => $options['locale'],
+                'fallbackLocale' => $options['fallbackLocale'],
             ])
         ;
     }
@@ -49,7 +51,7 @@ class DontSeeWhatType extends AbstractType
             'expanded' => true,
         ]);
 
-        $resolver->setRequired(['who', 'locale']);
+        $resolver->setRequired(['who', 'locale', 'fallbackLocale']);
     }
 
     /**

@@ -4,8 +4,8 @@
     <h1>{{ event.title }}</h1>
 
     <h2>{{ 'who.see_who_but_dont_see'|trans({
-            '%seer%': ('who.the.' ~ seer.identifier)|trans ~ ' "' ~ seer.translations[app.request.locale].title ~ '"',
-            '%seeable%': ('who.the.' ~ seeable.identifier)|trans ~ ' "' ~ seeable.translations[app.request.locale].title ~ '"'
+            '%seer%': ('who.the.' ~ seer.identifier)|trans ~ ' "' ~ seer.getTitle(app.request.locale, event.fallback) ~ '"',
+            '%seeable%': ('who.the.' ~ seeable.identifier)|trans ~ ' "' ~ seeable.getTitle(app.request.locale, event.fallback) ~ '"'
         })|capitalize }}</h2>
 
     {{ form_start(form) }}
