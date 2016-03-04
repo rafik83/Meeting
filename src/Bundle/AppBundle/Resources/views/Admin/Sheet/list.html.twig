@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for sheet in sheets %}
+            {% for sheet in sheets.results %}
                 <tr>
                     <td>{{ sheet.title }}</td>
                     <td>{{ sheet.type }}</td>
@@ -26,7 +26,7 @@
         </tbody>
     </table>
 
-    {{ knp_pagination_render(sheets) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': sheets}) }}
 
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
