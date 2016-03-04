@@ -2,8 +2,8 @@ Proximum\Vimeet\Domain\Model\Admin:
     user_admin:
         __construct: false
         email: "goi@proximumgroup.com"
-        salt: "4/CiKqpS3JTxE7RJZ+qDT50J0+zC3bhBWX0Uog82"
-        password: "EPsSLiRRBVveJU892hb3CMV+bz4=" #vimeet_admin
+        salt: "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO"
+        password: "YzzBNEhw7I6H5xPuziQEAPAsg5g=" #vimeet_admin
         firstname: "Layla"
         lastname: "GOI"
         role: 'ROLE_SUPER_ADMIN'
@@ -11,8 +11,8 @@ Proximum\Vimeet\Domain\Model\Admin:
     user_orga:
         __construct: false
         email: "larose@proximumgroup.com"
-        salt: "b21f0e9ecc60233ae5f9d64d878748a4c715e8c9"
-        password: "7oHMj2wak/EN0Kg74uWIpqRrhT8=" #vimeet_orga
+        salt: "hOcoU9/L7niTCDDLQOhqTzbrrEMO0/HWlbSQ6DNh"
+        password: "O9CLi6YZtHirpgd3fF/r2M2LMFs=" #vimeet_orga
         firstname: "Vincent"
         lastname: "LAROSE"
         role: 'ROLE_ORGANIZER'
@@ -20,8 +20,8 @@ Proximum\Vimeet\Domain\Model\Admin:
     user_co:
         __construct: false
         email: "gagnard@proximumgroup.com"
-        salt: "927f28daa8fee88026e30a4660e3baea077d579c"
-        password: "IS+6G2rSP7rSHnC6rvJs30XQEn8=" #vimeet_co
+        salt: "AkV6xDVrMTmD285rboI/Z9G31Id+WrvtoaLs/q3A"
+        password: "ENwYwD3WZei+Uv9Yl+DkbwlC6EY=" #vimeet_co
         firstname: "Julien"
         lastname: "GAGNARD"
         role: 'ROLE_OPERATOR'

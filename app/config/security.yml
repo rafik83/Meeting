@@ -35,8 +35,8 @@ security:
                 login_path: admin_login
                 check_path: admin_login_check
                 username_parameter: "login[username]"
-                password_parameter: "lgoin[password]"
-                default_target_path: admin_event
+                password_parameter: "login[password]"
+                default_target_path: admin_event_list
                 use_referer: true
             logout:
                 path: admin_logout

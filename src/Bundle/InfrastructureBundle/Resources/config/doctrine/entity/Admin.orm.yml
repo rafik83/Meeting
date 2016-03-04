@@ -18,3 +18,5 @@ Proximum\Vimeet\Domain\Model\Admin:
             type: string
         lastname:
             type: string
+        role:
+            type: string

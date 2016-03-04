@@ -51,13 +51,24 @@ class Admin extends AbstractUser
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getRole()
     {
         return $this->role;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return [$this->getRole()];
+    }
+
+    /**
+     * @return array
+     */
     public function getAllRoles()
     {
         return [
@@ -81,35 +92,5 @@ class Admin extends AbstractUser
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * @return string
-     */
-    public function serialize()
-    {
-        return serialize([
-            $this->id,
-            $this->email,
-            $this->password,
-            $this->firstname,
-            $this->lastname,
-            $this->salt,
-        ]);
-    }
-
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->email,
-            $this->password,
-            $this->firstname,
-            $this->lastname,
-            $this->salt
-            ) = unserialize($serialized);
     }
 }
