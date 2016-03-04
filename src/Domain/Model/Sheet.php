@@ -260,7 +260,7 @@ class Sheet implements BillingInfoInterface
     {
         return $this->participants->filter(function (Participant $participant) use ($user) {
             return $participant->getUser() === $user;
-        })->first();
+        })->first() ? : null;
     }
 
     /**
