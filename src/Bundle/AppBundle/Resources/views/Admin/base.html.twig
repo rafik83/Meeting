@@ -9,12 +9,14 @@
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body>
-    <div class="container" style="padding: 30px 0px;">
+<body style="padding: 30px 0px;">
+    <div class="container">
         <a href="{{ path('admin_event_list') }}">
             <span class="glyphicon glyphicon-home"></span> Admin
         </a>
         {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
+
+        {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
 

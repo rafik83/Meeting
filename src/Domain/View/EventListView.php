@@ -23,12 +23,19 @@ class EventListView
     public $title;
 
     /**
+     * @var string
+     */
+    public $domain;
+
+    /**
      * @param int    $id
      * @param string $title
+     * @param string $domain
      */
-    public function __construct($id, $title)
+    public function __construct($id, $title, $domain)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        $this->id     = $id;
+        $this->title  = $title;
+        $this->domain = $domain;
     }
 }

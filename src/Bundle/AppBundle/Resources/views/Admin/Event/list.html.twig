@@ -13,7 +13,10 @@
                 <tr>
                     <td>{{ event.title }}</td>
                     <td>
-                        <a href="{{ path('admin_event_read', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Voir</a>
+                        <a href="{{ path('admin_event_read', { 'event': event.id }) }}" class="btn btn-primary btn-sm">
+                            {{ 'admin.event.see.link'|trans }}
+                        </a>
+
                         {% include 'VimeetAppBundle:Admin/Event:links.html.twig' with {event: event} %}
                     </td>
                 </tr>

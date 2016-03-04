@@ -246,17 +246,37 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
-    sheet:
-        link: Fiches
     login:
         logged_as: '{0} Je suis connecté en tant que Collaborateur %lastname% %firstname% %email% |{1} Je suis connecté en tant qu''Organisateur %lastname% %firstname% %email% |{2} Je suis connecté en tant qu''Admin %lastname% %firstname% %email% '
+    event:
+        see:
+            link: Voir
+        see_on_front:
+            link: Voir en front
+        update:
+            link: Modifier
+    rule:
+        link: Qui voit qui
+    type:
+        link: Types de participation
+    category:
+        link: Catégories de participation
+    sheet:
+        link: Fiches de participation
+    meeting:
+        link: Rendez-vous
     meeting_request:
+        link: Demandes de rendez-vous
         list:
             state:
                 sent: Envoyé
                 approved: Accepté
                 refused: Refusé
                 cancelled: Annulé
+    happening:
+        link: Conférences
+    happening_speaker:
+        link: Intervenants
     spot:
         link: Lieux
         active:
