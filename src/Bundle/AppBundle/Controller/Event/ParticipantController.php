@@ -136,7 +136,7 @@ class ParticipantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
+        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToDeleteParticipant($sheet, $participant, $this->getUser())) {
             throw $this->createAccessDeniedException('You are not allowed to delete this participant');
         }
 
