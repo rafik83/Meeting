@@ -46,6 +46,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             "5645e5fd8f6a7": "FR"
             "5645e610e0e1b": "test"
         orders: ["@order_1"]
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Order:
     order_1:

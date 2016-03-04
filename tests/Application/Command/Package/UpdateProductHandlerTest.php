@@ -58,14 +58,16 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
         $type = new Type($event);
         $type->setPackageTemplate($packageTemplate);
 
-        $sheet = new Sheet($event, $type, [], [
+        $packageData = [
             'group1' => [
                 'row1' => [
                     'value'    => true,
                     'quantity' => 2,
                 ]
             ]
-        ]);
+        ];
+
+        $sheet = new Sheet($event, $type, [], $packageData, new \DateTime());
         $sheet->setBillingData([]);
         $sheet->setPackageData([]);
 
@@ -155,14 +157,16 @@ class UpdateProductHandlerTest extends \PHPUnit_Framework_TestCase
         $type = new Type($event);
         $type->setPackageTemplate($packageTemplate);
 
-        $sheet = new Sheet($event, $type, [], [
+        $packageData = [
             'group1' => [
                 'row1' => [
                     'value'    => true,
                     'quantity' => 2,
                 ]
             ]
-        ]);
+        ];
+
+        $sheet = new Sheet($event, $type, [], $packageData, new \DateTime());
         $sheet->setBillingData([]);
         $sheet->setPackageData([]);
 
