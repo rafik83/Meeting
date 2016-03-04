@@ -24,14 +24,14 @@ Feature: Update category
     And I check "category_create_types_0"
     And I press "form.category_create.children.submit.label"
     Then the response status code should be 200
-    And I should see "flash.admin.category.create.success"
+    Then I should see "flash.admin.category.create.success"
 
   Scenario: I can add a type in a category
     When I go to "/admin/event/1/category/1/update"
     Then the "category_update_types_0" checkbox should be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should not be checked
-    And I check "category_update_types_2"
+    When I check "category_update_types_2"
     And I press "form.category_update.children.submit.label"
     And I should see "flash.admin.category.update.success"
     Then I go to "/admin/event/1/category/1/update"
@@ -46,8 +46,8 @@ Feature: Update category
     And the "category_update_types_2" checkbox should not be checked
     And I uncheck "category_update_types_0"
     And I press "form.category_update.children.submit.label"
-    And I should see "flash.admin.category.update.success"
-    Then I go to "/admin/event/1/category/1/update"
+    Then I should see "flash.admin.category.update.success"
+    And I go to "/admin/event/1/category/1/update"
     And the "category_update_types_0" checkbox should not be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should not be checked
