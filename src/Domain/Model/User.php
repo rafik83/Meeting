@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-
 /**
  * "Compte utilisateur".
  */
