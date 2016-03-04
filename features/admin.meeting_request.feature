@@ -13,11 +13,11 @@ Feature: See meeting request
       | MeetingRequest.yml                     |
       | Admin.yml                              |
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/event"
+    And I go to "/admin/fr/event"
 
   Scenario: list meeting request
     When I follow "Demandes de RDV"
     Then the response status code should be 200
-    And I should be on "/admin/event/1/meeting-request"
+    And I should be on "/admin/fr/event/1/meeting-request"
     And I should see "Elao"
 

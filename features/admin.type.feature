@@ -15,7 +15,7 @@ Feature: add type
   Scenario: add a type
     When I follow "Types"
     Then the response status code should be 200
-    And I should be on "/admin/event/1/type"
+    And I should be on "/admin/fr/event/1/type"
     And I follow "Ajouter"
     Then the response status code should be 200
     And I fill in the following:
