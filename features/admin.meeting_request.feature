@@ -11,11 +11,13 @@ Feature: See meeting request
       | TwoSheetSeveralParticipantWithData.yml |
       | User.yml                               |
       | MeetingRequest.yml                     |
+      | Admin.yml                              |
+    Given I am logged with "test@test.com" on admin
+    And I go to "/admin/event"
 
   Scenario: list meeting request
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
-    And I follow "Demandes de RDV"
+    When I follow "Demandes de RDV"
     Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/meeting-request"
+    And I should be on "/admin/event/1/meeting-request"
     And I should see "Elao"
 

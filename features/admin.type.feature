@@ -8,12 +8,14 @@ Feature: add type
       | app/Event.yml       |
       | app/Type.yml        |
       | app/Category.yml    |
+      | Admin.yml           |
+    Given I am logged with "test@test.com" on admin
+    And I go to "/admin/event"
 
   Scenario: add a type
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
-    And I follow "Types"
+    When I follow "Types"
     Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/type"
+    And I should be on "/admin/event/1/type"
     And I follow "Ajouter"
     Then the response status code should be 200
     And I fill in the following:

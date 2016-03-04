@@ -8,18 +8,17 @@ Feature: See and update event
       | app/Event.yml    |
       | app/Type.yml     |
       | app/Category.yml |
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    And I go to "/admin/event"
 
   Scenario: see event
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
-    Then the response status code should be 200
-    And I should see "Les rendez-vous CARNOT 2016"
+    Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: update event
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+    When I follow "Modifier"
     Then the response status code should be 200
-    And I follow "Modifier"
-    Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/update"
+    And I should be on "/admin/event/1/update"
     And I fill in the following:
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
@@ -29,7 +28,7 @@ Feature: See and update event
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
-    And I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+    And I go to "/admin/event"
     And I should see "Other event"
     And I follow "Modifier"
     Then the response status code should be 200

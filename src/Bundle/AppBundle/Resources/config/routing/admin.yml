@@ -1,4 +1,21 @@
 #
+# Login/Logout
+#
+
+admin_login:
+    path:     /login
+    methods:  [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Security:login }
+
+admin_login_check:
+    path:     /login_check
+    methods:  [POST]
+
+admin_logout:
+    path:     /logout
+    methods:  [GET]
+
+#
 # Event
 #
 

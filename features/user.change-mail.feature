@@ -4,13 +4,13 @@ Feature: Change my mail
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | UserWithActivateAccountTokenAndSheet.yml                  |
+      | app/Template.yml                         |
+      | app/Event.yml                            |
+      | app/Type.yml                             |
+      | UserWithActivateAccountTokenAndSheet.yml |
 
   Scenario: I can change my email
-    Given I am logged with "test@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     When I go to "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
     And the response status code should be 200
     Then I should be on "/fr/"
@@ -21,7 +21,7 @@ Feature: Change my mail
     And I should see "toto@tata.fr"
 
   Scenario: I can change my email full process
-    Given I am logged with "test@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     When I follow "login.logged_as"
     Then I should be on "/fr/account"
     And the response status code should be 200

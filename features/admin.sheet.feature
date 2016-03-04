@@ -10,12 +10,13 @@ Feature: List sheet
       | app/Category.yml                       |
       | User.yml                               |
       | TwoSheetSeveralParticipantWithData.yml |
+      | Admin.yml                              |
+    Given I am logged with "test@test.com" on admin
+    And I go to "/admin/event"
 
   Scenario: I can list sheet of an event
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+    When I follow "admin.sheet.link"
     Then the response status code should be 200
-    And I follow "admin.sheet.link"
-    Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/sheet"
+    And I should be on "/admin/event/1/sheet"
     And I should see "Elao"
     And I should see "Oale"

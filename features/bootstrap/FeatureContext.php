@@ -3,8 +3,10 @@
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Defines application features from the specific context.
@@ -362,24 +364,57 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @Given I am on Admin
+     * @Given I am logged with :email on event :event
      */
-    public function iAmOnAdmin()
+    public function iAmLoggedOnEvent($email, $eventUrl)
     {
-        $this->setBaseUrl('http://vimeet.proximum.dev');
+        $this->setBaseUrl($eventUrl);
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+            throw new \Exception('BrowserKitDriver not supported');
+        }
+
+        $client = $driver->getClient();
+        $client->getCookieJar()->set(new Cookie(session_name(), true));
+
+        $session = $client->getContainer()->get('session');
+
+        $user = $this->kernel->getContainer()->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+        $providerKey = 'main';
+
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $session->set('_security_'.$providerKey, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
     }
 
     /**
-     * @Given I am logged with :email and :password on event :event
+     * @Given I am logged with :email on admin
      */
-    public function iAmLoggedOnEvent($email, $password, $eventUrl)
+    public function iAmLoggedAsAdmin($email)
     {
-        $this->setBaseUrl($eventUrl);
-        $this->visit('/fr/login');
-        $this->fillField('form.login.children.username.label', $email);
-        $this->fillField('form.login.children.password.label', $password);
-        $this->pressButton('form.login.children.submit.label');
-        $this->assertResponseStatus(200);
+        $this->setBaseUrl('http://vimeet.proximum.dev');
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+            throw new \Exception('BrowserKitDriver not supported');
+        }
+
+        $client = $driver->getClient();
+        $client->getCookieJar()->set(new Cookie(session_name(), true));
+
+        $session = $client->getContainer()->get('session');
+
+        $user = $this->kernel->getContainer()->get('repository.admin_repository')->findByEmail($email);
+        $providerKey = 'admin';
+
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $session->set('_security_'.$providerKey, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
     }
 
     /**
