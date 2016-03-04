@@ -6,6 +6,7 @@ Proximum\Vimeet\Domain\Model\Admin:
         password: "EPsSLiRRBVveJU892hb3CMV+bz4=" #vimeet_admin
         firstname: "Layla"
         lastname: "GOI"
+        role: 'ROLE_SUPER_ADMIN'
 
     user_orga:
         __construct: false
@@ -14,6 +15,7 @@ Proximum\Vimeet\Domain\Model\Admin:
         password: "7oHMj2wak/EN0Kg74uWIpqRrhT8=" #vimeet_orga
         firstname: "Vincent"
         lastname: "LAROSE"
+        role: 'ROLE_ORGANIZER'
 
     user_co:
         __construct: false
@@ -22,3 +24,4 @@ Proximum\Vimeet\Domain\Model\Admin:
         password: "IS+6G2rSP7rSHnC6rvJs30XQEn8=" #vimeet_co
         firstname: "Julien"
         lastname: "GAGNARD"
+        role: 'ROLE_OPERATOR'

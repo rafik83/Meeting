@@ -15,6 +15,10 @@ namespace Proximum\Vimeet\Domain\Model;
  */
 class Admin extends AbstractUser
 {
+    const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
+    const ROLE_STAFF       = 'ROLE_STAFF';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
     /**
      * @var string
      */
@@ -26,26 +30,41 @@ class Admin extends AbstractUser
     private $lastname;
 
     /**
+     * @var string
+     */
+    private $role;
+
+    /**
      * @param string $email
      * @param string $salt
      * @param string $password
      * @param string $firstname
      * @param string $lastname
      */
-    public function __construct($email, $salt, $password, $firstname, $lastname)
+    public function __construct($email, $salt, $password, $firstname, $lastname, $role)
     {
         parent::__construct($email, $salt, $password);
 
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
+        $this->role      = $role;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRole()
     {
-        return ['ROLE_ADMIN'];
+        return $this->role;
+    }
+
+    public function getAllRoles()
+    {
+        return [
+            self::ROLE_STAFF,
+            self::ROLE_ORGANIZER,
+            self::ROLE_SUPER_ADMIN,
+        ];
     }
 
     /**

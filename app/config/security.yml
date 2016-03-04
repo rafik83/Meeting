@@ -59,3 +59,7 @@ security:
     access_control:
         - { path: ^/admin/event, role: ROLE_ADMIN, host: '%domain%' }
 
+    role_hierarchy:
+        ROLE_OPERATOR: ['ROLE_ADMIN']
+        ROLE_ORGANIZER: ['ROLE_ADMIN', 'ROLE_OPERATOR']
+        ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_OPERATOR']
