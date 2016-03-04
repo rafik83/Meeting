@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\TypeListView;
 use Proximum\Vimeet\Domain\View\TypeTemplatesView;
 use Proximum\Vimeet\Domain\View\TypeView;
 
