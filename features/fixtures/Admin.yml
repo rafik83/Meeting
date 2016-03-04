@@ -1,0 +1,9 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    user_admin:
+        __construct: false
+        email: "test@test.com"
+        salt: "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO"
+        password: "YzzBNEhw7I6H5xPuziQEAPAsg5g=" #vimeet_admin
+        firstname: "Jean"
+        lastname: "DUPONT"
+        role: 'ROLE_SUPER_ADMIN'
