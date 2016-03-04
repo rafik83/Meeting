@@ -4,7 +4,7 @@
 <a href="{{ path('admin_category_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Catégories</a>
 <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Demandes de RDV</a>
 <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">RDV</a>
-<a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Fiches</a>
+<a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.sheet.link'|trans }}</a>
 <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Sous-événements</a>
 <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Intervenants</a>
 <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.spot.link'|trans }}</a>
