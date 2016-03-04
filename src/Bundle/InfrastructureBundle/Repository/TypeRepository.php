@@ -49,7 +49,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title)')
-            ->from('Entity:Type', 'type')
+            ->from('Entity:Type', 'type', 'type.id')
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->join('type.event', 'event', 'WITH', 'event.id = :eventId')
             ->setParameter('locale', $locale)

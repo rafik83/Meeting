@@ -29,19 +29,20 @@ class Paginator
         $resultQueryBuilder = clone $queryBuilder;
         $countQueryBuilder  = clone $queryBuilder;
         $idsQueryBuilder    = clone $queryBuilder;
+        $select = $selector . '.' . $element;
 
-        $countQueryBuilder->select('COUNT(' . $selector .'.' . $element .')');
+        $countQueryBuilder->select('COUNT(' . $select .')');
         $total = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
         $idsQueryBuilder
-            ->select($selector .'.' . $element)
+            ->select($select)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
         $ids = array_keys($idsQueryBuilder->getQuery()->getResult());
 
         $results = $resultQueryBuilder
-            ->andWhere($selector .'.' . $element . ' IN (:ids)')
+            ->andWhere($select . ' IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();
