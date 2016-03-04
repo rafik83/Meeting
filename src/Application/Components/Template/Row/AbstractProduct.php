@@ -47,7 +47,7 @@ abstract class AbstractProduct extends Row
      */
     public function isUpdatable()
     {
-        return $this->getUpdatableUntil() ? $this->getUpdatableUntil() > new \DateTime() : true;
+        return $this->getUpdatableUntil() ? $this->getUpdatableUntil() > new \DateTime() : false;
     }
 
     /**
