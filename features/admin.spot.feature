@@ -5,7 +5,7 @@ Feature: Spot feature
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml |
-      | Admin.yml        |
+      | Admin.yml     |
     Given I am logged with "test@test.com" on admin
     When I go to "/admin/event"
     And I follow "admin.spot.link"
@@ -29,7 +29,7 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Event.yml |
       | Spot.yml      |
-      | Admin.yml        |
+      | Admin.yml     |
     Given I am logged with "test@test.com" on admin
     When I go to "/admin/event"
     Then the response status code should be 200
