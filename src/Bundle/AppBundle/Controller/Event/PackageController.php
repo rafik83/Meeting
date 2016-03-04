@@ -224,7 +224,7 @@ class PackageController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
+            throw $this->createAccessDeniedException('This user is not allowed to update this data.');
         }
 
         $orderMerge = $this
