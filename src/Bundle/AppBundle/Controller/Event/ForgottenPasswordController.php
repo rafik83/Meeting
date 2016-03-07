@@ -51,7 +51,7 @@ class ForgottenPasswordController extends Controller
 
                 return $this->redirectToRoute('event');
             } catch (EmailDoesNotExistException $exception) {
-                $form->get('email')->addError(new FormError('validators.emailDoesNotExist'));
+                $form->get('email')->addError($this->get('error_factory')->create('validators.emailDoesNotExist', $request->getLocale()));
             }
         }
 
