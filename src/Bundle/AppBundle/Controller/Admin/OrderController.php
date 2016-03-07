@@ -40,7 +40,7 @@ class OrderController extends Controller
 
         $orderView = $this->get('components.sheet.order_view_factory')->createFromOrder(
             $order,
-            $request->getLocale()
+            $event->getAvailableLocale($request->getLocale())
         );
 
         return $this->render(
