@@ -28,14 +28,28 @@ class EventListView
     public $domain;
 
     /**
+     * @var array
+     */
+    public $locales;
+
+    /**
+     * @var string
+     */
+    public $fallback;
+
+    /**
      * @param int    $id
      * @param string $title
      * @param string $domain
+     * @param array  $locales
+     * @param string $fallback
      */
-    public function __construct($id, $title, $domain)
+    public function __construct($id, $title, $domain, $locales, $fallback)
     {
-        $this->id     = $id;
-        $this->title  = $title;
-        $this->domain = $domain;
+        $this->id       = $id;
+        $this->title    = $title;
+        $this->domain   = $domain;
+        $this->locales  = $locales;
+        $this->fallback = $fallback;
     }
 }

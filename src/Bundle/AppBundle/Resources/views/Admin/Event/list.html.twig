@@ -5,6 +5,8 @@
         <thead>
             <tr>
                 <th>Titre</th>
+                <th>Langues</th>
+                <th>Par défaut</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -12,6 +14,14 @@
             {% for event in events %}
                 <tr>
                     <td>{{ event.title }}</td>
+                    <td>
+                        <ul>
+                            {% for locale in event.locales %}
+                                <li>{{ locale|language }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ event.fallback|language }}</td>
                     <td>
                         <a href="{{ path('admin_event_read', { 'event': event.id }) }}" class="btn btn-primary btn-sm">
                             {{ 'admin.event.see.link'|trans }}

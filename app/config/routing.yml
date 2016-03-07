@@ -23,5 +23,3 @@ vimeet_admin:
 vimeet_event:
     resource: '@VimeetAppBundle/Resources/config/routing/event.yml'
     prefix:   /{_locale}
-    defaults:
-        _locale: %locale%
