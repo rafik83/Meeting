@@ -16,7 +16,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class Admin extends AbstractUser
 {
     const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
-    const ROLE_STAFF       = 'ROLE_STAFF';
+    const ROLE_OPERATOR    = 'ROLE_OPERATOR';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
     /**
