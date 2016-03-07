@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
+use Proximum\Vimeet\Application\Components\Template\Template;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -22,11 +24,27 @@ class UpdateBlockHandler
     private $sheetRepository;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
+     * @var TemplateFactory
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    private $templateFactory;
+
+    /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * UpdateBlockHandler constructor.
+     *
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param TemplateFactory          $templateFactory
+     * @param Validator                $validator
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, TemplateFactory $templateFactory, Validator $validator)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->templateFactory = $templateFactory;
+        $this->validator       = $validator;
     }
 
     /**
@@ -36,29 +54,44 @@ class UpdateBlockHandler
      */
     public function handle(UpdateBlock $updateBlock)
     {
-        $sheetTemplate = $updateBlock->sheet->getType()->getSheetTemplate();
+        // Get block template
+        $array    = $updateBlock->sheet->getType()->getSheetTemplate();
+        $template = $this->templateFactory->createTemplatesFromArray($array)->getTemplate($updateBlock->block);
 
-        // Check the constraint on the data (required) before
-        (new DataConstraintChecker())->check($updateBlock->data, $sheetTemplate[$updateBlock->block]['template']);
+        // Validate block data against the template
+        $this->validator->validateDataAgainstTemplate($updateBlock->data, $template);
 
+        // Update data
         $data = $updateBlock->sheet->getData();
 
-        foreach ($updateBlock->data as $key => $value) {
-            if (!isset ($data[$updateBlock->block][$key])) {
-                $translatable = isset($sheetTemplate[$updateBlock->block]['template'][$key]['translatable']) ?
-                    $sheetTemplate[$updateBlock->block]['template'][$key]['translatable'] :
-                    false;
+        $data[$updateBlock->block] = $this->merge(
+            $template,
+            isset($data[$updateBlock->block]) ? $data[$updateBlock->block] : [],
+            $updateBlock->data,
+            $updateBlock->locale
+        );
 
-                $data[$updateBlock->block][$key] = $translatable ? [] : null;
-            }
+        $updateBlock->sheet->setData($data);
 
-            if (is_array($data[$updateBlock->block][$key])) {
-                $data[$updateBlock->block][$key][$updateBlock->locale] = $value;
-            } else {
-                $data[$updateBlock->block][$key] = $value;
-            }
+        $this->sheetRepository->set($updateBlock->sheet);
+    }
+
+    /**
+     * @param Template $template
+     * @param array    $old
+     * @param array    $new
+     * @param string   $locale
+     *
+     * @return array
+     */
+    private function merge(Template $template, array $old, array $new, $locale)
+    {
+        foreach ($new as $key => $value) {
+            $translatable = $template->getRow($key)->isTranslatable();
+
+            $old[$key] = $translatable ? array_merge(isset($old[$key]) ? $old[$key] : [], [$locale => $value]) : $value;
         }
 
-        $this->sheetRepository->set($updateBlock->sheet->setData($data));
+        return $old;
     }
 }

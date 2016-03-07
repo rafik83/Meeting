@@ -176,6 +176,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.template_factory'
+            - '@template.validator'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
@@ -557,11 +559,14 @@ services:
         arguments:
             - '@components.sheet.tagged_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
-
     sheet.sheet_preview_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
         arguments:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
+    sheet.status_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\StatusGuesser
+        arguments:
+            - '@template.validator'
 
     #
     # Rule Component
@@ -741,6 +746,10 @@ services:
     #
     template.template_factory:
         class: Proximum\Vimeet\Application\Components\Template\TemplateFactory
+    template.validator:
+        class: Proximum\Vimeet\Application\Components\Template\Validator
+        arguments:
+            - '@template.template_factory'
 
     #
     # Spot component

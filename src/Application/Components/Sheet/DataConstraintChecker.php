@@ -19,6 +19,8 @@ class DataConstraintChecker
      * @param array $template
      *
      * @throws RequiredDataEmptyException
+     *
+     * @deprecated Use \Proximum\Vimeet\Application\Components\Template\Validator instead
      */
     public function check(array $data, array $template)
     {
