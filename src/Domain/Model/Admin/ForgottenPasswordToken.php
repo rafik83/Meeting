@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\User;
+namespace Proximum\Vimeet\Domain\Model\Admin;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Admin;
 
 class ForgottenPasswordToken
 {
@@ -21,9 +21,9 @@ class ForgottenPasswordToken
     private $id;
 
     /**
-     * @var User
+     * @var Admin
      */
-    private $user;
+    private $admin;
 
     /**
      * @var string
@@ -36,13 +36,13 @@ class ForgottenPasswordToken
     private $expireDate;
 
     /**
-     * @param User              $user
+     * @param Admin             $admin
      * @param string            $token
      * @param DateTimeInterface $expireDate
      */
-    public function __construct(User $user, $token, DateTimeInterface $expireDate)
+    public function __construct(Admin $admin, $token, DateTimeInterface $expireDate)
     {
-        $this->user       = $user;
+        $this->admin      = $admin;
         $this->token      = $token;
         $this->expireDate = $expireDate;
     }
@@ -56,11 +56,11 @@ class ForgottenPasswordToken
     }
 
     /**
-     * @return User
+     * @return Admin
      */
-    public function getUser()
+    public function getAdmin()
     {
-        return $this->user;
+        return $this->admin;
     }
 
     /**
