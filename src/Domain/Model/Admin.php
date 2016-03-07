@@ -38,12 +38,14 @@ class Admin extends AbstractUser
      * @param string $email
      * @param string $salt
      * @param string $password
+     * @param string $locale
      * @param string $firstname
      * @param string $lastname
+     * @param string $role
      */
-    public function __construct($email, $salt, $password, $firstname, $lastname, $role)
+    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role)
     {
-        parent::__construct($email, $salt, $password);
+        parent::__construct($email, $salt, $password, $locale);
 
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
