@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface ForgottenPasswordTokenRepositoryInterface
