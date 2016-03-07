@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Transaction\Remove;
 use Proximum\Vimeet\Application\Command\Transaction\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction\CreateTransactionType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Transaction\UpdateTransactionType;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -27,11 +28,12 @@ class TransactionController extends Controller
 {
     /**
      * @param Request $request
+     * @param Event   $event
      * @param Sheet   $sheet
      *
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, Sheet $sheet)
+    public function createAction(Request $request, Event $event, Sheet $sheet)
     {
         $create = new Create($sheet, null, new \DateTime());
         $form   = $this->createForm(CreateTransactionType::class, $create);
@@ -41,7 +43,7 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'event' => $sheet->getEvent()->getId(),
+                'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
         }
@@ -52,6 +54,7 @@ class TransactionController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Transaction:create.html.twig', [
             'form'       => $form->createView(),
+            'event'      => $event,
             'sheet'      => $sheet,
             'sheet_info' => $sheetInfo,
         ]);
@@ -59,12 +62,13 @@ class TransactionController extends Controller
 
     /**
      * @param Request     $request
+     * @param Event       $event
      * @param Sheet       $sheet
      * @param Transaction $transaction
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, Sheet $sheet, Transaction $transaction)
+    public function updateAction(Request $request, Event $event, Sheet $sheet, Transaction $transaction)
     {
         $update = new Update($transaction);
         $form   = $this->createForm(UpdateTransactionType::class, $update);
@@ -74,7 +78,7 @@ class TransactionController extends Controller
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
-                'event' => $sheet->getEvent()->getId(),
+                'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
         }
@@ -85,6 +89,7 @@ class TransactionController extends Controller
 
         return $this->render('VimeetAppBundle:Admin/Transaction:update.html.twig', [
             'form'       => $form->createView(),
+            'event'      => $event,
             'sheet'      => $sheet,
             'sheet_info' => $sheetInfo,
         ]);
@@ -93,18 +98,19 @@ class TransactionController extends Controller
     /**
      * @Method("DELETE")
      *
+     * @param Event       $event
      * @param Sheet       $sheet
      * @param Transaction $transaction
      *
      * @return RedirectResponse
      */
-    public function removeAction(Sheet $sheet, Transaction $transaction)
+    public function removeAction(Sheet $sheet, Event $event, Transaction $transaction)
     {
         $this->get('command.transaction.remove_handler')->handle(new Remove($transaction));
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
         return $this->redirectToRoute('admin_sheet_billing', [
-            'event' => $sheet->getEvent()->getId(),
+            'event' => $event->getId(),
             'sheet' => $sheet->getId(),
         ]);
     }

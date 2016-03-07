@@ -63,7 +63,7 @@
     {% if transactions is empty %}
         <p class="alert alert-info">
             Aucune transaction pour cette fiche.
-            <a href="{{ path('admin_sheet_transaction_create', { 'sheet': sheet.id }) }}" class="btn btn-success">Ajouter une transaction</a>
+            <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-success">Ajouter une transaction</a>
         </p>
     {% else %}
         <table class="table">
@@ -73,7 +73,7 @@
                 <th>Mode de paiement</th>
                 <th class="text-right">Montant</th>
                 <th class="text-right" width="200">
-                    <a href="{{ path('admin_sheet_transaction_create', { 'sheet': sheet.id }) }}" class="btn btn-success btn-sm">Ajouter une transaction</a>
+                    <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-success btn-sm">Ajouter une transaction</a>
                 </th>
             </thead>
             <tfoot>
@@ -89,8 +89,8 @@
                         <td>{{ transaction.mode }}</td>
                         <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
-                            <a href="{{ path('admin_sheet_transaction_update', { 'sheet': sheet.id, 'transaction': transaction.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                            {{ macro.button(path('admin_sheet_transaction_remove', { 'sheet': sheet.id, 'transaction': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'message.admin.transaction.remove.confirm'|trans }) }}
+                            <a href="{{ path('admin_sheet_transaction_update', { 'event': event.id, 'sheet': sheet.id, 'transaction': transaction.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                            {{ macro.button(path('admin_sheet_transaction_remove', { 'event': event.id, 'sheet': sheet.id, 'transaction': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'message.admin.transaction.remove.confirm'|trans }) }}
                         </td>
                     </tr>
                 {% endfor %}

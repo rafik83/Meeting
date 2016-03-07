@@ -302,19 +302,19 @@ admin_sheet_order_update_row:
 # Transaction
 #
 admin_sheet_transaction_create:
-    path: /sheet/{sheet}/transaction/create
+    path: /event/{event}/sheet/{sheet}/transaction/create
     requirements:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:create }
 admin_sheet_transaction_update:
-    path: /sheet/{sheet}/transaction/{transaction}/update
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/update
     requirements:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
 admin_sheet_transaction_remove:
-    path: /sheet/{sheet}/transaction/{transaction}/remove
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/remove
     requirements:
         sheet: \d+
     methods: [DELETE]
