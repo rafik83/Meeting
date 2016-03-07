@@ -8,24 +8,18 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event\User;
+namespace Proximum\Vimeet\Application\Event\Admin;
 
-use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\EventDispatcher\Event;
 
 class ResetPasswordEvent extends Event
 {
     /**
-     * @var User
+     * @var Admin
      */
-    private $user;
-
-    /**
-     * @var EventView
-     */
-    private $eventView;
+    private $admin;
 
     /**
      * @var ForgottenPasswordToken
@@ -38,33 +32,23 @@ class ResetPasswordEvent extends Event
     private $locale;
 
     /**
-     * @param User                   $user
-     * @param EventView              $eventView
+     * @param Admin                  $admin
      * @param ForgottenPasswordToken $forgottenPasswordToken
      * @param string                 $locale
      */
-    public function __construct(User $user, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken, $locale)
+    public function __construct(Admin $admin, ForgottenPasswordToken $forgottenPasswordToken, $locale)
     {
-        $this->user                   = $user;
-        $this->eventView              = $eventView;
+        $this->admin                  = $admin;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
         $this->locale                 = $locale;
     }
 
     /**
-     * @return User
+     * @return Admin
      */
-    public function getUser()
+    public function getAdmin()
     {
-        return $this->user;
-    }
-
-    /**
-     * @return EventView
-     */
-    public function getEventView()
-    {
-        return $this->eventView;
+        return $this->admin;
     }
 
     /**
