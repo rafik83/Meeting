@@ -3,11 +3,13 @@
 {% import 'VimeetAppBundle::macro.html.twig' as macro %}
 
 {% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
     <div class="jumbotron pull-right">
         <h2>Balance : <strong class="{{ balance < 0 ? 'text-danger' : 'text-success' }}">{{ balance|number_format(2, ',', ' ') }} €</strong></h2>
     </div>
 
-    <h1>{{ sheet_info }}</h1>
+    <h2>{{ sheet_info }}</h2>
 
     <address class="clearfix">
         <p>{{ billing.organization }}</p>
@@ -48,7 +50,7 @@
                         <td>{{ order.paymentMode }}</td>
                         <td class="text-right">{{ (order.total)|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
-                            <a href="{{ path('admin_sheet_order_edit', { 'order': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                            <a href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                         </td>
                     </tr>
                 {% endfor %}

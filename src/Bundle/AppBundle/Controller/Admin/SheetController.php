@@ -26,17 +26,19 @@ class SheetController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->paginate($request->query->getInt('page', 1), 20, $event, $request->getLocale());
+            ->paginate($request->query->getInt('page', 1), 20, $event, $locale);
 
-        $sheets->results = array_map(function (Sheet $sheet) use ($request) {
+        $sheets->setItems(array_map(function (Sheet $sheet) use ($locale) {
             return new SheetListView(
                 $sheet->getId(),
                 $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($sheet),
-                $sheet->getType()->getTranslations()->get($request->getLocale())->getTitle()
+                $sheet->getType()->getTranslations()->get($locale)->getTitle()
             );
-        }, $sheets->results);
+        }, $sheets->results));
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'  => $event,

@@ -269,20 +269,20 @@ admin_sheet_billing:
 # Order
 #
 admin_sheet_order_edit:
-    path: /order/{order}/edit
+    path: /event/{event}/order/{order}/edit
     requirements:
         order: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Order:edit }
 admin_sheet_order_add_row:
-    path: /order/{order}/group/{group}/row/add
+    path: /event/{event}/order/{order}/group/{group}/row/add
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:addRow }
 admin_sheet_order_remove_row:
-    path: /order/{order}/group/{group}/row/{row}/remove
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
@@ -290,7 +290,7 @@ admin_sheet_order_remove_row:
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Order:removeRow }
 admin_sheet_order_update_row:
-    path: /order/{order}/group/{group}/row/{row}/update
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/update
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
