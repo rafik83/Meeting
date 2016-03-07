@@ -32,7 +32,7 @@ class TypeTemplateFieldController extends Controller
     {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $packageObject = $this
             ->get('vimeet_infrastructure.application.components.product.product_builder')
@@ -76,7 +76,7 @@ class TypeTemplateFieldController extends Controller
     ) {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $templateFactory = $this->get('components.sheet.template_factory');
         $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
@@ -140,7 +140,7 @@ class TypeTemplateFieldController extends Controller
     {
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));

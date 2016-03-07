@@ -192,6 +192,20 @@ class Event
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getAvailableLocale($locale)
+    {
+        if (in_array($locale, $this->getLocales())) {
+            return $locale;
+        }
+
+        return $this->getFallback();
+    }
+
+    /**
      * Has locale.
      *
      * @param $locale
