@@ -30,7 +30,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $command->email = 'test@test.fr';
 
         $dateTime               = new DateTime();
-        $admin                  = new Admin('test@test.fr', 'test', 'test', 'jean', 'paul', 'ROLE_ADMIN');
+        $admin                  = new Admin('test@test.fr', 'test', 'test', 'fr', 'jean', 'paul', 'ROLE_ADMIN');
         $forgottenPasswordToken = new ForgottenPasswordToken($admin, 'token', $dateTime);
         $event                  = new ResetPasswordEvent($admin, $forgottenPasswordToken, $command->locale);
 
@@ -69,7 +69,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $command->email = 'test2@test.fr';
 
         $dateTime               = new DateTime();
-        $admin                  = new Admin('test@test.fr', 'test', 'test', 'jean', 'paul', 'ROLE_ADMIN');
+        $admin                  = new Admin('test@test.fr', 'test', 'test', 'fr', 'jean', 'paul', 'ROLE_ADMIN');
         $forgottenPasswordToken = new ForgottenPasswordToken($admin, 'token', $dateTime);
         $event                  = new ResetPasswordEvent($admin, $forgottenPasswordToken, $command->locale);
 
