@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Command\Admin;
+
+use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
+use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
+use Proximum\Vimeet\Application\Command\Admin\NewPassword;
+use Proximum\Vimeet\Application\Command\Admin\NewPasswordHandler;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+
+class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $admin             = new Admin('test@test.fr', 'test', 'test', 'jean', 'paul', 'ROLE_ADMIN');
+        $expectedAdmin     = new Admin('test@test.fr', 'test', 'tatatata', 'jean', 'paul', 'ROLE_ADMIN');
+        $command           = new NewPassword($admin);
+        $command->password = 'totototo';
+
+        $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
+        $adminRepository->set($expectedAdmin)->shouldBeCalled();
+
+        $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
+        $saltGenerator->generate()->shouldBeCalled()->willReturn('test');
+
+        $encoder = $this->prophesize(PasswordEncoderInterface::class);
+        $encoder->encode($admin, $command->password)->shouldBeCalled()->willReturn('tatatata');
+
+        $forgottenPasswordToken = $this->prophesize(ForgottenPasswordTokenRepositoryInterface::class);
+        $forgottenPasswordToken->deleteAllForUser($admin)->shouldBeCalled();
+
+        $handler = new NewPasswordHandler(
+            $adminRepository->reveal(),
+            $encoder->reveal(),
+            $saltGenerator->reveal(),
+            $forgottenPasswordToken->reveal()
+        );
+        $handler->handle($command);
+    }
+}
