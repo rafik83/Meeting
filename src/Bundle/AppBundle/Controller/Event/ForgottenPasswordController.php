@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\NewPasswordType;
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -46,7 +46,7 @@ class ForgottenPasswordController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler')->handle($forgottenPassword);
+                $this->get('command.user.forgotten_password_handler')->handle($forgottenPassword);
                 $this->addFlash('success', 'flash.reset_password_token.success');
 
                 return $this->redirectToRoute('event');
@@ -84,7 +84,7 @@ class ForgottenPasswordController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.user.new_password_handler')->handle($newPassword);
+            $this->get('command.user.new_password_handler')->handle($newPassword);
             $this->get('adapter.authentication_manager')->authenticate($forgottenPasswordToken->getUser(), 'main');
             $this->addFlash('success', 'flash.new_password.success');
 
