@@ -127,7 +127,7 @@ abstract class AbstractType implements TypeInterface
      */
     public function isUpdatable()
     {
-        return $this->getUpdatableUntil() > new \DateTime();
+        return $this->getUpdatableUntil() ? $this->getUpdatableUntil() > new \DateTime() : false;
     }
 
     /**

@@ -17,7 +17,7 @@ Feature: Update a sheet block
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "p@ssw0rd"
     And I press "form.login.children.submit.label"
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/update_block/563cae566af03"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/fr/update_block/563cae566af03"
     And the response status code should be 200
     And I fill in the following:
       | Nom               | CompanySAS             |

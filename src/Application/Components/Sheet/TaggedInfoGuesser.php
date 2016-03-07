@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
-use Proximum\Vimeet\Application\Components\Sheet\Template\TypeInterface;
+use Proximum\Vimeet\Application\Components\Template\Exception\RowNotFoundException;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 
 class TaggedInfoGuesser
 {
@@ -34,36 +34,40 @@ class TaggedInfoGuesser
      * @param array  $template
      * @param array  $data
      * @param string $tag
+     * @param string $locale
      *
      * @return array
      */
-    public function guess(array $template, array $data, $tag)
+    public function guess(array $template, array $data, $tag, $locale = 'fr')
     {
-        $types  = $this->templateFactory->createTemplateFromArray($template)->getTypesByTag($tag);
-        $values = array_map(function (TypeInterface $type) use ($data) {
-            $groupName = $type->getGroup()->getName();
-            $typeName  = $type->getName();
+        $values = array_values($template);
+        $first  = reset($values);
 
-            return $groupName === 'default' ?
-                (isset($data[$typeName]) ? $data[$typeName] : null) :
-                (isset($data[$groupName][$typeName]) ? $data[$groupName][$typeName] : null);
-        }, $types);
+        if (!isset($first['template'])) {
+            $template = ['default' => ['label' => 'Default', 'template' => $template]];
+            $data     = ['default' => $data];
+        }
 
-        return $values;
+        return $this->templateFactory->createTemplatesFromArray($template)->getTaggedValues($tag, $locale, $data);
     }
 
     /**
      * @param array      $template
      * @param array      $data
      * @param string     $tag
+     * @param string     $locale
      * @param mixed|null $default
      *
      * @return mixed
      */
-    public function guessFirst(array $template, array $data, $tag, $default = null)
+    public function guessFirst(array $template, array $data, $tag, $locale = 'fr', $default = null)
     {
-        $info = $this->guess($template, $data, $tag);
+        try {
+            $info = $this->guess($template, $data, $tag, $locale);
 
-        return !empty($info) ? $info[0] : $default;
+            return !empty($info) ? reset($info) : $default;
+        } catch (RowNotFoundException $exception) {
+            return $default;
+        }
     }
 }

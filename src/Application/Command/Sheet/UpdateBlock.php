@@ -25,6 +25,11 @@ class UpdateBlock
     public $block;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @var array
      */
     public $data = [];
@@ -32,19 +37,23 @@ class UpdateBlock
     /**
      * @param Sheet  $sheet
      * @param string $block
+     * @param string $locale
      */
-    public function __construct(Sheet $sheet, $block)
+    public function __construct(Sheet $sheet, $block, $locale)
     {
-        $this->sheet = $sheet;
-        $this->block = $block;
+        $this->sheet  = $sheet;
+        $this->block  = $block;
+        $this->locale = $locale;
 
         $sheetTemplate = $sheet->getType()->getSheetTemplate();
         $blockTemplate = $sheetTemplate[$block]['template'];
-        $blockData     = array_combine(array_keys($blockTemplate), array_fill(0, count($blockTemplate), null));
-        $sheetData     = isset($sheet->getData()[$block]) ? $sheet->getData()[$block] : $blockData;
+        $sheetData     = isset($sheet->getData()[$block]) ? $sheet->getData()[$block] : [];
 
-        foreach ($blockData as $key => $value) {
-            $this->data[$key] = isset($sheetData[$key]) ? $sheetData[$key] : null;
-        }
+        $this->data = array_merge(
+            array_combine(array_keys($blockTemplate), array_fill(0, count($blockTemplate), null)),
+            array_map(function ($value) use ($locale) {
+                return is_array($value) ? (isset($value[$locale]) ? $value[$locale] : null) : $value;
+            }, $sheetData)
+        );
     }
 }

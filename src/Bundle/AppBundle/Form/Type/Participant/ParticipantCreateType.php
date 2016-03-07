@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
 
+use Proximum\Vimeet\Application\Command\Participant\Create;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParticipantCreateType extends AbstractParticipantType
@@ -22,7 +23,7 @@ class ParticipantCreateType extends AbstractParticipantType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Participant\Create',
+            'data_class'    => Create::class,
             'csrf_token_id' => 'participant_create',
         ]);
     }

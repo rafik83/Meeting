@@ -36,16 +36,31 @@ class UpdateBlockHandler
      */
     public function handle(UpdateBlock $updateBlock)
     {
-        $data                      = $updateBlock->sheet->getData();
-        $data[$updateBlock->block] = $updateBlock->data;
-
         $sheetTemplate = $updateBlock->sheet->getType()->getSheetTemplate();
 
         // Check the constraint on the data (required) before
         (new DataConstraintChecker())->check($updateBlock->data, $sheetTemplate[$updateBlock->block]['template']);
 
-        $updateBlock->sheet->setData($data);
+        $data = $updateBlock->sheet->getData();
 
-        $this->sheetRepository->set($updateBlock->sheet);
+        foreach ($updateBlock->data as $key => $value) {
+            if (!isset ($data[$updateBlock->block][$key])) {
+
+                $translatable = isset($sheetTemplate[$updateBlock->block]['template'][$key]['translatable']) ?
+                    $sheetTemplate[$updateBlock->block]['template'][$key]['translatable'] :
+                    false;
+
+                $data[$updateBlock->block][$key] = $translatable ? [] : null;
+
+            }
+
+            if (is_array($data[$updateBlock->block][$key])) {
+                $data[$updateBlock->block][$key][$updateBlock->locale] = $value;
+            } else {
+                $data[$updateBlock->block][$key] = $value;
+            }
+        }
+
+        $this->sheetRepository->set($updateBlock->sheet->setData($data));
     }
 }

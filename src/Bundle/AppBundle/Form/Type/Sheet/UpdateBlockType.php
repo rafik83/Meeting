@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,7 +38,7 @@ class UpdateBlockType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Sheet\UpdateBlock',
+            'data_class'    => UpdateBlock::class,
             'csrf_token_id' => 'update_sheet_block',
         ]);
 

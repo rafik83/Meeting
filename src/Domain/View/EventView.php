@@ -59,4 +59,14 @@ class EventView
         $this->locales     = $locales;
         $this->timeZone    = $timeZone;
     }
+
+    /**
+     * @param $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
+    }
 }

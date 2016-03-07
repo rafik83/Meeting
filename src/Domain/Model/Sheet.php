@@ -150,10 +150,14 @@ class Sheet implements BillingInfoInterface
      * Set data.
      *
      * @param array $data
+     *
+     * @return Sheet
      */
     public function setData(array $data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -301,7 +305,7 @@ class Sheet implements BillingInfoInterface
     {
         return $this->participants->filter(function (Participant $participant) use ($user) {
             return $participant->getUser() === $user;
-        })->first();
+        })->first() ? : null;
     }
 
     /**
@@ -314,5 +318,15 @@ class Sheet implements BillingInfoInterface
         return $this->participants->exists(function ($index, Participant $participant) use ($user) {
             return $participant->getUser() === $user;
         });
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasParticipant(Participant $participant)
+    {
+        return $this->participants->contains($participant);
     }
 }

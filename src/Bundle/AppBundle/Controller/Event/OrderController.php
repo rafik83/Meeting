@@ -27,6 +27,8 @@ class OrderController extends Controller
      */
     public function listOrderAction(EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return $this->render('VimeetAppBundle:Event/Order:listOrders.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
@@ -42,6 +44,8 @@ class OrderController extends Controller
      */
     public function summaryAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $summary = $this
             ->get('components.sheet.order_merge_factory')
             ->createFromSheet($sheet, $request->getLocale());
