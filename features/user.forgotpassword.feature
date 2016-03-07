@@ -12,11 +12,9 @@ Feature: Forgot Password
       | OneSheetSeveralParticipants.yml |
 
   Scenario: I can not request a token for a non-existent account
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And I follow "login.forgotPassword"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
-    And the response status code should be 200
+    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "test-impossible@test.com"
     And I press "form.forgotten_password.children.submit.label"
     Then the response status code should be 200
@@ -26,16 +24,14 @@ Feature: Forgot Password
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
     And the response status code should be 200
     And I follow "login.forgotPassword"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
-    And the response status code should be 200
+    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "test@test.com"
     And I press "form.forgotten_password.children.submit.label"
-    Then the response status code should be 200
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
     And I should see "flash.reset_password_token.success"
-    And the "forgot_password" mail should be sent to "test@test.com"
-    And the "forgot_password" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/"
-    And I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/" link in the "forgot_password" mail
+    And the "user_forgot_password" mail should be sent to "test@test.com"
+    And the "user_forgot_password" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/"
+    And I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/" link in the "user_forgot_password" mail
     And the response status code should be 200
     And I should see "new_password.title"
     And I fill in the following:
