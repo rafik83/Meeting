@@ -45,13 +45,11 @@ class UpdateBlockHandler
 
         foreach ($updateBlock->data as $key => $value) {
             if (!isset ($data[$updateBlock->block][$key])) {
-
                 $translatable = isset($sheetTemplate[$updateBlock->block]['template'][$key]['translatable']) ?
                     $sheetTemplate[$updateBlock->block]['template'][$key]['translatable'] :
                     false;
 
                 $data[$updateBlock->block][$key] = $translatable ? [] : null;
-
             }
 
             if (is_array($data[$updateBlock->block][$key])) {
