@@ -17,7 +17,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\ForgottenPasswordType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
