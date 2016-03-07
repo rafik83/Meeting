@@ -354,16 +354,6 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param $locale
-     *
-     * @return string
-     */
-    public function getTitle($locale)
-    {
-        return $this->translations->get($locale)->getTitle();
-    }
-
-    /**
      * @param string $templateName
      * @param string $group
      * @param string $row
