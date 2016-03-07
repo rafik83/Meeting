@@ -36,7 +36,7 @@ class RuleController extends Controller
             'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -76,7 +76,7 @@ class RuleController extends Controller
         $rule = $this->findRule($event, $seer, $seeable);
         $this->notFoundUnless($rule, 'Rule not found.');
 
-        $form = $this->createWhatForm($rule, $request->getLocale(), $event->getFallback());
+        $form = $this->createWhatForm($rule, $event->getAvailableLocale($request->getLocale()));
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
@@ -155,18 +155,16 @@ class RuleController extends Controller
     /**
      * @param Rule   $rule
      * @param string $locale
-     * @param string $fallbackLocale
      *
      * @return Form
      */
-    private function createWhatForm(Rule $rule, $locale, $fallbackLocale)
+    private function createWhatForm(Rule $rule, $locale)
     {
         $form = $this->createForm(DontSeeWhatType::class, $rule->getWhat(), [
-            'action'         => $this->generateWhatUrl($rule),
-            'method'         => 'POST',
-            'who'            => $rule->getSeeable(),
-            'locale'         => $locale,
-            'fallbackLocale' => $fallbackLocale,
+            'action' => $this->generateWhatUrl($rule),
+            'method' => 'POST',
+            'who'    => $rule->getSeeable(),
+            'locale' => $locale,
         ]);
         $form->add('submit', SubmitType::class);
 

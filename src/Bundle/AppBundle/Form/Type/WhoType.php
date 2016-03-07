@@ -62,12 +62,7 @@ class WhoType extends AbstractType
             'choice_label'      => function (Options $options) {
                 return function ($choice) use ($options) {
                     if ($choice instanceof Type || $choice instanceof Category) {
-                        $translation = $choice->getTranslations()->get($options['locale']);
-                        if (null === $translation) {
-                            $translation = $choice->getTranslations()->get($options['event']->getFallback());
-                        }
-
-                        return $translation->getTitle();
+                        return $choice->getTranslations()->get($options['locale'])->getTitle();
                     }
 
                     return (string) $choice;

@@ -23,17 +23,14 @@ class WhatCheckboxesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['template'] as $name => $step) {
-            $label = isset($step['label'][$options['locale']])
-                ? $step['label'][$options['locale']]
-                : $step['label'][$options['fallbackLocale']];
+            $label = $step['label'][$options['locale']];
 
             if (isset($step['template'])) {
                 $builder
                     ->add($name, self::class, [
-                        'label'          => $label,
-                        'template'       => $step['template'],
-                        'locale'         => $options['locale'],
-                        'fallbackLocale' => $options['fallbackLocale'],
+                        'label'    => $label,
+                        'template' => $step['template'],
+                        'locale'   => $options['locale'],
                     ])
                 ;
             } else {
@@ -52,6 +49,6 @@ class WhatCheckboxesType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['template', 'locale', 'fallbackLocale']);
+        $resolver->setRequired(['template', 'locale']);
     }
 }
