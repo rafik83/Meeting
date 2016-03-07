@@ -40,6 +40,8 @@ class LoginEventListener
     }
 
     /**
+     * Set last login datetime on user sheets
+     *
      * @param InteractiveLoginEvent $interactiveLoginEvent
      */
     public function onLogin(InteractiveLoginEvent $interactiveLoginEvent)
