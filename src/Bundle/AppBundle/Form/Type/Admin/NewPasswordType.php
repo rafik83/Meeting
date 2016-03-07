@@ -3,18 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\AbstractEmailType;
+use Proximum\Vimeet\Application\Command\Admin\NewPassword;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\AbstractPasswordType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ForgottenPasswordType extends AbstractEmailType
+class NewPasswordType extends AbstractPasswordType
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class ForgottenPasswordType extends AbstractEmailType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => ForgottenPassword::class,
+            'data_class' => NewPassword::class,
         ]);
     }
 }
