@@ -3,7 +3,7 @@
 {% form_theme form 'VimeetAppBundle:Admin/Happening:theme.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
     <h2>Ajouter un sous-événement</h2>
 
     {{ form_start(form) }}
