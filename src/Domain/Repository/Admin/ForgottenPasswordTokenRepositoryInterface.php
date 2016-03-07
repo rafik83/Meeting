@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository\User;
+namespace Proximum\Vimeet\Domain\Repository\Admin;
 
-use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\Admin;
 
 interface ForgottenPasswordTokenRepositoryInterface
 {
@@ -21,7 +21,7 @@ interface ForgottenPasswordTokenRepositoryInterface
     public function create(ForgottenPasswordToken $forgottenPasswordToken);
 
     /**
-     * @param User $user
+     * @param Admin $admin
      */
-    public function deleteAllForUser(User $user);
+    public function deleteAllForUser(Admin $admin);
 }

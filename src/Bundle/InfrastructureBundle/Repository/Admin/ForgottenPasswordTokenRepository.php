@@ -3,17 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User;
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
-use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
 
 class ForgottenPasswordTokenRepository implements ForgottenPasswordTokenRepositoryInterface
 {
@@ -42,14 +42,14 @@ class ForgottenPasswordTokenRepository implements ForgottenPasswordTokenReposito
     /**
      * {@inheritdoc}
      */
-    public function deleteAllForUser(User $user)
+    public function deleteAllForUser(Admin $admin)
     {
         $this
             ->entityManager
             ->createQueryBuilder()
-            ->delete('Entity:User\ForgottenPasswordToken', 'forgottenPasswordToken')
-            ->where('forgottenPasswordToken.user = :user')
-            ->setParameter('user', $user)
+            ->delete('Entity:Admin\ForgottenPasswordToken', 'forgottenPasswordToken')
+            ->where('forgottenPasswordToken.admin = :admin')
+            ->setParameter('admin', $admin)
             ->getQuery()
             ->execute();
 
