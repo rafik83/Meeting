@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\User;
+namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
-use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
+use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordHandler
@@ -25,9 +25,9 @@ class ForgottenPasswordHandler
     private $forgottenPasswordTokenGenerator;
 
     /**
-     * @var UserRepositoryInterface
+     * @var AdminRepositoryInterface
      */
-    private $userRepository;
+    private $adminRepository;
 
     /**
      * @var ForgottenPasswordTokenRepositoryInterface
@@ -41,18 +41,18 @@ class ForgottenPasswordHandler
 
     /**
      * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
-     * @param UserRepositoryInterface                   $userRepository
+     * @param AdminRepositoryInterface                  $adminRepository
      * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
      * @param EventDispatcherInterface                  $eventDispatcher
      */
     public function __construct(
         ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
-        UserRepositoryInterface $userRepository,
+        AdminRepositoryInterface $adminRepository,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->forgottenPasswordTokenGenerator = $forgottenPasswordTokenGenerator;
-        $this->userRepository                  = $userRepository;
+        $this->adminRepository                 = $adminRepository;
         $this->forgottenPasswordRepository     = $forgottenPasswordTokenRepository;
         $this->eventDispatcher                 = $eventDispatcher;
     }
@@ -64,24 +64,23 @@ class ForgottenPasswordHandler
      */
     public function handle(ForgottenPassword $forgottenPassword)
     {
-        $user = $this->userRepository->findByEmail($forgottenPassword->email);
+        $admin = $this->adminRepository->findByEmail($forgottenPassword->email);
 
-        if (null === $user) {
+        if (null === $admin) {
             throw new EmailDoesNotExistException();
         }
 
-        $forgottenPasswordToken = $this->forgottenPasswordTokenGenerator->generate($user);
+        $forgottenPasswordToken = $this->forgottenPasswordTokenGenerator->generate($admin);
 
-        $this->forgottenPasswordRepository->deleteAllForUser($user);
+        $this->forgottenPasswordRepository->deleteAllForUser($admin);
         $this->forgottenPasswordRepository->create($forgottenPasswordToken);
 
         $event = new ResetPasswordEvent(
-            $user,
-            $forgottenPassword->eventView,
+            $admin,
             $forgottenPasswordToken,
             $forgottenPassword->locale
         );
 
-        $this->eventDispatcher->dispatch('user_reset_password', $event);
+        $this->eventDispatcher->dispatch('admin_reset_password', $event);
     }
 }
