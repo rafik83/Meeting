@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface AdminRepositoryInterface
 {
@@ -37,6 +38,14 @@ interface AdminRepositoryInterface
      * @return Admin
      */
     public function findByEmail($email);
+
+    /**
+     * @param int $page
+     * @param int $limit
+     *
+     * @return PaginatedResult
+     */
+    public function listPaginated($page, $limit);
 
     /**
      * @return Admin[]
