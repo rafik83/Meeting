@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\View;
+namespace Proximum\Vimeet\Application\Components\Schedule;
 
 class ScheduleSlotView
 {
