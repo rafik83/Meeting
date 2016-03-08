@@ -14,6 +14,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class HappeningType extends AbstractType
@@ -26,7 +29,7 @@ abstract class HappeningType extends AbstractType
         $event = $options['event'];
 
         $builder
-            ->add('category', CategoryType::class, ['event' => $event])
+            ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
             ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('translations', CollectionType::class, [

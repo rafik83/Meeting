@@ -39,7 +39,7 @@ class HappeningController extends Controller
     {
         $happenings = $this
             ->get('happening.happening_list_view_factory')
-            ->getListByEventAndLocale($event, $request->getLocale());
+            ->getListByEventAndLocale($event, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
             'event'      => $event,
@@ -92,6 +92,7 @@ class HappeningController extends Controller
         $update = new UpdateHappening($happening);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'action' => $this->generateUrl('admin_happening_update', [
                 'event'     => $event->getId(),
                 'happening' => $happening->getId(),
@@ -123,7 +124,7 @@ class HappeningController extends Controller
     {
         $categories = $this
             ->get('vimeet_infrastructure.repository_happening.category_repository')
-            ->findByEvent($event, $request->getLocale());
+            ->findByEvent($event, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('VimeetAppBundle:Admin/Happening/Category:list.html.twig', [
             'event'      => $event,
