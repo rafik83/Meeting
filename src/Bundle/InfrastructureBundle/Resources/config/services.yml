@@ -313,14 +313,14 @@ services:
     command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:
-            - '@components.token.forgotten_password_token_generator'
+            - '@components.user_token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.user.forgotten_password_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     command.admin.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ForgottenPasswordHandler
         arguments:
-            - '@components.token.forgotten_password_token_generator'
+            - '@components.admin_token.forgotten_password_token_generator'
             - '@repository.admin_repository'
             - '@repository.admin.forgotten_password_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -599,8 +599,12 @@ services:
     #
     # Token component
     #
-    components.token.forgotten_password_token_generator:
-        class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
+    components.admin_token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGenerator
+        arguments:
+            - '@datetime'
+    components.user_token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
     components.token.activate_account_token_generator:

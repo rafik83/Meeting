@@ -13,7 +13,7 @@ namespace Tests\Application\Command\User;
 use DateTime;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler;
-use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
+use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
@@ -39,7 +39,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail($command->email)->shouldBeCalled()->willReturn($user);
 
-        $forgottenPasswordTokenGenerator = $this->prophesize(ForgottenPasswordTokenGenerator::class);
+        $forgottenPasswordTokenGenerator = $this->prophesize(UserForgottenPasswordTokenGenerator::class);
         $forgottenPasswordTokenGenerator->generate($user)->shouldBeCalled()->willReturn(new ForgottenPasswordToken(
             $user,
             'token',
@@ -75,7 +75,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', new DateTime());
         $event                  = new ResetPasswordEvent($user, $command->eventView, $forgottenPasswordToken, $command->locale);
 
-        $forgottenPasswordTokenGenerator = $this->prophesize(ForgottenPasswordTokenGenerator::class);
+        $forgottenPasswordTokenGenerator = $this->prophesize(UserForgottenPasswordTokenGenerator::class);
         $forgottenPasswordTokenGenerator->generate($user)->shouldNotBeCalled();
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
