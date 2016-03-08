@@ -41,6 +41,8 @@ class AdminController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $filters = [];
         $filtered   = false;
         $filterForm = $this->createFilterForm(
@@ -71,6 +73,8 @@ class AdminController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $create = new Create($request->getLocale());
 
         $form = $this->createForm(CreateType::class, $create, [
