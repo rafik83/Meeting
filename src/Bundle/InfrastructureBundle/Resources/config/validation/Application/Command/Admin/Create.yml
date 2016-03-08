@@ -1,0 +1,13 @@
+Proximum\Vimeet\Application\Command\Meeting\Update:
+    properties:
+        email:
+            - NotBlank: ~
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 8
+                minMessage: validators.password.min
+        lastname:
+            - NotBlank: ~
+        firstname:
+            - NotBlank: ~
