@@ -91,7 +91,7 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function listPaginated($page, $limit)
+    public function listPaginated($page, $limit, array $filters)
     {
         $queryBuilder = $this
             ->entityManager
@@ -99,6 +99,23 @@ class AdminRepository implements AdminRepositoryInterface
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
             ->orderBy('admin.lastname', 'ASC');
+
+        if (isset($filters['role']) && null !== $filters['role'] && in_array($filters['role'], Admin::getAllRoles())) {
+            $queryBuilder
+                ->where('admin.role = :role')
+                ->setParameter('role', $filters['role']);
+        }
+
+        if (isset($filters['event']) && null !== $filters['event']) {
+            $queryBuilder
+                ->leftJoin('admin.events', 'event')
+                ->andWhere($queryBuilder->expr()->orX(
+                    'event.id = :eventId',
+                    'admin.role = :role_event AND admin.events IS EMPTY'
+                ))
+                ->setParameter('eventId', $filters['event'])
+                ->setParameter('role_event', Admin::ROLE_SUPER_ADMIN);
+        }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'admin', 'id');
     }

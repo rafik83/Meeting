@@ -40,12 +40,13 @@ interface AdminRepositoryInterface
     public function findByEmail($email);
 
     /**
-     * @param int $page
-     * @param int $limit
+     * @param int   $page
+     * @param int   $limit
+     * @param array $filters
      *
      * @return PaginatedResult
      */
-    public function listPaginated($page, $limit);
+    public function listPaginated($page, $limit, array $filters);
 
     /**
      * @return Admin[]
