@@ -279,6 +279,7 @@ admin:
         list:
             checkbox: Case à cocher
     admin_list:
+        link: Liste des utilisateurs
         title: Liste des utilisateurs du backoffice
         action:
             create: Créer un nouvel utilisateur
