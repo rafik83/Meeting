@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
+use Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
@@ -40,13 +40,13 @@ class ForgottenPasswordHandler
     private $eventDispatcher;
 
     /**
-     * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
+     * @param AdminForgottenPasswordTokenGenerator      $forgottenPasswordTokenGenerator
      * @param AdminRepositoryInterface                  $adminRepository
      * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
      * @param EventDispatcherInterface                  $eventDispatcher
      */
     public function __construct(
-        ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
+        AdminForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
         AdminRepositoryInterface $adminRepository,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository,
         EventDispatcherInterface $eventDispatcher
