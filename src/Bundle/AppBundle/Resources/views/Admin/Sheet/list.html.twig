@@ -23,7 +23,7 @@
                 <tr>
                     <td>{{ sheet.title }}</td>
                     <td>
-                        <span class="label label-default">{{ sheet.state }}</span>
+                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
