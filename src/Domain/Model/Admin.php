@@ -153,7 +153,15 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isEnabled()
     {
-        return $this->hasEvents();
+        if (!$this->hasEvents()) {
+            if ($this->getRole() === self::ROLE_SUPER_ADMIN) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     /**
