@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -37,15 +36,22 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
     protected $salt;
 
     /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
      * @param string $email
      * @param string $salt
      * @param string $password
+     * @param string $locale
      */
-    public function __construct($email, $salt, $password)
+    public function __construct($email, $salt, $password, $locale)
     {
         $this->email     = $email;
         $this->salt      = $salt;
         $this->password  = $password;
+        $this->locale    = $locale;
     }
 
     /**
@@ -64,6 +70,15 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
         return $this->email;
     }
 
+    /**
+     * Get locale.
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
 
     /**
      * {@inheritdoc}
@@ -128,7 +143,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
             $this->email,
             $this->password,
             $this->salt
-            ) = unserialize($serialized);
+        ) = unserialize($serialized);
     }
 
     /**

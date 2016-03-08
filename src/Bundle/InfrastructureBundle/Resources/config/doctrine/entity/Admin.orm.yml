@@ -14,6 +14,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             type: string
         salt:
             type: string
+        locale:
+            type: string
         firstname:
             type: string
         lastname:
