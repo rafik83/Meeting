@@ -61,7 +61,7 @@ class SheetListViewFactory
     {
         $sheets          = $this->sheetRepository->paginate($page, $limit, $event, $locale);
         $sheets->results = array_map(function (Sheet $sheet) use ($locale) {
-            $this->createFromSheet($sheet, $locale);
+            return $this->createFromSheet($sheet, $locale);
         }, $sheets->results);
 
         return $sheets;
