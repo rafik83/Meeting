@@ -57,7 +57,8 @@ security:
                 target: event
 
     access_control:
-        - { path: ^/admin/event, role: ROLE_ADMIN, host: '%domain%' }
+        - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
 
     role_hierarchy:
         ROLE_OPERATOR: ['ROLE_ADMIN']
