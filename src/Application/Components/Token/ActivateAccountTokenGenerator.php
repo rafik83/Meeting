@@ -24,11 +24,6 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      */
     public function generate(User $user, Sheet $sheet)
     {
-        return new ActivateAccountToken(
-            $user,
-            $this->generateToken($user),
-            $sheet,
-            $this->expirateDate
-        );
+        return new ActivateAccountToken($user, $this->generateToken($user), $sheet, $this->expirateDate);
     }
 }

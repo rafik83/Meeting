@@ -10,26 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use DateTime;
-use DateTimeImmutable;
 use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ForgottenPasswordTokenGenerator
+class ForgottenPasswordTokenGenerator extends AbstractTokenGenerator
 {
-    /**
-     * @var DateTime
-     */
-    private $expirateDate;
-
-    /**
-     * @param DateTimeImmutable $dateTime
-     */
-    public function __construct(DateTimeImmutable $dateTime)
-    {
-        $this->expirateDate = $dateTime->add(new \DateInterval('P1D'));
-    }
-
     /**
      * @param User $user
      *
@@ -37,20 +22,14 @@ class ForgottenPasswordTokenGenerator
      */
     public function generate(User $user)
     {
-        return new ForgottenPasswordToken(
-            $user,
-            $this->generateToken($user),
-            $this->expirateDate
-        );
+        return new ForgottenPasswordToken($user, $this->generateToken($user), $this->expirateDate);
     }
 
     /**
-     * @param User $user
-     *
-     * @return string
+     * @return \DateInterval
      */
-    private function generateToken(User $user)
+    protected function getLifetime()
     {
-        return sha1(uniqid() . $user->getId() . uniqid());
+        return new \DateInterval('P1D');
     }
 }
