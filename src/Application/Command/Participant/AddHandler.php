@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
-use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
@@ -52,6 +52,11 @@ class AddHandler
     private $activateAccountTokenRepository;
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -62,6 +67,7 @@ class AddHandler
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
      * @param ActivateAccountTokenRepository $activateAccountTokenRepository
+     * @param Validator                      $validator
      * @param EventDispatcherInterface       $eventDispatcher
      */
     public function __construct(
@@ -70,6 +76,7 @@ class AddHandler
         ParticipantRepositoryInterface $participantRepository,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         ActivateAccountTokenRepository $activateAccountTokenRepository,
+        Validator $validator,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository                 = $userRepository;
@@ -77,6 +84,7 @@ class AddHandler
         $this->participantRepository          = $participantRepository;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
         $this->activateAccountTokenRepository = $activateAccountTokenRepository;
+        $this->validator                      = $validator;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
@@ -92,7 +100,7 @@ class AddHandler
         $addNewUser = false;
 
         // Check the constraint on the data (required) before
-        (new DataConstraintChecker())->check($add->data, $add->sheet->getType()->getParticipantTemplate());
+        $this->validator->validateParticipantData($add->sheet, $add->data);
 
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();

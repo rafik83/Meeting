@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Billing;
 
-use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -22,11 +22,20 @@ class UpdateHandler
     private $sheetRepository;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
+     * @var Validator
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    private $validator;
+
+    /**
+     * UpdateHandler constructor.
+     *
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param Validator                $validator
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, Validator $validator)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->validator       = $validator;
     }
 
     /**
@@ -36,9 +45,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        // Check the constraint on the data (required)
-        (new DataConstraintChecker())->check($update->billingData, $update->sheet->getEvent()->getBillingTemplate());
-
+        $this->validator->validateBillingData($update->sheet, $update->billingData);
         $update->sheet->setBillingData($update->billingData);
 
         $this->sheetRepository->set($update->sheet);

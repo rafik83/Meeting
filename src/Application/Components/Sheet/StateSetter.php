@@ -59,7 +59,7 @@ class StateSetter
     private function isComplete(Sheet $sheet)
     {
         try {
-            $this->validator->validateSheet($sheet);
+            $this->validator->validateSheetData($sheet, $sheet->getData());
 
             return true;
         } catch (MissingRequiredDataException $exception) {

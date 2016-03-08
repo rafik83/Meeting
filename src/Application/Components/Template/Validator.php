@@ -62,11 +62,40 @@ class Validator
 
     /**
      * @param Sheet $sheet
+     * @param array $data
+     *
+     * @throws MissingRequiredDataException
      */
-    public function validateSheet(Sheet $sheet)
+    public function validateBillingData(Sheet $sheet, array $data)
+    {
+        $template = $this->templateFactory->createTemplateFromArray($sheet->getBillingTemplate());
+
+        $this->validateDataAgainstTemplate($data, $template);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $data
+     *
+     * @throws MissingRequiredDataException
+     */
+    public function validateParticipantData(Sheet $sheet, array $data)
+    {
+        $template = $this->templateFactory->createTemplateFromArray($sheet->getType()->getParticipantTemplate());
+
+        $this->validateDataAgainstTemplate($data, $template);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $data
+     *
+     * @throws MissingRequiredDataException
+     */
+    public function validateSheetData(Sheet $sheet, array $data)
     {
         $templates = $this->templateFactory->createTemplatesFromArray($sheet->getType()->getSheetTemplate());
 
-        $this->validateDataAgainstTemplates($sheet->getData(), $templates);
+        $this->validateDataAgainstTemplates($data, $templates);
     }
 }
