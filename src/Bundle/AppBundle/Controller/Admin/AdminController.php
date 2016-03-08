@@ -55,6 +55,7 @@ class AdminController extends Controller
 
                 return $this->redirectToRoute('admin_list_admin');
             } catch (EmailAlreadyExistsException $ex) {
+                $form->get('email')->addError($this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale()));
             }
 
         }
