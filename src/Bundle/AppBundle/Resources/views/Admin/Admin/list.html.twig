@@ -14,12 +14,13 @@
         </tr>
         </thead>
         <tbody>
+        {% set roles = {'ROLE_OPERATOR': 0, 'ROLE_ORGANIZER': 1,'ROLE_SUPER_ADMIN': 2} %}
         {% for admin in admins %}
             <tr>
                 <td>{{ admin.lastname }}</td>
                 <td>{{ admin.firstname }}</td>
                 <td>{{ admin.email }}</td>
-                <td>{{ admin.role }}</td>
+                <td>{{ 'admin.role'|transchoice(roles[admin.role]) }}</td>
                 <td>
                     {% if admin.role == 'ROLE_SUPER_ADMIN' %}
                         {% if admin.events|length == 0 %}
