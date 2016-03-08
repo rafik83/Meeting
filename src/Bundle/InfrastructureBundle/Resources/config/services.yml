@@ -665,6 +665,12 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.manager'
 
     #
+    # Security Component
+    #
+    components.security.admin_event_access:
+        class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+
+    #
     # DateTime
     #
     datetime:

@@ -22,6 +22,16 @@ services:
             - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
 
     #
+    # Security
+    #
+    security.admin_event_access_voter:
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\AdminEventAccessVoter
+        arguments:
+            - '@components.security.admin_event_access'
+        tags:
+            - { name: security.voter }
+
+    #
     # Form extension
     #
     vimeet_app.form_extension.translation_domain_extension:
