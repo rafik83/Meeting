@@ -50,9 +50,7 @@ class CreateHandler
 
     public function handle(Create $create)
     {
-        $admin = $this->adminRepository->findByEmail($create->email);
-
-        if (null !== $admin) {
+        if ($this->adminRepository->emailExists($create->email)) {
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $create->email));
         }
 
