@@ -30,6 +30,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function listAction(Request $request, Event $event, Type $type)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
@@ -74,6 +76,8 @@ class TypeTemplateFieldController extends Controller
         $group,
         $libType
     ) {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
@@ -138,6 +142,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $templateName, $group, $row)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $request->getLocale());
@@ -202,6 +208,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldPositionAction(Request $request, Event $event, Type $type, $templateName, $group)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $fieldsOrder     = $request->request->get('order', []);
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $template        = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));

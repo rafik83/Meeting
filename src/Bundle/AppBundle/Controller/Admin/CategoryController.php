@@ -32,6 +32,8 @@ class CategoryController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
             ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
@@ -50,6 +52,8 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new Create($event);
         $form   = $this->createForm(CategoryCreateType::class, $create, [
             'method' => 'POST',
@@ -80,6 +84,8 @@ class CategoryController extends Controller
      */
     public function updateAction(Request $request, Event $event, Category $category)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($event !== $category->getEvent()) {
             throw $this->createNotFoundException('Category not found.');
         }
