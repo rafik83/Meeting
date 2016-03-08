@@ -85,7 +85,7 @@ abstract class AbstractType implements TypeInterface
     {
         $label = $this->getOption('label');
 
-        return (string) (is_array($label) ? $label[$locale] : $label);
+        return (string) (is_array($label) ? (isset($label[$locale]) ? $label[$locale] : null) : $label);
     }
 
     /**
