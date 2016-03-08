@@ -25,6 +25,13 @@ class SheetListView
     public $title;
 
     /**
+     * "Etat de la fiche"
+     *
+     * @var string
+     */
+    public $state;
+
+    /**
      * "Catégorie"
      *
      * @var array
@@ -64,16 +71,18 @@ class SheetListView
      *
      * @param int                  $id
      * @param string               $title
+     * @param string               $state
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      */
-    public function __construct($id, $title, array $categories, $type, SheetParticipantView $owner, \DateTimeInterface $createdAt, \DateTimeInterface $lastLoginAt = null)
+    public function __construct($id, $title, $state, array $categories, $type, SheetParticipantView $owner, \DateTimeInterface $createdAt, \DateTimeInterface $lastLoginAt = null)
     {
         $this->id          = $id;
         $this->title       = $title;
+        $this->state       = $state;
         $this->categories  = $categories;
         $this->type        = $type;
         $this->owner       = $owner;

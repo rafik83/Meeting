@@ -78,6 +78,7 @@ class SheetListViewFactory
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $sheet->getState(),
             array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(

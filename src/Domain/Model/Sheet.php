@@ -76,7 +76,7 @@ class Sheet implements BillingInfoInterface
      *
      * @var string
      */
-    private $state;
+    private $state = self::STATE_INCOMPLETE;
 
     /**
      * Sheet constructor.
@@ -343,6 +343,16 @@ class Sheet implements BillingInfoInterface
     public function hasParticipant(Participant $participant)
     {
         return $this->participants->contains($participant);
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 
     /**
