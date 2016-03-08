@@ -4,7 +4,10 @@
 
 {% block content %}
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-    <h2>Ajouter un sous-événement</h2>
+
+    <h2>{{ 'admin.happening.title'|trans }}</h2>
+
+    <h3>{{ 'admin.happening.add'|trans }}</h3>
 
     {{ form_start(form) }}
         {{ form_errors(form) }}

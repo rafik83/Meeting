@@ -36,12 +36,11 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function readAction(Request $request, Event $event)
+    public function readAction(Event $event)
     {
         return $this->render('VimeetAppBundle:Admin/Event:read.html.twig', [
             'event' => $event,

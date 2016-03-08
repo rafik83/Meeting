@@ -261,6 +261,8 @@ admin:
         link: Types de participation
     category:
         link: Catégories de participation
+        add: Ajouter
+        update: Modifier
     sheet:
         link: Fiches de participation
     meeting:
@@ -275,8 +277,20 @@ admin:
                 cancelled: Annulé
     happening:
         link: Conférences
+        title: Conférences
+        add: Ajouter
+        update: Modifier
+    happening_category:
+        link: Catégories de conférences
+        title: Catégories de conférences
+        add: Ajouter
+        update: Modifier
     happening_speaker:
         link: Intervenants
+        title: Intervenants
+        happenings: Conférences
+        add: Ajouter
+        update: Modifier
     spot:
         link: Lieux
         active:

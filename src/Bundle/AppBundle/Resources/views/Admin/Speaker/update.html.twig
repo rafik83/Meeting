@@ -6,7 +6,9 @@
 
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
-    <h2>{{ block('title') }}</h2>
+    <h2>{{ 'admin.happening_speaker.title'|trans }}</h2>
+
+    <h2>{{ 'admin.happening_speaker.update'|trans }}</h2>
 
     {{ form_start(form) }}
         {{ form_errors(form) }}
