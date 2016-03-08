@@ -17,6 +17,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Sheet implements BillingInfoInterface
 {
+    const STATE_COMPLETE   = 'complete';
+    const STATE_INCOMPLETE = 'incomplete';
+    const STATE_VALIDATED  = 'validated';
+
     /**
      * @var int
      */
@@ -68,10 +72,20 @@ class Sheet implements BillingInfoInterface
     private $lastLoginAt;
 
     /**
-     * @param Event $event
-     * @param Type  $type
-     * @param array $data
-     * @param array $packageData
+     * "Etat de la fiche"
+     *
+     * @var string
+     */
+    private $state;
+
+    /**
+     * Sheet constructor.
+     *
+     * @param Event              $event
+     * @param Type               $type
+     * @param array              $data
+     * @param array              $packageData
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(Event $event, Type $type, array $data, array $packageData, \DateTimeInterface $createdAt)
     {
@@ -82,6 +96,7 @@ class Sheet implements BillingInfoInterface
         $this->createdAt    = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
+        $this->state        = self::STATE_INCOMPLETE;
     }
 
     /**
@@ -328,5 +343,33 @@ class Sheet implements BillingInfoInterface
     public function hasParticipant(Participant $participant)
     {
         return $this->participants->contains($participant);
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function markAsIncomplete()
+    {
+        $this->state = self::STATE_INCOMPLETE;
+
+        return $this;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function markAsComplete()
+    {
+        $this->state = self::STATE_COMPLETE;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidated()
+    {
+        return self::STATE_VALIDATED === $this->state;
     }
 }
