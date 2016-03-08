@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Components\Token;
 
 use Proximum\Vimeet\Domain\Model\AbstractUser;
-use Proximum\Vimeet\Domain\Model\User;
 
 abstract class AbstractTokenGenerator
 {

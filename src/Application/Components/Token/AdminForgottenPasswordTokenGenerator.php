@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Components\Token;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken as AdminForgottenPasswordToken;
-use Proximum\Vimeet\Domain\Model\User;
 
 class AdminForgottenPasswordTokenGenerator extends AbstractTokenGenerator
 {
