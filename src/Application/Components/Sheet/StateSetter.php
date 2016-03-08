@@ -14,19 +14,15 @@ use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDat
 use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class StatusGuesser
+class StateSetter
 {
-    const STATUS_COMPLETE   = 'complete';
-    const STATUS_INCOMPLETE = 'incomplete';
-    const STATUS_VALIDATED  = 'validated';
-
     /**
      * @var Validator
      */
     private $validator;
 
     /**
-     * StatusGuesser constructor.
+     * StateSetter constructor.
      *
      * @param Validator $validator
      */
@@ -36,19 +32,21 @@ class StatusGuesser
     }
 
     /**
-     * Guess status of a sheet
+     * Set state
      *
      * @param Sheet $sheet
-     *
-     * @return string
      */
-    public function guessStatus(Sheet $sheet)
+    public function setState(Sheet $sheet)
     {
-        if (!$this->isComplete($sheet) || !$this->hasPackage($sheet)) {
-            return self::STATUS_INCOMPLETE;
+        if ($sheet->isValidated()) {
+            return;
         }
 
-        return self::STATUS_COMPLETE;
+        if (!$this->isComplete($sheet) || !$this->hasPackage($sheet)) {
+            $sheet->markAsIncomplete();
+        }
+
+        $sheet->markAsComplete();
     }
 
     /**

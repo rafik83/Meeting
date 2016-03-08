@@ -178,6 +178,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_factory'
             - '@template.validator'
+            - '@sheet.state_setter'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
@@ -563,8 +564,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
         arguments:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
-    sheet.status_guesser:
-        class: Proximum\Vimeet\Application\Components\Sheet\StatusGuesser
+    sheet.state_setter:
+        class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
         arguments:
             - '@template.validator'
 

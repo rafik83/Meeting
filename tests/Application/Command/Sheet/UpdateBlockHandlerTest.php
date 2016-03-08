@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler;
+use Proximum\Vimeet\Application\Components\Sheet\StateSetter;
 
 class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -115,12 +116,14 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $templateFactory = new TemplateFactory();
         $validator       = new Validator($templateFactory);
+        $stateSetter     = $this->prophesize(StateSetter::class);
 
         // Prophecies
+        $stateSetter->setState($expected)->shouldBeCalled();
         $sheetRepository->set($expected)->shouldBeCalled();
 
         // Handler
-        $handler = new UpdateBlockHandler($sheetRepository->reveal(), $templateFactory, $validator);
+        $handler = new UpdateBlockHandler($sheetRepository->reveal(), $templateFactory, $validator, $stateSetter->reveal());
         $handler->handle($command);
     }
 }

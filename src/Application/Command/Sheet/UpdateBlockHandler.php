@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Components\Sheet\StateSetter;
 use Proximum\Vimeet\Application\Components\Template\Template;
 use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Application\Components\Template\Validator;
@@ -34,17 +35,28 @@ class UpdateBlockHandler
     private $validator;
 
     /**
+     * @var StateSetter
+     */
+    private $stateSetter;
+
+    /**
      * UpdateBlockHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param TemplateFactory          $templateFactory
      * @param Validator                $validator
+     * @param StateSetter              $stateSetter
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, TemplateFactory $templateFactory, Validator $validator)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        TemplateFactory $templateFactory,
+        Validator $validator,
+        StateSetter $stateSetter
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->templateFactory = $templateFactory;
         $this->validator       = $validator;
+        $this->stateSetter     = $stateSetter;
     }
 
     /**
@@ -73,6 +85,10 @@ class UpdateBlockHandler
 
         $updateBlock->sheet->setData($data);
 
+        // Update status
+        $this->stateSetter->setState($updateBlock->sheet);
+
+        // Save sheet
         $this->sheetRepository->set($updateBlock->sheet);
     }
 
