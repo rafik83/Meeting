@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 /**
  * "Compte admin/organisateur/collaborateur".
  */
-class Admin extends AbstractUser
+class Admin extends AbstractUser implements AdvancedUserInterface
 {
     const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
     const ROLE_OPERATOR    = 'ROLE_OPERATOR';
@@ -118,5 +120,37 @@ class Admin extends AbstractUser
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return true;
     }
 }
