@@ -37,7 +37,9 @@ abstract class AbstractLib extends Row
      */
     public function getDisplayableValue($value, $locale)
     {
-        return is_array($value) && $this->isTranslatable() ? $value[$locale] : $value;
+        return is_array($value) && $this->isTranslatable() ?
+            (isset($value[$locale]) ? $value[$locale] : null) :
+            $value;
     }
 
     /**
