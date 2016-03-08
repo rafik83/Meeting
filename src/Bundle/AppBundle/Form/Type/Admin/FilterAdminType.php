@@ -44,7 +44,7 @@ class FilterAdminType extends AbstractType
                 'placeholder' => 'form.filter_admin.event.all',
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'form.admin.meeting_request.list.filter.children.submit.label',
+                'label' => 'form.filter_admin.children.submit.label',
             ]);
     }
 

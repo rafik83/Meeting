@@ -13,7 +13,7 @@
         <div class="col-xs-4">
             {{ form_row(filter_form.submit) }}
             {% if filtered %}
-                <a href="{{ path('admin_list_admin') }}" class="btn btn-link">Vider les filtres</a>
+                <a href="{{ path('admin_list_admin') }}" class="btn btn-link">{{ 'admin.admin_list.filter.empty_filter'|trans }}</a>
             {% endif %}
         </div>
         {{ form_rest(filter_form) }}

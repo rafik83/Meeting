@@ -280,6 +280,8 @@ admin:
         list:
             checkbox: Case à cocher
     admin_list:
+        filter:
+            empty_filter: Vider les filtres
         link: Liste des utilisateurs
         title: Liste des utilisateurs du backoffice
         action:

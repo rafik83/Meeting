@@ -583,3 +583,14 @@ form:
         role:
             super_admin: Admin
             organizer: Organisateur
+    filter_admin:
+        role:
+            all: Tous les types
+            organizer: Organisateur
+            super_admin: Admin
+        event:
+            all: Tous les événements
+        children:
+            submit:
+                label: Filtrer
+
