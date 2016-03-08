@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\Create;
+use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\CreateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,10 +49,14 @@ class AdminController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.admin.create_handler')->handle($create);
-            $this->addFlash('success', 'flash.admin.admin.create.success');
+            try {
+                $this->get('command.admin.create_handler')->handle($create);
+                $this->addFlash('success', 'flash.admin.admin.create.success');
 
-            return $this->redirectToRoute('admin_list_admin');
+                return $this->redirectToRoute('admin_list_admin');
+            } catch (EmailAlreadyExistsException $ex) {
+            }
+
         }
 
         return $this->render('VimeetAppBundle:Admin/Admin:create.html.twig', [
