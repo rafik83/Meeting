@@ -15,6 +15,7 @@
             <span class="glyphicon glyphicon-home"></span> Admin
         </a>
         {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
+        | <a href="{{ path('admin_list_admin') }}">Liste des utilisateurs</a>
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
 
