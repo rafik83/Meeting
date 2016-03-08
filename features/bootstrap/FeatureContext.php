@@ -451,6 +451,16 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * Checks, that current url is equal to specified.
+     *
+     * @Then /^(?:|I )should be on this url "(?P<url>[^"]+)"$/
+     */
+    public function assertUrl($url)
+    {
+        $this->assertSession()->addressEquals($url);
+    }
+
+    /**
      * @param $url
      */
     private function setBaseUrl($url)
