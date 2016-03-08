@@ -38,7 +38,7 @@ class TaggedInfoGuesser
      *
      * @return array
      */
-    public function guess(array $template, array $data, $tag, $locale = 'fr')
+    public function guess(array $template, array $data, $tag, $locale = null)
     {
         $values = array_values($template);
         $first  = reset($values);
@@ -60,7 +60,7 @@ class TaggedInfoGuesser
      *
      * @return mixed
      */
-    public function guessFirst(array $template, array $data, $tag, $locale = 'fr', $default = null)
+    public function guessFirst(array $template, array $data, $tag, $locale = null, $default = null)
     {
         try {
             $info = $this->guess($template, $data, $tag, $locale);
