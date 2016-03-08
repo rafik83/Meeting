@@ -435,7 +435,7 @@ form:
             lastname:
                 label: Nom
             function:
-                label: Function
+                label: Fonction
             organization:
                 label: Société
             logo:
@@ -451,7 +451,7 @@ form:
             lastname:
                 label: Nom
             function:
-                label: Function
+                label: Fonction
             organization:
                 label: Société
             logo:
