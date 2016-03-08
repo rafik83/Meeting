@@ -130,6 +130,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\AdminRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
 
     #
     # Fixture providers
@@ -463,6 +464,12 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.admin.create_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
 
     #
     # Security
