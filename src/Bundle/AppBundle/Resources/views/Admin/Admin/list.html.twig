@@ -2,6 +2,23 @@
 
 {% block content %}
     <h2>{{ 'admin.admin_list.title'|trans }}</h2>
+    <div class="col-xs-12">
+        {{ form_start(filter_form) }}
+        <div class="col-xs-4">
+            {{ form_row(filter_form.role) }}
+        </div>
+        <div class="col-xs-4">
+            {{ form_row(filter_form.event) }}
+        </div>
+        <div class="col-xs-4">
+            {{ form_row(filter_form.submit) }}
+            {% if filtered %}
+                <a href="{{ path('admin_list_admin') }}" class="btn btn-link">Vider les filtres</a>
+            {% endif %}
+        </div>
+        {{ form_rest(filter_form) }}
+        {{ form_end(filter_form) }}
+    </div>
     <a href="{{ path('admin_create_admin') }}" class="btn btn-primary">{{ 'admin.admin_list.action.create'|trans }}</a>
     <table class="table">
         <thead>
