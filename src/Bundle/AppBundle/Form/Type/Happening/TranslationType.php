@@ -31,4 +31,12 @@ class TranslationType extends AbstractType
             ])
         ;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'happening_translation';
+    }
 }

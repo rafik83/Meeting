@@ -58,6 +58,7 @@ class HappeningController extends Controller
         $create = new CreateHappening($event);
         $form   = $this->createForm(CreateType::class, $create, [
             'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'action' => $this->generateUrl('admin_happening_create', ['event' => $event->getId()]),
             'method' => 'POST',
         ]);
