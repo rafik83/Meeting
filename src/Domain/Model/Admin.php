@@ -35,6 +35,11 @@ class Admin extends AbstractUser
     private $role;
 
     /**
+     * @var Event[]
+     */
+    private $events;
+
+    /**
      * @param string $email
      * @param string $salt
      * @param string $password
@@ -78,6 +83,25 @@ class Admin extends AbstractUser
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
         ];
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param Event $event
+     * @return self
+     */
+    public function addEvent(Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
     }
 
     /**
