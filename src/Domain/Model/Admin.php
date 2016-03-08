@@ -74,7 +74,7 @@ class Admin extends AbstractUser
     public function getAllRoles()
     {
         return [
-            self::ROLE_STAFF,
+            self::ROLE_OPERATOR,
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
         ];
