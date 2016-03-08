@@ -7,7 +7,7 @@
 {% block content %}
     <ul>
         {% for locale in eventView.locales %}
-            <li><a href="{{ path('event_sheet_locale', { 'sheet': preview.id, 'locale': locale }) }}">{{ locale|locale }}</a></li>
+            <li><a href="{{ path('event_sheet_locale', { 'sheet': preview.id, 'locale': locale }) }}">{{ locale|locale(locale) }}</a></li>
         {% endfor %}
     </ul>
 
