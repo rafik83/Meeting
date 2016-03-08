@@ -278,3 +278,21 @@ admin:
         disable: Désactiver
         list:
             checkbox: Case à cocher
+    admin_list:
+        title: Liste des utilisateurs du backoffice
+        action:
+            create: Créer un nouvel utilisateur
+        table:
+            title:
+                lastname: Nom
+                firstname: Prénom
+                email: Email
+                role: Type
+                events: Événéments
+            content:
+                super_admin:
+                    events:
+                        all: Tous
+                admin:
+                    events:
+                        none: Aucun
