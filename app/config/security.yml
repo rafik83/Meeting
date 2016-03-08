@@ -58,6 +58,7 @@ security:
 
     access_control:
         - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
 
     role_hierarchy:
