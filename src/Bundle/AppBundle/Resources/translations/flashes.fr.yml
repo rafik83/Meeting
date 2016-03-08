@@ -1,4 +1,8 @@
 flash:
+    admin:
+        reset_password_token:
+            success: Vous allez recevoir un email vous permettant de créer un nouveau mot de passe
+            expired: Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.
     event:
         register:
             success: Votre compte a bien été créé

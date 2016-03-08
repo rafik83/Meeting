@@ -30,6 +30,21 @@ admin_create_admin:
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
 #
+# Forgot password
+#
+admin_forgot_password:
+    path: /forgot-password
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/ForgottenPassword:forgottenPassword }
+
+admin_create_new_password:
+    path: /reset-password/{token}
+    methods:  [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: VimeetAppBundle:Admin/ForgottenPassword:createNewPassword }
+
+#
 # Event
 #
 

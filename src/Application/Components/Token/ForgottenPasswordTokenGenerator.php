@@ -12,7 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Token;
 
 use DateTime;
 use DateTimeImmutable;
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken as UserForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken as AdminForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ForgottenPasswordTokenGenerator
@@ -31,25 +34,35 @@ class ForgottenPasswordTokenGenerator
     }
 
     /**
-     * @param User $user
+     * @param AbstractUser $user
      *
-     * @return ForgottenPasswordToken
+     * @return UserForgottenPasswordToken|AdminForgottenPasswordToken|null
      */
-    public function generate(User $user)
+    public function generate(AbstractUser $user)
     {
-        return new ForgottenPasswordToken(
-            $user,
-            $this->generateToken($user),
-            $this->expirateDate
-        );
+        if ($user instanceof User) {
+            return new UserForgottenPasswordToken(
+                $user,
+                $this->generateToken($user),
+                $this->expirateDate
+            );
+        } elseif ($user instanceof Admin) {
+            return new AdminForgottenPasswordToken(
+                $user,
+                $this->generateToken($user),
+                $this->expirateDate
+            );
+        }
+
+        return null;
     }
 
     /**
-     * @param User $user
+     * @param AbstractUser $user
      *
      * @return string
      */
-    private function generateToken(User $user)
+    private function generateToken(AbstractUser $user)
     {
         return sha1(uniqid() . $user->getId() . uniqid());
     }
