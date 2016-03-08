@@ -8,5 +8,3 @@ Proximum\Vimeet\Domain\Model\Admin:
         firstname: "Jean"
         lastname: "DUPONT"
         role: 'ROLE_SUPER_ADMIN'
-        events:
-            - '@event_rdv_carnot_2016'
