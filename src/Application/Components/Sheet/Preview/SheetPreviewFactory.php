@@ -105,7 +105,6 @@ class SheetPreviewFactory
      */
     private function createBlockViews(Sheet $sheet, $locale)
     {
-        //*
         $blocksViews = [];
         $data        = new ArrayCollection($sheet->getData());
         $templates   = (new TemplateFactory())->createTemplatesFromArray($sheet->getType()->getSheetTemplate());
