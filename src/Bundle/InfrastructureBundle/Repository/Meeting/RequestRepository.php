@@ -78,7 +78,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
+            ->from(Request::class, 'request')
             ->where('request.from = :sheet')
             ->setParameter('sheet', $sheet)
             ->orderBy('request.createdAt', 'DESC');
@@ -95,7 +95,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
+            ->from(Request::class, 'request')
             ->where('request.to = :sheet')
             ->setParameter('sheet', $sheet)
             ->orderBy('request.createdAt', 'DESC');
@@ -112,7 +112,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
+            ->from(Request::class, 'request')
             ->where('request.to = :sheet')
             ->orWhere('request.from = :sheet')
             ->setParameter('sheet', $sheet)
