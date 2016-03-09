@@ -11,7 +11,7 @@
         {% endfor %}
     </ul>
 
-    <h2>{{ preview.typeTitle }}</h2>
+    <h2>{{ preview.typeTitle }} <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span></h2>
 
     <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
 
