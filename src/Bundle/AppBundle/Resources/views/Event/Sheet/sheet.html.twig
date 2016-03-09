@@ -51,7 +51,7 @@
             </div>
         {% endfor %}
 
-        {% for i in 0..preview.remainingParticipants %}
+        {% for i in 0..preview.remainingParticipants if preview.remainingParticipants > 0 %}
             <div class="col-md-4">
                 <table class="table table-bordered table-condensed" style="height: 160px;">
                     <tr>
