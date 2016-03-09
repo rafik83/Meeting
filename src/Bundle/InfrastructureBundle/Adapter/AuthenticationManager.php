@@ -12,12 +12,13 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Domain\Model\User;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\AuthenticationEvents;
+use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class AuthenticationManager implements AuthenticationManagerInterface
 {
@@ -71,8 +72,8 @@ class AuthenticationManager implements AuthenticationManagerInterface
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->tokenStorage->setToken($token);
 
-        $event = new InteractiveLoginEvent($this->requestStack->getMasterRequest(), $token);
-        $this->eventDispatcher->dispatch('security.interactive_login', $event);
+        $event = new AuthenticationEvent($token);
+        $this->eventDispatcher->dispatch(AuthenticationEvents::AUTHENTICATION_SUCCESS, $event);
     }
 
     /**
