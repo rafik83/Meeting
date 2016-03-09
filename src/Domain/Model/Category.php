@@ -91,7 +91,7 @@ class Category implements WhoInterface
      */
     public function getTitle($locale)
     {
-        return $this->translations->get($locale)->getTitle();
+        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
     }
 
     /**
