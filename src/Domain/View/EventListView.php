@@ -44,7 +44,7 @@ class EventListView
      * @param array  $locales
      * @param string $fallback
      */
-    public function __construct($id, $title, $domain, $locales, $fallback)
+    public function __construct($id, $title, $domain, array $locales, $fallback)
     {
         $this->id       = $id;
         $this->title    = $title;
