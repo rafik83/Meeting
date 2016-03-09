@@ -41,7 +41,8 @@ security:
             logout:
                 path: admin_logout
                 target: admin_login
-            switch_user: true
+            switch_user:
+                role: ROLE_ADMIN
 
         main:
             anonymous: ~
@@ -56,6 +57,8 @@ security:
             logout:
                 path: event_logout
                 target: event
+            switch_user:
+                role: ROLE_ADMIN
 
     access_control:
         - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
