@@ -1,7 +1,7 @@
 Feature: See and update event
   I need to be able to see and update an event
 
-  Background: Re-init the database and load the fixtures
+  Scenario: See event
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Template.yml |
@@ -10,15 +10,13 @@ Feature: See and update event
       | app/Category.yml |
       | Admin.yml        |
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/en/event"
-
-  Scenario: See event
-    Given I am on this page "/admin/en/event"
+    When I go to this page "/admin/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: update event
-    Given I am on this page "/admin/en/event/1"
-    When I follow "Modifier"
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/en/event/1"
+    When I follow "admin.event.update.link"
     Then the response status code should be 200
     And I should be on this page "/admin/en/event/1/update"
     And I fill in the following:
@@ -32,7 +30,7 @@ Feature: See and update event
     And I should see "flash.admin.event.update.success"
     And I go to "/admin/fr/event"
     And I should see "Other event"
-    And I follow "Modifier"
+    And I follow "admin.event.update.link"
     Then the response status code should be 200
     And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
     And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
