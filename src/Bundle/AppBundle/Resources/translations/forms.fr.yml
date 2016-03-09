@@ -593,4 +593,13 @@ form:
         children:
             submit:
                 label: Filtrer
-
+    create_operator:
+        children:
+            email:
+                label: Email
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            submit:
+                label: Envoyer

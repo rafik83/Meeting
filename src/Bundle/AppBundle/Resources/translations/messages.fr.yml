@@ -305,3 +305,7 @@ admin:
                 admin:
                     events:
                         none: Aucun
+    operator:
+        create:
+            title: Créer un nouveau collaborateur
+            link: Créer collaborateur
