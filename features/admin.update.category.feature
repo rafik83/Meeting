@@ -2,7 +2,8 @@ Feature: Update category
   I need to be able to update category title and types
 
   Background: Re-init the database and load the fixtures
-    Given the database is empty
+    Given the cache is clear
+    And the database is empty
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
