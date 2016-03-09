@@ -8,10 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet;
-
-use Proximum\Vimeet\Application\Components\Template\Exception\RowNotFoundException;
-use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
+namespace Proximum\Vimeet\Application\Components\Template;
 
 class TaggedInfoGuesser
 {
@@ -43,12 +40,9 @@ class TaggedInfoGuesser
         $values = array_values($template);
         $first  = reset($values);
 
-        if (!isset($first['template'])) {
-            $template = ['default' => ['label' => 'Default', 'template' => $template]];
-            $data     = ['default' => $data];
-        }
-
-        return $this->templateFactory->createTemplatesFromArray($template)->getTaggedValues($tag, $locale, $data);
+        return isset($first['template'])
+            ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValues($tag, $locale, $data)
+            : $this->templateFactory->createTemplateFromArray($template)->getTaggedValues($tag, $locale, $data);
     }
 
     /**
@@ -62,12 +56,13 @@ class TaggedInfoGuesser
      */
     public function guessFirst(array $template, array $data, $tag, $locale = null, $default = null)
     {
-        try {
-            $info = $this->guess($template, $data, $tag, $locale);
+        $values = array_values($template);
+        $first  = reset($values);
 
-            return !empty($info) ? reset($info) : $default;
-        } catch (RowNotFoundException $exception) {
-            return $default;
-        }
+        $value = isset($first['template'])
+            ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValue($tag, $locale, $data)
+            : $this->templateFactory->createTemplateFromArray($template)->getTaggedValue($tag, $locale, $data);
+
+        return $value !== null ? $value : $default;
     }
 }

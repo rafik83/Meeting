@@ -25,6 +25,7 @@ Proximum\Vimeet\Domain\Model\Template:
                 required: true
                 private: true
                 label: { fr: "Téléphone", en: "Phone" }
+                tags: ["participant_phone"]
                 position: 3
             563caf34eed69:
                 type: lib_choice
@@ -215,6 +216,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             en: "Description package en"
                         type: choice_with_description
                         required: true
+                        tags: ["sheet_package"]
                         position: 1
                         choices:
                             563cb1257722e:
@@ -635,7 +637,7 @@ Proximum\Vimeet\Domain\Model\Template:
         participant:
             563cb0568a3bb: { type: lib_text, required: true, private: false, label: { fr: "Nom", en: "Lastname" }, tags: ["participant_lastname"], position: 1 }
             563cb05cb81ec: { type: lib_text, required: true, private: false, label: { fr: "Prénom", en: "Firstname" }, tags: ["participant_firstname"], position: 2 }
-            563cb062b89a9: { type: lib_text, required: true, private: true, label: { fr: "Téléphone", en: "Phone" }, position: 3 }
+            563cb062b89a9: { type: lib_text, required: true, private: true, label: { fr: "Téléphone", en: "Phone" }, tags: ["participant_phone"], position: 3 }
             563cb06a1a441:
                 type: lib_choice
                 placeholder:

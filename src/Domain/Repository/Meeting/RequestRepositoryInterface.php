@@ -81,4 +81,32 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getRequestsByEventAndUser($event, User $user);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countApprovedRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countRefusedRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countRefusedPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countPendingPropositionReceivedBySheet(Sheet $sheet);
 }

@@ -44,6 +44,7 @@
                     <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
                     <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
                     <td>
+                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
                         <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
                     </td>
                 </tr>

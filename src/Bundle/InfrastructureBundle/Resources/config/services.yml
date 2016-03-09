@@ -566,16 +566,27 @@ services:
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
     sheet.sheet_preview_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
         arguments:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@sheet.block.block_data_view_factory'
     sheet.state_setter:
         class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
         arguments:
             - '@template.validator'
+    sheet.sheet_details_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@components.sheet.billing_view_factory'
+            - '@sheet.block.block_data_view_factory'
+    sheet.block.block_data_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 
     #
     # Rule Component
@@ -611,7 +622,7 @@ services:
     vimeet_infrastructure.application.components.sheet.participant_info_guesser:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
 
     #
     # Paginator Component
@@ -715,15 +726,10 @@ services:
             - '@components.sheet.order_view_factory'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@components.sheet.billing_view_factory'
-
-    components.sheet.tagged_info_guesser:
-        class: Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser
-        arguments:
-            - '@template.template_factory'
     components.sheet.billing_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
 
     #
     # Notification component
@@ -757,6 +763,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Template\TemplateFactory
     template.validator:
         class: Proximum\Vimeet\Application\Components\Template\Validator
+        arguments:
+            - '@template.template_factory'
+    template.tagged_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser
         arguments:
             - '@template.template_factory'
 

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
+namespace Proximum\Vimeet\Application\Components\Sheet\Block;
 
 class RowDataView
 {

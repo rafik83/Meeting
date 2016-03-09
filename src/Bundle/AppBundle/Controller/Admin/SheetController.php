@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
@@ -22,7 +24,7 @@ class SheetController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event)
     {
@@ -60,5 +62,23 @@ class SheetController extends Controller
             'csrf_protection' => false,
             'required'        => false,
         ]));
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     *
+     * @return Response
+     */
+    public function detailsAction(Request $request, Event $event, Sheet $sheet)
+    {
+        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
+
+        return $this->render('VimeetAppBundle:Admin/Sheet:details.html.twig', [
+            'event'   => $event,
+            'sheet'   => $sheet,
+            'details' => $details,
+        ]);
     }
 }
