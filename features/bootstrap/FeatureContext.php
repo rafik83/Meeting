@@ -458,6 +458,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function assertUrl($url)
     {
         $this->assertSession()->addressEquals($url);
+        $this->assertResponseStatus(200);
     }
 
     /**
