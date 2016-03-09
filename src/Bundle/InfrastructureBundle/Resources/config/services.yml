@@ -488,6 +488,12 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+    command.operator.create_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
 
     #
     # Security
