@@ -59,6 +59,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @Given the cache is clear
+     */
+    public function theCacheIsClear()
+    {
+        exec("bin/console cache:clear --env=test");
+        exec("bin/console doctrine:cache:clear-metadata --env=test");
+        exec("bin/console doctrine:cache:clear-query --env=test");
+        exec("bin/console doctrine:cache:clear-result --env=test");
+    }
+
+    /**
      * @param $string
      * @return mixed
      * @throws Exception

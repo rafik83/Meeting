@@ -107,7 +107,7 @@ Proximum\Vimeet\Domain\Model\Participant:
     participant_random_1{10..30}:
         __construct: false
         user: "@user_random_1"
-        sheet: "@sheet_exposant"*
+        sheet: "@sheet_exposant"
         owner: false
         active: true
         data:
