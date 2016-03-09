@@ -41,6 +41,7 @@ security:
             logout:
                 path: admin_logout
                 target: admin_login
+            switch_user: true
 
         main:
             anonymous: ~
