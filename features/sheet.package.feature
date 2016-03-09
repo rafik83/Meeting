@@ -10,15 +10,11 @@ Feature: Choose a package
       | User.yml                   |
       | Sheet.yml                  |
       | OneSheetOneParticipant.yml |
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
 
   Scenario: I can choose the Silver package
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in "form.login.children.username.label" with "test@test.com"
-    And I fill in "form.login.children.password.label" with "p@ssw0rd"
-    And I press "form.login.children.submit.label"
-    Then the response status code should be 200
-    And I follow "event.link.see_my_sheet"
+    When I follow "event.link.see_my_sheet"
     Then the response status code should be 200
     And I follow "event.sheet.package.step.next"
     Then the response status code should be 200
@@ -29,13 +25,7 @@ Feature: Choose a package
     And I should see "flash.package.update_step.success"
 
   Scenario: I can complete my package
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in "form.login.children.username.label" with "test@test.com"
-    And I fill in "form.login.children.password.label" with "p@ssw0rd"
-    And I press "form.login.children.submit.label"
-    And the response status code should be 200
-    Then I follow "event.link.see_my_sheet"
+    When I follow "event.link.see_my_sheet"
     And the response status code should be 200
     Then I follow "event.sheet.package.step.next"
     And the response status code should be 200
@@ -66,11 +56,11 @@ Feature: Choose a package
     And I select the quantity "2" for the checkbox "traduction de votre fiche de présentation"
     And I check "Wifi sur place"
     And I press "form.update_step.children.submit.label"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/cart"
+    Then I should be on "/fr/sheet/1/cart"
     And the response status code should be 200
     And I should see "flash.package.final_step.success"
     And I should see "event.sheet.cart.totalWithoutTaxes"
     And I should see "30 280,00 €"
     And I follow "event.sheet.cart.label.billingStep"
-    And I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1/billing"
+    And I should be on "/fr/sheet/1/billing"
     And the response status code should be 200

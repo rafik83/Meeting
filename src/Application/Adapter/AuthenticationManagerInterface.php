@@ -10,16 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 
 interface AuthenticationManagerInterface
 {
     /**
      * Authenticate the user
      *
-     * @param User $user
+     * @param AbstractUser $user
+     * @param string       $providerKey
      */
-    public function authenticate(User $user);
+    public function authenticate(AbstractUser $user, $providerKey);
 
     /**
      * Disconnect the user

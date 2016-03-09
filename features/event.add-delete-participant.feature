@@ -12,15 +12,10 @@ Feature: Add and delete participant
       | OneSheetSeveralParticipants.yml |
 
   Scenario: I can delete a participant as an owner
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in "form.login.children.username.label" with "test@test.com"
-    And I fill in "form.login.children.password.label" with "p@ssw0rd"
-    And I press "form.login.children.submit.label"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
-    And the response status code should be 200
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
     And I follow "event.link.see_my_sheet"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
+    Then I should be on "/fr/sheet/1"
     And the response status code should be 200
     And I should see "Exposant"
     And I should see "form.delete_participant.children.submit.label"
@@ -29,15 +24,10 @@ Feature: Add and delete participant
     And I should see "flash.sheet.delete_participant.success"
 
   Scenario: I can not delete a participant as a guest
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in "form.login.children.username.label" with "test-2@test.com"
-    And I fill in "form.login.children.password.label" with "p@ssw0rd"
-    And I press "form.login.children.submit.label"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
-    And the response status code should be 200
+    Given I am logged with "test-2@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
     And I follow "event.link.see_my_sheet"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
+    Then I should be on "/fr/sheet/1"
     And the response status code should be 200
     And I should see "Exposant"
     And I should not see "form.delete_participant.children.submit.label"

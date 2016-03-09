@@ -22,7 +22,7 @@ Feature: Activate Account
     And I should see "flash.activate_account.success"
 
   Scenario: I can buy a participant and activate the account
-    Given I am logged with "test@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr/sheet/1"
     And the response status code should be 200
     Then I follow "event.sheet.package.step.next"

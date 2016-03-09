@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    type:  entity
+    table: admin
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        email:
+            type: string
+            unique: true
+        password:
+            type: string
+        salt:
+            type: string
+        locale:
+            type: string
+        firstname:
+            type: string
+        lastname:
+            type: string
+        role:
+            type: string

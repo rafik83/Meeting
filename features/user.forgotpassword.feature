@@ -42,6 +42,6 @@ Feature: Forgot Password
       |form.new_password.children.password.children.first.label  | testtest |
       |form.new_password.children.password.children.second.label | testtest |
     And I press "form.new_password.children.submit.label"
-    Then I should be on "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
+    Then I should be on "/fr/"
     And the response status code should be 200
     And I should see "flash.new_password.success"
