@@ -503,7 +503,6 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
-            - '@request_stack'
 
     #
     # Components

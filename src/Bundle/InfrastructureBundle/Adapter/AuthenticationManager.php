@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -38,28 +37,20 @@ class AuthenticationManager implements AuthenticationManagerInterface
     private $eventDispatcher;
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
      * AuthenticationManager constructor.
      *
      * @param TokenStorageInterface    $tokenStorage
      * @param SessionInterface         $session
      * @param EventDispatcherInterface $eventDispatcher
-     * @param RequestStack             $requestStack
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         SessionInterface $session,
-        EventDispatcherInterface $eventDispatcher,
-        RequestStack $requestStack
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->tokenStorage    = $tokenStorage;
         $this->session         = $session;
         $this->eventDispatcher = $eventDispatcher;
-        $this->requestStack    = $requestStack;
     }
 
     /**
