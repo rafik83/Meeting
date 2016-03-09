@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Meeting\Update:
+Proximum\Vimeet\Application\Command\Admin\Create:
     properties:
         email:
             - NotBlank: ~
