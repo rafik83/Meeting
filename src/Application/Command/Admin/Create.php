@@ -52,6 +52,7 @@ class Create
      */
     public function __construct($locale)
     {
-        $this->locale = $locale;
+        $this->locale   = $locale;
+        $this->password = substr(md5(uniqid()), 0, 8);
     }
 }

@@ -33,7 +33,6 @@ class CreateType extends AbstractType
             ])
             ->add('password', TextType::class, [
                 'required' => true,
-                'data'     => substr(md5(uniqid()), 0, 8),
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,
