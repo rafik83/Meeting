@@ -9,13 +9,12 @@ Feature: add type
       | app/Type.yml        |
       | app/Category.yml    |
       | Admin.yml           |
-    Given I am logged with "test@test.com" on admin
-    And I go to "/admin/event"
+    And I am logged with "test@test.com" on admin
 
   Scenario: add a type
-    When I follow "Types"
-    Then the response status code should be 200
-    And I should be on "/admin/fr/event/1/type"
+    Given I am on this page "/admin/fr/event"
+    When I follow "admin.type.link"
+    Then I should be on "/admin/fr/event/1/type"
     And I follow "Ajouter"
     Then the response status code should be 200
     And I fill in the following:
