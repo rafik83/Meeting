@@ -67,7 +67,6 @@ class CreateType extends AbstractType
         ]);
     }
 
-
     /**
      * {@inheritdoc}
      */
