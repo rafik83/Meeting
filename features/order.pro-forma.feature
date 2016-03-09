@@ -10,7 +10,7 @@ Feature: Pro-forma
       | app/Type.yml                                         |
       | User.yml                                             |
       | OneSheetOneParticipantWithBillingDataForProForma.yml |
-    Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test-3@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can see a valid pro-forma
     When I go to this page "/fr/sheet/1/orders"

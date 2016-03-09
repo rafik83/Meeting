@@ -80,7 +80,7 @@ class AccountController extends Controller
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
 
         $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
-        $this->get('adapter.authentication_manager')->authenticate($user);
+        $this->get('adapter.authentication_manager')->authenticate($user, 'main');
         $this->addFlash('success', 'flash.change_mail_activate.success');
 
         return $this->redirectToRoute('event');

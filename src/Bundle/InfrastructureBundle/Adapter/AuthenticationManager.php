@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -56,11 +56,12 @@ class AuthenticationManager implements AuthenticationManagerInterface
     /**
      * Authenticate the user
      *
-     * @param User $user
+     * @param AbstractUser $user
+     * @param string       $providerKey
      */
-    public function authenticate(User $user)
+    public function authenticate(AbstractUser $user, $providerKey)
     {
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $this->tokenStorage->setToken($token);
 
         $event = new AuthenticationEvent($token);

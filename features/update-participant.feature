@@ -10,15 +10,11 @@ Feature: Update self participant sheet
       | User.yml                        |
       | Sheet.yml                       |
       | OneSheetSeveralParticipants.yml |
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
 
   Scenario: I can go to the participant sheet and update it
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in "form.login.children.username.label" with "test@test.com"
-    And I fill in "form.login.children.password.label" with "p@ssw0rd"
-    And I press "form.login.children.submit.label"
-    Then the response status code should be 200
-    And I follow "event.link.see_my_sheet"
+    When I follow "event.link.see_my_sheet"
     Then the response status code should be 200
     And I follow "event.sheet.block.update_participant.title"
     And I fill in the following:

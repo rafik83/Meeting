@@ -14,6 +14,7 @@
         <a href="{{ path('admin_event_list') }}">
             <span class="glyphicon glyphicon-home"></span> Admin
         </a>
+        {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
 
