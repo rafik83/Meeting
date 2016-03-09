@@ -33,6 +33,8 @@ class OrderController extends Controller
      */
     public function editAction(Request $request, Event $event, Order $order)
     {
+        $this->denyAccessIfOrderNotInEvent($event, $order);
+
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($order->getSheet())
@@ -64,6 +66,8 @@ class OrderController extends Controller
      */
     public function addRowAction(Request $request, Event $event, Order $order, $group)
     {
+        $this->denyAccessIfOrderNotInEvent($event, $order);
+
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($order->getSheet())
@@ -104,6 +108,8 @@ class OrderController extends Controller
      */
     public function updateRowAction(Request $request, Event $event, Order $order, $group, $row)
     {
+        $this->denyAccessIfOrderNotInEvent($event, $order);
+
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($order->getSheet())
@@ -143,6 +149,8 @@ class OrderController extends Controller
      */
     public function removeRowAction(Event $event, Order $order, $group, $row)
     {
+        $this->denyAccessIfOrderNotInEvent($event, $order);
+
         $this->get('command.order.remove_row_handler')->handle(new RemoveRow($order, $group, $row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
@@ -150,5 +158,16 @@ class OrderController extends Controller
             'event' => $event->getId(),
             'order' => $order->getId(),
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Order $order
+     */
+    private function denyAccessIfOrderNotInEvent(Event $event, Order $order)
+    {
+        if ($order->getSheet()->getEvent() !== $event) {
+            throw $this->createAccessDeniedException();
+        }
     }
 }

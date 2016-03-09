@@ -35,6 +35,8 @@ class TransactionController extends Controller
      */
     public function createAction(Request $request, Event $event, Sheet $sheet)
     {
+        $this->denyAccessIfSheetNotInEvent($event, $sheet);
+
         $create = new Create($sheet, null, new \DateTime());
         $form   = $this->createForm(CreateTransactionType::class, $create);
 
@@ -70,6 +72,9 @@ class TransactionController extends Controller
      */
     public function updateAction(Request $request, Event $event, Sheet $sheet, Transaction $transaction)
     {
+        $this->denyAccessIfSheetNotInEvent($event, $sheet);
+        $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
+
         $update = new Update($transaction);
         $form   = $this->createForm(UpdateTransactionType::class, $update);
 
@@ -104,8 +109,11 @@ class TransactionController extends Controller
      *
      * @return RedirectResponse
      */
-    public function removeAction(Sheet $sheet, Event $event, Transaction $transaction)
+    public function removeAction(Event $event, Sheet $sheet, Transaction $transaction)
     {
+        $this->denyAccessIfSheetNotInEvent($event, $sheet);
+        $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
+
         $this->get('command.transaction.remove_handler')->handle(new Remove($transaction));
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
@@ -113,5 +121,27 @@ class TransactionController extends Controller
             'event' => $event->getId(),
             'sheet' => $sheet->getId(),
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Sheet $sheet
+     */
+    private function denyAccessIfSheetNotInEvent(Event $event, Sheet $sheet)
+    {
+        if ($sheet->getEvent() !== $event) {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    /**
+     * @param Sheet       $sheet
+     * @param Transaction $transaction
+     */
+    private function denyAccessIfTransactionNotInSheet(Sheet $sheet, Transaction $transaction)
+    {
+        if ($transaction->getSheet() !== $sheet) {
+            throw $this->createAccessDeniedException();
+        }
     }
 }

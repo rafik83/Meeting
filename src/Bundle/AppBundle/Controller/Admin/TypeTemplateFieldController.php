@@ -30,6 +30,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function listAction(Request $request, Event $event, Type $type)
     {
+        $this->denyAccessIfTypeNotInEvent($event, $type);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
@@ -74,6 +76,8 @@ class TypeTemplateFieldController extends Controller
         $group,
         $libType
     ) {
+        $this->denyAccessIfTypeNotInEvent($event, $type);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
@@ -138,6 +142,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $templateName, $group, $row)
     {
+        $this->denyAccessIfTypeNotInEvent($event, $type);
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
@@ -202,6 +208,8 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldPositionAction(Request $request, Event $event, Type $type, $templateName, $group)
     {
+        $this->denyAccessIfTypeNotInEvent($event, $type);
+
         $fieldsOrder     = $request->request->get('order', []);
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $template        = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
@@ -222,5 +230,16 @@ class TypeTemplateFieldController extends Controller
                 'type'  => $type->getId(),
             ]
         );
+    }
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     */
+    private function denyAccessIfTypeNotInEvent(Event $event, Type $type)
+    {
+        if ($type->getEvent() !== $event) {
+            throw $this->createAccessDeniedException();
+        }
     }
 }
