@@ -30,6 +30,7 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
+     * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param Event  $event
@@ -37,7 +38,7 @@ interface SheetRepositoryInterface
      *
      * @return PaginatedResult
      */
-    public function paginate($page, $limit, Event $event, $locale);
+    public function paginate(array $filters, $page, $limit, Event $event, $locale);
 
     /**
      * @param int|User  $user

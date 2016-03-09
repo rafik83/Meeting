@@ -5,6 +5,19 @@
 
     <h2>Gestion des participations</h2>
 
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            {{ form_row(form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
+            <div class="col-md-3 text-right" style="padding-top: 25px;">
+                {% if filtered %}
+                    <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
     <table class="table">
         <thead>
             <tr>
@@ -38,7 +51,7 @@
         </tbody>
     </table>
 
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': sheets}) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>

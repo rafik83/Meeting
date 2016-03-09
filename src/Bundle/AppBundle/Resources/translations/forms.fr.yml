@@ -564,3 +564,7 @@ form:
                 label_delete: Supprimer cet item
                 prototype:
                     label: Libellé
+    sheet_filter:
+        children:
+            state:
+                label: Etat

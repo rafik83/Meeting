@@ -51,15 +51,16 @@ class SheetListViewFactory
 
     /**
      * @param Event  $event
+     * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param string $locale
      *
      * @return PaginatedResult
      */
-    public function paginate(Event $event, $page, $limit, $locale)
+    public function paginate(Event $event, array $filters, $page, $limit, $locale)
     {
-        $sheets          = $this->sheetRepository->paginate($page, $limit, $event, $locale);
+        $sheets          = $this->sheetRepository->paginate($filters, $page, $limit, $event, $locale);
         $sheets->results = array_map(function (Sheet $sheet) use ($locale) {
             return $this->createFromSheet($sheet, $locale);
         }, $sheets->results);

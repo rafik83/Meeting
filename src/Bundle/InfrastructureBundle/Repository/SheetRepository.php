@@ -75,7 +75,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, Event $event, $locale)
+    public function paginate(array $filters, $page, $limit, Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -87,6 +87,12 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
             ->join('sheet.participants', 'participant', 'WITH', 'participant.owner = TRUE');
+
+        if (isset($filters['state'])) {
+            $queryBuilder
+                ->andWhere('sheet.state = :state')
+                ->setParameter('state', $filters['state']);
+        }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }
