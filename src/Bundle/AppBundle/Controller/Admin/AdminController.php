@@ -92,7 +92,6 @@ class AdminController extends Controller
             } catch (EmailAlreadyExistsException $ex) {
                 $form->get('email')->addError($this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale()));
             }
-
         }
 
         return $this->render('VimeetAppBundle:Admin/Admin:create.html.twig', [
