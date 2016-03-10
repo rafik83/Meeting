@@ -11,6 +11,7 @@
 namespace Tests\Application\Components\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
+use Proximum\Vimeet\Application\Components\Template\Exception\RowNotFoundException;
 use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
 use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -38,6 +39,8 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessParticipantLastNameWithEmptyTemplate()
     {
+        $this->expectException(RowNotFoundException::class);
+
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
@@ -52,8 +55,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = new ParticipantInfoGuesser(new TaggedInfoGuesser(new TemplateFactory()));
 
         $resultParticipant = $participantInfoGuesser->guessParticipantLastName($participant);
-
-        $this->assertEquals('', $resultParticipant);
     }
 
     public function testGuessParticipantLastName()
@@ -129,6 +130,8 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessParticipantFirstNameWithEmptyTemplate()
     {
+        $this->expectException(RowNotFoundException::class);
+
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
@@ -143,8 +146,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = new ParticipantInfoGuesser(new TaggedInfoGuesser(new TemplateFactory()));
 
         $resultParticipant = $participantInfoGuesser->guessParticipantFirstName($participant);
-
-        $this->assertEquals('', $resultParticipant);
     }
 
     public function testGuessParticipantFirstName()
