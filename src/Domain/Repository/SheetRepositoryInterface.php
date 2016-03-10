@@ -79,4 +79,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getUserSheetsByTypes(User $user, array $types);
+
+    /**
+     * @param array $ids
+     *
+     * @return int
+     */
+    public function markAsValidated(array $ids);
 }

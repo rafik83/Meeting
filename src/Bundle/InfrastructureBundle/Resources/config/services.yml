@@ -474,6 +474,10 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.sheet.batch_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Security
