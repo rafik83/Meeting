@@ -15,7 +15,7 @@
         <p>
             {{ billing.address }}<br>
             {{ billing.zipcode }} {{ billing.city }}<br>
-            {{ billing.country|country }}
+            {% if billing.country %}{{ billing.country|country }}{% endif %}
         </p>
         <p>N° de TVA intracommunautaire : {{ billing.vat_number }}</p>
     </address>

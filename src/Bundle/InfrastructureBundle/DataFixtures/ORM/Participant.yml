@@ -28,8 +28,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: BOUCHON
-            563caf1d9b1cb: François
+            563caf1d9b1cb: BOUCHON
+            563caf2746398: François
     proximum_participant_carnot:
         __construct: false
         user: '@proximum_user_carnot'
@@ -37,8 +37,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: MIGNOT
-            563caf1d9b1cb: Isabelle
+            563caf1d9b1cb: MIGNOT
+            563caf2746398: Isabelle
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
@@ -46,8 +46,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: GOI
-            563caf1d9b1cb: Layla
+            563caf1d9b1cb: GOI
+            563caf2746398: Layla
     proximum_participant_test:
         __construct: false
         user: '@proximum_user_test'
@@ -55,8 +55,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: LAROSE
-            563caf1d9b1cb: Vincent
+            563caf1d9b1cb: LAROSE
+            563caf2746398: Vincent
     proximum_participant_ui:
         __construct: false
         user: '@proximum_user_ui'
@@ -64,8 +64,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: GAGNARD
-            563caf1d9b1cb: Julien
+            563cb0568a3bb: GAGNARD
+            563cb05cb81ec: Julien
 
     # Random
     participant_random_1:

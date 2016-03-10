@@ -36,7 +36,7 @@
             <p>
                 {{ details.billing.address }}<br>
                 {{ details.billing.zipcode }} {{ details.billing.city }}<br>
-                {{ details.billing.country|country }}
+                {% if details.billing.country %}{{ details.billing.country|country }}{% endif %}
             </p>
             <p>N° de TVA intracommunautaire : {{ details.billing.vat_number }}</p>
         </div>
