@@ -13,7 +13,7 @@ Feature: Update a sheet block
     Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can set my company informations
-    When I go to "/fr/sheet/1/update_block/563cae566af03"
+    When I go to "/fr/sheet/1/fr/update_block/563cae566af03"
     And the response status code should be 200
     And I fill in the following:
       | Nom               | CompanySAS             |
