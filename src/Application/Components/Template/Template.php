@@ -106,7 +106,7 @@ class Template
             return $this->rows[$key];
         }
 
-        throw new RowNotFoundException($key);
+        throw new RowNotFoundException($key, array_keys($this->rows));
     }
 
     /**
