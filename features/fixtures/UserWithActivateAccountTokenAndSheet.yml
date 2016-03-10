@@ -40,7 +40,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             563caf2746398: "Michel"
             563caf2f0ddbd: "0101010101"
 
-Proximum\Vimeet\Domain\Model\ActivateAccountToken:
+Proximum\Vimeet\Domain\Model\User\ActivateAccountToken:
     activate_account_token_1:
         __construct:
              - "@user_2"

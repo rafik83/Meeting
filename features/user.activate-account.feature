@@ -4,10 +4,10 @@ Feature: Activate Account
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | UserWithActivateAccountTokenAndSheet.yml                  |
+      | app/Template.yml                         |
+      | app/Event.yml                            |
+      | app/Type.yml                             |
+      | UserWithActivateAccountTokenAndSheet.yml |
 
   Scenario: I can activate my account
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/azertyuiopqsdfghjklmwxcvbn"

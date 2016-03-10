@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPasswordHandler;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 

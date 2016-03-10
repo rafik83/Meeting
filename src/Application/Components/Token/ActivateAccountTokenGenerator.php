@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 

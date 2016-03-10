@@ -17,7 +17,7 @@ use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;

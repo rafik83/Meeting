@@ -8,9 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\User;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ActivateAccountToken
 {

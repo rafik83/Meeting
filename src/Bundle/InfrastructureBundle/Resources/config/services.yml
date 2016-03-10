@@ -118,8 +118,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.activate_account_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository
+    repository.user_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.change_mail_token_repository:
@@ -177,7 +177,7 @@ services:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@components.token.activate_account_token_generator'
-            - '@repository.activate_account_token_repository'
+            - '@repository.user_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
@@ -454,7 +454,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@repository.activate_account_token_repository'
+            - '@repository.user_activate_account_token_repository'
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
