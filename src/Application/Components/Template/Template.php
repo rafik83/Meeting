@@ -97,12 +97,22 @@ class Template
     /**
      * @param $key
      *
+     * @return bool
+     */
+    public function hasRow($key)
+    {
+        return isset($this->rows[$key]);
+    }
+
+    /**
+     * @param $key
+     *
      * @return Row
      * @throws RowNotFoundException
      */
     public function getRow($key)
     {
-        if (isset($this->rows[$key])) {
+        if ($this->hasRow($key)) {
             return $this->rows[$key];
         }
 
@@ -120,7 +130,7 @@ class Template
     {
         // Filter tagged values
         $tagged = array_filter($data, function ($key) use ($tag) {
-            return $this->getRow($key)->hasTag($tag);
+            return $this->hasRow($key) && $this->getRow($key)->hasTag($tag);
         }, ARRAY_FILTER_USE_KEY);
 
         // Get displayable values
