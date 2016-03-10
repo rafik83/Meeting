@@ -251,7 +251,7 @@ message:
 
 admin:
     sheet:
-        link: Fiches
+        link: Gestion des participations
     login:
         logged_as: '{0} Je suis connecté en tant que Collaborateur %lastname% %firstname% %email% |{1} Je suis connecté en tant qu''Organisateur %lastname% %firstname% %email% |{2} Je suis connecté en tant qu''Admin %lastname% %firstname% %email% '
     meeting_request:
