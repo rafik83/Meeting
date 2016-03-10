@@ -3,3 +3,5 @@ Proximum\Vimeet\Domain\Model\Admin:
         __construct: ["test@test.com", "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO", "YzzBNEhw7I6H5xPuziQEAPAsg5g=", 'fr', "Jean", "DUPONT", "ROLE_SUPER_ADMIN"]
     user_admin_2:
         __construct: ["test2@test.com", "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO", "YzzBNEhw7I6H5xPuziQEAPAsg5g=", 'fr', "Truc", "MUCHE", "ROLE_ORGANIZER"]
+        events:
+            - '@event_rdv_carnot_2016'
