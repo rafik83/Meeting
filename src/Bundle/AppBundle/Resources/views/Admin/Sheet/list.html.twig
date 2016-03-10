@@ -18,39 +18,47 @@
         </div>
     {{ form_end(form) }}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Fiche</th>
-                <th>Etat</th>
-                <th>Catégories</th>
-                <th>Type</th>
-                <th>Propriétaire</th>
-                <th>Créé le</th>
-                <th>Dernière connexion le</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sheet in sheets.results %}
+    <form action="" method="GET">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ sheet.title }}</td>
-                    <td>
-                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
-                    </td>
-                    <td>{{ sheet.categories|join(', ') }}</td>
-                    <td>{{ sheet.type }}</td>
-                    <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
-                    <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
-                    <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
-                    <td>
-                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
-                        <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
-                    </td>
+                    <th>
+                        <input type="checkbox" data-check-all=".toto input[type=checkbox]" />
+                    </th>
+                    <th>Fiche</th>
+                    <th>Etat</th>
+                    <th>Catégories</th>
+                    <th>Type</th>
+                    <th>Propriétaire</th>
+                    <th>Créé le</th>
+                    <th>Dernière connexion le</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="toto">
+                {% for sheet in sheets.results %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" />
+                        </td>
+                        <td>{{ sheet.title }}</td>
+                        <td>
+                            <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        </td>
+                        <td>{{ sheet.categories|join(', ') }}</td>
+                        <td>{{ sheet.type }}</td>
+                        <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
+                        <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
+                        <td>
+                            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
+                            <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
 
     {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
