@@ -284,5 +284,26 @@ services:
         public: false
         arguments:
             - '@sonata.intl.templating.helper.locale'
+            - '@security.token_storage'
         tags:
             - { name: 'twig.extension' }
+
+    #
+    # Security
+    #
+    security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\Http\Firewall\SwitchUserListener
+        public: false
+        abstract: true
+        arguments:
+            - "@security.token_storage"
+            - ""
+            - ""
+            - ""
+            - "@security.access.decision_manager"
+            - "@?logger"
+            - "_switch_user"
+            - "ROLE_ADMIN"
+            - "@?event_dispatcher"
+        tags:
+            - { name: monolog.logger, channel: security }

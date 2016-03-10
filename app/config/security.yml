@@ -27,6 +27,7 @@ security:
             security: false
 
         admin:
+            context: vimeet
             anonymous: ~
             host: '%domain%'
             pattern: ^/admin
@@ -42,9 +43,11 @@ security:
                 path: admin_logout
                 target: admin_login
             switch_user:
-                role: ROLE_ADMIN
+                role: ROLE_PREVIOUS_USER
+                provider: admin_provider
 
         main:
+            context: vimeet
             anonymous: ~
             provider: user_provider
             form_login:
@@ -59,12 +62,14 @@ security:
                 target: event
             switch_user:
                 role: ROLE_ADMIN
+                provider: user_provider
 
     access_control:
         - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
 
     role_hierarchy:
+        ROLE_ADMIN: ['ROLE_ALLOWED_TO_SWITCH']
         ROLE_OPERATOR: ['ROLE_ADMIN']
         ROLE_ORGANIZER: ['ROLE_ADMIN', 'ROLE_OPERATOR']
         ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_OPERATOR']

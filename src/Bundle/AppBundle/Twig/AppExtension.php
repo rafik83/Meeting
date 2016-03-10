@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Twig;
 
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
 
 class AppExtension extends \Twig_Extension
 {
@@ -18,13 +20,16 @@ class AppExtension extends \Twig_Extension
      * @var LocaleHelper
      */
     protected $localeHelper;
+    protected $tokenStorage;
+
 
     /**
      * @param LocaleHelper $localeHelper
      */
-    public function __construct(LocaleHelper $localeHelper)
+    public function __construct(LocaleHelper $localeHelper, TokenStorage $tokenStorage)
     {
         $this->localeHelper = $localeHelper;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -37,6 +42,16 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('getImpersonatingUser', [$this, 'getImpersonatingUser']),
         ];
     }
 
@@ -121,6 +136,22 @@ class AppExtension extends \Twig_Extension
         asort($items);
 
         return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $items));
+    }
+
+    /**
+     * @return null
+     */
+    public function getImpersonatingUser()
+    {
+        $roles = $this->tokenStorage->getToken()->getRoles();
+
+        foreach ($roles as $role) {
+            if ($role instanceof SwitchUserRole) {
+                return $role->getSource()->getUser();
+            }
+        }
+
+        return null;
     }
 
     /**
