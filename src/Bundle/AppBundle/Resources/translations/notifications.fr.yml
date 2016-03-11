@@ -35,3 +35,7 @@ notification:
         received:
             message: Vous avez reçu un nouveau message de la part de %from_sheet%
             action: Nouveau message
+    sheet:
+        validated:
+            message: Votre fiche a été validé
+            action: Fiche validée
