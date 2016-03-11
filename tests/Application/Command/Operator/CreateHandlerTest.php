@@ -15,9 +15,14 @@ use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Operator\Create;
 use Proximum\Vimeet\Application\Command\Operator\CreateHandler;
+use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +57,35 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $adminRepository->add($expectedOperator)->shouldBeCalled();
 
-        $handler = new CreateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
+        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+
+        $expectedActivateAccountToken = new ActivateAccountToken(
+            $expectedOperator,
+            'STRING',
+            new \DateTime()
+        );
+
+        $activateAccountEvent = new ActivateAccountEvent(
+            $expectedOperator,
+            $expectedActivateAccountToken,
+            'fr'
+        );
+
+        $activateAccountTokenGenerator->generate($expectedOperator)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
+        $activateAccountTokenRepository->deleteAllForUser($expectedOperator)->shouldBeCalled();
+        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
+        $eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent)->shouldBeCalled();
+
+        $handler = new CreateHandler(
+            $adminRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $activateAccountTokenGenerator->reveal(),
+            $activateAccountTokenRepository->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($command);
     }
 }
