@@ -282,6 +282,13 @@ services:
             - '@request_stack'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
+    event_listener.mail_event_subscriber:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\MailEventSubscriber
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: kernel.event_subscriber }
 
     #
     # Twig extension
