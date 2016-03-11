@@ -248,6 +248,7 @@ message:
 admin:
     sheet:
         link: Fiches
+        impersonate: Impersonnation
     login:
         logged_as: '{0} Je suis connecté en tant que Collaborateur %lastname% %firstname% %email% |{1} Je suis connecté en tant qu''Organisateur %lastname% %firstname% %email% |{2} Je suis connecté en tant qu''Admin %lastname% %firstname% %email% '
     meeting_request:

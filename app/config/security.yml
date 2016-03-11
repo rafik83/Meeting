@@ -27,7 +27,6 @@ security:
             security: false
 
         admin:
-            context: vimeet
             anonymous: ~
             host: '%domain%'
             pattern: ^/admin
@@ -42,12 +41,8 @@ security:
             logout:
                 path: admin_logout
                 target: admin_login
-            switch_user:
-                role: ROLE_PREVIOUS_USER
-                provider: admin_provider
 
         main:
-            context: vimeet
             anonymous: ~
             provider: user_provider
             form_login:

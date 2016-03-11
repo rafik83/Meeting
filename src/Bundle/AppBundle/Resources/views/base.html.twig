@@ -11,19 +11,7 @@
     </head>
     <body>
         <div class="container">
-            {% if eventView is defined and is_granted('ROLE_PREVIOUS_ADMIN') %}
-                {% set impersonatingUser = getImpersonatingUser() %}
-                {% if impersonatingUser %}
-                    <div class="well">
-                        {{ impersonatingUser.firstname ~ ' ' ~ impersonatingUser.lastname }}
-                        {{ impersonatingUser.email }}
-
-                        <a href="{{ path('admin_sheet', {'event': eventView.id, '_switch_user': '_exit'}) }}" class="btn btn-danger">
-                            Exit impersonation
-                        </a>
-                    </div>
-                {% endif %}
-            {% endif %}
+            {{ include('VimeetAppBundle:Event:impersonating.html.twig') }}
 
             {% block locales %}
                 {% if event is defined %}

@@ -31,7 +31,7 @@
                             Commandes et transactions
                         </a>
 
-                        <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switch_user': sheet.owner.email}) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switch_user': impersonate(app.user.email, sheet.owner.email)}) }}" class="btn btn-primary btn-sm">
                             {{ 'admin.sheet.impersonate'|trans }}
                         </a>
                     </td>

@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Twig;
 
+use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Domain\Model\User;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
@@ -20,16 +22,27 @@ class AppExtension extends \Twig_Extension
      * @var LocaleHelper
      */
     protected $localeHelper;
+
+    /**
+     * @var TokenStorage
+     */
     protected $tokenStorage;
 
+    /**
+     * @var Impersonate
+     */
+    protected $impersonate;
 
     /**
      * @param LocaleHelper $localeHelper
+     * @param TokenStorage $tokenStorage
+     * @param Impersonate  $impersonate
      */
-    public function __construct(LocaleHelper $localeHelper, TokenStorage $tokenStorage)
+    public function __construct(LocaleHelper $localeHelper, TokenStorage $tokenStorage, Impersonate $impersonate)
     {
         $this->localeHelper = $localeHelper;
         $this->tokenStorage = $tokenStorage;
+        $this->impersonate  = $impersonate;
     }
 
     /**
@@ -52,6 +65,7 @@ class AppExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('getImpersonatingUser', [$this, 'getImpersonatingUser']),
+            new \Twig_SimpleFunction('impersonate', [$this, 'impersonate']),
         ];
     }
 
@@ -139,7 +153,7 @@ class AppExtension extends \Twig_Extension
     }
 
     /**
-     * @return null
+     * @return null|User
      */
     public function getImpersonatingUser()
     {
@@ -152,6 +166,17 @@ class AppExtension extends \Twig_Extension
         }
 
         return null;
+    }
+
+    /**
+     * @param string $adminEmail
+     * @param string $userEmail
+     *
+     * @return string
+     */
+    public function impersonate($adminEmail, $userEmail)
+    {
+        return $this->impersonate->getEncodedToken($adminEmail, $userEmail);
     }
 
     /**
