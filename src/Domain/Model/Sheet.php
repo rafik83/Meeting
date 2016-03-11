@@ -79,6 +79,11 @@ class Sheet implements BillingInfoInterface
     private $state = self::STATE_INCOMPLETE;
 
     /**
+     * @var Admin
+     */
+    private $follower;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
@@ -391,5 +396,33 @@ class Sheet implements BillingInfoInterface
     public function isValidated()
     {
         return self::STATE_VALIDATED === $this->state;
+    }
+
+    /**
+     * Get follower
+     *
+     * @return Admin
+     */
+    public function getFollower()
+    {
+        return $this->follower;
+    }
+
+    /**
+     * Set follower
+     *
+     * @param Admin $follower
+     *
+     * @return Sheet
+     */
+    public function setFollower(Admin $follower)
+    {
+        if (!$follower->isOrganizer() && !$follower->isOperator()) {
+            throw new \InvalidArgumentException('Follower must be an organizer or operator.');
+        }
+
+        $this->follower = $follower;
+
+        return $this;
     }
 }

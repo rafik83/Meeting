@@ -183,4 +183,20 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             return $eventLinked->getId() === $event->getId();
         });
     }
+
+    /**
+     * @return bool
+     */
+    public function isOrganizer()
+    {
+        return $this->role === self::ROLE_ORGANIZER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOperator()
+    {
+        return $this->role === self::ROLE_OPERATOR;
+    }
 }
