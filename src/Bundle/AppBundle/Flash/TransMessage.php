@@ -23,11 +23,6 @@ class TransMessage
     public $arguments;
 
     /**
-     * @var int|null
-     */
-    public $count;
-
-    /**
      * @var string
      */
     public $domain;
@@ -51,5 +46,13 @@ class TransMessage
         $this->arguments = $arguments;
         $this->domain    = $domain;
         $this->locale    = $locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->message;
     }
 }

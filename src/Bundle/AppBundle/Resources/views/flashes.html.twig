@@ -2,9 +2,9 @@
     {% for message in app.session.flashbag.get(type) %}
         <div class="alert alert-{{ mappedType }}">
             {% if message.count is defined %}
-                {{ message.message|transchoice(message.count, message.arguments, message.domain, message.locale) }}
+                {{ message|transchoice(message.count, message.arguments, message.domain, message.locale) }}
             {% elseif message.message is defined %}
-                {{ message.message|trans(message.arguments, message.domain, message.locale) }}
+                {{ message|trans(message.arguments, message.domain, message.locale) }}
             {% else %}
                 {{ message|trans({}, 'flashes') }}
             {% endif %}

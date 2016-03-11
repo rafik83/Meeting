@@ -18,7 +18,7 @@ class TranschoiceMessage extends TransMessage
     public $count;
 
     /**
-     * TransMessage constructor.
+     * TranschoiceMessage constructor.
      *
      * @param string   $message
      * @param int      $count
