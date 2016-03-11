@@ -39,8 +39,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessParticipantLastNameWithEmptyTemplate()
     {
-        $this->expectException(RowNotFoundException::class);
-
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
@@ -55,6 +53,8 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = new ParticipantInfoGuesser(new TaggedInfoGuesser(new TemplateFactory()));
 
         $resultParticipant = $participantInfoGuesser->guessParticipantLastName($participant);
+
+        $this->assertEquals('', $resultParticipant);
     }
 
     public function testGuessParticipantLastName()
@@ -73,7 +73,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -85,7 +85,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
@@ -130,8 +130,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessParticipantFirstNameWithEmptyTemplate()
     {
-        $this->expectException(RowNotFoundException::class);
-
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
@@ -146,6 +144,8 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $participantInfoGuesser = new ParticipantInfoGuesser(new TaggedInfoGuesser(new TemplateFactory()));
 
         $resultParticipant = $participantInfoGuesser->guessParticipantFirstName($participant);
+
+        $this->assertEquals('', $resultParticipant);
     }
 
     public function testGuessParticipantFirstName()
@@ -164,7 +164,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -175,7 +175,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
@@ -234,7 +234,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -245,7 +245,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
