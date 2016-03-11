@@ -28,6 +28,8 @@ class SheetController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $filters  = [];
         $form     = $this->createFilterForm(FilterType::class, $filters);
         $filtered = $form->handleRequest($request)->isSubmitted() && $form->isValid();
@@ -73,6 +75,8 @@ class SheetController extends Controller
      */
     public function detailsAction(Request $request, Event $event, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Sheet:details.html.twig', [

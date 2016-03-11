@@ -250,10 +250,14 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    role:
+        ROLE_OPERATOR: Collaborateur
+        ROLE_ORGANIZER: Organisateur
+        ROLE_SUPER_ADMIN: Admin
     sheet:
         link: Gestion des participations
     login:
-        logged_as: '{0} Je suis connecté en tant que Collaborateur %lastname% %firstname% %email% |{1} Je suis connecté en tant qu''Organisateur %lastname% %firstname% %email% |{2} Je suis connecté en tant qu''Admin %lastname% %firstname% %email% '
+        logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     meeting_request:
         list:
             state:
@@ -284,4 +288,24 @@ admin:
         disable: Désactiver
         list:
             checkbox: Case à cocher
-
+    admin_list:
+        filter:
+            empty_filter: Vider les filtres
+        link: Liste des utilisateurs
+        title: Liste des utilisateurs du backoffice
+        action:
+            create: Créer un nouvel utilisateur
+        table:
+            title:
+                lastname: Nom
+                firstname: Prénom
+                email: Email
+                role: Type
+                events: Événéments
+            content:
+                super_admin:
+                    events:
+                        all: Tous
+                admin:
+                    events:
+                        none: Aucun

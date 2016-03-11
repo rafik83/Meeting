@@ -62,8 +62,12 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UnavailabilityRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.forgotten_password_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ForgottenPasswordTokenRepository
+    repository.user.forgotten_password_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ForgottenPasswordTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.admin.forgotten_password_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ForgottenPasswordTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.request_repository:
@@ -130,6 +134,7 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\AdminRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
 
     #
     # Fixture providers
@@ -315,20 +320,34 @@ services:
         class: Proximum\Vimeet\Application\Command\TypeTemplateField\Position\PositionHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-    vimeet_infrastructure.vimeet.application.command.user.forgotten_password_handler:
+    command.user.forgotten_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler
         arguments:
-            - '@vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator'
+            - '@components.user_token.forgotten_password_token_generator'
             - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
+            - '@repository.user.forgotten_password_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-    vimeet_infrastructure.vimeet.application.command.user.new_password_handler:
+    command.admin.forgotten_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ForgottenPasswordHandler
+        arguments:
+            - '@components.admin_token.forgotten_password_token_generator'
+            - '@repository.admin_repository'
+            - '@repository.admin.forgotten_password_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.user.new_password_handler:
         class: Proximum\Vimeet\Application\Command\User\NewPasswordHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@vimeet_infrastructure.repository.forgotten_password_token_repository'
+            - '@repository.user.forgotten_password_token_repository'
+    command.admin.new_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\NewPasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.admin.forgotten_password_token_repository'
     vimeet_infrastructure.vimeet.application.components.happening.participate_handler:
         class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
         arguments:
@@ -474,6 +493,12 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.admin.create_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
 
     #
     # Security
@@ -603,8 +628,12 @@ services:
     #
     # Token component
     #
-    vimeet_infrastructure.vimeet.application.components.token.forgotten_password_token_generator:
-        class: Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator
+    components.admin_token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGenerator
+        arguments:
+            - '@datetime'
+    components.user_token.forgotten_password_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
     components.token.activate_account_token_generator:
@@ -663,6 +692,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.manager'
+
+    #
+    # Security Component
+    #
+    components.security.admin_event_access:
+        class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
 
     #
     # DateTime

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -39,6 +40,26 @@ class EventRepository implements EventRepositoryInterface
         foreach ($event->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListByAdmin(Admin $admin)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
+            ->from(Event::class, 'event');
+
+        if ($admin->hasEvents()) {
+            $queryBuilder
+                ->where('event IN (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

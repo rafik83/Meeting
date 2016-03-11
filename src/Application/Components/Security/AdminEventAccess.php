@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Security;
+
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\EventInterface;
+
+class AdminEventAccess
+{
+    /**
+     * @param Admin          $admin
+     * @param EventInterface $event
+     *
+     * @return bool
+     */
+    public function canAccess(Admin $admin, EventInterface $event)
+    {
+        if (!$admin->hasEvents()) {
+            if ($admin->getRole() === Admin::ROLE_SUPER_ADMIN) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return $admin->hasEvent($event);
+        }
+    }
+}

@@ -568,3 +568,32 @@ form:
         children:
             state:
                 label: Etat
+    create_admin:
+        children:
+            email:
+                label: Email
+            password:
+                label: Mot de passe
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            role:
+                label: Type
+            events:
+                label: Événements
+            submit:
+                label: Envoyer
+        role:
+            super_admin: Admin
+            organizer: Organisateur
+    filter_admin:
+        role:
+            all: Tous les types
+            organizer: Organisateur
+            super_admin: Admin
+        event:
+            all: Tous les événements
+        children:
+            submit:
+                label: Filtrer

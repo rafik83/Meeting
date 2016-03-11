@@ -49,7 +49,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testEmailAlreadyExistsException()
     {
-        $this->setExpectedException(EmailAlreadyExistsException::class);
+        $this->expectException(EmailAlreadyExistsException::class);
 
         $command           = new Register();
         $command->email    = 'test@test.com';

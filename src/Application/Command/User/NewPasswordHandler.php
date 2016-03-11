@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class NewPasswordHandler

@@ -37,6 +37,8 @@ class HappeningController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $happenings = $this
             ->get('happening.happening_list_view_factory')
             ->getListByEventAndLocale($event, $request->getLocale());
@@ -55,6 +57,8 @@ class HappeningController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreateHappening($event);
         $form   = $this->createForm(CreateType::class, $create, [
             'event'  => $event,
@@ -85,6 +89,8 @@ class HappeningController extends Controller
      */
     public function updateAction(Request $request, Event $event, Happening $happening)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening, true)) {
             throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
         }
@@ -121,6 +127,8 @@ class HappeningController extends Controller
      */
     public function listCategoryAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $categories = $this
             ->get('vimeet_infrastructure.repository_happening.category_repository')
             ->findByEvent($event, $request->getLocale());
@@ -139,6 +147,8 @@ class HappeningController extends Controller
      */
     public function createCategoryAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreateCategory($event);
         $form   = $this->createForm(CategoryCreateType::class, $create, [
             'action' => $this->generateUrl('admin_happening_category_create', ['event' => $event->getId()]),
@@ -168,6 +178,8 @@ class HappeningController extends Controller
      */
     public function updateCategoryAction(Request $request, Event $event, Category $category)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($event !== $category->getEvent()) {
             throw $this->createNotFoundException('Category not found.');
         }
