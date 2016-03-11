@@ -256,6 +256,10 @@ admin:
         ROLE_SUPER_ADMIN: Admin
     sheet:
         link: Gestion des participations
+        details:
+            comments:
+                title: Commentaires
+                author: 'Par %firstname% %lastname%, le %date%'
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     meeting_request:

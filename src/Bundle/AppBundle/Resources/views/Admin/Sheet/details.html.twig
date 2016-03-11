@@ -109,4 +109,33 @@
             </div>
         </div>
     </div>
+
+    <h3>{{ 'admin.sheet.details.comments.title'|trans }}</h3>
+    <div class="row">
+        {% for comment in details.comments %}
+            <blockquote>
+                {{ comment.text|nl2br }}
+                <br>
+            <span class="label label-default">
+                {{ 'admin.sheet.details.comments.author'|trans({
+                    '%firstname%': comment.author.firstname,
+                    '%lastname%': comment.author.lastname,
+                    '%date%': comment.createdAt|date('d/m/Y H:i')
+                }) }}
+            </span>
+            </blockquote>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        {{ form_start(form) }}
+        <div class="col-xs-10">
+            {{ form_row(form.text) }}
+        </div>
+        <div class="col-xs-2">
+            {{ form_row(form.submit) }}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
