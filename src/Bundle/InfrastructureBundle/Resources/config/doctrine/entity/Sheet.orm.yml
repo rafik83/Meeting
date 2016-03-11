@@ -35,3 +35,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             mappedBy: sheet
+        comments:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Comment
+            mappedBy: sheet

@@ -72,6 +72,11 @@ class Sheet implements BillingInfoInterface
     private $lastLoginAt;
 
     /**
+     * @var ArrayCollection
+     */
+    private $comments;
+
+    /**
      * "Etat de la fiche"
      *
      * @var string
@@ -96,6 +101,7 @@ class Sheet implements BillingInfoInterface
         $this->createdAt    = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
+        $this->comments     = new ArrayCollection();
         $this->state        = self::STATE_INCOMPLETE;
     }
 
@@ -353,6 +359,14 @@ class Sheet implements BillingInfoInterface
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     /**
