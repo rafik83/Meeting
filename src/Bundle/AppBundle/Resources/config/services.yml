@@ -291,6 +291,13 @@ services:
             - '%mailer_sender%'
         tags:
             - { name: 'kernel.event_listener', event: 'change_mail', method: 'sendToken' }
+    event_listener.admin.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ActivateAccountEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'admin_activate_account', method: 'sendToken' }
 
 
     #

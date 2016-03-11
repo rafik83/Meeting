@@ -135,6 +135,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    repository.admin_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -494,6 +498,16 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.admin.activate_account_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.admin_activate_account_token_repository'
 
     #
     # Security
