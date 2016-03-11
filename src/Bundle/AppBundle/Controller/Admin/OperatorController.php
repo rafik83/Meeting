@@ -39,10 +39,7 @@ class OperatorController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('command.operator.create_handler')->handle($create);
-                $this->addFlash('success', [
-                    'message'   => 'flash.admin.operator.create.success',
-                    'arguments' => ['%password%' => $create->password],
-                ]);
+                $this->addFlash('success', 'flash.admin.operator.create.success');
 
                 return $this->redirectToRoute('admin_event_list');
             } catch (EmailAlreadyExistsException $ex) {
