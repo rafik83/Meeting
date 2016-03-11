@@ -31,9 +31,13 @@ class BatchValidateHandler
 
     /**
      * @param BatchValidate $batchValidate
+     *
+     * @return BatchValidateResult
      */
     public function handle(BatchValidate $batchValidate)
     {
-        $this->sheetRepository->markAsValidated($batchValidate->ids);
+        $count = $this->sheetRepository->markAsValidated($batchValidate->ids);
+
+        return new BatchValidateResult($count);
     }
 }

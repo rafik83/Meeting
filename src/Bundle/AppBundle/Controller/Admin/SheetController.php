@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
+use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -58,12 +59,17 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
-        $ids    = $request->request->get('ids', []);
-        $delete = $request->request->getBoolean('validate');
+        $ids      = $request->request->get('ids', []);
+        $validate = $request->request->getBoolean('validate');
 
-        if (!empty($ids) && $delete) {
-            $this->get('command.sheet.batch_validate_handler')->handle(new BatchValidate($ids));
-            $this->addFlash('success', 'success');
+        if (!empty($ids) && $validate) {
+            $result = $this->get('command.sheet.batch_validate_handler')->handle(new BatchValidate($ids));
+
+            $this->addFlash('success', new TranschoiceMessage(
+                'flash.admin.sheet_batch.validate.success',
+                $result->count,
+                ['%count%' => $result->count]
+            ));
         }
 
         return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
