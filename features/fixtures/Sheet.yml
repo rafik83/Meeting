@@ -3,3 +3,5 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         event: "@event_rdv_carnot_2016"
         type: "@type_exposant"
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>

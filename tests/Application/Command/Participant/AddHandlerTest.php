@@ -40,10 +40,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
                 'private'  => 'false',
             ]
         ]);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $owner = false;
 
-        $expectedSheet       = new Sheet($event, $type, [], []);
+        $expectedSheet       = new Sheet($event, $type, [], [], new \DateTime());
         $expectedUser        = new User('test@test.com', '', '', 'fr');
         $expectedParticipant = new Participant($expectedSheet, $expectedUser, ['foobar' => 'barfoo'], $owner, false);
 
@@ -103,11 +103,11 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
                 'private'  => false,
             ]
         ]);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
 
-        $expectedSheet       = new Sheet($event, $type, [], []);
+        $expectedSheet       = new Sheet($event, $type, [], [], new \DateTime());
         $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo'], $owner, false);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
@@ -142,7 +142,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $type->setParticipantTemplate(['foobar' => ['required' => true, 'private'  => false]]);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
         $userRepository        = $this->prophesize(UserRepositoryInterface::class);
         $participantManager    = $this->prophesize(ParticipantManager::class);
@@ -154,7 +154,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
 
         // 2
-        $expectedSheetWithParticipant = new Sheet($event, $type, [], []);
+        $expectedSheetWithParticipant = new Sheet($event, $type, [], [], new \DateTime());
         $expectedParticipant          = new Participant($expectedSheetWithParticipant, $user, ['foobar' => 'barfoo'], false, false);
         $expectedOrder                = new Order($expectedSheetWithParticipant, 'unpaid', [], [], [], [], $createdAt, 'toto');
         $participantManager->findOrderToAttach(Argument::that(function (Sheet $sheet) {
@@ -162,7 +162,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         }))->shouldBeCalled()->willReturn($expectedOrder);
 
         // 3
-        $expectedSheetWithParticipant2 = new Sheet($event, $type, [], []);
+        $expectedSheetWithParticipant2 = new Sheet($event, $type, [], [], new \DateTime());
         $expectedParticipant2          = new Participant($expectedSheetWithParticipant2, $user, ['foobar' => 'barfoo'], false, false);
         $expectedOrder2                = new Order($expectedSheetWithParticipant2, 'unpaid', [], [], [], [], $createdAt, 'toto');
         $expectedParticipant2->setActive(true);

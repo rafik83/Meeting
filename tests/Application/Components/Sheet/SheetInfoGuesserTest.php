@@ -27,7 +27,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
-        $sheet       = new Sheet($event, $type, [], []);
+        $sheet       = new Sheet($event, $type, [], [], new \DateTime());
         $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
@@ -50,7 +50,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $user        = new User('test@test.fr', 'test', 'test', 'fr');
         $event       = new Event();
         $type        = new Type($event);
-        $sheet       = new Sheet($event, $type, [], []);
+        $sheet       = new Sheet($event, $type, [], [], new \DateTime());
         $participant = new Participant($sheet, $user, [], true, true);
 
         $sheet->getParticipants()->add($participant);
@@ -72,7 +72,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $type->setSheetTemplate([
             'azer' => [
                 'label' => 'foobar',

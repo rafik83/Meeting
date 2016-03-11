@@ -25,9 +25,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $event->setBillingTemplate([['company'], ['vat']]);
 
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
-        $expectedSheet = new Sheet($event, $type, [], []);
+        $expectedSheet = new Sheet($event, $type, [], [], new \DateTime());
         $expectedSheet->setBillingData(['CompanyName', '1234']);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);

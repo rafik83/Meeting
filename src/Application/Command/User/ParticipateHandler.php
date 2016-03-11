@@ -30,15 +30,23 @@ class ParticipateHandler
     private $participantRepository;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
+        $this->dateTime              = $dateTime;
     }
 
     /**
@@ -52,7 +60,7 @@ class ParticipateHandler
         (new DataConstraintChecker())->check($participate->data, $participate->type->getParticipantTemplate());
 
         // Create a new sheet for this event
-        $sheet = new Sheet($participate->event, $participate->type, [], []);
+        $sheet = new Sheet($participate->event, $participate->type, [], [], $this->dateTime);
         $this->sheetRepository->add($sheet);
 
         // Create a new participant

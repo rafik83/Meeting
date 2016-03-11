@@ -166,6 +166,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@datetime'
     vimeet_infrastructure.vimeet.application.command.participant.update_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
         arguments:
@@ -773,3 +774,13 @@ services:
     #
     spot.reference_factory:
         class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory
+
+    #
+    # Queries
+    #
+    query.sheet.sheet_list_view_factory:
+        class: Proximum\Vimeet\Application\Query\Sheet\SheetListViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'

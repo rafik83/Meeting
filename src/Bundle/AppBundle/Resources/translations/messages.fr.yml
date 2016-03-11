@@ -251,7 +251,7 @@ admin:
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
     sheet:
-        link: Fiches
+        link: Gestion des participations
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     meeting_request:
