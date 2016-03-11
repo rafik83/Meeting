@@ -25,7 +25,7 @@ services:
     # Security
     #
     security.admin_event_access_voter:
-        class: Proximum\Vimeet\Bundle\AppBundle\Security\AdminEventAccessVoter
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\Voter\AdminEventAccessVoter
         arguments:
             - '@components.security.admin_event_access'
         tags:

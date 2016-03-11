@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Security;
+namespace Proximum\Vimeet\Bundle\AppBundle\Security\Voter;
 
 use Proximum\Vimeet\Application\Components\Security\AdminEventAccess;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class AdminEventAccessVoter extends Voter
 {
     /**
-     * @varAdminEventAccess
+     * @var AdminEventAccess
      */
     private $adminEventAccess;
 
@@ -36,11 +36,7 @@ class AdminEventAccessVoter extends Voter
      */
     public function supports($attribute, $subject)
     {
-        if ($attribute !== 'PERMISSION_EVENT_ACCESS' && !$subject instanceof Event) {
-            return false;
-        }
-
-        return true;
+        return !($attribute !== 'PERMISSION_EVENT_ACCESS' && !$subject instanceof Event);
     }
 
     /**

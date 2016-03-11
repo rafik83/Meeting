@@ -24,13 +24,9 @@ class AdminEventAccess
     public function canAccess(Admin $admin, EventInterface $event)
     {
         if (!$admin->hasEvents()) {
-            if ($admin->getRole() === Admin::ROLE_SUPER_ADMIN) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return $admin->hasEvent($event);
+            return $admin->getRole() === Admin::ROLE_SUPER_ADMIN;
         }
+
+        return $admin->hasEvent($event);
     }
 }
