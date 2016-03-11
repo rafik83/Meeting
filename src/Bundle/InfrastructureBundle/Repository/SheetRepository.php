@@ -42,7 +42,6 @@ class SheetRepository implements SheetRepositoryInterface
      * @param EntityManager           $entityManager
      * @param Paginator               $paginator
      * @param TypeRepositoryInterface $typeRepository
-     *
      */
     public function __construct(
         EntityManager $entityManager,

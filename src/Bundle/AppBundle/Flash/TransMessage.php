@@ -35,10 +35,10 @@ class TransMessage
     /**
      * TransMessage constructor.
      *
-     * @param string   $message
-     * @param array    $arguments
-     * @param string   $domain
-     * @param string   $locale
+     * @param string $message
+     * @param array  $arguments
+     * @param string $domain
+     * @param string $locale
      */
     public function __construct($message, array $arguments = [], $domain = 'flashes', $locale = null)
     {
