@@ -270,6 +270,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
         $resultParticipant = $participantInfoGuesser->guessParticipantInfo($participant);
 
-        $this->assertEquals('DUPOND Jean', $resultParticipant);
+        $this->assertEquals('Jean DUPOND', $resultParticipant);
     }
 }

@@ -26,8 +26,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: "Dutest"
             563caf2746398: "Jean"
+            563caf1d9b1cb: "Dutest"
             563caf2f0ddbd: "0909090909"
     participant_2:
         __construct: false
@@ -36,8 +36,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: "Super"
             563caf2746398: "Test"
+            563caf1d9b1cb: "Super"
             563caf2f0ddbd: "08080808"
             563caf34eed69: "position4"
     participant_3:
@@ -47,6 +47,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: "Truc"
             563caf2746398: "Paul"
+            563caf1d9b1cb: "Truc"
             563caf2f0ddbd: "0101010101"
