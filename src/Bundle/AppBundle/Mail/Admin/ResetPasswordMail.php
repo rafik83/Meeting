@@ -3,22 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
+namespace Proximum\Vimeet\Bundle\AppBundle\Mail\Admin;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 
 class ResetPasswordMail extends Mail
 {
-    /**
-     * @var string
-     */
-    private $eventTitle;
-
     /**
      * @var string
      */
@@ -30,22 +25,12 @@ class ResetPasswordMail extends Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
-     * @param string $eventTitle
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $eventTitle, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
-        $this->eventTitle = $eventTitle;
-        $this->token      = $token;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEventTitle()
-    {
-        return $this->eventTitle;
+        $this->token = $token;
     }
 
     /**

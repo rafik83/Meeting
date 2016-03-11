@@ -49,6 +49,14 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * @param User   $user
+     * @param Event  $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetByUserAndEvent(User $user, Event $event);
+
+    /**
      * @param int $sheetId
      *
      * @return Sheet

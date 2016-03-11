@@ -46,6 +46,8 @@ class MeetingRequestController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $filter     = [];
         $filtered   = false;
         $filterForm = $this->createFilterForm(
@@ -119,6 +121,8 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if (!$meetingRequest->isApproved()) {
             throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
         }

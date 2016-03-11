@@ -68,10 +68,13 @@ class Sheet implements BillingInfoInterface
     private $lastLoginAt;
 
     /**
-     * @param Event $event
-     * @param Type  $type
-     * @param array $data
-     * @param array $packageData
+     * Sheet constructor.
+     *
+     * @param Event              $event
+     * @param Type               $type
+     * @param array              $data
+     * @param array              $packageData
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(Event $event, Type $type, array $data, array $packageData, \DateTimeInterface $createdAt)
     {
