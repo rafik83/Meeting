@@ -7,7 +7,7 @@ validators:
     sameEmail: Vous utilisez déjà cet email
     password:
         min: Le mot de passe doit comporter au moins {{ limit }} caractères
-        mismatch: La ressaisie du mot de passe ne correspond pas
+        mismatch: Les 2 mots de passe ne sont pas identiques
     currentPassword: Le mot de passe actuel n'est pas correct
     option:
         quantityMustBeAdded: Vous devez ajouter une quantité si vous sélectionnez cette option

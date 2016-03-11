@@ -1,0 +1,59 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\Security;
+
+use Proximum\Vimeet\Application\Components\Security\AdminEventAccess;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+
+class AdminEventAccessVoter extends Voter
+{
+    /**
+     * @varAdminEventAccess
+     */
+    private $adminEventAccess;
+
+    /**
+     * @param AdminEventAccess $adminEventAccess
+     */
+    public function __construct(AdminEventAccess $adminEventAccess)
+    {
+        $this->adminEventAccess = $adminEventAccess;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($attribute, $subject)
+    {
+        if ($attribute !== 'PERMISSION_EVENT_ACCESS' && !$subject instanceof Event) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function voteOnAttribute($attribute, $event, TokenInterface $token)
+    {
+        $user = $token->getUser();
+
+        if (!$user instanceof Admin) {
+            return false;
+        }
+
+        return $this->adminEventAccess->canAccess($user, $event);
+    }
+}

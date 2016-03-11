@@ -64,7 +64,7 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantInfo(Participant $participant)
     {
-        $string = trim($this->guessParticipantLastName($participant) . ' ' . $this->guessParticipantFirstName($participant));
+        $string = trim($this->guessParticipantFirstName($participant) . ' ' . $this->guessParticipantLastName($participant));
 
         return empty($string) ? sprintf('#%d', $participant->getId()) : $string;
     }

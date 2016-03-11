@@ -10,19 +10,23 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken as UserForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ForgottenPasswordTokenGenerator extends AbstractTokenGenerator
+class UserForgottenPasswordTokenGenerator extends AbstractTokenGenerator
 {
     /**
      * @param User $user
      *
-     * @return ForgottenPasswordToken
+     * @return UserForgottenPasswordToken
      */
     public function generate(User $user)
     {
-        return new ForgottenPasswordToken($user, $this->generateToken($user), $this->expirateDate);
+        return new UserForgottenPasswordToken(
+            $user,
+            $this->generateToken($user),
+            $this->expirateDate
+        );
     }
 
     /**

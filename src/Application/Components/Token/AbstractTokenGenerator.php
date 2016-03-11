@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 
 abstract class AbstractTokenGenerator
 {
@@ -28,11 +28,11 @@ abstract class AbstractTokenGenerator
     }
 
     /**
-     * @param User $user
+     * @param AbstractUser $user
      *
      * @return string
      */
-    protected function generateToken(User $user)
+    protected function generateToken(AbstractUser $user)
     {
         return sha1(uniqid() . $user->getId() . uniqid() . $this->expirateDate->format('c'));
     }

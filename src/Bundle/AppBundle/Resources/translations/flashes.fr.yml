@@ -1,4 +1,8 @@
 flash:
+    admin:
+        reset_password_token:
+            success: Vous allez recevoir un email vous permettant de créer un nouveau mot de passe
+            expired: Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.
     event:
         register:
             success: Votre compte a bien été créé
@@ -128,6 +132,9 @@ flash:
         sheet_batch:
             validate:
                 success: "{0} aucune fiche n'a été validé.|{1} 1 fiche a été validé|]1,Inf[ %count% fiche ont été validée"
+        admin:
+            create:
+                success: Le nouvel utilisateur a bien été créé
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

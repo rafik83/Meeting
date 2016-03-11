@@ -8,6 +8,9 @@ Proximum\Vimeet\Domain\Model\Admin:
         firstname: "Layla"
         lastname: "GOI"
         role: 'ROLE_SUPER_ADMIN'
+        events:
+            - '@event_rdv_carnot_2016'
+            - '@event_asddays_2016'
 
     user_orga:
         __construct: false
@@ -18,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Admin:
         firstname: "Vincent"
         lastname: "LAROSE"
         role: 'ROLE_ORGANIZER'
+        events:
+            - '@event_rdv_carnot_2016'
 
     user_co:
         __construct: false
@@ -28,3 +33,5 @@ Proximum\Vimeet\Domain\Model\Admin:
         firstname: "Julien"
         lastname: "GAGNARD"
         role: 'ROLE_OPERATOR'
+        events:
+            - '@event_rdv_carnot_2016'

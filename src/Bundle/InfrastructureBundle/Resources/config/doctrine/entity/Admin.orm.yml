@@ -22,3 +22,6 @@ Proximum\Vimeet\Domain\Model\Admin:
             type: string
         role:
             type: string
+    manyToMany:
+        events:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
