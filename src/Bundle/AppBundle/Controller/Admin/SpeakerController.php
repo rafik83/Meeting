@@ -31,6 +31,8 @@ class SpeakerController extends Controller
      */
     public function listAction(Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $speakers = $this->get('repository.happening.speaker')->allByEvent($event);
 
         return $this->render('VimeetAppBundle:Admin/Speaker:list.html.twig', [
@@ -47,6 +49,8 @@ class SpeakerController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $command = new Create($event);
         $form    = $this->createForm(CreateSpeakerType::class, $command);
 
@@ -72,6 +76,8 @@ class SpeakerController extends Controller
      */
     public function updateAction(Request $request, Event $event, Speaker $speaker)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $command = new Update($speaker);
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
 
@@ -97,6 +103,8 @@ class SpeakerController extends Controller
      */
     public function readAction(Request $request, Event $event, Speaker $speaker)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $happenings = $this
             ->get('happening.happening_list_view_factory')
             ->getListBySpeakerAndLocale($speaker, $request->getLocale());
@@ -116,6 +124,8 @@ class SpeakerController extends Controller
      */
     public function deleteAction(Event $event, Speaker $speaker)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $this->get('command.happening.speaker.delete_handler')->handle(new Delete($speaker));
         $this->addFlash('success', 'flash.admin.speaker.delete.success');
 

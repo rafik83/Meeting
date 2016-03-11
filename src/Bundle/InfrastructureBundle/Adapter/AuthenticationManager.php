@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -69,6 +71,16 @@ class AuthenticationManager implements AuthenticationManagerInterface
      */
     public function authenticate(AbstractUser $user, $providerKey)
     {
+        if ($user instanceof Admin) {
+            if (!$user->isAccountNonExpired()
+                || !$user->isAccountNonLocked()
+                || !$user->isCredentialsNonExpired()
+                || !$user->isEnabled()
+            ) {
+                throw new AuthenticationException;
+            }
+        }
+
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $this->tokenStorage->setToken($token);
 

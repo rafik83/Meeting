@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * "Compte admin/organisateur/collaborateur".
@@ -37,7 +38,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     private $role;
 
     /**
-     * @var Event[]
+     * @var ArrayCollection
      */
     private $events;
 
@@ -57,6 +58,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->role      = $role;
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -151,6 +153,34 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isEnabled()
     {
-        return true;
+        if (!$this->hasEvents()) {
+            if ($this->getRole() === self::ROLE_SUPER_ADMIN) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasEvents()
+    {
+        return !$this->events->isEmpty();
+    }
+
+    /**
+     * @param EventInterface $event
+     *
+     * @return bool
+     */
+    public function hasEvent(EventInterface $event)
+    {
+        return $this->events->exists(function ($index, Event $eventLinked) use ($event) {
+            return $eventLinked->getId() === $event->getId();
+        });
     }
 }

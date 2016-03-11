@@ -26,6 +26,8 @@ class SheetController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->paginate($request->query->getInt('page', 1), 20, $event, $request->getLocale());

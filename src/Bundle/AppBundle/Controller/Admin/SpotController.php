@@ -55,6 +55,8 @@ class SpotController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $filter     = [];
         $filterForm = $this->createFilterForm(FilterSpotType::class, $filter);
 
@@ -64,8 +66,7 @@ class SpotController extends Controller
 
         $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filter);
 
-        return $this->render(
-            'VimeetAppBundle:Admin/Spot:list.html.twig', [
+        return $this->render('VimeetAppBundle:Admin/Spot:list.html.twig', [
             'spots'               => $spots,
             'event'               => $event,
             'filter_form'         => $filterForm->createView(),
@@ -82,6 +83,8 @@ class SpotController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $spotsToDelete = $request->request->get('ids', []);
         $deleteButton  = $request->request->getBoolean('delete');
         $disableButton = $request->request->getBoolean('disable');
@@ -114,6 +117,8 @@ class SpotController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new Create($event);
         $form   = $this->createForm(SpotCreateType::class, $create, [
             'action' => $this->generateUrl('admin_spot_create', ['event' => $event->getId()]),
@@ -146,6 +151,8 @@ class SpotController extends Controller
      */
     public function batchCreateAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $batchCreate = new BatchCreate($event);
         $form        = $this->createForm(BatchCreateType::class, $batchCreate);
 
@@ -177,6 +184,8 @@ class SpotController extends Controller
      */
     public function updateAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $data = json_decode($request->getContent(), true);
 
         try {
