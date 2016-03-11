@@ -144,11 +144,27 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->where('sheet.id = :sheetId')
             ->setParameter('sheetId', $sheetId);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsById(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -175,7 +191,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->where('sheet.type IN (:types)')

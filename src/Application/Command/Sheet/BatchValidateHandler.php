@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchValidateHandler
@@ -20,13 +21,20 @@ class BatchValidateHandler
     private $sheetRepository;
 
     /**
+     * @var ValidateHandler
+     */
+    private $validateHandler;
+
+    /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param ValidateHandler          $validateHandler
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    public function __construct(SheetRepositoryInterface $sheetRepository, ValidateHandler $validateHandler)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->validateHandler = $validateHandler;
     }
 
     /**
@@ -36,8 +44,19 @@ class BatchValidateHandler
      */
     public function handle(BatchValidate $batchValidate)
     {
-        $count = $this->sheetRepository->markAsValidated($batchValidate->ids);
+        // Get sheets
+        $sheets = $this->sheetRepository->getSheetsById($batchValidate->ids);
 
-        return new BatchValidateResult($count);
+        // Ensure all sheets are not validated
+        $sheets = array_filter($sheets, function (Sheet $sheet) {
+            return !$sheet->isValidated();
+        });
+
+        // Validate sheets
+        foreach ($sheets as $sheet) {
+            $this->validateHandler->handle(new Validate($sheet));
+        }
+
+        return new BatchValidateResult(count($sheets));
     }
 }
