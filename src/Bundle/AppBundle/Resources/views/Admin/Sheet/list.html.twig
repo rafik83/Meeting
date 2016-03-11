@@ -18,6 +18,8 @@
         </div>
     {{ form_end(form) }}
 
+    <hr />
+
     <form action="{{ path('admin_sheet_batch', { 'event': event.id }) }}" method="POST">
         <button type="submit" name="validate" value="1" class="btn btn-primary" data-confirm="Confirmer la validation">Valider</button>
         <table class="table">
