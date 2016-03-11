@@ -6,7 +6,7 @@
             {{ impersonatingUser.email }}
 
             <a href="{{ path('event', {'_switch_user': '_exit', '_redirect': url('admin_sheet', {'event': eventView.id})}) }}" class="btn btn-danger">
-                Exit impersonation
+                {{ 'admin.sheet.exit_impersonation'|trans }}
             </a>
         </div>
     {% endif %}

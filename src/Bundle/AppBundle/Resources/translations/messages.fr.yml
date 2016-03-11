@@ -253,6 +253,7 @@ admin:
     sheet:
         link: Fiches de participations
         impersonate: Impersonnation
+        exit_impersonation: Quitter l'impersonnation
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     meeting_request:
