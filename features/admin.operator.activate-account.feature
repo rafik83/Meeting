@@ -9,13 +9,13 @@ Feature: Operator Activate Account
       | AdminWithActivateAccountToken.yml |
 
   Scenario: I can activate my account
-    When I go to this page "http://vimeet.proximum.dev/app_test.php/admin/activate-account/azertyuiopqsdfghjklmwxcvbn"
+    When I go to this page "/admin/activate-account/azertyuiopqsdfghjklmwxcvbn"
     And the response status code should be 200
     Then I fill in the following:
       | form.admin_activate_account_password.children.password.children.first.label  | tructruc |
       | form.admin_activate_account_password.children.password.children.second.label | tructruc |
     And I press "form.admin_activate_account_password.children.submit.label"
-    Then I should be on this page "http://vimeet.proximum.dev/app_test.php/admin/event"
+    Then I should be on this page "/admin/event"
     And I should see "flash.admin.activate_account.success"
     And I should see "Les rendez-vous CARNOT 2016"
 
