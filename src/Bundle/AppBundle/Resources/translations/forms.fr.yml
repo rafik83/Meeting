@@ -603,3 +603,13 @@ form:
                 label: Nom
             submit:
                 label: Envoyer
+    admin_activate_account_password:
+        children:
+            password:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer

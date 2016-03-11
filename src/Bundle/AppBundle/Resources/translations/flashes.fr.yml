@@ -133,7 +133,9 @@ flash:
                 success: Le nouvel utilisateur a bien été créé
         operator:
             create:
-                success: 'Le nouveau collaborateur a bien été créé avec le mot de passe %password%'
+                success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
+        activate_account:
+            success: Votre compte a été activé avec succès
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

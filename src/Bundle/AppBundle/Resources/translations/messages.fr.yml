@@ -309,3 +309,6 @@ admin:
         create:
             title: Créer un nouveau collaborateur
             link: Créer collaborateur
+    activateAccount:
+        password:
+            title: Création du mot de passe pour votre compte collaborateur
