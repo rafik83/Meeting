@@ -27,7 +27,7 @@ class StateChoiceType extends AbstractType
             'choices'           => [
                 'event.sheet.state.complete'   => Sheet::STATE_COMPLETE,
                 'event.sheet.state.incomplete' => Sheet::STATE_INCOMPLETE,
-                //'event.sheet.state.validated'  => Sheet::STATE_VALIDATED,
+                'event.sheet.state.validated'  => Sheet::STATE_VALIDATED,
             ],
             'choice_translation_domain' => 'messages',
         ]);
