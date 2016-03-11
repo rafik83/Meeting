@@ -55,6 +55,14 @@ class Comment
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return Sheet
      */
     public function getSheet()
