@@ -14,8 +14,8 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
-use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
-use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -76,7 +76,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $activateAccountTokenRepository->deleteAllForUser($expectedUser)->shouldBeCalled();
         $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
-        $eventDispatcher->dispatch('activate_account', $activateAccountEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
         $add = new Add($sheet, 'fr');
         $add->email = 'test@test.com';

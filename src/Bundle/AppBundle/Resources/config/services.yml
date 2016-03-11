@@ -277,13 +277,13 @@ services:
             - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
-    event_listener.activate_account_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ActivateAccountEventListener
+    event_listener.user.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ActivateAccountEventListener
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
         tags:
-            - { name: 'kernel.event_listener', event: 'activate_account', method: 'sendToken' }
+            - { name: 'kernel.event_listener', event: 'user_activate_account', method: 'sendToken' }
     event_listener.change_mail_address_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ChangeMailAddressEventListener
         arguments:

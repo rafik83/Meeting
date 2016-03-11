@@ -176,7 +176,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@components.token.activate_account_token_generator'
+            - '@components.token.user.activate_account_token_generator'
             - '@repository.user_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
@@ -613,8 +613,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
-    components.token.activate_account_token_generator:
-        class: Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator
+    components.token.user.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator
+        arguments:
+            - '@datetime'
+    components.token.admin.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
             - '@datetime'
     components.token.change_mail_token_generator:

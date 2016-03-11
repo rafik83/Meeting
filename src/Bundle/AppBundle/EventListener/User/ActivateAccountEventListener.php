@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
+namespace Proximum\Vimeet\Bundle\AppBundle\EventListener\User;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
-use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
-use Proximum\Vimeet\Bundle\AppBundle\Mail\ActivateAccountMail;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\User\ActivateAccountMail;
 
 class ActivateAccountEventListener
 {
@@ -44,8 +44,8 @@ class ActivateAccountEventListener
         $mail = new ActivateAccountMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'VimeetAppBundle:Mail:activateAccount.html.twig',
-            'activate_account',
+            'VimeetAppBundle:Mail:User/activateAccount.html.twig',
+            'user_activate_account',
             $event->getUser()->getLocale(),
             $event->getEvent(),
             $event->getActivateAccountToken()->getToken()

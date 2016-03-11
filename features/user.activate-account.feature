@@ -45,9 +45,9 @@ Feature: Activate Account
     | Téléphone                                 | 0101010202            |
     | Fonction                                  | position4             |
     Then I press "form.add_participant.children.submit.label"
-    And the "activate_account" mail should be sent to "test_activate@test.fr"
-    And the "activate_account" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/"
-    Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/" link in the "activate_account" mail
+    And the "user_activate_account" mail should be sent to "test_activate@test.fr"
+    And the "user_activate_account" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/"
+    Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/" link in the "user_activate_account" mail
     And the response status code should be 200
     And I should see "greetings"
     And I should see "login.link"
