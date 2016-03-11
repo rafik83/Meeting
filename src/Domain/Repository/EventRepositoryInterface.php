@@ -10,12 +10,20 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\EventListView;
 use Proximum\Vimeet\Domain\View\EventView;
 
 interface EventRepositoryInterface
 {
+    /**
+     * @param Admin $admin
+     *
+     * @return EventListView[]
+     */
+    public function getListByAdmin(Admin $admin);
+
     /**
      * @return EventListView[]
      */

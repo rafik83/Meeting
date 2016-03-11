@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Components\Token\ForgottenPasswordTokenGenerator;
-use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
+use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
+use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Domain\Repository\ForgottenPasswordTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordHandler
 {
     /**
-     * @var ForgottenPasswordTokenGenerator
+     * @var UserForgottenPasswordTokenGenerator
      */
     private $forgottenPasswordTokenGenerator;
 
@@ -40,13 +40,13 @@ class ForgottenPasswordHandler
     private $eventDispatcher;
 
     /**
-     * @param ForgottenPasswordTokenGenerator           $forgottenPasswordTokenGenerator
+     * @param UserForgottenPasswordTokenGenerator       $forgottenPasswordTokenGenerator
      * @param UserRepositoryInterface                   $userRepository
      * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository
      * @param EventDispatcherInterface                  $eventDispatcher
      */
     public function __construct(
-        ForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
+        UserForgottenPasswordTokenGenerator $forgottenPasswordTokenGenerator,
         UserRepositoryInterface $userRepository,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordTokenRepository,
         EventDispatcherInterface $eventDispatcher
@@ -82,6 +82,6 @@ class ForgottenPasswordHandler
             $forgottenPassword->locale
         );
 
-        $this->eventDispatcher->dispatch('reset_password', $event);
+        $this->eventDispatcher->dispatch('user_reset_password', $event);
     }
 }

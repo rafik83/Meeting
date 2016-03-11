@@ -76,7 +76,7 @@ class SecurityController extends Controller
      */
     public function loginUserAction(User $user)
     {
-        $this->get('adapter.authentication_manager')->authenticate($user);
+        $this->get('adapter.authentication_manager')->authenticate($user, 'main');
 
         return $this->redirectToRoute('event');
     }

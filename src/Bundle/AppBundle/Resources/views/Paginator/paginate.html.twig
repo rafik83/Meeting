@@ -1,4 +1,4 @@
-{% if paginator.pages > 1 %}
+{% if paginator is not null and paginator.pages > 1 %}
     <nav class="text-center">
         <ul class="pagination">
             {% if paginator.page > 1 %}

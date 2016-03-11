@@ -5,12 +5,14 @@ Feature: Spot feature
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml     |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     And I follow "admin.spot.link"
     Then the response status code should be 200
     And I follow "admin.spot.listSpot.add"
     Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/spot/create"
+    And I should be on "/admin/event/1/spot/create"
     And I fill in the following:
       | spot_create_reference       | D098 |
       | spot_create_size            | 3    |
@@ -19,7 +21,7 @@ Feature: Spot feature
     And I check "spot_create_active"
     And I press "form.spot_create.children.submit.label"
     Then the response status code should be 200
-    And I should be on "http://vimeet.proximum.dev/app_test.php/admin/event/1/spot"
+    And I should be on "/admin/event/1/spot"
     And I should see "flash.admin.spot.create.success"
 
   Scenario: I can list spot
@@ -27,7 +29,9 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Event.yml |
       | Spot.yml      |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml     |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -39,7 +43,9 @@ Feature: Spot feature
       | app/Template.yml |
       | app/Event.yml    |
       | Spot.yml         |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -60,7 +66,9 @@ Feature: Spot feature
       | app/Template.yml |
       | app/Event.yml    |
       | Spot.yml         |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -81,7 +89,9 @@ Feature: Spot feature
       | app/Template.yml |
       | app/Event.yml    |
       | Spot.yml         |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -104,7 +114,9 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Event.yml    |
       | Spot.yml         |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200
@@ -118,7 +130,9 @@ Feature: Spot feature
     And the following fixtures files are loaded:
       | app/Event.yml    |
       | Spot.yml         |
-    When I go to "http://vimeet.proximum.dev/app_test.php/admin/event"
+      | Admin.yml        |
+    Given I am logged with "test@test.com" on admin
+    When I go to "/admin/event"
     Then the response status code should be 200
     And I follow "admin.spot.link"
     Then the response status code should be 200

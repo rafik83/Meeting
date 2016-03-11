@@ -6,17 +6,41 @@ security:
             algorithm: sha1
             iterations: 5
             encode_as_base64: true
+        Proximum\Vimeet\Domain\Model\Admin:
+            algorithm: sha1
+            iterations: 5
+            encode_as_base64: true
 
     providers:
         user_provider:
             entity:
                 class: Proximum\Vimeet\Domain\Model\User
                 property: email
+        admin_provider:
+            entity:
+                class: Proximum\Vimeet\Domain\Model\Admin
+                property: email
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        admin:
+            anonymous: ~
+            host: '%domain%'
+            pattern: ^/admin
+            provider: admin_provider
+            form_login:
+                login_path: admin_login
+                check_path: admin_login_check
+                username_parameter: "login[username]"
+                password_parameter: "login[password]"
+                default_target_path: admin_event_list
+                use_referer: true
+            logout:
+                path: admin_logout
+                target: admin_login
 
         main:
             anonymous: ~
@@ -31,3 +55,14 @@ security:
             logout:
                 path: event_logout
                 target: event
+
+    access_control:
+        - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
+
+    role_hierarchy:
+        ROLE_OPERATOR: ['ROLE_ADMIN']
+        ROLE_ORGANIZER: ['ROLE_ADMIN', 'ROLE_OPERATOR']
+        ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_OPERATOR']

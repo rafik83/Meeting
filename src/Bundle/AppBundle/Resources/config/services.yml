@@ -22,6 +22,16 @@ services:
             - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
 
     #
+    # Security
+    #
+    security.admin_event_access_voter:
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\AdminEventAccessVoter
+        arguments:
+            - '@components.security.admin_event_access'
+        tags:
+            - { name: security.voter }
+
+    #
     # Form extension
     #
     vimeet_app.form_extension.translation_domain_extension:
@@ -244,13 +254,20 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
-    vimeet_app.reset_password_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ResetPasswordEventListener
+    vimeet_app.user_reset_password_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ResetPasswordEventListener
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
         tags:
-            - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
+            - { name: 'kernel.event_listener', event: 'user_reset_password', method: 'sendToken' }
+    vimeet_app.admin_reset_password_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ResetPasswordEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'admin_reset_password', method: 'sendToken' }
     vimeet_app.vimeet.application.event.notification_event_listener:
         class: Proximum\Vimeet\Application\Event\NotificationEventListener
         arguments:
@@ -292,3 +309,11 @@ services:
             - '@sonata.intl.templating.helper.locale'
         tags:
             - { name: 'twig.extension' }
+
+    #
+    # Services
+    #
+    error_factory:
+        class: Proximum\Vimeet\Bundle\AppBundle\Service\ErrorFactory
+        arguments:
+            - '@translator'

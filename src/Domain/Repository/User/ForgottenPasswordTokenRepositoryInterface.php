@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository;
+namespace Proximum\Vimeet\Domain\Repository\User;
 
-use Proximum\Vimeet\Domain\Model\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface ForgottenPasswordTokenRepositoryInterface

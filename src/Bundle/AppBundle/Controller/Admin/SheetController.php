@@ -24,6 +24,8 @@ class SheetController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
             ->paginate($event, $request->query->getInt('page', 1), 20, $request->getLocale());
