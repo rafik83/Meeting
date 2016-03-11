@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\Flash;
+
+class TransMessage
+{
+    /**
+     * @var string
+     */
+    public $message;
+
+    /**
+     * @var array
+     */
+    public $arguments;
+
+    /**
+     * @var int|null
+     */
+    public $count;
+
+    /**
+     * @var string
+     */
+    public $domain;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
+     * TransMessage constructor.
+     *
+     * @param string   $message
+     * @param array    $arguments
+     * @param string   $domain
+     * @param string   $locale
+     */
+    public function __construct($message, array $arguments = [], $domain = 'flashes', $locale = null)
+    {
+        $this->message   = $message;
+        $this->arguments = $arguments;
+        $this->domain    = $domain;
+        $this->locale    = $locale;
+    }
+}
