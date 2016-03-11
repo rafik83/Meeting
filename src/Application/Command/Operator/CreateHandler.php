@@ -61,6 +61,10 @@ class CreateHandler extends AbstractCreateHandler
         $this->eventDispatcher                = $eventDispatcher;
     }
 
+    /**
+     * @param Create $create
+     * @throws EmailAlreadyExistsException
+     */
     public function handle(Create $create)
     {
         if ($this->adminRepository->emailExists($create->email)) {
