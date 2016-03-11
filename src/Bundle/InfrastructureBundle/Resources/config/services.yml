@@ -135,6 +135,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    repository.sheet.comment_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\CommentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -499,6 +503,10 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+    command.sheet.add_comment_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
+        arguments:
+            - '@repository.sheet.comment_repository'
 
     #
     # Security
@@ -610,6 +618,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
+            - '@repository.sheet.comment_repository'
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 
