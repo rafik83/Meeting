@@ -112,7 +112,7 @@ class SwitchUserListener implements ListenerInterface
         $providerKey,
         AccessDecisionManagerInterface $accessDecisionManager,
         LoggerInterface $logger = null,
-        $switchUserParameter = '_switch_user',
+        $switchUserParameter = '_switchto',
         $role = 'ROLE_ALLOWED_TO_SWITCH',
         EventDispatcherInterface $dispatcher = null,
         Impersonate $impersonate,

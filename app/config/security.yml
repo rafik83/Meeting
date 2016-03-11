@@ -56,8 +56,7 @@ security:
                 path: event_logout
                 target: event
             switch_user:
-                role: ROLE_ADMIN
-                provider: user_provider
+                parameter: _switchto
 
     access_control:
         - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }

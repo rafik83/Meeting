@@ -122,10 +122,17 @@ class Impersonate
      * @param string $token
      *
      * @return array
+     * @throws \Exception
      */
     private function decodeToken($token)
     {
-        return unserialize(base64_decode($token));
+        $decodedToken = unserialize(base64_decode($token));
+
+        if (!$decodedToken) {
+            throw new \Exception('token invalid');
+        }
+
+        return $decodedToken;
     }
 
     /**
