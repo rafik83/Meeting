@@ -244,13 +244,20 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
-    vimeet_app.reset_password_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ResetPasswordEventListener
+    vimeet_app.user_reset_password_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ResetPasswordEventListener
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
         tags:
-            - { name: 'kernel.event_listener', event: 'reset_password', method: 'sendToken' }
+            - { name: 'kernel.event_listener', event: 'user_reset_password', method: 'sendToken' }
+    vimeet_app.admin_reset_password_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ResetPasswordEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'admin_reset_password', method: 'sendToken' }
     vimeet_app.vimeet.application.event.notification_event_listener:
         class: Proximum\Vimeet\Application\Event\NotificationEventListener
         arguments:
@@ -286,3 +293,11 @@ services:
             - '@sonata.intl.templating.helper.locale'
         tags:
             - { name: 'twig.extension' }
+
+    #
+    # Services
+    #
+    error_factory:
+        class: Proximum\Vimeet\Bundle\AppBundle\Service\ErrorFactory
+        arguments:
+            - '@translator'

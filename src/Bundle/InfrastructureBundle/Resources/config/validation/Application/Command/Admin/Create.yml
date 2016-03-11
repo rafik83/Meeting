@@ -1,0 +1,15 @@
+Proximum\Vimeet\Application\Command\Admin\Create:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email:
+                message: validators.email
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 8
+                minMessage: validators.password.min
+        lastname:
+            - NotBlank: ~
+        firstname:
+            - NotBlank: ~

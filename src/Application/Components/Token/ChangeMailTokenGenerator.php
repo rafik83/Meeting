@@ -23,11 +23,6 @@ class ChangeMailTokenGenerator extends AbstractTokenGenerator
      */
     public function generate(User $user, $mail)
     {
-        return new ChangeMailToken(
-            $user,
-            $mail,
-            $this->generateToken($user),
-            $this->expirateDate
-        );
+        return new ChangeMailToken($user, $mail, $this->generateToken($user), $this->expirateDate);
     }
 }

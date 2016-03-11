@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 /**
  * "Compte admin/organisateur/collaborateur".
  */
-class Admin extends AbstractUser
+class Admin extends AbstractUser implements AdvancedUserInterface
 {
     const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
     const ROLE_OPERATOR    = 'ROLE_OPERATOR';
@@ -33,6 +35,11 @@ class Admin extends AbstractUser
      * @var string
      */
     private $role;
+
+    /**
+     * @var Event[]
+     */
+    private $events;
 
     /**
      * @param string $email
@@ -71,13 +78,32 @@ class Admin extends AbstractUser
     /**
      * @return array
      */
-    public function getAllRoles()
+    public static function getAllRoles()
     {
         return [
             self::ROLE_OPERATOR,
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
         ];
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param Event $event
+     * @return self
+     */
+    public function addEvent(Event $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
     }
 
     /**
@@ -94,5 +120,37 @@ class Admin extends AbstractUser
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return true;
     }
 }
