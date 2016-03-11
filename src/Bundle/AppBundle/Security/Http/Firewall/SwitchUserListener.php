@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Security\Http\Firewall;
 
 use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
@@ -87,6 +88,11 @@ class SwitchUserListener implements ListenerInterface
     private $impersonate;
 
     /**
+     * @var EventRepositoryInterface
+     */
+    private $eventRepository;
+
+    /**
      * @param TokenStorageInterface          $tokenStorage
      * @param UserProviderInterface          $provider
      * @param UserCheckerInterface           $userChecker
@@ -97,6 +103,7 @@ class SwitchUserListener implements ListenerInterface
      * @param string                         $role
      * @param EventDispatcherInterface|null  $dispatcher
      * @param Impersonate                    $impersonate
+     * @param EventRepositoryInterface       $eventRepository
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -108,7 +115,8 @@ class SwitchUserListener implements ListenerInterface
         $switchUserParameter = '_switch_user',
         $role = 'ROLE_ALLOWED_TO_SWITCH',
         EventDispatcherInterface $dispatcher = null,
-        Impersonate $impersonate
+        Impersonate $impersonate,
+        EventRepositoryInterface $eventRepository
     ) {
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
@@ -124,6 +132,7 @@ class SwitchUserListener implements ListenerInterface
         $this->logger                = $logger;
         $this->dispatcher            = $dispatcher;
         $this->impersonate           = $impersonate;
+        $this->eventRepository       = $eventRepository;
     }
 
     /**
@@ -146,7 +155,7 @@ class SwitchUserListener implements ListenerInterface
             $this->attemptExitUser($request);
 
             if (null === $request->get('_redirect')) {
-                throw new \Exception('Missing _redirect url');
+                throw new \Exception('Missing _redirect url parameter');
             }
 
             $response = new RedirectResponse($request->get('_redirect'), 302);
@@ -185,21 +194,26 @@ class SwitchUserListener implements ListenerInterface
         $token = $request->get($this->switchUserParameter);
 
         if (null !== $this->logger) {
-            $this->logger->info('Attempting to switch to user.', array('token' => $token));
+            $this->logger->info('Attempting to switch to user.', ['token' => $token]);
         }
 
-        $admin = $this->impersonate->getAdmin($token);
+        $admin      = $this->impersonate->getAdmin($token);
         $adminToken = new UsernamePasswordToken($admin, null, $this->providerKey, $admin->getRoles());
 
-        if (false === $this->accessDecisionManager->decide($adminToken, array($this->role))) {
+        if (false === $this->accessDecisionManager->decide($adminToken, [$this->role])) {
             throw new AccessDeniedException();
         }
 
-        $user = $this->impersonate->getUser($token);
+        $event = $this->eventRepository->getEventByDomain($request->getHost());
 
+        if (false === $this->accessDecisionManager->decide($adminToken, ['PERMISSION_EVENT_ACCESS'], $event)) {
+            throw new AccessDeniedException('This admin can not access to this event');
+        }
+
+        $user = $this->impersonate->getUser($token);
         $this->userChecker->checkPostAuth($user);
 
-        $roles = $user->getRoles();
+        $roles   = $user->getRoles();
         $roles[] = new SwitchUserRole('ROLE_PREVIOUS_ADMIN', $adminToken);
 
         $token = new UsernamePasswordToken($user, $user->getPassword(), $this->providerKey, $roles);

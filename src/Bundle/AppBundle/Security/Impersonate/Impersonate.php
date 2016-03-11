@@ -35,8 +35,11 @@ class Impersonate
      * @param UserProviderInterface $userProvider
      * @param string                $salt
      */
-    public function __construct(UserProviderInterface $adminProvider, UserProviderInterface $userProvider, $salt)
-    {
+    public function __construct(
+        UserProviderInterface $adminProvider,
+        UserProviderInterface $userProvider,
+        $salt
+    ) {
         $this->adminProvider = $adminProvider;
         $this->userProvider  = $userProvider;
         $this->salt          = $salt;
