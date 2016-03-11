@@ -129,6 +129,9 @@ flash:
                 success: Le sous événement a bien été créé
             update:
                 success: Le sous événement a bien été mis à jour
+        admin:
+            create:
+                success: Le nouvel utilisateur a bien été créé
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

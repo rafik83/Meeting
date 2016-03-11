@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class PaginatedResult
+use Countable;
+use Iterator;
+
+class PaginatedResult implements Countable, Iterator
 {
     /**
      * @var array
@@ -52,5 +55,53 @@ class PaginatedResult
         $this->limit   = $limit;
         $this->total   = $total;
         $this->pages   = (int) ceil($total / $limit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function rewind()
+    {
+        reset($this->results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function current()
+    {
+        return current($this->results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function key()
+    {
+        return key($this->results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function next()
+    {
+        next($this->results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function valid()
+    {
+        return key($this->results) !== null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->results);
     }
 }

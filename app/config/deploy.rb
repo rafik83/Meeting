@@ -13,7 +13,7 @@ ssh_options[:forward_agent] = true
 set :scm,          :git
 set :scm_verbose,  true
 set :scm_username, "git"
-set :repository,   "git@github.com:Elao/proximum-vimeet.git"
+set :repository,   "git@github.com:proximum/vimeet.git"
 set :deploy_via,   :remote_cache
 
 # Vendors

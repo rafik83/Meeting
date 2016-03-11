@@ -25,7 +25,6 @@ class AppKernel extends Kernel
             new Elao\ErrorNotifierBundle\ElaoErrorNotifierBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),

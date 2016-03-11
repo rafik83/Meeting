@@ -29,8 +29,7 @@
         "elao/theme-twitter-bootstrap-3-bundle": "2.0",
         "elao/error-notifier-bundle": "1.0.7",
         "nelmio/alice": "2.1.*",
-        "doctrine/doctrine-fixtures-bundle": "~2.3",
-        "knplabs/knp-paginator-bundle": "^2.5"
+        "doctrine/doctrine-fixtures-bundle": "~2.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

@@ -16,6 +16,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
         billingData:
             type: json_array
             nullable: true
+        createdAt:
+            type: datetime
+        lastLoginAt:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -28,7 +28,8 @@ class EventController extends Controller
     {
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
-            ->getList();
+            ->getListByAdmin($this->getUser());
+
 
         return $this->render('VimeetAppBundle:Admin/Event:list.html.twig', [
             'events' => $events,
@@ -43,6 +44,8 @@ class EventController extends Controller
      */
     public function readAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         return $this->render('VimeetAppBundle:Admin/Event:read.html.twig', [
             'event' => $event,
         ]);
@@ -56,6 +59,8 @@ class EventController extends Controller
      */
     public function updateAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $update = new Update($event);
 
         $form = $this->createForm(EventUpdateType::class, $update, [
