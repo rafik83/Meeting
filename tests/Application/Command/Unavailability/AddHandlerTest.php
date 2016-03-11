@@ -27,7 +27,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event                 = new Event();
         $type                  = new Type($event);
-        $sheet                 = new Sheet($event, $type, [], []);
+        $sheet                 = new Sheet($event, $type, [], [], new \DateTime());
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true, true);
         $command               = new Add();
@@ -53,7 +53,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event                 = new Event();
         $type                  = new Type($event);
-        $sheet                 = new Sheet($event, $type, [], []);
+        $sheet                 = new Sheet($event, $type, [], [], new \DateTime());
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $participant           = new Participant($sheet, $user, [], true, true);
         $command               = new Add();

@@ -295,7 +295,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $packageTemplate  = [];
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $type->setPackageTemplate($packageTemplate);
 
         $template = $productBuilder->createFromSheet($sheet);
@@ -486,7 +486,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $type->setPackageTemplate($packageTemplate);
 
         $template = $productBuilder->createFromSheet($sheet);
@@ -753,7 +753,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $type->setPackageTemplate($packageTemplate);
 
         $template = $productBuilder->createFromSheet($sheet);

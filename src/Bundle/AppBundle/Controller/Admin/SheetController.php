@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\SheetListView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,16 +27,8 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->paginate($request->query->getInt('page', 1), 20, $event, $request->getLocale());
-
-        $sheets->results = array_map(function (Sheet $sheet) use ($request) {
-            return new SheetListView(
-                $sheet->getId(),
-                $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($sheet),
-                $sheet->getType()->getTranslations()->get($request->getLocale())->getTitle()
-            );
-        }, $sheets->results);
+            ->get('query.sheet.sheet_list_view_factory')
+            ->paginate($event, $request->query->getInt('page', 1), 20, $request->getLocale());
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'  => $event,

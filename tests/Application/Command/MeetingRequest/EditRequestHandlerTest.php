@@ -35,8 +35,8 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
+        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -98,8 +98,8 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
+        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -163,8 +163,8 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
+        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -226,8 +226,8 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
+        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');

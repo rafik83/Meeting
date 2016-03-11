@@ -33,8 +33,8 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], []);
-        $sheetFrom = new Sheet($event, $type, [], []);
+        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $dateTime  = new DateTime();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
 
