@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 
 class SheetDetailsViewFactory
 {
@@ -46,6 +47,11 @@ class SheetDetailsViewFactory
     private $blockDataViewFactory;
 
     /**
+     * @var CommentRepositoryInterface
+     */
+    private $commentRepository;
+
+    /**
      * SheetDetailsViewFactory constructor.
      *
      * @param SheetInfoGuesser           $sheetInfoGuesser
@@ -53,19 +59,22 @@ class SheetDetailsViewFactory
      * @param RequestRepositoryInterface $requestRepository
      * @param BillingViewFactory         $billingViewFactory
      * @param BlockDataViewFactory       $blockDataViewFactory
+     * @param CommentRepositoryInterface $commentRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestRepositoryInterface $requestRepository,
         BillingViewFactory $billingViewFactory,
-        BlockDataViewFactory $blockDataViewFactory
+        BlockDataViewFactory $blockDataViewFactory,
+        CommentRepositoryInterface $commentRepository
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestRepository      = $requestRepository;
         $this->billingViewFactory     = $billingViewFactory;
         $this->blockDataViewFactory   = $blockDataViewFactory;
+        $this->commentRepository      = $commentRepository;
     }
 
     /**
@@ -102,7 +111,9 @@ class SheetDetailsViewFactory
             // Refused requests
             $this->requestRepository->countRefusedRequestSentBySheet($sheet),
             // Refused propositions
-            $this->requestRepository->countRefusedPropositionReceivedBySheet($sheet)
+            $this->requestRepository->countRefusedPropositionReceivedBySheet($sheet),
+            // Comments
+            $this->commentRepository->getCommentsBySheet($sheet)
         );
     }
 }
