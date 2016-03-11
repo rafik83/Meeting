@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -79,10 +81,32 @@ class SheetController extends Controller
 
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
 
+        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
+
+        $form = $this->createForm(CommentType::class, $addComment, [
+            'action' => $this->generateUrl('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]),
+            'method' => 'POST',
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.sheet.add_comment_handler')->handle($addComment);
+            $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
+
+            return $this->redirectToRoute('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         return $this->render('VimeetAppBundle:Admin/Sheet:details.html.twig', [
             'event'   => $event,
             'sheet'   => $sheet,
             'details' => $details,
+            'form'    => $form->createView(),
         ]);
     }
 }
