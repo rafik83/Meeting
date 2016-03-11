@@ -79,9 +79,10 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, type, typeTranslation')
+            ->select('sheet, type, category, typeTranslation')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
+            ->join('type.categories', 'category')
             ->setParameter('event', $event)
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
@@ -91,6 +92,18 @@ class SheetRepository implements SheetRepositoryInterface
             $queryBuilder
                 ->andWhere('sheet.state = :state')
                 ->setParameter('state', $filters['state']);
+        }
+
+        if (isset($filters['category'])) {
+            $queryBuilder
+                ->andWhere('category = :category')
+                ->setParameter('category', $filters['category']);
+        }
+
+        if (isset($filters['type'])) {
+            $queryBuilder
+                ->andWhere('type = :type')
+                ->setParameter('type', $filters['type']);
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');

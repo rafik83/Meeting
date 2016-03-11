@@ -34,7 +34,7 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $filters  = [];
-        $form     = $this->createFilterForm(FilterType::class, $filters);
+        $form     = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
         $filtered = $form->handleRequest($request)->isSubmitted() && $form->isValid();
 
         if ($filtered) {

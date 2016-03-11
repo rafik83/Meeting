@@ -568,6 +568,10 @@ form:
         children:
             state:
                 label: Etat
+            category:
+                label: Catégorie
+            type:
+                label: Type
     create_admin:
         children:
             email:

@@ -9,6 +9,8 @@
         {{ form_errors(form) }}
         <div class="row">
             {{ form_row(form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
+            {{ form_row(form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
+            {{ form_row(form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
             <div class="col-md-3 text-right" style="padding-top: 25px;">
                 {% if filtered %}
                     <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
