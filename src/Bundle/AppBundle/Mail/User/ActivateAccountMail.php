@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
+namespace Proximum\Vimeet\Bundle\AppBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -37,6 +37,7 @@ class ActivateAccountMail extends Mail
     public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
+
         $this->event = $event;
         $this->token = $token;
     }

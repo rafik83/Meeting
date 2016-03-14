@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>{{ 'admin.spot.createSpot.title'|trans }}</h2>
 

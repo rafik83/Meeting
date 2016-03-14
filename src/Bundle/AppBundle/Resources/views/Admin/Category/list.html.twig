@@ -3,7 +3,7 @@
 {% block title 'Catégories de types de participation' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>Catégories de types de participation</h2>
 
@@ -12,7 +12,9 @@
         <tr>
             <th>Titre</th>
             <th>
-                <a href="{{ path('admin_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
+                <a href="{{ path('admin_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
+                    {{ 'admin.category.add'|trans }}
+                </a>
             </th>
         </tr>
         </thead>
@@ -21,7 +23,9 @@
             <tr>
                 <td>{{ category.title }}</td>
                 <td>
-                    <a href="{{ path('admin_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-primary btn-sm">
+                        {{ 'admin.category.update'|trans }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

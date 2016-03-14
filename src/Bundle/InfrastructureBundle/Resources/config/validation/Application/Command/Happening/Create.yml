@@ -6,3 +6,4 @@ Proximum\Vimeet\Application\Command\Happening\Create:
                     fields:
                         title:
                             - NotBlank: ~
+                        description: ~

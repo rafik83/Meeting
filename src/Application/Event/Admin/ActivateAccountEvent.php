@@ -8,24 +8,18 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event;
+namespace Proximum\Vimeet\Application\Event\Admin;
 
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\Event as ProximumEvent;
+use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\EventDispatcher\Event;
 
 class ActivateAccountEvent extends Event
 {
     /**
-     * @var User
+     * @var Admin
      */
-    private $user;
-
-    /**
-     * @var ProximumEvent
-     */
-    private $event;
+    private $admin;
 
     /**
      * @var ActivateAccountToken
@@ -38,33 +32,23 @@ class ActivateAccountEvent extends Event
     private $locale;
 
     /**
-     * @param User                 $user
-     * @param ProximumEvent        $event
+     * @param Admin                $admin
      * @param ActivateAccountToken $activateAccountToken
      * @param string               $locale
      */
-    public function __construct(User $user, ProximumEvent $event, ActivateAccountToken $activateAccountToken, $locale)
+    public function __construct(Admin $admin, ActivateAccountToken $activateAccountToken, $locale)
     {
-        $this->user                 = $user;
-        $this->event                = $event;
+        $this->admin                = $admin;
         $this->activateAccountToken = $activateAccountToken;
         $this->locale               = $locale;
     }
 
     /**
-     * @return User
+     * @return Admin
      */
-    public function getUser()
+    public function getAdmin()
     {
-        return $this->user;
-    }
-
-    /**
-     * @return ProximumEvent
-     */
-    public function getEvent()
-    {
-        return $this->event;
+        return $this->admin;
     }
 
     /**

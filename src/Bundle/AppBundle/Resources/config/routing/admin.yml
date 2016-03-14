@@ -30,6 +30,24 @@ admin_create_admin:
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
 #
+# Create Operator
+#
+
+admin_create_operator:
+    path: /operator/create
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:create }
+
+#
+# Activate Operator account
+#
+
+admin_operator_activate_account:
+    path: /activate-account/{token}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/ActivateAccount:password }
+
+#
 # Forgot password
 #
 admin_forgot_password:
@@ -311,20 +329,20 @@ admin_sheet_billing:
 # Order
 #
 admin_sheet_order_edit:
-    path: /order/{order}/edit
+    path: /event/{event}/order/{order}/edit
     requirements:
         order: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Order:edit }
 admin_sheet_order_add_row:
-    path: /order/{order}/group/{group}/row/add
+    path: /event/{event}/order/{order}/group/{group}/row/add
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Order:addRow }
 admin_sheet_order_remove_row:
-    path: /order/{order}/group/{group}/row/{row}/remove
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
@@ -332,7 +350,7 @@ admin_sheet_order_remove_row:
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Order:removeRow }
 admin_sheet_order_update_row:
-    path: /order/{order}/group/{group}/row/{row}/update
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/update
     requirements:
         order: \d+
         group: '[a-zA-Z0-9\-]+'
@@ -344,19 +362,19 @@ admin_sheet_order_update_row:
 # Transaction
 #
 admin_sheet_transaction_create:
-    path: /sheet/{sheet}/transaction/create
+    path: /event/{event}/sheet/{sheet}/transaction/create
     requirements:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:create }
 admin_sheet_transaction_update:
-    path: /sheet/{sheet}/transaction/{transaction}/update
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/update
     requirements:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Transaction:update }
 admin_sheet_transaction_remove:
-    path: /sheet/{sheet}/transaction/{transaction}/remove
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/remove
     requirements:
         sheet: \d+
     methods: [DELETE]

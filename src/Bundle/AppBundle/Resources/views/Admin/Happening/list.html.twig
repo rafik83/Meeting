@@ -1,11 +1,14 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
-    <h2>Sous-événements</h2>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>{{ 'admin.happening.title'|trans }}</h2>
+
     <div class="text-right">
-        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-success">Ajouter</a>
-        <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}" class="btn btn-primary">Catégories de sous-événement &rarr; </a>
+        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-success">
+            {{ 'admin.happening.add'|trans }}
+        </a>
     </div>
 
     <table class="table">
@@ -15,7 +18,7 @@
             <th>Intervenants</th>
             <th>Début</th>
             <th>Fin</th>
-            <th>Acion</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -27,7 +30,9 @@
                 <td>{{ happening.end|date('d/m/Y h\\hi') }}</td>
                 <td>
                     {% if happening.canUpdate %}
-                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">Modifier</a>
+                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">
+                            {{ 'admin.happening.update'|trans }}
+                        </a>
                     {% endif %}
                 </td>
             </tr>
