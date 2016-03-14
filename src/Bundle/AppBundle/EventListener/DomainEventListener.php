@@ -60,6 +60,11 @@ class DomainEventListener
         // If the locale is not in event locales, redirect to the fallback locale
         if (!$event->hasLocale($request->getLocale())) {
             $route = $request->attributes->get('_route');
+
+            if ($route === 'default_event') {
+                $route = 'event';
+            }
+
             $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, $route));
 
             return;

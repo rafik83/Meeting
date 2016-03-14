@@ -118,7 +118,7 @@ class HomeController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // Check if the user has already created a participate
-        $this->hasUserAlreadyCreatedParticipant($this->getUser()->getId());
+        $this->hasUserAlreadyCreatedParticipant($eventView->id, $this->getUser()->getId());
 
         // Create participate form
         $create   = new Create();
@@ -156,13 +156,14 @@ class HomeController extends Controller
     }
 
     /**
+     * @param int $eventId
      * @param int $userId
      */
-    private function hasUserAlreadyCreatedParticipant($userId)
+    private function hasUserAlreadyCreatedParticipant($eventId, $userId)
     {
         $participants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getAllParticipantForUser($userId);
+            ->getAllParticipantForUser($eventId, $userId);
 
         if (1 <= count($participants)) {
             throw $this->createAccessDeniedException('Participation already created');

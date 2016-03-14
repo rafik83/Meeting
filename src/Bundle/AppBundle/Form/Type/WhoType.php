@@ -50,7 +50,7 @@ class WhoType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setDefaults([
             'choices' => function (Options $options) {
                 return [
@@ -59,12 +59,16 @@ class WhoType extends AbstractType
                 ];
             },
             'choices_as_values' => true,
-            'choice_label'      => function ($choice) {
-                if ($choice instanceof Type || $choice instanceof Category) {
-                    return $choice->getTranslations()->get('fr')->getTitle();
-                }
+            'choice_label'      => function (Options $options) {
+                return function ($choice) use ($options) {
+                    if ($choice instanceof Type || $choice instanceof Category) {
+                        return $choice->getTranslations()->containsKey($options['locale'])
+                            ? $choice->getTranslations()->get($options['locale'])->getTitle()
+                            : '';
+                    }
 
-                return (string) $choice;
+                    return (string) $choice;
+                };
             },
             'choice_value' => function ($choice) {
                 if ($choice instanceof Type) {

@@ -48,6 +48,8 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Meeting/Request.yml',
             __DIR__ . '/Meeting/Message.yml',
             __DIR__ . '/CanceledRequestNotification.yml',
+            __DIR__ . '/EventASDDays2016.yml',
+            __DIR__ . '/EventSpanish.yml',
         ];
 
         $options = [

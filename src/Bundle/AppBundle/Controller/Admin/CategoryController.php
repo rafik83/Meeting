@@ -36,7 +36,7 @@ class CategoryController extends Controller
 
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
-            ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
+            ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('VimeetAppBundle:Admin/Category:list.html.twig', [
             'event'      => $event,
@@ -58,7 +58,7 @@ class CategoryController extends Controller
         $form   = $this->createForm(CategoryCreateType::class, $create, [
             'method' => 'POST',
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -94,7 +94,7 @@ class CategoryController extends Controller
         $form   = $this->createForm(CategoryUpdateType::class, $update, [
             'method' => 'POST',
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
         $form->add('submit', SubmitType::class);
 

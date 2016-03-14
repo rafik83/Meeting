@@ -38,6 +38,7 @@ class RuleController extends Controller
             'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -79,7 +80,7 @@ class RuleController extends Controller
         $rule = $this->findRule($event, $seer, $seeable);
         $this->notFoundUnless($rule, 'Rule not found.');
 
-        $form = $this->createWhatForm($rule, $request->getLocale());
+        $form = $this->createWhatForm($rule, $event->getAvailableLocale($request->getLocale()));
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
