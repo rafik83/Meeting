@@ -50,7 +50,6 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDeleteNotAllowedException()
     {
         $this->expectException(DeleteNotAllowedException::class);
-
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();

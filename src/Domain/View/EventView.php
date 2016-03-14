@@ -63,14 +63,6 @@ class EventView implements EventInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @param $locale
      *
      * @return bool
@@ -78,5 +70,13 @@ class EventView implements EventInterface
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }
