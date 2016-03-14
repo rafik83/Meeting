@@ -35,6 +35,7 @@ class BatchType extends AbstractType
             ->add('follower', FollowerChoiceType::class, [
                 'event'       => $options['event'],
                 'placeholder' => '',
+                'required'    => false,
             ])
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
@@ -48,5 +49,10 @@ class BatchType extends AbstractType
     {
         $resolver->setRequired(['ids', 'event']);
         $resolver->setAllowedTypes('ids', ['array']);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'sheet_batch';
     }
 }

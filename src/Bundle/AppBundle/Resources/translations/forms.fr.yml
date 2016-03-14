@@ -621,3 +621,11 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    sheet_batch:
+        children:
+            validate:
+                label: Valider
+            assign:
+                label: Assigner
+            follower:
+                label: Collaborateur
