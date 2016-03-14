@@ -8,9 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Admin;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
 
 class ActivateAccountToken
 {
@@ -20,9 +21,9 @@ class ActivateAccountToken
     private $id;
 
     /**
-     * @var User
+     * @var Admin
      */
-    private $user;
+    private $admin;
 
     /**
      * @var string
@@ -30,26 +31,19 @@ class ActivateAccountToken
     private $token;
 
     /**
-     * @var Sheet
-     */
-    private $sheet;
-
-    /**
      * @var DateTimeInterface
      */
     private $expireDate;
 
     /**
-     * @param User              $user
+     * @param Admin             $admin
      * @param string            $token
-     * @param Sheet             $sheet
      * @param DateTimeInterface $expireDate
      */
-    public function __construct(User $user, $token, Sheet $sheet, DateTimeInterface $expireDate)
+    public function __construct(Admin $admin, $token, DateTimeInterface $expireDate)
     {
-        $this->user       = $user;
+        $this->admin      = $admin;
         $this->token      = $token;
-        $this->sheet      = $sheet;
         $this->expireDate = $expireDate;
     }
 
@@ -62,11 +56,11 @@ class ActivateAccountToken
     }
 
     /**
-     * @return User
+     * @return Admin
      */
-    public function getUser()
+    public function getAdmin()
     {
-        return $this->user;
+        return $this->admin;
     }
 
     /**
@@ -75,14 +69,6 @@ class ActivateAccountToken
     public function getToken()
     {
         return $this->token;
-    }
-
-    /**
-     * @return Sheet
-     */
-    public function getSheet()
-    {
-        return $this->sheet;
     }
 
     /**

@@ -1,32 +1,30 @@
 Proximum\Vimeet\Domain\Model\Admin:
-    user_admin:
+    admin_1:
         __construct:
             - "test@test.com"
             - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO" #vimeet_admin
             - "YzzBNEhw7I6H5xPuziQEAPAsg5g="
-            - 'fr'
-            - "Jean"
-            - "DUPONT"
-            - "ROLE_SUPER_ADMIN"
-
-    user_admin_2:
+            - "fr"
+            - "Truc"
+            - "Muche"
+            - "ROLE_ORGANIZER"
+        events:
+            - '@event_rdv_carnot_2016'
+    admin_2:
         __construct:
             - "test2@test.com"
             - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO" #vimeet_admin
             - "YzzBNEhw7I6H5xPuziQEAPAsg5g="
-            - 'fr'
-            - "Truc"
-            - "MUCHE"
-            - "ROLE_ORGANIZER"
+            - "fr"
+            - "Bidule"
+            - "Chouette"
+            - "ROLE_OPERATOR"
         events:
             - '@event_rdv_carnot_2016'
 
-    user_admin_3:
+Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken:
+    activate_account_token_1:
         __construct:
-            - "test3@test.com"
-            - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO" #vimeet_admin
-            - "YzzBNEhw7I6H5xPuziQEAPAsg5g="
-            - 'fr'
-            - "Bidule"
-            - "CHOUETTE"
-            - "ROLE_ORGANIZER"
+             - "@admin_1"
+             - azertyuiopqsdfghjklmwxcvbn
+             - <dateTimeBetween('+10 days', '+14 days')>

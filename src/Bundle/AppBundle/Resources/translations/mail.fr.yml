@@ -46,3 +46,12 @@ admin:
             end: |
                 Cordialement,
                 L'équipe Vimeet
+        activateAccount:
+            subject: 'Activer votre compte'
+            body: |
+                Bonjour,
+                Vous avez été invité en tant que collaborateur sur Vimeet
+                Pour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:
+            end: |
+                Cordialement,
+                L'équipe Vimeet

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ActivateAccountPasswordType;
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;

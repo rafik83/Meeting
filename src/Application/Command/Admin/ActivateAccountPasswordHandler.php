@@ -8,19 +8,19 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\User;
+namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class ActivateAccountPasswordHandler
 {
     /**
-     * @var UserRepositoryInterface
+     * @var AdminRepositoryInterface
      */
-    private $userRepository;
+    private $adminRepository;
 
     /**
      * @var PasswordEncoderInterface
@@ -38,18 +38,18 @@ class ActivateAccountPasswordHandler
     private $activateAccountTokenRepository;
 
     /**
-     * @param UserRepositoryInterface        $userRepository
+     * @param AdminRepositoryInterface       $adminRepository
      * @param PasswordEncoderInterface       $encoder
      * @param SaltGeneratorInterface         $saltGenerator
      * @param ActivateAccountTokenRepository $activateAccountTokenRepository
      */
     public function __construct(
-        UserRepositoryInterface $userRepository,
+        AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
         ActivateAccountTokenRepository $activateAccountTokenRepository
     ) {
-        $this->userRepository                 = $userRepository;
+        $this->adminRepository                = $adminRepository;
         $this->encoder                        = $encoder;
         $this->saltGenerator                  = $saltGenerator;
         $this->activateAccountTokenRepository = $activateAccountTokenRepository;
@@ -60,12 +60,12 @@ class ActivateAccountPasswordHandler
      */
     public function handle(ActivateAccountPassword $activateAccountPassword)
     {
-        $user     = $activateAccountPassword->user;
+        $admin    = $activateAccountPassword->admin;
         $salt     = $this->saltGenerator->generate();
-        $password = $this->encoder->encode($user->updatePassword($salt, null), $activateAccountPassword->password);
+        $password = $this->encoder->encode($admin->updatePassword($salt, null), $activateAccountPassword->password);
 
-        $user->updatePassword($salt, $password);
-        $this->userRepository->set($user);
-        $this->activateAccountTokenRepository->deleteAllForUser($user);
+        $admin->updatePassword($salt, $password);
+        $this->adminRepository->set($admin);
+        $this->activateAccountTokenRepository->deleteAllForUser($admin);
     }
 }

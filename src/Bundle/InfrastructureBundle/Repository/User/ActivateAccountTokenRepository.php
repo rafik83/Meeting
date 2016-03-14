@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
+namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ActivateAccountTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 
 class ActivateAccountTokenRepository implements ActivateAccountTokenRepositoryInterface
 {
@@ -47,7 +47,7 @@ class ActivateAccountTokenRepository implements ActivateAccountTokenRepositoryIn
         $this
             ->entityManager
             ->createQueryBuilder()
-            ->delete('Entity:ActivateAccountToken', 'activateAccountToken')
+            ->delete('Entity:User\ActivateAccountToken', 'activateAccountToken')
             ->where('activateAccountToken.user = :user')
             ->setParameter('user', $user)
             ->getQuery()

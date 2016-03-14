@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\ActivateAccountToken:
+Proximum\Vimeet\Domain\Model\User\ActivateAccountToken:
     type:  entity
-    table: activate_account_token
+    table: user_activate_account_token
     id:
         id:
             type: integer
