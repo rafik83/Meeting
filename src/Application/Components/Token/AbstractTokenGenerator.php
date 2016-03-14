@@ -10,31 +10,38 @@
 
 namespace Proximum\Vimeet\Application\Components\Token;
 
-use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 
-class AbstractTokenGenerator
+abstract class AbstractTokenGenerator
 {
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeImmutable
      */
     protected $expirateDate;
 
     /**
-     * @param DateTimeInterface $dateTime
+     * @param \DateTimeImmutable $dateTime
      */
-    public function __construct(DateTimeInterface $dateTime)
+    public function __construct(\DateTimeImmutable $dateTime)
     {
-        $this->expirateDate = $dateTime->add(new \DateInterval('P2D'));
+        $this->expirateDate = $dateTime->add($this->getLifetime());
     }
 
     /**
-     * @param User $user
+     * @param AbstractUser $user
      *
      * @return string
      */
-    protected function generateToken(User $user)
+    protected function generateToken(AbstractUser $user)
     {
         return sha1(uniqid() . $user->getId() . uniqid() . $this->expirateDate->format('c'));
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    protected function getLifetime()
+    {
+        return new \DateInterval('P2D');
     }
 }

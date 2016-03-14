@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
-class EventListView
+use Proximum\Vimeet\Domain\Model\EventInterface;
+
+class EventListView implements EventInterface
 {
     /**
      * @var int
@@ -23,12 +25,41 @@ class EventListView
     public $title;
 
     /**
+     * @var string
+     */
+    public $domain;
+
+    /**
+     * @var array
+     */
+    public $locales;
+
+    /**
+     * @var string
+     */
+    public $fallback;
+
+    /**
      * @param int    $id
      * @param string $title
+     * @param string $domain
+     * @param array  $locales
+     * @param string $fallback
      */
-    public function __construct($id, $title)
+    public function __construct($id, $title, $domain, array $locales, $fallback)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        $this->id       = $id;
+        $this->title    = $title;
+        $this->domain   = $domain;
+        $this->locales  = $locales;
+        $this->fallback = $fallback;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

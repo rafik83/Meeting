@@ -27,7 +27,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event       = new Event();
         $type        = new Type($event);
-        $sheet       = new Sheet($event, $type, [], []);
+        $sheet       = new Sheet($event, $type, [], [], new \DateTime());
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
         $participant = new Participant($sheet, $user, [], true, true);
 
@@ -59,7 +59,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event       = new Event();
         $type        = new Type($event);
-        $sheet       = new Sheet($event, $type, [], []);
+        $sheet       = new Sheet($event, $type, [], [], new \DateTime());
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
         $participant = new Participant($sheet, $user, [], true, true);
 

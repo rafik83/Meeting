@@ -30,6 +30,9 @@ class BillingController extends Controller
      */
     public function listAction(Request $request, Event $event, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         // Sheet
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
@@ -40,8 +43,8 @@ class BillingController extends Controller
             ->get('vimeet_infrastructure.repository.order_repository')
             ->findBySheet($sheet);
 
-        $orders = array_map(function (Order $order) use ($request) {
-            return $this->get('components.sheet.order_view_factory')->createFromOrder($order, $request->getLocale());
+        $orders = array_map(function (Order $order) use ($locale) {
+            return $this->get('components.sheet.order_view_factory')->createFromOrder($order, $locale);
         }, $orders);
 
         // Transactions

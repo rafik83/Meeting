@@ -4,7 +4,7 @@ mail:
         body: |
             Bonjour,
             Vous avez fait une demande de réinitialisation de mot de passe.
-            Rendez vous sur ce lien pour pouvoir créer une nouveau mot de passe:
+            Rendez vous sur ce lien pour pouvoir créer un nouveau mot de passe:
         end: |
             Cordialement,
             L'équipe Vimeet
@@ -34,3 +34,15 @@ mail:
         end: |
             Cordialement,
             L'équipe Vimeet
+
+admin:
+    mail:
+        resetPassword:
+            subject: 'Mot de passe oublié'
+            body: |
+                Bonjour,
+                Vous avez fait une demande de réinitialisation de mot de passe.
+                Rendez vous sur ce lien pour pouvoir créer un nouveau mot de passe:
+            end: |
+                Cordialement,
+                L'équipe Vimeet

@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Evènement".
  */
-class Event
+class Event implements EventInterface
 {
     /**
      * All Taxes Include : prices include taxes, no additional taxes computed
@@ -189,6 +189,20 @@ class Event
     public function getFallback()
     {
         return $this->fallback;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getAvailableLocale($locale)
+    {
+        if (in_array($locale, $this->getLocales())) {
+            return $locale;
+        }
+
+        return $this->getFallback();
     }
 
     /**

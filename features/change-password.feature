@@ -6,16 +6,11 @@ Feature: Change password
     And the following fixtures files are loaded:
       | app/Event.yml |
       | User.yml      |
+    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
 
   Scenario: Change the password successfully
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in the following:
-      |form.login.children.username.label |test@test.com |
-      |form.login.children.password.label |p@ssw0rd      |
-    And I press "form.login.children.submit.label"
-    And I should see "login.logged_as"
-    Then I follow "change_password.link"
+    When I follow "change_password.link"
     And I fill in the following:
       |form.change_password.children.currentPassword.label               |p@ssw0rd     |
       |form.change_password.children.plainPassword.children.first.label  |new-p@ssw0rd |
@@ -24,14 +19,7 @@ Feature: Change password
     And I should see "flash.change_password.success"
 
   Scenario: Change the password failed
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I fill in the following:
-      |form.login.children.username.label |test@test.com |
-      |form.login.children.password.label |p@ssw0rd      |
-    And I press "form.login.children.submit.label"
-    And I should see "login.logged_as"
-    Then I follow "change_password.link"
+    When I follow "change_password.link"
     And I fill in the following:
       |form.change_password.children.currentPassword.label               |whatever-wrong-password     |
       |form.change_password.children.plainPassword.children.first.label  |new-p@ssw0rd                |

@@ -76,7 +76,8 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
                     'cb11d08df1' => 'foobar'
                 ]
             ],
-            []
+            [],
+            new \DateTime()
         );
 
         //Expected
@@ -92,7 +93,8 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
                     'cb11d08df1' => 'foobar'
                 ]
             ],
-            []
+            [],
+            new \DateTime()
         );
 
         //Command

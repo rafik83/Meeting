@@ -32,10 +32,13 @@ class RuleController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -66,6 +69,8 @@ class RuleController extends Controller
      */
     public function whatAction(Request $request, Event $event, $seerIdentifier, $seerId, $seeableIdentifier, $seeableId)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $seer = $this->findWho($seerIdentifier, $seerId);
         $this->notFoundUnless($seer, 'Seer not found.');
 
@@ -75,7 +80,7 @@ class RuleController extends Controller
         $rule = $this->findRule($event, $seer, $seeable);
         $this->notFoundUnless($rule, 'Rule not found.');
 
-        $form = $this->createWhatForm($rule, $request->getLocale());
+        $form = $this->createWhatForm($rule, $event->getAvailableLocale($request->getLocale()));
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
@@ -101,6 +106,8 @@ class RuleController extends Controller
      */
     public function deleteAction(Event $event, Rule $rule)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($rule->getEvent() !== $event) {
             throw $this->createNotFoundException('Rule not found');
         }

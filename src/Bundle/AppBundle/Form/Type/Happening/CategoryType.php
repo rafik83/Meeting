@@ -34,12 +34,14 @@ class CategoryType extends AbstractType
                         ->setParameter('event', $options['event']);
                 };
             },
-            'choice_label' => function (Category $category) {
-                return $category->getTranslations()->get('fr')->getTitle();
+            'choice_label' => function (Options $options) {
+                return function (Category $category) use ($options) {
+                    return $category->getTranslations()->get($options['locale'])->getTitle();
+                };
             },
         ]);
 
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
     }
 
     /**

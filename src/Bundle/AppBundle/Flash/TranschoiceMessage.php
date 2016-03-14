@@ -1,0 +1,35 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\Flash;
+
+class TranschoiceMessage extends TransMessage
+{
+    /**
+     * @var int
+     */
+    public $count;
+
+    /**
+     * TranschoiceMessage constructor.
+     *
+     * @param string   $message
+     * @param int      $count
+     * @param array    $arguments
+     * @param string   $domain
+     * @param string   $locale
+     */
+    public function __construct($message, $count, array $arguments = [], $domain = 'flashes', $locale = null)
+    {
+        parent::__construct($message, $arguments, $domain, $locale);
+
+        $this->count = $count;
+    }
+}

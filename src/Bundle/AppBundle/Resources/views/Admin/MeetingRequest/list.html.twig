@@ -1,7 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>Liste des demandes de RDV</h2>
 
@@ -32,7 +32,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for meeting_request in meeting_requests %}
+        {% for meeting_request in meeting_requests.results %}
             <tr>
                 <td>{{ meeting_request.sheetNameFrom }}</td>
                 <td>{{ meeting_request.sheetNameTo }}</td>
@@ -55,6 +55,5 @@
         </tbody>
     </table>
 
-    {{ knp_pagination_render(meeting_requests) }}
-
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': meeting_requests}) }}
 {% endblock %}

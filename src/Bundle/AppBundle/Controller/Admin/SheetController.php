@@ -11,10 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\SheetListView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
@@ -22,21 +21,17 @@ class SheetController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, Event $event)
     {
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->paginate($request->query->getInt('page', 1), 20, $event, $request->getLocale());
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheets->setItems(array_map(function (Sheet $sheet) use ($request) {
-            return new SheetListView(
-                $sheet->getId(),
-                $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($sheet),
-                $sheet->getType()->getTranslations()->get($request->getLocale())->getTitle()
-            );
-        }, $sheets->getItems()));
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $sheets = $this
+            ->get('query.sheet.sheet_list_view_factory')
+            ->paginate($event, $request->query->getInt('page', 1), 20, $locale);
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'  => $event,

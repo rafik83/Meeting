@@ -1,7 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
     
     <h2>Types de participation</h2>
 
@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for type in types %}
+        {% for type in types.results %}
             <tr>
                 <td>{{ type.title }}</td>
                 <td>
@@ -26,7 +26,7 @@
         {% endfor %}
         </tbody>
     </table>
-    {{ knp_pagination_render(types) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>

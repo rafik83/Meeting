@@ -32,9 +32,11 @@ class TypeController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $types = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->paginate($request->query->get('page', 1), 20, $event->getId(), $request->getLocale());
+            ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('VimeetAppBundle:Admin/Type:list.html.twig', [
             'event' => $event,
@@ -50,6 +52,8 @@ class TypeController extends Controller
      */
     public function createAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new Create($event);
         $form   = $this->createForm(TypeCreateType::class, $create, [
             'action' => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
@@ -79,6 +83,8 @@ class TypeController extends Controller
      */
     public function updateAction(Request $request, Event $event, Type $type)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($event !== $type->getEvent()) {
             throw $this->createNotFoundException('Type not found.');
         }

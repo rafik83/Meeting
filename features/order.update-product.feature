@@ -9,7 +9,7 @@ Feature: Update a product purchased
       | app/Type.yml                                           |
       | User.yml                                               |
       | OneSheetOneParticipantWithBillingDataForProForma.yml   |
-    Given I am logged with "test-3@test.com" and "p@ssw0rd" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test-3@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr/sheet/1/orders"
     And I follow "event.sheet.summary.title"
     Then the response status code should be 200

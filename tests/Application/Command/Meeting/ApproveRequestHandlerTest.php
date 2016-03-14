@@ -27,8 +27,8 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event        = new Event();
         $type         = new Type($event);
-        $sheetTo      = new Sheet($event, $type, [], []);
-        $sheetFrom    = new Sheet($event, $type, [], []);
+        $sheetTo      = new Sheet($event, $type, [], [], new \DateTime());
+        $sheetFrom    = new Sheet($event, $type, [], [], new \DateTime());
         $user1        = new User('test@test.fr', 'test', 'test', 'fr');
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
         $user3        = new User('test3@test.fr', 'test', 'test', 'fr');

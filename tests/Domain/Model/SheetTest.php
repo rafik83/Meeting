@@ -22,7 +22,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
         $user1 = new User('user1@test.com', '', '', 'fr');
         $user2 = new User('user2@test.com', '', '', 'fr');
@@ -40,7 +40,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
         $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true, true);
         $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true, true);
@@ -59,7 +59,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
         $user1 = new User('user1@test.com', '', '', 'fr');
         $user2 = new User('user2@test.com', '', '', 'fr');

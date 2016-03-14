@@ -25,6 +25,8 @@ class MeetingController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $meetings = $this
             ->get('vimeet_infrastructure.repository.meeting_repository')
             ->getByEvent($event, $request->query->getInt('page', 1), 20);

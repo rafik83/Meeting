@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -44,13 +45,33 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getListByAdmin(Admin $admin)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->from(Event::class, 'event');
+
+        if ($admin->hasEvents()) {
+            $queryBuilder
+                ->where('event IN (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getList()
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
-            ->from('Entity:Event', 'event');
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->from(Event::class, 'event');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -64,7 +85,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->where('event.domain = :domain')
             ->setParameter('domain', $domain);
 
@@ -80,7 +101,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\EventView(event.id, event.title, translations.description, translations.locale, event.locales, event.timeZone)')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('event.domain = :domain')
@@ -99,7 +120,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->where('event.id = :id')
             ->setParameter('id', $id)
             ->setMaxResults(1);

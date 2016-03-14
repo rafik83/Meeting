@@ -46,6 +46,8 @@ class MeetingRequestController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $filter     = [];
         $filtered   = false;
         $filterForm = $this->createFilterForm(
@@ -62,10 +64,14 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filter);
 
+        $meetingRequestsAll = $this
+            ->get('vimeet_infrastructure.repository.meeting.request_repository')
+            ->countAllByEvent($event);
+
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequests->getTotalItemCount(),
+            'totalRequest'     => $meetingRequestsAll,
             'filter_form'      => $filterForm->createView(),
             'filtered'         => $filtered,
         ]);
@@ -115,6 +121,8 @@ class MeetingRequestController extends Controller
      */
     public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if (!$meetingRequest->isApproved()) {
             throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
         }

@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
 
     # Proximum sheets
     proximum_sheet_visiteur:
@@ -26,6 +28,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cb00c629d8:
                 563cb02125c23: "Martin & Associés"
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     proximum_sheet_exposant:
         __construct: false
         type: '@type_exposant'
@@ -35,6 +39,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 563cb103926e6: "BIOTECH"
                 563cb115bbeb9: "Laboratoire de recherches et développement dans le domaine de la biotechnologie"
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     proximum_sheet_carnot:
         __construct: false
         type: '@type_institute_carnot'
@@ -44,6 +50,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 563cb103926e6: "ASSOCIATION DES INSTITUTS CARNOT"
                 563cb115bbeb9: "L’Association des instituts Carnot fédère et anime le réseau des 34 instituts Carnot, réseau national de recherche pour l’innovation des entreprises à fort ancrage territorial. Elle a créé Les Rendez-vous Carnot qu'elle organise depuis 2008."
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     proximum_sheet_admin:
         __construct: false
         type: '@type_exposant'
@@ -53,6 +61,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 563cb103926e6: "Vimeet"
                 563cb115bbeb9: "Editeur plateforme de mise en relation B2B"
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     proximum_sheet_test:
         __construct: false
         type: '@type_exposant'
@@ -72,6 +82,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             5645e6067f46a: Chaville
             5645e5fd8f6a7: FR
             5645e610e0e1b: ""
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     proximum_sheet_ui:
         __construct: false
         type: '@type_visiteur'
@@ -80,6 +92,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cb00c629d8:
                 563cb02125c23: "CREA"
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
 
     # Random
     sheet_exposant{1..20}:
@@ -95,6 +109,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     sheet_investisseur{1..20}:
         __construct: false
         event: '@event_rdv_carnot_2016'
@@ -108,6 +124,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cae5f48ce2:
                 563cb11d08df1: <text(200)>
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     sheet_visiteur{1..20}:
         __construct: false
         event: '@event_rdv_carnot_2016'
@@ -121,6 +139,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cb014e2784:
                 563cb03f9a509: <text(200)>
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
     sheet_visiteur_visio{1..20}:
         __construct: false
         event: '@event_rdv_carnot_2016'
@@ -134,3 +154,5 @@ Proximum\Vimeet\Domain\Model\Sheet:
             563cb014e2784:
                 563cb03f9a509: <text(200)>
         packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
