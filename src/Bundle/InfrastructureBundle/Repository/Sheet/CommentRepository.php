@@ -50,7 +50,8 @@ class CommentRepository implements CommentRepositoryInterface
             ->select('comment')
             ->from(Comment::class, 'comment')
             ->where('comment.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameter('sheet', $sheet)
+            ->orderBy('comment.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
