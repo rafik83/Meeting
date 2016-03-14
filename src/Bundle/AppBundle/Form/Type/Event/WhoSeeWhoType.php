@@ -22,9 +22,15 @@ class WhoSeeWhoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $delegatedOptions = [
+            'event'       => $options['event'],
+            'locale'      => $options['locale'],
+            'placeholder' => '',
+        ];
+
         $builder
-            ->add('seer', WhoType::class, ['event' => $options['event'], 'placeholder' => ''])
-            ->add('seeable', WhoType::class, ['event' => $options['event'], 'placeholder' => ''])
+            ->add('seer', WhoType::class, $delegatedOptions)
+            ->add('seeable', WhoType::class, $delegatedOptions)
         ;
     }
 
@@ -33,6 +39,6 @@ class WhoSeeWhoType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
     }
 }

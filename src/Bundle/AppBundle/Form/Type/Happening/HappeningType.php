@@ -14,6 +14,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class HappeningType extends AbstractType
@@ -26,7 +29,7 @@ abstract class HappeningType extends AbstractType
         $event = $options['event'];
 
         $builder
-            ->add('category', CategoryType::class, ['event' => $event])
+            ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
             ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('translations', CollectionType::class, [
@@ -35,7 +38,7 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('talkings', CollectionType::class, [
                 'entry_type'     => TalkingType::class,
-                'entry_options'  => ['label' => false],
+                'entry_options'  => ['label' => false, 'event' => $event],
                 'prototype_data' => ['speaker' => null, 'position' => 0],
                 'allow_add'      => true,
                 'allow_delete'   => true,
@@ -46,9 +49,19 @@ abstract class HappeningType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        foreach ($view->children['translations'] as $translation) {
+            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
     }
 
     /**

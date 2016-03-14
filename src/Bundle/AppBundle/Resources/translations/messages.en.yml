@@ -72,3 +72,57 @@ event:
             label:
                 totalPrice: Total price of your cart
                 billingStep: Go to the billing step
+
+admin:
+    event:
+        see:
+            link: See
+        see_on_front:
+            link: See on front
+        update:
+            link: Update
+    rule:
+        link: Who see who
+    type:
+        link: Participation types
+    category:
+        link: Participation categories
+    sheet:
+        link: Participation sheets
+    meeting:
+        link: Meetings
+    meeting_request:
+        link: Meeting requests
+        list:
+            state:
+                sent: Sent
+                approved: Accepted
+                refused: Refused
+                cancelled: Cancelled
+    happening:
+        link: Conferences
+    happening_speaker:
+        link: Speakers
+    spot:
+        link: Spots
+        active:
+            yes: Yes
+            no: No
+        listSpot:
+            reference: Reference
+            size: Size (m²)
+            meetingCapacity: Meetings capacity
+            seatCapacity: Seats capacity
+            active: Active
+            add: Add
+            yes: Yes
+            no: No
+        createSpot:
+            title: Add a spot
+        batch_create:
+            title: Add spots per batch
+        delete: Delete
+        enable: Enable
+        disable: Disable
+        list:
+            checkbox: Checkbox

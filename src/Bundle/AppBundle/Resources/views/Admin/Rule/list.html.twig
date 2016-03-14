@@ -1,7 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>Ajouter une règle</h2>
 
@@ -22,16 +22,16 @@
                 <tr>
                     <td>
                         {% if rule.seerType %}
-                            Type {{ rule.seerType.translations.get(app.request.locale).title }}
+                            Type "{{ rule.seerType.getTitle(event.availableLocale(app.request.locale)) }}"
                         {% elseif rule.seerCategory %}
-                            Catégorie {{ rule.seerCategory.translations.get(app.request.locale).title }}
+                            Catégorie "{{ rule.seerCategory.getTitle(event.availableLocale(app.request.locale)) }}"
                         {% endif %}
                     </td>
                     <td>
                         {% if rule.seeableType %}
-                            Type {{ rule.seeableType.translations.get(app.request.locale).title }}
+                            Type "{{ rule.seeableType.getTitle(event.availableLocale(app.request.locale)) }}"
                         {% elseif rule.seeableCategory %}
-                            Catégorie {{ rule.seeableCategory.translations.get(app.request.locale).title }}
+                            Catégorie "{{ rule.seeableCategory.getTitle(event.availableLocale(app.request.locale)) }}"
                         {% endif %}
                     </td>
                     <td>

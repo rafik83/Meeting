@@ -31,10 +31,11 @@ class TypeTemplateFieldController extends Controller
     public function listAction(Request $request, Event $event, Type $type)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $packageObject = $this
             ->get('vimeet_infrastructure.application.components.product.product_builder')
@@ -77,10 +78,11 @@ class TypeTemplateFieldController extends Controller
         $libType
     ) {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $templateFactory = $this->get('components.sheet.template_factory');
         $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
@@ -143,10 +145,11 @@ class TypeTemplateFieldController extends Controller
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $templateName, $group, $row)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $request->getLocale());
+            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
 
         $templateFactory = $this->container->get('components.sheet.template_factory');
         $template = $templateFactory->createTemplateFromArray($type->getTemplate($templateName));
@@ -209,6 +212,7 @@ class TypeTemplateFieldController extends Controller
     public function fieldPositionAction(Request $request, Event $event, Type $type, $templateName, $group)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $fieldsOrder     = $request->request->get('order', []);
         $templateFactory = $this->container->get('components.sheet.template_factory');
@@ -230,5 +234,16 @@ class TypeTemplateFieldController extends Controller
                 'type'  => $type->getId(),
             ]
         );
+    }
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     */
+    private function denyAccessIfTypeNotInEvent(Event $event, Type $type)
+    {
+        if ($type->getEvent() !== $event) {
+            throw $this->createAccessDeniedException();
+        }
     }
 }

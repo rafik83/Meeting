@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Happening\Create:
+Proximum\Vimeet\Application\Command\Happening\Update:
     properties:
         translations:
             - All:

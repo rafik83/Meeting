@@ -21,10 +21,10 @@
             </tr>
             {% if templateName != 'package' %}
                 {% for group in template.groups %}
-                    {% if group.label(app.request.locale) != 'Default' %}
+                    {% if group.name != 'default' %}
                         <tr>
                             <th colspan="6" class="info">
-                                {{ group.label(app.request.locale) }}
+                                {{ group.label(event.availableLocale(app.request.locale)) }}
                             </th>
                         </tr>
                     {% endif %}
