@@ -12,7 +12,7 @@ namespace Tests\Application\Components\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -71,30 +71,33 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_firstname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_firstname'],
                 'required' => true,
-                'private' => false,
-                'label' => [
+                'private'  => false,
+                'position' => 0,
+                'label'    => [
                     'fr' => 'Nom',
                     'en' => 'Lastname'
                 ],
                 
             ],
             '563caf2746398' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_lastname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_lastname'],
                 'required' => true,
-                'private' => false,
+                'private'  => false,
+                'position' => 1,
                 'label' => [
                     'fr' => 'Prénom',
                     'en' => 'Firstname',
                 ],
             ],
             '563caf2f0ddbd' => [
-                'type' => 'lib_text',
+                'type'     => 'lib_text',
                 'required' => true,
-                'private' => true,
+                'private'  => true,
+                'position' => 2,
                 'label' => [
                     'fr' => 'Téléphone',
                     'en' => 'Phone',
@@ -159,29 +162,32 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_firstname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_firstname'],
                 'required' => true,
-                'private' => false,
+                'private'  => false,
+                'position' => 0,
                 'label' => [
                     'fr' => 'Nom',
                     'en' => 'Lastname'
                 ],
             ],
             '563caf2746398' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_lastname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_lastname'],
                 'required' => true,
-                'private' => false,
+                'private'  => false,
+                'position' => 1,
                 'label' => [
                     'fr' => 'Prénom',
                     'en' => 'Firstname',
                 ],
             ],
             '563caf2f0ddbd' => [
-                'type' => 'lib_text',
+                'type'     => 'lib_text',
                 'required' => true,
-                'private' => true,
+                'private'  => true,
+                'position' => 2,
                 'label' => [
                     'fr' => 'Téléphone',
                     'en' => 'Phone',
@@ -226,29 +232,32 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_firstname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_firstname'],
                 'required' => true,
-                'private' => false,
+                'private'  => false,
+                'position' => 0,
                 'label' => [
                     'fr' => 'Nom',
                     'en' => 'Lastname'
                 ],
             ],
             '563caf2746398' => [
-                'type' => 'lib_text',
-                'tags' => ['participant_lastname'],
+                'type'     => 'lib_text',
+                'tags'     => ['participant_lastname'],
                 'required' => true,
-                'private' => false,
+                'private'  => false,
+                'position' => 1,
                 'label' => [
                     'fr' => 'Prénom',
                     'en' => 'Firstname',
                 ],
             ],
             '563caf2f0ddbd' => [
-                'type' => 'lib_text',
+                'type'     => 'lib_text',
                 'required' => true,
-                'private' => true,
+                'private'  => true,
+                'position' => 2,
                 'label' => [
                     'fr' => 'Téléphone',
                     'en' => 'Phone',

@@ -13,7 +13,7 @@ namespace Tests\Application\Components\Sheet;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\Template\TemplateFactory;
+use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;

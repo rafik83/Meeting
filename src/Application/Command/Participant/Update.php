@@ -10,12 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+
 class Update
 {
     /**
-     * @var int
+     * @var Sheet
      */
-    public $id;
+    public $sheet;
+
+    /**
+     * @var User
+     */
+    public $requester;
+
+    /**
+     * @var Participant
+     */
+    public $participant;
 
     /**
      * @var array
@@ -23,12 +37,17 @@ class Update
     public $data;
 
     /**
-     * @param int   $id
-     * @param array $data
+     * Update constructor.
+     *
+     * @param Sheet       $sheet
+     * @param User        $requester
+     * @param Participant $participant
      */
-    public function __construct($id, array $data)
+    public function __construct(Sheet $sheet, User $requester, Participant $participant)
     {
-        $this->id   = $id;
-        $this->data = $data;
+        $this->sheet       = $sheet;
+        $this->requester   = $requester;
+        $this->participant = $participant;
+        $this->data        = $participant->getData();
     }
 }

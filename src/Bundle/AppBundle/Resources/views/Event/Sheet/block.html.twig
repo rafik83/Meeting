@@ -1,18 +1,11 @@
-{% for i, block in blocks %}
-    <h3>
-        {{ block['label'][app.request.locale] }}
+{% extends 'VimeetAppBundle:Event:base.html.twig' %}
 
-        {% if block.template is defined %}
-            <a href="{{ path('event_sheet_update_block', { 'sheet': sheetDataView.id, 'block': i }) }}" class="btn btn-xs btn-default">
-                {{ 'event.sheet.block.edit'|trans }}
-            </a>
-        {% endif %}
-    </h3>
+{% block title eventView.title %}
 
-    {% if block.template is defined and sheetDataView.data is defined %}
-        {% include 'VimeetAppBundle:Event:blockData.html.twig' with {
-            'template': block.template,
-            'data': sheetDataView.data[i]|default,
-        } %}
-    {% endif %}
-{% endfor %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}
