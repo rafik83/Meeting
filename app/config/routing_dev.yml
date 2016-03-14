@@ -11,12 +11,12 @@ _errors:
     prefix:   /_error
 
 event_login_user:
-    path:     /login/{user}
+    path:     /{_locale}/login/{user}
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Security:loginUser }
 
 admin_login_user:
-    path:     /admin/login/{admin}
+    path:     /admin/{_locale}/login/{admin}
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Security:loginUser }
 

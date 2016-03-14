@@ -41,9 +41,7 @@ class ParticipantInfoGuesser
         $template = $participant->getSheet()->getType()->getParticipantTemplate();
         $data     = $participant->getData();
 
-        $info = $this->taggedInfoGuesser->guess($template, $data, Tag::PARTICIPANT_FIRSTNAME);
-
-        return empty($info) ? '' : $info[0];
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_FIRSTNAME);
     }
 
     /**
@@ -56,9 +54,7 @@ class ParticipantInfoGuesser
         $template = $participant->getSheet()->getType()->getParticipantTemplate();
         $data     = $participant->getData();
 
-        $info = $this->taggedInfoGuesser->guess($template, $data, Tag::PARTICIPANT_LASTNAME);
-
-        return empty($info) ? '' : $info[0];
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_LASTNAME);
     }
 
     /**

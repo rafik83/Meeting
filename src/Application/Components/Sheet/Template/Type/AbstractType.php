@@ -85,7 +85,7 @@ abstract class AbstractType implements TypeInterface
     {
         $label = $this->getOption('label');
 
-        return isset($label[$locale]) ? $label[$locale] : null;
+        return (string) (is_array($label) ? (isset($label[$locale]) ? $label[$locale] : null) : $label);
     }
 
     /**
@@ -127,7 +127,7 @@ abstract class AbstractType implements TypeInterface
      */
     public function isUpdatable()
     {
-        return $this->getUpdatableUntil() > new \DateTime();
+        return $this->getUpdatableUntil() ? $this->getUpdatableUntil() > new \DateTime() : false;
     }
 
     /**

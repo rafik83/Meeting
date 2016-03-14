@@ -1,5 +1,5 @@
 <tr>
-    <td>{{ type.label(app.request.locale) }}</td>
+    <td>{{ type.label(event.availableLocale(app.request.locale)) }}</td>
     <td>{{ ('template.field.type.' ~ type.rawType)|trans  }}</td>
     <td>{{ type.required|boolean_tick }}</td>
     <td>{{ type.private|boolean_tick }}</td>

@@ -3,14 +3,16 @@
 {% import 'VimeetAppBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1>{{ sheet_info }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
-    <h2>Ajouter une transaction</h2>
+    <h2>{{ sheet_info }}</h2>
+
+    <h3>Ajouter une transaction</h3>
 
     {{ form(form) }}
 
     <div class="text-left">
-        <a href="{{ path('admin_sheet_billing', { 'event': sheet.event.id, 'sheet': sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
+        <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
     </div>
 
 {% endblock %}

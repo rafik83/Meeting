@@ -23,18 +23,20 @@ class WhatCheckboxesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['template'] as $name => $step) {
+            $label = isset($step['label'][$options['locale']]) ? $step['label'][$options['locale']] : '';
+
             if (isset($step['template'])) {
                 $builder
                     ->add($name, self::class, [
+                        'label'    => $label,
                         'template' => $step['template'],
                         'locale'   => $options['locale'],
-                        'label'    => $step['label'][$options['locale']],
                     ])
                 ;
             } else {
                 $builder
                     ->add($name, CheckboxType::class, [
-                        'label'    => $step['label'][$options['locale']],
+                        'label'    => $label,
                         'required' => false,
                     ])
                 ;

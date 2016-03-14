@@ -14,10 +14,8 @@
             {{ include('VimeetAppBundle:Event:impersonating.html.twig') }}
 
             {% block locales %}
-                {% if event is defined %}
-                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': event.locales }) }}
-                {% else %}
-                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+                {% if eventView is defined %}
+                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': eventView.locales }) }}
                 {% endif %}
             {% endblock %}
 

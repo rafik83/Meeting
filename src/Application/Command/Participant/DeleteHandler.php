@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Exception\Participant\IsNotLinkedToSheetException;
-use Proximum\Vimeet\Application\Exception\Participant\IsNotOwnerException;
-use Proximum\Vimeet\Application\Exception\Participant\OwnerCanNotBeDeletedException;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class DeleteHandler
@@ -23,38 +22,33 @@ class DeleteHandler
     private $participantRepository;
 
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
+     * @var ParticipantManager
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository)
+    private $participantManager;
+
+    /**
+     * DeleteHandler constructor.
+     *
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param ParticipantManager             $participantManager
+     */
+    public function __construct(ParticipantRepositoryInterface $participantRepository, ParticipantManager $participantManager)
     {
         $this->participantRepository = $participantRepository;
+        $this->participantManager    = $participantManager;
     }
 
     /**
      * @param Delete $delete
      *
-     * @throws IsNotLinkedToSheetException
-     * @throws IsNotOwnerException
-     * @throws OwnerCanNotBeDeletedException
+     * @throws DeleteNotAllowedException
      */
     public function handle(Delete $delete)
     {
-        if (!$delete->sheet->hasUser($delete->requester)) {
-            throw new IsNotLinkedToSheetException('No participant for this user attached on this sheet');
+        if (!$this->participantManager->isUserAllowedToDeleteParticipant($delete->sheet, $delete->participant, $delete->requester)) {
+            throw new DeleteNotAllowedException('You are not allowed to delete this participant');
         }
 
-        $participant = $this->participantRepository->findById($delete->participantId);
-
-        if (null !== $participant && $participant->isOwner()) {
-            throw new OwnerCanNotBeDeletedException('The participant selected to be deleted is owner of the sheet');
-        }
-
-        $requesterParticipant = $this->participantRepository->getParticipantForUserAndSheet($delete->requester, $delete->sheet);
-
-        if (!$requesterParticipant->isOwner()) {
-            throw new IsNotOwnerException('The requester is not owner of the sheet and therefore can not delete a participant');
-        }
-
-        $this->participantRepository->delete($participant);
+        $this->participantRepository->delete($delete->participant);
     }
 }

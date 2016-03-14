@@ -57,11 +57,12 @@ interface ParticipantRepositoryInterface
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
     /**
+     * @param int $eventId
      * @param int $userId
      *
      * @return array
      */
-    public function getAllParticipantForUser($userId);
+    public function getAllParticipantForUser($eventId, $userId);
 
     /**
      * @param int $sheetId
