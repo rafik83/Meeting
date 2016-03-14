@@ -11,19 +11,17 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
-use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
-use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
 use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
 use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
 
 class SheetController extends Controller
 {
