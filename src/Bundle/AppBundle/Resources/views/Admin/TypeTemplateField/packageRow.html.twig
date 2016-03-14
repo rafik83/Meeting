@@ -9,13 +9,13 @@
     </tr>
     {% for product in step.products %}
         <tr>
-            <td>{{ product.label(event.availableLocale(app.request.locale)) }}</td>
+            <td>{{ product.label(locale) }}</td>
             <td>{{ product.type }}</td>
             <td>{{ product.required|boolean_tick }}</td>
             <td>{% if product.type == 'choice_with_description' %}
                     <ul>
                         {% for choice in product.choices %}
-                            <li>{{ choice.label(event.availableLocale(app.request.locale)) }}</li>
+                            <li>{{ choice.label(locale) }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -23,7 +23,7 @@
             <td>
                 <ul>
                     {% for including in product.includedIn %}
-                        <li> {{ including.quantity }} inclus avec {{ including.productThatInclude.label(event.availableLocale(app.request.locale)) }}</li>
+                        <li> {{ including.quantity }} inclus avec {{ including.productThatInclude.label(locale) }}</li>
                     {% endfor %}
                 </ul>
             </td>

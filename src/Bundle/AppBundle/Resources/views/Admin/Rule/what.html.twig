@@ -4,8 +4,8 @@
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>{{ 'who.see_who_but_dont_see'|trans({
-            '%seer%': ('who.the.' ~ seer.identifier)|trans ~ ' "' ~ seer.getTitle(event.availableLocale(app.request.locale)) ~ '"',
-            '%seeable%': ('who.the.' ~ seeable.identifier)|trans ~ ' "' ~ seeable.getTitle(event.availableLocale(app.request.locale)) ~ '"'
+            '%seer%': ('who.the.' ~ seer.identifier)|trans ~ ' "' ~ seer.getTitle(locale) ~ '"',
+            '%seeable%': ('who.the.' ~ seeable.identifier)|trans ~ ' "' ~ seeable.getTitle(locale) ~ '"'
         })|capitalize }}</h2>
 
     {{ form_start(form) }}

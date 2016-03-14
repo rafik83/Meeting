@@ -22,16 +22,16 @@
                 <tr>
                     <td>
                         {% if rule.seerType %}
-                            Type "{{ rule.seerType.getTitle(event.availableLocale(app.request.locale)) }}"
+                            Type "{{ rule.seerType.getTitle(locale) }}"
                         {% elseif rule.seerCategory %}
-                            Catégorie "{{ rule.seerCategory.getTitle(event.availableLocale(app.request.locale)) }}"
+                            Catégorie "{{ rule.seerCategory.getTitle(locale) }}"
                         {% endif %}
                     </td>
                     <td>
                         {% if rule.seeableType %}
-                            Type "{{ rule.seeableType.getTitle(event.availableLocale(app.request.locale)) }}"
+                            Type "{{ rule.seeableType.getTitle(locale) }}"
                         {% elseif rule.seeableCategory %}
-                            Catégorie "{{ rule.seeableCategory.getTitle(event.availableLocale(app.request.locale)) }}"
+                            Catégorie "{{ rule.seeableCategory.getTitle(locale) }}"
                         {% endif %}
                     </td>
                     <td>
