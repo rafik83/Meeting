@@ -5,12 +5,12 @@
 
     <h2>Gestion des participations</h2>
 
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
+    {{ form_start(filter_form) }}
+        {{ form_errors(filter_form) }}
         <div class="row">
-            {{ form_row(form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
-            {{ form_row(form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
-            {{ form_row(form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
+            {{ form_row(filter_form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
+            {{ form_row(filter_form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
+            {{ form_row(filter_form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
             <div class="col-md-3 text-right" style="padding-top: 25px;">
                 {% if filtered %}
                     <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
@@ -18,33 +18,55 @@
                 <button type="submit" class="btn btn-primary">Filtrer</button>
             </div>
         </div>
-    {{ form_end(form) }}
+    {{ form_end(filter_form) }}
 
     <hr />
 
-    <form action="{{ path('admin_sheet_batch', { 'event': event.id }) }}" method="POST">
-        <button type="submit" name="validate" value="1" class="btn btn-primary" data-confirm="Confirmer la validation">Valider</button>
+    {{ form_start(batch_form) }}
+        {{ form_errors(batch_form) }}
+        {{ form_widget(batch_form.validate) }}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#commercial-follow-up">Suivi commercial</button>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Suivi commercial</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.follower) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        {{ form_widget(batch_form.assign) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox" data-check-all=".toto input[type=checkbox]" />
+                        <input type="checkbox" data-check-all=".sheet-table input[type=checkbox]" title="Tout cocher" />
                     </th>
                     <th>Fiche</th>
                     <th>Etat</th>
                     <th>Catégories</th>
                     <th>Type</th>
                     <th>Propriétaire</th>
+                    <th>Suivi commercial</th>
                     <th>Créé le</th>
                     <th>Dernière connexion le</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody class="toto">
+            <tbody class="sheet-table">
                 {% for sheet in sheets.results %}
                     <tr>
                         <td>
-                            <input type="checkbox" name="ids[]" value="{{ sheet.id }}" />
+                            {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
                         </td>
                         <td>{{ sheet.title }}</td>
                         <td>
@@ -53,6 +75,7 @@
                         <td>{{ sheet.categories|join(', ') }}</td>
                         <td>{{ sheet.type }}</td>
                         <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
+                        <td>{{ sheet.follower }}</td>
                         <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
                         <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
                         <td>
@@ -63,7 +86,7 @@
                 {% endfor %}
             </tbody>
         </table>
-    </form>
+    {{ form_end(batch_form) }}
 
     {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 

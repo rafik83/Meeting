@@ -216,17 +216,16 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function markAsValidated(array $ids)
+    public function getIdsByEvent(Event $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->update(Sheet::class, 'sheet')
-            ->set('sheet.state', ':validated')
-            ->setParameter('validated', Sheet::STATE_VALIDATED)
-            ->where('sheet.id IN (:ids)')
-            ->setParameter('ids', $ids);
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
 
-        return $queryBuilder->getQuery()->execute();
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 }

@@ -53,6 +53,13 @@ class SheetListView
     public $owner;
 
     /**
+     * "Suivi commercial"
+     *
+     * @var string
+     */
+    public $follower;
+
+    /**
      * "Date de création de la fiche"
      *
      * @var \DateTimeInterface
@@ -75,10 +82,11 @@ class SheetListView
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
+     * @param string               $follower
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      */
-    public function __construct($id, $title, $state, array $categories, $type, SheetParticipantView $owner, \DateTimeInterface $createdAt, \DateTimeInterface $lastLoginAt = null)
+    public function __construct($id, $title, $state, array $categories, $type, SheetParticipantView $owner, $follower, \DateTimeInterface $createdAt, \DateTimeInterface $lastLoginAt)
     {
         $this->id          = $id;
         $this->title       = $title;
@@ -86,6 +94,7 @@ class SheetListView
         $this->categories  = $categories;
         $this->type        = $type;
         $this->owner       = $owner;
+        $this->follower    = $follower;
         $this->createdAt   = $createdAt;
         $this->lastLoginAt = $lastLoginAt;
     }

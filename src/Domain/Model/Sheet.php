@@ -79,6 +79,8 @@ class Sheet implements BillingInfoInterface
     private $state = self::STATE_INCOMPLETE;
 
     /**
+     * "Suivi commercial"
+     *
      * @var Admin
      */
     private $follower;
@@ -409,13 +411,13 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
-     * Set follower
+     * Assign follower
      *
      * @param Admin $follower
      *
      * @return Sheet
      */
-    public function setFollower(Admin $follower)
+    public function assign(Admin $follower)
     {
         if (!$follower->isOrganizer() && !$follower->isOperator()) {
             throw new \InvalidArgumentException('Follower must be an organizer or operator.');

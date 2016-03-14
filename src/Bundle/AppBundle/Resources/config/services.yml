@@ -140,6 +140,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
+    form_type_.sheet.follower_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FollowerChoiceType
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type

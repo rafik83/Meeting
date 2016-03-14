@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
+use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
 use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -20,6 +22,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
 
 class SheetController extends Controller
 {
@@ -31,25 +34,36 @@ class SheetController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $filters  = [];
-        $form     = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
-        $filtered = $form->handleRequest($request)->isSubmitted() && $form->isValid();
+        // Filters
+        $filters    = [];
+        $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
-            $filters = $form->getData();
+            $filters = $filterForm->getData();
         }
 
+        // Pagination
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
             ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $request->getLocale());
 
+        // Batch
+        $batchForm = $this->createForm(BatchType::class, [], [
+            'ids'    => $sheets->map(function (SheetListView $listView) { return $listView->id; }),
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
+        ]);
+
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
-            'event'    => $event,
-            'sheets'   => $sheets,
-            'form'     => $form->createView(),
-            'filtered' => $filtered,
+            'event'       => $event,
+            'sheets'      => $sheets,
+            'filter_form' => $filterForm->createView(),
+            'filtered'    => $filtered,
+            'batch_form'  => $batchForm->createView(),
         ]);
     }
 
@@ -61,17 +75,40 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
-        $ids      = $request->request->get('ids', []);
-        $validate = $request->request->getBoolean('validate');
+        $batchForm = $this->createForm(BatchType::class, [], [
+            'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
+        ]);
 
-        if (!empty($ids) && $validate) {
-            $result = $this->get('command.sheet.batch_validate_handler')->handle(new BatchValidate($ids));
+        if ($batchForm->handleRequest($request)->isSubmitted()) {
 
-            $this->addFlash('success', new TranschoiceMessage(
-                'flash.admin.sheet_batch.validate.success',
-                $result->count,
-                ['%count%' => $result->count]
-            ));
+            if ($batchForm->isValid()) {
+
+                $ids = $batchForm->get('ids')->getData();
+
+                if ($batchForm->get('validate')->isClicked()) {
+                    $result = $this->get('command.sheet.batch_validate_handler')->handle(new BatchValidate($ids));
+
+                    $this->addFlash('success', new TranschoiceMessage(
+                        'flash.admin.sheet_batch.validate.success',
+                        $result->count,
+                        ['%count%' => $result->count]
+                    ));
+                } elseif ($batchForm->get('assign')->isClicked()) {
+                    $result = $this->get('command.sheet.batch_assign_handler')->handle(new BatchAssign($ids, $batchForm->get('follower')->getData()));
+
+                    $this->addFlash('success', new TranschoiceMessage(
+                        'flash.admin.sheet_batch.validate.assign',
+                        $result->count,
+                        ['%count%' => $result->count]
+                    ));
+                }
+
+            } else {
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
+            }
+
         }
 
         return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
