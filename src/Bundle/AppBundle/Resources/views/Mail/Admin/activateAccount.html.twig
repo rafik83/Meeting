@@ -1,0 +1,11 @@
+{% block subject %}
+    {{ 'admin.mail.activateAccount.subject'|trans({}, 'mail', mail.locale)|html }}
+{% endblock %}
+
+{% block body %}
+    {{ 'admin.mail.activateAccount.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    <a href="{{ url('admin_operator_activate_account', {'token': mail.token}) }}">
+        {{ url('admin_operator_activate_account', {'token': mail.token}) }}
+    </a><br>
+    {{ 'admin.mail.activateAccount.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

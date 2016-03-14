@@ -1,19 +1,37 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
+    {% if  is_granted('ROLE_ORGANIZER') %}
+        <div class="col-xs-12">
+            <a href="{{ path('admin_create_operator') }}" class="btn btn-primary">{{ 'admin.operator.create.link'|trans }}</a>
+        </div>
+    {% endif %}
     <table class="table">
         <thead>
             <tr>
                 <th>Titre</th>
+                <th>Langues</th>
+                <th>Par défaut</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for event in events %}
                 <tr>
-                    <td>{{ event.title }}</td>
                     <td>
-                        <a href="{{ path('admin_event_read', { 'event': event.id }) }}" class="btn btn-primary btn-sm">Voir</a>
+                        <a href="{{ path('admin_event_read', { 'event': event.id }) }}">
+                            {{ event.title }}
+                        </a>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for locale in event.locales %}
+                                <li>{{ locale|language }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ event.fallback|language }}</td>
+                    <td>
                         {% include 'VimeetAppBundle:Admin/Event:links.html.twig' with {event: event} %}
                     </td>
                 </tr>

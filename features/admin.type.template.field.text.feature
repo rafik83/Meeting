@@ -11,16 +11,16 @@ Feature: Administer text type template field
     Given I am logged with "test@test.com" on admin
 
   Scenario: I can add a text field
-    When I go to this page "/admin/event/1/type/1/form/field/add/lib_text/5/to/participant/default"
+    Given I am on this page "/admin/en/event/1/type/1/form/field/add/lib_text/5/to/participant/default"
     And I fill in the following:
-      | admin_lib_text_label_fr       | label fr |
-      | admin_lib_text_label_en       | label en |
+      | admin_lib_text_label_fr | label fr |
+      | admin_lib_text_label_en | label en |
     And I press "admin_lib_text_submit"
     Then the response status code should be 200
     And I should see "flash.admin.type_template_field.create.success"
 
   Scenario: I can update a text field
-    When I go to this page "/admin/event/1/type/1/form/field/update/participant/default/563caf1d9b1cb"
+    Given I am on this page "/admin/en/event/1/type/1/form/field/update/participant/default/563caf1d9b1cb"
     And the "admin_lib_text_label_fr" field should contain "Nom"
     And the "admin_lib_text_label_en" field should contain "Lastname"
     When I fill in the following:
@@ -29,8 +29,8 @@ Feature: Administer text type template field
     And I press "admin_lib_text_submit"
     Then the response status code should be 200
     And I should see "flash.admin.type_template_field.update.success"
-    And I go to this page "/admin/event/1/type/1/form/field/update/participant/default/563caf1d9b1cb"
-    And the "admin_lib_text_label_fr" field should contain "label fr"
+    When I go to this page "/admin/en/event/1/type/1/form/field/update/participant/default/563caf1d9b1cb"
+    Then the "admin_lib_text_label_fr" field should contain "label fr"
     And the "admin_lib_text_label_en" field should contain "label en"
 
 

@@ -13,11 +13,13 @@ default_event:
 
 vimeet_admin:
     resource: '@VimeetAppBundle/Resources/config/routing/admin.yml'
-    prefix:   /admin
+    prefix:   /admin/{_locale}
+    requirements:
+        _locale: fr|en
+    defaults:
+        _locale: %locale%
     host:     '%domain%'
 
 vimeet_event:
     resource: '@VimeetAppBundle/Resources/config/routing/event.yml'
     prefix:   /{_locale}
-    defaults:
-        _locale: %locale%

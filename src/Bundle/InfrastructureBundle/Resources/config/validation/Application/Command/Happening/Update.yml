@@ -1,0 +1,9 @@
+Proximum\Vimeet\Application\Command\Happening\Update:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        description: ~

@@ -1,8 +1,13 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
-    <h2>Ajouter une catégorie</h2>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>{{ 'admin.happening.title'|trans }}</h2>
+
+    <h3>{{ 'admin.happening_category.title'|trans }}</h3>
+
+    <h4>{{ 'admin.happening_category.add'|trans }}</h4>
 
     {{ form_start(form) }}
     {{ form_errors(form) }}

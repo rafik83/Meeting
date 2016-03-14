@@ -57,11 +57,20 @@ class Update
         $this->begin     = $happening->getBegin();
         $this->end       = $happening->getEnd();
 
-        foreach ($happening->getTranslations() as $translation) {
-            $this->translations[$translation->getLocale()] = [
-                'title'       => $translation->getTitle(),
-                'description' => $translation->getDescription(),
-            ];
+        foreach ($happening->getEvent()->getLocales() as $locale) {
+            if ($happening->getTranslations()->containsKey($locale)) {
+                $translation = $happening->getTranslations()->get($locale);
+
+                $this->translations[$locale] = [
+                    'title'       => $translation->getTitle(),
+                    'description' => $translation->getDescription(),
+                ];
+            } else {
+                $this->translations[$locale] = [
+                    'title'       => '',
+                    'description' => '',
+                ];
+            }
         }
 
         foreach ($happening->getSpeakers() as $position => $speaker) {

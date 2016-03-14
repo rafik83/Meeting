@@ -127,6 +127,16 @@ class Type implements WhoInterface
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getTitle($locale)
+    {
+        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
+    }
+
+    /**
      * Get participantTemplate.
      *
      * @return array
@@ -452,15 +462,5 @@ class Type implements WhoInterface
         }
 
         return $this->setTemplateByName($templateName, $template);
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getTitle($locale)
-    {
-        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
     }
 }
