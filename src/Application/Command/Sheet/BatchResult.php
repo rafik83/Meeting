@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class BatchValidateResult
+class BatchResult
 {
     /**
      * @var int

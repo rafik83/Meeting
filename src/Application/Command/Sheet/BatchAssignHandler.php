@@ -32,7 +32,7 @@ class BatchAssignHandler
     /**
      * @param BatchAssign $batchAssign
      *
-     * @return BatchAssignResult
+     * @return BatchResult
      */
     public function handle(BatchAssign $batchAssign)
     {
@@ -44,6 +44,6 @@ class BatchAssignHandler
             $this->sheetRepository->set($sheet->assign($batchAssign->admin));
         }
 
-        return new BatchAssignResult(count($sheets));
+        return new BatchResult(count($sheets));
     }
 }

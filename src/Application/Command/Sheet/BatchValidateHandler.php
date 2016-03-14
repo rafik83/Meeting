@@ -40,7 +40,7 @@ class BatchValidateHandler
     /**
      * @param BatchValidate $batchValidate
      *
-     * @return BatchValidateResult
+     * @return BatchResult
      */
     public function handle(BatchValidate $batchValidate)
     {
@@ -57,6 +57,6 @@ class BatchValidateHandler
             $this->validateHandler->handle(new Validate($sheet));
         }
 
-        return new BatchValidateResult(count($sheets));
+        return new BatchResult(count($sheets));
     }
 }

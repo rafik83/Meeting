@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
-
+use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -49,6 +49,7 @@ class BatchType extends AbstractType
     {
         $resolver->setRequired(['ids', 'event']);
         $resolver->setAllowedTypes('ids', ['array']);
+        $resolver->setDefaults(['data_class' => Batch::class]);
     }
 
     public function getBlockPrefix()

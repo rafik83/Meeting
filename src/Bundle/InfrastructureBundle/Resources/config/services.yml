@@ -533,6 +533,11 @@ services:
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@repository.admin_activate_account_token_repository'
+    command.sheet.batch_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchHandler
+        arguments:
+            - '@command.sheet.batch_validate_handler'
+            - '@command.sheet.batch_assign_handler'
 
     #
     # Security
