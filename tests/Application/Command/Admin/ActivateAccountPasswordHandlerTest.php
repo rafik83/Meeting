@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Command\Admin;
+
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
+use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
+use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
+use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+
+class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
+
+        // Expected
+        $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
+
+        // Mock
+        $adminRepository                = $this->prophesize(AdminRepositoryInterface::class);
+        $encoder                        = $this->prophesize(PasswordEncoderInterface::class);
+        $saltGenerator                  = $this->prophesize(SaltGeneratorInterface::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+
+        $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
+        $encoder->encode(Argument::that(function (Admin $encodedOperator) use ($operator) {
+            return $operator->getEmail() === $encodedOperator->getEmail();
+        }), 'TOTO')->shouldBeCalled()->willReturn('encoded_password');
+        $adminRepository->set($expectedOperator)->shouldBeCalled();
+        $activateAccountTokenRepository->deleteAllForUser($expectedOperator)->shouldBeCalled();
+
+        $activeAccountPassword = new ActivateAccountPassword($operator);
+        $activeAccountPassword->password = 'TOTO';
+
+        $handler = new ActivateAccountPasswordHandler(
+            $adminRepository->reveal(),
+            $encoder->reveal(),
+            $saltGenerator->reveal(),
+            $activateAccountTokenRepository->reveal()
+        );
+        $handler->handle($activeAccountPassword);
+    }
+}

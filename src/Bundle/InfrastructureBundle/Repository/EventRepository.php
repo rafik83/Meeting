@@ -50,7 +50,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
             ->from(Event::class, 'event');
 
         if ($admin->hasEvents()) {
@@ -70,8 +70,8 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title)')
-            ->from('Entity:Event', 'event');
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->from(Event::class, 'event');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -85,7 +85,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->where('event.domain = :domain')
             ->setParameter('domain', $domain);
 
@@ -101,7 +101,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\EventView(event.id, event.title, translations.description, translations.locale, event.locales, event.timeZone)')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('event.domain = :domain')
@@ -120,7 +120,7 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from('Entity:Event', 'event')
+            ->from(Event::class, 'event')
             ->where('event.id = :id')
             ->setParameter('id', $id)
             ->setMaxResults(1);

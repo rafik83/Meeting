@@ -12,15 +12,15 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Components\Template\Validator;
-use Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator;
-use Proximum\Vimeet\Application\Event\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -47,7 +47,7 @@ class AddHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var ActivateAccountTokenRepository
+     * @var ActivateAccountTokenRepositoryInterface
      */
     private $activateAccountTokenRepository;
 
@@ -62,20 +62,22 @@ class AddHandler
     private $eventDispatcher;
 
     /**
-     * @param UserRepositoryInterface        $userRepository
-     * @param ParticipantManager             $participantManager
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
-     * @param ActivateAccountTokenRepository $activateAccountTokenRepository
-     * @param Validator                      $validator
-     * @param EventDispatcherInterface       $eventDispatcher
+     * AddHandler constructor.
+     *
+     * @param UserRepositoryInterface                 $userRepository
+     * @param ParticipantManager                      $participantManager
+     * @param ParticipantRepositoryInterface          $participantRepository
+     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
+     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
+     * @param Validator                               $validator
+     * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         ParticipantManager $participantManager,
         ParticipantRepositoryInterface $participantRepository,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        ActivateAccountTokenRepository $activateAccountTokenRepository,
+        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         Validator $validator,
         EventDispatcherInterface $eventDispatcher
     ) {
@@ -161,6 +163,6 @@ class AddHandler
             $add->locale
         );
 
-        $this->eventDispatcher->dispatch('activate_account', $activateAccountEvent);
+        $this->eventDispatcher->dispatch('user_activate_account', $activateAccountEvent);
     }
 }

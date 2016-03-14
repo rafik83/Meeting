@@ -37,6 +37,9 @@ class SheetController extends Controller
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        // Locale
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         // Filters
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
@@ -49,7 +52,7 @@ class SheetController extends Controller
         // Pagination
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $request->getLocale());
+            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale);
 
         // Batch
         $batchForm = $this->createForm(BatchType::class, [], [

@@ -1,5 +1,4 @@
 greetings: 'Bonjour !'
-greetings: 'Bonjour !'
 
 login:
     title: Connexion
@@ -254,17 +253,51 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
-    sheet:
-        link: Gestion des participations
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
+    event:
+        see:
+            link: Voir
+        see_on_front:
+            link: Voir en front
+        update:
+            link: Modifier
+    rule:
+        link: Qui voit qui
+    type:
+        link: Types de participation
+    category:
+        link: Catégories de participation
+        add: Ajouter
+        update: Modifier
+    sheet:
+        link: Fiches de participation
+    meeting:
+        link: Rendez-vous
     meeting_request:
+        link: Demandes de rendez-vous
         list:
             state:
                 sent: Envoyé
                 approved: Accepté
                 refused: Refusé
                 cancelled: Annulé
+    happening:
+        link: Conférences
+        title: Conférences
+        add: Ajouter
+        update: Modifier
+    happening_category:
+        link: Catégories de conférences
+        title: Catégories de conférences
+        add: Ajouter
+        update: Modifier
+    happening_speaker:
+        link: Intervenants
+        title: Intervenants
+        happenings: Conférences
+        add: Ajouter
+        update: Modifier
     spot:
         link: Lieux
         active:
@@ -309,3 +342,10 @@ admin:
                 admin:
                     events:
                         none: Aucun
+    operator:
+        create:
+            title: Créer un nouveau collaborateur
+            link: Créer collaborateur
+    activateAccount:
+        password:
+            title: Création du mot de passe pour votre compte collaborateur
