@@ -28,7 +28,7 @@ class OrderMergeFactoryTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $event->update('event', ['fr'], 'fr', Event::VAT_MODE_ET, 20);
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], []);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
 
         // Orders to merge
         $orders = [

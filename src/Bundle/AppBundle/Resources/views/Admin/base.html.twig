@@ -14,9 +14,14 @@
         <a href="{{ path('admin_event_list') }}">
             <span class="glyphicon glyphicon-home"></span> Admin
         </a>
-        {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
 
         {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+
+        {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
+
+        {% if  is_granted('ROLE_SUPER_ADMIN') %}
+            | <a href="{{ path('admin_list_admin') }}">{{ 'admin.admin_list.link'|trans }}</a>
+        {% endif %}
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
 

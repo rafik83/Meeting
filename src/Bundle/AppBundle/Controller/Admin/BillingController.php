@@ -30,6 +30,7 @@ class BillingController extends Controller
      */
     public function listAction(Request $request, Event $event, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $locale = $event->getAvailableLocale($request->getLocale());
 
         // Sheet

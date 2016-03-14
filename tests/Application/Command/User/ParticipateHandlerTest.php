@@ -38,14 +38,14 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository       = $this->prophesize(SheetRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
-        $expectedSheet = new Sheet($event, $type, [], []);
+        $expectedSheet = new Sheet($event, $type, [], [], new \DateTime());
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
 
-        $expectedSheetWithParticipant = new Sheet($event, $type, [], []);
+        $expectedSheetWithParticipant = new Sheet($event, $type, [], [], new \DateTime());
         $expectedParticipant          = new Participant($expectedSheetWithParticipant, $user, ['foobar' => 'barfoo'], $owner, true);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal());
+        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal(), new \DateTimeImmutable());
         $handler->handle(new Participate($user, $event, $type, ['foobar' => 'barfoo']));
     }
 }

@@ -3,13 +3,17 @@
 {% block content %}
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
-    <h2>Liste des fiches</h2>
+    <h2>Gestion des participations</h2>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Fiche</th>
+                <th>Catégories</th>
                 <th>Type</th>
+                <th>Propriétaire</th>
+                <th>Créé le</th>
+                <th>Dernière connexion le</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -17,7 +21,11 @@
             {% for sheet in sheets.results %}
                 <tr>
                     <td>{{ sheet.title }}</td>
+                    <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
+                    <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
+                    <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
                     <td>
                         <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
                     </td>

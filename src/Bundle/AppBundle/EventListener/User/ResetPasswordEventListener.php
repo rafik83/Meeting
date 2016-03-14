@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
+namespace Proximum\Vimeet\Bundle\AppBundle\EventListener\User;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
-use Proximum\Vimeet\Application\Event\ResetPasswordEvent;
-use Proximum\Vimeet\Bundle\AppBundle\Mail\ResetPasswordMail;
+use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\User\ResetPasswordMail;
 
 class ResetPasswordEventListener
 {
@@ -44,9 +44,9 @@ class ResetPasswordEventListener
         $mail = new ResetPasswordMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'VimeetAppBundle:Mail:resetPassword.html.twig',
-            'forgot_password',
-            $event->getUser()->getLocale(),
+            'VimeetAppBundle:Mail:User/resetPassword.html.twig',
+            'user_forgot_password',
+            $event->getLocale(),
             $event->getEventView()->title,
             $event->getForgottenPasswordToken()->getToken()
         );

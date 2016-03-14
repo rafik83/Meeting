@@ -58,17 +58,31 @@ class Sheet implements BillingInfoInterface
     private $orders;
 
     /**
-     * @param Event $event
-     * @param Type  $type
-     * @param array $data
-     * @param array $packageData
+     * @var \DateTimeInterface
      */
-    public function __construct(Event $event, Type $type, array $data, array $packageData)
+    private $createdAt;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $lastLoginAt;
+
+    /**
+     * Sheet constructor.
+     *
+     * @param Event              $event
+     * @param Type               $type
+     * @param array              $data
+     * @param array              $packageData
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct(Event $event, Type $type, array $data, array $packageData, \DateTimeInterface $createdAt)
     {
         $this->event        = $event;
         $this->type         = $type;
         $this->data         = $data;
         $this->packageData  = $packageData;
+        $this->createdAt    = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
     }
@@ -181,6 +195,40 @@ class Sheet implements BillingInfoInterface
     public function setBillingData(array $billingData)
     {
         $this->billingData = $billingData;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set lastLoginAt
+     *
+     * @param \DateTimeInterface $lastLoginAt
+     *
+     * @return Sheet
+     */
+    public function setLastLoginAt(\DateTimeInterface $lastLoginAt)
+    {
+        $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
+    }
+
+    /**
+     * Get lastLoginAt
+     *
+     * @return \DateTimeInterface
+     */
+    public function getLastLoginAt()
+    {
+        return $this->lastLoginAt;
     }
 
     /**

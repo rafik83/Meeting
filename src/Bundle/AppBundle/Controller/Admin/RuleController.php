@@ -32,6 +32,8 @@ class RuleController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
@@ -67,6 +69,8 @@ class RuleController extends Controller
      */
     public function whatAction(Request $request, Event $event, $seerIdentifier, $seerId, $seeableIdentifier, $seeableId)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $seer = $this->findWho($seerIdentifier, $seerId);
         $this->notFoundUnless($seer, 'Seer not found.');
 
@@ -102,6 +106,8 @@ class RuleController extends Controller
      */
     public function deleteAction(Event $event, Rule $rule)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($rule->getEvent() !== $event) {
             throw $this->createNotFoundException('Rule not found');
         }

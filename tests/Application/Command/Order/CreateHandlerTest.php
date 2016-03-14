@@ -35,7 +35,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event     = new Event();
         $type      = new Type($event);
-        $sheet     = new Sheet($event, $type, [], []);
+        $sheet     = new Sheet($event, $type, [], [], new \DateTime());
         $createdAt = new \DateTime();
         $cart      = new Cart([], [], $sheet, $createdAt);
 

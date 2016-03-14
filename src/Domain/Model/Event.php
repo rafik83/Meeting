@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Evènement".
  */
-class Event
+class Event implements EventInterface
 {
     /**
      * All Taxes Include : prices include taxes, no additional taxes computed

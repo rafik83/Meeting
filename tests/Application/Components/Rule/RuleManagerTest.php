@@ -65,7 +65,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $event = new Event();
-        $sheet = new Sheet($event, new Type($event), $data, []);
+        $sheet = new Sheet($event, new Type($event), $data, [], new \DateTime());
         $rule  = new Rule($event, new Type($event), $sheet->getType(), $what);
 
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
@@ -82,7 +82,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
     {
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $event = new Event();
-        $sheet = new Sheet($event, new Type($event), [], []);
+        $sheet = new Sheet($event, new Type($event), [], [], new \DateTime());
 
         $types = [
             new Type($event),

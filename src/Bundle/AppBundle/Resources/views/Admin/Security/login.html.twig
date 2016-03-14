@@ -12,6 +12,7 @@
             {% endif %}
 
             {{ form(form) }}
+            <a href="{{ path('admin_forgot_password') }}">{{ 'login.forgotPassword'|trans }}</a>
 
             {% if admins is not empty %}
                 <h3>1-click login</h3>

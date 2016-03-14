@@ -5,7 +5,7 @@ Feature: Login admin
     Given the database is empty
     And the following fixtures files are loaded:
       | app/Event.yml |
-      | Admin.yml     |
+      | Admins.yml     |
 
   Scenario: Login successful
     When I go to this page "/admin/fr/login"
@@ -22,3 +22,12 @@ Feature: Login admin
     And I press "form.login.children.submit.label"
     Then I should be on this page "/admin/fr/login"
     And I should see "Invalid credentials."
+
+  Scenario: Login failed for deactivated admin
+    When I go to this page "http://vimeet.proximum.dev/app_test.php/admin/login"
+    And I fill in "form.login.children.username.label" with "test2@test.com"
+    And I fill in "form.login.children.password.label" with "vimeet_admin"
+    And I press "form.login.children.submit.label"
+    Then I should be on this page "http://vimeet.proximum.dev/app_test.php/admin/login"
+    And I should see "Account is disabled."
+

@@ -30,6 +30,7 @@ class TypeTemplateFieldController extends Controller
      */
     public function listAction(Request $request, Event $event, Type $type)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
@@ -76,6 +77,7 @@ class TypeTemplateFieldController extends Controller
         $group,
         $libType
     ) {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
@@ -142,6 +144,7 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldUpdateAction(Request $request, Event $event, Type $type, $templateName, $group, $row)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $typeView = $this
@@ -208,6 +211,7 @@ class TypeTemplateFieldController extends Controller
      */
     public function fieldPositionAction(Request $request, Event $event, Type $type, $templateName, $group)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfTypeNotInEvent($event, $type);
 
         $fieldsOrder     = $request->request->get('order', []);

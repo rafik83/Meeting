@@ -1,7 +1,13 @@
 {% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'danger' } %}
     {% for message in app.session.flashbag.get(type) %}
         <div class="alert alert-{{ mappedType }}">
-            {{ message is iterable ? message.message|trans(message.arguments, 'flashes') : message|trans({}, 'flashes') }}
+            {% if message.count is defined %}
+                {{ message|transchoice(message.count, message.arguments, message.domain, message.locale) }}
+            {% elseif message.message is defined %}
+                {{ message|trans(message.arguments, message.domain, message.locale) }}
+            {% else %}
+                {{ message|trans({}, 'flashes') }}
+            {% endif %}
         </div>
     {% endfor %}
 {% endfor %}

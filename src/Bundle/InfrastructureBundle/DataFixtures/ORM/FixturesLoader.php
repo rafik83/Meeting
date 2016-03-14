@@ -39,6 +39,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Category.yml',
             __DIR__ . '/Sheet.yml',
             __DIR__ . '/Rule.yml',
+            __DIR__ . '/EventASDDays2016.yml',
             __DIR__ . '/User.yml',
             __DIR__ . '/Admin.yml',
             __DIR__ . '/Participant.yml',
