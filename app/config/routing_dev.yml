@@ -11,7 +11,7 @@ _errors:
     prefix:   /_error
 
 event_login_user:
-    path:     /login/{user}
+    path:     /{_locale}/login/{user}
     methods:  [GET]
     defaults: { _controller: VimeetAppBundle:Event/Security:loginUser }
 

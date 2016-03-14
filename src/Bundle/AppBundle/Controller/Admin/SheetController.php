@@ -32,6 +32,8 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $locale   = $event->getAvailableLocale($request->getLocale());
+
         $filters  = [];
         $form     = $this->createFilterForm(FilterType::class, $filters);
         $filtered = $form->handleRequest($request)->isSubmitted() && $form->isValid();
@@ -42,7 +44,7 @@ class SheetController extends Controller
 
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $request->getLocale());
+            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale);
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'    => $event,

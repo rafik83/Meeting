@@ -139,7 +139,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllParticipantForUser($userId)
+    public function getAllParticipantForUser($eventId, $userId)
     {
         $queryBuilder = $this
             ->entityManager
@@ -147,7 +147,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant.id')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->setParameter('userId', $userId);
+            ->setParameter('userId', $userId)
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->setParameter('eventId', $eventId);
 
         return $queryBuilder->getQuery()->getResult();
     }

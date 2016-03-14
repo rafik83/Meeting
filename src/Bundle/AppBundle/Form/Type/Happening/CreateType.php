@@ -11,9 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Create;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateType extends HappeningType
@@ -37,15 +34,5 @@ class CreateType extends HappeningType
     public function getBlockPrefix()
     {
         return 'happening_create';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
-        }
     }
 }

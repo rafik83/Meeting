@@ -2,13 +2,13 @@
 
 {% import 'VimeetAppBundle::macro.html.twig' as macro %}
 
-{% block title 'Liste des intervenants' %}
+{% block title 'admin.happening_speaker.title'|trans %}
 
 {% block content %}
 
-    <h1>{{ event.title }}</h1>
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
-    <h2>{{ block('title') }}</h2>
+    <h2>{{ 'admin.happening_speaker.title'|trans }}</h2>
 
     <table class="table">
         <thead>
@@ -16,11 +16,11 @@
             <th>Nom</th>
             <th>Fonction</th>
             <th>Société</th>
-            <th>Sous-événements</th>
+            <th>{{ 'admin.happening_speaker.happenings'|trans }}</th>
             <th>
-                {% if speakers is not empty %}
-                    <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter un intervenant</a>
-                {% endif %}
+                <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
+                    {{ 'admin.happening_speaker.add'|trans }}
+                </a>
             </th>
         </tr>
         </thead>
@@ -50,7 +50,7 @@
             {% else %}
                 <tr>
                     <td colspan="4" class="text-center">
-                        Aucun intervenant. <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success">Ajouter un intervenant</a>
+                        Aucun intervenant.
                     </td>
                 </tr>
             {% endfor %}
