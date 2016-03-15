@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -107,7 +108,7 @@ class Impersonate
             return $this->adminProvider->loadUserByUsername($decodedToken['from']);
         }
 
-        throw new \Exception('invalid provider');
+        throw new BadCredentialsException('Invalid provider');
     }
 
     /**
@@ -118,13 +119,13 @@ class Impersonate
     private function checkToken(array $decodedToken)
     {
         if (!isset($decodedToken['from']) || !isset($decodedToken['from']) || !isset($decodedToken['from'])) {
-            throw new \Exception('token params invalid');
+            throw new BadCredentialsException('token params invalid');
         }
 
         $tokenCheck = $this->getTokenCheck($decodedToken['from'], $decodedToken['to']);
 
         if ($tokenCheck !== $decodedToken['check']) {
-            throw new \Exception('token check invalid');
+            throw new BadCredentialsException('Token check invalid');
         }
     }
 
@@ -139,7 +140,7 @@ class Impersonate
         $decodedToken = unserialize(base64_decode($token));
 
         if (!$decodedToken) {
-            throw new \Exception('token invalid');
+            throw new BadCredentialsException('Token invalid');
         }
 
         return $decodedToken;

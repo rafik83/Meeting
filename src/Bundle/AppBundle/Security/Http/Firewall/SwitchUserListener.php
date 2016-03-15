@@ -140,8 +140,7 @@ class SwitchUserListener implements ListenerInterface
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
      *
-     * @throws \Exception
-     * @throws \LogicException
+     * @throws AccessDeniedException
      */
     public function handle(GetResponseEvent $event)
     {
@@ -152,23 +151,28 @@ class SwitchUserListener implements ListenerInterface
         }
 
         if ('_exit' === $request->get($this->switchUserParameter)) {
-            $this->attemptExitUser();
-
             if (null === $request->get('_redirect')) {
-                throw new \Exception('Missing _redirect url parameter');
+                throw new AccessDeniedException('Missing _redirect url parameter');
             }
 
-            $response = new RedirectResponse($request->get('_redirect'), 302);
-            $event->setResponse($response);
-
-            return;
-        } else {
             try {
-                $token = $this->attemptSwitchUser($request);
-                $this->tokenStorage->setToken($token);
-            } catch (AuthenticationException $e) {
-                throw new \LogicException(sprintf('Switch User failed: "%s"', $e->getMessage()));
+                $this->attemptExitUser();
+                $response = new RedirectResponse($request->get('_redirect'), 302);
+                $event->setResponse($response);
+
+                return;
+            } catch (\Exception $exception) {
+                throw new AccessDeniedException(
+                    sprintf('Impossible to exit impersonation : "%s"', $exception->getMessage())
+                );
             }
+        }
+
+        try {
+            $token = $this->attemptSwitchUser($request);
+            $this->tokenStorage->setToken($token);
+        } catch (\Exception $exception) {
+            throw new AccessDeniedException(sprintf('Switch User failed: "%s"', $exception->getMessage()));
         }
 
         $request->query->remove($this->switchUserParameter);
