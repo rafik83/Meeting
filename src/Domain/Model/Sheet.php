@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 
 /**
  * "Fiche de participation".
@@ -420,7 +421,7 @@ class Sheet implements BillingInfoInterface
     public function assign(Admin $follower)
     {
         if (!$follower->isOrganizer() && !$follower->isOperator()) {
-            throw new \InvalidArgumentException('Follower must be an organizer or operator.');
+            throw new SheetException('Follower must be an organizer or operator.');
         }
 
         $this->follower = $follower;
