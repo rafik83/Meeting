@@ -8,9 +8,7 @@ Proximum\Vimeet\Domain\Model\Admin:
         firstname: "Layla"
         lastname: "GOI"
         role: 'ROLE_SUPER_ADMIN'
-        events:
-            - '@event_rdv_carnot_2016'
-            - '@event_asddays_2016'
+        events: []
 
     user_orga:
         __construct: false
