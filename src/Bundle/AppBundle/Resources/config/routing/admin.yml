@@ -300,6 +300,12 @@ admin_sheet:
         id: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:list }
+admin_sheet_details:
+    path: /event/{event}/sheet/{sheet}
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Sheet:details }
 
 #
 # Billing

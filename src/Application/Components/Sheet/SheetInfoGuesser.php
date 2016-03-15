@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
 
 class SheetInfoGuesser
 {
@@ -74,5 +75,19 @@ class SheetInfoGuesser
         }
 
         return sprintf('#%s', $sheet->getId());
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function guessSheetPackage(Sheet $sheet, $locale)
+    {
+        $template = $sheet->getTypePackageTemplate();
+        $data     = $sheet->getPackageData();
+
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_PACKAGE, $locale);
     }
 }

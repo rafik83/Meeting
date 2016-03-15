@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Participant;
 
-use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
+use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
 
@@ -41,7 +41,7 @@ class ParticipantInfoGuesser
         $template = $participant->getSheet()->getType()->getParticipantTemplate();
         $data     = $participant->getData();
 
-        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_FIRSTNAME);
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_LASTNAME);
     }
 
     /**
@@ -54,7 +54,7 @@ class ParticipantInfoGuesser
         $template = $participant->getSheet()->getType()->getParticipantTemplate();
         $data     = $participant->getData();
 
-        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_LASTNAME);
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_FIRSTNAME);
     }
 
     /**
@@ -64,8 +64,21 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantInfo(Participant $participant)
     {
-        $string = trim($this->guessParticipantLastName($participant) . ' ' . $this->guessParticipantFirstName($participant));
+        $string = trim($this->guessParticipantFirstName($participant) . ' ' . $this->guessParticipantLastName($participant));
 
         return empty($string) ? sprintf('#%d', $participant->getId()) : $string;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return string
+     */
+    public function guessParticipantPhone(Participant $participant)
+    {
+        $template = $participant->getSheet()->getType()->getParticipantTemplate();
+        $data     = $participant->getData();
+
+        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::PARTICIPANT_PHONE);
     }
 }

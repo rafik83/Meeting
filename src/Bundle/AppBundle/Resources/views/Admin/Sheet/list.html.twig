@@ -5,10 +5,24 @@
 
     <h2>Gestion des participations</h2>
 
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            {{ form_row(form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
+            <div class="col-md-3 text-right" style="padding-top: 25px;">
+                {% if filtered %}
+                    <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
     <table class="table">
         <thead>
             <tr>
                 <th>Fiche</th>
+                <th>Etat</th>
                 <th>Catégories</th>
                 <th>Type</th>
                 <th>Propriétaire</th>
@@ -21,12 +35,16 @@
             {% for sheet in sheets.results %}
                 <tr>
                     <td>{{ sheet.title }}</td>
+                    <td>
+                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                    </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
                     <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
                     <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
                     <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
                     <td>
+                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
                         <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
                     </td>
                 </tr>
@@ -34,7 +52,7 @@
         </tbody>
     </table>
 
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': sheets}) }}
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>

@@ -264,6 +264,9 @@ class Order implements BillingInfoInterface
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
+     *
+     * @throws NotAddedRowException
+     * @throws RowNotFoundException
      */
     public function updateRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {

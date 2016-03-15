@@ -14,6 +14,7 @@ final class Tag
 {
     const PARTICIPANT_FIRSTNAME = 'participant_firstname';
     const PARTICIPANT_LASTNAME  = 'participant_lastname';
+    const PARTICIPANT_PHONE     = 'participant_phone';
     const BILLING_NAME          = 'billing_name';
     const BILLING_ADDRESS       = 'billing_address';
     const BILLING_CITY          = 'billing_city';
@@ -25,6 +26,7 @@ final class Tag
     const BILLING_VAT_NUMBER    = 'billing_vat_number';
     const BILLING_EXTRA         = 'billing_extra';
     const SHEET_ORGANIZATION    = 'sheet_organization';
+    const SHEET_PACKAGE         = 'sheet_package';
 
     /**
      * @return array

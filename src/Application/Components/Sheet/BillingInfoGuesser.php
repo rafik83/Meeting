@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\BillingInfoInterface;
+use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
 
 class BillingInfoGuesser
 {

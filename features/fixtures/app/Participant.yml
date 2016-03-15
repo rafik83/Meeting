@@ -7,8 +7,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: "Dupond"
             563caf2746398: "Jean"
+            563caf1d9b1cb: "Dupond"
             563caf2f0ddbd: "0909090909"
 
     # Proximum participants
@@ -19,8 +19,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563cb0568a3bb: MARTIN
             563cb05cb81ec: Jean
+            563cb0568a3bb: MARTIN
     proximum_participant_exposant:
         __construct: false
         user: "@proximum_user_exposant"
@@ -28,8 +28,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: BOUCHON
-            563caf1d9b1cb: François
+            563caf2746398: François
+            563caf1d9b1cb: BOUCHON
     proximum_participant_carnot:
         __construct: false
         user: "@proximum_user_carnot"
@@ -37,8 +37,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: MIGNOT
-            563caf1d9b1cb: Isabelle
+            563caf2746398: Isabelle
+            563caf1d9b1cb: MIGNOT
     proximum_participant_admin:
         __construct: false
         user: "@proximum_user_admin"
@@ -46,8 +46,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: GOI
-            563caf1d9b1cb: Layla
+            563caf2746398: Layla
+            563caf1d9b1cb: GOI
     proximum_participant_test:
         __construct: false
         user: "@proximum_user_test"
@@ -55,8 +55,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: LAROSE
-            563caf1d9b1cb: Vincent
+            563caf2746398: Vincent
+            563caf1d9b1cb: LAROSE
     proximum_participant_ui:
         __construct: false
         user: "@proximum_user_ui"
@@ -64,8 +64,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: GAGNARD
-            563caf1d9b1cb: Julien
+            563caf2746398: Julien
+            563caf1d9b1cb: GAGNARD
 
     # Random
     participant_random_1:
@@ -75,8 +75,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            563caf2746398: <firstName()>
+            563caf1d9b1cb: <lastName()>
     participant_random_2:
         __construct: false
         user: "@user_random_1"
@@ -84,8 +84,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            563caf2746398: <firstName()>
+            563caf1d9b1cb: <lastName()>
     participant_random_3:
         __construct: false
         user: "@user_random_1"
@@ -93,8 +93,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            563caf2746398: <firstName()>
+            563caf1d9b1cb: <lastName()>
     participant_random_4:
         __construct: false
         user: "@user_random_1"
@@ -102,8 +102,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            563caf2746398: <firstName()>
+            563caf1d9b1cb: <lastName()>
     participant_random_1{10..30}:
         __construct: false
         user: "@user_random_1"
@@ -111,6 +111,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            563caf2746398: <firstName()>
+            563caf1d9b1cb: <lastName()>
             563caf2f0ddbd: "0809090909"

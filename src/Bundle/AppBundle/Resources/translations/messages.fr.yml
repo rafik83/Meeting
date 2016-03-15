@@ -39,6 +39,10 @@ event:
         product:
             cancel: Annuler
     sheet:
+        state:
+            complete: Complète
+            incomplete: Incomplète
+            validated: Validée
         participant:
             already_exists: Ce participant est déjà ajouté
             email: Adresse email

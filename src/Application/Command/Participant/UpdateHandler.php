@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
-use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -29,15 +29,25 @@ class UpdateHandler
     private $participantManager;
 
     /**
-     * DeleteHandler constructor.
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * UpdateHandler constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantManager             $participantManager
+     * @param Validator                      $validator
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository, ParticipantManager $participantManager)
-    {
+    public function __construct(
+        ParticipantRepositoryInterface $participantRepository,
+        ParticipantManager $participantManager,
+        Validator $validator
+    ) {
         $this->participantRepository = $participantRepository;
         $this->participantManager    = $participantManager;
+        $this->validator             = $validator;
     }
 
     /**
@@ -54,7 +64,7 @@ class UpdateHandler
         }
 
         // Check the constraint on the data (required)
-        (new DataConstraintChecker())->check($update->data, $update->participant->getSheet()->getType()->getParticipantTemplate());
+        $this->validator->validateParticipantData($update->participant->getSheet(), $update->data);
 
         // Update participant
         $update->participant->setData($update->data);

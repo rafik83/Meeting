@@ -13,6 +13,7 @@ namespace Tests\Application\Command\Participant;
 use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -46,9 +47,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantManager = $this->prophesize(ParticipantManager::class);
         $participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)->shouldBeCalled()->willReturn(true);
 
+        $validator = $this->prophesize(Validator::class);
+
         $update  = new Update($sheet, $user, $participant);
         $update->data = ['foobar' => 'foobar'];
-        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal());
+        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal(), $validator->reveal());
         $handler->handle($update);
     }
 
@@ -76,9 +79,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantManager = $this->prophesize(ParticipantManager::class);
         $participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)->shouldBeCalled()->willReturn(false);
 
+        $validator = $this->prophesize(Validator::class);
+
         $update  = new Update($sheet, $user, $participant);
         $update->data = ['foobar' => 'foobar'];
-        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal());
+        $handler = new UpdateHandler($participantRepository->reveal(), $participantManager->reveal(), $validator->reveal());
         $handler->handle($update);
     }
 }

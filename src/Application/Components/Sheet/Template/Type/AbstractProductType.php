@@ -26,6 +26,7 @@ abstract class AbstractProductType extends AbstractType
         $resolver->setDefaults([
             'quantity'   => 1,
             'includedIn' => [],
+            'tags'       => [],
         ]);
     }
 
@@ -47,5 +48,21 @@ abstract class AbstractProductType extends AbstractType
     public function getIncludedIn()
     {
         return $this->getOption('includedIn');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        return (array) $this->getOption('tags');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasTag($tag)
+    {
+        return in_array($tag, $this->getTags());
     }
 }

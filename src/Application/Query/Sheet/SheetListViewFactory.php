@@ -51,32 +51,44 @@ class SheetListViewFactory
 
     /**
      * @param Event  $event
+     * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param string $locale
      *
      * @return PaginatedResult
      */
-    public function paginate(Event $event, $page, $limit, $locale)
+    public function paginate(Event $event, array $filters, $page, $limit, $locale)
     {
-        $sheets = $this->sheetRepository->paginate($page, $limit, $event, $locale);
-
+        $sheets          = $this->sheetRepository->paginate($filters, $page, $limit, $event, $locale);
         $sheets->results = array_map(function (Sheet $sheet) use ($locale) {
-            return new SheetListView(
-                $sheet->getId(),
-                $this->sheetInfoGuesser->guessSheetInfo($sheet),
-                array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
-                $sheet->getType()->getTitle($locale),
-                new SheetParticipantView(
-                    $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner()),
-                    $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner()),
-                    $sheet->getOwner()->getUser()->getEmail()
-                ),
-                $sheet->getCreatedAt(),
-                $sheet->getLastLoginAt()
-            );
+            return $this->createFromSheet($sheet, $locale);
         }, $sheets->results);
 
         return $sheets;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return SheetListView
+     */
+    public function createFromSheet(Sheet $sheet, $locale)
+    {
+        return new SheetListView(
+            $sheet->getId(),
+            $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $sheet->getState(),
+            array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
+            $sheet->getType()->getTitle($locale),
+            new SheetParticipantView(
+                $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner()),
+                $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner()),
+                $sheet->getOwner()->getUser()->getEmail()
+            ),
+            $sheet->getCreatedAt(),
+            $sheet->getLastLoginAt()
+        );
     }
 }

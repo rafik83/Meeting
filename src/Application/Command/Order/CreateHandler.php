@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Application\Components\Sheet\StateSetter;
 
 class CreateHandler
 {
@@ -45,24 +46,32 @@ class CreateHandler
     private $participantManager;
 
     /**
+     * @var StateSetter
+     */
+    private $stateSetter;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param CartRepositoryInterface  $cartRepository
      * @param OrderManager             $orderManager
      * @param ParticipantManager       $participantManager
+     * @param StateSetter              $stateSetter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SheetRepositoryInterface $sheetRepository,
         CartRepositoryInterface $cartRepository,
         OrderManager $orderManager,
-        ParticipantManager $participantManager
+        ParticipantManager $participantManager,
+        StateSetter $stateSetter
     ) {
         $this->orderRepository    = $orderRepository;
         $this->sheetRepository    = $sheetRepository;
         $this->cartRepository     = $cartRepository;
         $this->orderManager       = $orderManager;
         $this->participantManager = $participantManager;
+        $this->stateSetter        = $stateSetter;
     }
 
     /**
@@ -92,6 +101,9 @@ class CreateHandler
         $this->cartRepository->delete($create->cart);
 
         $create->sheet->setPackageData($sheetData);
+
+        $this->stateSetter->setState($create->sheet);
+
         $this->sheetRepository->set($create->sheet);
     }
 }

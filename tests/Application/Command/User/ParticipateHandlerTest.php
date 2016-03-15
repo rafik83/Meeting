@@ -12,13 +12,14 @@ namespace Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +46,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedParticipant          = new Participant($expectedSheetWithParticipant, $user, ['foobar' => 'barfoo'], $owner, true);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal(), new \DateTimeImmutable());
+        $validator = $this->prophesize(Validator::class);
+
+        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal(), $validator->reveal(), new \DateTimeImmutable());
         $handler->handle(new Participate($user, $event, $type, ['foobar' => 'barfoo']));
     }
 }
