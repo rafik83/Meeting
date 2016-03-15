@@ -152,7 +152,7 @@ class SwitchUserListener implements ListenerInterface
         }
 
         if ('_exit' === $request->get($this->switchUserParameter)) {
-            $this->attemptExitUser($request);
+            $this->attemptExitUser();
 
             if (null === $request->get('_redirect')) {
                 throw new \Exception('Missing _redirect url parameter');
@@ -229,11 +229,9 @@ class SwitchUserListener implements ListenerInterface
     /**
      * Attempts to exit from an already switched user.
      *
-     * @param Request $request
-     *
      * @throws AuthenticationCredentialsNotFoundException
      */
-    private function attemptExitUser(Request $request)
+    private function attemptExitUser()
     {
         if (false === $original = $this->getOriginalToken($this->tokenStorage->getToken())) {
             throw new AuthenticationCredentialsNotFoundException('Could not find original Token object.');
