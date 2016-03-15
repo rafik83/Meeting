@@ -36,7 +36,7 @@ class AdminEventAccessVoter extends Voter
      */
     public function supports($attribute, $subject)
     {
-        return !($attribute !== 'PERMISSION_EVENT_ACCESS' && !$subject instanceof Event);
+        return $attribute === 'PERMISSION_EVENT_ACCESS' && $subject instanceof Event;
     }
 
     /**
