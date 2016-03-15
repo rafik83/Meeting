@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate;
 
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -66,16 +68,24 @@ class Impersonate
     }
 
     /**
-     * @param string $adminEmail
-     * @param string $userEmail
+     * @param Admin $admin
+     * @param User  $user
      *
      * @return string
      */
-    public function getEncodedToken($adminEmail, $userEmail)
+    public function getEncodedToken(Admin $admin, User $user)
     {
-        $tokenString = $this->getTokenCheck($adminEmail, $userEmail);
+        $tokenString = $this->getTokenCheck($admin->getEmail(), $user->getEmail());
 
-        return base64_encode(serialize(['from' => $adminEmail, 'to' => $userEmail, 'check' => $tokenString]));
+        return base64_encode(
+            serialize(
+                [
+                    'from'  => $admin->getEmail(),
+                    'to'    => $user->getEmail(),
+                    'check' => $tokenString,
+                ]
+            )
+        );
     }
 
     /**

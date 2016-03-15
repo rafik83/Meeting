@@ -31,7 +31,7 @@ class SheetController extends Controller
 
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $request->query->getInt('page', 1), 20, $locale);
+            ->paginate($event, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
             'event'  => $event,

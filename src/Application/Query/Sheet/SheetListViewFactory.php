@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -36,17 +38,28 @@ class SheetListViewFactory
     private $participantInfoGuesser;
 
     /**
+     * @var Impersonate
+     */
+    private $impersonate;
+
+    /**
      * SheetOwnerView constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param ParticipantInfoGuesser   $participantInfoGuesser
+     * @param Impersonate              $impersonate
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        Impersonate $impersonate
+    ) {
         $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->impersonate            = $impersonate;
     }
 
     /**
@@ -54,14 +67,15 @@ class SheetListViewFactory
      * @param int    $page
      * @param int    $limit
      * @param string $locale
+     * @param Admin  $admin
      *
      * @return PaginatedResult
      */
-    public function paginate(Event $event, $page, $limit, $locale)
+    public function paginate(Event $event, $page, $limit, $locale, Admin $admin)
     {
         $sheets = $this->sheetRepository->paginate($page, $limit, $event, $locale);
 
-        $sheets->results = array_map(function (Sheet $sheet) use ($locale) {
+        $sheets->results = array_map(function (Sheet $sheet) use ($locale, $admin) {
             return new SheetListView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetInfo($sheet),
@@ -73,7 +87,8 @@ class SheetListViewFactory
                     $sheet->getOwner()->getUser()->getEmail()
                 ),
                 $sheet->getCreatedAt(),
-                $sheet->getLastLoginAt()
+                $sheet->getLastLoginAt(),
+                $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser())
             );
         }, $sheets->results);
 
