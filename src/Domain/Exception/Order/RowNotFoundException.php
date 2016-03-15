@@ -8,11 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Exception\Order;
+namespace Proximum\Vimeet\Domain\Exception\Order;
 
-use Proximum\Vimeet\Domain\Model\Exception\DomainException;
-
-class RowNotFoundException extends DomainException
+class RowNotFoundException extends OrderException
 {
     /**
      * NotAddedRowException constructor.
