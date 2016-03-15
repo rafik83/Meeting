@@ -307,8 +307,6 @@ services:
         public: false
         arguments:
             - '@sonata.intl.templating.helper.locale'
-            - '@security.token_storage'
-            - '@security.impersonate'
         tags:
             - { name: 'twig.extension' }
 

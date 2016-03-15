@@ -10,11 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Twig;
 
-use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Domain\Model\User;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Role\SwitchUserRole;
 
 class AppExtension extends \Twig_Extension
 {
@@ -24,25 +21,11 @@ class AppExtension extends \Twig_Extension
     protected $localeHelper;
 
     /**
-     * @var TokenStorage
-     */
-    protected $tokenStorage;
-
-    /**
-     * @var Impersonate
-     */
-    protected $impersonate;
-
-    /**
      * @param LocaleHelper $localeHelper
-     * @param TokenStorage $tokenStorage
-     * @param Impersonate  $impersonate
      */
-    public function __construct(LocaleHelper $localeHelper, TokenStorage $tokenStorage, Impersonate $impersonate)
+    public function __construct(LocaleHelper $localeHelper)
     {
         $this->localeHelper = $localeHelper;
-        $this->tokenStorage = $tokenStorage;
-        $this->impersonate  = $impersonate;
     }
 
     /**
@@ -55,17 +38,6 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFunctions()
-    {
-        return [
-            new \Twig_SimpleFunction('getImpersonatingUser', [$this, 'getImpersonatingUser']),
-            new \Twig_SimpleFunction('impersonate', [$this, 'impersonate']),
         ];
     }
 
@@ -150,33 +122,6 @@ class AppExtension extends \Twig_Extension
         asort($items);
 
         return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $items));
-    }
-
-    /**
-     * @return null|User
-     */
-    public function getImpersonatingUser()
-    {
-        $roles = $this->tokenStorage->getToken()->getRoles();
-
-        foreach ($roles as $role) {
-            if ($role instanceof SwitchUserRole) {
-                return $role->getSource()->getUser();
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $adminEmail
-     * @param string $userEmail
-     *
-     * @return string
-     */
-    public function impersonate($adminEmail, $userEmail)
-    {
-        return $this->impersonate->getEncodedToken($adminEmail, $userEmail);
     }
 
     /**

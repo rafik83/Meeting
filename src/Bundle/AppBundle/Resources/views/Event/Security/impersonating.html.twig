@@ -1,0 +1,10 @@
+{% if impersonatingUser %}
+    <div class="well">
+        {{ impersonatingUser.firstname ~ ' ' ~ impersonatingUser.lastname }}
+        ({{ impersonatingUser.email }})
+
+        <a href="{{ path('event', {'_switchto': '_exit', '_redirect': url('admin_sheet', {'event': eventView.id})}) }}" class="btn btn-danger">
+            {{ 'admin.sheet.exit_impersonation'|trans }}
+        </a>
+    </div>
+{% endif %}
