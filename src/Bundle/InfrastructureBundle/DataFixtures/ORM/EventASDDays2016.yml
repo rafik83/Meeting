@@ -889,4 +889,4 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_delegation_fr:
         __construct: ['@event_asddays_2016_type_delegation', fr, "Délégation"]
     event_asddays_2016_type_delegation_en:
-    __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]
+        __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]
