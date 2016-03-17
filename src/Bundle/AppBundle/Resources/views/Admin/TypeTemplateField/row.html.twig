@@ -16,6 +16,7 @@
         {% for type in types %}
             {% include 'VimeetAppBundle:Admin/TypeTemplateField:field.html.twig' with {
                 event: event,
+                locale: locale,
                 typeId: typeId,
                 type: type,
                 templateName: templateName,

@@ -128,6 +128,24 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: form.type }
+    form_type.category_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\CategoryChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: form.type }
+    form_type.type_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: form.type }
+    form_type_.sheet.follower_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FollowerChoiceType
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type
@@ -277,13 +295,13 @@ services:
             - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
-    event_listener.activate_account_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ActivateAccountEventListener
+    event_listener.user.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ActivateAccountEventListener
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
         tags:
-            - { name: 'kernel.event_listener', event: 'activate_account', method: 'sendToken' }
+            - { name: 'kernel.event_listener', event: 'user_activate_account', method: 'sendToken' }
     event_listener.change_mail_address_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ChangeMailAddressEventListener
         arguments:
@@ -291,6 +309,14 @@ services:
             - '%mailer_sender%'
         tags:
             - { name: 'kernel.event_listener', event: 'change_mail', method: 'sendToken' }
+    event_listener.admin.activate_account_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ActivateAccountEventListener
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: 'kernel.event_listener', event: 'admin_activate_account', method: 'sendToken' }
+
     event_listener.login_event_listener:
         class: Proximum\Vimeet\Bundle\AppBundle\EventListener\LoginEventListener
         arguments:
@@ -299,6 +325,13 @@ services:
             - '@request_stack'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
+    event_listener.mail_event_subscriber:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\MailEventSubscriber
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: kernel.event_subscriber }
 
     #
     # Twig extension

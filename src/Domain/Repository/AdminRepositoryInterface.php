@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface AdminRepositoryInterface
@@ -52,4 +53,11 @@ interface AdminRepositoryInterface
      * @return Admin[]
      */
     public function all();
+
+    /**
+     * @param Event $event
+     *
+     * @return Admin[]
+     */
+    public function getFollowers(Event $event);
 }

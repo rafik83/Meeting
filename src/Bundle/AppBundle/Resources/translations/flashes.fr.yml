@@ -128,12 +128,22 @@ flash:
                 success: Le sous événement a bien été créé
             update:
                 success: Le sous événement a bien été mis à jour
+        sheet_batch:
+            validate:
+                success: "{0} aucune fiche n'a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées"
+            assign:
+                success: "{0} aucune fiche n'a été assignée.|{1} 1 fiche a été assignée à %name%|]1,Inf[ %count% fiches ont été assignées à %name%"
         admin:
             create:
                 success: Le nouvel utilisateur a bien été créé
         sheet:
             add_comment:
                 success: Votre commentaire a bien été ajouté
+        operator:
+            create:
+                success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
+        activate_account:
+            success: Votre compte a été activé avec succès
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

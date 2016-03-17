@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\CategoryChoiceType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterType extends AbstractType
 {
@@ -22,7 +25,17 @@ class FilterType extends AbstractType
     {
         $builder
             ->add('state', StateChoiceType::class, ['placeholder' => ''])
+            ->add('category', CategoryChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
+            ->add('type', TypeChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
         ;
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['event', 'locale']);
     }
 
     /**

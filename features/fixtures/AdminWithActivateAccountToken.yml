@@ -1,0 +1,30 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    admin_1:
+        __construct:
+            - "test@test.com"
+            - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO" #vimeet_admin
+            - "YzzBNEhw7I6H5xPuziQEAPAsg5g="
+            - "fr"
+            - "Truc"
+            - "Muche"
+            - "ROLE_ORGANIZER"
+        events:
+            - '@event_rdv_carnot_2016'
+    admin_2:
+        __construct:
+            - "test2@test.com"
+            - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO" #vimeet_admin
+            - "YzzBNEhw7I6H5xPuziQEAPAsg5g="
+            - "fr"
+            - "Bidule"
+            - "Chouette"
+            - "ROLE_OPERATOR"
+        events:
+            - '@event_rdv_carnot_2016'
+
+Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken:
+    activate_account_token_1:
+        __construct:
+             - "@admin_1"
+             - azertyuiopqsdfghjklmwxcvbn
+             - <dateTimeBetween('+10 days', '+14 days')>

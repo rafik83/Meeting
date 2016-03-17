@@ -33,9 +33,11 @@ class TypeTemplateFieldController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfTypeNotInEvent($event, $type);
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $typeView = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewById($type->getId(), $event->getAvailableLocale($request->getLocale()));
+            ->getTypeViewById($type->getId(), $locale);
 
         $packageObject = $this
             ->get('vimeet_infrastructure.application.components.product.product_builder')
@@ -53,6 +55,7 @@ class TypeTemplateFieldController extends Controller
             'typeView'      => $typeView,
             'packageObject' => $packageObject,
             'templates'     => $templates,
+            'locale'        => $locale,
         ]);
     }
 

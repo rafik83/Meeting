@@ -30,6 +30,24 @@ admin_create_admin:
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
 #
+# Create Operator
+#
+
+admin_create_operator:
+    path: /operator/create
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:create }
+
+#
+# Activate Operator account
+#
+
+admin_operator_activate_account:
+    path: /activate-account/{token}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/ActivateAccount:password }
+
+#
 # Forgot password
 #
 admin_forgot_password:
@@ -210,7 +228,7 @@ admin_spot_list:
     defaults: { _controller: VimeetAppBundle:Admin/Spot:list }
 
 admin_spot_batch:
-    path: /event/{event}/batch
+    path: /event/{event}/spot/batch
     requirements:
         event: \d+
     methods: [POST]
@@ -286,8 +304,15 @@ admin_sheet_details:
     path: /event/{event}/sheet/{sheet}
     requirements:
         id: \d+
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:details }
+admin_sheet_batch:
+    path: /event/{event}/sheet/batch
+    requirements:
+        id: \d+
+    methods: [POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Sheet:batch }
 
 #
 # Billing

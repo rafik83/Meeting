@@ -25,7 +25,7 @@ Feature: Login admin
 
   Scenario: Login failed for deactivated admin
     When I go to this page "/admin/fr/login"
-    And I fill in "form.login.children.username.label" with "test2@test.com"
+    And I fill in "form.login.children.username.label" with "test3@test.com"
     And I fill in "form.login.children.password.label" with "vimeet_admin"
     And I press "form.login.children.submit.label"
     Then I should be on this page "admin/fr/login"

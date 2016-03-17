@@ -118,8 +118,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.activate_account_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository
+    repository.user_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.change_mail_token_repository:
@@ -137,6 +137,10 @@ services:
             - '@vimeet.components.paginator'
     repository.sheet.comment_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\CommentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.admin_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -184,8 +188,8 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@components.token.activate_account_token_generator'
-            - '@repository.activate_account_token_repository'
+            - '@components.token.user.activate_account_token_generator'
+            - '@repository.user_activate_account_token_repository'
             - '@template.validator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
@@ -469,7 +473,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@repository.activate_account_token_repository'
+            - '@repository.user_activate_account_token_repository'
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
@@ -497,6 +501,16 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.sheet.validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.sheet.batch_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.validate_handler'
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:
@@ -507,6 +521,31 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
             - '@repository.sheet.comment_repository'
+    command.sheet.batch_assign_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+    command.operator.create_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.admin.activate_account_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.admin_activate_account_token_repository'
+    command.sheet.batch_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchHandler
+        arguments:
+            - '@command.sheet.batch_validate_handler'
+            - '@command.sheet.batch_assign_handler'
 
     #
     # Security
@@ -645,8 +684,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
-    components.token.activate_account_token_generator:
-        class: Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator
+    components.token.user.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator
+        arguments:
+            - '@datetime'
+    components.token.admin.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
             - '@datetime'
     components.token.change_mail_token_generator:

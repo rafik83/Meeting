@@ -42,7 +42,6 @@ class SheetRepository implements SheetRepositoryInterface
      * @param EntityManager           $entityManager
      * @param Paginator               $paginator
      * @param TypeRepositoryInterface $typeRepository
-     *
      */
     public function __construct(
         EntityManager $entityManager,
@@ -80,9 +79,10 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, type, typeTranslation')
+            ->select('sheet, type, category, typeTranslation')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
+            ->join('type.categories', 'category')
             ->setParameter('event', $event)
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
@@ -92,6 +92,18 @@ class SheetRepository implements SheetRepositoryInterface
             $queryBuilder
                 ->andWhere('sheet.state = :state')
                 ->setParameter('state', $filters['state']);
+        }
+
+        if (isset($filters['category'])) {
+            $queryBuilder
+                ->andWhere('category = :category')
+                ->setParameter('category', $filters['category']);
+        }
+
+        if (isset($filters['type'])) {
+            $queryBuilder
+                ->andWhere('type = :type')
+                ->setParameter('type', $filters['type']);
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
@@ -145,11 +157,27 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->where('sheet.id = :sheetId')
             ->setParameter('sheetId', $sheetId);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsById(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -176,12 +204,28 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->where('sheet.type IN (:types)')
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdsByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return array_keys($queryBuilder->getQuery()->getResult());
     }
 }

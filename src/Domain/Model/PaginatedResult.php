@@ -104,4 +104,14 @@ class PaginatedResult implements Countable, Iterator
     {
         return count($this->results);
     }
+
+    /**
+     * @param \Closure $closure
+     *
+     * @return array
+     */
+    public function map(\Closure $closure)
+    {
+        return array_map($closure, $this->results);
+    }
 }

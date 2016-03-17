@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Exception\Order;
+namespace Proximum\Vimeet\Domain\Exception\Order;
 
 class NotAddedRowException extends OrderException
 {

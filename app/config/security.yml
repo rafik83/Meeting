@@ -60,6 +60,7 @@ security:
         - { path: ^/admin/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
+        - { path: ^/admin/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
 
     role_hierarchy:

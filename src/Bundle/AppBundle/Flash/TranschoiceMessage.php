@@ -20,11 +20,11 @@ class TranschoiceMessage extends TransMessage
     /**
      * TranschoiceMessage constructor.
      *
-     * @param string   $message
-     * @param int      $count
-     * @param array    $arguments
-     * @param string   $domain
-     * @param string   $locale
+     * @param string $message
+     * @param int    $count
+     * @param array  $arguments
+     * @param string $domain
+     * @param string $locale
      */
     public function __construct($message, $count, array $arguments = [], $domain = 'flashes', $locale = null)
     {

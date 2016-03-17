@@ -65,4 +65,12 @@ class RouterAdapter implements RouterInterface
 
         throw new \RuntimeException('Unknown subject type.');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateSheet(Sheet $sheet)
+    {
+        return $this->router->generate('event_sheet', ['sheet' => $sheet->getId()]);
+    }
 }

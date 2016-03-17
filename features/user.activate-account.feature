@@ -4,10 +4,10 @@ Feature: Activate Account
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | UserWithActivateAccountTokenAndSheet.yml                  |
+      | app/Template.yml                         |
+      | app/Event.yml                            |
+      | app/Type.yml                             |
+      | UserWithActivateAccountTokenAndSheet.yml |
 
   Scenario: I can activate my account
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/azertyuiopqsdfghjklmwxcvbn"
@@ -45,9 +45,9 @@ Feature: Activate Account
     | Téléphone                                 | 0101010202            |
     | Fonction                                  | position4             |
     Then I press "form.add_participant.children.submit.label"
-    And the "activate_account" mail should be sent to "test_activate@test.fr"
-    And the "activate_account" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/"
-    Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/" link in the "activate_account" mail
+    And the "user_activate_account" mail should be sent to "test_activate@test.fr"
+    And the "user_activate_account" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/"
+    Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/" link in the "user_activate_account" mail
     And the response status code should be 200
     And I should see "greetings"
     And I should see "login.link"

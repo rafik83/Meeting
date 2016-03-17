@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 
 /**
  * "Fiche de participation".
@@ -77,6 +78,13 @@ class Sheet implements BillingInfoInterface
      * @var string
      */
     private $state = self::STATE_INCOMPLETE;
+
+    /**
+     * "Suivi commercial"
+     *
+     * @var Admin
+     */
+    private $follower;
 
     /**
      * Sheet constructor.
@@ -376,10 +384,48 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
+     * @return Sheet
+     */
+    public function markAsValidated()
+    {
+        $this->state = self::STATE_VALIDATED;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isValidated()
     {
         return self::STATE_VALIDATED === $this->state;
+    }
+
+    /**
+     * Get follower
+     *
+     * @return Admin
+     */
+    public function getFollower()
+    {
+        return $this->follower;
+    }
+
+    /**
+     * Assign follower
+     *
+     * @param Admin $follower
+     *
+     * @return Sheet
+     */
+    public function assign(Admin $follower)
+    {
+        if (!$follower->isOrganizer() && !$follower->isOperator()) {
+            throw new SheetException('Follower must be an organizer or operator.');
+        }
+
+        $this->follower = $follower;
+
+        return $this;
     }
 }

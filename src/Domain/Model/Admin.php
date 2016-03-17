@@ -58,7 +58,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->role      = $role;
-        $this->events = new ArrayCollection();
+        $this->events    = new ArrayCollection();
     }
 
     /**
@@ -182,5 +182,29 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         return $this->events->exists(function ($index, Event $eventLinked) use ($event) {
             return $eventLinked->getId() === $event->getId();
         });
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrganizer()
+    {
+        return $this->role === self::ROLE_ORGANIZER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOperator()
+    {
+        return $this->role === self::ROLE_OPERATOR;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 }

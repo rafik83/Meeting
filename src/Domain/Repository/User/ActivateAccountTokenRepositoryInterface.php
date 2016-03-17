@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository;
+namespace Proximum\Vimeet\Domain\Repository\User;
 
-use Proximum\Vimeet\Domain\Model\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface ActivateAccountTokenRepositoryInterface
