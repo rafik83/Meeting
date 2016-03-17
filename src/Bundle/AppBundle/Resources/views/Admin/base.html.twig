@@ -19,8 +19,11 @@
 
         {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
 
-        {% if  is_granted('ROLE_SUPER_ADMIN') %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
             | <a href="{{ path('admin_list_admin') }}">{{ 'admin.admin_list.link'|trans }}</a>
+        {% endif %}
+        {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+            | <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
         {% endif %}
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
