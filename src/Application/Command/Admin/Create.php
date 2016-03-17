@@ -48,11 +48,18 @@ class Create
     public $locale;
 
     /**
-     * @param string $locale
+     * @var \DateTimeInterface
      */
-    public function __construct($locale)
+    public $date;
+
+    /**
+     * @param string             $locale
+     * @param \DateTimeInterface $date
+     */
+    public function __construct($locale, \DateTimeInterface $date)
     {
         $this->locale   = $locale;
         $this->password = substr(md5(uniqid()), 0, 8);
+        $this->date     = $date;
     }
 }
