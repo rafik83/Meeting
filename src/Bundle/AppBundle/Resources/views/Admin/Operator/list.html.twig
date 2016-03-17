@@ -29,6 +29,7 @@
             <th>{{ 'admin.operator_list.table.title.email'|trans }}</th>
             <th>{{ 'admin.operator_list.table.title.lastLoginAt'|trans }}</th>
             <th>{{ 'admin.operator_list.table.title.events'|trans }}</th>
+            <th>{{ 'admin.operator_list.table.title.actions'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +45,9 @@
                             <li>{{ event.title }}</li>
                         {% endfor %}
                     </ul>
+                </td>
+                <td>
+                    <a class="btn btn-default" href="{{ path('admin_update_operator', {'operator': operator.id}) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}
