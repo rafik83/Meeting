@@ -91,11 +91,13 @@ class SecurityController extends Controller
     {
         $impersonatingUser = null;
 
-        $roles = $this->get('security.token_storage')->getToken()->getRoles();
+        if (null !== $token = $this->get('security.token_storage')->getToken()) {
+            $roles = $token->getRoles();
 
-        foreach ($roles as $role) {
-            if ($role instanceof SwitchUserRole) {
-                $impersonatingUser = $role->getSource()->getUser();
+            foreach ($roles as $role) {
+                if ($role instanceof SwitchUserRole) {
+                    $impersonatingUser = $role->getSource()->getUser();
+                }
             }
         }
 
