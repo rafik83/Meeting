@@ -6,11 +6,13 @@ Feature: Create Operator
     And the following fixtures files are loaded:
       | app/Template.yml |
       | app/Event.yml    |
-      | Admins.yml        |
+      | Admins.yml       |
     Given I am logged with "test2@test.com" on admin
 
   Scenario: I can create an Operator with the events of the organizer
     When I go to this page "/admin/fr/event"
+    And I follow "admin.operator_list.link"
+    Then I should be on this page "/admin/fr/operator"
     And I follow "admin.operator.create.link"
     Then I should be on this page "/admin/fr/operator/create"
     Then I fill in the following:
