@@ -601,6 +601,12 @@ form:
         children:
             submit:
                 label: Filtrer
+    filter_operator:
+        event:
+            all: Tous les événements
+        children:
+            submit:
+                label: Filtrer
     sheet_comment:
         children:
             submit:

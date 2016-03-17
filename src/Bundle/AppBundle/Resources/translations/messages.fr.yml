@@ -348,10 +348,27 @@ admin:
                 admin:
                     events:
                         none: Aucun
+    operator_list:
+        filter:
+            empty_filter: Vider les filtres
+        link: Liste des collaborateurs
+        title: Liste des collaborateurs
+        action:
+            create: Créer un nouveau collaborateur
+        table:
+            title:
+                lastname: Nom
+                firstname: Prénom
+                email: Email
+                lastLoginAt: Date de dernière connexion
+                events: Événéments
+            content:
+                admin:
+                    events:
+                        none: Aucun
     operator:
         create:
             title: Créer un nouveau collaborateur
-            link: Créer collaborateur
     activateAccount:
         password:
             title: Création du mot de passe pour votre compte collaborateur
