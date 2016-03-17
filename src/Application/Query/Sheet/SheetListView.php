@@ -25,6 +25,13 @@ class SheetListView
     public $title;
 
     /**
+     * "Etat de la fiche"
+     *
+     * @var string
+     */
+    public $state;
+
+    /**
      * "Catégorie"
      *
      * @var array
@@ -44,6 +51,13 @@ class SheetListView
      * @var SheetParticipantView
      */
     public $owner;
+
+    /**
+     * "Suivi commercial"
+     *
+     * @var string
+     */
+    public $follower;
 
     /**
      * "Date de création de la fiche"
@@ -69,9 +83,11 @@ class SheetListView
      *
      * @param int                  $id
      * @param string               $title
+     * @param string               $state
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
+     * @param string               $follower
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
@@ -79,18 +95,22 @@ class SheetListView
     public function __construct(
         $id,
         $title,
+        $state,
         array $categories,
         $type,
         SheetParticipantView $owner,
+        $follower,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt,
         $impersonationToken
     ) {
         $this->id                 = $id;
         $this->title              = $title;
+        $this->state       = $state;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
+        $this->follower    = $follower;
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;

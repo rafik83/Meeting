@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Exception\Order;
+namespace Proximum\Vimeet\Domain\Exception\Order;
 
-use Proximum\Vimeet\Domain\Model\Exception\DomainException;
+use Proximum\Vimeet\Domain\Exception\DomainException;
 
 class OrderException extends DomainException
 {

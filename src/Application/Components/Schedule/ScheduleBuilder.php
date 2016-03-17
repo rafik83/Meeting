@@ -19,8 +19,6 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Domain\View\ScheduleSlotView;
-use Proximum\Vimeet\Domain\View\ScheduleView;
 
 class ScheduleBuilder
 {

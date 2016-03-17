@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Components\Sheet\DataConstraintChecker;
+use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -30,6 +30,11 @@ class ParticipateHandler
     private $participantRepository;
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
      * @var \DateTimeInterface
      */
     private $dateTime;
@@ -37,15 +42,18 @@ class ParticipateHandler
     /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param Validator                      $validator
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
+        Validator $validator,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
+        $this->validator             = $validator;
         $this->dateTime              = $dateTime;
     }
 
@@ -56,11 +64,12 @@ class ParticipateHandler
      */
     public function handle(Participate $participate)
     {
-        // Check the constraint on the data (required)
-        (new DataConstraintChecker())->check($participate->data, $participate->type->getParticipantTemplate());
-
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], [], $this->dateTime);
+
+        // Check the constraint on the data (required)
+        $this->validator->validateParticipantData($sheet, $participate->data);
+
         $this->sheetRepository->add($sheet);
 
         // Create a new participant

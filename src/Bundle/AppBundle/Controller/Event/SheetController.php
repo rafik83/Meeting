@@ -69,6 +69,9 @@ class SheetController extends Controller
      */
     public function blockAction(Request $request, EventView $eventView, Sheet $sheet, $locale, $block)
     {
+        // We must refresh sheet to make behat feature working ...
+        $this->getDoctrine()->getManager()->refresh($sheet);
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if (!$eventView->hasLocale($locale)) {

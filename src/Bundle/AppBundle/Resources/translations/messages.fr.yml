@@ -39,6 +39,10 @@ event:
         product:
             cancel: Annuler
     sheet:
+        state:
+            complete: Complète
+            incomplete: Incomplète
+            validated: Validée
         participant:
             already_exists: Ce participant est déjà ajouté
             email: Adresse email
@@ -249,6 +253,14 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    sheet:
+        link: Fiches de participation
+        impersonate: Impersonnation
+        exit_impersonation: Quitter l'impersonnation
+        details:
+            comments:
+                title: Commentaires
+                author: 'Par %firstname% %lastname%, le %date%'
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     event:
@@ -266,10 +278,6 @@ admin:
         link: Catégories de participation
         add: Ajouter
         update: Modifier
-    sheet:
-        link: Fiches de participation
-        impersonate: Impersonnation
-        exit_impersonation: Quitter l'impersonnation
     meeting:
         link: Rendez-vous
     meeting_request:
@@ -340,3 +348,10 @@ admin:
                 admin:
                     events:
                         none: Aucun
+    operator:
+        create:
+            title: Créer un nouveau collaborateur
+            link: Créer collaborateur
+    activateAccount:
+        password:
+            title: Création du mot de passe pour votre compte collaborateur

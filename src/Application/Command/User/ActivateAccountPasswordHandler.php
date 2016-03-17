@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class ActivateAccountPasswordHandler

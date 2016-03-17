@@ -171,4 +171,12 @@ abstract class Row
     {
         return $value;
     }
+
+    /**
+     * @return bool
+     */
+    public function isTranslatable()
+    {
+        return false;
+    }
 }

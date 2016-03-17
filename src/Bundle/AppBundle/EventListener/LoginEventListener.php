@@ -13,7 +13,8 @@ namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class LoginEventListener
 {
@@ -28,26 +29,36 @@ class LoginEventListener
     private $sheetRepository;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * LoginEventListener constructor.
      *
      * @param EventRepositoryInterface $eventRepository
      * @param SheetRepositoryInterface $sheetRepository
+     * @param RequestStack             $requestStack
      */
-    public function __construct(EventRepositoryInterface $eventRepository, SheetRepositoryInterface $sheetRepository)
-    {
+    public function __construct(
+        EventRepositoryInterface $eventRepository,
+        SheetRepositoryInterface $sheetRepository,
+        RequestStack $requestStack
+    ) {
         $this->eventRepository = $eventRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->requestStack    = $requestStack;
     }
 
     /**
      * Set last login datetime on user sheets
      *
-     * @param InteractiveLoginEvent $interactiveLoginEvent
+     * @param AuthenticationEvent $authenticationEvent
      */
-    public function onLogin(InteractiveLoginEvent $interactiveLoginEvent)
+    public function onLoginSuccess(AuthenticationEvent $authenticationEvent)
     {
-        $user = $interactiveLoginEvent->getAuthenticationToken()->getUser();
-        $host = $interactiveLoginEvent->getRequest()->getHost();
+        $user = $authenticationEvent->getAuthenticationToken()->getUser();
+        $host = $this->requestStack->getMasterRequest()->getHost();
 
         $event = $this->eventRepository->getEventByDomain($host);
 

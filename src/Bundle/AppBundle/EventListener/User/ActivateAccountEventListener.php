@@ -1,0 +1,56 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Bundle\AppBundle\EventListener\User;
+
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
+use Proximum\Vimeet\Bundle\AppBundle\Mail\User\ActivateAccountMail;
+
+class ActivateAccountEventListener
+{
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
+     * @var string
+     */
+    private $sender;
+
+    /**
+     * @param MailerInterface $mailer
+     * @param string          $sender
+     */
+    public function __construct(MailerInterface $mailer, $sender)
+    {
+        $this->mailer = $mailer;
+        $this->sender = $sender;
+    }
+
+    /**
+     * @param ActivateAccountEvent $event
+     */
+    public function sendToken(ActivateAccountEvent $event)
+    {
+        $mail = new ActivateAccountMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'VimeetAppBundle:Mail:User/activateAccount.html.twig',
+            'user_activate_account',
+            $event->getUser()->getLocale(),
+            $event->getEvent(),
+            $event->getActivateAccountToken()->getToken()
+        );
+
+        $this->mailer->send($mail);
+    }
+}

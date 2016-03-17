@@ -30,6 +30,7 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
+     * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param Event  $event
@@ -37,7 +38,7 @@ interface SheetRepositoryInterface
      *
      * @return PaginatedResult
      */
-    public function paginate($page, $limit, Event $event, $locale);
+    public function paginate(array $filters, $page, $limit, Event $event, $locale);
 
     /**
      * @param int|User  $user
@@ -64,6 +65,13 @@ interface SheetRepositoryInterface
     public function getSheetById($sheetId);
 
     /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsById(array $ids);
+
+    /**
      * @param Category|int $category
      * @param User|int     $user
      *
@@ -78,4 +86,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getUserSheetsByTypes(User $user, array $types);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function getIdsByEvent(Event $event);
 }

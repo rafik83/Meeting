@@ -1,0 +1,141 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+
+    <h2>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Participants</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Participants</th>
+                    <td>
+                        <ul>
+                            {% for participant in details.participants %}
+                                <li>{{ participant }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email du propriétaire</th>
+                    <td>{{ details.ownerEmail }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone du propriétaire</th>
+                    <td>{{ details.ownerPhone }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3>Informations de facturation</h3>
+            <p>{{ details.billing.organization }}</p>
+            <p>{{ details.billing.name }}</p>
+            <p>
+                {{ details.billing.address }}<br>
+                {{ details.billing.zipcode }} {{ details.billing.city }}<br>
+                {% if details.billing.country %}{{ details.billing.country|country }}{% endif %}
+            </p>
+            <p>N° de TVA intracommunautaire : {{ details.billing.vat_number }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Forfait</h3>
+            {{ details.package }}
+        </div>
+        <div class="col-md-6">
+            <h3>Commandes</h3>
+            <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
+        </div>
+    </div>
+
+    {% for key, block in details.blocks %}
+        <h3>{{ block.title }}</h3>
+        <table class="table table-condensed">
+            {% for row in block.rows %}
+                <tr>
+                    <th class="col-md-3">{{ row.label }}</th>
+                    <td class="col-md-9">{{ row.value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+
+    <h3>Rendez-vous</h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Demandes validée
+                </div>
+                <div class="panel-body text-center h1">
+                    {{ details.approvedRequests }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Propositions en attente
+                </div>
+                <div class="panel-body text-center h1">
+                    {{ details.pendingPropositions }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Demandes refusées
+                </div>
+                <div class="panel-body text-center h1">
+                    {{ details.refusedRequests }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Propositions refusées
+                </div>
+                <div class="panel-body text-center h1">
+                    {{ details.refusePropositions }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>{{ 'admin.sheet.details.comments.title'|trans }}</h3>
+    <div class="row">
+        {% for comment in details.comments %}
+            <blockquote>
+                {{ comment.text|nl2br }}
+                <br>
+            <span class="label label-default">
+                {{ 'admin.sheet.details.comments.author'|trans({
+                    '%firstname%': comment.author.firstname,
+                    '%lastname%': comment.author.lastname,
+                    '%date%': comment.createdAt|date('d/m/Y H:i')
+                }) }}
+            </span>
+            </blockquote>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        {{ form_start(form) }}
+        <div class="col-xs-10">
+            {{ form_row(form.text) }}
+        </div>
+        <div class="col-xs-2">
+            {{ form_row(form.submit) }}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

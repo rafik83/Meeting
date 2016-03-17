@@ -76,4 +76,12 @@ class ProductRadioRow extends AbstractProduct
     {
         return Choice::createFromChoices($this->getChoices(), $value)->getDescription($locale);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayableValue($value, $locale)
+    {
+        return $value ? $this->getChoiceLabel($value['value'], $locale) : null;
+    }
 }

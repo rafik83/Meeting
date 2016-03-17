@@ -16,11 +16,14 @@ class RowNotFoundException extends TemplateException
      * RowNotFoundException constructor.
      *
      * @param string          $key
+     * @param array           $availables
      * @param int             $code
      * @param \Exception|null $previous
      */
-    public function __construct($key, $code = 0, \Exception $previous = null)
+    public function __construct($key, array $availables, $code = 0, \Exception $previous = null)
     {
-        parent::__construct(sprintf('Row not found for the key "%s".', $key), $code, $previous);
+        $message = sprintf('Row not found for the key "%s". Availables are "%s".', $key, implode('", "', $availables));
+
+        parent::__construct($message, $code, $previous);
     }
 }

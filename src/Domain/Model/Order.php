@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Exception\Order\NotAddedRowException;
-use Proximum\Vimeet\Domain\Model\Exception\Order\RowAlreadyExistsException;
-use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
+use Proximum\Vimeet\Domain\Exception\Order\NotAddedRowException;
+use Proximum\Vimeet\Domain\Exception\Order\RowAlreadyExistsException;
+use Proximum\Vimeet\Domain\Exception\Order\RowNotFoundException;
 
 /**
  * "Commande"
@@ -264,6 +264,9 @@ class Order implements BillingInfoInterface
      * @param string $description
      * @param float  $unitPrice
      * @param int    $quantity
+     *
+     * @throws NotAddedRowException
+     * @throws RowNotFoundException
      */
     public function updateRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
     {

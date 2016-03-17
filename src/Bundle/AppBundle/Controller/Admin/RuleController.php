@@ -34,11 +34,13 @@ class RuleController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $form = $this->createForm(WhoSeeWhoType::class, [], [
             'action' => $this->generateUrl('admin_rule_list', ['event' => $event->getId()]),
             'method' => 'POST',
             'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
+            'locale' => $locale,
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -51,9 +53,10 @@ class RuleController extends Controller
         $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
 
         return $this->render('VimeetAppBundle:Admin/Rule:list.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
-            'rules' => $rules,
+            'form'   => $form->createView(),
+            'event'  => $event,
+            'rules'  => $rules,
+            'locale' => $locale,
         ]);
     }
 
@@ -71,6 +74,8 @@ class RuleController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $seer = $this->findWho($seerIdentifier, $seerId);
         $this->notFoundUnless($seer, 'Seer not found.');
 
@@ -80,7 +85,7 @@ class RuleController extends Controller
         $rule = $this->findRule($event, $seer, $seeable);
         $this->notFoundUnless($rule, 'Rule not found.');
 
-        $form = $this->createWhatForm($rule, $event->getAvailableLocale($request->getLocale()));
+        $form = $this->createWhatForm($rule, $locale);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
@@ -95,6 +100,7 @@ class RuleController extends Controller
             'event'   => $event,
             'seer'    => $seer,
             'seeable' => $seeable,
+            'locale'  => $locale,
         ]);
     }
 

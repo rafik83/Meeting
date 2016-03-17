@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
+use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataView;
+
 class SheetPreview
 {
     /**

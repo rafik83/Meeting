@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Order\CreateHandler;
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
+use Proximum\Vimeet\Application\Components\Sheet\StateSetter;
 use Proximum\Vimeet\Domain\Model\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -52,12 +53,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $cartRepository->delete($cart)->shouldBeCalled();
         $sheetRepository->set($sheet)->shouldBeCalled();
 
+        $stateSetter = $this->prophesize(StateSetter::class);
+        $stateSetter->setState($sheet)->shouldBeCalled();
+
         $handler = new CreateHandler(
             $orderRepository->reveal(),
             $sheetRepository->reveal(),
             $cartRepository->reveal(),
             $orderManager->reveal(),
-            $participantManager->reveal()
+            $participantManager->reveal(),
+            $stateSetter->reveal()
         );
         $handler->handle($create);
     }

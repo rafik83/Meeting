@@ -118,8 +118,8 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.activate_account_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ActivateAccountTokenRepository
+    repository.user_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.change_mail_token_repository:
@@ -135,6 +135,14 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    repository.sheet.comment_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\CommentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.admin_activate_account_token_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -166,25 +174,31 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.validator'
             - '@datetime'
     vimeet_infrastructure.vimeet.application.command.participant.update_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@template.validator'
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@components.token.activate_account_token_generator'
-            - '@repository.activate_account_token_repository'
+            - '@components.token.user.activate_account_token_generator'
+            - '@repository.user_activate_account_token_repository'
+            - '@template.validator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateBlockHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.template_factory'
+            - '@template.validator'
+            - '@sheet.state_setter'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
@@ -210,6 +224,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.validator'
     vimeet_infrastructure.vimeet.application.command.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
@@ -405,6 +420,7 @@ services:
             - '@vimeet_infrastructure.repository.cart_repository'
             - '@vimeet_infrastructure.application.components.order.order_manager'
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@sheet.state_setter'
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -457,7 +473,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@repository.activate_account_token_repository'
+            - '@repository.user_activate_account_token_repository'
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
@@ -485,12 +501,51 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.sheet.validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.sheet.batch_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.validate_handler'
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+    command.sheet.add_comment_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
+        arguments:
+            - '@repository.sheet.comment_repository'
+    command.sheet.batch_assign_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+    command.operator.create_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.admin.activate_account_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@repository.admin_activate_account_token_repository'
+    command.sheet.batch_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchHandler
+        arguments:
+            - '@command.sheet.batch_validate_handler'
+            - '@command.sheet.batch_assign_handler'
 
     #
     # Security
@@ -524,7 +579,6 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
-            - '@request_stack'
 
     #
     # Components
@@ -584,13 +638,28 @@ services:
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
-
     sheet.sheet_preview_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
         arguments:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@sheet.block.block_data_view_factory'
+    sheet.state_setter:
+        class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
+        arguments:
+            - '@template.validator'
+    sheet.sheet_details_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@components.sheet.billing_view_factory'
+            - '@sheet.block.block_data_view_factory'
+            - '@repository.sheet.comment_repository'
+    sheet.block.block_data_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 
     #
     # Rule Component
@@ -615,8 +684,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator
         arguments:
             - '@datetime'
-    components.token.activate_account_token_generator:
-        class: Proximum\Vimeet\Application\Components\Token\ActivateAccountTokenGenerator
+    components.token.user.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator
+        arguments:
+            - '@datetime'
+    components.token.admin.activate_account_token_generator:
+        class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
             - '@datetime'
     components.token.change_mail_token_generator:
@@ -630,7 +703,7 @@ services:
     vimeet_infrastructure.application.components.sheet.participant_info_guesser:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
 
     #
     # Paginator Component
@@ -740,15 +813,10 @@ services:
             - '@components.sheet.order_view_factory'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@components.sheet.billing_view_factory'
-
-    components.sheet.tagged_info_guesser:
-        class: Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser
-        arguments:
-            - '@template.template_factory'
     components.sheet.billing_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
         arguments:
-            - '@components.sheet.tagged_info_guesser'
+            - '@template.tagged_info_guesser'
 
     #
     # Notification component
@@ -780,6 +848,14 @@ services:
     #
     template.template_factory:
         class: Proximum\Vimeet\Application\Components\Template\TemplateFactory
+    template.validator:
+        class: Proximum\Vimeet\Application\Components\Template\Validator
+        arguments:
+            - '@template.template_factory'
+    template.tagged_info_guesser:
+        class: Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser
+        arguments:
+            - '@template.template_factory'
 
     #
     # Spot component

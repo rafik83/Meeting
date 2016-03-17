@@ -1,0 +1,54 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Tests\Application\Command\Sheet;
+
+use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Comment;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
+
+class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $dateTime = new \DateTime();
+        $event    = new Event();
+        $type     = new Type($event);
+        $sheet    = new Sheet($event, $type, [], [], $dateTime);
+        $author   = new Admin('test@test.com', '__SALT__', '__PASSWORD__', 'fr', 'Truc', 'Muche', 'ROLE_SUPER_ADMIN');
+
+        $addComment = new AddComment(
+            $sheet,
+            $author,
+            $dateTime
+        );
+        $addComment->text = 'text';
+
+        // expected
+        $expectedComment = new Comment(
+            $sheet,
+            $author,
+            'text',
+            $dateTime
+        );
+
+        // mock
+        $commentRepository = $this->prophesize(CommentRepositoryInterface::class);
+        $commentRepository->add($expectedComment)->shouldBeCalled();
+
+        $command = new AddCommentHandler($commentRepository->reveal());
+        $command->handle($addComment);
+    }
+}

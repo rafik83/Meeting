@@ -11,7 +11,7 @@
         {% endfor %}
     </ul>
 
-    <h2>{{ preview.typeTitle }}</h2>
+    <h2>{{ preview.typeTitle }} <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span></h2>
 
     <h3>{{ 'event.sheet.block.participants.title'|trans }}</h3>
 
@@ -51,7 +51,7 @@
             </div>
         {% endfor %}
 
-        {% for i in 0..preview.remainingParticipants if preview.remainingParticipants > 0 %}
+        {% for i in 1..preview.remainingParticipants if preview.remainingParticipants > 0 %}
             <div class="col-md-4">
                 <table class="table table-bordered table-condensed" style="height: 160px;">
                     <tr>

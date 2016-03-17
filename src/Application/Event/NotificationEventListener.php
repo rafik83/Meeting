@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -556,6 +557,36 @@ class NotificationEventListener implements EventSubscriberInterface
     }
 
     /**
+     * Notify sheet owner when the sheet is validated
+     *
+     * @param SheetValidatedEvent $event
+     */
+    public function onSheetValidated(SheetValidatedEvent $event)
+    {
+        // Get owner
+        $owner = $event->getSheet()->getOwner();
+
+        // Translated message
+        $message = $this->translator->trans(
+            'notification.sheet.validated.message',
+            [],
+            'notifications',
+            $owner->getUser()->getLocale()
+        );
+
+        // Send notification
+        $this->notificationRepository->add(new Notification(
+            $event->getSheet()->getEvent(),
+            $owner->getUser(),
+            $owner->getUser(),
+            new \DateTime(),
+            'sheet.validated',
+            $message,
+            $this->router->generateSheet($event->getSheet())
+        ));
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -574,6 +605,7 @@ class NotificationEventListener implements EventSubscriberInterface
             'meeting_request.participant.added'   => 'onParticipantAddedToMeetingRequest',
             'meeting_request.update.message'      => 'onMessage',
             'meeting.update.message'              => 'onMessage',
+            Events::SHEET_VALIDATED               => 'onSheetValidated',
         ];
     }
 }

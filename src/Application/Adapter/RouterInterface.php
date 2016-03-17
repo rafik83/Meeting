@@ -40,4 +40,11 @@ interface RouterInterface
      * @return string
      */
     public function generateSubject(Sheet $sheet, MessageSubjectInterface $subject);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return string
+     */
+    public function generateSheet(Sheet $sheet);
 }

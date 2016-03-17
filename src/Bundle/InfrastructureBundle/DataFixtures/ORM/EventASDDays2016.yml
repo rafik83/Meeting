@@ -1,17 +1,17 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
-        title: ASD Days 2016
+        title: "ASD Days"
         domain: asddays-2016.<domain()>
         timeZone: 'Europe/Paris'
         locales: [fr, en]
         fallback: fr
-        organiserName: PROXIMUM
+        organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
-        organiserEmail: accounts@proximumgroup.com
+        organiserEmail: "accounts@proximumgroup.com"
         bankInfo: |+
-            'HSBC Issy les Moulineaux
+            HSBC Issy les Moulineaux
             IBAN: FR76 3005 6006 4306 4332 4153 439
-            SWIFT (BIC): CCFRFRPP'
+            SWIFT (BIC): CCFRFRPP
         legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
@@ -119,6 +119,7 @@ Proximum\Vimeet\Domain\Model\Template:
                 required: true
                 private: true
                 label: { fr: "Téléphone", en: "Phone" }
+                tags: ["participant_phone"]
                 position: 3
             563caf34eed69:
                 type: lib_choice
@@ -200,8 +201,43 @@ Proximum\Vimeet\Domain\Model\Template:
                     fr: "Société"
                     en: "Company"
                 template:
-                    563cb103926e6: { type: lib_text, required: true, private: false, label: { fr: "Nom de l'organisme", en: "Name" }, tags: ['sheet_organization'], position: 1 }
-                    563cb10a524c5: { type: lib_text, required: false, private: false, label: { fr: "Adresse", en: "Address" }, position: 2 }
+                    993cb1036EB88:
+                        type: lib_choice
+                        label: { fr: "Souhaitez-vous recevoir la newsletter ?", en: "Receive newsletter ?" }
+                        placeholder:
+                            fr: "--- Sélectionner un item  ---"
+                            en: "--- Sélectionner un item  ---"
+                        required: true
+                        private: false
+                        position: 1
+                        choices:
+                            yes: { label: { fr: "Oui", en: "Yes" } }
+                            no: { label: { fr: "Non", en: "No" } }
+                    563cb103926e6:
+                        type: lib_text
+                        required: true
+                        private: false
+                        label:
+                            fr: "Nom de l'organisme"
+                            en: "Name"
+                        tags: ['sheet_organization']
+                        position: 1
+                    563cb10a524c5:
+                        type: lib_text
+                        required: false
+                        private: false
+                        label:
+                            fr: "Adresse"
+                            en: "Address"
+                        position: 2
+                    103cb10a524c6:
+                        type: lib_text
+                        required: true
+                        private: false
+                        label:
+                            fr: "Département"
+                            en: "Department"
+                        position: 2
                     563ccd1fe3a81: { type: lib_country, required: true, private: false, label: { fr: "Pays", en: "Country" }, placeholder: { fr: "--- Sélectionner un pays  ---", en: "--- Sélectionner un pays  ---" }, position: 3 }
                     563cb10fcc9fe: { type: lib_text, required: false, private: false, label: { fr: "Site web", en: "Website" }, position: 4 }
                     563cb115bbeb9: { type: lib_text, required: false, private: false, label: { fr: "Descriptif", en: "Description" }, position: 5 }
@@ -291,7 +327,7 @@ Proximum\Vimeet\Domain\Model\Template:
                 template:
                     563cb11d08df1: { type: lib_textarea, required: false, private: false, label: { fr: "Mes offres", en: "My offers" }, position: 1 }
         package:
-            563cae7496da1:
+            forfaitDeParticipation:
                 label:
                     fr: "Forfait de participation"
                     en: "Participation package"
@@ -300,7 +336,7 @@ Proximum\Vimeet\Domain\Model\Template:
                     en: "Step Description in english"
                 position: 1
                 template:
-                    563cae8a5072d:
+                    forfait:
                         label:
                             fr: "Forfait"
                             en: "Package"
@@ -309,9 +345,10 @@ Proximum\Vimeet\Domain\Model\Template:
                             en: "Description package en"
                         type: choice_with_description
                         required: true
+                        tags: ["sheet_package"]
                         position: 1
                         choices:
-                            563cb1257722e:
+                            forfaitExposant:
                                 label:
                                     fr: "Formule Exposant"
                                     en: "Exhibitors package"
@@ -330,7 +367,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     en: "Description Exhibitors"
                                 unitPrice: 2190
                                 position: 1
-                            563cb12b41909:
+                            forfaitDecouverte:
                                 label:
                                     fr: "Formule Découverte"
                                     en: "Discovery formula"
@@ -339,7 +376,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     en: "Description Discovery"
                                 unitPrice: 1090
                                 position: 2
-                            563cb13a4d3de:
+                            forfaitSilver:
                                 label:
                                     fr: "Forfait Silver"
                                     en: "Silver formula"
@@ -348,7 +385,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     en: "Description Silver"
                                 unitPrice: 3990
                                 position: 3
-                            563cb1546dd70:
+                            forfaitGold:
                                 label:
                                     fr: "Forfait Gold"
                                     en: "Gold formula"
@@ -357,7 +394,7 @@ Proximum\Vimeet\Domain\Model\Template:
                                     en: "Description Gold"
                                 unitPrice: 5990
                                 position: 4
-                            563cb15fbf353:
+                            forfaitSponsoring:
                                 label:
                                     fr: "Formule de sponsoring des CONFERENCES"
                                     en: "Sponsoring formula for CONFERENCES"
@@ -417,9 +454,9 @@ Proximum\Vimeet\Domain\Model\Template:
                         unitPrice: 200
                         position: 1
                         includedIn:
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                            forfaitDeParticipation.forfait.forfaitExposant: ~
+                            forfaitDeParticipation.forfait.forfaitSilver: ~
+                            forfaitDeParticipation.forfait.forfaitGold: ~
                     56615bcdb140f:
                         label:
                             fr: "Page pub sur la fiche"
@@ -430,10 +467,6 @@ Proximum\Vimeet\Domain\Model\Template:
                         type: "lib_option"
                         unitPrice: 300
                         position: 2
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
                     56615bf2bb41b:
                         label:
                             fr: "Pub dans pochette accueil"
@@ -445,9 +478,6 @@ Proximum\Vimeet\Domain\Model\Template:
                         unitPrice: 400
                         position: 3
                         updatableUntil: "2016-08-01 00:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
                     56615bfe852a0:
                         label:
                             fr: "Logo dans les emails promotionnels de l'événement"
@@ -459,7 +489,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         unitPrice: 450
                         position: 4
                         includedIn:
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                            forfaitDeParticipation.forfait.forfaitExposant: ~
                     56615c2dc5e91:
                         label:
                             fr: "Logo sur le programme des conférences"
@@ -471,7 +501,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         unitPrice: 1200
                         position: 5
                         includedIn:
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
+                            forfaitDeParticipation.forfait.forfaitExposant: ~
             56615ef1b3b7d:
                 label:
                     fr: "Stands et équipements"
@@ -495,8 +525,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 2
                         updatableUntil: "2016-09-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1257722e: ~
                     56615feba09a4:
                         label:
                             fr: "Stand 6m²"
@@ -511,8 +539,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 2
                         updatableUntil: "2016-09-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: ~
                     56615ff492a29:
                         label:
                             fr: "Stand 10m²"
@@ -527,8 +553,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 2
                         updatableUntil: "2016-09-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
                     56616023b335e:
                         label:
                             fr: "Bannière"
@@ -543,9 +567,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 1
                         updatableUntil: "2016-09-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: ~
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: ~
                     56616046619b6:
                         label:
                             fr: "Rail pour spot éléctrique"
@@ -561,10 +582,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             max: 4
                         updatableUntil: "2016-09-01 09:00:00"
                         includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
+                            forfaitDeParticipation.forfait.forfaitExposant: 2 # quantity included
                     5661605ccbc61:
                         label:
                             fr: "Table"
@@ -579,11 +597,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 3
                         updatableUntil: "2016-09-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
                     5661606674b6d:
                         label:
                             fr: "Chaise"
@@ -599,10 +612,7 @@ Proximum\Vimeet\Domain\Model\Template:
                             max: 8
                         updatableUntil: "2016-09-01 09:00:00"
                         includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1257722e: 4
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 4
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: 6
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 6
+                            forfaitDeParticipation.forfait.forfaitExposant: 4 # quantity included
                     566160678d9cb:
                         label:
                             fr: "Prise éléctrique"
@@ -617,11 +627,6 @@ Proximum\Vimeet\Domain\Model\Template:
                             min: 0
                             max: 4
                         updatableUntil: "2016-01-01 09:00:00"
-                        includedIn:
-                            563cae7496da1.563cae8a5072d.563cb1257722e: 1
-                            563cae7496da1.563cae8a5072d.563cb13a4d3de: 1
-                            563cae7496da1.563cae8a5072d.563cb1546dd70: 2
-                            563cae7496da1.563cae8a5072d.563cb15fbf353: 2
             5666eb32401d6:
                 label:
                     fr: "Options supplémentaires"
@@ -652,7 +657,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         description:
                             fr: "Quantité min 3, quantité max 3"
                             en: "Quantité min 3, quantité max 3"
-                        type: lib_option
+                        type: "lib_option"
                         unitPrice: 5990
                         position: 2
                         quantity:
@@ -713,11 +718,7 @@ Proximum\Vimeet\Domain\Model\Template:
                         unitPrice: 2600
                         position: 3
                         type: lib_option
-        preview: >
-            <div>
-                <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
-            </div>
+        preview: ""
         view: ""
 
     #
@@ -729,7 +730,7 @@ Proximum\Vimeet\Domain\Model\Template:
         participant:
             563cb0568a3bb: { type: lib_text, required: true, private: false, label: { fr: "Nom", en: "Lastname" }, tags: ["participant_lastname"], position: 1 }
             563cb05cb81ec: { type: lib_text, required: true, private: false, label: { fr: "Prénom", en: "Firstname" }, tags: ["participant_firstname"], position: 2 }
-            563cb062b89a9: { type: lib_text, required: true, private: true, label: { fr: "Téléphone", en: "Phone" }, position: 3 }
+            563cb062b89a9: { type: lib_text, required: true, private: true, label: { fr: "Téléphone", en: "Phone" }, tags: ["participant_phone"], position: 3 }
             563cb06a1a441:
                 type: lib_choice
                 placeholder:
@@ -811,19 +812,15 @@ Proximum\Vimeet\Domain\Model\Template:
                 template:
                     563cb03f9a509: { type: lib_textarea, required: false, private: false, label: { fr: "Mes besoins", en: "My needs" }, position: 1 }
         package: []
-        preview: >
-            <div>
-                <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
-            </div>
+        preview: ""
         view: ""
 
 Proximum\Vimeet\Domain\Model\Type:
     event_asddays_2016_type_fournisseur:
         __construct: ["@event_asddays_2016"]
-        position: 0
-        maxParticipant: 4
-        maxPlanning: 4
+        position: 1
+        maxParticipant: 3
+        maxPlanning: 2
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant'
         sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
@@ -832,15 +829,48 @@ Proximum\Vimeet\Domain\Model\Type:
 
     event_asddays_2016_type_investisseur:
         __construct: ["@event_asddays_2016"]
-        position: 1
+        position: 2
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
-        participantTemplate: '@event_asddays_2016_template_investisseur->participant'
+        participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
         sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
         previewTemplate: '@event_asddays_2016_template_investisseur->preview'
 
+    event_asddays_2016_type_donneur_ordre:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_investisseur->package'
+        previewTemplate: '@event_asddays_2016_template_investisseur->preview'
+        
+    event_asddays_2016_type_structure_de_recherche:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_fournisseur->package'
+        previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
+    
+    event_asddays_2016_type_delegation:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
+        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        packageTemplate: '@event_asddays_2016_template_fournisseur->package'
+        previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
+        
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_fournisseur_fr:
         __construct: ['@event_asddays_2016_type_fournisseur', fr, "Fournisseur"]
@@ -850,3 +880,15 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         __construct: ['@event_asddays_2016_type_investisseur', fr, "Investisseur"]
     event_asddays_2016_type_investisseur_en:
         __construct: ['@event_asddays_2016_type_investisseur', en, "Investor"]
+    event_asddays_2016_type_donneur_ordre_fr:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', fr, "Donneur d'ordre"]
+    event_asddays_2016_type_donneur_ordre_en:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', en, "Contractor"]
+    event_asddays_2016_type_structure_de_recherche_fr:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', fr, "Structure de recherche"]
+    event_asddays_2016_type_structure_de_recherche_en:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', en, "Research entity"]
+    event_asddays_2016_type_delegation_fr:
+        __construct: ['@event_asddays_2016_type_delegation', fr, "Délégation"]
+    event_asddays_2016_type_delegation_en:
+        __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]

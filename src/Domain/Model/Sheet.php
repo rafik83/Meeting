@@ -11,12 +11,17 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 
 /**
  * "Fiche de participation".
  */
 class Sheet implements BillingInfoInterface
 {
+    const STATE_COMPLETE   = 'complete';
+    const STATE_INCOMPLETE = 'incomplete';
+    const STATE_VALIDATED  = 'validated';
+
     /**
      * @var int
      */
@@ -68,6 +73,20 @@ class Sheet implements BillingInfoInterface
     private $lastLoginAt;
 
     /**
+     * "Etat de la fiche"
+     *
+     * @var string
+     */
+    private $state = self::STATE_INCOMPLETE;
+
+    /**
+     * "Suivi commercial"
+     *
+     * @var Admin
+     */
+    private $follower;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
@@ -85,6 +104,7 @@ class Sheet implements BillingInfoInterface
         $this->createdAt    = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
+        $this->state        = self::STATE_INCOMPLETE;
     }
 
     /**
@@ -331,5 +351,81 @@ class Sheet implements BillingInfoInterface
     public function hasParticipant(Participant $participant)
     {
         return $this->participants->contains($participant);
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function markAsIncomplete()
+    {
+        $this->state = self::STATE_INCOMPLETE;
+
+        return $this;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function markAsComplete()
+    {
+        $this->state = self::STATE_COMPLETE;
+
+        return $this;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function markAsValidated()
+    {
+        $this->state = self::STATE_VALIDATED;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidated()
+    {
+        return self::STATE_VALIDATED === $this->state;
+    }
+
+    /**
+     * Get follower
+     *
+     * @return Admin
+     */
+    public function getFollower()
+    {
+        return $this->follower;
+    }
+
+    /**
+     * Assign follower
+     *
+     * @param Admin $follower
+     *
+     * @return Sheet
+     */
+    public function assign(Admin $follower)
+    {
+        if (!$follower->isOrganizer() && !$follower->isOperator()) {
+            throw new SheetException('Follower must be an organizer or operator.');
+        }
+
+        $this->follower = $follower;
+
+        return $this;
     }
 }

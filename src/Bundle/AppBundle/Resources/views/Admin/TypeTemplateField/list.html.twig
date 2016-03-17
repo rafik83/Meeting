@@ -24,13 +24,14 @@
                     {% if group.name != 'default' %}
                         <tr>
                             <th colspan="6" class="info">
-                                {{ group.label(event.availableLocale(app.request.locale)) }}
+                                {{ group.label(locale) }}
                             </th>
                         </tr>
                     {% endif %}
 
                     {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
                         typeId: typeView.id,
+                        locale: locale,
                         templateName: templateName,
                         types: group.types,
                         group: group
@@ -56,11 +57,14 @@
                 {% for step in packageObject.steps %}
                     <tr>
                         <th colspan="6" class="info">
-                            {{ step.label(app.request.locale) }}
+                            {{ step.label(locale) }}
                         </th>
                     </tr>
 
-                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {step: step} %}
+                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {
+                        step: step,
+                        locale: locale
+                    } %}
                 {% endfor %}
             {% endif %}
         {% endfor %}

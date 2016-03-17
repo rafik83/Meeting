@@ -11,7 +11,8 @@
 namespace Tests\Application\Components\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\TaggedInfoGuesser;
+use Proximum\Vimeet\Application\Components\Template\Exception\RowNotFoundException;
+use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
 use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -72,7 +73,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -84,7 +85,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
@@ -163,7 +164,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -174,7 +175,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
@@ -233,7 +234,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->getType()->setParticipantTemplate([
             '563caf1d9b1cb' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_firstname'],
+                'tags'     => ['participant_lastname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 0,
@@ -244,7 +245,7 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
             ],
             '563caf2746398' => [
                 'type'     => 'lib_text',
-                'tags'     => ['participant_lastname'],
+                'tags'     => ['participant_firstname'],
                 'required' => true,
                 'private'  => false,
                 'position' => 1,
@@ -269,6 +270,6 @@ class ParticipantInfoGuesserTest extends \PHPUnit_Framework_TestCase
 
         $resultParticipant = $participantInfoGuesser->guessParticipantInfo($participant);
 
-        $this->assertEquals('DUPOND Jean', $resultParticipant);
+        $this->assertEquals('Jean DUPOND', $resultParticipant);
     }
 }

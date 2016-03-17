@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
+use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Meeting\Request\RequestQueryBuilder;
 
 class RequestRepository implements RequestRepositoryInterface
 {
@@ -74,14 +75,8 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function getRequestSentBySheet(Sheet $sheet)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
-            ->where('request.from = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->orderBy('request.createdAt', 'DESC');
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->sendBy($sheet)->mostRecentFirst();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -91,16 +86,50 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function getPropositionReceivedBySheet(Sheet $sheet)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
-            ->where('request.to = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->orderBy('request.createdAt', 'DESC');
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->mostRecentFirst();
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countApprovedRequestSentBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->approved()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRefusedRequestSentBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->refused()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRefusedPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->refused()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->pending()->count()->getIntResult();
     }
 
     /**
@@ -112,7 +141,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from('Entity:Meeting\Request', 'request')
+            ->from(Request::class, 'request')
             ->where('request.to = :sheet')
             ->orWhere('request.from = :sheet')
             ->setParameter('sheet', $sheet)

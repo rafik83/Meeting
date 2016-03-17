@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class AdminRepository implements AdminRepositoryInterface
@@ -130,6 +131,28 @@ class AdminRepository implements AdminRepositoryInterface
             ->createQueryBuilder()
             ->select('admin')
             ->from(Admin::class, 'admin');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Followers are Organizer and Operator which can be assigned to a sheet for commercial follow-up
+     *
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function getFollowers(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin')
+            ->join('admin.events', 'event', 'WITH', 'event = :event')
+            ->setParameter('event', $event)
+            ->where('admin.role IN (:roles)')
+            ->setParameter('roles', [Admin::ROLE_ORGANIZER, Admin::ROLE_OPERATOR]);
 
         return $queryBuilder->getQuery()->getResult();
     }

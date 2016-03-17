@@ -30,6 +30,7 @@ class LibChoiceWithDescriptionProduct extends AbstractProduct
         $optionsResolver->setDefined([
             'quantity',
             'description',
+            'tags',
         ]);
     }
 
