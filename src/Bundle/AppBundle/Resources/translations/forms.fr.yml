@@ -623,6 +623,18 @@ form:
                 label: Nom
             submit:
                 label: Envoyer
+    update_operator:
+        children:
+            email:
+                label: Email
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            events:
+                label: Événements disponible pour ce collaborateur
+            submit:
+                label: Envoyer
     admin_activate_account_password:
         children:
             password:

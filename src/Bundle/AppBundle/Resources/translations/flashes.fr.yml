@@ -142,6 +142,8 @@ flash:
         operator:
             create:
                 success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
+            update:
+                success: 'Le collaborateur a été édité avec succès'
         activate_account:
             success: Votre compte a été activé avec succès
     activate_account:

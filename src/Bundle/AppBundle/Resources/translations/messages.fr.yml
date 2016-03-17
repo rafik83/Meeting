@@ -362,13 +362,17 @@ admin:
                 email: Email
                 lastLoginAt: Date de dernière connexion
                 events: Événéments
+                actions: Actions
             content:
+                update: Editer
                 admin:
                     events:
                         none: Aucun
     operator:
         create:
             title: Créer un nouveau collaborateur
+        update:
+            title: Editer un collaborateur
     activateAccount:
         password:
             title: Création du mot de passe pour votre compte collaborateur
