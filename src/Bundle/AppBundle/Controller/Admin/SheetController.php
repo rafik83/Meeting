@@ -42,8 +42,7 @@ class SheetController extends Controller
 
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $locale]);
-        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $form->isValid();
-
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
             $filters = $filterForm->getData();
