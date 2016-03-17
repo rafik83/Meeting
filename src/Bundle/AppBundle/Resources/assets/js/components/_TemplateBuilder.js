@@ -17,7 +17,7 @@ function TemplateBuilder(element)
     var blockList = element.querySelector('#block-list');
 
     new Sortable(blockList, {
-        group: { name: 'block-list', pull: 'clone', put: false },
+        group: { name: 'block-reference', pull: 'clone', put: false },
         sort: false,
         onStart: function () {
             this.closeMenu();
@@ -31,30 +31,7 @@ function TemplateBuilder(element)
 
     var templateContainer = element.querySelector('#template-container');
 
-    new Sortable(templateContainer, {
-        group: { name: 'block-list', pull: false, put: true },
-        onStart: function () {
-            this.closeMenu();
-            this.drag = true;
-        }.bind(this),
-        onEnd: function () {
-            this.openMenu();
-            this.drag = false;
-        }.bind(this),
-        onAdd: function (event) {
-
-            if (event.item.parentNode === event.from) {
-                return;
-            }
-
-            var dummy = document.createElement('div');
-            dummy.innerHTML = event.item.getAttribute('data-block-template');
-
-            event.item.parentNode.insertBefore(dummy.firstChild, event.item);
-            event.item.remove();
-
-        }.bind(this)
-    });
+    this.sortable(templateContainer);
 }
 
 TemplateBuilder.prototype.toggleMenu = function (open)
@@ -77,6 +54,40 @@ TemplateBuilder.prototype.openMenu = function ()
 TemplateBuilder.prototype.closeMenu = function ()
 {
     this.toggleMenu(false);
+};
+
+TemplateBuilder.prototype.sortable = function (element)
+{
+    new Sortable(element, {
+        group: { name: 'block-list', pull: false, put: ['block-reference'] },
+        onStart: function () {
+            this.closeMenu();
+            this.drag = true;
+        }.bind(this),
+        onEnd: function () {
+            this.openMenu();
+            this.drag = false;
+        }.bind(this),
+        onAdd: function (event) {
+
+            if (event.item.parentNode === event.from) {
+                return;
+            }
+
+            var dummy = document.createElement('div');
+            dummy.innerHTML = event.item.getAttribute('data-block-template');
+
+            var item = dummy.firstChild;
+
+            [].forEach.call(item.querySelectorAll('.block-inner'), function (inner) {
+                this.sortable(inner);
+            }.bind(this));
+
+            event.item.parentNode.insertBefore(item, event.item);
+            event.item.remove();
+
+        }.bind(this)
+    });
 };
 
 module.exports = TemplateBuilder;

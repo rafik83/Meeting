@@ -39,6 +39,7 @@
     right: 10px;
     bottom: 10px;
     overflow-y: scroll;
+    padding: 100px 0;
 
     .block {
 
@@ -47,6 +48,10 @@
         .block-inner {
             border: 3px dashed #ccc;
             min-height: 300px;
+
+            >.block {
+                margin: 20px;
+            }
         }
     }
 }
