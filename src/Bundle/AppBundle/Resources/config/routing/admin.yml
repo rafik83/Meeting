@@ -43,6 +43,13 @@ admin_create_operator:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Operator:create }
 
+admin_update_operator:
+    path: /operator/update/{operator}
+    methods: [GET, POST]
+    requirements:
+        operator: \d+
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:update }
+
 #
 # Activate Operator account
 #
