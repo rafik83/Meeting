@@ -305,7 +305,7 @@ admin_sheet_details:
     requirements:
         id: \d+
         sheet: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:details }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch

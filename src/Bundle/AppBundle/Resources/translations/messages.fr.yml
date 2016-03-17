@@ -253,6 +253,12 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    sheet:
+        link: Fiches de participation
+        details:
+            comments:
+                title: Commentaires
+                author: 'Par %firstname% %lastname%, le %date%'
     login:
         logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
     event:
@@ -270,8 +276,6 @@ admin:
         link: Catégories de participation
         add: Ajouter
         update: Modifier
-    sheet:
-        link: Fiches de participation
     meeting:
         link: Rendez-vous
     meeting_request:

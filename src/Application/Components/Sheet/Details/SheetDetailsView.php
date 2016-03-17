@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataView;
 use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingView;
+use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 
 class SheetDetailsView
 {
@@ -86,6 +87,11 @@ class SheetDetailsView
     public $refusePropositions;
 
     /**
+     * @var Comment[]
+     */
+    public $comments;
+
+    /**
      * SheetDetailsView constructor.
      *
      * @param string          $title
@@ -100,8 +106,9 @@ class SheetDetailsView
      * @param int             $pendingPropositions
      * @param int             $refusedRequests
      * @param int             $refusePropositions
+     * @param Comment[]      $comments
      */
-    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingPropositions, $refusedRequests, $refusePropositions)
+    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingPropositions, $refusedRequests, $refusePropositions, array $comments)
     {
         $this->title               = $title;
         $this->state               = $state;
@@ -115,5 +122,6 @@ class SheetDetailsView
         $this->pendingPropositions = $pendingPropositions;
         $this->refusedRequests     = $refusedRequests;
         $this->refusePropositions  = $refusePropositions;
+        $this->comments            = $comments;
     }
 }

@@ -136,6 +136,9 @@ flash:
         admin:
             create:
                 success: Le nouvel utilisateur a bien été créé
+        sheet:
+            add_comment:
+                success: Votre commentaire a bien été ajouté
         operator:
             create:
                 success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'

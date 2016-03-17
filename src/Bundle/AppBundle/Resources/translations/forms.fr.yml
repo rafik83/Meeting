@@ -601,6 +601,12 @@ form:
         children:
             submit:
                 label: Filtrer
+    sheet_comment:
+        children:
+            submit:
+                label: Envoyer
+            text:
+                placeholder: Écrire un commentaire
     create_operator:
         children:
             email:

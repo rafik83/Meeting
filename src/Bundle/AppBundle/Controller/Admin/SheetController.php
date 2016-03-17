@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
 use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
@@ -36,13 +38,12 @@ class SheetController extends Controller
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        // Locale
-        $locale = $event->getAvailableLocale($request->getLocale());
+        $locale   = $event->getAvailableLocale($request->getLocale());
 
-        // Filters
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
-        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+        $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $locale]);
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $form->isValid();
+
 
         if ($filtered) {
             $filters = $filterForm->getData();
@@ -134,10 +135,32 @@ class SheetController extends Controller
 
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
 
+        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
+
+        $form = $this->createForm(CommentType::class, $addComment, [
+            'action' => $this->generateUrl('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]),
+            'method' => 'POST',
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.sheet.add_comment_handler')->handle($addComment);
+            $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
+
+            return $this->redirectToRoute('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         return $this->render('VimeetAppBundle:Admin/Sheet:details.html.twig', [
             'event'   => $event,
             'sheet'   => $sheet,
             'details' => $details,
+            'form'    => $form->createView(),
         ]);
     }
 }

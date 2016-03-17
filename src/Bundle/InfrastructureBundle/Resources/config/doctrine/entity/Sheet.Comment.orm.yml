@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Sheet\Comment:
+    type: entity
+    table: sheet_comment
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        text:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        author:
+            targetEntity: Proximum\Vimeet\Domain\Model\Admin
