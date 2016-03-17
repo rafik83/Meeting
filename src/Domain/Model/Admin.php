@@ -112,11 +112,82 @@ class Admin extends AbstractUser implements AdvancedUserInterface
 
     /**
      * @param Event $event
+     *
      * @return self
      */
     public function addEvent(Event $event)
     {
         $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return self
+     */
+    public function removeEvent(Event $event)
+    {
+        $this->events->removeElement($event);
+
+        return $this;
+    }
+
+    /**
+     * @param array $events
+     *
+     * @return self
+     */
+    public function setEvents(array $events)
+    {
+        foreach ($this->events as $event) {
+            if (!in_array($event, $events)) {
+                $this->removeEvent($event);
+            }
+        }
+
+        foreach ($events as $event) {
+            if (!$this->hasEvent($event)) {
+                $this->addEvent($event);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return self
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @param string $firstname
+     *
+     * @return self
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * @param string $lastname
+     *
+     * @return self
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
