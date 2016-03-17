@@ -4,8 +4,12 @@
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
     {{ form_start(form) }}
         {{ form_errors(form) }}
-        {% for key, child in form if key not in ['submit']%}
-            {{ form_row(child) }}
+        {% for key, child in form if key not in ['submit'] %}
+            {% if key == 'mode' %}
+                {{ form_row(child, {inline: true}) }}
+            {% else %}
+                {{ form_row(child) }}
+            {% endif %}
         {% endfor %}
         <div class="text-right">
             <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour à la liste</a>
