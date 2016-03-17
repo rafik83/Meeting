@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator;
 
 use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventEntityType;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
