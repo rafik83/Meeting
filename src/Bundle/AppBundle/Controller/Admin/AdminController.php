@@ -75,7 +75,7 @@ class AdminController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $create = new Create($request->getLocale());
+        $create = new Create($request->getLocale(), new \DateTime());
 
         $form = $this->createForm(CreateType::class, $create, [
             'action' => $this->generateUrl('admin_create_admin'),

@@ -27,8 +27,12 @@ class OperatorController extends Controller
     public function createAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $organizer = $this->getUser();
+        if (!$organizer->isOrganizer()) {
+            throw $this->createAccessDeniedException(sprintf('%s is not a granted ROLE to access this page', $organizer->getRole()));
+        }
 
-        $create = new Create($this->getUser());
+        $create = new Create($this->getUser(), new \DateTime());
 
         $form = $this->createForm(CreateType::class, $create, [
             'action' => $this->generateUrl('admin_create_operator'),
