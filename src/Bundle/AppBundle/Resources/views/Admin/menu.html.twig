@@ -23,34 +23,18 @@
                 <ul class="nav navbar-nav">
                     {% if event is defined %}
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-submenu>
-                                Menu
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Actions
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Users</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Users management</a></li>
-                                        <li><a href="#">Who see who</a></li>
-                                        <li><a href="#">ACL</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Another item</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Item 1</a></li>
-                                        <li><a href="#">Item 2</a></li>
-                                        <li><a href="#">Item 3</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Something else here</a></li>
+                                {{ include('VimeetAppBundle:Admin/Event:links.html.twig') }}
                             </ul>
                         </li>
                     {% else %}
                         <li>
                             <a href="{{ path('admin_event_list') }}">
-                                Events
+                                Mes évènements
                             </a>
                         </li>
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -63,8 +47,30 @@
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if event is defined %}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Menu
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ path('admin_event_list') }}">
+                                        Mes évènements
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('admin_list_admin') }}">
+                                            {{ 'admin.admin_list.link'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endif %}
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-submenu>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-user"></span>
                             {{ 'admin.login.logged_as'|trans({'%role%': ('admin.role.' ~ app.user.roles[0])|trans, '%lastname%': app.user.lastname, '%firstname%': app.user.firstname}) }}
                             <span class="caret"></span>

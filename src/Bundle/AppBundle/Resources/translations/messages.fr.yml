@@ -269,7 +269,9 @@ admin:
         see_on_front:
             link: Voir en front
         update:
-            link: Modifier
+            link: Modifier l'évènement
+        settings:
+            link: Paramétrages de l'évènement
     rule:
         link: Qui voit qui
     type:
