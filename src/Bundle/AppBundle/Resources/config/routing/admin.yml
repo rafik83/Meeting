@@ -33,6 +33,11 @@ admin_create_admin:
 # Create Operator
 #
 
+admin_list_operator:
+    path: /operator
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:list }
+
 admin_create_operator:
     path: /operator/create
     methods: [GET, POST]
