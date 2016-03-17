@@ -33,11 +33,6 @@ class Update
     /**
      * @var Admin
      */
-    public $organizer;
-
-    /**
-     * @var Admin
-     */
     public $operator;
 
     /**
@@ -46,12 +41,10 @@ class Update
     public $events;
 
     /**
-     * @param Admin $organizer
      * @param Admin $operator
      */
-    public function __construct(Admin $organizer, Admin $operator)
+    public function __construct(Admin $operator)
     {
-        $this->organizer = $organizer;
         $this->operator  = $operator;
         $this->email     = $operator->getEmail();
         $this->lastname  = $operator->getLastname();

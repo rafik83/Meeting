@@ -142,7 +142,7 @@ class OperatorController extends Controller
             );
         }
 
-        $update = new Update($organizer, $operator);
+        $update = new Update($operator);
 
         $form = $this->createForm(UpdateType::class, $update, [
             'action' => $this->generateUrl('admin_update_operator', ['operator' => $operator->getId()]),

@@ -80,16 +80,17 @@ class UpdateHandler
 
         $this->adminRepository->set($operator);
 
+        // If the mail of the operator has changed
+        // Send a new activation Event
         if ($newMail) {
-            $this->sendActivationEvent($update, $update->operator);
+            $this->sendActivationEvent($operator);
         }
     }
 
     /**
-     * @param Update $update
      * @param Admin  $operator
      */
-    private function sendActivationEvent(Update $update, Admin $operator)
+    private function sendActivationEvent(Admin $operator)
     {
         $activateAccountToken = $this->activateAccountTokenGenerator->generate($operator);
 
@@ -99,7 +100,7 @@ class UpdateHandler
         $activateAccountEvent = new ActivateAccountEvent(
             $operator,
             $activateAccountToken,
-            $update->organizer->getLocale()
+            $operator->getLocale()
         );
 
         $this->eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent);
