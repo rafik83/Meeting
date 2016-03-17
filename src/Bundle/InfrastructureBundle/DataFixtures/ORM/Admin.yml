@@ -21,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             - 'ROLE_ORGANIZER'
         events:
             - '@event_rdv_carnot_2016'
+            - '@event_asddays_2016'
+            - '@event_spanish'
 
     user_co:
         __construct:
