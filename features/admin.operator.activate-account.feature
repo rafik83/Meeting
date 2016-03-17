@@ -22,7 +22,9 @@ Feature: Operator Activate Account
   Scenario: I can add an operator and activate the account
     Given I am logged with "test@test.com" on admin
     And I go to this page "/admin/fr/event"
-    Then I follow "admin.operator.create.link"
+    And I follow "admin.operator_list.link"
+    Then I should be on this page "/admin/fr/operator"
+    And I follow "admin.operator_list.action.create"
     Then I should be on this page "/admin/fr/operator/create"
     Then I fill in the following:
       | form.create_operator.children.email.label     | toto@toto.fr |
