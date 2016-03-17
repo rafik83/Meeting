@@ -25,7 +25,7 @@ services:
     # Security
     #
     security.admin_event_access_voter:
-        class: Proximum\Vimeet\Bundle\AppBundle\Security\AdminEventAccessVoter
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\Voter\AdminEventAccessVoter
         arguments:
             - '@components.security.admin_event_access'
         tags:
@@ -343,6 +343,35 @@ services:
             - '@sonata.intl.templating.helper.locale'
         tags:
             - { name: 'twig.extension' }
+
+    #
+    # Security
+    #
+    security.impersonate:
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate
+        arguments:
+            - '@security.user.provider.concrete.admin_provider'
+            - '@security.user.provider.concrete.user_provider'
+            - '%secret%'
+
+    security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
+        class: Proximum\Vimeet\Bundle\AppBundle\Security\Http\Firewall\SwitchUserListener
+        public: false
+        abstract: true
+        arguments:
+            - '@security.token_storage'
+            - ~
+            - ~
+            - ~
+            - '@security.access.decision_manager'
+            - '@?logger'
+            - ~
+            - ~
+            - '@?event_dispatcher'
+            - '@security.impersonate'
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: monolog.logger, channel: security }
 
     #
     # Services

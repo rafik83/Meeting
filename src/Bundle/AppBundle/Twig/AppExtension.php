@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Twig;
 
+use Proximum\Vimeet\Domain\Model\User;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
 
 class AppExtension extends \Twig_Extension

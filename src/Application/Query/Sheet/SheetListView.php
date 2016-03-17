@@ -74,6 +74,11 @@ class SheetListView
     public $lastLoginAt;
 
     /**
+     * @var string
+     */
+    public $impersonationToken;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
@@ -85,17 +90,29 @@ class SheetListView
      * @param string               $follower
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
+     * @param string               $impersonationToken
      */
-    public function __construct($id, $title, $state, array $categories, $type, SheetParticipantView $owner, $follower, \DateTimeInterface $createdAt, \DateTimeInterface $lastLoginAt)
-    {
-        $this->id          = $id;
-        $this->title       = $title;
+    public function __construct(
+        $id,
+        $title,
+        $state,
+        array $categories,
+        $type,
+        SheetParticipantView $owner,
+        $follower,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $lastLoginAt,
+        $impersonationToken
+    ) {
+        $this->id                 = $id;
+        $this->title              = $title;
         $this->state       = $state;
-        $this->categories  = $categories;
-        $this->type        = $type;
-        $this->owner       = $owner;
+        $this->categories         = $categories;
+        $this->type               = $type;
+        $this->owner              = $owner;
         $this->follower    = $follower;
-        $this->createdAt   = $createdAt;
-        $this->lastLoginAt = $lastLoginAt;
+        $this->createdAt          = $createdAt;
+        $this->lastLoginAt        = $lastLoginAt;
+        $this->impersonationToken = $impersonationToken;
     }
 }

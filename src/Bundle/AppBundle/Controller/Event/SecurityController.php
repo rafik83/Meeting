@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
 
 class SecurityController extends Controller
 {
@@ -79,5 +80,28 @@ class SecurityController extends Controller
         $this->get('adapter.authentication_manager')->authenticate($user, 'main');
 
         return $this->redirectToRoute('event');
+    }
+
+    /**
+     * @param EventView $eventView
+     *
+     * @return Response
+     */
+    public function impersonatingUserAction(EventView $eventView)
+    {
+        $impersonatingUser = null;
+
+        $roles = $this->get('security.token_storage')->getToken()->getRoles();
+
+        foreach ($roles as $role) {
+            if ($role instanceof SwitchUserRole) {
+                $impersonatingUser = $role->getSource()->getUser();
+            }
+        }
+
+        return $this->render('VimeetAppBundle:Event/Security:impersonating.html.twig', [
+            'impersonatingUser' => $impersonatingUser,
+            'eventView'         => $eventView,
+        ]);
     }
 }

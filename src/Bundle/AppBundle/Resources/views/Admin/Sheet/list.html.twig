@@ -81,6 +81,9 @@
                         <td>
                             <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
                             <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
+                            <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken}) }}" class="btn btn-primary btn-sm">
+                                {{ 'admin.sheet.impersonate'|trans }}
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

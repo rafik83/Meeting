@@ -55,6 +55,8 @@ security:
             logout:
                 path: event_logout
                 target: event
+            switch_user:
+                parameter: _switchto
 
     access_control:
         - { path: ^/admin/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
@@ -64,6 +66,7 @@ security:
         - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
 
     role_hierarchy:
+        ROLE_ADMIN: ['ROLE_ALLOWED_TO_SWITCH']
         ROLE_OPERATOR: ['ROLE_ADMIN']
         ROLE_ORGANIZER: ['ROLE_ADMIN', 'ROLE_OPERATOR']
         ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_OPERATOR']

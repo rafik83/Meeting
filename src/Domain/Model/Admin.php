@@ -125,6 +125,38 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                $this->id,
+                $this->email,
+                $this->firstname,
+                $this->lastname,
+                $this->password,
+                $this->salt,
+            ]
+        );
+    }
+
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->email,
+            $this->firstname,
+            $this->lastname,
+            $this->password,
+            $this->salt
+        ) = unserialize($serialized);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isAccountNonExpired()

@@ -255,6 +255,8 @@ admin:
         ROLE_SUPER_ADMIN: Admin
     sheet:
         link: Fiches de participation
+        impersonate: Impersonnation
+        exit_impersonation: Quitter l'impersonnation
         details:
             comments:
                 title: Commentaires

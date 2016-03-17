@@ -42,8 +42,7 @@ class SheetController extends Controller
 
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $locale]);
-        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $form->isValid();
-
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
             $filters = $filterForm->getData();
@@ -52,7 +51,7 @@ class SheetController extends Controller
         // Pagination
         $sheets = $this
             ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale);
+            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
 
         // Batch
         $batch     = new Batch();

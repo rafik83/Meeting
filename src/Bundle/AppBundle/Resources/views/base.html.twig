@@ -11,6 +11,10 @@
     </head>
     <body>
         <div class="container">
+            {% if eventView is defined %}
+                {{ render(controller('VimeetAppBundle:Event/Security:impersonatingUser', {'eventView': eventView})) }}
+            {% endif %}
+
             {% block locales %}
                 {% if eventView is defined %}
                     {{ include('VimeetAppBundle::locales.html.twig', { 'locales': eventView.locales }) }}
