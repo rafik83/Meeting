@@ -1,0 +1,112 @@
+@font-face {
+  font-family: 'OpenSans';
+  src: url('fonts/OpenSansCondensed.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  src: url('fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoItalic';
+  src: url('fonts/Roboto-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'PictoOutline';
+  src: url('fonts/PictoOutline.eot?4nyk96');
+  src: url('fonts/PictoOutline.eot?4nyk96#iefix') format('embedded-opentype'),
+       url('fonts/PictoOutline.ttf?4nyk96') format('truetype'),
+       url('fonts/PictoOutline.woff?4nyk96') format('woff'),
+       url('fonts/PictoOutline.svg?4nyk96#PictoOutline') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'PictoOutline' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-FMZ:before { content: "\5f"; }
+.icon-Badge_1:before { content: "\61"; }
+.icon-Badge_2:before { content: "\62"; }
+.icon-Contact_1:before { content: "\63"; }
+.icon-Home_1:before { content: "\64"; }
+.icon-Info_1:before { content: "\65"; }
+.icon-Info_2:before { content: "\66"; }
+.icon-Menu_1:before { content: "\67"; }
+.icon-Menu_2:before { content: "\68"; }
+.icon-Alerter_1:before { content: "\69"; }
+.icon-Fermer_1:before { content: "\6a"; }
+.icon-Fermer_2:before { content: "\6b"; }
+.icon-Fermer_3:before { content: "\6c"; }
+.icon-Fermer_4:before { content: "\6d"; }
+.icon-Ouvrir_1:before { content: "\6e"; }
+.icon-Ouvrir_2:before { content: "\6f"; }
+.icon-Ouvrir_3:before { content: "\70"; }
+.icon-Ouvrir_4:before { content: "\71"; }
+.icon-Reduire_1:before { content: "\72"; }
+.icon-Reduire_2:before { content: "\73"; }
+.icon-Reduire_3:before { content: "\74"; }
+.icon-Reduire_4:before { content: "\75"; }
+.icon-Valider_1:before { content: "\76"; }
+.icon-Valider_2:before { content: "\77"; }
+.icon-Valider_3:before { content: "\78"; }
+.icon-Valider_4:before { content: "\79"; }
+.icon-Deverouiller_1:before { content: "\7a"; }
+.icon-Deverouiller_2:before { content: "\41"; }
+.icon-Verouiller_1:before { content: "\42"; }
+.icon-Verouiller_2:before { content: "\43"; }
+.icon-Cocktail:before { content: "\44"; }
+.icon-Dejeuner:before { content: "\45"; }
+.icon-RDV:before { content: "\46"; }
+.icon-Conference:before { content: "\47"; }
+.icon-PresFlash_1:before { content: "\48"; }
+.icon-PresFlash_2:before { content: "\49"; }
+.icon-Precedent_1:before { content: "\4a"; }
+.icon-Precedent_2:before { content: "\4b"; }
+.icon-Precedent_3:before { content: "\4c"; }
+.icon-Suivant_1:before { content: "\4d"; }
+.icon-Suivant_2:before { content: "\4e"; }
+.icon-Suivant_3:before { content: "\4f"; }
+.icon-Cafe_1:before { content: "\50"; }
+.icon-Editer_1:before { content: "\51"; }
+.icon-Message_1:before { content: "\52"; }
+.icon-Voir_1:before { content: "\53"; }
+.icon-Calendrier:before { content: "\54"; }
+.icon-Document_1:before { content: "\55"; }
+.icon-Document_2:before { content: "\56"; }
+.icon-Inserer_1:before { content: "\57"; }
+.icon-Inserer_2:before { content: "\58"; }
+.icon-Note_1:before { content: "\59"; }
+.icon-Note_2:before { content: "\5a"; }
+.icon-Paiement_1:before { content: "\31"; }
+.icon-Panier_1:before { content: "\32"; }
+.icon-Panier_2:before { content: "\33"; }
+.icon-ZoomMoins_1:before { content: "\34"; }
+.icon-ZoomPlus_1:before { content: "\35"; }
+.icon-Horaire:before { content: "\36"; }
+.icon-Localiser:before { content: "\37"; }
+.icon-Effacer:before { content: "\38"; }
+.icon-Appeler:before { content: "\39"; }
+.icon-Retard:before { content: "\2c"; }
+.icon-Transferer:before { content: "\3f"; }
+.icon-Website:before { content: "\3b"; }
+.icon-Smartphone:before { content: "\2e"; }
+.icon-Actualiser:before { content: "\3a"; }
+.icon-Desktop:before { content: "\2f"; }
+.icon-Commentaire:before { content: "\3d"; }
+.icon-Coeur:before { content: "\2b"; }
+.icon-Etoile:before { content: "\2d"; }
+.icon-Retour:before { content: "\28"; }
+.icon-Suivant:before { content: "\29"; }
+.icon-Actualiser_2:before { content: "\21"; }

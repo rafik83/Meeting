@@ -1,0 +1,34 @@
+.tabs {
+  font-family: OpenSans;
+  text-transform: uppercase;
+  font-size: 18px;
+
+  > li {
+    display: inline-block;
+
+    > a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 14px 20px;
+      color: $color-primary;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+
+      &:hover {
+        text-decoration: none;
+        background: $bg-container-color;
+      }
+    }
+
+    img {
+      width: 25px;
+      margin-right: 5px;
+    }
+
+    &.active {
+      a { background: $bg-container-color; }
+    }
+  }
+}

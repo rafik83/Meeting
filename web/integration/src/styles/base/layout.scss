@@ -1,0 +1,44 @@
+body {
+  font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: $bg-body-color;
+}
+
+.wrapper {
+  .container-fluid {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+}
+
+.main {
+  > header {
+    position: relative;
+    height: 70px;
+
+    h1 {
+      position: absolute;
+      bottom: 20px;
+      left: -15px;
+      margin: 0;
+    }
+
+    .tabs {
+      position: absolute;
+      right: 20px;
+      bottom: 0;
+    }
+  }
+}
+  .main__container {
+    padding: 25px 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: $bg-container-color;
+  }
+
+.content { padding-right: 40px; }
+
+.content-large { margin-top: 30px; }

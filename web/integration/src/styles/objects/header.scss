@@ -1,0 +1,110 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  height: 115px;
+  padding: 15px;
+  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+  overflow: hidden;
+
+  .logo {
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    height: 135px;
+  }
+}
+
+  .header__info {
+    position: absolute;
+    top: 40px;
+    left: 290px;
+    font-size: 15px;
+    line-height: 20px;
+    color: $gradient-text-color;
+
+    > p {
+      margin: 0;
+
+      > span { text-transform: uppercase; }
+    }
+  }
+
+  .header__navigation {
+    font-family: OpenSans;
+    text-transform: uppercase;
+
+    > li {
+      float: left;
+      font-size: 15px;
+      margin-left: 8px;
+
+      &:last-child {
+        i[class^='icon-'] {
+          margin-right: 0;
+        }
+      }
+
+      i[class^='icon-'] {
+        float: left;
+        font-size: 20px;
+        margin-right: 5px;
+        margin-top: 6px;
+      }
+
+      img {
+        max-width: 20px;
+        max-height: 20px;
+        margin-left: 1px;
+        margin-top: -2px;
+      }
+
+      a {
+        display: block;
+        min-width: 35px;
+        height: 35px;
+        line-height: 36px;
+        color: $gradient-text-color;
+        padding: 0 9px 0 8px;
+        border-radius: 15px;
+        background: rgba(#FFFFFF, .15);
+        transition: background .2s ease-in-out;
+
+        &:hover {
+          text-decoration: none;
+          background: rgba(#FFFFFF, .3);
+        }
+      }
+
+      .notif {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        line-height: 21px;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        margin-left: 5px;
+        border-radius: 100%;
+        background: $color-notification;
+      }
+    }
+  }
+
+.sub-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 80px;
+  padding: 15px;
+  background: $color-primary;
+  box-shadow: 0 6px 5px rgba(0,0,0,0.2);
+
+  li {
+    display: inline-block;
+    margin-right: 10px;
+
+    &:last-child { margin-right: 0; }
+  }
+}

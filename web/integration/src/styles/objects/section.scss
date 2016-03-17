@@ -1,0 +1,177 @@
+.section {
+  position: relative;
+  margin-bottom: 30px;
+
+  footer {
+    line-height: 22px;
+
+    i[class^='icon-'] {
+      font-size: 20px;
+      float: left;
+      margin-right: 5px;
+      color: $color-highlighted;
+    }
+
+    a { text-decoration: underline; }
+  }
+
+  &.row {
+    > div > section { margin-bottom: 0; }
+  }
+}
+
+  .section__content {
+    img { width: 100%; }
+  }
+
+.section-before {
+  content: ' ';
+  position: absolute;
+  background: #2F2F2F;
+}
+
+.section--main {
+  h2 {
+    text-transform: initial;
+    margin-bottom: 25px;
+  }
+}
+
+.section--category {
+  h2 { margin: 0; }
+
+  p {
+    color: $color-highlighted;
+    font-family: openSans;
+    margin: 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .link { text-align: right; }
+}
+
+.section--skill {
+  padding: 15px 30px;
+  border-left: 2px solid #2F2F2F;
+  background: #FFFFFF;
+
+  &:before {
+    @extend .section-before;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 60px;
+  }
+}
+
+.section--list {
+  padding-top: 25px;
+  border-top: 2px solid #2F2F2F;
+
+  &:before {
+    @extend .section-before;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 8px;
+  }
+}
+
+.section--full,
+.section--carousel {
+  color: $gradient-text-color;
+  padding: 20px;
+  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+  a {
+    font-family: openSans;
+    color: $gradient-text-color;
+  }
+
+  footer,
+  footer i[class^='icon-'],
+  footer a { color: rgba($gradient-text-color, .6); }
+}
+
+.section--full {
+  li:after { color: $gradient-text-color; }
+
+  &:before {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 200px 200px 0 0;
+    border-color: #ffffff transparent transparent transparent;
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.section--carousel {
+  padding-top: 280px;
+  font-family: RobotoItalic;
+
+  .carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+  }
+}
+
+.section--white {
+  padding: 15px 20px;
+  margin-bottom: 2px !important;
+  background: #FFFFFF;
+
+  &:last-child { margin-bottom: 0 !important; }
+}
+
+.section--large {
+  margin-bottom: 0;
+  background: #FFFFFF;
+
+  > header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $gradient-text-color;
+    height: 70px;
+    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+    h2 {
+      position: relative;
+      margin-bottom: 0;
+
+      &:before,
+      &:after {
+        position: absolute;
+        top: 6px;
+        width: 20px;
+        height: 20px;
+        content: ' ';
+        background-image: url(images/icons/icon-quote.png);
+        background-size: cover;
+      }
+
+      &:before { left: -40px; }
+      &:after {
+        right: -40px;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  > .section__content {
+    padding: 25px 20px;
+  }
+
+  section { margin-bottom: 0; }
+}
