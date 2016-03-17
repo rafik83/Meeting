@@ -376,6 +376,16 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
+     * @return Sheet
+     */
+    public function markAsValidated()
+    {
+        $this->state = self::STATE_VALIDATED;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isValidated()

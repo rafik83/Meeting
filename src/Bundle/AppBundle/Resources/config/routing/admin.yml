@@ -228,7 +228,7 @@ admin_spot_list:
     defaults: { _controller: VimeetAppBundle:Admin/Spot:list }
 
 admin_spot_batch:
-    path: /event/{event}/batch
+    path: /event/{event}/spot/batch
     requirements:
         event: \d+
     methods: [POST]
@@ -304,8 +304,15 @@ admin_sheet_details:
     path: /event/{event}/sheet/{sheet}
     requirements:
         id: \d+
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: VimeetAppBundle:Admin/Sheet:details }
+admin_sheet_batch:
+    path: /event/{event}/sheet/batch
+    requirements:
+        id: \d+
+    methods: [POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Sheet:batch }
 
 #
 # Billing

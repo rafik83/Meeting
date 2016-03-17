@@ -128,6 +128,9 @@ flash:
                 success: Le sous événement a bien été créé
             update:
                 success: Le sous événement a bien été mis à jour
+        sheet_batch:
+            validate:
+                success: "{0} aucune fiche n'a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées"
         admin:
             create:
                 success: Le nouvel utilisateur a bien été créé

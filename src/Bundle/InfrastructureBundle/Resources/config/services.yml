@@ -497,6 +497,16 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+    command.sheet.validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.sheet.batch_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.validate_handler'
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:

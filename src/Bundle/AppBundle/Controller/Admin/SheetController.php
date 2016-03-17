@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
+use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
+use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -17,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SheetController extends Controller
 {
@@ -50,6 +53,30 @@ class SheetController extends Controller
             'form'     => $form->createView(),
             'filtered' => $filtered,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse
+     */
+    public function batchAction(Request $request, Event $event)
+    {
+        $ids      = $request->request->get('ids', []);
+        $validate = $request->request->getBoolean('validate');
+
+        if (!empty($ids) && $validate) {
+            $result = $this->get('command.sheet.batch_validate_handler')->handle(new BatchValidate($ids));
+
+            $this->addFlash('success', new TranschoiceMessage(
+                'flash.admin.sheet_batch.validate.success',
+                $result->count,
+                ['%count%' => $result->count]
+            ));
+        }
+
+        return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
     }
 
     /**

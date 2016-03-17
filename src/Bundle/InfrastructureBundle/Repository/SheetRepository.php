@@ -42,7 +42,6 @@ class SheetRepository implements SheetRepositoryInterface
      * @param EntityManager           $entityManager
      * @param Paginator               $paginator
      * @param TypeRepositoryInterface $typeRepository
-     *
      */
     public function __construct(
         EntityManager $entityManager,
@@ -145,11 +144,27 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->where('sheet.id = :sheetId')
             ->setParameter('sheetId', $sheetId);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsById(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -176,12 +191,29 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet')
+            ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->where('sheet.type IN (:types)')
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markAsValidated(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.state', ':validated')
+            ->setParameter('validated', Sheet::STATE_VALIDATED)
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->execute();
     }
 }

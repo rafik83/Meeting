@@ -1,0 +1,7 @@
+{% block subject %}
+    {{ 'mail.sheet.sheetValidated.subject'|trans({}, 'mail', mail.locale)|html }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.sheet.sheetValidated.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
