@@ -11,9 +11,12 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Operator\Create;
+use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator\CreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator\FilterType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator\UpdateType;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -111,6 +114,57 @@ class OperatorController extends Controller
         }
 
         return $this->render('VimeetAppBundle:Admin/Operator:create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @param Admin   $operator
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Admin $operator)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $organizer = $this->getUser();
+
+        if (!$organizer->isOrganizer()) {
+            throw $this->createAccessDeniedException(
+                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
+            );
+        }
+
+        if (!$operator->isOperator()) {
+            throw $this->createAccessDeniedException(
+                sprintf('The user with the role %s can not be updated with this page', $operator->getRole())
+            );
+        }
+
+        $update = new Update($organizer, $operator);
+
+        $form = $this->createForm(UpdateType::class, $update, [
+            'action' => $this->generateUrl('admin_update_operator', ['operator' => $operator->getId()]),
+            'method' => 'POST',
+            'submit' => true,
+            'events' => $organizer->getEvents(),
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('command.operator.update_handler')->handle($update);
+                $this->addFlash('success', 'flash.admin.operator.update.success');
+
+                return $this->redirectToRoute('admin_list_operator');
+            } catch (EmailAlreadyExistsException $ex) {
+                $form->get('email')->addError(
+                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
+                );
+            }
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Operator:update.html.twig', [
             'form' => $form->createView(),
         ]);
     }
