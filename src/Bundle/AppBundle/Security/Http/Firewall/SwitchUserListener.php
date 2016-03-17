@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -41,11 +40,6 @@ class SwitchUserListener implements ListenerInterface
      * @var TokenStorageInterface
      */
     private $tokenStorage;
-
-    /**
-     * @var UserProviderInterface
-     */
-    private $provider;
 
     /**
      * @var UserCheckerInterface
@@ -123,7 +117,6 @@ class SwitchUserListener implements ListenerInterface
         }
 
         $this->tokenStorage          = $tokenStorage;
-        $this->provider              = $provider;
         $this->userChecker           = $userChecker;
         $this->providerKey           = $providerKey;
         $this->accessDecisionManager = $accessDecisionManager;
@@ -237,7 +230,7 @@ class SwitchUserListener implements ListenerInterface
      */
     private function attemptExitUser()
     {
-        if (false === $original = $this->getOriginalToken($this->tokenStorage->getToken())) {
+        if (false === $this->getOriginalToken($this->tokenStorage->getToken())) {
             throw new AuthenticationCredentialsNotFoundException('Could not find original Token object.');
         }
 
