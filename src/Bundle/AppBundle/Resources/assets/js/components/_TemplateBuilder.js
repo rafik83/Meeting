@@ -4,15 +4,79 @@ var Sortable = require('./_Sortable');
 function TemplateBuilder(element)
 {
     this.element    = element;
-    this.menu       = element.querySelector('.slide-menu-container');
-    this.openButton = element.querySelector('.slide-menu-button');
+    this.menu       = element.querySelector('#template-menu');
+    this.openButton = element.querySelector('#template-menu-button');
+    this.open       = false;
+    this.drag       = false;
 
     this.openButton.addEventListener('click', function (event) {
         event.preventDefault();
-        this.menu.classList.toggle('slide-menu-container-open');
-        this.openButton.querySelector('i').classList.toggle('glyphicon-chevron-left');
-        this.openButton.querySelector('i').classList.toggle('glyphicon-chevron-right');
+        this.toggleMenu();
     }.bind(this));
+
+    var blockList = element.querySelector('#block-list');
+
+    new Sortable(blockList, {
+        group: { name: 'block-list', pull: 'clone', put: false },
+        sort: false,
+        onStart: function () {
+            this.closeMenu();
+            this.drag = true;
+        }.bind(this),
+        onEnd: function () {
+            this.openMenu();
+            this.drag = false;
+        }.bind(this)
+    });
+
+    var templateContainer = element.querySelector('#template-container');
+
+    new Sortable(templateContainer, {
+        group: { name: 'block-list', pull: false, put: true },
+        onStart: function () {
+            this.closeMenu();
+            this.drag = true;
+        }.bind(this),
+        onEnd: function () {
+            this.openMenu();
+            this.drag = false;
+        }.bind(this),
+        onAdd: function (event) {
+
+            if (event.item.parentNode === event.from) {
+                return;
+            }
+
+            var dummy = document.createElement('div');
+            dummy.innerHTML = event.item.getAttribute('data-block-template');
+
+            event.item.parentNode.insertBefore(dummy.firstChild, event.item);
+            event.item.remove();
+
+        }.bind(this)
+    });
 }
+
+TemplateBuilder.prototype.toggleMenu = function (open)
+{
+    if (open !== undefined && this.open === open) {
+        return;
+    }
+
+    this.menu.classList.toggle('slide-menu-container-open');
+    this.openButton.querySelector('i').classList.toggle('glyphicon-chevron-left');
+    this.openButton.querySelector('i').classList.toggle('glyphicon-chevron-right');
+    this.open = !this.open;
+};
+
+TemplateBuilder.prototype.openMenu = function ()
+{
+    this.toggleMenu(true);
+};
+
+TemplateBuilder.prototype.closeMenu = function ()
+{
+    this.toggleMenu(false);
+};
 
 module.exports = TemplateBuilder;

@@ -1,4 +1,13 @@
 
+.template-builder {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .slide-menu-container {
     position: absolute;
     top: 0;
@@ -29,5 +38,15 @@
     left: 10px;
     right: 10px;
     bottom: 10px;
-    border: 3px dashed #ccc;
+    overflow-y: scroll;
+
+    .block {
+
+        margin: 20px 0px;
+
+        .block-inner {
+            border: 3px dashed #ccc;
+            min-height: 300px;
+        }
+    }
 }
