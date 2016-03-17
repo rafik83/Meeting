@@ -534,6 +534,13 @@ services:
             - '@components.token.admin.activate_account_token_generator'
             - '@repository.admin_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.operator.update_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:
