@@ -13,14 +13,14 @@ Feature: Create Operator
     When I go to this page "/admin/fr/event"
     And I follow "admin.operator_list.link"
     Then I should be on this page "/admin/fr/operator"
-    And I follow "admin.operator.create.link"
+    And I follow "admin.operator_list.action.create"
     Then I should be on this page "/admin/fr/operator/create"
     Then I fill in the following:
       | form.create_operator.children.email.label     | toto@toto.fr |
       | form.create_operator.children.lastname.label  | Toto         |
       | form.create_operator.children.firstname.label | Tata         |
     And I press "form.create_operator.children.submit.label"
-    Then I should be on this page "/admin/fr/event"
+    Then I should be on this page "/admin/fr/operator"
     And I should see "flash.admin.operator.create.success"
     Given I am logged with "toto@toto.fr" on admin
     When I go to this page "/admin/fr/event"
