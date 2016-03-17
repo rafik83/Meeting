@@ -13,13 +13,13 @@ Feature: Impersonation
       | OneSheetSeveralParticipants.yml |
       | Admin.yml                       |
     And I am logged with "test@test.com" on admin
-    And I am on this page "/admin/event"
+    And I am on this page "/admin/fr/event"
     And I follow "admin.sheet.link"
-    And I should be on this page "/admin/event/1/sheet"
+    And I should be on this page "/admin/fr/event/1/sheet"
     When I follow "admin.sheet.impersonate"
     Then I should be on this url "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "admin.sheet.exit_impersonation"
     And I should see "Exposant"
     And I should see "Dutest"
     When I follow "admin.sheet.exit_impersonation"
-    Then I should be on this page "/admin/event/1/sheet"
+    Then I should be on this page "/admin/fr/event/1/sheet"
