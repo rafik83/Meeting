@@ -31,11 +31,11 @@ class Paginator
         $idsQueryBuilder    = clone $queryBuilder;
         $select = $selector . '.' . $element;
 
-        $countQueryBuilder->select('COUNT(' . $select .')');
+        $countQueryBuilder->select('COUNT(DISTINCT ' . $select .')');
         $total = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
         $idsQueryBuilder
-            ->select($select)
+            ->select('DISTINCT ' . $select)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
