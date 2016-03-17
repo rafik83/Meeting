@@ -87,6 +87,7 @@ class SheetListViewFactory
                 $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner()),
                 $sheet->getOwner()->getUser()->getEmail()
             ),
+            $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt()
         );

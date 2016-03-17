@@ -568,6 +568,10 @@ form:
         children:
             state:
                 label: Etat
+            category:
+                label: Catégorie
+            type:
+                label: Type
     create_admin:
         children:
             email:
@@ -617,3 +621,11 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    sheet_batch:
+        children:
+            validate:
+                label: Valider
+            assign:
+                label: Assigner
+            follower:
+                label: Collaborateur

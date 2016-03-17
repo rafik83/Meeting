@@ -88,9 +88,9 @@ interface SheetRepositoryInterface
     public function getUserSheetsByTypes(User $user, array $types);
 
     /**
-     * @param array $ids
+     * @param Event $event
      *
-     * @return int
+     * @return array
      */
-    public function markAsValidated(array $ids);
+    public function getIdsByEvent(Event $event);
 }

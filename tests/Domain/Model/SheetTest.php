@@ -10,6 +10,8 @@
 
 namespace Tests\Domain\Model;
 
+use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -79,5 +81,40 @@ class SheetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($participant2, $sheet->getUserParticipant($user2));
         $this->assertEquals($participant3, $sheet->getUserParticipant($user3));
         $this->assertNull($sheet->getUserParticipant($user4));
+    }
+
+    public function testAssignOrganizer()
+    {
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+
+        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER);
+
+        $this->assertEquals($organizer, $sheet->assign($organizer)->getFollower());
+    }
+
+    public function testAssignOperator()
+    {
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+
+        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_OPERATOR);
+
+        $this->assertEquals($operator, $sheet->assign($operator)->getFollower());
+    }
+
+    public function testAssignSuperAdmin()
+    {
+        $this->expectException(SheetException::class);
+
+        $event = new Event();
+        $type  = new Type($event);
+        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+
+        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_SUPER_ADMIN);
+
+        $sheet->assign($operator);
     }
 }

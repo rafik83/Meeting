@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Exception\Order\NotAddedRowException;
-use Proximum\Vimeet\Domain\Model\Exception\Order\RowAlreadyExistsException;
-use Proximum\Vimeet\Domain\Model\Exception\Order\RowNotFoundException;
+use Proximum\Vimeet\Domain\Exception\Order\NotAddedRowException;
+use Proximum\Vimeet\Domain\Exception\Order\RowAlreadyExistsException;
+use Proximum\Vimeet\Domain\Exception\Order\RowNotFoundException;
 
 /**
  * "Commande"

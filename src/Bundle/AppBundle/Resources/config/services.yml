@@ -128,6 +128,24 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: form.type }
+    form_type.category_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\CategoryChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: form.type }
+    form_type.type_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: form.type }
+    form_type_.sheet.follower_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FollowerChoiceType
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type

@@ -131,6 +131,8 @@ flash:
         sheet_batch:
             validate:
                 success: "{0} aucune fiche n'a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées"
+            assign:
+                success: "{0} aucune fiche n'a été assignée.|{1} 1 fiche a été assignée à %name%|]1,Inf[ %count% fiches ont été assignées à %name%"
         admin:
             create:
                 success: Le nouvel utilisateur a bien été créé

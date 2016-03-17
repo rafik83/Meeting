@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Exception\Order;
+namespace Proximum\Vimeet\Domain\Exception\Sheet;
 
 use Proximum\Vimeet\Domain\Exception\DomainException;
 
-class OrderException extends DomainException
+class SheetException extends DomainException
 {
 }
