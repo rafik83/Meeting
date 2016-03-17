@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}Admin{% endblock %}</title>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     {% block stylesheets %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
     {% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body style="padding: 30px 0px;">
-    <div class="container">
-        <a href="{{ path('admin_event_list') }}">
-            <span class="glyphicon glyphicon-home"></span> Admin
-        </a>
+<body>
 
-        {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+{{ include('VimeetAppBundle:Admin:menu.html.twig') }}
 
-        {{ include('VimeetAppBundle:Admin/Security:user.html.twig') }}
+<div class="container-fluid">
+    {{ include('VimeetAppBundle::flashes.html.twig') }}
 
-        {% if  is_granted('ROLE_SUPER_ADMIN') %}
-            | <a href="{{ path('admin_list_admin') }}">{{ 'admin.admin_list.link'|trans }}</a>
-        {% endif %}
+    {% block content %}{% endblock %}
+</div>
 
-        {{ include('VimeetAppBundle::flashes.html.twig') }}
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+{% endblock %}
 
-        {% block content %}{% endblock %}
-    </div>
-    {% block javascripts %}
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="{{ asset('assets/js/main.js') }}"></script>
-    {% endblock %}
 </body>
 </html>

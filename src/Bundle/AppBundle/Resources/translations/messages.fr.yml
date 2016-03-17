@@ -262,7 +262,7 @@ admin:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
     login:
-        logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
+        logged_as: '%firstname% %lastname% (%role%)'
     event:
         see:
             link: Voir
@@ -330,7 +330,7 @@ admin:
     admin_list:
         filter:
             empty_filter: Vider les filtres
-        link: Liste des utilisateurs
+        link: Utilisateurs
         title: Liste des utilisateurs du backoffice
         action:
             create: Créer un nouvel utilisateur

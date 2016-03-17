@@ -1,7 +1,0 @@
-{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    {{ 'admin.login.logged_as'|trans({'%role%': ('admin.role.' ~ app.user.roles[0])|trans, '%lastname%': app.user.lastname, '%firstname%': app.user.firstname, '%email%': app.user.email}) }}
-    |
-    <a href="{{ path('admin_logout') }}">
-        {{ 'logout.link'|trans }}
-    </a>
-{% endif %}

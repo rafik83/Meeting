@@ -1,15 +1,13 @@
 {% if locales|length > 1 %}
-    <div>
-        {% for locale in locales %}
-            {% if app.request.locale != locale %}
+    {% for locale in locales %}
+        {% if app.request.locale != locale %}
+            <li>
                 <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">
                     {{ locale|locale(locale) }}
                 </a>
-            {% else %}
-                <b>{{ locale|locale(locale) }}</b>
-            {% endif %}
-
-            {% if not loop.last %}|{% endif %}
-        {% endfor %}
-    </div>
+            </li>
+        {% else %}
+            <li><a href="#" class="active">{{ locale|locale(locale) }}</a></li>
+        {% endif %}
+    {% endfor %}
 {% endif %}
