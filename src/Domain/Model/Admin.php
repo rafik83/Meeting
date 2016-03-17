@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -43,15 +44,26 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     private $events;
 
     /**
-     * @param string $email
-     * @param string $salt
-     * @param string $password
-     * @param string $locale
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $role
+     * @var DateTimeInterface
      */
-    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role)
+    private $createdAt;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $lastLoginAt;
+
+    /**
+     * @param string            $email
+     * @param string            $salt
+     * @param string            $password
+     * @param string            $locale
+     * @param string            $firstname
+     * @param string            $lastname
+     * @param string            $role
+     * @param DateTimeInterface $createdAt
+     */
+    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role, DateTimeInterface $createdAt)
     {
         parent::__construct($email, $salt, $password, $locale);
 
@@ -59,6 +71,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         $this->lastname  = $lastname;
         $this->role      = $role;
         $this->events    = new ArrayCollection();
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -122,6 +135,30 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getLastLoginAt()
+    {
+        return $this->lastLoginAt;
+    }
+
+    /**
+     * @param DateTimeInterface $lastLoginAt
+     */
+    public function setLastLoginAt($lastLoginAt)
+    {
+        $this->lastLoginAt = $lastLoginAt;
     }
 
     /**
