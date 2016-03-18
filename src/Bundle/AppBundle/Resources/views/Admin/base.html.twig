@@ -22,6 +22,7 @@
         {% if  is_granted('ROLE_SUPER_ADMIN') %}
             | <a href="{{ path('admin_list_admin') }}">{{ 'admin.admin_list.link'|trans }}</a>
         {% endif %}
+        | <a href="{{ path('admin_account') }}">{{ 'admin.account.link'|trans }}</a>
 
         {{ include('VimeetAppBundle::flashes.html.twig') }}
 
