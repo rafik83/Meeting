@@ -30,6 +30,11 @@ interface EventRepositoryInterface
     public function getList();
 
     /**
+     * @return Event[]
+     */
+    public function getAll();
+
+    /**
      * @param Event $event
      */
     public function set(Event $event);
