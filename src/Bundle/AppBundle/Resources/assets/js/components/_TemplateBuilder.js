@@ -77,16 +77,27 @@ TemplateBuilder.prototype.sortable = function (element)
             var dummy = document.createElement('div');
             dummy.innerHTML = event.item.getAttribute('data-block-template');
 
-            var item = dummy.firstChild;
+            var block = dummy.firstChild;
 
-            [].forEach.call(item.querySelectorAll('.block-inner'), function (inner) {
-                this.sortable(inner);
-            }.bind(this));
+            this.block(block);
 
-            event.item.parentNode.insertBefore(item, event.item);
+            event.item.parentNode.insertBefore(block, event.item);
             event.item.remove();
 
         }.bind(this)
+    });
+};
+
+TemplateBuilder.prototype.block = function (element)
+{
+    [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
+        this.sortable(inner);
+    }.bind(this));
+
+    element.querySelector('.delete-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        element.remove();
+        console.log('remove clicked', element);
     });
 };
 

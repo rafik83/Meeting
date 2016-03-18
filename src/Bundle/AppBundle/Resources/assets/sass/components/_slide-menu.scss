@@ -44,6 +44,11 @@
     .block {
 
         margin: 20px 0px;
+        position: relative;
+
+        .row {
+            margin-left: 40px;
+        }
 
         .block-inner {
             border: 3px dashed #ccc;
@@ -52,6 +57,16 @@
             >.block {
                 margin: 20px;
             }
+        }
+
+        .block-buttons {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            background-color: #ccc;
+            color: #fff;
         }
     }
 }
