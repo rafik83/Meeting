@@ -144,6 +144,8 @@ flash:
                 success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
         activate_account:
             success: Votre compte a été activé avec succès
+        change_password:
+            success: Votre mot de passe a été changé
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

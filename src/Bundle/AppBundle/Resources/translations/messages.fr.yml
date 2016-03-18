@@ -253,6 +253,13 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    account:
+        link: Mon compte
+        title: Mon compte
+        content:
+            password: Modifier mon mot de passe
+        update_password:
+            title: Modifier mon mot de passe
     sheet:
         link: Fiches de participation
         impersonate: Impersonnation
