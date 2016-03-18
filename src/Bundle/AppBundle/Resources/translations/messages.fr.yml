@@ -341,13 +341,19 @@ admin:
                 email: Email
                 role: Type
                 events: Événéments
+                actions: Actions
             content:
+                update: Éditer
                 super_admin:
                     events:
                         all: Tous
                 admin:
                     events:
                         none: Aucun
+    create_admin:
+        title: Créer un nouvel utilisateur du backoffice
+    update_admin:
+        title: Modifier un utilisateur du backoffice
     operator_list:
         filter:
             empty_filter: Vider les filtres
