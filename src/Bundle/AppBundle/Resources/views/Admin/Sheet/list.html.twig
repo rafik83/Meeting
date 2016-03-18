@@ -7,25 +7,9 @@
 {% block list_filters '' %}
 {% block list_filters_summary '' %}
 
-{% block list_legacy_filters %}
-    {{ form_start(filter_form) }}
-    {{ form_errors(filter_form) }}
-    <div class="row">
-        {{ form_row(filter_form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
-        {{ form_row(filter_form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
-        {{ form_row(filter_form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
-        <div class="col-md-3 text-right" style="padding-top: 25px;">
-            {% if filtered %}
-                <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    Vider les filtres
-                </a>
-            {% endif %}
-            <button type="submit" class="btn btn-primary">Filtrer</button>
-        </div>
-    </div>
-    {{ form_end(filter_form) }}
-{% endblock list_legacy_filters %}
+{% block list_filter_form %}
+    {{ form(filter_form) }}
+{% endblock list_filter_form %}
 
 {% block list_batchs_links %}
     <li>
@@ -39,34 +23,16 @@
 {% endblock list_batchs_links %}
 
 {% block list_table %}
-    <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Suivi commercial</h4>
-                </div>
-                <div class="modal-body">
-                    {{ form_row(batch_form.follower) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    {{ form_widget(batch_form.assign) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <table class="table table-hover selectable-row">
+    <table class="table table-hover selectable-row filterable">
         <thead>
             <tr>
                 <th class="minwidth">
                     <input type="checkbox" data-check-all=".sheet-table input[type=checkbox]" title="Tout cocher" />
                 </th>
                 <th>Fiche</th>
-                <th>Etat</th>
-                <th>Catégories</th>
-                <th>Type</th>
+                <th data-filter-bind="state">Etat</th>
+                <th data-filter-bind="category">Catégories</th>
+                <th data-filter-bind="type">Type</th>
                 <th>Date création</th>
                 <th>Dernière connexion</th>
                 <th>Suivi commercial</th>
@@ -118,9 +84,31 @@
                         </div>
                     </td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9" class="text-danger text-center">Aucun résultat</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
 
     {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Suivi commercial</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batch_form.follower) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    {{ form_widget(batch_form.assign) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock list_table %}

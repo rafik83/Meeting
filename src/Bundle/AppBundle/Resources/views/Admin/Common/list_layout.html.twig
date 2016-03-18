@@ -3,7 +3,10 @@
 {% block content %}
     <h1 class="page-header">{% block list_title 'List title' %}</h1>
 
-    {% block list_legacy_filters %}{% endblock list_legacy_filters %}
+    <div id="filters">
+        {% block list_filter_form %}
+        {% endblock list_filter_form %}
+    </div>
 
     {% block batch_form_begin %}
         {{ form_start(batch_form) }}

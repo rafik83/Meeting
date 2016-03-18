@@ -68,4 +68,42 @@ $(document).ready(function(){
     $('[data-check-all]').each(function (key, element) { new CheckAll(element); });
 
     $('.batch-actions').hide();
+
+
+
+    $('[data-filter-bind]').each(function() {
+        var filterName = $(this).data('filterBind');
+
+        var filterField = $('#filters [name="'+filterName+'"]');
+
+        var options = $('#filters [name="'+filterName+'"] option');
+
+        var optionsHtml = '';
+        options.each(function() {
+            var active = $(this).attr('selected') == 'selected' ? 'class="active"' : '';
+            var label = $(this).text() != '' ? $(this).text() : 'All';
+            optionsHtml += '<li '+active+'><a href="#" data-filter-value="'+$(this).val()+'">'+label+'</a></li>';
+        });
+
+        var columnHtml = '<div class="btn-group">';
+        columnHtml += '<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+        columnHtml += $(this).text() + ' <span class="caret"></span>';
+        columnHtml += '</a>';
+        columnHtml += '<ul class="dropdown-menu" data-filter-name="' + filterName + '">';
+        columnHtml += optionsHtml;
+        columnHtml += '</ul></div>';
+
+        $(this).html(columnHtml);
+
+        $(filterField).parents('.form-group').hide();
+    });
+
+    $('.filterable').on('click', '[data-filter-value]', function() {
+        var filterValue = $(this).data('filterValue');
+        var filterName = $(this).parents('[data-filter-name]').data('filterName');
+
+        var field = $('#filters [name="'+filterName+'"]');
+        field.val(filterValue);
+        field.parents('form').submit();
+    });
 });
