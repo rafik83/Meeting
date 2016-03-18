@@ -233,6 +233,20 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @param string $role
+     *
+     * @return self
+     */
+    public function setRole($role)
+    {
+        if (in_array($role, $this->getAllRoles())) {
+            $this->role = $role;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function serialize()
@@ -338,6 +352,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function isOperator()
     {
         return $this->role === self::ROLE_OPERATOR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
     }
 
     /**
