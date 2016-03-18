@@ -100,14 +100,26 @@
 .section--full {
   li:after { color: $gradient-text-color; }
 
+  &:after,
   &:before {
     position: absolute;
+    bottom: 0;
+    right: 0;
+    content: ' ';
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 200px 200px 0 0;
-    border-color: #ffffff transparent transparent transparent;
-    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+
+  &:after {
+    border-width: 0 0 37px 37px;
+    border-color: transparent transparent $bg-container-color transparent;
+  }
+
+  &:before {
+    border-width: 37px 37px 0 0;
+    border-color: rgba(#ffffff, .5) transparent transparent transparent;
   }
 }
 
