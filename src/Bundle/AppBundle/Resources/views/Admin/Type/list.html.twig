@@ -3,27 +3,27 @@
 {% block content %}
     <h1 class="page-header">Types de participation</h1>
 
-    <table class="table">
+    <a href="{{ path('admin_type_create', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.type.create.link'|trans }}</a>
+
+    <table class="table table-hover">
         <thead>
-        <tr>
-            <th>Titre</th>
-            <th>
-                <a href="{{ path('admin_type_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">Ajouter</a>
-            </th>
-        </tr>
+            <tr>
+                <th>Title</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
         {% for type in types.results %}
             <tr>
                 <td>{{ type.title }}</td>
-                <td>
-                    <a href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                <td class="text-right">
+                    <a href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">{{ 'admin.type.update.link'|trans }}</a>
                     <a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    
+
     {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
 {% endblock %}
