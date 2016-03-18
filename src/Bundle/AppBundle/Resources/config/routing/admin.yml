@@ -29,6 +29,11 @@ admin_create_admin:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
+admin_update_admin:
+    path: /admin/update/{admin}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Admin:update }
+
 #
 # Create Operator
 #
