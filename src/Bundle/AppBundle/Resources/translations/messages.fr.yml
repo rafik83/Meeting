@@ -281,6 +281,9 @@ admin:
         link: Qui voit qui
     type:
         link: Types de participation
+        update:
+            link: Modifier le type de participation
+            title: Modifier le type de participation
     category:
         link: Catégories de participation
         add: Ajouter

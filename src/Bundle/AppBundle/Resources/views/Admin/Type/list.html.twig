@@ -1,9 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-    
-    <h2>Types de participation</h2>
+    <h1 class="page-header">Types de participation</h1>
 
     <table class="table">
         <thead>
@@ -26,8 +24,6 @@
         {% endfor %}
         </tbody>
     </table>
+    
     {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
-    <div class="text-left">
-        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
-    </div>
 {% endblock %}
