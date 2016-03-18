@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\Create;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateType extends AdminType

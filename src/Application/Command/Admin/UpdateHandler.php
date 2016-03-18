@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Domain\Model\Admin;
 
 class UpdateHandler extends AbstractCreateHandler
 {
