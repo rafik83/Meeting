@@ -7,7 +7,7 @@
                 </a>
             </li>
         {% else %}
-            <li class="active">{{ locale|locale(locale)|capitalize }}</li>
+            <li class="active"><a href="#">{{ locale|locale(locale)|capitalize }}</a></li>
         {% endif %}
     {% endfor %}
 {% endif %}
