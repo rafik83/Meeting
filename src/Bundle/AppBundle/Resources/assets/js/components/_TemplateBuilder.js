@@ -60,6 +60,7 @@ TemplateBuilder.prototype.sortable = function (element)
 {
     new Sortable(element, {
         group: { name: 'block-list', pull: false, put: ['block-reference'] },
+        handle: '.move-button',
         onStart: function () {
             this.closeMenu();
             this.drag = true;
@@ -89,7 +90,6 @@ TemplateBuilder.prototype.block = function (element)
     element.querySelector('.delete-button').addEventListener('click', function (event) {
         event.preventDefault();
         element.remove();
-        console.log('remove clicked', element);
     });
 };
 
