@@ -59,7 +59,7 @@ TemplateBuilder.prototype.closeMenu = function ()
 TemplateBuilder.prototype.sortable = function (element)
 {
     new Sortable(element, {
-        group: { name: 'block-list', pull: false, put: ['block-reference'] },
+        group: { name: 'block-list', pull: true, put: ['block-reference', 'block-inner'] },
         handle: '.move-button',
         onStart: function () {
             this.closeMenu();
