@@ -8,17 +8,17 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+abstract class AdminType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -29,40 +29,30 @@ class UpdateType extends AbstractType
             ->add('email', EmailType::class, [
                 'required' => true,
             ])
+            ->add('password', TextType::class, [
+                'required' => isset($options['password_required']) ? $options['password_required'] : true,
+            ])
             ->add('lastname', TextType::class, [
                 'required' => true,
             ])
             ->add('firstname', TextType::class, [
                 'required' => true,
             ])
+            ->add('role', ChoiceType::class, [
+                'choices' => [
+                    'form.create_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
+                    'form.create_admin.role.operator'    => Admin::ROLE_OPERATOR,
+                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
+                ],
+                'choices_as_values' => true,
+                'required'          => true,
+            ])
             ->add('events', EventChoiceType::class, [
                 'required'    => false,
                 'expanded'    => true,
                 'multiple'    => true,
                 'placeholder' => '',
-                'choices'     => $options['events']
             ])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired([
-            'events',
-        ]);
-        $resolver->setDefaults([
-            'data_class' => Update::class,
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'update_operator';
     }
 }

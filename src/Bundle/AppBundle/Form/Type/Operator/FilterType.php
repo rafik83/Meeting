@@ -10,8 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator;
 
-use Doctrine\ORM\EntityRepository;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventEntityType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,18 +25,13 @@ class FilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('event', EventEntityType::class, [
-                'label'         => false,
-                'required'      => false,
-                'expanded'      => false,
-                'multiple'      => false,
-                'placeholder'   => 'form.filter_operator.event.all',
-                'query_builder' => function (EntityRepository $entityRepository) use ($options) {
-                    return $entityRepository
-                        ->createQueryBuilder('event')
-                        ->where('event IN (:events)')
-                        ->setParameter('events', $options['events']);
-                },
+            ->add('event', EventChoiceType::class, [
+                'label'       => false,
+                'required'    => false,
+                'expanded'    => false,
+                'multiple'    => false,
+                'placeholder' => 'form.filter_operator.event.all',
+                'choices'     => $options['events'],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'form.filter_operator.children.submit.label',

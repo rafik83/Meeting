@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Application\Command\Admin\Create;
+use Proximum\Vimeet\Application\Command\Admin\Update;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AdminType
+class UpdateType extends AdminType
 {
     /**
      * {@inheritdoc}
@@ -22,8 +22,8 @@ class CreateType extends AdminType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'        => Create::class,
-            'password_required' => true,
+            'data_class'        => Update::class,
+            'password_required' => false,
         ]);
     }
 
@@ -32,6 +32,6 @@ class CreateType extends AdminType
      */
     public function getBlockPrefix()
     {
-        return 'create_admin';
+        return 'update_admin';
     }
 }
