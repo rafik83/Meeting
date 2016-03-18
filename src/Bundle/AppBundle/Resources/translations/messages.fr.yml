@@ -249,6 +249,10 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    goback:
+        link: Retour
+    events:
+        link: Mes évènements
     role:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
@@ -270,6 +274,7 @@ admin:
             link: Voir en front
         update:
             link: Modifier l'évènement
+            title: Modifier l'évènement
         settings:
             link: Paramétrages de l'évènement
     rule:

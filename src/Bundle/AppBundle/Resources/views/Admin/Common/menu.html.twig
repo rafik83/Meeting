@@ -12,19 +12,13 @@
                 <a class="navbar-brand" href="{{ path('admin_event_list') }}">
                     <span class="glyphicon glyphicon-home"></span>
                 </a>
-
-                {% if event is defined %}
-                    <a class="navbar-brand" href="{{ path('admin_event_read', {'event': event.id}) }}">
-                        {{ event.title }}
-                    </a>
-                {% endif %}
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     {% if event is defined %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Actions
+                                {{ event.title }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -34,7 +28,7 @@
                     {% else %}
                         <li>
                             <a href="{{ path('admin_event_list') }}">
-                                Mes évènements
+                                {{ 'admin.events.link'|trans }}
                             </a>
                         </li>
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -56,7 +50,7 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="{{ path('admin_event_list') }}">
-                                        Mes évènements
+                                        {{ 'admin.events.link'|trans }}
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -76,10 +70,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="#">Profile</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Language</li>
-                            {{ include('VimeetAppBundle::locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+                            <li class="dropdown-header">Langues</li>
+                            {{ include('VimeetAppBundle:Admin/Common:locales.html.twig', { 'locales': ['fr', 'en'] }) }}
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{{ path('admin_logout') }}">
