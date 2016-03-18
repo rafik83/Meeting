@@ -30,6 +30,28 @@
         overflow-y: scroll;
     }
 
+    .block-list {
+
+        .block {
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+
+            .block-buttons {
+                display: none;
+            }
+
+            .block-inner {
+                background-color: #ccc;
+                height: 100px;
+            }
+        }
+
+
+    }
+
 }
 
 .template-container {

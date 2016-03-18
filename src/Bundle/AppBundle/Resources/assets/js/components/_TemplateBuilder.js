@@ -74,15 +74,7 @@ TemplateBuilder.prototype.sortable = function (element)
                 return;
             }
 
-            var dummy = document.createElement('div');
-            dummy.innerHTML = event.item.getAttribute('data-block-template');
-
-            var block = dummy.firstChild;
-
-            this.block(block);
-
-            event.item.parentNode.insertBefore(block, event.item);
-            event.item.remove();
+            this.block(event.item);
 
         }.bind(this)
     });
