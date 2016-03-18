@@ -271,9 +271,9 @@ admin:
         see:
             link: Voir
         see_on_front:
-            link: Voir en front
+            link: Voir le site
         update:
-            link: Modifier l'évènement
+            link: Modifier
             title: Modifier l'évènement
         settings:
             link: Paramétrages de l'évènement
@@ -281,8 +281,11 @@ admin:
         link: Qui voit qui
     type:
         link: Types de participation
+        create:
+            link: Ajouter
+            title: Ajouter un type de participation
         update:
-            link: Modifier le type de participation
+            link: Modifier
             title: Modifier le type de participation
     category:
         link: Catégories de participation
