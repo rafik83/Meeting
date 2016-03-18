@@ -1,0 +1,86 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{% block list_title 'List title' %}</h1>
+
+    {% block list_legacy_filters %}{% endblock list_legacy_filters %}
+
+    {% block batch_form_begin %}
+        {{ form_start(batch_form) }}
+        {{ form_errors(batch_form) }}
+    {% endblock batch_form_begin %}
+
+    <div class="row filters">
+        <div class="col-md-4">
+            {% block list_new %}
+                <a class="btn btn-primary new-action" href="{% block list_new_link '#' %}">
+                    {% block list_new_label 'admin.new.link'|trans %}
+                </a>
+            {% endblock list_new %}
+
+            {% block list_batchs %}
+                <div class="dropdown batch-actions" data-batch-action-plural-label="{{ 'admin.batch_actions.plural'|trans }}" data-batch-action-single-label="{{ 'admin.batch_actions.single'|trans }}">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="batch-actions-label">{{ 'admin.batch_actions.single'|trans }}</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% block list_batchs_links %}
+                            <li><a href="#">Batch links undefined</a></li>
+                        {% endblock list_batchs_links %}
+                    </ul>
+                </div>
+            {% endblock list_batchs %}
+        </div>
+
+        <div class="col-md-4">
+            {% block list_filters %}
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filters <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Has purchased at least one product</a></li>
+                        <li><a href="#">Registered in last 10 days</a></li>
+                        <li><a href="#">Disabled</a></li>
+                    </ul>
+                </div>
+                <input type="text" placeholder="Search a name or an email" class="form-control">
+            </div>
+            {% endblock list_filters %}
+        </div>
+
+        <div class="col-md-4 text-right">
+            {% block list_sort %}
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Sort by
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#">Newest</a></li>
+                    <li><a href="#">Oldest</a></li>
+                </ul>
+            </div>
+            {% endblock list_sort %}
+        </div>
+    </div>
+
+    {% block list_filters_summary %}
+        <div class="text-center filters-list">
+            <span class="label label-default">Has purchased at least one product</span>
+            <span class="label label-default">Status: Approved</span>
+            <span class="label label-default">Required: Yes</span>
+            <a href="#" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-remove"></span>
+                Reset filters
+            </a>
+        </div>
+    {% endblock list_filters_summary %}
+
+    {% block list_table %}
+    {% endblock list_table %}
+
+    {% block batch_form_end %}
+        {{ form_end(batch_form) }}
+    {% endblock batch_form_end %}
+{% endblock %}

@@ -249,6 +249,11 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    new:
+        link: Ajouter
+    batch_actions:
+        single: Actions batch sur un élément
+        plural: Actions batch sur %count% éléments
     goback:
         link: Retour
     events:
@@ -258,6 +263,7 @@ admin:
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
     sheet:
+        title: Fiches de participation
         link: Fiches de participation
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation

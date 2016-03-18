@@ -1,100 +1,126 @@
-{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+{% extends 'VimeetAppBundle:Admin/Common:list_layout.html.twig' %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+{% block list_title 'admin.sheet.title'|trans %}
 
-    <h2>Gestion des participations</h2>
+{% block list_new '' %}
+{% block list_sort '' %}
+{% block list_filters '' %}
+{% block list_filters_summary '' %}
 
+{% block list_legacy_filters %}
     {{ form_start(filter_form) }}
-        {{ form_errors(filter_form) }}
-        <div class="row">
-            {{ form_row(filter_form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
-            {{ form_row(filter_form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
-            {{ form_row(filter_form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
-            <div class="col-md-3 text-right" style="padding-top: 25px;">
-                {% if filtered %}
-                    <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
-                {% endif %}
-                <button type="submit" class="btn btn-primary">Filtrer</button>
-            </div>
+    {{ form_errors(filter_form) }}
+    <div class="row">
+        {{ form_row(filter_form.state, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.state.label' }) }}
+        {{ form_row(filter_form.category, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.category.label' }) }}
+        {{ form_row(filter_form.type, { 'group_attr': { 'class': 'col-md-3' }, 'label': 'form.sheet_filter.children.type.label' }) }}
+        <div class="col-md-3 text-right" style="padding-top: 25px;">
+            {% if filtered %}
+                <a href="{{ path('admin_sheet', { 'event': event.id }) }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Vider les filtres
+                </a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Filtrer</button>
         </div>
+    </div>
     {{ form_end(filter_form) }}
+{% endblock list_legacy_filters %}
 
-    <hr />
-
-    {{ form_start(batch_form) }}
-        {{ form_errors(batch_form) }}
+{% block list_batchs_links %}
+    <li>
         {{ form_widget(batch_form.validate) }}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#commercial-follow-up">Suivi commercial</button>
+    </li>
+    <li>
+        <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
+            Suivi commercial
+        </a>
+    </li>
+{% endblock list_batchs_links %}
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Suivi commercial</h4>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_row(batch_form.follower) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                        {{ form_widget(batch_form.assign) }}
-                    </div>
+{% block list_table %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Suivi commercial</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batch_form.follower) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    {{ form_widget(batch_form.assign) }}
                 </div>
             </div>
         </div>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" data-check-all=".sheet-table input[type=checkbox]" title="Tout cocher" />
-                    </th>
-                    <th>Fiche</th>
-                    <th>Etat</th>
-                    <th>Catégories</th>
-                    <th>Type</th>
-                    <th>Propriétaire</th>
-                    <th>Suivi commercial</th>
-                    <th>Créé le</th>
-                    <th>Dernière connexion le</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody class="sheet-table">
-                {% for sheet in sheets.results %}
-                    <tr>
-                        <td>
-                            {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
-                        </td>
-                        <td>{{ sheet.title }}</td>
-                        <td>
-                            <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
-                        </td>
-                        <td>{{ sheet.categories|join(', ') }}</td>
-                        <td>{{ sheet.type }}</td>
-                        <td>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</td>
-                        <td>{{ sheet.follower }}</td>
-                        <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
-                        <td>{% if sheet.lastLoginAt %}{{ sheet.lastLoginAt|date('d/m/Y H:i') }}{% endif %}</td>
-                        <td>
-                            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Détails</a>
-                            <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
-                            <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken}) }}" class="btn btn-primary btn-sm">
-                                {{ 'admin.sheet.impersonate'|trans }}
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {{ form_end(batch_form) }}
-
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
-
-    <div class="text-left">
-        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
     </div>
 
-{% endblock %}
+    <table class="table table-hover selectable-row">
+        <thead>
+            <tr>
+                <th class="minwidth">
+                    <input type="checkbox" data-check-all=".sheet-table input[type=checkbox]" title="Tout cocher" />
+                </th>
+                <th>Fiche</th>
+                <th>Etat</th>
+                <th>Catégories</th>
+                <th>Type</th>
+                <th>Date création</th>
+                <th>Dernière connexion</th>
+                <th>Suivi commercial</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="sheet-table">
+            {% for sheet in sheets.results %}
+                <tr>
+                    <td>
+                        {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
+                            {{ sheet.title }}
+                        </a><br>
+                        <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
+                    </td>
+                    <td>
+                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                    </td>
+                    <td>{{ sheet.categories|join(', ') }}</td>
+                    <td>{{ sheet.type }}</td>
+                    <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if sheet.lastLoginAt %}
+                            {{ sheet.lastLoginAt|date('d/m/Y H:i') }}
+                        {% endif %}
+                    </td>
+                    <td>{{ sheet.follower }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">Détails</a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}">
+                                        Commandes et transactions
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken}) }}">
+                                        {{ 'admin.sheet.impersonate'|trans }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+{% endblock list_table %}
