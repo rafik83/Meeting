@@ -56,7 +56,7 @@ class OperatorController extends Controller
         $filtered   = false;
         $filterForm = $this->createFilterForm(
             FilterType::class,
-            ['event' => $request->query->get('event')],
+            ['event'  => $request->query->get('event')],
             ['events' => $organizer->getEvents()]
         );
 
@@ -91,7 +91,9 @@ class OperatorController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
         $organizer = $this->getUser();
         if (!$organizer->isOrganizer()) {
-            throw $this->createAccessDeniedException(sprintf('%s is not a granted ROLE to access this page', $organizer->getRole()));
+            throw $this->createAccessDeniedException(
+                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
+            );
         }
 
         $create = new Create($this->getUser(), new \DateTime());
@@ -109,7 +111,9 @@ class OperatorController extends Controller
 
                 return $this->redirectToRoute('admin_list_operator');
             } catch (EmailAlreadyExistsException $ex) {
-                $form->get('email')->addError($this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale()));
+                $form->get('email')->addError(
+                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
+                );
             }
         }
 
