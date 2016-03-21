@@ -19,17 +19,17 @@
 </head>
 <body>
 
-{{ include('VimeetAppBundle:Admin/Common:menu.html.twig') }}
+    {{ include('VimeetAppBundle:Admin/Common:menu.html.twig') }}
 
-<div class="container-fluid">
-    {{ include('VimeetAppBundle::flashes.html.twig') }}
+    <div class="container-fluid">
+        {{ include('VimeetAppBundle::flashes.html.twig') }}
 
     {% block content %}{% endblock %}
 </div>
 
-{% block javascripts %}
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-{% endblock %}
 
+{% block javascripts %}
+    <script src="{{ asset('assets/js/admin.js') }}"></script>
+{% endblock %}
 </body>
 </html>

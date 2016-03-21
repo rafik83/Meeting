@@ -37,6 +37,11 @@
                                     {{ 'admin.admin_list.link'|trans }}
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ path('admin_template_list') }}">
+                                    {{ 'admin.template_list.link'|trans }}
+                                </a>
+                            </li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -57,6 +62,11 @@
                                     <li>
                                         <a href="{{ path('admin_list_admin') }}">
                                             {{ 'admin.admin_list.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_list') }}">
+                                            {{ 'admin.template_list.link'|trans }}
                                         </a>
                                     </li>
                                 {% endif %}
