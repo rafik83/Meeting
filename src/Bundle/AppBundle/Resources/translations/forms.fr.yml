@@ -675,3 +675,11 @@ form:
                 label: Assigner
             follower:
                 label: Collaborateur
+    sheet_template_create:
+        children:
+            title:
+                label: Titre
+            close:
+                label: Annuler
+            submit:
+                label: Enregistrer

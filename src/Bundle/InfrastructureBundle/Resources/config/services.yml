@@ -143,6 +143,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.sheet.template_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\TemplateRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -559,6 +563,10 @@ services:
         arguments:
             - '@command.sheet.batch_validate_handler'
             - '@command.sheet.batch_assign_handler'
+    command.sheet.template.create_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
+        arguments:
+            - '@repository.sheet.template_repository'
 
     #
     # Security

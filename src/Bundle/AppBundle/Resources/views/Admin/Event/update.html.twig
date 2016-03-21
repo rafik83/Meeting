@@ -1,15 +1,14 @@
-{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+{% extends 'VimeetAppBundle:Admin/Common:form_layout.html.twig' %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
-        {% for key, child in form if key not in ['submit']%}
-            {{ form_row(child) }}
-        {% endfor %}
-        <div class="text-right">
-            <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour à la liste</a>
-            {{ form_rest(form) }}
-        </div>
-    {{ form_end(form) }}
-{% endblock %}
+{% block form_title 'admin.event.update.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    {{ form_row(form.translations) }}
+    {{ form_row(form.locales, {widget_columns: 3}) }}
+    {{ form_row(form.fallback, {widget_columns: 3}) }}
+    {{ form_row(form.mode, {inline: true}) }}
+    {{ form_row(form.vat, {widget_columns: 2}) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

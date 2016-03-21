@@ -249,11 +249,21 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    new:
+        link: Ajouter
+    batch_actions:
+        single: Actions batch sur un élément
+        plural: Actions batch sur %count% éléments
+    goback:
+        link: Retour
+    events:
+        link: Mes évènements
     role:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
     sheet:
+        title: Fiches de participation
         link: Fiches de participation
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation
@@ -262,18 +272,27 @@ admin:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
     login:
-        logged_as: 'Je suis connecté en tant que %role% %lastname% %firstname% %email%'
+        logged_as: '%firstname% %lastname% (%role%)'
     event:
         see:
             link: Voir
         see_on_front:
-            link: Voir en front
+            link: Voir le site
         update:
             link: Modifier
+            title: Modifier l'évènement
+        settings:
+            link: Paramétrages de l'évènement
     rule:
         link: Qui voit qui
     type:
         link: Types de participation
+        create:
+            link: Ajouter
+            title: Ajouter un type de participation
+        update:
+            link: Modifier
+            title: Modifier le type de participation
     category:
         link: Catégories de participation
         add: Ajouter
@@ -330,7 +349,7 @@ admin:
     admin_list:
         filter:
             empty_filter: Vider les filtres
-        link: Liste des utilisateurs
+        link: Utilisateurs
         title: Liste des utilisateurs du backoffice
         action:
             create: Créer un nouvel utilisateur
@@ -382,3 +401,5 @@ admin:
     activateAccount:
         password:
             title: Création du mot de passe pour votre compte collaborateur
+    template_list:
+        link: Templates

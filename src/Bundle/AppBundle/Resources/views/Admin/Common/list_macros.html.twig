@@ -1,0 +1,40 @@
+{% macro btnGroupAndRightMenuDropdown(links) %}
+    <div class="btn-group">
+        {% for label, link in links %}
+            {% if loop.first %}
+                <a href="{{ link }}" class="btn btn-default btn-sm">
+                    {{ label }}
+                </a>
+            {% elseif loop.index == 2 %}
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+            {% endif %}
+
+            {% if loop.index > 1 %}
+                <li>
+                    <a href="{{ link }}">{{ label }}</a>
+                </li>
+            {% endif %}
+
+            {% if loop.last %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro choice_as_dropdown(choice) %}
+    <div class="dropdown">
+        <button id="{{ choice.vars.id }}-dropdown" class="btn btn-link btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ choice }}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="{{ choice.vars.id }}-dropdown">
+            {% for choice in choice.vars.choices %}
+                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}

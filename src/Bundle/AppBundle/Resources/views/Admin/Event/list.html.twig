@@ -7,28 +7,28 @@
                 <th>Titre</th>
                 <th>Langues</th>
                 <th>Par défaut</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for event in events %}
                 <tr>
                     <td>
-                        <a href="{{ path('admin_event_read', { 'event': event.id }) }}">
-                            {{ event.title }}
-                        </a>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                {{ event.title }}
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {{ include('VimeetAppBundle:Admin/Event:links.html.twig', {event: event}) }}
+                            </ul>
+                        </div>
                     </td>
                     <td>
-                        <ul>
-                            {% for locale in event.locales %}
-                                <li>{{ locale|language }}</li>
-                            {% endfor %}
-                        </ul>
+                        {% for locale in event.locales %}
+                            {{ locale|language ~ (not loop.last ? ',' : '') }}
+                        {% endfor %}
                     </td>
                     <td>{{ event.fallback|language }}</td>
-                    <td>
-                        {% include 'VimeetAppBundle:Admin/Event:links.html.twig' with {event: event} %}
-                    </td>
                 </tr>
             {% endfor %}
         </tbody>
