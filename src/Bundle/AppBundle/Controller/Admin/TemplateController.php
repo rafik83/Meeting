@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template\CreateType;
-use Proximum\Vimeet\Domain\Model\Template;
+use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
