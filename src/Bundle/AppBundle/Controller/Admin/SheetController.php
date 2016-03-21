@@ -89,6 +89,7 @@ class SheetController extends Controller
             if ($batchForm->isValid()) {
                 $batch->validate = $batchForm->get('validate')->isClicked();
                 $batch->assign   = $batchForm->get('assign')->isClicked();
+                $batch->accept   = $batchForm->get('accept')->isClicked();
 
                 $result = $this->get('command.sheet.batch_handler')->handle($batch);
 
