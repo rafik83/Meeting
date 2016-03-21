@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataView;
 use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
+use Proximum\Vimeet\Domain\Model\Trace;
 
 class SheetDetailsView
 {
@@ -92,6 +93,11 @@ class SheetDetailsView
     public $comments;
 
     /**
+     * @var Trace[]
+     */
+    public $traces;
+
+    /**
      * SheetDetailsView constructor.
      *
      * @param string          $title
@@ -106,9 +112,10 @@ class SheetDetailsView
      * @param int             $pendingPropositions
      * @param int             $refusedRequests
      * @param int             $refusePropositions
-     * @param Comment[]      $comments
+     * @param Comment[]       $comments
+     * @param Trace[]         $traces
      */
-    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingPropositions, $refusedRequests, $refusePropositions, array $comments)
+    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingPropositions, $refusedRequests, $refusePropositions, array $comments, array $traces)
     {
         $this->title               = $title;
         $this->state               = $state;
@@ -123,5 +130,6 @@ class SheetDetailsView
         $this->refusedRequests     = $refusedRequests;
         $this->refusePropositions  = $refusePropositions;
         $this->comments            = $comments;
+        $this->traces              = $traces;
     }
 }
