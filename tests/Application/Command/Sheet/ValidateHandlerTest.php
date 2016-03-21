@@ -50,8 +50,7 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->isValidated();
         }))->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::TRACE_ACTION, new TraceEvent($expectedSheet, 'validate', $admin, $date, $comment))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet, $admin, $date, $comment))->shouldBeCalled();
 
         $this->assertTrue($sheet->isValidated());
     }
