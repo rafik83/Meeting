@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Trace;
+
 class SheetListView
 {
     /**
@@ -79,6 +81,16 @@ class SheetListView
     public $impersonationToken;
 
     /**
+     * @var \DateTimeInterface
+     */
+    public $acceptedAt = null;
+
+    /**
+     * @var string
+     */
+    public $acceptedBy = null;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
@@ -92,6 +104,7 @@ class SheetListView
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
+     * @param Trace|null           $accepted
      */
     public function __construct(
         $id,
@@ -104,7 +117,8 @@ class SheetListView
         $follower,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt,
-        $impersonationToken
+        $impersonationToken,
+        Trace $accepted = null
     ) {
         $this->id                 = $id;
         $this->title              = $title;
@@ -117,6 +131,11 @@ class SheetListView
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
+
+        if (null !== $accepted) {
+            $this->acceptedAt = $accepted->getDate();
+            $this->acceptedBy = $accepted->getAuthor();
+        }
     }
 
     /**
