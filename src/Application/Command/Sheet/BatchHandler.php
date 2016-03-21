@@ -60,7 +60,7 @@ class BatchHandler
         }
 
         if ($batch->accept) {
-            return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids));
+            return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids, $batch->admin, $batch->date));
         }
 
         return new BatchResult(0);

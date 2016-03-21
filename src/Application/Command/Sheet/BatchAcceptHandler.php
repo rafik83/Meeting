@@ -54,7 +54,7 @@ class BatchAcceptHandler
 
         // Accept sheets
         foreach ($sheets as $sheet) {
-            $this->acceptHandler->handle(new Accept($sheet));
+            $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $batchAccept->date));
         }
 
         return new BatchResult(count($sheets));

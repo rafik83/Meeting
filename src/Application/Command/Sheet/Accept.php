@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Accept
@@ -20,12 +22,26 @@ class Accept
     public $sheet;
 
     /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $date;
+
+    /**
      * Accept constructor.
      *
-     * @param Sheet $sheet
+     * @param Sheet             $sheet
+     * @param Admin             $admin
+     * @param DateTimeInterface $date
      */
-    public function __construct(Sheet $sheet)
+    public function __construct(Sheet $sheet, Admin $admin, DateTimeInterface $date)
     {
         $this->sheet = $sheet;
+        $this->admin = $admin;
+        $this->date  = $date;
     }
 }

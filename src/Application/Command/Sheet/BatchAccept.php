@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
+
 class BatchAccept
 {
     /**
@@ -18,12 +21,26 @@ class BatchAccept
     public $ids;
 
     /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $date;
+
+    /**
      * BatchAccept constructor.
      *
-     * @param array $ids
+     * @param array             $ids
+     * @param Admin             $admin
+     * @param DateTimeInterface $date
      */
-    public function __construct(array $ids)
+    public function __construct(array $ids, Admin $admin, DateTimeInterface $date)
     {
-        $this->ids = $ids;
+        $this->ids   = $ids;
+        $this->admin = $admin;
+        $this->date  = $date;
     }
 }

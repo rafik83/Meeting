@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AcceptHandler
 {
@@ -20,13 +23,20 @@ class AcceptHandler
     private $sheetRepository;
 
     /**
-     * ValidateHandler constructor.
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * AcceptHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    public function __construct(SheetRepositoryInterface $sheetRepository, EventDispatcherInterface $eventDispatcher)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -39,5 +49,16 @@ class AcceptHandler
         }
 
         $this->sheetRepository->set($accept->sheet->markAsAccepted());
+
+        $this->eventDispatcher->dispatch(
+            Events::TRACE_ACTION,
+            new TraceEvent(
+                $accept->sheet,
+                'accept',
+                $accept->admin,
+                $accept->date,
+                ''
+            )
+        );
     }
 }
