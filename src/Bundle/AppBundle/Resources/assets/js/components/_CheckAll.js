@@ -1,4 +1,3 @@
-
 function CheckAll(element)
 {
     this.element = element;

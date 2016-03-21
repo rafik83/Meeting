@@ -1,0 +1,13 @@
+{% if locales|length > 1 %}
+    {% for locale in locales %}
+        {% if app.request.locale != locale %}
+            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">
+                {{ locale|locale(locale)|capitalize }}
+            </a>
+        {% else %}
+            {{ locale|locale(locale)|capitalize }}
+        {% endif %}
+
+        {{ not loop.last ? '|' : '' }}
+    {% endfor %}
+{% endif %}
