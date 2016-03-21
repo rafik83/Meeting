@@ -84,6 +84,7 @@ class SheetListView
      * @param int                  $id
      * @param string               $title
      * @param string               $state
+     * @param bool                 $completed
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -96,6 +97,7 @@ class SheetListView
         $id,
         $title,
         $state,
+        $completed,
         array $categories,
         $type,
         SheetParticipantView $owner,
@@ -106,13 +108,22 @@ class SheetListView
     ) {
         $this->id                 = $id;
         $this->title              = $title;
-        $this->state       = $state;
+        $this->state              = $state;
+        $this->completed          = $completed;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
-        $this->follower    = $follower;
+        $this->follower           = $follower;
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncomplete()
+    {
+        return false === $this->completed;
     }
 }

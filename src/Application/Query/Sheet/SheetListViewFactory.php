@@ -85,6 +85,7 @@ class SheetListViewFactory
     /**
      * @param Sheet  $sheet
      * @param string $locale
+     * @param Admin  $admin
      *
      * @return SheetListView
      */
@@ -94,6 +95,7 @@ class SheetListViewFactory
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
             $sheet->getState(),
+            $sheet->isCompleted(),
             array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
