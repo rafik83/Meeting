@@ -273,6 +273,7 @@ admin:
         acceptedAt: 'Acceptée le %at% par %by%'
         trace:
             accept: 'Acceptée le %at% par %by%'
+            validate: 'Validée le %at% par %by% avec le commentaire: %comment%'
         details:
             comments:
                 title: Commentaires

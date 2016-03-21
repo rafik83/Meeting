@@ -633,6 +633,8 @@ form:
         children:
             validate:
                 label: Valider
+            validateComment:
+                label: Laisser un commentaire (optionnel)
             assign:
                 label: Assigner
             accept:
