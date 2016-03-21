@@ -75,13 +75,6 @@ Batch.prototype.toggle = function ()
             item.classList.toggle('hide');
         });
 
-        // Uncheck check all checkbox if 0 item checked
-        if (this.batch && count === 0) {
-            [].forEach.call(this.element.querySelectorAll('[data-batch-all]'), function (item) {
-                item.checked = false;
-            });
-        }
-
         this.batch = !this.batch;
     }
 
