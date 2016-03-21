@@ -112,3 +112,9 @@ body {
   outline: 0;
   box-shadow: none;
 }
+
+button, a {
+  &:active, &:hover, &:focus, &:link, &:target, &:visited {
+    outline:none !important;
+  }
+}
