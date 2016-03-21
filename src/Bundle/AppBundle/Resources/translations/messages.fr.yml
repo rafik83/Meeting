@@ -270,6 +270,9 @@ admin:
         link: Fiches de participation
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation
+        acceptedAt: 'Acceptée le %at% par %by%'
+        trace:
+            accept: 'Acceptée le %at% par %by%'
         details:
             comments:
                 title: Commentaires
