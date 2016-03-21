@@ -54,7 +54,7 @@ class SheetController extends Controller
             ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
 
         // Batch
-        $batch     = new Batch();
+        $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) { return $listView->id; }),
             'event'  => $event,
@@ -78,7 +78,7 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
-        $batch     = new Batch();
+        $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
