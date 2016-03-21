@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,6 +37,9 @@ class BatchType extends AbstractType
                 'event'       => $options['event'],
                 'placeholder' => '',
                 'required'    => false,
+            ])
+            ->add('validateComment', TextareaType::class, [
+                'required' => false,
             ])
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
