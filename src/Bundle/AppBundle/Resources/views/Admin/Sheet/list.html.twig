@@ -58,10 +58,16 @@
                         <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
                     </td>
                     <td>
-                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        <span class="label label-default"
+                            {% if sheet.state == 'accepted' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ 'admin.sheet.acceptedAt'|trans({'%at%': sheet.acceptedAt|date('d/m/Y H:i'), '%by%': sheet.acceptedBy}) }}"
+                            {% endif %}
+                        >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
                     <td>
-                        <span class="label label-danger">{{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}</span>
+                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
+                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
+                        </span>
                     </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
