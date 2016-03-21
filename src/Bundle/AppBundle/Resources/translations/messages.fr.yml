@@ -249,6 +249,8 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    filters:
+        reset: Réinitialiser les filtres
     new:
         link: Ajouter
     batch_actions:
@@ -262,9 +264,13 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    order:
+        link: Commandes et transactions
     sheet:
         title: Fiches de participation
         link: Fiches de participation
+        read: Voir
+        commercialFollowUp: Attribuer le suivi commercial
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation
         details:
