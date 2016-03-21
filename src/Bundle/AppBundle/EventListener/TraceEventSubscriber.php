@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\TraceableInterface;
@@ -49,6 +50,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetValidatedEvent $event
+     */
+    public function onSheetValidated(SheetValidatedEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            Trace::VALIDATE,
+            $event->getAuthor(),
+            $event->getDate(),
+            $event->getComment()
+        );
+    }
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param AbstractUser       $user
@@ -74,7 +89,8 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_ACCEPTED => 'onSheetAccepted',
+            Events::SHEET_ACCEPTED  => 'onSheetAccepted',
+            Events::SHEET_VALIDATED => 'onSheetValidated',
         ];
     }
 }
