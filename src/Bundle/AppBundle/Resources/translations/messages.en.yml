@@ -81,6 +81,8 @@ admin:
             link: See on front
         update:
             link: Update
+        settings:
+            link: Event settings
     rule:
         link: Who see who
     type:

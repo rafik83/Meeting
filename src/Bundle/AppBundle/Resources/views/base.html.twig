@@ -17,11 +17,11 @@
 
             {% block locales %}
                 {% if eventView is defined %}
-                    {{ include('VimeetAppBundle::locales.html.twig', { 'locales': eventView.locales }) }}
+                    {{ include('VimeetAppBundle:Event/Common:locales.html.twig', { 'locales': eventView.locales }) }}
                 {% endif %}
             {% endblock %}
 
-            {{ include('VimeetAppBundle::user.html.twig') }}
+            {{ include('VimeetAppBundle:Event/Common:user.html.twig') }}
 
             {% block body %}{% endblock %}
             {% block javascripts %}

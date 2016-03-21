@@ -1,0 +1,33 @@
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+
+{% form_theme form 'VimeetAppBundle:Admin/Common:form_theme.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{% block form_title 'Form title' %}</h1>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    {% block form_content %}{% endblock form_content %}
+
+    {% block submit_section %}
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                {% block goback %}
+                <a href="{% block goback_link '#' %}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ 'admin.goback.link'|trans }}
+                </a>
+                {% endblock goback %}
+            </div>
+            <div class="col-sm-9 text-right">
+                {% block form_submit %}
+                    {{ form_row(form.submit) }}
+                {% endblock form_submit %}
+            </div>
+        </div>
+    {% endblock submit_section %}
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
