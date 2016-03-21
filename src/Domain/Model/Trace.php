@@ -1,0 +1,135 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Model;
+
+use DateTimeInterface;
+
+/**
+ * Traçabilité
+ */
+class Trace
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * Composed of TraceableName + ID
+     * @var string
+     */
+    private $object;
+
+    /**
+     * @var string
+     */
+    private $action;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var Admin
+     */
+    private $admin;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $date;
+
+    /**
+     * @var string
+     */
+    private $comment;
+
+    /**
+     * @param TraceableInterface $traceable
+     * @param string             $action
+     * @param AbstractUser       $abstractUser
+     * @param DateTimeInterface  $date
+     * @param string             $comment
+     */
+    public function __construct (
+        TraceableInterface $traceable,
+        $action,
+        AbstractUser $abstractUser,
+        DateTimeInterface $date,
+        $comment
+    ) {
+        $this->object  = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
+        $this->action  = $action;
+        $this->date    = $date;
+        $this->comment = $comment;
+
+        if ($abstractUser instanceof User) {
+            $this->user = $abstractUser;
+        } elseif ($abstractUser instanceof Admin) {
+            $this->admin = $abstractUser;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthor()
+    {
+        if (null !== $this->user) {
+            return $this->user->getEmail();
+        } elseif (null !== $this->admin) {
+            return sprintf('%s %s', $this->admin->getFirstname(), $this->admin->getLastname());
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+}
