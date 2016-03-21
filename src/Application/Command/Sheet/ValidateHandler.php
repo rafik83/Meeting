@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -50,5 +51,15 @@ class ValidateHandler
 
         $this->sheetRepository->set($validate->sheet->markAsValidated());
         $this->eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($validate->sheet));
+        $this->eventDispatcher->dispatch(
+            Events::TRACE_ACTION,
+            new TraceEvent(
+                $validate->sheet,
+                'validate',
+                $validate->admin,
+                $validate->date,
+                $validate->comment
+            )
+        );
     }
 }

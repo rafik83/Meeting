@@ -51,6 +51,11 @@ class Batch
     public $date;
 
     /**
+     * @var string
+     */
+    public $validateComment;
+
+    /**
      * @param Admin             $admin
      * @param DateTimeInterface $date
      */
