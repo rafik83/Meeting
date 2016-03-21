@@ -143,6 +143,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.trace_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TraceRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
