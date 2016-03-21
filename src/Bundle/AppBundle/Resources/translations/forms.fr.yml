@@ -568,6 +568,8 @@ form:
         children:
             state:
                 label: Etat
+            completed:
+                label: Complète
             category:
                 label: Catégorie
             type:
@@ -633,5 +635,7 @@ form:
                 label: Valider
             assign:
                 label: Assigner
+            accept:
+                label: Accepter
             follower:
                 label: Collaborateur
