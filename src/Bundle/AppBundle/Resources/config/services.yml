@@ -332,6 +332,12 @@ services:
             - '%mailer_sender%'
         tags:
             - { name: kernel.event_subscriber }
+    event_listener.trace_event_listener:
+        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\TraceEventListener
+        arguments:
+            - '@repository.trace_repository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'trace_action', method: 'trace' }
 
     #
     # Twig extension
