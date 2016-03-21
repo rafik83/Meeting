@@ -23,6 +23,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             nullable: true
         state:
             type: string
+        completed:
+            type: boolean
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
