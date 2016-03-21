@@ -374,3 +374,5 @@ admin:
     activateAccount:
         password:
             title: Création du mot de passe pour votre compte collaborateur
+    template_list:
+        link: Templates
