@@ -39,6 +39,7 @@ class BatchType extends AbstractType
             ])
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
+            ->add('accept', SubmitType::class)
         ;
     }
 

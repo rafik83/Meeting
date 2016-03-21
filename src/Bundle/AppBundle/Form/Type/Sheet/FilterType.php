@@ -25,6 +25,7 @@ class FilterType extends AbstractType
     {
         $builder
             ->add('state', StateChoiceType::class, ['placeholder' => ''])
+            ->add('completed', CompletedChoiceType::class, ['placeholder' => ''])
             ->add('category', CategoryChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
             ->add('type', TypeChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
         ;
