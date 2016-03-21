@@ -3,27 +3,27 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class BatchResult
+class BatchAccept
 {
     /**
-     * @var int
+     * @var array
      */
-    public $count;
+    public $ids;
 
     /**
-     * BatchResult constructor.
+     * BatchAccept constructor.
      *
-     * @param int $count
+     * @param array $ids
      */
-    public function __construct($count)
+    public function __construct(array $ids)
     {
-        $this->count = $count;
+        $this->ids = $ids;
     }
 }

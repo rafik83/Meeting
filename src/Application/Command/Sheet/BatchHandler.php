@@ -23,15 +23,25 @@ class BatchHandler
     private $batchAssignHandler;
 
     /**
+     * @var BatchAcceptHandler
+     */
+    private $batchAcceptHandler;
+
+    /**
      * BatchHandler constructor.
      *
      * @param BatchValidateHandler $batchValidateHandler
      * @param BatchAssignHandler   $batchAssignHandler
+     * @param BatchAcceptHandler   $batchAcceptHandler
      */
-    public function __construct(BatchValidateHandler $batchValidateHandler, BatchAssignHandler $batchAssignHandler)
-    {
+    public function __construct(
+        BatchValidateHandler $batchValidateHandler,
+        BatchAssignHandler $batchAssignHandler,
+        BatchAcceptHandler $batchAcceptHandler
+    ) {
         $this->batchValidateHandler = $batchValidateHandler;
         $this->batchAssignHandler   = $batchAssignHandler;
+        $this->batchAcceptHandler   = $batchAcceptHandler;
     }
 
     /**
@@ -47,6 +57,10 @@ class BatchHandler
 
         if ($batch->assign && $batch->follower) {
             return $this->batchAssignHandler->handle(new BatchAssign($batch->ids, $batch->follower));
+        }
+
+        if ($batch->accept) {
+            return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids));
         }
 
         return new BatchResult(0);

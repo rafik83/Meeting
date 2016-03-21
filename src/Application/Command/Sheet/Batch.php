@@ -27,6 +27,11 @@ class Batch
     /**
      * @var bool
      */
+    public $accept;
+
+    /**
+     * @var bool
+     */
     public $assign;
 
     /**
