@@ -54,7 +54,7 @@ class TraceRepository implements TraceRepositoryInterface
             ->where('trace.object = :object')
             ->setParameter('object', sprintf('%s%s', $sheet->getTraceableName(), $sheet->getId()))
             ->andWhere('trace.action = :action')
-            ->setParameter('action', 'accept')
+            ->setParameter('action', Trace::ACCEPT)
             ->orderBy('trace.date', 'DESC')
             ->setMaxResults(1);
 
