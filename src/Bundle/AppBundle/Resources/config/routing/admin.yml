@@ -475,3 +475,13 @@ admin_happening_speaker_delete:
         speaker: \d+
     methods: [DELETE]
     defaults: { _controller: VimeetAppBundle:Admin/Speaker:delete }
+
+#
+# Template
+#
+admin_template_list:
+    path: /template
+    defaults: { _controller: VimeetAppBundle:Admin/Template:list }
+admin_template_builder:
+    path: /template/{template}/builder
+    defaults: { _controller: VimeetAppBundle:Admin/Template:builder }

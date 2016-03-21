@@ -647,3 +647,11 @@ form:
                         label: Ressaisir le nouveau mot de passe
             submit:
                 label: Envoyer
+    sheet_template_create:
+        children:
+            title:
+                label: Titre
+            close:
+                label: Annuler
+            submit:
+                label: Enregistrer
