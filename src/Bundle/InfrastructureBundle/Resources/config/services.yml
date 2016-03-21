@@ -555,6 +555,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     command.sheet.batch_accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler
         arguments:
@@ -672,6 +673,7 @@ services:
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
             - '@repository.sheet.comment_repository'
+            - '@repository.trace_repository'
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 
@@ -887,3 +889,4 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@security.impersonate'
+            - '@repository.trace_repository'
