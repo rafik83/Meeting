@@ -546,6 +546,16 @@ services:
         arguments:
             - '@command.sheet.batch_validate_handler'
             - '@command.sheet.batch_assign_handler'
+            - '@command.sheet.batch_accept_handler'
+    command.sheet.accept_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+    command.sheet.batch_accept_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.accept_handler'
 
     #
     # Security
