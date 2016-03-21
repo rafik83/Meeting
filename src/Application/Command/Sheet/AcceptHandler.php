@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -51,13 +52,11 @@ class AcceptHandler
         $this->sheetRepository->set($accept->sheet->markAsAccepted());
 
         $this->eventDispatcher->dispatch(
-            Events::TRACE_ACTION,
-            new TraceEvent(
+            Events::SHEET_ACCEPTED,
+            new SheetAcceptedEvent(
                 $accept->sheet,
-                'accept',
                 $accept->admin,
-                $accept->date,
-                ''
+                $accept->date
             )
         );
     }

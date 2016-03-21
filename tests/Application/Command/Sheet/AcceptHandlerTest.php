@@ -14,6 +14,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Sheet\Accept;
 use Proximum\Vimeet\Application\Command\Sheet\AcceptHandler;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -49,7 +50,7 @@ class AcceptHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->isAccepted();
         }))->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::TRACE_ACTION, new TraceEvent($expectedSheet, 'accept', $admin, $date, ''))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_ACCEPTED, new SheetAcceptedEvent($expectedSheet, $admin, $date))->shouldBeCalled();
 
         $this->assertTrue($sheet->isAccepted());
     }

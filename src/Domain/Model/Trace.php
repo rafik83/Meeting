@@ -17,6 +17,11 @@ use DateTimeInterface;
  */
 class Trace
 {
+    const ACCEPT   = 'accept';
+    const VALIDATE = 'validate';
+    const CREATE   = 'create';
+    const UPDATE   = 'update';
+
     /**
      * @var int
      */
