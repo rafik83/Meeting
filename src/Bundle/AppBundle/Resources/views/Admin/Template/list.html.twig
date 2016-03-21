@@ -21,7 +21,9 @@
                         {{ form_row(form.title) }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            {{ 'form.sheet_template_create.children.close.label'|trans({}, 'forms') }}
+                        </button>
                         {{ form_widget(form.submit) }}
                     </div>
                 </div>
@@ -33,14 +35,16 @@
         <thead>
             <tr>
                 <th>Titre</th>
-                <th>Action</th>
+                <th class="text-right">Action</th>
             </tr>
         </thead>
         <tbody>
             {% for template in templates %}
                 <tr>
                     <td>{{ template.title }}</td>
-                    <td><a href="{{ path('admin_template_builder', { 'template': template.id }) }}" class="btn btn-primary">Modifier</a></td>
+                    <td class="text-right">
+                        <a href="{{ path('admin_template_builder', { 'template': template.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
