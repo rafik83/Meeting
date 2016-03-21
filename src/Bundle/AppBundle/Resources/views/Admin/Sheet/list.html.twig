@@ -1,5 +1,7 @@
 {% extends 'VimeetAppBundle:Admin/Common:list_layout.html.twig' %}
 
+{% import "VimeetAppBundle:Admin/Common:list_macros.html.twig" as list_macros %}
+
 {% block list_title 'admin.sheet.title'|trans %}
 
 {% block list_new '' %}
@@ -64,24 +66,11 @@
                     </td>
                     <td>{{ sheet.follower }}</td>
                     <td class="text-right">
-                        <div class="btn-group">
-                            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">Détails</a>
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}">
-                                        Commandes et transactions
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken}) }}">
-                                        {{ 'admin.sheet.impersonate'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        {{ list_macros.btnGroupAndRightMenuDropdown({
+                            'Détails': path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
+                            'Commandes et transactions': path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }),
+                            ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
+                        }) }}
                     </td>
                 </tr>
             {% else %}
