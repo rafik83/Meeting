@@ -1,51 +1,94 @@
-{% extends 'VimeetAppBundle:Admin/Common:list_layout.html.twig' %}
+{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
-{% import "VimeetAppBundle:Admin/Common:list_macros.html.twig" as list_macros %}
+{% import 'VimeetAppBundle:Admin/Common:list_macros.html.twig' as list_macros %}
 
 {% block list_title 'admin.sheet.title'|trans %}
 
-{% block list_new '' %}
-{% block list_sort '' %}
-{% block list_filters '' %}
+{% block content %}
+    <h1 class="page-header">{{ block('list_title') }}</h1>
 
-{% block list_filter_form %}
-    {{ form(filter_form) }}
-{% endblock list_filter_form %}
+    {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
+        {{ form_errors(batch_form) }}
 
-{% block list_batchs_links %}
-    <li>
-        {{ form_widget(batch_form.validate) }}
-    </li>
-    <li>
-        <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
-            {{ 'admin.sheet.commercialFollowUp'|trans }}
-        </a>
-    </li>
-{% endblock list_batchs_links %}
+        <div class="row filters">
+            <div class="col-md-4">
+                <div class="dropdown batch-actions hide">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span data-batch-transchoice="{{ 'admin.batch_actions.single'|trans ~ '|' ~ 'admin.batch_actions.plural'|trans }}">{{ 'admin.batch_actions.single'|trans }}</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            {{ form_widget(batch_form.validate) }}
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
+                                {{ 'admin.sheet.commercialFollowUp'|trans }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-{% block list_table %}
-    {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
-        filters:   filters_summary,
-        resetLink: path('admin_sheet', { 'event': event.id })
-    }) }}
+        {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
+            filters:   filters_summary,
+            resetLink: path('admin_sheet', { 'event': event.id })
+        }) }}
 
-    <table class="table table-hover selectable-row filterable">
-        <thead>
+        <table class="table table-hover selectable-row filterable">
+            <thead>
             <tr>
                 <th class="minwidth">
-                    <input type="checkbox" data-check-all=".sheet-table input[type=checkbox]" title="Tout cocher" />
+                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="Tout cocher" />
                 </th>
                 <th>Fiche</th>
-                <th data-filter-bind="state">Etat</th>
-                <th data-filter-bind="category">Catégories</th>
-                <th data-filter-bind="type">Type</th>
+                <th>
+                    <div class="dropdown">
+                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Etat
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
+                            {% for choice in filter_form.state.vars.choices %}
+                                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </th>
+                <th>
+                    <div class="dropdown">
+                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Catégorie
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
+                            {% for choice in filter_form.category.vars.choices %}
+                                <li><a href="?{{ app.request.query.all|merge({'category': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </th>
+                <th>
+                    <div class="dropdown">
+                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Type
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
+                            {% for choice in filter_form.type.vars.choices %}
+                                <li><a href="?{{ app.request.query.all|merge({'type': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </th>
                 <th>Date création</th>
                 <th>Dernière connexion</th>
                 <th>Suivi commercial</th>
                 <th class="text-right">Actions</th>
             </tr>
-        </thead>
-        <tbody class="sheet-table">
+            </thead>
+            <tbody class="sheet-table">
             {% for sheet in sheets.results %}
                 <tr>
                     <td>
@@ -82,26 +125,27 @@
                     <td colspan="9" class="text-danger text-center">Aucun résultat</td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+        {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{ 'admin.sheet.commercialFollowUp'|trans }}</h4>
-                </div>
-                <div class="modal-body">
-                    {{ form_row(batch_form.follower) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    {{ form_widget(batch_form.assign) }}
+        <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{ 'admin.sheet.commercialFollowUp'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.follower) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        {{ form_widget(batch_form.assign) }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock list_table %}
+    {{ form_end(batch_form) }}
+{% endblock %}

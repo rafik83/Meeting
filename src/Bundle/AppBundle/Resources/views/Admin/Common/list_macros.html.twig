@@ -24,3 +24,17 @@
         {% endfor %}
     </div>
 {% endmacro %}
+
+{% macro choice_as_dropdown(choice) %}
+    <div class="dropdown">
+        <button id="{{ choice.vars.id }}-dropdown" class="btn btn-link btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ choice }}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="{{ choice.vars.id }}-dropdown">
+            {% for choice in choice.vars.choices %}
+                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
