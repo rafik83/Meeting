@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 /**
  * "Fiche de participation".
  */
-class Sheet implements BillingInfoInterface
+class Sheet implements BillingInfoInterface, TraceableInterface
 {
     const STATE_PENDING   = 'pending';
     const STATE_VALIDATED = 'validated';
@@ -121,6 +121,14 @@ class Sheet implements BillingInfoInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceableName()
+    {
+        return 'sheet';
     }
 
     /**
