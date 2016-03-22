@@ -887,6 +887,15 @@ services:
     spot.reference_factory:
         class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory
 
+
+    #
+    # Sheet Validator
+    #
+    components.sheet.sheet_validator:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetValidator
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
     #
     # Queries
     #
