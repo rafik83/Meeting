@@ -329,7 +329,7 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@request_stack'
-            - '@repository.admin_repository'
+            - '@command.admin.update_last_login_handler'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
     event_listener.mail_event_subscriber:
