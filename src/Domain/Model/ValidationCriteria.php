@@ -37,4 +37,15 @@ class ValidationCriteria
     {
         return $this->sheetAccepted;
     }
+
+    /**
+     * @param bool $sheetAccepted
+     * @return $this
+     */
+    public function setSheetAccepted($sheetAccepted)
+    {
+        $this->sheetAccepted = $sheetAccepted;
+
+        return $this;
+    }
 }
