@@ -110,8 +110,7 @@
                         <div id="object-list" class="object-list">
 
                             <div class="object">
-                                Texte non modifiable
-                                <ul class="block-buttons list-inline pull-right">
+                                <ul class="block-buttons list-inline">
                                     <li>
                                         <span class="btn btn-link move-button">
                                             <i class="glyphicon glyphicon-move"></i>
@@ -123,16 +122,22 @@
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="btn btn-link config-button">
+                                        <button
+                                                class="btn btn-link configure-button"
+                                                data-toggle="modal"
+                                                data-target="#configure-modal"
+                                                data-modal-title="Texte non modifiable"
+                                                data-modal-body="Texte non modifiable"
+                                        >
                                             <i class="glyphicon glyphicon-cog"></i>
                                         </button>
                                     </li>
                                 </ul>
+                                Texte non modifiable
                             </div>
 
                             <div class="object">
-                                Texte modifiable
-                                <ul class="block-buttons list-inline pull-right">
+                                <ul class="block-buttons list-inline">
                                     <li>
                                         <span class="btn btn-link move-button">
                                             <i class="glyphicon glyphicon-move"></i>
@@ -144,15 +149,40 @@
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="btn btn-link config-button">
+                                        <button
+                                                class="btn btn-link configure-button"
+                                                data-toggle="modal"
+                                                data-target="#configure-modal"
+                                                data-modal-title="Texte modifiable"
+                                                data-modal-body="Texte modifiable"
+                                        >
                                             <i class="glyphicon glyphicon-cog"></i>
                                         </button>
                                     </li>
                                 </ul>
+                                Texte modifiable
                             </div>
 
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade button-based-modal" id="configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="configure-modal-label">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>

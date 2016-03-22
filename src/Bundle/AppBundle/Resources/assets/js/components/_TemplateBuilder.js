@@ -112,6 +112,9 @@ TemplateBuilder.prototype.sortable = function (element, accept)
 
 TemplateBuilder.prototype.block = function (element)
 {
+    // Dispatch DOM added element event
+    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
     // Init block inner as sortable target
     [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
         this.sortable(inner, ['block-reference', 'object-reference', 'block-inner']);
@@ -128,12 +131,20 @@ TemplateBuilder.prototype.block = function (element)
 
 TemplateBuilder.prototype.object = function (element)
 {
+    // Dispatch DOM added element event
+    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
     // Delete button behavior
     [].forEach.call(element.querySelectorAll('.delete-button'), function (button) {
         button.addEventListener('click', function (event) {
             event.preventDefault();
             element.remove();
         });
+    });
+
+    // Configure button behavior
+    [].forEach.call(element.querySelectorAll('.configure-button'), function (button) {
+        button.click();
     });
 };
 
