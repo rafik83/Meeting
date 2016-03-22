@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\ValidationCriteria;
 
 class Create
 {
@@ -30,6 +31,11 @@ class Create
      * @var Template
      */
     public $template;
+
+    /**
+     * @var array
+     */
+    public $validationCriteria = [];
 
     /**
      * @var array
