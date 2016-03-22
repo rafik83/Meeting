@@ -25,6 +25,9 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         viewTemplate:
             type: text
+    embedded:
+        validationCriteria:
+            class: Proximum\Vimeet\Domain\Model\ValidationCriteria
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
