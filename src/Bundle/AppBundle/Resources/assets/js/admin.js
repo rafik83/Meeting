@@ -1,4 +1,5 @@
 var $               = require('jquery'),
+    bootstrap       = require('bootstrap'),
     Confirm         = require('./components/_Confirm'),
     CheckAll        = require('./components/_CheckAll'),
     TemplateBuilder = require('./components/_TemplateBuilder'),
