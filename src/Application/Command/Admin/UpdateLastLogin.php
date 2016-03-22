@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Admin;
 
 class UpdateLastLogin
 {
