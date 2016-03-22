@@ -8,6 +8,7 @@ function TemplateBuilder(element)
     this.openButton = element.querySelector('#template-menu-button');
     this.open       = false;
     this.drag       = false;
+    this.current    = null;
 
     // Open button
 
@@ -52,9 +53,19 @@ function TemplateBuilder(element)
 
     // Template
 
-    var templateContainer = element.querySelector('#template-container');
+    this.templateContainer = element.querySelector('#template-container');
 
-    this.sortable(templateContainer, ['block-reference', 'block-inner']);
+    this.sortable(this.templateContainer, ['block-reference', 'block-inner']);
+
+    // Configure modal
+
+    this.configureModal = element.querySelector('#configure-modal');
+
+    // Save configuration button
+
+    this.configureModal.querySelector('.save-configuration').addEventListener('click', function (event) {
+        this.current.setAttribute('data-configuration', this.getFormData(this.configureModal));
+    }.bind(this));
 }
 
 TemplateBuilder.prototype.toggleMenu = function (open)
@@ -144,8 +155,33 @@ TemplateBuilder.prototype.object = function (element)
 
     // Configure button behavior
     [].forEach.call(element.querySelectorAll('.configure-button'), function (button) {
+        button.addEventListener('click', function (event) {
+            this.current = element;
+            this.configureModal.querySelector('.modal-title').innerHTML = button.getAttribute('data-modal-title');
+            this.configureModal.querySelector('.modal-body').innerHTML  = button.getAttribute('data-modal-body');
+            this.setFormData(this.configureModal, this.current.getAttribute('data-configuration'));
+        }.bind(this));
+
         button.click();
-    });
+    }.bind(this));
+};
+
+TemplateBuilder.prototype.getFormData = function (form)
+{
+    // Todo return an array object instead
+    return new FormData(form);
+};
+
+TemplateBuilder.prototype.setFormData = function (form, data)
+{
+    if (data === null || data === undefined) {
+        return;
+    }
+
+    [].forEach.call(data, function (key, value) {
+        console.log('[name="' + key + '"] = ' + value);
+        //form.querySelector('[name="' + key + '"]').value = value;
+    }.bind(this));
 };
 
 module.exports = TemplateBuilder;

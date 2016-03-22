@@ -127,7 +127,19 @@
                                                 data-toggle="modal"
                                                 data-target="#configure-modal"
                                                 data-modal-title="Texte non modifiable"
-                                                data-modal-body="Texte non modifiable"
+                                                data-modal-body="{{ '
+                                                    <div class="form-group">
+                                                        <label class="form-label">Contenu</label>
+                                                        <textarea class="form-control" name="content"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Type</label>
+                                                        <select class="form-control" name="type">
+                                                            <option value="titre">Titre</option>
+                                                            <option value="texte">Texte</option>
+                                                        </select>
+                                                    </div>
+                                                '|e }}"
                                         >
                                             <i class="glyphicon glyphicon-cog"></i>
                                         </button>
@@ -154,7 +166,19 @@
                                                 data-toggle="modal"
                                                 data-target="#configure-modal"
                                                 data-modal-title="Texte modifiable"
-                                                data-modal-body="Texte modifiable"
+                                                data-modal-body="{{ '
+                                                    <div class="form-group">
+                                                        <label class="form-label">Contenu</label>
+                                                        <textarea class="form-control" name="content"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Type</label>
+                                                        <select class="form-control" name="type">
+                                                            <option value="titre">Titre</option>
+                                                            <option value="texte">Texte</option>
+                                                        </select>
+                                                    </div>
+                                                '|e }}"
                                         >
                                             <i class="glyphicon glyphicon-cog"></i>
                                         </button>
@@ -170,7 +194,7 @@
             </div>
         </div>
 
-        <div class="modal fade button-based-modal" id="configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
+        <form action="#" method="GET" class="modal fade" id="configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -182,11 +206,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary save-configuration" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
     </div>
 

@@ -22,7 +22,7 @@ function init(target) {
         var body   = button.data('modal-body');
 
         modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(title);
+        modal.find('.modal-body').html(body );
     });
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
