@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -41,23 +43,28 @@ class LoginEventListener
     private $requestStack;
 
     /**
+     * @var UpdateLastLoginHandler
+     */
+    private $updateLastLoginHandler;
+
+    /**
      * LoginEventListener constructor.
      *
      * @param EventRepositoryInterface $eventRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param RequestStack             $requestStack
-     * @param AdminRepositoryInterface $adminRepository
+     * @param UpdateLastLoginHandler   $updateLastLoginHandler
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
         RequestStack $requestStack,
-        AdminRepositoryInterface $adminRepository
+        UpdateLastLoginHandler $updateLastLoginHandler
     ) {
-        $this->eventRepository = $eventRepository;
-        $this->sheetRepository = $sheetRepository;
-        $this->requestStack    = $requestStack;
-        $this->adminRepository = $adminRepository;
+        $this->eventRepository        = $eventRepository;
+        $this->sheetRepository        = $sheetRepository;
+        $this->requestStack           = $requestStack;
+        $this->updateLastLoginHandler = $updateLastLoginHandler;
     }
 
     /**
@@ -74,8 +81,12 @@ class LoginEventListener
 
         if (!$user instanceof User) {
             if ($user instanceof Admin) {
-                $user->setLastLoginAt(new \DateTime());
-                $this->adminRepository->set($user);
+                $this->updateLastLoginHandler->handle(
+                    new UpdateLastLogin(
+                        $user->getEmail(),
+                        new \DateTime()
+                    )
+                );
             }
             return;
         }
