@@ -5,6 +5,7 @@
 {% block form_content %}
     {{ form_row(form.template) }}
     {{ form_row(form.translations) }}
+    {{ form_row(form.validationCriteria) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_type_list', { 'event': event.id }) %}
