@@ -469,6 +469,9 @@ admin_happening_speaker_delete:
 admin_template_list:
     path: /template
     defaults: { _controller: VimeetAppBundle:Admin/Template:list }
+    methods: [GET, POST]
 admin_template_builder:
     path: /template/{template}/builder
     defaults: { _controller: VimeetAppBundle:Admin/Template:builder }
+    methods: [GET]
+
