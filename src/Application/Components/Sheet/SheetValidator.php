@@ -40,6 +40,8 @@ class SheetValidator
     }
 
     /**
+     * At least 1 yes and 0 no
+     *
      * @param Sheet $sheet
      */
     public function validate(Sheet $sheet)
