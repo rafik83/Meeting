@@ -106,6 +106,12 @@ class SheetRepository implements SheetRepositoryInterface
                 ->setParameter('type', $filters['type']);
         }
 
+        if (isset($filters['follower'])) {
+            $queryBuilder
+                ->andWhere('sheet.follower = :follower')
+                ->setParameter('follower', $filters['follower']);
+        }
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }
 
