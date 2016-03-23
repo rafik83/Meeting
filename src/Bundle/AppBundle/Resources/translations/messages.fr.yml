@@ -254,11 +254,14 @@ admin:
         reset: Réinitialiser les filtres
     new:
         link: Ajouter
+    check-all: Tout cocher
     batch_actions:
         single: Actions batch sur un élément
         plural: Actions batch sur %count% éléments
     goback:
         link: Retour
+    zero-result: Aucun résultat
+    cancel: Annuler
     events:
         link: Mes évènements
     role:
@@ -268,8 +271,8 @@ admin:
     order:
         link: Commandes et transactions
     sheet:
-        title: Fiches de participation
-        link: Fiches de participation
+        title: Participations
+        link: Participations
         read: Voir
         commercialFollowUp: Attribuer le suivi commercial
         impersonate: Impersonnation
@@ -278,6 +281,12 @@ admin:
             comments:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
+        state: Etat
+        category: Catégorie
+        type: Type
+        follower: Suivi commercial
+        createdAt: Date création
+        lastLoginAt: Dernière connexion
     login:
         logged_as: '%firstname% %lastname% (%role%)'
     event:
