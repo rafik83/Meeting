@@ -40,52 +40,24 @@
             <thead>
             <tr>
                 <th class="minwidth">
-                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="Tout cocher" />
+                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
                 </th>
-                <th>Fiche</th>
+                <th></th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Etat
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.state.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.state) }}
                 </th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Catégorie
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.category.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'category': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.category) }}
                 </th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Type
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.type.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'type': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.type) }}
                 </th>
-                <th>Date création</th>
-                <th>Dernière connexion</th>
-                <th>Suivi commercial</th>
-                <th class="text-right">Actions</th>
+                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
+                <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.follower) }}
+                </th>
+                <th></th>
             </tr>
             </thead>
             <tbody class="sheet-table">

@@ -27,13 +27,27 @@
 
 {% macro choice_as_dropdown(choice) %}
     <div class="dropdown">
-        <button id="{{ choice.vars.id }}-dropdown" class="btn btn-link btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ choice }}
+        <a href="#" id="{{ choice.vars.id }}-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ choice.vars.label|trans({}, choice.vars.translation_domain) }}
             <span class="caret"></span>
-        </button>
+        </a>
         <ul class="dropdown-menu" aria-labelledby="{{ choice.vars.id }}-dropdown">
-            {% for choice in choice.vars.choices %}
-                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+            {% set selectedValue = app.request.query.get(choice.vars.id) %}
+
+            {% if selectedValue != null %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): ''})|url_encode }}">
+                        {{ 'admin.filters.all'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for item in choice.vars.choices %}
+                <li {{ selectedValue == item.value ? 'class="active"' : '' }}>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value})|url_encode }}">
+                        {{ item.label|trans }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>

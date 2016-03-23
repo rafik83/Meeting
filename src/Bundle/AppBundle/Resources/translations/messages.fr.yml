@@ -250,6 +250,7 @@ message:
 
 admin:
     filters:
+        all: Tous
         reset: Réinitialiser les filtres
     new:
         link: Ajouter
