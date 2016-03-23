@@ -28,7 +28,8 @@
   height: 45px;
   line-height: 27px;
 
-  > i[class^='icon-'] {
+  > i[class^='icon-'],
+  > img {
     position: absolute;
     top: 10px;
     left: 10px;

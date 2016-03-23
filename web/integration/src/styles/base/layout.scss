@@ -8,7 +8,7 @@ body {
 
 .wrapper {
   .container-fluid {
-    max-width: 1280px;
+    max-width: 1240px;
     margin: 0 auto;
   }
 }
@@ -22,7 +22,17 @@ body {
       position: absolute;
       bottom: 20px;
       left: -15px;
+      line-height: 20px;
       margin: 0;
+
+      > span { color: $color-highlighted; }
+
+      img {
+        float: left;
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+      }
     }
 
     .tabs {
