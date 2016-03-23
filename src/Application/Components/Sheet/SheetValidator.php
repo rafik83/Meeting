@@ -12,9 +12,12 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Validator\CriteriaValidatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Validator\SheetAcceptedCriteriaValidator;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\NotValidException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SheetValidator
 {
@@ -29,11 +32,18 @@ class SheetValidator
     private $validators;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
+     * @var EventDispatcherInterface
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    private $eventDispatcher;
+
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, EventDispatcherInterface $eventDispatcher)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->eventDispatcher = $eventDispatcher;
         $this->validators      = [
             new SheetAcceptedCriteriaValidator()
         ];
@@ -62,6 +72,16 @@ class SheetValidator
             if ($yesCount > 0) {
                 $sheet->markAsValidated();
                 $this->sheetRepository->set($sheet);
+
+                $this->eventDispatcher->dispatch(
+                    Events::SHEET_VALIDATED,
+                    new SheetValidatedEvent(
+                        $sheet,
+                        new \DateTime(),
+                        '',
+                        null
+                    )
+                );
             }
         } catch (NotValidException $e) {
             return;

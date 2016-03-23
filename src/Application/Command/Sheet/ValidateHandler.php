@@ -53,9 +53,9 @@ class ValidateHandler
             Events::SHEET_VALIDATED,
             new SheetValidatedEvent(
                 $validate->sheet,
-                $validate->admin,
                 $validate->date,
-                $validate->comment
+                $validate->comment,
+                $validate->admin
             )
         );
     }

@@ -895,6 +895,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetValidator
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
     #
     # Queries
