@@ -645,3 +645,5 @@ form:
                 label: Annuler
             submit:
                 label: Enregistrer
+    filter:
+        label: Filtrer

@@ -285,8 +285,10 @@ admin:
         category: Catégorie
         type: Type
         follower: Suivi commercial
-        createdAt: Date création
+        createdAt: Date inscription
         lastLoginAt: Dernière connexion
+        created_today: Inscrits aujourd'hui
+        created_this_week: Inscrits cette semaine
     login:
         logged_as: '%firstname% %lastname% (%role%)'
     event:

@@ -45,6 +45,10 @@ class FilterType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
             ])
+            ->add('predefined', PredefinedFiltersChoiceType::class, [
+                'label'       => 'form.filter.label',
+                'placeholder' => '',
+            ])
         ;
     }
 
