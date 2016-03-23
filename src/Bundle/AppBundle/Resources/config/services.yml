@@ -392,3 +392,8 @@ services:
         class: Proximum\Vimeet\Bundle\AppBundle\Service\ErrorFactory
         arguments:
             - '@translator'
+
+    filter_summary:
+        class: Proximum\Vimeet\Bundle\AppBundle\Service\FilterSummary
+        arguments:
+            - '@translator'

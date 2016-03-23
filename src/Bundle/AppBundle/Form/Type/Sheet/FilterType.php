@@ -24,10 +24,26 @@ class FilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('state', StateChoiceType::class, ['placeholder' => ''])
-            ->add('completed', CompletedChoiceType::class, ['placeholder' => ''])
-            ->add('category', CategoryChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
-            ->add('type', TypeChoiceType::class, ['placeholder' => '', 'event' => $options['event'], 'locale' => $options['locale']])
+            ->add('state', StateChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.state.label',
+                'placeholder' => '',
+            ])
+            ->add('completed', CompletedChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.completed.label',
+                'placeholder' => ''
+            ])
+            ->add('category', CategoryChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.category.label',
+                'placeholder' => '',
+                'event'       => $options['event'],
+                'locale'      => $options['locale'],
+            ])
+            ->add('type', TypeChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.type.label',
+                'placeholder' => '',
+                'event'       => $options['event'],
+                'locale'      => $options['locale'],
+            ])
         ;
     }
 

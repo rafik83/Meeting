@@ -579,7 +579,7 @@ form:
             state:
                 label: Etat
             completed:
-                label: Complète
+                label: Complétude
             category:
                 label: Catégorie
             type:

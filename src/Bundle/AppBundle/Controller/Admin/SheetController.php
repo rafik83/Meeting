@@ -61,12 +61,15 @@ class SheetController extends Controller
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
 
+        $filterFormView = $filterForm->createView();
+
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
-            'event'       => $event,
-            'sheets'      => $sheets,
-            'filter_form' => $filterForm->createView(),
-            'filtered'    => $filtered,
-            'batch_form'  => $batchForm->createView(),
+            'event'           => $event,
+            'sheets'          => $sheets,
+            'filter_form'     => $filterFormView,
+            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filtered'        => $filtered,
+            'batch_form'      => $batchForm->createView(),
         ]);
     }
 
