@@ -1,6 +1,13 @@
 
+var $        = require('jquery');
 var Sortable = require('./_Sortable');
 
+/**
+ * TemplateBuilder
+ *
+ * @param element
+ * @constructor
+ */
 function TemplateBuilder(element)
 {
     this.element    = element;
@@ -11,61 +18,22 @@ function TemplateBuilder(element)
     this.current    = null;
 
     // Open button
-
     this.openButton.addEventListener('click', function (event) {
         event.preventDefault();
         this.toggleMenu();
     }.bind(this));
 
     // Blocks
-
     this.blockList = element.querySelector('#block-list');
-
-    new Sortable(this.blockList, {
-        group: { name: 'block-reference', pull: 'clone', put: false },
-        sort: false,
-        onStart: function () {
-            this.closeMenu();
-            this.drag = true;
-        }.bind(this),
-        onEnd: function () {
-            this.openMenu();
-            this.drag = false;
-        }.bind(this)
-    });
+    this.list(this.blockList, 'block-reference');
 
     // Objects
-
     this.objectList = element.querySelector('#object-list');
-
-    new Sortable(this.objectList, {
-        group: { name: 'object-reference', pull: 'clone', put: false },
-        sort: false,
-        onStart: function () {
-            this.closeMenu();
-            this.drag = true;
-        }.bind(this),
-        onEnd: function () {
-            this.openMenu();
-            this.drag = false;
-        }.bind(this)
-    });
+    this.list(this.objectList, 'object-reference');
 
     // Template
-
     this.templateContainer = element.querySelector('#template-container');
-
     this.sortable(this.templateContainer, ['block-reference', 'block-inner']);
-
-    // Configure modal
-
-    this.configureModal = element.querySelector('#configure-modal');
-
-    // Save configuration button
-
-    this.configureModal.querySelector('.save-configuration').addEventListener('click', function (event) {
-        this.current.setAttribute('data-configuration', this.getFormData(this.configureModal));
-    }.bind(this));
 }
 
 TemplateBuilder.prototype.toggleMenu = function (open)
@@ -88,6 +56,22 @@ TemplateBuilder.prototype.openMenu = function ()
 TemplateBuilder.prototype.closeMenu = function ()
 {
     this.toggleMenu(false);
+};
+
+TemplateBuilder.prototype.list = function (element, name)
+{
+    new Sortable(element, {
+        group: { name: name, pull: 'clone', put: false },
+        sort: false,
+        onStart: function () {
+            this.closeMenu();
+            this.drag = true;
+        }.bind(this),
+        onEnd: function () {
+            this.openMenu();
+            this.drag = false;
+        }.bind(this)
+    });
 };
 
 TemplateBuilder.prototype.sortable = function (element, accept)
@@ -145,43 +129,109 @@ TemplateBuilder.prototype.object = function (element)
     // Dispatch DOM added element event
     document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
 
-    // Delete button behavior
-    [].forEach.call(element.querySelectorAll('.delete-button'), function (button) {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            element.remove();
-        });
-    });
-
-    // Configure button behavior
-    [].forEach.call(element.querySelectorAll('.configure-button'), function (button) {
-        button.addEventListener('click', function (event) {
-            this.current = element;
-            this.configureModal.querySelector('.modal-title').innerHTML = button.getAttribute('data-modal-title');
-            this.configureModal.querySelector('.modal-body').innerHTML  = button.getAttribute('data-modal-body');
-            this.setFormData(this.configureModal, this.current.getAttribute('data-configuration'));
-        }.bind(this));
-
-        button.click();
-    }.bind(this));
+    // Create object
+    var templateObject = new TemplateObject(element);
+    templateObject.openConfigureModal();
 };
 
-TemplateBuilder.prototype.getFormData = function (form)
+/**
+ * Template Object
+ *
+ * @param element
+ * @constructor
+ */
+function TemplateObject(element)
 {
-    // Todo return an array object instead
-    return new FormData(form);
+    this.element         = element;
+    this.configureModal  = element.querySelector('.configure-modal');
+    this.saveButton      = this.configureModal.querySelector('.save-configuration');
+    this.deleteButton    = element.querySelector('.delete-button');
+    this.configureButton = element.querySelector('.configure-button');
+
+    // Init modal
+    $(this.configureModal).modal({show: false});
+
+    this.deleteButton.addEventListener('click', this.deleteButtonClicked.bind(this));
+    this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+}
+
+TemplateObject.prototype.deleteButtonClicked = function (event)
+{
+    event.preventDefault();
+    this.element.remove();
 };
 
-TemplateBuilder.prototype.setFormData = function (form, data)
+TemplateObject.prototype.configureButtonClicked = function (event)
 {
-    if (data === null || data === undefined) {
-        return;
-    }
+    event.preventDefault();
+    // Todo fill form data
+    this.openConfigureModal();
+};
 
-    [].forEach.call(data, function (key, value) {
-        console.log('[name="' + key + '"] = ' + value);
-        //form.querySelector('[name="' + key + '"]').value = value;
-    }.bind(this));
+TemplateObject.prototype.saveButtonClicked = function (event)
+{
+    event.preventDefault();
+    // Todo get form data
+    this.closeConfigureModal();
+};
+
+TemplateObject.prototype.openConfigureModal = function ()
+{
+    $(this.configureModal).modal('show');
+};
+
+TemplateObject.prototype.closeConfigureModal = function ()
+{
+    $(this.configureModal).modal('hide');
+};
+
+/**
+ * Text object
+ *
+ * @param element
+ * @constructor
+ */
+function TextObject(element)
+{
+    this.element = element;
+
+    this.content = null;
+    this.type    = null;
+}
+
+Text.prototype.fill = function ()
+{
+    this.element.querySelector('input[name="type"]').value = this.content;
+};
+
+Text.prototype.save = function ()
+{
+    this.content = this.element.querySelector('input[name="type"]').value;
+};
+
+/**
+ * EditableTextObject
+ *
+ * @param element
+ * @constructor
+ */
+function EditableTextObject(element)
+{
+    this.element = element;
+
+    this.content = null;
+    this.type    = null;
+}
+
+Text.prototype.fill = function ()
+{
+    this.element.querySelector('input[name="type"]').value = this.content;
+};
+
+Text.prototype.save = function ()
+{
+    this.content = this.element.querySelector('input[name="type"]').value;
 };
 
 module.exports = TemplateBuilder;
