@@ -31,3 +31,5 @@ parameters:
     timezone_default: Europe/Paris
 
     trusted_proxies: []
+    elastic_host: localhost
+    elastic_port: 9200
