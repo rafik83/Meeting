@@ -195,8 +195,13 @@ TemplateObject.prototype.closeConfigureModal = function ()
     $(this.configureModal).modal('hide');
 };
 
+TemplateObject.prototype.serialize = function ()
+{
+    return JSON.stringify(this.object.config);
+};
+
 /**
- * Text object
+ * TextObject
  *
  * @param element
  * @constructor
@@ -204,23 +209,21 @@ TemplateObject.prototype.closeConfigureModal = function ()
 function TextObject(element)
 {
     this.element = element;
-
-    this.content = null;
-    this.type    = null;
+    this.config  = { content: null, type: null };
 }
 
 TextObject.prototype.fill = function ()
 {
-    this.element.querySelector('textarea[name="content"]').value = this.content;
-    this.element.querySelector('select[name="type"]').value      = this.type;
+    this.element.querySelector('textarea[name="content"]').value = this.config.content;
+    this.element.querySelector('select[name="type"]').value      = this.config.type;
 };
 
 TextObject.prototype.save = function ()
 {
-    this.content = this.element.querySelector('textarea[name="content"]').value;
-    this.type    = this.element.querySelector('select[name="type"]').value;
+    this.config.content = this.element.querySelector('textarea[name="content"]').value;
+    this.config.type    = this.element.querySelector('select[name="type"]').value;
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = this.content;
+    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
 };
 
 /**
@@ -232,23 +235,21 @@ TextObject.prototype.save = function ()
 function EditableTextObject(element)
 {
     this.element = element;
-
-    this.content = null;
-    this.type    = null;
+    this.config  = { content: null, type: null };
 }
 
 EditableTextObject.prototype.fill = function ()
 {
-    this.element.querySelector('textarea[name="content"]').value = this.content;
-    this.element.querySelector('select[name="type"]').value      = this.type;
+    this.element.querySelector('textarea[name="content"]').value = this.config.content;
+    this.element.querySelector('select[name="type"]').value      = this.config.type;
 };
 
 EditableTextObject.prototype.save = function ()
 {
-    this.content = this.element.querySelector('textarea[name="content"]').value;
-    this.type    = this.element.querySelector('select[name="type"]').value;
+    this.config.content = this.element.querySelector('textarea[name="content"]').value;
+    this.config.type    = this.element.querySelector('select[name="type"]').value;
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = this.content;
+    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
 };
 
 module.exports = TemplateBuilder;
