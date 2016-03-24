@@ -219,6 +219,8 @@ TextObject.prototype.save = function ()
 {
     this.content = this.element.querySelector('textarea[name="content"]').value;
     this.type    = this.element.querySelector('select[name="type"]').value;
+
+    this.element.querySelector('[data-bind="content"]').innerHTML = this.content;
 };
 
 /**
@@ -245,6 +247,8 @@ EditableTextObject.prototype.save = function ()
 {
     this.content = this.element.querySelector('textarea[name="content"]').value;
     this.type    = this.element.querySelector('select[name="type"]').value;
+
+    this.element.querySelector('[data-bind="content"]').innerHTML = this.content;
 };
 
 module.exports = TemplateBuilder;
