@@ -13,6 +13,7 @@ function TemplateBuilder(element)
     this.element    = element;
     this.menu       = element.querySelector('#template-menu');
     this.openButton = element.querySelector('#template-menu-button');
+    this.saveButton = element.querySelector('#template-save-button');
     this.open       = false;
     this.drag       = false;
     this.current    = null;
@@ -21,6 +22,12 @@ function TemplateBuilder(element)
     this.openButton.addEventListener('click', function (event) {
         event.preventDefault();
         this.toggleMenu();
+    }.bind(this));
+
+    // Save button
+    this.saveButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        this.save();
     }.bind(this));
 
     // Blocks
@@ -134,6 +141,53 @@ TemplateBuilder.prototype.object = function (element)
     templateObject.openConfigureModal();
 };
 
+TemplateBuilder.prototype.save = function ()
+{
+    console.log(JSON.stringify(this.normalize(this.templateContainer)));
+};
+
+TemplateBuilder.prototype.inners = function (item)
+{
+    return [].map.call(this.children(item.querySelector('.block-inner').parentNode.parentNode), function (column) {
+        return column.querySelector('.block-inner');
+    });
+};
+
+TemplateBuilder.prototype.children = function (item)
+{
+    return [].filter.call(item.childNodes, function (child) {
+        return child.nodeType === Node.ELEMENT_NODE;
+    });
+};
+
+TemplateBuilder.prototype.normalize = function (item)
+{
+    var blockType  = item.getAttribute('data-block');
+    var objectType = item.getAttribute('data-object');
+
+    if (blockType !== null && blockType !== undefined) {
+        return {
+            component: 'block',
+            type: blockType,
+            config: [].map.call(this.inners(item), function (child) {
+                return this.normalize(child);
+            }.bind(this))
+        }
+    }
+
+    if (objectType !== null && objectType !== undefined) {
+        return {
+            component: 'object',
+            type: objectType,
+            config: item.templateObject.object.config
+        }
+    }
+
+    return [].map.call(this.children(item), function (child) {
+        return this.normalize(child);
+    }.bind(this));
+};
+
 /**
  * Template Object
  *
@@ -142,6 +196,8 @@ TemplateBuilder.prototype.object = function (element)
  */
 function TemplateObject(element)
 {
+    element.templateObject = this;
+
     this.element         = element;
     this.configureModal  = element.querySelector('.configure-modal');
     this.saveButton      = this.configureModal.querySelector('.save-configuration');
@@ -195,9 +251,9 @@ TemplateObject.prototype.closeConfigureModal = function ()
     $(this.configureModal).modal('hide');
 };
 
-TemplateObject.prototype.serialize = function ()
+TemplateObject.prototype.getConfig = function ()
 {
-    return JSON.stringify(this.object.config);
+    return this.object.config;
 };
 
 /**
