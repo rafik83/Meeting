@@ -881,3 +881,11 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@security.impersonate'
+
+    #
+    # Elastic Transformer
+    #
+    transformer.elastic.sheet_elastic_transformer:
+        class: Proximum\Vimeet\Application\Transformer\Elastic\SheetElasticTransformer
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
