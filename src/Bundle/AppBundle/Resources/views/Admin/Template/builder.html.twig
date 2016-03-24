@@ -8,10 +8,7 @@
             <h1 class="page-header">{{ template.title }}</h1>
         </div>
 
-        <div class="template-container container-fluid" id="template-container">
-
-
-        </div>
+        <div class="template-container container-fluid" id="template-container"></div>
 
         <div class="slide-menu-container" id="template-menu">
             <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">
@@ -29,184 +26,17 @@
 
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="blocks">
-
                         <div id="block-list" class="block-list">
-                            <div class="block">
-                                <div class="block-buttons">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <span class="btn btn-link move-button">
-                                                <i class="glyphicon glyphicon-move"></i>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-link delete-button">
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="block-inner"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="block-inner"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="block">
-                                <div class="block-buttons">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <span class="btn btn-link move-button">
-                                                <i class="glyphicon glyphicon-move"></i>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-link delete-button">
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="block-inner"></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="block-inner"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="block">
-                                <div class="block-buttons">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <span class="btn btn-link move-button">
-                                                <i class="glyphicon glyphicon-move"></i>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-link delete-button">
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="block-inner"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            {{ include('VimeetAppBundle:Admin/Template/Block:8-4.html.twig') }}
+                            {{ include('VimeetAppBundle:Admin/Template/Block:6-6.html.twig') }}
+                            {{ include('VimeetAppBundle:Admin/Template/Block:12.html.twig') }}
                         </div>
-
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
-
                         <div id="object-list" class="object-list">
-
-                            <div class="object" data-object="text">
-                                <ul class="block-buttons list-inline">
-                                    <li>
-                                        <span class="btn btn-link move-button">
-                                            <i class="glyphicon glyphicon-move"></i>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-link delete-button">
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-link configure-button">
-                                            <i class="glyphicon glyphicon-cog"></i>
-                                        </button>
-                                        <form action="#" method="GET" class="modal fade configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="configure-modal-label">Modal title</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Contenu</label>
-                                                            <textarea class="form-control" name="content"></textarea>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label">Type</label>
-                                                            <select class="form-control" name="type">
-                                                                <option value="titre">Titre</option>
-                                                                <option value="texte">Texte</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary save-configuration">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </li>
-                                </ul>
-                                Texte non modifiable
-                            </div>
-
-                            <div class="object" data-object="editable-text">
-                                <ul class="block-buttons list-inline">
-                                    <li>
-                                        <span class="btn btn-link move-button">
-                                            <i class="glyphicon glyphicon-move"></i>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-link delete-button">
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-link configure-button">
-                                            <i class="glyphicon glyphicon-cog"></i>
-                                        </button>
-                                        <form action="#" method="GET" class="modal fade configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="configure-modal-label">Modal title</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Contenu</label>
-                                                            <textarea class="form-control" name="content"></textarea>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="form-label">Type</label>
-                                                            <select class="form-control" name="type">
-                                                                <option value="titre">Titre</option>
-                                                                <option value="texte">Texte</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary save-configuration">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </li>
-                                </ul>
-                                Texte modifiable
-                            </div>
-
+                            {{ include('VimeetAppBundle:Admin/Template/Object:text.html.twig') }}
+                            {{ include('VimeetAppBundle:Admin/Template/Object:editable-text.html.twig') }}
                         </div>
-
                     </div>
                 </div>
             </div>
