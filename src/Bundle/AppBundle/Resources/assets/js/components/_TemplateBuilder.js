@@ -147,13 +147,22 @@ function TemplateObject(element)
     this.saveButton      = this.configureModal.querySelector('.save-configuration');
     this.deleteButton    = element.querySelector('.delete-button');
     this.configureButton = element.querySelector('.configure-button');
+    this.type            = element.getAttribute('data-object');
 
     // Init modal
     $(this.configureModal).modal({show: false});
 
+    // Buttons
     this.deleteButton.addEventListener('click', this.deleteButtonClicked.bind(this));
     this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
     this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+
+    // Object
+    if (this.type === 'text') {
+        this.object = new TextObject(this.element);
+    } else if (this.type === 'editable-text') {
+        this.object = new EditableTextObject(this.element);
+    }
 }
 
 TemplateObject.prototype.deleteButtonClicked = function (event)
@@ -165,14 +174,14 @@ TemplateObject.prototype.deleteButtonClicked = function (event)
 TemplateObject.prototype.configureButtonClicked = function (event)
 {
     event.preventDefault();
-    // Todo fill form data
+    this.object.fill();
     this.openConfigureModal();
 };
 
 TemplateObject.prototype.saveButtonClicked = function (event)
 {
     event.preventDefault();
-    // Todo get form data
+    this.object.save();
     this.closeConfigureModal();
 };
 
@@ -200,14 +209,16 @@ function TextObject(element)
     this.type    = null;
 }
 
-Text.prototype.fill = function ()
+TextObject.prototype.fill = function ()
 {
-    this.element.querySelector('input[name="type"]').value = this.content;
+    this.element.querySelector('textarea[name="content"]').value = this.content;
+    this.element.querySelector('select[name="type"]').value      = this.type;
 };
 
-Text.prototype.save = function ()
+TextObject.prototype.save = function ()
 {
-    this.content = this.element.querySelector('input[name="type"]').value;
+    this.content = this.element.querySelector('textarea[name="content"]').value;
+    this.type    = this.element.querySelector('select[name="type"]').value;
 };
 
 /**
@@ -224,14 +235,16 @@ function EditableTextObject(element)
     this.type    = null;
 }
 
-Text.prototype.fill = function ()
+EditableTextObject.prototype.fill = function ()
 {
-    this.element.querySelector('input[name="type"]').value = this.content;
+    this.element.querySelector('textarea[name="content"]').value = this.content;
+    this.element.querySelector('select[name="type"]').value      = this.type;
 };
 
-Text.prototype.save = function ()
+EditableTextObject.prototype.save = function ()
 {
-    this.content = this.element.querySelector('input[name="type"]').value;
+    this.content = this.element.querySelector('textarea[name="content"]').value;
+    this.type    = this.element.querySelector('select[name="type"]').value;
 };
 
 module.exports = TemplateBuilder;
