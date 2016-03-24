@@ -146,6 +146,12 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: form.type }
+    form_type.event_choice_type:
+        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Admin library form type
@@ -323,6 +329,7 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@request_stack'
+            - '@repository.admin_repository'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
     event_listener.mail_event_subscriber:

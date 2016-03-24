@@ -23,10 +23,11 @@ class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
+        $dateTime = new \DateTime();
+        $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
 
         // Expected
-        $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
+        $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
 
         // Mock
         $adminRepository                = $this->prophesize(AdminRepositoryInterface::class);

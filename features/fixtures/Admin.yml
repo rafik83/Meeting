@@ -8,3 +8,5 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Jean"
             - "DUPONT"
             - "ROLE_SUPER_ADMIN"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>

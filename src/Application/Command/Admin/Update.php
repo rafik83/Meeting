@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-class Create
+use Proximum\Vimeet\Domain\Model\Admin;
+
+class Update
 {
+    /**
+     * @var Admin
+     */
+    public $admin;
+
     /**
      * @var string
      */
@@ -43,23 +50,15 @@ class Create
     public $events;
 
     /**
-     * @var string
+     * @param Admin $admin
      */
-    public $locale;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $date;
-
-    /**
-     * @param string             $locale
-     * @param \DateTimeInterface $date
-     */
-    public function __construct($locale, \DateTimeInterface $date)
+    public function __construct(Admin $admin)
     {
-        $this->locale   = $locale;
-        $this->password = substr(md5(uniqid()), 0, 8);
-        $this->date     = $date;
+        $this->admin     = $admin;
+        $this->email     = $admin->getEmail();
+        $this->lastname  = $admin->getLastname();
+        $this->firstname = $admin->getFirstname();
+        $this->role      = $admin->getRole();
+        $this->events    = $admin->getEvents()->toArray();
     }
 }

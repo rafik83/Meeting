@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,6 +31,11 @@ class LoginEventListener
     private $sheetRepository;
 
     /**
+     * @var AdminRepositoryInterface
+     */
+    private $adminRepository;
+
+    /**
      * @var RequestStack
      */
     private $requestStack;
@@ -39,15 +46,18 @@ class LoginEventListener
      * @param EventRepositoryInterface $eventRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param RequestStack             $requestStack
+     * @param AdminRepositoryInterface $adminRepository
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        AdminRepositoryInterface $adminRepository
     ) {
         $this->eventRepository = $eventRepository;
         $this->sheetRepository = $sheetRepository;
         $this->requestStack    = $requestStack;
+        $this->adminRepository = $adminRepository;
     }
 
     /**
@@ -63,6 +73,10 @@ class LoginEventListener
         $event = $this->eventRepository->getEventByDomain($host);
 
         if (!$user instanceof User) {
+            if ($user instanceof Admin) {
+                $user->setLastLoginAt(new \DateTime());
+                $this->adminRepository->set($user);
+            }
             return;
         }
 

@@ -521,6 +521,12 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+    command.admin.update_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -535,6 +541,13 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.operator.update_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
             - '@components.token.admin.activate_account_token_generator'
             - '@repository.admin_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
