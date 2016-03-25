@@ -5,7 +5,7 @@
     <div data-template-builder="{{ path('admin_template_save', { 'template': template.id }) }}" class="template-builder">
 
         <div class="container-fluid">
-            <h1 class="page-header">{{ template.title }} <button class="btn btn-success" id="template-save-button" data-loading-button="Sauvegarde en cours ...">Enregistrer</button></h1>
+            <h1 class="page-header">{{ template.title }} <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button></h1>
         </div>
 
         <div class="template-container container-fluid" id="template-container"></div>
