@@ -53,4 +53,12 @@ class TemplateRepository implements TemplateRepositoryInterface
         $this->entityManager->persist($template);
         $this->entityManager->flush($template);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Template $template)
+    {
+        $this->entityManager->flush($template);
+    }
 }

@@ -1,6 +1,7 @@
 
-var $        = require('jquery');
-var Sortable = require('./_Sortable');
+var $             = require('jquery');
+var Sortable      = require('./_Sortable');
+var LoadingButton = require('./_LoadingButton');
 
 /**
  * TemplateBuilder
@@ -11,12 +12,15 @@ var Sortable = require('./_Sortable');
 function TemplateBuilder(element)
 {
     this.element    = element;
+    this.url        = element.getAttribute('data-template-builder');
     this.menu       = element.querySelector('#template-menu');
     this.openButton = element.querySelector('#template-menu-button');
-    this.saveButton = element.querySelector('#template-save-button');
     this.open       = false;
     this.drag       = false;
     this.current    = null;
+
+    var saveButton  = element.querySelector('#template-save-button');
+    this.saveButton = new LoadingButton(saveButton, saveButton.getAttribute('data-loading-button'));
 
     // Open button
     this.openButton.addEventListener('click', function (event) {
@@ -25,7 +29,7 @@ function TemplateBuilder(element)
     }.bind(this));
 
     // Save button
-    this.saveButton.addEventListener('click', function (event) {
+    this.saveButton.element.addEventListener('click', function (event) {
         event.preventDefault();
         this.save();
     }.bind(this));
@@ -143,7 +147,25 @@ TemplateBuilder.prototype.object = function (element)
 
 TemplateBuilder.prototype.save = function ()
 {
-    console.log(JSON.stringify(this.normalize(this.templateContainer)));
+    this.saveButton.start();
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        var DONE = 4;
+        var OK   = 200;
+
+        if (xhr.readyState === DONE) {
+            if (xhr.status === OK) {
+
+            } else {
+                alert('error');
+            }
+
+            this.saveButton.stop();
+        }
+    }.bind(this);
+    xhr.open('POST', this.url);
+    xhr.send(JSON.stringify(this.normalize(this.templateContainer)));
 };
 
 TemplateBuilder.prototype.inners = function (item)

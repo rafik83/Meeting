@@ -23,4 +23,9 @@ interface TemplateRepositoryInterface
      * @param Template $template
      */
     public function add(Template $template);
+
+    /**
+     * @param Template $template
+     */
+    public function set(Template $template);
 }
