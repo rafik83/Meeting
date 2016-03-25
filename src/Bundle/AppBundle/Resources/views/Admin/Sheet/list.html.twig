@@ -7,6 +7,12 @@
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
 
+
+
+    {{ form_start(filter_part_form) }}
+        {{ form_row(filter_part_form.sheetName) }}
+    {{ form_end(filter_part_form) }}
+
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
         {{ form_errors(batch_form) }}
 
