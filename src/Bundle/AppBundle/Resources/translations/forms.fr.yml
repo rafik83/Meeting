@@ -572,6 +572,8 @@ form:
                 label: Catégorie
             type:
                 label: Type
+            follower:
+                label: Suivi commercial
     create_admin:
         children:
             email:
@@ -643,3 +645,5 @@ form:
                 label: Annuler
             submit:
                 label: Enregistrer
+    filter:
+        label: Filtrer
