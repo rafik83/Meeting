@@ -272,6 +272,8 @@ function TemplateObject(element)
         this.object = new TextObject(this.element);
     } else if (this.type === 'editable-text') {
         this.object = new EditableTextObject(this.element);
+    } else if (this.type === 'button-link') {
+        this.object = new ButtonLinkObject(this.element);
     }
 
     this.object.save();
@@ -362,6 +364,34 @@ EditableTextObject.prototype.save = function ()
     this.config.type    = this.element.querySelector('select[name="type"]').value;
 
     this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
+};
+
+/**
+ * ButtonLinkObject
+ *
+ * @param element
+ * @constructor
+ */
+function ButtonLinkObject(element)
+{
+    this.element = element;
+    this.config  = { label: null, url: null };
+}
+
+ButtonLinkObject.prototype.fill = function ()
+{
+    this.element.querySelector('input[name="label"]').value = this.config.label;
+    this.element.querySelector('input[name="url"]').value   = this.config.url;
+};
+
+ButtonLinkObject.prototype.save = function ()
+{
+    this.config.label = this.element.querySelector('input[name="label"]').value;
+    this.config.url =   this.element.querySelector('input[name="url"]').value;
+
+    var button = this.element.querySelector('[data-bind="link"]');
+    button.setAttribute('href', this.config.url);
+    button.innerHTML = '' + this.config.label;
 };
 
 module.exports = TemplateBuilder;
