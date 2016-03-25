@@ -15,6 +15,7 @@ function TemplateBuilder(element)
     this.url        = element.getAttribute('data-template-builder');
     this.menu       = element.querySelector('#template-menu');
     this.openButton = element.querySelector('#template-menu-button');
+    this.wasOpen    = false;
     this.open       = false;
     this.drag       = false;
     this.current    = null;
@@ -80,6 +81,8 @@ TemplateBuilder.prototype.openMenu = function ()
 
 TemplateBuilder.prototype.closeMenu = function ()
 {
+    this.wasOpen = this.open;
+
     this.toggleMenu(false);
 };
 
@@ -109,7 +112,10 @@ TemplateBuilder.prototype.sortable = function (element, accept)
             this.drag = true;
         }.bind(this),
         onEnd: function () {
-            this.openMenu();
+            if (this.wasOpen) {
+                this.openMenu();
+            }
+
             this.drag = false;
         }.bind(this),
         onAdd: function (event) {
