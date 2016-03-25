@@ -45,9 +45,10 @@ function TemplateBuilder(element)
 
     // Template
     this.templateContainer = element.querySelector('#template-container');
-    this.sortable(this.templateContainer, ['block-reference', 'block-inner']);
+    this.sortable(this.templateContainer);
 
     // Init
+    //this.init(this.element);
     this.init(this.templateContainer);
 }
 
@@ -102,10 +103,10 @@ TemplateBuilder.prototype.list = function (element, name)
     });
 };
 
-TemplateBuilder.prototype.sortable = function (element, accept)
+TemplateBuilder.prototype.sortable = function (element)
 {
     new Sortable(element, {
-        group: { name: 'block-list', pull: true, put: accept },
+        group: { name: 'block-list', pull: true, put: ['block-reference', 'object-reference', 'block-inner'] },
         handle: '.move-button',
         onStart: function () {
             this.closeMenu();
@@ -247,18 +248,50 @@ function TemplateBlock(element, builder)
     this.builder = builder;
 
     // Init block inner as sortable target
-    [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
-        this.builder.sortable(inner, ['block-reference', 'object-reference', 'block-inner']);
+    [].forEach.call(this.builder.inners(element), function (inner) {
+        this.sortable(inner);
     }.bind(this));
 
     // Delete button behavior
-    [].forEach.call(element.querySelectorAll('.delete-button'), function (button) {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            element.remove();
-        });
+    element.querySelector('.delete-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        element.remove();
     });
 }
+
+TemplateBlock.prototype.sortable = function (element)
+{
+    new Sortable(element, {
+        group: { name: 'block-list', pull: true, put: ['block-reference', 'object-reference', 'block-inner'] },
+        handle: '.move-button',
+        onStart: function () {
+            this.builder.closeMenu();
+            this.builder.drag = true;
+        }.bind(this),
+        onEnd: function () {
+            if (this.builder.wasOpen) {
+                this.builder.openMenu();
+            }
+
+            this.builder.drag = false;
+        }.bind(this),
+        onAdd: function (event) {
+
+            if (event.item.parentNode === event.from) {
+                return;
+            }
+
+            if (event.from === this.builder.blockList) {
+                this.builder.addBlock(event.item);
+            }
+
+            if (event.from === this.builder.objectList) {
+                this.builder.addObject(event.item);
+            }
+
+        }.bind(this)
+    });
+};
 
 /**
  * Template Object
