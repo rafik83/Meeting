@@ -119,26 +119,36 @@ TemplateBuilder.prototype.sortable = function (element, accept)
             }
 
             if (event.from === this.blockList) {
-                // Dispatch DOM added element event
-                document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-
-                // Enable block behavior
-                this.block(event.item);
+                this.addBlock(event.item);
             }
 
             if (event.from === this.objectList) {
-                // Dispatch DOM added element event
-                document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-
-                // Enable object behavior
-                this.object(event.item);
-
-                // Open configure modal
-                event.item.templateObject.openConfigureModal();
+                this.addObject(event.item);
             }
 
         }.bind(this)
     });
+};
+
+TemplateBuilder.prototype.addBlock = function (element)
+{
+    // Dispatch DOM added element event
+    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
+    // Enable block behavior
+    this.block(element);
+};
+
+TemplateBuilder.prototype.addObject = function (element)
+{
+    // Dispatch DOM added element event
+    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
+    // Enable object behavior
+    this.object(element);
+
+    // Open configure modal
+    element.templateObject.openConfigureModal();
 };
 
 TemplateBuilder.prototype.block = function (element)
@@ -257,6 +267,8 @@ function TemplateObject(element)
     } else if (this.type === 'editable-text') {
         this.object = new EditableTextObject(this.element);
     }
+
+    this.object.save();
 }
 
 TemplateObject.prototype.deleteButtonClicked = function (event)

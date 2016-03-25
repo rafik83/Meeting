@@ -1,4 +1,6 @@
-<div class="object" data-object="text">
+{% set config = { 'content': 'Texte non modifiable', 'type': 'titre' }|merge(config|default({})) %}
+
+<div class="object" data-object="editable-text">
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">
@@ -19,18 +21,19 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="configure-modal-label">Modal title</h4>
+                            <h4 class="modal-title" id="configure-modal-label">Texte non éditable</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Contenu</label>
-                                <textarea class="form-control" name="content">Texte non modifiable</textarea>
+                                <textarea class="form-control" name="content">{{ config.content }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Type</label>
                                 <select class="form-control" name="type">
-                                    <option value="titre">Titre</option>
-                                    <option value="texte">Texte</option>
+                                    {% for label, value in { 'Titre': 'titre', 'Texte': 'texte' } %}
+                                        <option value="{{ value }}"{% if value == config.type %} selected="selected"{% endif %}>{{ label }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -43,5 +46,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="content">Texte non modifiable</div>
+    <div data-bind="content">{{ config.content }}</div>
 </div>
