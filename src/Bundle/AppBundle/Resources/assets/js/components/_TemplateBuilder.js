@@ -159,18 +159,8 @@ TemplateBuilder.prototype.addObject = function (element)
 
 TemplateBuilder.prototype.block = function (element)
 {
-    // Init block inner as sortable target
-    [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
-        this.sortable(inner, ['block-reference', 'object-reference', 'block-inner']);
-    }.bind(this));
-
-    // Delete button behavior
-    [].forEach.call(element.querySelectorAll('.delete-button'), function (button) {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            element.remove();
-        });
-    });
+    // Create block
+    element.templateBlock = new TemplateBlock(element, this);
 };
 
 TemplateBuilder.prototype.object = function (element)
@@ -243,6 +233,32 @@ TemplateBuilder.prototype.normalize = function (item)
         return this.normalize(child);
     }.bind(this));
 };
+
+/**
+ * Template Block
+ *
+ * @param element
+ * @param builder
+ * @constructor
+ */
+function TemplateBlock(element, builder)
+{
+    this.element = element;
+    this.builder = builder;
+
+    // Init block inner as sortable target
+    [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
+        this.builder.sortable(inner, ['block-reference', 'object-reference', 'block-inner']);
+    }.bind(this));
+
+    // Delete button behavior
+    [].forEach.call(element.querySelectorAll('.delete-button'), function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            element.remove();
+        });
+    });
+}
 
 /**
  * Template Object
