@@ -102,6 +102,13 @@ fos_elastica:
     indexes:
         app:
             index_name: app_%kernel.environment%
+            settings:
+                index:
+                    analysis:
+                        analyzer:
+                            sheetAnalyzer:
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase"]
             types:
                 sheet:
                     mappings:
@@ -109,6 +116,14 @@ fos_elastica:
                             type: integer
                         sheetName:
                             type: string
+                        state:
+                            type: string
+                        categories:
+                            type: nested
+                        type:
+                            type: integer
+                        followUp:
+                            type: integer
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer
