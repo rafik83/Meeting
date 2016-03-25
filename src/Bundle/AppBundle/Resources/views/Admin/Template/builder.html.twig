@@ -8,7 +8,11 @@
             <h1 class="page-header">{{ template.title }} <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button></h1>
         </div>
 
-        <div class="template-container container-fluid" id="template-container"></div>
+        <div class="template-container container-fluid" id="template-container">
+            {% for item in template.value|default([]) %}
+                {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'config': item.config }, false) }}
+            {% endfor %}
+        </div>
 
         <div class="slide-menu-container" id="template-menu">
             <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">

@@ -15,7 +15,11 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="block-inner"></div>
+            <div class="block-inner">
+                {% for item in config[0]|default([]) %}
+                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'config': item.config }, false) }}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

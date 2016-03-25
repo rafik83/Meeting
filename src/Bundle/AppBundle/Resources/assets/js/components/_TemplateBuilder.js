@@ -45,7 +45,21 @@ function TemplateBuilder(element)
     // Template
     this.templateContainer = element.querySelector('#template-container');
     this.sortable(this.templateContainer, ['block-reference', 'block-inner']);
+
+    // Init
+    this.init(this.templateContainer);
 }
+
+TemplateBuilder.prototype.init = function (element)
+{
+    [].forEach.call(element.querySelectorAll('.block'), function (block) {
+        this.block(block);
+    }.bind(this));
+
+    [].forEach.call(element.querySelectorAll('.object'), function (object) {
+        this.object(object);
+    }.bind(this));
+};
 
 TemplateBuilder.prototype.toggleMenu = function (open)
 {
@@ -105,11 +119,22 @@ TemplateBuilder.prototype.sortable = function (element, accept)
             }
 
             if (event.from === this.blockList) {
+                // Dispatch DOM added element event
+                document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
+                // Enable block behavior
                 this.block(event.item);
             }
 
             if (event.from === this.objectList) {
+                // Dispatch DOM added element event
+                document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+
+                // Enable object behavior
                 this.object(event.item);
+
+                // Open configure modal
+                event.item.templateObject.openConfigureModal();
             }
 
         }.bind(this)
@@ -118,9 +143,6 @@ TemplateBuilder.prototype.sortable = function (element, accept)
 
 TemplateBuilder.prototype.block = function (element)
 {
-    // Dispatch DOM added element event
-    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-
     // Init block inner as sortable target
     [].forEach.call(element.querySelectorAll('.block-inner'), function (inner) {
         this.sortable(inner, ['block-reference', 'object-reference', 'block-inner']);
@@ -137,12 +159,8 @@ TemplateBuilder.prototype.block = function (element)
 
 TemplateBuilder.prototype.object = function (element)
 {
-    // Dispatch DOM added element event
-    document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-
     // Create object
-    var templateObject = new TemplateObject(element);
-    templateObject.openConfigureModal();
+    element.templateObject = new TemplateObject(element);
 };
 
 TemplateBuilder.prototype.save = function ()
@@ -218,8 +236,6 @@ TemplateBuilder.prototype.normalize = function (item)
  */
 function TemplateObject(element)
 {
-    element.templateObject = this;
-
     this.element         = element;
     this.configureModal  = element.querySelector('.configure-modal');
     this.saveButton      = this.configureModal.querySelector('.save-configuration');
