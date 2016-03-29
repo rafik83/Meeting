@@ -578,6 +578,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.accept_handler'
+    command.admin.change_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ChangePasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     command.sheet.template.create_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
