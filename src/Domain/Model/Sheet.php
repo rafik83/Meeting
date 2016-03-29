@@ -429,18 +429,4 @@ class Sheet implements BillingInfoInterface
 
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function isIndexable()
-    {
-        try {
-            $this->getOwner();
-
-            return true;
-        } catch (\RuntimeException $ex) {
-            return false;
-        }
-    }
 }
