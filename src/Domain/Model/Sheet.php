@@ -303,9 +303,11 @@ class Sheet implements BillingInfoInterface
      */
     public function getOwner()
     {
-        foreach ($this->getParticipants() as $participant) {
-            if ($participant->isOwner()) {
-                return $participant;
+        if ($this->participants !== null) {
+            foreach ($this->getParticipants() as $participant) {
+                if ($participant->isOwner()) {
+                    return $participant;
+                }
             }
         }
 
