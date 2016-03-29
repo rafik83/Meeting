@@ -431,21 +431,36 @@ TextObject.prototype.save = function ()
 function EditableTextObject(element)
 {
     this.element = element;
-    this.config  = { content: null, type: null };
+    this.config  = {
+        label: null,
+        placeholder: null,
+        help: null,
+        length: null,
+        type: null,
+        required: false
+    };
 }
 
 EditableTextObject.prototype.fill = function ()
 {
-    this.element.querySelector('textarea[name="content"]').value = this.config.content;
-    this.element.querySelector('select[name="type"]').value      = this.config.type;
+    this.element.querySelector('input[name="label"]').value          = this.config.label;
+    this.element.querySelector('textarea[name="placeholder"]').value = this.config.placeholder;
+    this.element.querySelector('textarea[name="help"]').value        = this.config.help;
+    this.element.querySelector('input[name="length"]').value         = this.config.length;
+    this.element.querySelector('select[name="type"]').value          = this.config.type;
+    this.element.querySelector('[name="required"]').checked          = this.config.required;
 };
 
 EditableTextObject.prototype.save = function ()
 {
-    this.config.content = this.element.querySelector('textarea[name="content"]').value;
-    this.config.type    = this.element.querySelector('select[name="type"]').value;
+    this.config.label       = this.element.querySelector('input[name="label"]').value;
+    this.config.placeholder = this.element.querySelector('textarea[name="placeholder"]').value;
+    this.config.help        = this.element.querySelector('textarea[name="help"]').value;
+    this.config.length      = this.element.querySelector('input[name="length"]').value;
+    this.config.type        = this.element.querySelector('select[name="type"]').value;
+    this.config.required    = this.element.querySelector('input[name="required"]').checked;
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
 
 /**
