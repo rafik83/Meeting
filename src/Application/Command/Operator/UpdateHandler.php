@@ -10,19 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Operator;
 
-use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
-use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CreateHandler extends AbstractCreateHandler
+class UpdateHandler
 {
+    /**
+     * @var AdminRepositoryInterface
+     */
+    private $adminRepository;
+
     /**
      * @var ActivateAccountTokenGenerator
      */
@@ -40,77 +42,65 @@ class CreateHandler extends AbstractCreateHandler
 
     /**
      * @param AdminRepositoryInterface                $adminRepository
-     * @param PasswordEncoderInterface                $encoder
-     * @param SaltGeneratorInterface                  $saltGenerator
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
      * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
-        PasswordEncoderInterface $encoder,
-        SaltGeneratorInterface $saltGenerator,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
-        parent::__construct($adminRepository, $encoder, $saltGenerator);
-
+        $this->adminRepository                = $adminRepository;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
         $this->activateAccountTokenRepository = $activateAccountTokenRepository;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
     /**
-     * @param Create $create
+     * @param Update $update
+     *
      * @throws EmailAlreadyExistsException
      */
-    public function handle(Create $create)
+    public function handle(Update $update)
     {
-        if ($this->adminRepository->emailExists($create->email)) {
-            throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $create->email));
+        $newMail = $update->email !== $update->operator->getEmail();
+
+        if ($newMail && $this->adminRepository->emailExists($update->email)) {
+            throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $update->email));
         }
 
-        $salt = $this->saltGenerator->generate();
+        $operator = $update->operator;
+        $operator->setFirstName($update->firstname)
+            ->setLastname($update->lastname)
+            ->setEmail($update->email);
 
-        $admin = new Admin(
-            $create->email,
-            $salt,
-            null,
-            $create->organizer->getLocale(),
-            $create->firstname,
-            $create->lastname,
-            Admin::ROLE_OPERATOR,
-            $create->date
-        );
+        $operator->setEvents($update->events);
 
-        $password = $this->encoder->encode($admin, $create->password);
-        $admin->updatePassword($salt, $password);
+        $this->adminRepository->set($operator);
 
-        foreach ($create->organizer->getEvents() as $event) {
-            $admin->addEvent($event);
+        // If the mail of the operator has changed
+        // Send a new activation Event
+        if ($newMail) {
+            $this->sendActivationEvent($operator);
         }
-
-        $this->adminRepository->add($admin);
-
-        $this->sendActivationEvent($create, $admin);
     }
 
     /**
-     * @param Create $create
-     * @param Admin  $admin
+     * @param Admin  $operator
      */
-    private function sendActivationEvent(Create $create, Admin $admin)
+    private function sendActivationEvent(Admin $operator)
     {
-        $activateAccountToken = $this->activateAccountTokenGenerator->generate($admin);
+        $activateAccountToken = $this->activateAccountTokenGenerator->generate($operator);
 
-        $this->activateAccountTokenRepository->deleteAllForUser($admin);
+        $this->activateAccountTokenRepository->deleteAllForUser($operator);
         $this->activateAccountTokenRepository->create($activateAccountToken);
 
         $activateAccountEvent = new ActivateAccountEvent(
-            $admin,
+            $operator,
             $activateAccountToken,
-            $create->organizer->getLocale()
+            $operator->getLocale()
         );
 
         $this->eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent);

@@ -13,28 +13,46 @@ namespace Tests\Application\Command\Admin;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Application\Command\Admin\Create;
-use Proximum\Vimeet\Application\Command\Admin\CreateHandler;
+use Proximum\Vimeet\Application\Command\Admin\Update;
+use Proximum\Vimeet\Application\Command\Admin\UpdateHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime           = new \DateTime();
-        $command            = new Create('fr', $dateTime);
+        $admin              = new Admin(
+            'test@test.com',
+            '__salt__',
+            null,
+            'fr',
+            'toto',
+            'tata',
+            Admin::ROLE_ORGANIZER,
+            $dateTime
+        );
+        $command            = new Update($admin);
         $command->email     = 'test@test.com';
-        $command->password  = 'password';
+        $command->password  = 'password2';
         $command->firstname = 'toto';
         $command->lastname  = 'tata';
         $command->role      = Admin::ROLE_ORGANIZER;
         $command->events    = [];
 
-        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
-        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
+        $expectedAdmin = new Admin(
+            'test@test.com',
+            '__salt__',
+            'encoded_password',
+            'fr',
+            'toto',
+            'tata',
+            Admin::ROLE_ORGANIZER,
+            $dateTime
+        );
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
@@ -45,20 +63,33 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
-        $adminRepository->add($expectedAdmin)->shouldBeCalled();
+        $adminRepository->set($expectedAdmin)->shouldBeCalled();
 
-        $handler = new CreateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
         $handler->handle($command);
     }
 
     public function testHandleWithEvents()
     {
-        $event  = new Event();
-        $event2 = new Event();
-        $dateTime           = new \DateTime();
-        $command            = new Create('fr', $dateTime);
-        $command->email     = 'test@test.com';
+        $dateTime = new \DateTime();
+        $event    = new Event();
+        $event2   = new Event();
+        $event3   = new Event();
+        $admin    = new Admin(
+            'test@test.com',
+            '__salt__',
+            null,
+            'fr',
+            'toto',
+            'tata',
+            Admin::ROLE_ORGANIZER,
+            $dateTime
+        );
+        $admin->addEvent($event);
+        $admin->addEvent($event3);
+
+        $command            = new Update($admin);
+        $command->email     = 'test4@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
         $command->lastname  = 'tata';
@@ -68,8 +99,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             1 => $event2,
         ];
 
-        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
-        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
+        $expectedAdmin = new Admin(
+            'test4@test.com',
+            '__salt__',
+            'encoded_password',
+            'fr',
+            'toto',
+            'tata',
+            Admin::ROLE_ORGANIZER,
+            $dateTime
+        );
         $expectedAdmin->addEvent($event);
         $expectedAdmin->addEvent($event2);
 
@@ -83,9 +122,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
-        $adminRepository->add($expectedAdmin)->shouldBeCalled();
+        $adminRepository->set($expectedAdmin)->shouldBeCalled();
 
-        $handler = new CreateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
         $handler->handle($command);
     }
 
@@ -93,9 +132,20 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
-        $dateTime           = new \DateTime();
-        $command            = new Create('fr', $dateTime);
-        $command->email     = 'test@test.com';
+        $dateTime = new \DateTime();
+        $admin    = new Admin(
+            'test@test.com',
+            '__salt__',
+            null,
+            'fr',
+            'toto',
+            'tata',
+            Admin::ROLE_ORGANIZER,
+            $dateTime
+        );
+
+        $command            = new Update($admin);
+        $command->email     = 'test4@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
         $command->lastname  = 'tata';
@@ -112,7 +162,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
         $adminRepository->add()->shouldNotBeCalled();
 
-        $handler = new CreateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
         $handler->handle($command);
     }
 }

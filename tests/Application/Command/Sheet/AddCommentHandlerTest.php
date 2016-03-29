@@ -27,7 +27,7 @@ class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $sheet    = new Sheet($event, $type, [], [], $dateTime);
-        $author   = new Admin('test@test.com', '__SALT__', '__PASSWORD__', 'fr', 'Truc', 'Muche', 'ROLE_SUPER_ADMIN');
+        $author   = new Admin('test@test.com', '__SALT__', '__PASSWORD__', 'fr', 'Truc', 'Muche', 'ROLE_SUPER_ADMIN', $dateTime);
 
         $addComment = new AddComment(
             $sheet,

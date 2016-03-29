@@ -43,6 +43,11 @@
                                 </a>
                             </li>
                         {% endif %}
+                        {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                            <li>
+                                <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -68,6 +73,11 @@
                                         <a href="{{ path('admin_template_list') }}">
                                             {{ 'admin.template_list.link'|trans }}
                                         </a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                                    <li>
+                                        <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
                                     </li>
                                 {% endif %}
                             </ul>
