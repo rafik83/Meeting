@@ -675,6 +675,18 @@ form:
                 label: Assigner
             follower:
                 label: Collaborateur
+    change_password_admin:
+        children:
+            currentPassword:
+                label: Mot de passe actuel
+            plainPassword:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer
     sheet_template_create:
         children:
             title:
