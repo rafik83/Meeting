@@ -9,9 +9,16 @@
 
 
 
-    {{ form_start(filter_part_form) }}
-        {{ form_row(filter_part_form.sheetName) }}
-    {{ form_end(filter_part_form) }}
+    <div class="row">
+        <div class="col-md-offset-2 col-md-1 text-right">
+            {{ list_macros.choice_as_dropdown(filter_form.predefined, true, true) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_start(filter_part_form) }}
+                {{ form_row(filter_part_form.sheetName) }}
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
 
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
         {{ form_errors(batch_form) }}
@@ -30,9 +37,6 @@
                         </li>
                     {% endblock actions %}
                 {% endembed %}
-            </div>
-            <div class="col-md-8 text-right">
-                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, true) }}
             </div>
         </div>
 
