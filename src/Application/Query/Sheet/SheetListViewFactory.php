@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -26,6 +27,11 @@ class SheetListViewFactory
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
+
+    /**
+     * @var SheetSearchAdapterInterface
+     */
+    private $sheetSearchAdapter;
 
     /**
      * @var SheetInfoGuesser
@@ -45,21 +51,24 @@ class SheetListViewFactory
     /**
      * SheetOwnerView constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
-     * @param ParticipantInfoGuesser   $participantInfoGuesser
-     * @param Impersonate              $impersonate
+     * @param SheetRepositoryInterface    $sheetRepository
+     * @param SheetInfoGuesser            $sheetInfoGuesser
+     * @param ParticipantInfoGuesser      $participantInfoGuesser
+     * @param Impersonate                 $impersonate
+     * @param SheetSearchAdapterInterface $sheetSearchAdapter
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
-        Impersonate $impersonate
+        Impersonate $impersonate,
+        SheetSearchAdapterInterface $sheetSearchAdapter
     ) {
         $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
+        $this->sheetSearchAdapter     = $sheetSearchAdapter;
     }
 
     /**
@@ -74,7 +83,8 @@ class SheetListViewFactory
      */
     public function paginate(Event $event, array $filters, $page, $limit, $locale, Admin $admin)
     {
-        $sheets          = $this->sheetRepository->paginate($filters, $page, $limit, $event, $locale);
+        $sheets          = $this->sheetSearchAdapter->find($event, $filters, $page, $limit, $event, $locale);
+
         $sheets->results = array_map(function (Sheet $sheet) use ($locale, $admin) {
             return $this->createFromSheet($sheet, $locale, $admin);
         }, $sheets->results);
