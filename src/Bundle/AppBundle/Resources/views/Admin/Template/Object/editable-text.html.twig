@@ -1,6 +1,6 @@
 {% set config = { 'content': 'Texte modifiable', 'type': 'titre' }|merge(config|default({})) %}
 
-<div class="object" data-object="editable-text">
+<div class="object" data-object="editable-text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">

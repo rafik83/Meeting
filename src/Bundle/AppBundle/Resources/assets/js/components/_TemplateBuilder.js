@@ -3,6 +3,13 @@ var $             = require('jquery');
 var Sortable      = require('./_Sortable');
 var LoadingButton = require('./_LoadingButton');
 
+function guidGenerator() {
+    var S4 = function() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4());
+}
+
 /**
  * TemplateBuilder
  *
@@ -230,9 +237,14 @@ TemplateBuilder.prototype.normalize = function (item)
         }
     }
 
-    return [].map.call(this.children(item), function (child) {
-        return this.normalize(child);
+    var config = {};
+
+    [].forEach.call(this.children(item), function (child) {
+        var template = child.templateBlock || child.templateObject;
+        config[template.uid] = this.normalize(child);
     }.bind(this));
+
+    return config;
 };
 
 /**
@@ -246,6 +258,14 @@ function TemplateBlock(element, builder)
 {
     this.element = element;
     this.builder = builder;
+
+    // UID
+    this.uid = element.getAttribute('data-uid');
+
+    if (this.uid === null || this.uid === undefined) {
+        this.uid = guidGenerator();
+        this.element.setAttribute('data-uid', this.uid);
+    }
 
     // Init block inner as sortable target
     [].forEach.call(this.builder.inners(element), function (inner) {
@@ -307,6 +327,14 @@ function TemplateObject(element)
     this.deleteButton    = element.querySelector('.delete-button');
     this.configureButton = element.querySelector('.configure-button');
     this.type            = element.getAttribute('data-object');
+
+    // UID
+    this.uid = element.getAttribute('data-uid');
+
+    if (this.uid === null || this.uid === undefined) {
+        this.uid = guidGenerator();
+        this.element.setAttribute('data-uid', this.uid);
+    }
 
     // Init modal
     $(this.configureModal).modal({show: false});

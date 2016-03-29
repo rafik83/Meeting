@@ -11,8 +11,8 @@
         <div class="block">
             <span class="delete"></span>
             <div class="template-container container-fluid block-inner" id="template-container">
-                {% for item in template.value|default([]) %}
-                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'config': item.config }, false) }}
+                {% for uid, item in template.value|default([]) %}
+                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
                 {% endfor %}
             </div>
         </div>

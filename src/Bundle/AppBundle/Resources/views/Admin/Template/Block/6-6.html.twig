@@ -1,4 +1,4 @@
-<div class="block" data-block="6-6">
+<div class="block" data-block="6-6"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
     <div class="block-buttons">
         <ul class="list-unstyled">
             <li>
@@ -16,15 +16,15 @@
     <div class="row">
         <div class="col-md-6">
             <div class="block-inner">
-                {% for item in config[0]|default([]) %}
-                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'config': item.config }, false) }}
+                {% for uid, item in config[0]|default([]) %}
+                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
                 {% endfor %}
             </div>
         </div>
         <div class="col-md-6">
             <div class="block-inner">
-                {% for item in config[1]|default([]) %}
-                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'config': item.config }, false) }}
+                {% for uid, item in config[1]|default([]) %}
+                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
                 {% endfor %}
             </div>
         </div>
