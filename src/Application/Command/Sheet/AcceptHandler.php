@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ValidateHandler
+class AcceptHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -28,7 +28,7 @@ class ValidateHandler
     private $eventDispatcher;
 
     /**
-     * ValidateHandler constructor.
+     * AcceptHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param EventDispatcherInterface $eventDispatcher
@@ -40,22 +40,22 @@ class ValidateHandler
     }
 
     /**
-     * @param Validate $validate
+     * @param Accept $accept
      */
-    public function handle(Validate $validate)
+    public function handle(Accept $accept)
     {
-        if ($validate->sheet->isValidated()) {
+        if ($accept->sheet->isAccepted()) {
             return;
         }
 
-        $this->sheetRepository->set($validate->sheet->markAsValidated());
+        $this->sheetRepository->set($accept->sheet->markAsAccepted());
+
         $this->eventDispatcher->dispatch(
-            Events::SHEET_VALIDATED,
-            new SheetValidatedEvent(
-                $validate->sheet,
-                $validate->admin,
-                $validate->date,
-                $validate->comment
+            Events::SHEET_ACCEPTED,
+            new SheetAcceptedEvent(
+                $accept->sheet,
+                $accept->admin,
+                $accept->date
             )
         );
     }

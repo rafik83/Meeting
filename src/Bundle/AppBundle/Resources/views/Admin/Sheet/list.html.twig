@@ -19,7 +19,12 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            {{ form_widget(batch_form.validate) }}
+                            {{ form_widget(batch_form.accept) }}
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#validate-comment">
+                                Valider
+                            </a>
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
@@ -52,6 +57,19 @@
                         <ul class="dropdown-menu" aria-labelledby="state-dropdown">
                             {% for choice in filter_form.state.vars.choices %}
                                 <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </th>
+                <th>
+                    <div class="dropdown">
+                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Complitude
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
+                            {% for choice in filter_form.completed.vars.choices %}
+                                <li><a href="?{{ app.request.query.all|merge({'completed': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -101,7 +119,16 @@
                         <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
                     </td>
                     <td>
-                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        <span class="label label-default"
+                            {% if sheet.state == 'accepted' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ 'admin.sheet.acceptedAt'|trans({'%at%': sheet.acceptedAt|date('d/m/Y H:i'), '%by%': sheet.acceptedBy}) }}"
+                            {% endif %}
+                        >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                    </td>
+                    <td>
+                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
+                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
+                        </span>
                     </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
@@ -147,5 +174,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="validate-comment">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Valider les fiches</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.validateComment) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        {{ form_widget(batch_form.validate) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     {{ form_end(batch_form) }}
-{% endblock %}
+{% endblock content %}

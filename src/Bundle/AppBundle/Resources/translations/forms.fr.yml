@@ -568,6 +568,8 @@ form:
         children:
             state:
                 label: Etat
+            completed:
+                label: Complète
             category:
                 label: Catégorie
             type:
@@ -671,8 +673,12 @@ form:
         children:
             validate:
                 label: Valider
+            validateComment:
+                label: Laisser un commentaire (optionnel)
             assign:
                 label: Assigner
+            accept:
+                label: Accepter
             follower:
                 label: Collaborateur
     change_password_admin:

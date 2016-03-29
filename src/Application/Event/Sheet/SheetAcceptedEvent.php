@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
-class SheetValidatedEvent extends Event
+class SheetAcceptedEvent extends Event
 {
     /**
      * @var Sheet
@@ -33,24 +33,17 @@ class SheetValidatedEvent extends Event
     private $date;
 
     /**
-     * @var string
-     */
-    private $comment;
-
-    /**
-     * SheetValidatedEvent constructor.
+     * SheetAcceptedEvent constructor.
      *
      * @param Sheet             $sheet
      * @param AbstractUser      $user
      * @param DateTimeInterface $date
-     * @param string            $comment
      */
-    public function __construct(Sheet $sheet, AbstractUser $user, DateTimeInterface $date, $comment)
+    public function __construct(Sheet $sheet, AbstractUser $user, DateTimeInterface $date)
     {
-        $this->sheet   = $sheet;
-        $this->user    = $user;
-        $this->date    = $date;
-        $this->comment = $comment;
+        $this->sheet = $sheet;
+        $this->user  = $user;
+        $this->date  = $date;
     }
 
     /**
@@ -77,13 +70,5 @@ class SheetValidatedEvent extends Event
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 }

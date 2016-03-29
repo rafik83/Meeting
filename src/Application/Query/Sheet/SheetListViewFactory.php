@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 
 class SheetListViewFactory
 {
@@ -43,23 +44,31 @@ class SheetListViewFactory
     private $impersonate;
 
     /**
+     * @var TraceRepositoryInterface
+     */
+    private $traceRepository;
+
+    /**
      * SheetOwnerView constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param ParticipantInfoGuesser   $participantInfoGuesser
      * @param Impersonate              $impersonate
+     * @param TraceRepositoryInterface $traceRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
-        Impersonate $impersonate
+        Impersonate $impersonate,
+        TraceRepositoryInterface $traceRepository
     ) {
         $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
+        $this->traceRepository        = $traceRepository;
     }
 
     /**
@@ -85,6 +94,7 @@ class SheetListViewFactory
     /**
      * @param Sheet  $sheet
      * @param string $locale
+     * @param Admin  $admin
      *
      * @return SheetListView
      */
@@ -94,6 +104,7 @@ class SheetListViewFactory
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
             $sheet->getState(),
+            $sheet->isCompleted(),
             array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
@@ -104,7 +115,8 @@ class SheetListViewFactory
             $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
-            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser())
+            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
+            $this->traceRepository->getLastAcceptBySheet($sheet)
         );
     }
 }
