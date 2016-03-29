@@ -1,5 +1,7 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
+{% import "VimeetAppBundle:Admin/Common:list_macros.html.twig" as list_macros %}
+
 {% block content %}
     <h1 class="page-header">{% block list_title 'List title' %}</h1>
 
@@ -67,18 +69,6 @@
             {% endblock list_sort %}
         </div>
     </div>
-
-    {% block list_filters_summary %}
-        <div class="text-center filters-list">
-            <span class="label label-default">Has purchased at least one product</span>
-            <span class="label label-default">Status: Approved</span>
-            <span class="label label-default">Required: Yes</span>
-            <a href="#" class="btn btn-default btn-xs">
-                <span class="glyphicon glyphicon-remove"></span>
-                Reset filters
-            </a>
-        </div>
-    {% endblock list_filters_summary %}
 
     {% block list_table %}
     {% endblock list_table %}

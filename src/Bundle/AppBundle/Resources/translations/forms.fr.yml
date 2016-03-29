@@ -589,13 +589,41 @@ form:
             submit:
                 label: Envoyer
         role:
+            organizer: Organisateur
+            operator: Collaborateur
+            super_admin: Administrateur
+    update_admin:
+        children:
+            email:
+                label: Email
+            password:
+                label: Mot de passe
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            role:
+                label: Type
+            events:
+                label: Événements
+            submit:
+                label: Envoyer
+        role:
             super_admin: Admin
             organizer: Organisateur
+            operator: Collaborateur
     filter_admin:
         role:
             all: Tous les types
             organizer: Organisateur
+            operator: Collaborateur
             super_admin: Admin
+        event:
+            all: Tous les événements
+        children:
+            submit:
+                label: Filtrer
+    filter_operator:
         event:
             all: Tous les événements
         children:
@@ -615,6 +643,18 @@ form:
                 label: Prénom
             lastname:
                 label: Nom
+            submit:
+                label: Envoyer
+    update_operator:
+        children:
+            email:
+                label: Email
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            events:
+                label: Événements disponible pour ce collaborateur
             submit:
                 label: Envoyer
     admin_activate_account_password:

@@ -156,4 +156,30 @@ class AdminRepository implements AdminRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin', 'admin.id')
+            ->where('admin.role = :role')
+            ->setParameter('role', Admin::ROLE_OPERATOR);
+
+        if (isset($filters['event'])) {
+            $queryBuilder
+                ->join('admin.events', 'event', 'WITH', 'event = :event')
+                ->setParameter('event', $filters['event']);
+        } else {
+            $queryBuilder
+                ->join('admin.events', 'event', 'WITH', 'event in (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'admin', 'id');
+    }
 }

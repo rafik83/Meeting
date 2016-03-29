@@ -42,14 +42,31 @@ admin_create_admin:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
+admin_update_admin:
+    path: /admin/update/{admin}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Admin:update }
+
 #
 # Create Operator
 #
+
+admin_list_operator:
+    path: /operator
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:list }
 
 admin_create_operator:
     path: /operator/create
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Operator:create }
+
+admin_update_operator:
+    path: /operator/update/{operator}
+    methods: [GET, POST]
+    requirements:
+        operator: \d+
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:update }
 
 #
 # Activate Operator account
@@ -482,6 +499,9 @@ admin_happening_speaker_delete:
 admin_template_list:
     path: /template
     defaults: { _controller: VimeetAppBundle:Admin/Template:list }
+    methods: [GET, POST]
 admin_template_builder:
     path: /template/{template}/builder
     defaults: { _controller: VimeetAppBundle:Admin/Template:builder }
+    methods: [GET]
+

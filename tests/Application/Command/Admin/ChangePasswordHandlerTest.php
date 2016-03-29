@@ -22,7 +22,7 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $dateTime =  new \DateTime();
-        $admin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', $dateTime);
+        $admin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $dateTime);
 
         // Command
         $command = new ChangePassword($admin);
@@ -35,6 +35,7 @@ class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
             'fr',
             'truc',
             'muche',
+            'ROLE_SUPER_ADMIN',
             $dateTime
         );
 

@@ -65,6 +65,20 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAll()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event', 'event.id');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getList()
     {
         $queryBuilder = $this
