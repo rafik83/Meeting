@@ -40,11 +40,18 @@ class Create
     public $organizer;
 
     /**
-     * @param Admin $organizer
+     * @var \DateTimeInterface
      */
-    public function __construct(Admin $organizer)
+    public $date;
+
+    /**
+     * @param Admin              $organizer
+     * @param \DateTimeInterface $date
+     */
+    public function __construct(Admin $organizer, \DateTimeInterface $date)
     {
         $this->organizer = $organizer;
         $this->password  = substr(md5(uniqid()), 0, 8);
+        $this->date      = $date;
     }
 }

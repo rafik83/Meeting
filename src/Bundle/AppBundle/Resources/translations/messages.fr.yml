@@ -267,6 +267,13 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    account:
+        link: Mon compte
+        title: Mon compte
+        content:
+            password: Modifier mon mot de passe
+        update_password:
+            title: Modifier mon mot de passe
     order:
         link: Commandes et transactions
     sheet:
@@ -378,17 +385,44 @@ admin:
                 email: Email
                 role: Type
                 events: Événéments
+                actions: Actions
             content:
+                update: Éditer
                 super_admin:
                     events:
                         all: Tous
                 admin:
                     events:
                         none: Aucun
+    create_admin:
+        title: Créer un nouvel utilisateur du backoffice
+    update_admin:
+        title: Modifier un utilisateur du backoffice
+    operator_list:
+        filter:
+            empty_filter: Vider les filtres
+        link: Liste des collaborateurs
+        title: Liste des collaborateurs
+        action:
+            create: Créer un nouveau collaborateur
+        table:
+            title:
+                lastname: Nom
+                firstname: Prénom
+                email: Email
+                lastLoginAt: Date de dernière connexion
+                events: Événéments
+                actions: Actions
+            content:
+                update: Editer
+                admin:
+                    events:
+                        none: Aucun
     operator:
         create:
             title: Créer un nouveau collaborateur
-            link: Créer collaborateur
+        update:
+            title: Editer un collaborateur
     activateAccount:
         password:
             title: Création du mot de passe pour votre compte collaborateur

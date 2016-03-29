@@ -8,6 +8,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Jean"
             - "DUPONT"
             - "ROLE_SUPER_ADMIN"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>
 
     user_admin_2:
         __construct:
@@ -18,6 +20,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Truc"
             - "MUCHE"
             - "ROLE_ORGANIZER"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>
         events:
             - '@event_rdv_carnot_2016'
 
@@ -30,3 +34,5 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Bidule"
             - "CHOUETTE"
             - "ROLE_ORGANIZER"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>

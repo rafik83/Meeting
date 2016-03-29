@@ -525,6 +525,12 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+    command.admin.update_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -539,6 +545,13 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@repository.admin_activate_account_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.operator.update_handler:
+        class: Proximum\Vimeet\Application\Command\Operator\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
             - '@components.token.admin.activate_account_token_generator'
             - '@repository.admin_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -565,10 +578,20 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.accept_handler'
+    command.admin.change_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ChangePasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     command.sheet.template.create_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
             - '@repository.sheet.template_repository'
+    command.admin.update_last_login_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
+        arguments:
+            - '@repository.admin_repository'
 
     #
     # Security

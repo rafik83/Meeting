@@ -23,13 +23,14 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
-        $type  = new Type($event);
-        $sheet1 = new Sheet($event, $type, [], [], new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], [], new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], [], new \DateTime());
+        $event    = new Event();
+        $type     = new Type($event);
+        $dateTime = new \DateTime();
+        $sheet1   = new Sheet($event, $type, [], [], $dateTime);
+        $sheet2   = new Sheet($event, $type, [], [], $dateTime);
+        $sheet3   = new Sheet($event, $type, [], [], $dateTime);
 
-        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER);
+        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);

@@ -85,22 +85,24 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignOrganizer()
     {
-        $event = new Event();
-        $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $event    = new Event();
+        $type     = new Type($event);
+        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $dateTime = new \DateTime();
 
-        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER);
+        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
 
         $this->assertEquals($organizer, $sheet->assign($organizer)->getFollower());
     }
 
     public function testAssignOperator()
     {
-        $event = new Event();
-        $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $event    = new Event();
+        $type     = new Type($event);
+        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $dateTime = new \DateTime();
 
-        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_OPERATOR);
+        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_OPERATOR, $dateTime);
 
         $this->assertEquals($operator, $sheet->assign($operator)->getFollower());
     }
@@ -109,11 +111,12 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(SheetException::class);
 
-        $event = new Event();
-        $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $event    = new Event();
+        $type     = new Type($event);
+        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $dateTime = new \DateTime();
 
-        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_SUPER_ADMIN);
+        $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_SUPER_ADMIN, $dateTime);
 
         $sheet->assign($operator);
     }

@@ -28,6 +28,7 @@
             <th>{{ 'admin.admin_list.table.title.email'|trans }}</th>
             <th>{{ 'admin.admin_list.table.title.role'|trans }}</th>
             <th>{{ 'admin.admin_list.table.title.events'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.actions'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +39,7 @@
                 <td>{{ admin.email }}</td>
                 <td>{{ ('admin.role.' ~ admin.role)|trans }}</td>
                 <td>
-                    {% if admin.role == 'ROLE_SUPER_ADMIN' %}
+                    {% if admin.isSuperAdmin %}
                         {% if admin.events|length == 0 %}
                             {{ 'admin.admin_list.table.content.super_admin.events.all'|trans }}
                         {% else %}
@@ -60,6 +61,7 @@
                         {% endif %}
                     {% endif %}
                 </td>
+                <td><a href="{{ path('admin_update_admin', {'admin': admin.id}) }}" class="btn btn-default">{{ 'admin.admin_list.table.content.update'|trans }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
