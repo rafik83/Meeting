@@ -230,11 +230,7 @@ TemplateBuilder.prototype.normalize = function (item)
     }
 
     if (objectType !== null && objectType !== undefined) {
-        return {
-            component: 'object',
-            type: objectType,
-            config: item.templateObject.object.config
-        }
+        return item.templateObject.normalize();
     }
 
     var config = {};
@@ -389,6 +385,15 @@ TemplateObject.prototype.closeConfigureModal = function ()
 TemplateObject.prototype.getConfig = function ()
 {
     return this.object.config;
+};
+
+TemplateObject.prototype.normalize = function ()
+{
+    return {
+        component: 'object',
+        type: this.type,
+        config: this.object.config
+    };
 };
 
 /**
