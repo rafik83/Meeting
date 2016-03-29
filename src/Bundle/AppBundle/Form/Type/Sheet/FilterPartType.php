@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,10 +23,15 @@ class FilterPartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('state', HiddenType::class)
+            ->add('category', HiddenType::class)
             ->add('sheetName', SheetNameType::class, [
                 'label'       => false,
                 'placeholder' => 'form.sheet_filter.children.sheet_name.label',
             ])
+            ->add('type', HiddenType::class)
+            ->add('follower', HiddenType::class)
+            ->add('predefined', HiddenType::class)
         ;
     }
 
