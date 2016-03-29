@@ -124,6 +124,14 @@ fos_elastica:
                             type: integer
                         followUp:
                             type: integer
+                        participantNumber:
+                            type: integer
+                        event:
+                            type: integer
+                        owner:
+                            type: integer
+                        createdAt:
+                            type: date
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer
@@ -132,7 +140,6 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
-                    indexable_callback: 'isIndexable'
 
 # From translation
 elao_form_translation:
