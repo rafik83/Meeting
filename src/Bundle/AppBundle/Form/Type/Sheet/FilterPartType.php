@@ -23,7 +23,8 @@ class FilterPartType extends AbstractType
     {
         $builder
             ->add('sheetName', SheetNameType::class, [
-                'label' => 'form.sheet_filter.children.sheet_name.label',
+                'label'       => false,
+                'placeholder' => 'form.sheet_filter.children.sheet_name.label',
             ])
         ;
     }
