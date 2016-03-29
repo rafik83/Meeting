@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
@@ -52,9 +53,13 @@ class SheetController extends Controller
         }
 
         // Pagination
-        $sheets = $this
-            ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+        try {
+            $sheets = $this
+                ->get('query.sheet.sheet_list_view_factory')
+                ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+        } catch (UnavailableCurrentPageException $ex) {
+            throw $this->createNotFoundException($ex->getMessage());
+        }
 
         // Batch
         $batch     = new Batch();
