@@ -477,18 +477,18 @@ function ButtonLinkObject(element)
 
 ButtonLinkObject.prototype.fill = function ()
 {
-    this.element.querySelector('input[name="label"]').value = this.config.label;
-    this.element.querySelector('input[name="url"]').value   = this.config.url;
+    this.element.querySelector('input[name="label"]').value   = this.config.label;
+    this.element.querySelector('textarea[name="help"]').value = this.config.help;
+    this.element.querySelector('[name="required"]').checked   = this.config.required;
 };
 
 ButtonLinkObject.prototype.save = function ()
 {
-    this.config.label = this.element.querySelector('input[name="label"]').value;
-    this.config.url =   this.element.querySelector('input[name="url"]').value;
+    this.config.label    = this.element.querySelector('input[name="label"]').value;
+    this.config.help     = this.element.querySelector('textarea[name="help"]').value;
+    this.config.required = this.element.querySelector('input[name="required"]').checked;
 
-    var button = this.element.querySelector('[data-bind="link"]');
-    button.setAttribute('href', this.config.url);
-    button.innerHTML = '' + this.config.label;
+    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label;
 };
 
 module.exports = TemplateBuilder;
