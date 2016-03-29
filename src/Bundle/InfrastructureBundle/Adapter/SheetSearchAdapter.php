@@ -15,7 +15,6 @@ use Elastica\Query\Bool;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
-use Elastica\QueryBuilder;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;

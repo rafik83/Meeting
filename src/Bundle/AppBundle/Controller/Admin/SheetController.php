@@ -18,8 +18,6 @@ use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterPartType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\SheetNameType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

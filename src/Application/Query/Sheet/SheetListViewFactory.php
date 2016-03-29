@@ -19,15 +19,9 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetListViewFactory
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
     /**
      * @var SheetSearchAdapterInterface
      */
@@ -51,20 +45,17 @@ class SheetListViewFactory
     /**
      * SheetOwnerView constructor.
      *
-     * @param SheetRepositoryInterface    $sheetRepository
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
      * @param Impersonate                 $impersonate
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      */
     public function __construct(
-        SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
         SheetSearchAdapterInterface $sheetSearchAdapter
     ) {
-        $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
