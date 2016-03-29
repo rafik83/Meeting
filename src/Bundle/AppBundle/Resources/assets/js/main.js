@@ -1,6 +1,7 @@
-var $        = require('jquery'),
-    Confirm  = require('./components/_Confirm'),
-    Update   = require('./components/_Update');
+var $         = require('jquery'),
+    bootstrap = require('bootstrap'),
+    Confirm   = require('./components/_Confirm'),
+    Update    = require('./components/_Update');
 
 require('elao-form.js');
 
