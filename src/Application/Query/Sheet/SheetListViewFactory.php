@@ -74,7 +74,7 @@ class SheetListViewFactory
      */
     public function paginate(Event $event, array $filters, $page, $limit, $locale, Admin $admin)
     {
-        $sheets          = $this->sheetSearchAdapter->find($event, $filters, $page, $limit, $event, $locale);
+        $sheets = $this->sheetSearchAdapter->find($event, $filters, $page, $limit, $locale);
 
         $sheets->results = array_map(function (Sheet $sheet) use ($locale, $admin) {
             return $this->createFromSheet($sheet, $locale, $admin);
@@ -86,6 +86,7 @@ class SheetListViewFactory
     /**
      * @param Sheet  $sheet
      * @param string $locale
+     * @param Admin  $admin
      *
      * @return SheetListView
      */
