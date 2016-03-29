@@ -26,7 +26,7 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = new Event();
-        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', new \DateTime());
+        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $type  = new Type($event);
         $sheet1 = new Sheet($event, $type, [], [], new \DateTime());
         $sheet2 = new Sheet($event, $type, [], [], new \DateTime());

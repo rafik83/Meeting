@@ -27,7 +27,7 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event   = new Event();
         $type    = new Type($event);
-        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', new \DateTime());
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $date    = new \DateTime();
         $comment = 'truc muche';
 

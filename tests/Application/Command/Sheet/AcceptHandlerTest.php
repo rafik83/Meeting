@@ -32,9 +32,8 @@ class AcceptHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet   = new Sheet($event, $type, [], [], new \DateTime());
         $expectedSheet = clone $sheet;
         $expectedSheet->markAsAccepted();
-        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', new \DateTime());
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $date    = new \DateTime();
-        $comment = 'truc muche';
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
