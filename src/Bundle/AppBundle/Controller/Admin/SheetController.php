@@ -57,10 +57,6 @@ class SheetController extends Controller
             ->get('query.sheet.sheet_list_view_factory')
             ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
 
-        $sheetss = $this
-            ->get('adapter.sheet_search_adapter')
-            ->find($event, $filters, $request->query->getInt('page', 1), 20, $locale);
-
         // Batch
         $batch     = new Batch();
         $batchForm = $this->createForm(BatchType::class, $batch, [
