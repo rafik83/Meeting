@@ -28,20 +28,21 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandleWithEvents()
     {
+        $dateTime  = new \DateTime();
         $event     = new Event();
         $event2    = new Event();
-        $organizer = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER);
+        $organizer = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
         $organizer->addEvent($event);
         $organizer->addEvent($event2);
 
-        $command            = new Create($organizer);
+        $command            = new Create($organizer, $dateTime);
         $command->email     = 'test2@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
         $command->lastname  = 'tata';
 
-        $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
-        $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR);
+        $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
+        $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator->addEvent($event);
         $expectedOperator->addEvent($event2);
 

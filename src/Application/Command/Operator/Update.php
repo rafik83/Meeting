@@ -11,18 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Operator;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class Update
 {
     /**
      * @var string
      */
     public $email;
-
-    /**
-     * @var string
-     */
-    public $password;
 
     /**
      * @var string
@@ -37,21 +33,22 @@ class Create
     /**
      * @var Admin
      */
-    public $organizer;
+    public $operator;
 
     /**
-     * @var \DateTimeInterface
+     * @var Event[]
      */
-    public $date;
+    public $events;
 
     /**
-     * @param Admin              $organizer
-     * @param \DateTimeInterface $date
+     * @param Admin $operator
      */
-    public function __construct(Admin $organizer, \DateTimeInterface $date)
+    public function __construct(Admin $operator)
     {
-        $this->organizer = $organizer;
-        $this->password  = substr(md5(uniqid()), 0, 8);
-        $this->date      = $date;
+        $this->operator  = $operator;
+        $this->email     = $operator->getEmail();
+        $this->lastname  = $operator->getLastname();
+        $this->firstname = $operator->getFirstname();
+        $this->events    = $operator->getEvents()->toArray();
     }
 }

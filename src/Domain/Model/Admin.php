@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -43,15 +44,26 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     private $events;
 
     /**
-     * @param string $email
-     * @param string $salt
-     * @param string $password
-     * @param string $locale
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $role
+     * @var DateTimeInterface
      */
-    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role)
+    private $createdAt;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $lastLoginAt;
+
+    /**
+     * @param string            $email
+     * @param string            $salt
+     * @param string            $password
+     * @param string            $locale
+     * @param string            $firstname
+     * @param string            $lastname
+     * @param string            $role
+     * @param DateTimeInterface $createdAt
+     */
+    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role, DateTimeInterface $createdAt)
     {
         parent::__construct($email, $salt, $password, $locale);
 
@@ -59,6 +71,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         $this->lastname  = $lastname;
         $this->role      = $role;
         $this->events    = new ArrayCollection();
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -99,11 +112,82 @@ class Admin extends AbstractUser implements AdvancedUserInterface
 
     /**
      * @param Event $event
+     *
      * @return self
      */
     public function addEvent(Event $event)
     {
         $this->events[] = $event;
+
+        return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return self
+     */
+    public function removeEvent(Event $event)
+    {
+        $this->events->removeElement($event);
+
+        return $this;
+    }
+
+    /**
+     * @param array $events
+     *
+     * @return self
+     */
+    public function setEvents(array $events)
+    {
+        foreach ($this->events as $event) {
+            if (!in_array($event, $events)) {
+                $this->removeEvent($event);
+            }
+        }
+
+        foreach ($events as $event) {
+            if (!$this->hasEvent($event)) {
+                $this->addEvent($event);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return self
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @param string $firstname
+     *
+     * @return self
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * @param string $lastname
+     *
+     * @return self
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -122,6 +206,44 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getLastLoginAt()
+    {
+        return $this->lastLoginAt;
+    }
+
+    /**
+     * @param DateTimeInterface $lastLoginAt
+     */
+    public function setLastLoginAt($lastLoginAt)
+    {
+        $this->lastLoginAt = $lastLoginAt;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return self
+     */
+    public function setRole($role)
+    {
+        if (in_array($role, $this->getAllRoles())) {
+            $this->role = $role;
+        }
+
+        return $this;
     }
 
     /**
@@ -230,6 +352,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function isOperator()
     {
         return $this->role === self::ROLE_OPERATOR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
     }
 
     /**

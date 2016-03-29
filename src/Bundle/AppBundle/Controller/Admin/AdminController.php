@@ -11,9 +11,12 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\Create;
+use Proximum\Vimeet\Application\Command\Admin\Update;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\CreateType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\FilterAdminType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\UpdateType;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +60,8 @@ class AdminController extends Controller
             $filters   = $filterForm->getData();
             $filtered = true;
         }
-        $admins = $this->get('repository.admin_repository')->listPaginated($request->query->get('page', 1), 20, $filters);
+        $admins = $this->get('repository.admin_repository')
+            ->listPaginated($request->query->get('page', 1), 20, $filters);
 
         return $this->render('VimeetAppBundle:Admin/Admin:list.html.twig', [
             'admins'      => $admins,
@@ -75,7 +79,7 @@ class AdminController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $create = new Create($request->getLocale());
+        $create = new Create($request->getLocale(), new \DateTime());
 
         $form = $this->createForm(CreateType::class, $create, [
             'action' => $this->generateUrl('admin_create_admin'),
@@ -90,11 +94,49 @@ class AdminController extends Controller
 
                 return $this->redirectToRoute('admin_list_admin');
             } catch (EmailAlreadyExistsException $ex) {
-                $form->get('email')->addError($this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale()));
+                $form->get('email')->addError(
+                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
+                );
             }
         }
 
         return $this->render('VimeetAppBundle:Admin/Admin:create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Admin   $admin
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Admin $admin)
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
+        $update = new Update($admin);
+
+        $form = $this->createForm(UpdateType::class, $update, [
+            'action' => $this->generateUrl('admin_update_admin', ['admin' => $admin->getId()]),
+            'method' => 'POST',
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('command.admin.update_handler')->handle($update);
+                $this->addFlash('success', 'flash.admin.admin.update.success');
+
+                return $this->redirectToRoute('admin_list_admin');
+            } catch (EmailAlreadyExistsException $ex) {
+                $form->get('email')->addError(
+                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
+                );
+            }
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Admin:update.html.twig', [
             'form' => $form->createView(),
         ]);
     }

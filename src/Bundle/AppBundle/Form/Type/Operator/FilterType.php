@@ -8,17 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
+namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FilterAdminType extends AbstractType
+class FilterType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -27,25 +25,16 @@ class FilterAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('role', ChoiceType::class, [
-                'label'             => false,
-                'choices_as_values' => true,
-                'choices'           => [
-                    'form.filter_admin.role.all'         => null,
-                    'form.filter_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
-                    'form.filter_admin.role.operator'    => Admin::ROLE_OPERATOR,
-                    'form.filter_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
-                ],
-            ])
             ->add('event', EventChoiceType::class, [
                 'label'       => false,
                 'required'    => false,
                 'expanded'    => false,
                 'multiple'    => false,
-                'placeholder' => 'form.filter_admin.event.all',
+                'placeholder' => 'form.filter_operator.event.all',
+                'choices'     => $options['events'],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'form.filter_admin.children.submit.label',
+                'label' => 'form.filter_operator.children.submit.label',
             ]);
     }
 
@@ -54,6 +43,9 @@ class FilterAdminType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired([
+            'events',
+        ]);
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',

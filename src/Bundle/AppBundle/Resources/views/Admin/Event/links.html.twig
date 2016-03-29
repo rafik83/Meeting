@@ -1,5 +1,5 @@
 <li class="dropdown-submenu">
-    <a href="#">{{ 'admin.event.settings.link'|trans }}</a>
+    <a href="{{ path('admin_event_update', { 'event': event.id }) }}">{{ 'admin.event.settings.link'|trans }}</a>
     <ul class="dropdown-menu">
         <li>
             <a href="{{ path('admin_event_update', { 'event': event.id }) }}">
@@ -24,7 +24,7 @@
     </a>
 </li>
 <li class="dropdown-submenu">
-    <a href="#">{{ 'admin.type.link'|trans }}</a>
+    <a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ 'admin.type.link'|trans }}</a>
     <ul class="dropdown-menu">
         <li>
             <a href="{{ path('admin_type_list', { 'event': event.id }) }}">
@@ -44,7 +44,7 @@
     </ul>
 </li>
 <li class="dropdown-submenu">
-    <a href="#">{{ 'admin.meeting.link'|trans }}</a>
+    <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
     <ul class="dropdown-menu">
         <li>
             <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}">
@@ -59,7 +59,7 @@
     </ul>
 </li>
 <li class="dropdown-submenu">
-    <a href="#">{{ 'admin.happening.link'|trans }}</a>
+    <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.link'|trans }}</a>
     <ul class="dropdown-menu">
         <li>
             <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">

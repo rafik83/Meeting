@@ -1,0 +1,12 @@
+{% if filters|length > 0 %}
+    <div class="text-center filters-summary">
+        {% for label, value in filters %}
+            <span class="label label-default">{{ label }}: {{ value }}</span>
+        {% endfor %}
+
+        <a href="{{ resetLink }}" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-remove"></span>
+            {{ 'admin.filters.reset'|trans }}
+        </a>
+    </div>
+{% endif %}

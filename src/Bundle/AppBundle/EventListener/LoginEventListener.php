@@ -3,13 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Bundle\AppBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -34,20 +38,36 @@ class LoginEventListener
     private $requestStack;
 
     /**
+     * @var UpdateLastLoginHandler
+     */
+    private $updateLastLoginHandler;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
      * LoginEventListener constructor.
      *
      * @param EventRepositoryInterface $eventRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param RequestStack             $requestStack
+     * @param UpdateLastLoginHandler   $updateLastLoginHandler
+     * @param EntityManager            $entityManager
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        UpdateLastLoginHandler $updateLastLoginHandler,
+        EntityManager $entityManager
     ) {
-        $this->eventRepository = $eventRepository;
-        $this->sheetRepository = $sheetRepository;
-        $this->requestStack    = $requestStack;
+        $this->eventRepository        = $eventRepository;
+        $this->sheetRepository        = $sheetRepository;
+        $this->requestStack           = $requestStack;
+        $this->updateLastLoginHandler = $updateLastLoginHandler;
+        $this->entityManager          = $entityManager;
     }
 
     /**
@@ -63,6 +83,18 @@ class LoginEventListener
         $event = $this->eventRepository->getEventByDomain($host);
 
         if (!$user instanceof User) {
+
+            if ($user instanceof Admin) {
+                $this->entityManager->detach($user);
+
+                $this->updateLastLoginHandler->handle(
+                    new UpdateLastLogin(
+                        $user->getEmail(),
+                        new \DateTime()
+                    )
+                );
+            }
+
             return;
         }
 
