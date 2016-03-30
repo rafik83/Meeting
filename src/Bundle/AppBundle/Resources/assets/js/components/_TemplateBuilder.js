@@ -348,6 +348,8 @@ function TemplateObject(element)
         this.object = new EditableTextObject(this.element);
     } else if (this.type === 'button-link') {
         this.object = new ButtonLinkObject(this.element);
+    } else if (this.type === 'participant') {
+        this.object = new ParticipantObject(this.element);
     }
 
     this.object.save();
@@ -493,6 +495,36 @@ ButtonLinkObject.prototype.save = function ()
     this.config.required = this.form.get('required');
 
     this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label;
+};
+
+/**
+ * ParticipantObject
+ *
+ * @param element
+ * @constructor
+ */
+function ParticipantObject(element)
+{
+    this.element = element;
+    this.form    = new Form(element);
+    this.config  = {
+        label: null,
+        numberOfParticipantShown: 1
+    };
+}
+
+ParticipantObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label);
+    this.form.set('numberOfParticipantShown', this.config.numberOfParticipantShown);
+};
+
+ParticipantObject.prototype.save = function ()
+{
+    this.config.label                    = this.form.get('label');
+    this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
+
+    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label + ' ' + this.config.numberOfParticipantShown;
 };
 
 module.exports = TemplateBuilder;
