@@ -125,16 +125,16 @@ Form.prototype.isRadio = function (input)
 
 Form.prototype.areRadios = function (inputs)
 {
-    return inputs.reduce(function (previous, input) {
+    return [].reduce.call(inputs, function (previous, input) {
         return previous && this.isRadio(input);
-    }.bind(this), true);
+    }.bind(this));
 };
 
 Form.prototype.areCheckboxes = function (inputs)
 {
-    return inputs.reduce(function (previous, input) {
+    return [].reduce.call(inputs, function (previous, input) {
         return previous && this.isCheckbox(input);
-    }.bind(this), true);
+    }.bind(this));
 };
 
 Form.prototype.getCheckedCheckboxesValues = function (inputs)
