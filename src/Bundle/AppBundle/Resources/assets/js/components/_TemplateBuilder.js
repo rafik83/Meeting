@@ -2,6 +2,7 @@
 var $             = require('jquery');
 var Sortable      = require('./_Sortable');
 var LoadingButton = require('./_LoadingButton');
+var Form          = require('./_Form');
 
 function guidGenerator() {
     var S4 = function() {
@@ -405,19 +406,20 @@ TemplateObject.prototype.normalize = function ()
 function TextObject(element)
 {
     this.element = element;
+    this.form    = new Form(element);
     this.config  = { content: null, type: null };
 }
 
 TextObject.prototype.fill = function ()
 {
-    this.element.querySelector('textarea[name="content"]').value = this.config.content;
-    this.element.querySelector('select[name="type"]').value      = this.config.type;
+    this.form.set('content', this.config.content);
+    this.form.set('type', this.config.type);
 };
 
 TextObject.prototype.save = function ()
 {
-    this.config.content = this.element.querySelector('textarea[name="content"]').value;
-    this.config.type    = this.element.querySelector('select[name="type"]').value;
+    this.config.content = this.form.get('content');
+    this.config.type    = this.form.get('type');
 
     this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
 };
@@ -431,6 +433,7 @@ TextObject.prototype.save = function ()
 function EditableTextObject(element)
 {
     this.element = element;
+    this.form    = new Form(element);
     this.config  = {
         label: null,
         placeholder: null,
@@ -443,22 +446,22 @@ function EditableTextObject(element)
 
 EditableTextObject.prototype.fill = function ()
 {
-    this.element.querySelector('input[name="label"]').value          = this.config.label;
-    this.element.querySelector('textarea[name="placeholder"]').value = this.config.placeholder;
-    this.element.querySelector('textarea[name="help"]').value        = this.config.help;
-    this.element.querySelector('input[name="length"]').value         = this.config.length;
-    this.element.querySelector('select[name="type"]').value          = this.config.type;
-    this.element.querySelector('[name="required"]').checked          = this.config.required;
+    this.form.set('label', this.config.label);
+    this.form.set('placeholder', this.config.placeholder);
+    this.form.set('help', this.config.help);
+    this.form.set('length', this.config.length);
+    this.form.set('type', this.config.type);
+    this.form.set('required', this.config.required);
 };
 
 EditableTextObject.prototype.save = function ()
 {
-    this.config.label       = this.element.querySelector('input[name="label"]').value;
-    this.config.placeholder = this.element.querySelector('textarea[name="placeholder"]').value;
-    this.config.help        = this.element.querySelector('textarea[name="help"]').value;
-    this.config.length      = this.element.querySelector('input[name="length"]').value;
-    this.config.type        = this.element.querySelector('select[name="type"]').value;
-    this.config.required    = this.element.querySelector('input[name="required"]').checked;
+    this.config.label       = this.form.get('label');
+    this.config.placeholder = this.form.get('placeholder');
+    this.config.help        = this.form.get('help');
+    this.config.length      = this.form.get('length');
+    this.config.type        = this.form.get('type');
+    this.config.required    = this.form.get('required');
 
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
@@ -472,21 +475,22 @@ EditableTextObject.prototype.save = function ()
 function ButtonLinkObject(element)
 {
     this.element = element;
+    this.form    = new Form(element);
     this.config  = { label: null, url: null };
 }
 
 ButtonLinkObject.prototype.fill = function ()
 {
-    this.element.querySelector('input[name="label"]').value   = this.config.label;
-    this.element.querySelector('textarea[name="help"]').value = this.config.help;
-    this.element.querySelector('[name="required"]').checked   = this.config.required;
+    this.form.set('label', this.config.label);
+    this.form.set('help', this.config.help);
+    this.form.set('required', this.config.required);
 };
 
 ButtonLinkObject.prototype.save = function ()
 {
-    this.config.label    = this.element.querySelector('input[name="label"]').value;
-    this.config.help     = this.element.querySelector('textarea[name="help"]').value;
-    this.config.required = this.element.querySelector('input[name="required"]').checked;
+    this.config.label    = this.form.get('label');
+    this.config.help     = this.form.get('help');
+    this.config.required = this.form.get('required');
 
     this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label;
 };
