@@ -8,10 +8,6 @@ Form.prototype.get = function (name)
 {
     var inputs = this.getByName(name);
 
-    if (inputs.length === 0) {
-        return null;
-    }
-
     if (inputs.length === 1) {
 
         if (this.hasValue(inputs[0])) {
@@ -22,15 +18,25 @@ Form.prototype.get = function (name)
             return inputs[0].checked;
         }
     }
+
+    if (inputs.length > 1) {
+
+        if (this.areRadios(inputs)) {
+            return this.getCheckedRadioValue(inputs);
+        }
+
+        if (this.areCheckboxes(inputs)) {
+            return this.getCheckedCheckboxesValues(inputs);
+        }
+
+    }
+
+    return null;
 };
 
 Form.prototype.set = function (name, value)
 {
     var inputs = this.getByName(name);
-
-    if (inputs.length === 0) {
-        return;
-    }
 
     if (inputs.length === 1) {
 
@@ -46,6 +52,20 @@ Form.prototype.set = function (name, value)
             return;
         }
     }
+
+    if (inputs.length > 1) {
+
+        if (this.areRadios(inputs)) {
+            this.checkRadio(inputs, value);
+
+            return;
+        }
+
+        if (this.areCheckboxes(inputs)) {
+            this.checkCheckboxes(inputs, value);
+        }
+
+    }
 };
 
 Form.prototype.getByName = function (name)
@@ -55,14 +75,100 @@ Form.prototype.getByName = function (name)
 
 Form.prototype.hasValue = function (input)
 {
-    return input.tagName === 'INPUT' && ['text', 'number', 'email'].indexOf(input.getAttribute('type')) !== -1 ||
-        input.tagName === 'TEXTAREA' ||
-        input.tagName === 'SELECT';
+    return this.isText(input) || this.isEmail(input) || this.isNumber(input) || this.isSelect(input) || this.isTextarea(input);
 };
 
 Form.prototype.hasChecked = function (input)
 {
-    return input.tagName === 'INPUT' && ['checkbox'].indexOf(input.getAttribute('type')) !== -1;
+    return this.isCheckbox(input);
+};
+
+Form.prototype.isText = function (input)
+{
+    return this.isInput(input, 'text');
+};
+
+Form.prototype.isNumber = function (input)
+{
+    return this.isInput(input, 'number');
+};
+
+Form.prototype.isEmail = function (input)
+{
+    return this.isInput(input, 'email')
+};
+
+Form.prototype.isInput = function (input, type)
+{
+    return input.tagName === 'INPUT' && input.getAttribute('type') === type;
+};
+
+Form.prototype.isSelect = function (input)
+{
+    return input.tagName === 'SELECT';
+};
+
+Form.prototype.isTextarea = function (input)
+{
+    return input.tagName === 'TEXTAREA';
+};
+
+Form.prototype.isCheckbox = function (input)
+{
+    return this.isInput(input, 'checkbox');
+};
+
+Form.prototype.isRadio = function (input)
+{
+    return this.isInput(input, 'radio');
+};
+
+Form.prototype.areRadios = function (inputs)
+{
+    return inputs.reduce(function (previous, input) {
+        return previous && this.isRadio(input);
+    }.bind(this), true);
+};
+
+Form.prototype.areCheckboxes = function (inputs)
+{
+    return inputs.reduce(function (previous, input) {
+        return previous && this.isCheckbox(input);
+    }.bind(this), true);
+};
+
+Form.prototype.getCheckedCheckboxesValues = function (inputs)
+{
+    var checked = [].filter.call(inputs, function (input) {
+        return input.checked;
+    });
+
+    [].reduce.call(checked , function (previous, input) {
+        return previous.push(input.value);
+    }, []);
+};
+
+Form.prototype.checkCheckboxes = function (inputs, values)
+{
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[0].checked = (values.indexOf(inputs[0].value) !== -1)
+    }
+};
+
+Form.prototype.getCheckedRadioValue = function (inputs)
+{
+    var checked = [].filter.call(inputs, function (input) {
+        return input.checked;
+    });
+
+    return checked[0].value;
+};
+
+Form.prototype.checkRadio = function (inputs, value)
+{
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[0].checked = (value === inputs[0].value);
+    }
 };
 
 module.exports = Form;
