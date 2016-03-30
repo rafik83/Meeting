@@ -1,6 +1,6 @@
 {% set config = {
-label: 'Participant',
-numberOfParticipantShown: 1
+    label: 'Participant',
+    numberOfParticipantShown: 1
 }|merge(config|default({})) %}
 
 <div class="object" data-object="participant"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
