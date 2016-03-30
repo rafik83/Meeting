@@ -1,9 +1,11 @@
-<div class="dropdown batch-actions hide">
-    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        <span data-batch-transchoice="{{ 'admin.batch_actions.single'|trans ~ '|' ~ 'admin.batch_actions.plural'|trans }}">{{ 'admin.batch_actions.single'|trans }}</span>
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-        {% block actions %}{% endblock actions %}
-    </ul>
+<div class="batch-default-height">
+    <div class="dropdown batch-actions hide">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span data-batch-transchoice="{{ 'admin.batch_actions.single'|trans ~ '|' ~ 'admin.batch_actions.plural'|trans }}">{{ 'admin.batch_actions.single'|trans }}</span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            {% block actions %}{% endblock actions %}
+        </ul>
+    </div>
 </div>

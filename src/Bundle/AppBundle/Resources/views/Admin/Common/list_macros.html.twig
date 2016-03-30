@@ -25,8 +25,8 @@
     </div>
 {% endmacro %}
 
-{% macro choice_as_dropdown(choice, btn_style = false, dropdown_menu_right = false) %}
-    <div class="dropdown">
+{% macro choice_as_dropdown(choice, btn_style = false, dropdown_menu_right = false, input_group = false) %}
+    <div class="{{ input_group ? 'input-group-btn' : 'dropdown' }}">
         <a href="#" id="{{ choice.vars.id }}-dropdown" {{ btn_style ? 'class="btn btn-default"' : '' }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ choice.vars.label|trans({}, choice.vars.translation_domain) }}
             <span class="caret"></span>
