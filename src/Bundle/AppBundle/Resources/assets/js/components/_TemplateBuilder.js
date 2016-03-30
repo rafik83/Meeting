@@ -350,6 +350,8 @@ function TemplateObject(element)
         this.object = new ButtonLinkObject(this.element);
     } else if (this.type === 'participant') {
         this.object = new ParticipantObject(this.element);
+    } else if (this.type === 'choice') {
+        this.object = new ChoiceObject(this.element);
     }
 
     this.object.save();
@@ -525,6 +527,46 @@ ParticipantObject.prototype.save = function ()
     this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
     this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label + ' ' + this.config.numberOfParticipantShown;
+};
+
+
+/**
+ * ChoiceObject
+ *
+ * @param element
+ * @constructor
+ */
+function ChoiceObject(element)
+{
+    this.element = element;
+    this.form    = new Form(element);
+    this.config  = {
+        label: null,
+        type: null,
+        required: false,
+        placeholder: '',
+        choices: ''
+    };
+}
+
+ChoiceObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label);
+    this.form.set('type', this.config.type);
+    this.form.set('required', this.config.required);
+    this.form.set('placeholder', this.config.placeholder);
+    this.form.set('choices', this.config.choices);
+};
+
+ChoiceObject.prototype.save = function ()
+{
+    this.config.label       = this.form.get('label');
+    this.config.type        = this.form.get('type');
+    this.config.required    = this.form.get('required');
+    this.config.placeholder = this.form.get('placeholder');
+    this.config.choices     = this.form.get('choices');
+
+    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label + ' ' + this.config.type;
 };
 
 module.exports = TemplateBuilder;
