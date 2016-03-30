@@ -21,10 +21,9 @@
     ]
   },
   "devDependencies": {
-    "browserify-shim": "3.8.*",
     "del": "1.2.*",
     "elao-assets-gulp": "0.3.*",
-    "gulp": "^3.9.1",
+    "gulp": "3.9.*",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",

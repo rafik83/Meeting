@@ -43,9 +43,7 @@
       margin-left: 8px;
 
       &:last-child {
-        i[class^='icon-'] {
-          margin-right: 0;
-        }
+        i[class^='icon-'] { margin-right: 0; }
       }
 
       i[class^='icon-'] {

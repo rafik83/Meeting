@@ -18,6 +18,12 @@
   &.row {
     > div > section { margin-bottom: 0; }
   }
+
+  &.section--2col {
+    display: flex;
+
+    > .col-md-6:first-child { display: flex; }
+  }
 }
 
   .section__content {
@@ -38,7 +44,10 @@
 }
 
 .section--category {
-  h2 { margin: 0; }
+  h2 {
+    font-size: 24px;
+    margin: 0;
+  }
 
   p {
     color: $color-highlighted;
@@ -135,6 +144,15 @@
     width: 100%;
     height: 260px;
     overflow: hidden;
+
+    .carousel-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      > .item { width: 100%; }
+    }
   }
 }
 

@@ -3,6 +3,20 @@
   .container-fluid { margin: 0 20px !important; }
 }
 
+// Responsive
+@media screen and (max-width: 1000px) {
+  .section--2col,
+  .section .col-md-6 { display: block !important; }
+}
+
+@media screen and (max-width: 990px) {
+  .sidebar { margin-top: 30px; }
+
+  .section--2col {
+    .col-md-6:first-child { margin-bottom: 30px; }
+  }
+}
+
 @media screen and (max-width: 840px) {
   .header__navigation {
     .name { display: none; }
@@ -37,6 +51,7 @@
     left: 0;
     right: 0;
     z-index: 10;
+    box-shadow: 0px 5px 5px 8px rgba(0,0,0,.3);
 
     .name { display: none; }
     .btn-lg { padding-left: 29px; }
@@ -47,7 +62,11 @@
       .tabs {
         right: 0;
 
-        > li a { padding: 24px 20px; }
+        > li a {
+          padding: 24px 0;
+
+          &:hover { background: none; }
+        }
 
         .active,
         .name { display: none; }

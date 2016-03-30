@@ -25,6 +25,13 @@ body {
       line-height: 20px;
       margin: 0;
 
+      i[class^='icon-'] {
+        float: left;
+        font-size: 20px;
+        margin-right: 5px;
+        margin-top: -2px;
+      }
+
       > span { color: $color-highlighted; }
 
       img {
