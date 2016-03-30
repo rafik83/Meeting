@@ -1,13 +1,11 @@
 {% set config = {
-    label: 'Texte modifiable',
+    label: 'Image',
     placeholder: '',
     help: '',
-    length: null,
     required: false,
-    type: 'title'
 }|merge(config|default({})) %}
 
-<div class="object" data-object="editable-text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="image"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">
@@ -28,7 +26,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="configure-modal-label">Texte éditable</h4>
+                            <h4 class="modal-title" id="configure-modal-label">Image</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -46,18 +44,6 @@
                             <div class="form-group">
                                 <label class="form-label">Requis</label>
                                 <input type="checkbox" name="required"{% if config.required %} checked="checked"{% endif %} />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Longueur</label>
-                                <input class="form-control" type="number" step="1" name="length" value="{{ config.length }}" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Type</label>
-                                <select class="form-control" name="type">
-                                    {% for label, value in { 'Titre': 'title', 'Texte': 'text' } %}
-                                        <option value="{{ value }}"{% if value == config.type %} selected="selected"{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
