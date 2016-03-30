@@ -352,6 +352,8 @@ function TemplateObject(element)
         this.object = new ParticipantObject(this.element);
     } else if (this.type === 'image') {
         this.object = new ImageObject(this.element);
+    } else if (this.type === 'tag') {
+        this.object = new TagObject(this.element);
     }
 
     this.object.save();
@@ -531,7 +533,6 @@ ParticipantObject.prototype.save = function ()
 
 module.exports = TemplateBuilder;
 
-
 /**
  * ImageObject
  *
@@ -566,6 +567,36 @@ ImageObject.prototype.save = function ()
     this.config.placeholder = this.form.get('placeholder');
     this.config.help        = this.form.get('help');
     this.config.required    = this.form.get('required');
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+};
+
+/**
+ * TagObject
+ *
+ * @param element
+ * @constructor
+ */
+function TagObject(element)
+{
+    this.element = element;
+    this.form    = new Form(element);
+    this.config  = {
+        label: null,
+        tag: null
+    };
+}
+
+TagObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label);
+    this.form.set('tag', this.config.tag);
+};
+
+TagObject.prototype.save = function ()
+{
+    this.config.label = this.form.get('label');
+    this.config.tag   = this.form.get('tag');
 
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
