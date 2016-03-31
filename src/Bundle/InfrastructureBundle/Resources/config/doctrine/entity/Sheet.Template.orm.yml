@@ -10,4 +10,4 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
         title:
             type: string
         value:
-            type: text
+            type: json_array
