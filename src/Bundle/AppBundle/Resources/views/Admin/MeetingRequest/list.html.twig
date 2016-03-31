@@ -23,8 +23,16 @@
         <tbody>
         {% for meeting_request in meeting_requests.results %}
             <tr>
-                <td>{{ meeting_request.sheetNameFrom }}</td>
-                <td>{{ meeting_request.sheetNameTo }}</td>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetFromId }) }}">
+                        {{ meeting_request.sheetNameFrom }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetToId }) }}">
+                        {{ meeting_request.sheetNameTo }}
+                    </a>
+                </td>
                 <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
                 <td>
                     {{ list_macros.state_label(
