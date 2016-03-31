@@ -14,7 +14,7 @@ Feature: Spot feature
     Then I should be on this page "/admin/fr/event/1/spot/create"
     When I fill in the following:
       | spot_create_reference       | D098 |
-      | spot_create_size            | 3    |
+      | spot_create_size            | 3,0  |
       | spot_create_meetingCapacity | 6    |
       | spot_create_seatCapacity    | 2    |
     And I check "spot_create_active"
