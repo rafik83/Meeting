@@ -332,6 +332,11 @@ admin:
         title: Conférences
         add: Ajouter
         update: Modifier
+        list:
+            title: Titre
+            speaker: Intervenants
+            begin: Début
+            end: Fin
     happening_category:
         link: Catégories de conférences
         title: Catégories de conférences

@@ -1,12 +1,13 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h1 class="page-header">
+        {{ 'admin.happening.title'|trans }}
 
-    <h2>{{ 'admin.happening.title'|trans }}</h2>
+    </h1>
 
-    <div class="text-right">
-        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-success">
+    <div>
+        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-primary new-action">
             {{ 'admin.happening.add'|trans }}
         </a>
     </div>
@@ -14,11 +15,11 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Titre</th>
-            <th>Intervenants</th>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Action</th>
+            <th>{{ 'admin.happening.list.title'|trans }}</th>
+            <th>{{ 'admin.happening.list.speaker'|trans }}</th>
+            <th>{{ 'admin.happening.list.begin'|trans }}</th>
+            <th>{{ 'admin.happening.list.end'|trans }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -26,9 +27,9 @@
             <tr>
                 <td>{{ happening.title }}</td>
                 <td>{{ happening.speakers|join(', ') }}</td>
-                <td>{{ happening.begin|date('d/m/Y h\\hi') }}</td>
-                <td>{{ happening.end|date('d/m/Y h\\hi') }}</td>
-                <td>
+                <td>{{ happening.begin|date('d/m/Y H\\hi') }}</td>
+                <td>{{ happening.end|date('d/m/Y H\\hi') }}</td>
+                <td class="text-right">
                     {% if happening.canUpdate %}
                         <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">
                             {{ 'admin.happening.update'|trans }}
@@ -39,7 +40,4 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="text-left">
-        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
-    </div>
 {% endblock %}
