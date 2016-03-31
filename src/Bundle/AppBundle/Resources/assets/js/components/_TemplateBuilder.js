@@ -350,6 +350,8 @@ function TemplateObject(element)
         this.object = new ButtonLinkObject(this.element);
     } else if (this.type === 'participant') {
         this.object = new ParticipantObject(this.element);
+    } else if (this.type === 'choice') {
+        this.object = new ChoiceObject(this.element);
     } else if (this.type === 'image') {
         this.object = new ImageObject(this.element);
     } else if (this.type === 'tag') {
@@ -533,7 +535,69 @@ ParticipantObject.prototype.save = function ()
     this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label + ' ' + this.config.numberOfParticipantShown;
 };
 
-module.exports = TemplateBuilder;
+
+/**
+ * ChoiceObject
+ *
+ * @param element
+ * @constructor
+ */
+function ChoiceObject(element)
+{
+    this.element = element;
+    this.form    = new Form(element);
+    this.config  = {
+        label: null,
+        type: null,
+        required: false,
+        placeholder: '',
+        choices: null
+    };
+}
+
+ChoiceObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label);
+    this.form.set('type', this.config.type);
+    this.form.set('required', this.config.required);
+    this.form.set('placeholder', this.config.placeholder);
+
+    var content = '';
+
+    for (var key in this.config.choices) {
+        if (Object.prototype.hasOwnProperty.call(this.config.choices, key)) {
+            if (content !== '') {
+                content = content + ',';
+            }
+
+            content = content + this.config.choices[key];
+        }
+    }
+
+    this.form.set('choices', content);
+};
+
+ChoiceObject.prototype.save = function ()
+{
+    this.config.label       = this.form.get('label');
+    this.config.type        = this.form.get('type');
+    this.config.required    = this.form.get('required');
+    this.config.placeholder = this.form.get('placeholder');
+
+    var result = {};
+
+    var current = this.form.get('choices').split(',').filter(function(item, pos, self) {
+        return self.indexOf(item) == pos;
+    });
+
+    for (var index = 0; index < current.length; ++index) {
+        result[current[index]] = current[index];
+    }
+
+    this.config.choices = result;
+
+    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label + ' ' + this.config.type;
+};
 
 /**
  * ImageObject
@@ -603,7 +667,6 @@ TagObject.prototype.save = function ()
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
 
-
 /**
  * CollectionObject
  *
@@ -642,3 +705,5 @@ CollectionObject.prototype.save = function ()
 
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
+
+module.exports = TemplateBuilder;

@@ -13,4 +13,5 @@ namespace Proximum\Vimeet\Application\Event;
 final class Events
 {
     const SHEET_VALIDATED = 'sheet.validated';
+    const SHEET_ACCEPTED  = 'sheet.accepted';
 }

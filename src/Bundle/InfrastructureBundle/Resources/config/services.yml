@@ -143,6 +143,10 @@ services:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.trace_repository:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TraceRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.sheet.template_repository:
         class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\TemplateRepository
         arguments:
@@ -563,6 +567,23 @@ services:
         arguments:
             - '@command.sheet.batch_validate_handler'
             - '@command.sheet.batch_assign_handler'
+            - '@command.sheet.batch_accept_handler'
+    command.sheet.accept_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    command.sheet.batch_accept_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.accept_handler'
+    command.admin.change_password_handler:
+        class: Proximum\Vimeet\Application\Command\Admin\ChangePasswordHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
     command.sheet.template.create_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
@@ -687,6 +708,7 @@ services:
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
             - '@repository.sheet.comment_repository'
+            - '@repository.trace_repository'
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 
@@ -902,3 +924,4 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@security.impersonate'
+            - '@repository.trace_repository'

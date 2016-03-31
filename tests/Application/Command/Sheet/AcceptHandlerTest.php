@@ -11,10 +11,10 @@
 namespace Tests\Application\Command\Sheet;
 
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Command\Sheet\Validate;
-use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
+use Proximum\Vimeet\Application\Command\Sheet\Accept;
+use Proximum\Vimeet\Application\Command\Sheet\AcceptHandler;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
+class AcceptHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -31,27 +31,26 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $type    = new Type($event);
         $sheet   = new Sheet($event, $type, [], [], new \DateTime());
         $expectedSheet = clone $sheet;
-        $expectedSheet->markAsValidated();
+        $expectedSheet->markAsAccepted();
         $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $date    = new \DateTime();
-        $comment = 'truc muche';
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
-        $command = new Validate($sheet, $admin, $date, $comment);
+        $command = new Accept($sheet, $admin, $date);
 
-        $this->assertFalse($sheet->isValidated());
+        $this->assertFalse($sheet->isAccepted());
 
-        $handler = new ValidateHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
+        $handler = new AcceptHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($command);
 
         $sheetRepository->set(Argument::that(function (Sheet $sheet) {
-            return $sheet->isValidated();
+            return $sheet->isAccepted();
         }))->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet, $admin, $date, $comment))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_ACCEPTED, new SheetAcceptedEvent($expectedSheet, $admin, $date))->shouldBeCalled();
 
-        $this->assertTrue($sheet->isValidated());
+        $this->assertTrue($sheet->isAccepted());
     }
 }

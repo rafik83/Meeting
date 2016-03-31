@@ -110,6 +110,17 @@
         </div>
     </div>
 
+    {% if details.traces %}
+    <h3>Historique</h3>
+    <div class="row">
+        <ul>
+            {% for trace in details.traces %}
+                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|date('d/m/Y H:i'), '%by%': trace.author, '%comment%': trace.comment}) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <h3>{{ 'admin.sheet.details.comments.title'|trans }}</h3>
     <div class="row">
         {% for comment in details.comments %}

@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Trace:
+    type:  entity
+    table: trace
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        object:
+            type: string
+        action:
+            type: string
+        date:
+            type: datetime
+        comment:
+            type: text
+            nullable: true
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+        admin:
+            targetEntity: Proximum\Vimeet\Domain\Model\Admin
