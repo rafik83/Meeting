@@ -624,7 +624,6 @@ Proximum\Vimeet\Domain\Model\Template:
         preview: >
             <div>
                 <h1>{{ sheet.data['563cae566af03']['563cb103926e6']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cae566af03']['563cb115bbeb9']|default }}</p>
             </div>
         view: ""
 
@@ -722,6 +721,5 @@ Proximum\Vimeet\Domain\Model\Template:
         preview: >
             <div>
                 <h1>{{ sheet.data['563cb00c629d8']['563cb02125c23']|default }} <small>{{ sheet.type.translations.get(app.request.locale).title }}</small></h1>
-                <p>{{ sheet.data['563cb00c629d8']['563cb0364f1c6']|default }}</p>
             </div>
         view: ""
