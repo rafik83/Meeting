@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Order;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order;
 
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Symfony\Component\OptionsResolver\OptionsResolver;

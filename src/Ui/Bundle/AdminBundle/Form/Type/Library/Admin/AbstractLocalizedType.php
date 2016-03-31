@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Symfony\Component\Form\AbstractType;

@@ -4,7 +4,7 @@
 
 {% block content %}
     {% for participantSchedule in participantSchedules %}
-        {{ include('VimeetAppBundle:Event/Schedule:participantSchedule.html.twig', {
+        {{ include('EventBundle:Schedule:participantSchedule.html.twig', {
             'participantSchedule': participantSchedule,
             'eventView': eventView,
             'sheet': sheet

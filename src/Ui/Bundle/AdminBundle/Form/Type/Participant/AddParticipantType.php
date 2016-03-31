@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Symfony\Component\OptionsResolver\OptionsResolver;

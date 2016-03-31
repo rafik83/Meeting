@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
@@ -44,7 +44,7 @@ class TemplateController extends Controller
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Template:list.html.twig', [
+        return $this->render('AdminBundle:Template:list.html.twig', [
             'templates' => $templates,
             'form'      => $form->createView(),
         ]);
@@ -70,7 +70,7 @@ class TemplateController extends Controller
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Template:duplicate.html.twig', [
+        return $this->render('AdminBundle:Template:duplicate.html.twig', [
             'template' => $template,
             'form'     => $form->createView(),
         ]);
@@ -83,7 +83,7 @@ class TemplateController extends Controller
      */
     public function builderAction(Template $template)
     {
-        return $this->render('VimeetAppBundle:Admin/Template:builder.html.twig', [
+        return $this->render('AdminBundle:Template:builder.html.twig', [
             'template' => $template,
         ]);
     }

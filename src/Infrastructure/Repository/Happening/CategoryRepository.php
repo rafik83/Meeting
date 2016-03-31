@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening;
+namespace Proximum\Vimeet\Infrastructure\Repository\Happening;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;

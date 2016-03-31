@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -29,7 +29,7 @@ class OrderController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        return $this->render('VimeetAppBundle:Event/Order:listOrders.html.twig', [
+        return $this->render('EventBundle:Order:listOrders.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
         ]);
@@ -50,7 +50,7 @@ class OrderController extends Controller
             ->get('components.sheet.order_merge_factory')
             ->createFromSheet($sheet, $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event/Order:summary.html.twig', [
+        return $this->render('EventBundle:Order:summary.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'summary'   => $summary,
@@ -81,7 +81,7 @@ class OrderController extends Controller
             ->get('components.sheet.proforma_view_factory')
             ->createFromOrder($order, $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event/Order:proforma.html.twig', [
+        return $this->render('EventBundle:Order:proforma.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'order'     => $order,

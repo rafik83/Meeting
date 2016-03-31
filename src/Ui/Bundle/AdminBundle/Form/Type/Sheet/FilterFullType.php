@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\CategoryChoiceType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -6,7 +6,7 @@
     <h2>{{ 'event.sheet.cart.title'|trans }}</h2>
 
     {% if cartView and cartView.groups|length %}
-        {{ include('VimeetAppBundle:Event/Package:table.html.twig', { 'order': cartView }, false) }}
+        {{ include('EventBundle:Package:table.html.twig', { 'order': cartView }, false) }}
 
         <div class="text-center">
             <a href="{{ path('event_sheet_billing', { 'sheet': sheet.id }) }}" class="btn btn-primary">

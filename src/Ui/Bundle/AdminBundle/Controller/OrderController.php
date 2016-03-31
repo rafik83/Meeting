@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Order\AddRow;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
@@ -46,7 +46,7 @@ class OrderController extends Controller
         );
 
         return $this->render(
-            'VimeetAppBundle:Admin/Order:edit.html.twig',
+            'AdminBundle:Order:edit.html.twig',
             [
                 'event'      => $event,
                 'sheet_info' => $sheetInfo,
@@ -87,7 +87,7 @@ class OrderController extends Controller
         }
 
         return $this->render(
-            'VimeetAppBundle:Admin/Order:addRow.html.twig',
+            'AdminBundle:Order:addRow.html.twig',
             [
                 'event'      => $event,
                 'sheet_info' => $sheetInfo,
@@ -129,7 +129,7 @@ class OrderController extends Controller
         }
 
         return $this->render(
-            'VimeetAppBundle:Admin/Order:updateRow.html.twig',
+            'AdminBundle:Order:updateRow.html.twig',
             [
                 'event'      => $event,
                 'sheet_info' => $sheetInfo,

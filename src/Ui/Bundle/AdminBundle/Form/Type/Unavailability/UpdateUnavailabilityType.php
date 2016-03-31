@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Symfony\Component\Form\AbstractType;

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
@@ -43,7 +43,7 @@ class HappeningController extends Controller
             ->get('happening.happening_list_view_factory')
             ->getListByEventAndLocale($event, $event->getAvailableLocale($request->getLocale()));
 
-        return $this->render('VimeetAppBundle:Admin/Happening:list.html.twig', [
+        return $this->render('AdminBundle:Happening:list.html.twig', [
             'event'      => $event,
             'happenings' => $happenings,
         ]);
@@ -75,7 +75,7 @@ class HappeningController extends Controller
             return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Happening:create.html.twig', [
+        return $this->render('AdminBundle:Happening:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -115,7 +115,7 @@ class HappeningController extends Controller
             return $this->redirectToRoute('admin_happening_update', ['event' => $event->getId(), 'happening' => $happening->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Happening:update.html.twig', [
+        return $this->render('AdminBundle:Happening:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -135,7 +135,7 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository_happening.category_repository')
             ->findByEvent($event, $event->getAvailableLocale($request->getLocale()));
 
-        return $this->render('VimeetAppBundle:Admin/Happening/Category:list.html.twig', [
+        return $this->render('AdminBundle:Happening/Category:list.html.twig', [
             'event'      => $event,
             'categories' => $categories,
         ]);
@@ -165,7 +165,7 @@ class HappeningController extends Controller
             return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Happening/Category:create.html.twig', [
+        return $this->render('AdminBundle:Happening/Category:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -200,7 +200,7 @@ class HappeningController extends Controller
             return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Happening/Category:update.html.twig', [
+        return $this->render('AdminBundle:Happening/Category:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

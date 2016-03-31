@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Transaction\Create;
 use Proximum\Vimeet\Application\Command\Transaction\Remove;
@@ -54,7 +54,7 @@ class TransactionController extends Controller
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($sheet);
 
-        return $this->render('VimeetAppBundle:Admin/Transaction:create.html.twig', [
+        return $this->render('AdminBundle:Transaction:create.html.twig', [
             'form'       => $form->createView(),
             'event'      => $event,
             'sheet'      => $sheet,
@@ -92,7 +92,7 @@ class TransactionController extends Controller
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetInfo($sheet);
 
-        return $this->render('VimeetAppBundle:Admin/Transaction:update.html.twig', [
+        return $this->render('AdminBundle:Transaction:update.html.twig', [
             'form'       => $form->createView(),
             'event'      => $event,
             'sheet'      => $sheet,

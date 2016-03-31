@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot;
 
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Symfony\Component\Form\AbstractType;

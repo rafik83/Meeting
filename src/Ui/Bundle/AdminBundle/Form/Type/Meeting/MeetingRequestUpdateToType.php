@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\User;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User;
 
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\AbstractEmailType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\AbstractEmailType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ForgottenPasswordType extends AbstractEmailType

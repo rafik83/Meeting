@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Symfony\Component\Form\AbstractType;

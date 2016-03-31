@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Operator;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
@@ -49,7 +49,7 @@ class SheetController extends Controller
 
         $preview = $this->get('sheet.sheet_preview_factory')->createFromSheet($sheet, $this->getUser(), $locale);
 
-        return $this->render('VimeetAppBundle:Event/Sheet:sheet.html.twig', [
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'sheet'         => $sheet,
             'eventView'     => $eventView,
             'preview'       => $preview,
@@ -109,7 +109,7 @@ class SheetController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Sheet:block.html.twig', [
+        return $this->render('EventBundle:Sheet:block.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),

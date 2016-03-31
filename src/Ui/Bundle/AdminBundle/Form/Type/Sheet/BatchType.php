@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Symfony\Component\Form\AbstractType;

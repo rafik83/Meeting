@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Symfony\Component\Form\AbstractType;

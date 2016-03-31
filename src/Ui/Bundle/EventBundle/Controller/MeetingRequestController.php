@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
@@ -54,7 +54,7 @@ class MeetingRequestController extends Controller
         $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getRequestSentBySheet($sheet);
         $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest, $this->getUser(), $sheet);
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:listRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'request_views' => $requestViews,
@@ -80,7 +80,7 @@ class MeetingRequestController extends Controller
         $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getPropositionReceivedBySheet($sheet);
         $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition, $this->getUser(), $sheet);
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:listProposition.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
             'sheet'             => $sheet,
             'proposition_views' => $propositionViews,
@@ -118,7 +118,7 @@ class MeetingRequestController extends Controller
             return $this->redirectToRoute('event_catalog_category', ['categoryView' => $categoryView->id]);
         }
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:createRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($from),
             'toName'    => $sheetInfoGuesser->guessSheetInfo($to),
@@ -156,7 +156,7 @@ class MeetingRequestController extends Controller
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:approvedRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
@@ -195,7 +195,7 @@ class MeetingRequestController extends Controller
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:refusedRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
@@ -248,7 +248,7 @@ class MeetingRequestController extends Controller
             $meetingRequest->getState()
         );
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:showRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:showRequest.html.twig', [
             'eventView'          => $eventView,
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestView,
@@ -289,7 +289,7 @@ class MeetingRequestController extends Controller
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:cancelRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:cancelRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
@@ -337,7 +337,7 @@ class MeetingRequestController extends Controller
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        return $this->render('VimeetAppBundle:Event/MeetingRequest:editRequest.html.twig', [
+        return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
             'eventView' => $eventView,
             'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
             'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),

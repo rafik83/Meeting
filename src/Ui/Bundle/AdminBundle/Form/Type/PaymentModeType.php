@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type;
 
 use Proximum\Vimeet\Application\Components\Payment\PaymentMode;
 use Symfony\Component\Form\AbstractType;

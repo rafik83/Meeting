@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter;
+namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Query;
 use Elastica\Query\Bool;

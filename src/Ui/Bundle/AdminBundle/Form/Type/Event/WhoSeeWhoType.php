@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\WhoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

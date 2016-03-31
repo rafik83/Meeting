@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\Unparticipate;
@@ -46,7 +46,7 @@ class ScheduleController extends Controller
             ->get('proximum.vimeet.application.components.schedule.schedule_builder')
             ->buildForSheet($sheet, $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event/Schedule:display.html.twig', [
+        return $this->render('EventBundle:Schedule:display.html.twig', [
             'eventView'            => $eventView,
             'participantSchedules' => $participantSchedules,
             'sheet'                => $sheet,
@@ -79,7 +79,7 @@ class ScheduleController extends Controller
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Event/Schedule:addUnavailability.html.twig', [
+        return $this->render('EventBundle:Schedule:addUnavailability.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
@@ -115,7 +115,7 @@ class ScheduleController extends Controller
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Event/Schedule:updateUnavailability.html.twig', [
+        return $this->render('EventBundle:Schedule:updateUnavailability.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
@@ -174,7 +174,7 @@ class ScheduleController extends Controller
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Event/Schedule:participateHappening.html.twig', [
+        return $this->render('EventBundle:Schedule:participateHappening.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'happening' => $happening,

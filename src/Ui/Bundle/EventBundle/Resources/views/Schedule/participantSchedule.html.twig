@@ -12,7 +12,7 @@
             <h4>{{ ('event.schedule.columns.meeting.title')|trans }}</h4>
             {% for slot in schedule.meetings %}
                 <div style="border-top:1px solid #333;">
-                    {{ include('VimeetAppBundle:Event/Schedule:Slot/meeting.html.twig', { 'slot': slot }) }}
+                    {{ include('EventBundle:Schedule:Slot/meeting.html.twig', { 'slot': slot }) }}
                 </div>
             {% endfor %}
         </div>
@@ -20,7 +20,7 @@
             <h4>{{ ('event.schedule.columns.happening.title')|trans }}</h4>
             {% for slot in schedule.happenings %}
                 <div style="border-top:1px solid #333;">
-                    {{ include('VimeetAppBundle:Event/Schedule:Slot/happening.html.twig', { 'slot': slot, 'participant': participantSchedule.participant }) }}
+                    {{ include('EventBundle:Schedule:Slot/happening.html.twig', { 'slot': slot, 'participant': participantSchedule.participant }) }}
                 </div>
             {% endfor %}
         </div>
@@ -28,7 +28,7 @@
             <h4>{{ ('event.schedule.columns.unavailability.title')|trans }}</h4>
             {% for slot in schedule.unavailabilities %}
                 <div style="border-top:1px solid #333;">
-                    {{ include('VimeetAppBundle:Event/Schedule:Slot/unavailability.html.twig', { 'slot': slot }) }}
+                    {{ include('EventBundle:Schedule:Slot/unavailability.html.twig', { 'slot': slot }) }}
                 </div>
             {% endfor %}
         </div>

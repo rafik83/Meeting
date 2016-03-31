@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\ChangePassword;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\ChangePasswordType as AbstractChangePasswordType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\ChangePasswordType as AbstractChangePasswordType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChangePasswordType extends AbstractChangePasswordType

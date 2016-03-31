@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -44,7 +44,7 @@ class SecurityController extends Controller
             $this->get('repository.admin_repository')->all() :
             [];
 
-        return $this->render('VimeetAppBundle:Admin/Security:login.html.twig', [
+        return $this->render('AdminBundle:Security:login.html.twig', [
             'error'     => $error,
             'form'      => $form->createView(),
             'admins'    => $admins,

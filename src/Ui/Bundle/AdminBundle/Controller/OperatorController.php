@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Operator\Create;
 use Proximum\Vimeet\Application\Command\Operator\Update;
@@ -74,7 +74,7 @@ class OperatorController extends Controller
             )
         ;
 
-        return $this->render('VimeetAppBundle:Admin/Operator:list.html.twig', [
+        return $this->render('AdminBundle:Operator:list.html.twig', [
             'operators'   => $operators,
             'filter_form' => $filterForm->createView(),
             'filtered'    => $filtered,
@@ -117,7 +117,7 @@ class OperatorController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Admin/Operator:create.html.twig', [
+        return $this->render('AdminBundle:Operator:create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -168,7 +168,7 @@ class OperatorController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Admin/Operator:update.html.twig', [
+        return $this->render('AdminBundle:Operator:update.html.twig', [
             'form' => $form->createView(),
         ]);
     }

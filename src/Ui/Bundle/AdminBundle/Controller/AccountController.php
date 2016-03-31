@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\ChangePassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\ChangePasswordType;
@@ -23,7 +23,7 @@ class AccountController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('VimeetAppBundle:Admin/Account:index.html.twig');
+        return $this->render('AdminBundle:Account:index.html.twig');
     }
 
     public function updatePasswordAction(Request $request)
@@ -43,7 +43,7 @@ class AccountController extends Controller
             return $this->redirectToRoute('admin_account');
         }
 
-        return $this->render('VimeetAppBundle:Admin/Account:updatePassword.html.twig', [
+        return $this->render('AdminBundle:Account:updatePassword.html.twig', [
             'form' => $form->createView(),
         ]);
     }

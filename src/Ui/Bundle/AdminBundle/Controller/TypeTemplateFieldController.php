@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Position\Position;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -50,7 +50,7 @@ class TypeTemplateFieldController extends Controller
             'package'     => $templateFactory->createTemplateFromArray($type->getPackageTemplate()),
         ];
 
-        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:list.html.twig', [
+        return $this->render('AdminBundle:TypeTemplateField:list.html.twig', [
             'event'         => $event,
             'typeView'      => $typeView,
             'packageObject' => $packageObject,
@@ -125,7 +125,7 @@ class TypeTemplateFieldController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:add.html.twig', [
+        return $this->render('AdminBundle:TypeTemplateField:add.html.twig', [
             'event'    => $event,
             'typeView' => $typeView,
             'type'     => $type,
@@ -193,7 +193,7 @@ class TypeTemplateFieldController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/TypeTemplateField:update.html.twig', [
+        return $this->render('AdminBundle:TypeTemplateField:update.html.twig', [
             'event'    => $event,
             'typeView' => $typeView,
             'type'     => $type,

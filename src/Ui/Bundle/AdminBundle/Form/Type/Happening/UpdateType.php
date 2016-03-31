@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Symfony\Component\OptionsResolver\OptionsResolver;

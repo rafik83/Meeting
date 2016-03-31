@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Exception\Data\DataTypeNotFoundException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionEditType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OptionEditType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

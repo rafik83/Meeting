@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -64,7 +64,7 @@ class BillingController extends Controller
         // Billing view
         $billing = $this->get('components.sheet.billing_view_factory')->createFromSheet($sheet);
 
-        return $this->render('VimeetAppBundle:Admin/Billing:list.html.twig', [
+        return $this->render('AdminBundle:Billing:list.html.twig', [
             'event'              => $event,
             'sheet'              => $sheet,
             'sheet_info'         => $sheetInfo,

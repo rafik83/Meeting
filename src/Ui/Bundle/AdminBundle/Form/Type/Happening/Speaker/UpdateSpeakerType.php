@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Speaker;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker;
 
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
 use Symfony\Component\OptionsResolver\OptionsResolver;

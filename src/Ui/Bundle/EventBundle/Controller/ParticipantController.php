@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
@@ -73,7 +73,7 @@ class ParticipantController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Participant:add.html.twig', [
+        return $this->render('EventBundle:Participant:add.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -119,7 +119,7 @@ class ParticipantController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Participant:update.html.twig', [
+        return $this->render('EventBundle:Participant:update.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),

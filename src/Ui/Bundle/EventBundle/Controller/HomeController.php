@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,7 +39,7 @@ class HomeController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->getTypeViewsByEvent($eventView->id, $eventView->locale);
 
-        return $this->render('VimeetAppBundle:Event/Home:index.html.twig', [
+        return $this->render('EventBundle:Home:index.html.twig', [
             'eventView' => $eventView,
             'types'     => $typeViews,
             'sheets'    => $sheets,

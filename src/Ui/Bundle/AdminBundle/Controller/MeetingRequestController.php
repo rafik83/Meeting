@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
@@ -68,7 +68,7 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->countAllByEvent($event);
 
-        return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
+        return $this->render('AdminBundle:MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
             'totalRequest'     => $meetingRequestsAll,
@@ -106,7 +106,7 @@ class MeetingRequestController extends Controller
             $meetingRequest->getStateUpdatedAt()
         );
 
-        return $this->render('VimeetAppBundle:Admin/MeetingRequest:details.html.twig', [
+        return $this->render('AdminBundle:MeetingRequest:details.html.twig', [
             'event'              => $event,
             'meetingRequestView' => $meetingRequestView,
         ]);
@@ -143,7 +143,7 @@ class MeetingRequestController extends Controller
             return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/MeetingRequest:position.html.twig', [
+        return $this->render('AdminBundle:MeetingRequest:position.html.twig', [
             'event'           => $event,
             'meeting_request' => $meetingRequest,
             'form'            => $form->createView(),

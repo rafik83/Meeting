@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\ActivateAccountPasswordType;
@@ -49,7 +49,7 @@ class ActivateAccountController extends Controller
             return $this->redirectToRoute('admin_event_list');
         }
 
-        return $this->render('VimeetAppBundle:Admin/ActivateAccount:password.html.twig', [
+        return $this->render('AdminBundle:ActivateAccount:password.html.twig', [
             'form'      => $form->createView()
         ]);
     }

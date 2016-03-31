@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category;
 
 use Proximum\Vimeet\Application\Command\Category\Update;
 use Symfony\Component\OptionsResolver\OptionsResolver;

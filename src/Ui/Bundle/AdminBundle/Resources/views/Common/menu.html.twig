@@ -22,7 +22,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                {{ include('VimeetAppBundle:Admin/Event:links.html.twig') }}
+                                {{ include('AdminBundle:Event:links.html.twig') }}
                             </ul>
                         </li>
                     {% else %}
@@ -91,7 +91,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-header">Langues</li>
-                            {{ include('VimeetAppBundle:Admin/Common:locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+                            {{ include('AdminBundle:Common:locales.html.twig', { 'locales': ['fr', 'en'] }) }}
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{{ path('admin_account') }}">{{ 'admin.account.link'|trans }}</a>

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Sheet;

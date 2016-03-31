@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
@@ -54,7 +54,7 @@ class ForgottenPasswordController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/ResetPassword:request_token.html.twig', [
+        return $this->render('EventBundle:ResetPassword:request_token.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);
@@ -90,7 +90,7 @@ class ForgottenPasswordController extends Controller
             return $this->redirectToRoute('event');
         }
 
-        return $this->render('VimeetAppBundle:Event/ResetPassword:new_password.html.twig', [
+        return $this->render('EventBundle:ResetPassword:new_password.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);

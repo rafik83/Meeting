@@ -11,16 +11,16 @@
 <body>
 <div class="container">
     {% if eventView is defined %}
-        {{ render(controller('VimeetAppBundle:Event/Security:impersonatingUser', {'eventView': eventView})) }}
+        {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
     {% endif %}
 
     {% block locales %}
         {% if eventView is defined %}
-            {{ include('VimeetAppBundle:Event/Common:locales.html.twig', { 'locales': eventView.locales }) }}
+            {{ include('EventBundle:Common:locales.html.twig', { 'locales': eventView.locales }) }}
         {% endif %}
     {% endblock %}
 
-    {{ include('VimeetAppBundle:Event/Common:user.html.twig') }}
+    {{ include('EventBundle:Common:user.html.twig') }}
 
     {% block body %}
         <h1>

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use DateTime;
 use Proximum\Vimeet\Application\Command\Billing\Update;
@@ -68,7 +68,7 @@ class BillingController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Billing:billing.html.twig', [
+        return $this->render('EventBundle:Billing:billing.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -122,7 +122,7 @@ class BillingController extends Controller
 
         $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event/Billing:paymentMode.html.twig', [
+        return $this->render('EventBundle:Billing:paymentMode.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
             'sheet'     => $sheet,

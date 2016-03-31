@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting;
+namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;

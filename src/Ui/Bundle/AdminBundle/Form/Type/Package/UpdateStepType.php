@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\DataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
@@ -54,7 +54,7 @@ class AccountController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/User:update_account.html.twig', [
+        return $this->render('EventBundle:User:update_account.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
         ]);

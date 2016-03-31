@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type;
 
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;

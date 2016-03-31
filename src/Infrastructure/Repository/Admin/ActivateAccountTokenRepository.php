@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin;
+namespace Proximum\Vimeet\Infrastructure\Repository\Admin;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;

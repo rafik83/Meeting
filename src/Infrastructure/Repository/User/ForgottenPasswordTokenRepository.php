@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User;
+namespace Proximum\Vimeet\Infrastructure\Repository\User;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\User;

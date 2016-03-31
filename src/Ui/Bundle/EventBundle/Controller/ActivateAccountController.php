@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ActivateAccountPasswordType;
@@ -58,7 +58,7 @@ class ActivateAccountController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Event/ActivateAccount:password.html.twig', [
+        return $this->render('EventBundle:ActivateAccount:password.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView()
         ]);

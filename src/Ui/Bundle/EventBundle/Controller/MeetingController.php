@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Proximum\Vimeet\Application\Command\Meeting\Update;
@@ -39,7 +39,7 @@ class MeetingController extends Controller
         $participantInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser');
         $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        return $this->render('VimeetAppBundle:Event/Meeting:display.html.twig', [
+        return $this->render('EventBundle:Meeting:display.html.twig', [
             'eventView'        => $eventView,
             'sheet'            => $sheet,
             'meeting'          => $meeting,
@@ -76,7 +76,7 @@ class MeetingController extends Controller
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Event/Meeting:cancel.html.twig', [
+        return $this->render('EventBundle:Meeting:cancel.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'meeting'   => $meeting,
@@ -106,7 +106,7 @@ class MeetingController extends Controller
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Event/Meeting:update.html.twig', [
+        return $this->render('EventBundle:Meeting:update.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'meeting'   => $meeting,

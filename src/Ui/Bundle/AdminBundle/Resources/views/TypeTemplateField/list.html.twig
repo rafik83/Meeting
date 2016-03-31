@@ -29,7 +29,7 @@
                         </tr>
                     {% endif %}
 
-                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:row.html.twig' with {
+                    {% include 'AdminBundle:TypeTemplateField:row.html.twig' with {
                         typeId: typeView.id,
                         locale: locale,
                         templateName: templateName,
@@ -39,7 +39,7 @@
 
                     <tr>
                         <td colspan="6">
-                            {% include 'VimeetAppBundle:Admin/TypeTemplateField:addLinks.html.twig' with {
+                            {% include 'AdminBundle:TypeTemplateField:addLinks.html.twig' with {
                                 event: event,
                                 type: typeView,
                                 templateName: templateName,
@@ -61,7 +61,7 @@
                         </th>
                     </tr>
 
-                    {% include 'VimeetAppBundle:Admin/TypeTemplateField:packageRow.html.twig' with {
+                    {% include 'AdminBundle:TypeTemplateField:packageRow.html.twig' with {
                         step: step,
                         locale: locale
                     } %}

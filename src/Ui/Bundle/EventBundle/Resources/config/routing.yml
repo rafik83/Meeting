@@ -5,7 +5,7 @@
 event:
     path: /
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Home:index }
+    defaults: { _controller: EventBundle:Home:index }
 
 #
 # Register
@@ -14,7 +14,7 @@ event:
 event_register:
     path: /register/{typeView}
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Register:register }
+    defaults: { _controller: EventBundle:Register:register }
 
 #
 # Change mail
@@ -22,14 +22,14 @@ event_register:
 event_account:
     path: /account
     methods: [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Account:update }
+    defaults: { _controller: EventBundle:Account:update }
 
 event_activate_new_mail:
     path: /account/change_mail/{token}
     methods: [GET]
     requirements:
         token: \w+
-    defaults: { _controller: VimeetAppBundle:Event/Account:activateNewMail }
+    defaults: { _controller: EventBundle:Account:activateNewMail }
 
 #
 # Forgot password
@@ -38,14 +38,14 @@ event_activate_new_mail:
 event_forgotten_password:
     path: /forgotten_password
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:forgottenPassword }
+    defaults: { _controller: EventBundle:ForgottenPassword:forgottenPassword }
 
 event_create_new_password:
     path: /reset_password/{token}
     methods:  [GET, POST]
     requirements:
         token: \w+
-    defaults: { _controller: VimeetAppBundle:Event/ForgottenPassword:createNewPassword }
+    defaults: { _controller: EventBundle:ForgottenPassword:createNewPassword }
 
 #
 # Activate account
@@ -56,7 +56,7 @@ event_activate_account:
     methods: [GET, POST]
     requirements:
         token: \w+
-    defaults: { _controller: VimeetAppBundle:Event/ActivateAccount:password }
+    defaults: { _controller: EventBundle:ActivateAccount:password }
 
 #
 # Join event
@@ -65,7 +65,7 @@ event_activate_account:
 event_participate:
     path: /participate/{typeView}
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Register:participate }
+    defaults: { _controller: EventBundle:Register:participate }
 
 #
 # Sheet
@@ -76,7 +76,7 @@ event_sheet:
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
+    defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
     path:     /sheet/{sheet}/{locale}
@@ -84,7 +84,7 @@ event_sheet_locale:
         sheet: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:sheet }
+    defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_update_block:
     path:     /sheet/{sheet}/{locale}/update_block/{block}
@@ -93,7 +93,7 @@ event_sheet_update_block:
         locale: '[a-z]{2}'
         block: \w+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Sheet:block }
+    defaults: { _controller: EventBundle:Sheet:block }
 
 #
 # Sheet - Participant
@@ -104,7 +104,7 @@ event_sheet_add_participant:
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Participant:add }
+    defaults: { _controller: EventBundle:Participant:add }
 
 event_sheet_update_participant:
     path:     /sheet/{sheet}/update_participant/{participant}
@@ -112,7 +112,7 @@ event_sheet_update_participant:
         sheet: \d+
         participant: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Participant:update }
+    defaults: { _controller: EventBundle:Participant:update }
 
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}
@@ -120,7 +120,7 @@ event_sheet_delete_participant:
         sheet: \d+
         participant: \d+
     methods:  [DELETE]
-    defaults: { _controller: VimeetAppBundle:Event/Participant:delete }
+    defaults: { _controller: EventBundle:Participant:delete }
 
 #
 # Sheet - Package
@@ -131,14 +131,14 @@ event_sheet_package_update_step:
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Package:updateStep }
+    defaults: { _controller: EventBundle:Package:updateStep }
 
 event_sheet_package_products:
     path: /sheet/{sheet}/products/add
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Package:addProducts }
+    defaults: { _controller: EventBundle:Package:addProducts }
 
 event_sheet_product_update:
     path: /sheet/{sheet}/products/update/{groupId}/{rowId}
@@ -147,14 +147,14 @@ event_sheet_product_update:
         groupId: \w+
         rowId: \w+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Package:updateProduct }
+    defaults: { _controller: EventBundle:Package:updateProduct }
 
 event_sheet_package_cart:
     path:     /sheet/{sheet}/cart
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Package:cart }
+    defaults: { _controller: EventBundle:Package:cart }
 
 #
 # Sheet Billing
@@ -165,14 +165,14 @@ event_sheet_billing:
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Billing:billing }
+    defaults: { _controller: EventBundle:Billing:billing }
 
 event_sheet_package_payment_mode:
     path:     /sheet/{sheet}/payment_mode
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Billing:paymentMode }
+    defaults: { _controller: EventBundle:Billing:paymentMode }
 
 #
 # Sheet - Order
@@ -183,14 +183,14 @@ event_sheet_list_orders:
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Order:listOrder }
+    defaults: { _controller: EventBundle:Order:listOrder }
 
 event_sheet_summary:
     path:      /sheet/{sheet}/summary
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Order:summary }
+    defaults: { _controller: EventBundle:Order:summary }
 
 event_sheet_order_pro_forma:
     path:     /sheet/{sheet}/pro_forma/{order}
@@ -198,7 +198,7 @@ event_sheet_order_pro_forma:
         sheet: \d+
         order: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Order:proforma }
+    defaults: { _controller: EventBundle:Order:proforma }
 
 #
 # Authentication
@@ -207,7 +207,7 @@ event_sheet_order_pro_forma:
 event_login:
     path:     /login
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Security:login }
+    defaults: { _controller: EventBundle:Security:login }
 
 event_login_check:
     path:     /login_check
@@ -216,7 +216,7 @@ event_login_check:
 event_logout_confirmation:
     path:     /logout-confirmation
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Security:logoutConfirmation }
+    defaults: { _controller: EventBundle:Security:logoutConfirmation }
 
 event_logout:
     path:     /logout
@@ -225,7 +225,7 @@ event_logout:
 event_change_password:
     path:     /change-password
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/ChangePassword:changePassword }
+    defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
 #
 # Catalog
@@ -234,14 +234,14 @@ event_change_password:
 event_catalog:
     path: /catalog
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Catalog:categories }
+    defaults: { _controller: EventBundle:Catalog:categories }
 
 event_catalog_category:
     path: /catalog/{categoryView}
     requirements:
         categoryView: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Catalog:category }
+    defaults: { _controller: EventBundle:Catalog:category }
 
 event_catalog_sheet:
     path: /catalog/{categoryView}/sheet/{sheet}
@@ -249,7 +249,7 @@ event_catalog_sheet:
         categoryView: \d+
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Catalog:sheet }
+    defaults: { _controller: EventBundle:Catalog:sheet }
 
 event_catalog_sheet_meeting_request:
     path: /catalog/{categoryView}/sheet/{to}/meeting/request/from/{from}
@@ -258,7 +258,7 @@ event_catalog_sheet_meeting_request:
         to: \d+
         from: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:createRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
 #
 # Schedule
@@ -269,14 +269,14 @@ event_sheet_schedule:
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:display }
+    defaults: { _controller: EventBundle:Schedule:display }
 
 event_sheet_schedule_add_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/add
     requirements:
         sheet: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:addUnavailability }
+    defaults: { _controller: EventBundle:Schedule:addUnavailability }
 
 event_sheet_schedule_update_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/{unavailability}/update
@@ -284,7 +284,7 @@ event_sheet_schedule_update_unavailability:
         sheet: \d+
         unavailability: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:updateUnavailability }
+    defaults: { _controller: EventBundle:Schedule:updateUnavailability }
 
 event_sheet_schedule_remove_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/{unavailability}/remove
@@ -292,7 +292,7 @@ event_sheet_schedule_remove_unavailability:
         sheet: \d+
         unavailability: \d+
     methods:  [DELETE]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:removeUnavailability }
+    defaults: { _controller: EventBundle:Schedule:removeUnavailability }
 
 event_sheet_schedule_participate_happening:
     path: /sheet/{sheet}/happening/{happening}/participate
@@ -300,7 +300,7 @@ event_sheet_schedule_participate_happening:
         sheet: \d+
         happening: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:participateHappening }
+    defaults: { _controller: EventBundle:Schedule:participateHappening }
 
 event_sheet_schedule_unparticipate_happening:
     path: /sheet/{sheet}/happening/{happening}/unparticipate/{participant}
@@ -309,7 +309,7 @@ event_sheet_schedule_unparticipate_happening:
         happening: \d+
         participant: \d+
     methods:  [POST]
-    defaults: { _controller: VimeetAppBundle:Event/Schedule:unparticipateHappening }
+    defaults: { _controller: EventBundle:Schedule:unparticipateHappening }
 
 #
 # Meeting
@@ -321,7 +321,7 @@ event_sheet_schedule_meeting:
         sheet: \d+
         meeting: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:display }
+    defaults: { _controller: EventBundle:Meeting:display }
 
 event_sheet_schedule_meeting_cancel:
     path: /sheet/{sheet}/meeting/{meeting}/cancel
@@ -329,7 +329,7 @@ event_sheet_schedule_meeting_cancel:
         sheet: \d+
         meeting: \d+
     methods:  [GET, DELETE]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:cancel }
+    defaults: { _controller: EventBundle:Meeting:cancel }
 
 event_sheet_schedule_meeting_update:
     path: /sheet/{sheet}/meeting/{meeting}/update
@@ -337,7 +337,7 @@ event_sheet_schedule_meeting_update:
         sheet: \d+
         meeting: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/Meeting:update }
+    defaults: { _controller: EventBundle:Meeting:update }
 
 #
 # Meeting Request
@@ -347,14 +347,14 @@ event_meeting_list_request:
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:listRequest }
 
 event_meeting_list_proposition:
     path: /sheet/{sheet}/meeting/proposition
     requirements:
         sheet: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:listProposition }
+    defaults: { _controller: EventBundle:MeetingRequest:listProposition }
 
 event_meeting_request_approve:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
@@ -362,7 +362,7 @@ event_meeting_request_approve:
         sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:approveRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:approveRequest }
 
 event_meeting_request_refuse:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/refuse
@@ -370,7 +370,7 @@ event_meeting_request_refuse:
         sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:refuseRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:refuseRequest }
 
 event_meeting_request_cancel:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
@@ -378,7 +378,7 @@ event_meeting_request_cancel:
         sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:cancelRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:cancelRequest }
 
 event_meeting_request_show:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}
@@ -386,7 +386,7 @@ event_meeting_request_show:
         sheet: \d+
         meetingRequest: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:showRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:showRequest }
 
 event_meeting_request_edit:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
@@ -394,7 +394,7 @@ event_meeting_request_edit:
         sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
-    defaults: { _controller: VimeetAppBundle:Event/MeetingRequest:editRequest }
+    defaults: { _controller: EventBundle:MeetingRequest:editRequest }
 
 #
 # Notification
@@ -402,10 +402,10 @@ event_meeting_request_edit:
 event_notification_list:
     path:     /notification
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Notification:list }
+    defaults: { _controller: EventBundle:Notification:list }
 event_notification_read:
     path:     /notification/{notification}/read
     requirements:
         notification: \d+
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Notification:read }
+    defaults: { _controller: EventBundle:Notification:read }

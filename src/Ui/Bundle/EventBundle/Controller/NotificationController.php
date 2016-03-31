@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -33,7 +33,7 @@ class NotificationController extends Controller
             ->get('notification.notification_view_factory')
             ->getNotificationsByEventAndUser($eventView->id, $this->getUser());
 
-        return $this->render('VimeetAppBundle:Event/Notification:list.html.twig', [
+        return $this->render('EventBundle:Notification:list.html.twig', [
             'eventView'     => $eventView,
             'notifications' => $notifications,
         ]);
@@ -52,7 +52,7 @@ class NotificationController extends Controller
             ->get('notification.notification_view_factory')
             ->countUnreadNotificationByEventAndUser($eventView->id, $this->getUser());
 
-        return $this->render('VimeetAppBundle:Event/Notification:unreadNumber.html.twig', [
+        return $this->render('EventBundle:Notification:unreadNumber.html.twig', [
             'unreadNumber' => $count,
         ]);
     }

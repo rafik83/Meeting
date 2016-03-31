@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\Create;
 use Proximum\Vimeet\Application\Command\Admin\Update;
@@ -63,7 +63,7 @@ class AdminController extends Controller
         $admins = $this->get('repository.admin_repository')
             ->listPaginated($request->query->get('page', 1), 20, $filters);
 
-        return $this->render('VimeetAppBundle:Admin/Admin:list.html.twig', [
+        return $this->render('AdminBundle:Admin:list.html.twig', [
             'admins'      => $admins,
             'filter_form' => $filterForm->createView(),
             'filtered'    => $filtered
@@ -100,7 +100,7 @@ class AdminController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Admin/Admin:create.html.twig', [
+        return $this->render('AdminBundle:Admin:create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -136,7 +136,7 @@ class AdminController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Admin/Admin:update.html.twig', [
+        return $this->render('AdminBundle:Admin:update.html.twig', [
             'form' => $form->createView(),
         ]);
     }

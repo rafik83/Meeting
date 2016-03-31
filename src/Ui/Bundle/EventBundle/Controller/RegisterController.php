@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -68,7 +68,7 @@ class RegisterController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Register:register.html.twig', [
+        return $this->render('EventBundle:Register:register.html.twig', [
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
@@ -119,7 +119,7 @@ class RegisterController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Register:participate.html.twig', [
+        return $this->render('EventBundle:Register:participate.html.twig', [
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,

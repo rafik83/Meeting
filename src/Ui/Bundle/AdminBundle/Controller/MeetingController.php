@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,7 +31,7 @@ class MeetingController extends Controller
             ->get('vimeet_infrastructure.repository.meeting_repository')
             ->getByEvent($event, $request->query->getInt('page', 1), 20);
 
-        return $this->render('VimeetAppBundle:Admin/Meeting:list.html.twig', [
+        return $this->render('AdminBundle:Meeting:list.html.twig', [
             'event'    => $event,
             'meetings' => $meetings,
         ]);

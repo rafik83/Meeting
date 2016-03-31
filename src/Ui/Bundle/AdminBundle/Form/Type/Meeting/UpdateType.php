@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\MeetingParticipantChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;

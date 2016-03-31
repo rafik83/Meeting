@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Delete;
@@ -35,7 +35,7 @@ class SpeakerController extends Controller
 
         $speakers = $this->get('repository.happening.speaker')->allByEvent($event);
 
-        return $this->render('VimeetAppBundle:Admin/Speaker:list.html.twig', [
+        return $this->render('AdminBundle:Speaker:list.html.twig', [
             'event'    => $event,
             'speakers' => $speakers,
         ]);
@@ -61,7 +61,7 @@ class SpeakerController extends Controller
             return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Speaker:create.html.twig', [
+        return $this->render('AdminBundle:Speaker:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -88,7 +88,7 @@ class SpeakerController extends Controller
             return $this->redirectToRoute('admin_happening_speaker_update', ['event' => $event->getId(), 'speaker' => $speaker->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Speaker:update.html.twig', [
+        return $this->render('AdminBundle:Speaker:update.html.twig', [
             'event'   => $event,
             'speaker' => $speaker,
             'form'    => $form->createView(),
@@ -109,7 +109,7 @@ class SpeakerController extends Controller
             ->get('happening.happening_list_view_factory')
             ->getListBySpeakerAndLocale($speaker, $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Admin/Speaker:read.html.twig', [
+        return $this->render('AdminBundle:Speaker:read.html.twig', [
             'event'      => $event,
             'speaker'    => $speaker,
             'happenings' => $happenings,

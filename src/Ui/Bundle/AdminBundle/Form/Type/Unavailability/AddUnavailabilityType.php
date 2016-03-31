@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Unavailability;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;

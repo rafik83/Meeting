@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Flash;
+namespace Proximum\Vimeet\Ui\Flash;
 
 class TranschoiceMessage extends TransMessage
 {

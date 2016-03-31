@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

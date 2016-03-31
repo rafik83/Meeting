@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library;
 
 use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;

@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

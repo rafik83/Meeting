@@ -12,7 +12,7 @@
             <span class="delete"></span>
             <div class="template-container container-fluid block-inner" id="template-container">
                 {% for uid, item in template.value|default([]) %}
-                    {{ include('VimeetAppBundle:Admin/Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
                 {% endfor %}
             </div>
         </div>
@@ -34,21 +34,21 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="blocks">
                         <div id="block-list" class="block-list">
-                            {{ include('VimeetAppBundle:Admin/Template/Block:8-4.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Block:6-6.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Block:12.html.twig') }}
+                            {{ include('AdminBundle:Template/Block:8-4.html.twig') }}
+                            {{ include('AdminBundle:Template/Block:6-6.html.twig') }}
+                            {{ include('AdminBundle:Template/Block:12.html.twig') }}
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
                         <div id="object-list" class="object-list">
-                            {{ include('VimeetAppBundle:Admin/Template/Object:text.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:editable-text.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:button-link.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:participant.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:choice.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:image.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:tag.html.twig') }}
-                            {{ include('VimeetAppBundle:Admin/Template/Object:collection.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:text.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:editable-text.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:button-link.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:participant.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:choice.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:image.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:tag.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:collection.html.twig') }}
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\Update;
@@ -38,7 +38,7 @@ class CategoryController extends Controller
             ->get('vimeet_infrastructure.repository.category_repository')
             ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
 
-        return $this->render('VimeetAppBundle:Admin/Category:list.html.twig', [
+        return $this->render('AdminBundle:Category:list.html.twig', [
             'event'      => $event,
             'categories' => $categories,
         ]);
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Category:create.html.twig', [
+        return $this->render('AdminBundle:Category:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -105,7 +105,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Category:update.html.twig', [
+        return $this->render('AdminBundle:Category:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

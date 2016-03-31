@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
@@ -66,7 +66,7 @@ class SpotController extends Controller
 
         $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filter);
 
-        return $this->render('VimeetAppBundle:Admin/Spot:list.html.twig', [
+        return $this->render('AdminBundle:Spot:list.html.twig', [
             'spots'               => $spots,
             'event'               => $event,
             'filter_form'         => $filterForm->createView(),
@@ -137,7 +137,7 @@ class SpotController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Admin/Spot:create.html.twig', [
+        return $this->render('AdminBundle:Spot:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -170,7 +170,7 @@ class SpotController extends Controller
             return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Spot:batchCreate.html.twig', [
+        return $this->render('AdminBundle:Spot:batchCreate.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

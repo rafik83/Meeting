@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\ParamConverter;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter;
 
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\View\CategoryView;

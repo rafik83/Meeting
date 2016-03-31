@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\Update;
@@ -38,7 +38,7 @@ class TypeController extends Controller
             ->get('vimeet_infrastructure.repository.type_repository')
             ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
 
-        return $this->render('VimeetAppBundle:Admin/Type:list.html.twig', [
+        return $this->render('AdminBundle:Type:list.html.twig', [
             'event' => $event,
             'types' => $types,
         ]);
@@ -68,7 +68,7 @@ class TypeController extends Controller
             return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Type:create.html.twig', [
+        return $this->render('AdminBundle:Type:create.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
@@ -103,7 +103,7 @@ class TypeController extends Controller
             return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Type:update.html.twig', [
+        return $this->render('AdminBundle:Type:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

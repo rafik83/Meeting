@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
@@ -37,7 +37,7 @@ class CatalogController extends Controller
             ->get('vimeet_infrastructure.repository.category_repository')
             ->getCategoryViewsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
 
-        return $this->render('VimeetAppBundle:Event/Catalog:categories.html.twig', [
+        return $this->render('EventBundle:Catalog:categories.html.twig', [
             'eventView'  => $eventView,
             'categories' => $categories,
         ]);
@@ -69,7 +69,7 @@ class CatalogController extends Controller
                 ->apply($rule, $sheet, new SetNullStrategy());
         });
 
-        return $this->render('VimeetAppBundle:Event/Catalog:category.html.twig', [
+        return $this->render('EventBundle:Catalog:category.html.twig', [
             'eventView'    => $eventView,
             'categoryView' => $categoryView,
             'sheets'       => $sheets,
@@ -98,7 +98,7 @@ class CatalogController extends Controller
                 ->get('vimeet_infrastructure.application.components.sheet.manager')
                 ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
 
-            return $this->render('VimeetAppBundle:Event/Catalog:sheet.html.twig', [
+            return $this->render('EventBundle:Catalog:sheet.html.twig', [
                 'eventView'                     => $eventView,
                 'categoryView'                  => $categoryView,
                 'sheet'                         => $sheetView,

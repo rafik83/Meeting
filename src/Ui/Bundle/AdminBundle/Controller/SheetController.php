@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
@@ -71,7 +71,7 @@ class SheetController extends Controller
 
         $filterFormView = $filterFullForm->createView();
 
-        return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
+        return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
             'sheets'           => $sheets,
             'filter_form'      => $filterFormView,
@@ -168,7 +168,7 @@ class SheetController extends Controller
             ]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Sheet:details.html.twig', [
+        return $this->render('AdminBundle:Sheet:details.html.twig', [
             'event'   => $event,
             'sheet'   => $sheet,
             'details' => $details,

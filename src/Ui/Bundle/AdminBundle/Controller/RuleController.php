@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\DontSeeWhatType;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
@@ -52,7 +52,7 @@ class RuleController extends Controller
 
         $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
 
-        return $this->render('VimeetAppBundle:Admin/Rule:list.html.twig', [
+        return $this->render('AdminBundle:Rule:list.html.twig', [
             'form'   => $form->createView(),
             'event'  => $event,
             'rules'  => $rules,
@@ -95,7 +95,7 @@ class RuleController extends Controller
             return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Rule:what.html.twig', [
+        return $this->render('AdminBundle:Rule:what.html.twig', [
             'form'    => $form->createView(),
             'event'   => $event,
             'seer'    => $seer,

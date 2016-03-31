@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventUpdateType;
@@ -31,7 +31,7 @@ class EventController extends Controller
             ->getListByAdmin($this->getUser());
 
 
-        return $this->render('VimeetAppBundle:Admin/Event:list.html.twig', [
+        return $this->render('AdminBundle:Event:list.html.twig', [
             'events' => $events,
         ]);
     }
@@ -45,7 +45,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        return $this->render('VimeetAppBundle:Admin/Event:read.html.twig', [
+        return $this->render('AdminBundle:Event:read.html.twig', [
             'event' => $event,
         ]);
     }
@@ -76,7 +76,7 @@ class EventController extends Controller
             return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
         }
 
-        return $this->render('VimeetAppBundle:Admin/Event:update.html.twig', [
+        return $this->render('AdminBundle:Event:update.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
         ]);

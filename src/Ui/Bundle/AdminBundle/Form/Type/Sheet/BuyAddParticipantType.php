@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\AbstractAddParticipantType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\AbstractAddParticipantType;
 
 class BuyAddParticipantType extends AbstractAddParticipantType
 {

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Event;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\AddProducts;
 use Proximum\Vimeet\Application\Command\Package\UpdateProduct;
@@ -107,7 +107,7 @@ class PackageController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Package:updateStep.html.twig', [
+        return $this->render('EventBundle:Package:updateStep.html.twig', [
             'eventView'           => $eventView,
             'sheet'               => $sheet,
             'stepPackageTemplate' => $sheet->getTypePackageTemplate()[$step],
@@ -137,7 +137,7 @@ class PackageController extends Controller
             $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
         }
 
-        return $this->render('VimeetAppBundle:Event/Package:cart.html.twig', [
+        return $this->render('EventBundle:Package:cart.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'cartView'  => $cartView,
@@ -203,7 +203,7 @@ class PackageController extends Controller
             }
         }
 
-        return $this->render('VimeetAppBundle:Event/Package:products.html.twig', [
+        return $this->render('EventBundle:Package:products.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
@@ -304,7 +304,7 @@ class PackageController extends Controller
             $form->addError(new FormError('Aucune modification effectuée'));
         }
 
-        return $this->render('VimeetAppBundle:Event/Package:updateProduct.html.twig', [
+        return $this->render('EventBundle:Package:updateProduct.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'group'     => $group,
