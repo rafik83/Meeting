@@ -574,6 +574,10 @@ form:
                 label: Catégorie
             type:
                 label: Type
+            follower:
+                label: Suivi commercial
+            sheet_name:
+                label: Titre de la fiche
     create_admin:
         children:
             email:
@@ -707,3 +711,5 @@ form:
                 label: Titre
             submit:
                 label: Enregistrer
+    filter:
+        label: Filtrer

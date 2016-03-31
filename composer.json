@@ -24,6 +24,7 @@
 
         "sonata-project/intl-bundle": "2.2.*@dev",
         "friendsofsymfony/elastica-bundle": "3.2.*@dev",
+        "pagerfanta/pagerfanta": "^1.0",
         "elao/form-bundle": "^2.0.1",
         "elao/form-translation-bundle": "~1.4",
         "elao/theme-twitter-bootstrap-3-bundle": "2.0",

@@ -107,6 +107,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
         $this->data         = $data;
         $this->packageData  = $packageData;
         $this->createdAt    = $createdAt;
+        $this->lastLoginAt  = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
         $this->state        = self::STATE_PENDING;
@@ -316,9 +317,11 @@ class Sheet implements BillingInfoInterface, TraceableInterface
      */
     public function getOwner()
     {
-        foreach ($this->getParticipants() as $participant) {
-            if ($participant->isOwner()) {
-                return $participant;
+        if ($this->participants !== null) {
+            foreach ($this->getParticipants() as $participant) {
+                if ($participant->isOwner()) {
+                    return $participant;
+                }
             }
         }
 

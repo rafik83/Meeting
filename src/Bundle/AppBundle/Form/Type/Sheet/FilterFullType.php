@@ -16,7 +16,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FilterType extends AbstractType
+class FilterFullType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -35,11 +35,23 @@ class FilterType extends AbstractType
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
             ])
+            ->add('sheetName', SheetNameType::class, [
+                'label' => 'form.sheet_filter.children.sheet_name.label',
+            ])
             ->add('type', TypeChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.type.label',
                 'placeholder' => '',
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
+            ])
+            ->add('follower', FollowerChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.follower.label',
+                'placeholder' => '',
+                'event'       => $options['event'],
+            ])
+            ->add('predefined', PredefinedFiltersChoiceType::class, [
+                'label'       => 'form.filter.label',
+                'placeholder' => '',
             ])
         ;
     }

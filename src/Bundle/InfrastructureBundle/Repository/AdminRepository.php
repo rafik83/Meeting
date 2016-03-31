@@ -152,7 +152,9 @@ class AdminRepository implements AdminRepositoryInterface
             ->join('admin.events', 'event', 'WITH', 'event = :event')
             ->setParameter('event', $event)
             ->where('admin.role IN (:roles)')
-            ->setParameter('roles', [Admin::ROLE_ORGANIZER, Admin::ROLE_OPERATOR]);
+            ->setParameter('roles', [Admin::ROLE_ORGANIZER, Admin::ROLE_OPERATOR])
+            ->orderBy('admin.lastname')
+            ->addOrderBy('admin.firstname');
 
         return $queryBuilder->getQuery()->getResult();
     }

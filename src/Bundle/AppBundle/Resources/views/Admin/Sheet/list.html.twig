@@ -7,17 +7,26 @@
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
 
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group">
+                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ form_widget(filter_part_form.sheetName) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
         {{ form_errors(batch_form) }}
 
         <div class="row filters">
             <div class="col-md-4">
-                <div class="dropdown batch-actions hide">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span data-batch-transchoice="{{ 'admin.batch_actions.single'|trans ~ '|' ~ 'admin.batch_actions.plural'|trans }}">{{ 'admin.batch_actions.single'|trans }}</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
+                {% embed 'VimeetAppBundle:Admin/Common:batch.html.twig' %}
+                    {% block actions %}
                         <li>
                             {{ form_widget(batch_form.accept) }}
                         </li>
@@ -31,79 +40,39 @@
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
-                    </ul>
-                </div>
+                    {% endblock actions %}
+                {% endembed %}
+            </div>
+            <div class="col-md-4">
+                {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_sheet', { 'event': event.id })
+                }) }}
             </div>
         </div>
-
-        {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
-            filters:   filters_summary,
-            resetLink: path('admin_sheet', { 'event': event.id })
-        }) }}
 
         <table class="table table-hover selectable-row filterable">
             <thead>
             <tr>
                 <th class="minwidth">
-                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="Tout cocher" />
+                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
                 </th>
-                <th>Fiche</th>
+                <th></th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Etat
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.state.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.state) }}
                 </th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Complitude
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.completed.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'completed': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.category) }}
                 </th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Catégorie
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.category.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'category': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.type) }}
                 </th>
+                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
+                <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
                 <th>
-                    <div class="dropdown">
-                        <button id="state-dropdown" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Type
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="state-dropdown">
-                            {% for choice in filter_form.type.vars.choices %}
-                                <li><a href="?{{ app.request.query.all|merge({'type': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ list_macros.choice_as_dropdown(filter_form.follower) }}
                 </th>
-                <th>Date création</th>
-                <th>Dernière connexion</th>
-                <th>Suivi commercial</th>
-                <th class="text-right">Actions</th>
+                <th></th>
             </tr>
             </thead>
             <tbody class="sheet-table">
@@ -149,7 +118,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="9" class="text-danger text-center">Aucun résultat</td>
+                    <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -168,7 +137,7 @@
                         {{ form_row(batch_form.follower) }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
                         {{ form_widget(batch_form.assign) }}
                     </div>
                 </div>
