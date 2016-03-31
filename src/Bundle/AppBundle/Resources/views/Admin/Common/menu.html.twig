@@ -94,6 +94,10 @@
                             {{ include('VimeetAppBundle:Admin/Common:locales.html.twig', { 'locales': ['fr', 'en'] }) }}
                             <li role="separator" class="divider"></li>
                             <li>
+                                <a href="{{ path('admin_account') }}">{{ 'admin.account.link'|trans }}</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
                                 <a href="{{ path('admin_logout') }}">
                                     {{ 'logout.link'|trans }}
                                 </a>

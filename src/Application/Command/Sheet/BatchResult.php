@@ -18,7 +18,7 @@ class BatchResult
     public $count;
 
     /**
-     * BatchValidate constructor.
+     * BatchResult constructor.
      *
      * @param int $count
      */

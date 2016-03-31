@@ -28,6 +28,7 @@ class FilterType extends AbstractType
                 'label'       => 'form.sheet_filter.children.state.label',
                 'placeholder' => '',
             ])
+            ->add('completed', CompletedChoiceType::class, ['placeholder' => ''])
             ->add('category', CategoryChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.category.label',
                 'placeholder' => '',

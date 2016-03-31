@@ -16,6 +16,19 @@ admin_logout:
     methods:  [GET]
 
 #
+# Account
+#
+admin_account:
+    path: /account
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Account:index }
+
+admin_update_password:
+    path: /account/password
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Account:updatePassword }
+
+#
 # Create Admin/Organizer
 #
 

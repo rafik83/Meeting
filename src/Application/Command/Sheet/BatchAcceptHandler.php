@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class BatchValidateHandler
+class BatchAcceptHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -21,40 +21,40 @@ class BatchValidateHandler
     private $sheetRepository;
 
     /**
-     * @var ValidateHandler
+     * @var AcceptHandler
      */
-    private $validateHandler;
+    private $acceptHandler;
 
     /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param ValidateHandler          $validateHandler
+     * @param AcceptHandler            $acceptHandler
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, ValidateHandler $validateHandler)
+    public function __construct(SheetRepositoryInterface $sheetRepository, AcceptHandler $acceptHandler)
     {
         $this->sheetRepository = $sheetRepository;
-        $this->validateHandler = $validateHandler;
+        $this->acceptHandler   = $acceptHandler;
     }
 
     /**
-     * @param BatchValidate $batchValidate
+     * @param BatchAccept $batchAccept
      *
      * @return BatchResult
      */
-    public function handle(BatchValidate $batchValidate)
+    public function handle(BatchAccept $batchAccept)
     {
         // Get sheets
-        $sheets = $this->sheetRepository->getSheetsById($batchValidate->ids);
+        $sheets = $this->sheetRepository->getSheetsById($batchAccept->ids);
 
-        // Ensure all sheets are not validated
+        // Ensure all sheets are not accepted
         $sheets = array_filter($sheets, function (Sheet $sheet) {
-            return !$sheet->isValidated();
+            return !$sheet->isAccepted();
         });
 
-        // Validate sheets
+        // Accept sheets
         foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $batchValidate->date, $batchValidate->comment));
+            $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $batchAccept->date));
         }
 
         return new BatchResult(count($sheets));

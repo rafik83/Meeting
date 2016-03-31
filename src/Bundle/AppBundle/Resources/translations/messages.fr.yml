@@ -40,9 +40,12 @@ event:
             cancel: Annuler
     sheet:
         state:
+            pending: En attente
+            validated: Validée
+            accepted: Acceptée
+        completed:
             complete: Complète
             incomplete: Incomplète
-            validated: Validée
         participant:
             already_exists: Ce participant est déjà ajouté
             email: Adresse email
@@ -264,6 +267,13 @@ admin:
         ROLE_OPERATOR: Collaborateur
         ROLE_ORGANIZER: Organisateur
         ROLE_SUPER_ADMIN: Admin
+    account:
+        link: Mon compte
+        title: Mon compte
+        content:
+            password: Modifier mon mot de passe
+        update_password:
+            title: Modifier mon mot de passe
     order:
         link: Commandes et transactions
     sheet:
@@ -273,6 +283,10 @@ admin:
         commercialFollowUp: Attribuer le suivi commercial
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation
+        acceptedAt: 'Acceptée le %at% par %by%'
+        trace:
+            accept: 'Acceptée le %at% par %by%'
+            validate: 'Validée le %at% par %by% avec le commentaire: %comment%'
         details:
             comments:
                 title: Commentaires
