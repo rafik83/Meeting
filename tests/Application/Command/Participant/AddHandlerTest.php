@@ -17,15 +17,15 @@ use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
-use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -57,7 +57,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantManager = $this->prophesize(ParticipantManager::class);
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
@@ -122,7 +122,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantManager = $this->prophesize(ParticipantManager::class);
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
 
@@ -179,7 +179,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         }))->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $add = new Add($sheet, 'fr');
