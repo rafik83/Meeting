@@ -356,6 +356,8 @@ function TemplateObject(element)
         this.object = new ImageObject(this.element);
     } else if (this.type === 'tag') {
         this.object = new TagObject(this.element);
+    } else if (this.type === 'collection') {
+        this.object = new CollectionObject(this.element);
     }
 
     this.object.save();
@@ -661,6 +663,45 @@ TagObject.prototype.save = function ()
 {
     this.config.label = this.form.get('label');
     this.config.tag   = this.form.get('tag');
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+};
+
+/**
+ * CollectionObject
+ *
+ * @param element
+ * @constructor
+ */
+function CollectionObject(element)
+{
+    this.element = element;
+    this.form    = new Form(element);
+    this.config  = {
+        label: null,
+        placeholder: null,
+        help: null,
+        required: false,
+        default: 1
+    };
+}
+
+CollectionObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label);
+    this.form.set('placeholder', this.config.placeholder);
+    this.form.set('help', this.config.help);
+    this.form.set('required', this.config.required);
+    this.form.set('default', this.config.default);
+};
+
+CollectionObject.prototype.save = function ()
+{
+    this.config.label       = this.form.get('label');
+    this.config.placeholder = this.form.get('placeholder');
+    this.config.help        = this.form.get('help');
+    this.config.required    = this.form.get('required');
+    this.config.default     = this.form.get('default');
 
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };

@@ -1,6 +1,12 @@
-{% set config = { 'content': 'Texte non modifiable', 'type': 'titre' }|merge(config|default({})) %}
+{% set config = {
+    label: 'Collection',
+    placeholder: '',
+    help: '',
+    default: 1,
+    required: false,
+}|merge(config|default({})) %}
 
-<div class="object" data-object="text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="collection"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">
@@ -21,20 +27,28 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="configure-modal-label">Texte non éditable</h4>
+                            <h4 class="modal-title" id="configure-modal-label">Collection</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="form-label">Contenu</label>
-                                <textarea class="form-control" name="content">{{ config.content }}</textarea>
+                                <label class="form-label">Label</label>
+                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Type</label>
-                                <select class="form-control" name="type">
-                                    {% for label, value in { 'Titre': 'titre', 'Texte': 'texte' } %}
-                                        <option value="{{ value }}"{% if value == config.type %} selected="selected"{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
+                                <label class="form-label">Placeholder</label>
+                                <textarea class="form-control" name="placeholder">{{ config.placeholder }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Aide</label>
+                                <textarea class="form-control" name="help">{{ config.help }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Requis</label>
+                                <input type="checkbox" name="required"{% if config.required %} checked="checked"{% endif %} />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Elements par defaut</label>
+                                <input class="form-control" type="number" step="1" name="default" value="{{ config.default }}" />
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -46,5 +60,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="content">{{ config.content }}</div>
+    <div data-bind="label">{{ config.label }}</div>
 </div>
