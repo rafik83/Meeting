@@ -1,3 +1,8 @@
+Proximum\Vimeet\Domain\Model\ValidationCriteria (local):
+    validation_criteria_event_rdv_carnot_2016:
+        __construct:
+            - false
+
 Proximum\Vimeet\Domain\Model\Type:
     type_exposant:
         __construct: ["@event_rdv_carnot_2016"]
@@ -9,6 +14,7 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: '@template_exhibitor->sheet'
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -20,6 +26,7 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: '@template_exhibitor->sheet'
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -32,6 +39,7 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@template_visitor->package'
         previewTemplate: '@template_visitor->preview'
         viewTemplate: '@template_visitor->view'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -44,6 +52,7 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@template_visitor->package'
         previewTemplate: '@template_visitor->preview'
         viewTemplate: '@template_visitor->view'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
 
     type_institute_carnot:
         __construct: ["@event_rdv_carnot_2016"]
@@ -55,6 +64,7 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: '@template_exhibitor->sheet'
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type_exposant_fr:

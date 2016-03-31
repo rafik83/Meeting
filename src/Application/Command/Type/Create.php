@@ -34,6 +34,11 @@ class Create
     /**
      * @var array
      */
+    public $validationCriteria = [];
+
+    /**
+     * @var array
+     */
     public $translations = [];
 
     /**
