@@ -683,3 +683,9 @@ form:
                 label: Annuler
             submit:
                 label: Enregistrer
+    sheet_template_duplicate:
+        children:
+            title:
+                label: Titre
+            submit:
+                label: Enregistrer

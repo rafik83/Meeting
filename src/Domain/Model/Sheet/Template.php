@@ -82,4 +82,14 @@ class Template
 
         return $this;
     }
+
+    /**
+     * @param string $title
+     *
+     * @return Template
+     */
+    public function duplicate($title)
+    {
+        return new $this($title, $this->value);
+    }
 }
