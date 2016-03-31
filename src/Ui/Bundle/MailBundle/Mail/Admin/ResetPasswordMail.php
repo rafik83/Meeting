@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 

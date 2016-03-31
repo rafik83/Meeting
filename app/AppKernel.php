@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
             new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),
             new Proximum\Vimeet\Ui\Bundle\AdminBundle\AdminBundle(),
+            new Proximum\Vimeet\Ui\Bundle\MailBundle\MailBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

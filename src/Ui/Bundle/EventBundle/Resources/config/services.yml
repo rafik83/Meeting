@@ -25,7 +25,7 @@ services:
     # Security
     #
     security.admin_event_access_voter:
-        class: Proximum\Vimeet\Bundle\AppBundle\Security\Voter\AdminEventAccessVoter
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminEventAccessVoter
         arguments:
             - '@components.security.admin_event_access'
         tags:
@@ -272,26 +272,12 @@ services:
     # Event Listener
     #
     vimeet_app.domain_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\DomainEventListener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
         arguments:
             - '@router.default'
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
-    vimeet_app.user_reset_password_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ResetPasswordEventListener
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: 'kernel.event_listener', event: 'user_reset_password', method: 'sendToken' }
-    vimeet_app.admin_reset_password_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ResetPasswordEventListener
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: 'kernel.event_listener', event: 'admin_reset_password', method: 'sendToken' }
     vimeet_app.vimeet.application.event.notification_event_listener:
         class: Proximum\Vimeet\Application\Event\NotificationEventListener
         arguments:
@@ -301,30 +287,8 @@ services:
             - '@adapter.router'
         tags:
             - { name: 'kernel.event_subscriber' }
-    event_listener.user.activate_account_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\User\ActivateAccountEventListener
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: 'kernel.event_listener', event: 'user_activate_account', method: 'sendToken' }
-    event_listener.change_mail_address_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\ChangeMailAddressEventListener
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: 'kernel.event_listener', event: 'change_mail', method: 'sendToken' }
-    event_listener.admin.activate_account_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\Admin\ActivateAccountEventListener
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: 'kernel.event_listener', event: 'admin_activate_account', method: 'sendToken' }
-
     event_listener.login_event_listener:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\LoginEventListener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -334,20 +298,20 @@ services:
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
     event_listener.mail_event_subscriber:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\MailEventSubscriber
+        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.trace_event_subscriber:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\TraceEventSubscriber
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
         arguments:
             - '@repository.trace_repository'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet_validator_event_subscriber:
-        class: Proximum\Vimeet\Bundle\AppBundle\EventListener\SheetValidatorEventSubscriber
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetValidatorEventSubscriber
         arguments:
              - '@components.sheet.sheet_validator'
         tags:
@@ -357,7 +321,7 @@ services:
     # Twig extension
     #
     vimeet_app.twig_extension:
-        class: Proximum\Vimeet\Bundle\AppBundle\Twig\AppExtension
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig\AppExtension
         public: false
         arguments:
             - '@sonata.intl.templating.helper.locale'
@@ -368,14 +332,14 @@ services:
     # Security
     #
     security.impersonate:
-        class: Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate
         arguments:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
             - '%secret%'
 
     security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
-        class: Proximum\Vimeet\Bundle\AppBundle\Security\Http\Firewall\SwitchUserListener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchUserListener
         public: false
         abstract: true
         arguments:
@@ -397,11 +361,11 @@ services:
     # Services
     #
     error_factory:
-        class: Proximum\Vimeet\Bundle\AppBundle\Service\ErrorFactory
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
         arguments:
             - '@translator'
 
     filter_summary:
-        class: Proximum\Vimeet\Bundle\AppBundle\Service\FilterSummary
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
         arguments:
             - '@translator'

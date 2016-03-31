@@ -69,7 +69,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: %kernel.root_dir%/../src/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
+                dir: %kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
                 alias: Entity
                 is_bundle: false
 
@@ -151,5 +151,5 @@ services:
        tags:
            - { name: twig.extension }
 
-vimeet_app:
+infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']

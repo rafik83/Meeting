@@ -8,17 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail\User;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Event;
 
-class ActivateAccountMail extends Mail
+class ResetPasswordMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    private $eventTitle;
 
     /**
      * @var string
@@ -31,23 +30,22 @@ class ActivateAccountMail extends Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
-     * @param Event  $event
+     * @param string $eventTitle
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $eventTitle, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
-
-        $this->event = $event;
-        $this->token = $token;
+        $this->eventTitle = $eventTitle;
+        $this->token      = $token;
     }
 
     /**
-     * @return Event
+     * @return string
      */
-    public function getEvent()
+    public function getEventTitle()
     {
-        return $this->event;
+        return $this->eventTitle;
     }
 
     /**

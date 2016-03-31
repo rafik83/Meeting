@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DependencyInjection;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class InfrastructureExtension extends Extension
+class MailExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -21,8 +21,6 @@ class InfrastructureExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
-        $container->setParameter('infrastructure.eu_countries', $config['eu_countries']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

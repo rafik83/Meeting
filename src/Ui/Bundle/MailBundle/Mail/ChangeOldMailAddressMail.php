@@ -8,42 +8,36 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetValidatedMail extends Mail
+class ChangeOldMailAddressMail extends Mail
 {
     /**
-     * @var Sheet
+     * @var string
      */
-    private $sheet;
+    private $newMail;
 
     /**
-     * SheetValidatedMail constructor.
-     *
-     * @param Sheet  $sheet
      * @param string $sender
      * @param string $receiver
      * @param string $template
      * @param string $messageId
      * @param string $locale
+     * @param string $newMail
      */
-    public function __construct(Sheet $sheet, $sender, $receiver, $template, $messageId, $locale)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $newMail)
     {
-        $this->sheet = $sheet;
-
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
+        $this->newMail = $newMail;
     }
 
     /**
-     * Get sheet
-     *
-     * @return Sheet
+     * @return string
      */
-    public function getSheet()
+    public function getNewMail()
     {
-        return $this->sheet;
+        return $this->newMail;
     }
 }

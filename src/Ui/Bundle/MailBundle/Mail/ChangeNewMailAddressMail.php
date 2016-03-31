@@ -8,16 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Bundle\AppBundle\Mail;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 
-class ChangeOldMailAddressMail extends Mail
+class ChangeNewMailAddressMail extends Mail
 {
     /**
      * @var string
      */
-    private $newMail;
+    private $token;
 
     /**
      * @param string $sender
@@ -25,19 +25,19 @@ class ChangeOldMailAddressMail extends Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
-     * @param string $newMail
+     * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $newMail)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $token)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
-        $this->newMail = $newMail;
+        $this->token = $token;
     }
 
     /**
      * @return string
      */
-    public function getNewMail()
+    public function getToken()
     {
-        return $this->newMail;
+        return $this->token;
     }
 }
