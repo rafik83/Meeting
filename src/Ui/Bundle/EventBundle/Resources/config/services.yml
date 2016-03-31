@@ -3,19 +3,19 @@ services:
     # Params converters
     #
     vimeet_app.param_converter.event_domain_param_converter:
-        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\EventViewDomainParamConverter
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventViewDomainParamConverter
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'event_domain_param_converter' }
     vimeet_app.param_converter.participant_type_view_param_converter:
-        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\TypeViewParamConverter
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\TypeViewParamConverter
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'participant_type_view_param_converter' }
     vimeet_app.param_converter.category_view_param_converter:
-        class: Proximum\Vimeet\Bundle\AppBundle\ParamConverter\CategoryViewParamConverter
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\CategoryViewParamConverter
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
         tags:
@@ -35,7 +35,7 @@ services:
     # Form extension
     #
     vimeet_app.form_extension.translation_domain_extension:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Extension\TranslationDomainExtension
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\TranslationDomainExtension
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
 
@@ -43,111 +43,111 @@ services:
     # Form type
     #
     vimeet_app.form_type.who_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\WhoType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\WhoType
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCreateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestCreateType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.request_update_from_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestUpdateFromType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestUpdateFromType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.request_update_to_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestUpdateToType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestUpdateToType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: form.type }
     vimeet_app.form_type_meeting.meeting_request_update_to_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestUpdateToType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestUpdateToType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestApproveType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestApproveType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.refuse_request_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestRefuseType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestRefuseType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.meeting_request_cancel_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Meeting\MeetingRequestCancelType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\MeetingRequestCancelType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_spot.spot_create_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Spot\SpotCreateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_participant.participant_entity_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantEntityType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantEntityType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type.category_create_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type.category_update_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryUpdateType
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting_request.meeting_request:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest\PositionMeetingType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: form.type }
     vimeet_app.form_type_participant.participant_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\ParticipantChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantChoiceType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
         tags:
             - { name: form.type }
     vimeet_app.form_type_participant.meeting_participant_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Participant\MeetingParticipantChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\MeetingParticipantChoiceType
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: form.type }
     form_type.category_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\CategoryChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
         tags:
             - { name: form.type }
     form_type.type_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\TypeChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
     form_type_.sheet.follower_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FollowerChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType
         arguments:
             - '@repository.admin_repository'
         tags:
             - { name: form.type }
     form_type.event_choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
@@ -157,114 +157,114 @@ services:
     # Admin library form type
     #
     vimeet_app.form_type_admin.library.type_factory:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\TypeFactory
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\TypeFactory
         arguments:
             -
-                lib_text:   'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\TextType'
-                lib_choice: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\Admin\ChoiceType'
+                lib_text:   'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\TextType'
+                lib_choice: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\ChoiceType'
 
     #
     # Library
     #
     vimeet_app.form_type.data_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\DataType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\DataType
         arguments:
             -
-                choice_with_description: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType'
-                upload_with_choices: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType'
-                lib_text: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType'
-                lib_textarea: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType'
-                lib_email: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType'
-                lib_option: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType'
-                lib_participant: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType'
-                lib_planning: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType'
-                lib_country: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType'
-                lib_choice: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType'
-                lib_last_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType'
-                lib_first_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType'
-                lib_organisation: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType'
+                choice_with_description: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceWithDescriptionType'
+                upload_with_choices: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\UploadWithChoicesType'
+                lib_text: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextType'
+                lib_textarea: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextareaType'
+                lib_email: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\EmailType'
+                lib_option: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OptionType'
+                lib_participant: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ParticipantType'
+                lib_planning: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\PlanningType'
+                lib_country: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\CountryType'
+                lib_choice: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceType'
+                lib_last_name: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\LastNameType'
+                lib_first_name: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\FirstNameType'
+                lib_organisation: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OrganisationType'
         tags:
             - { name: form.type }
     vimeet_app.form_type_package.data_product_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\DataProductType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\DataProductType
         arguments:
             -
-                choice_with_description: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType'
-                upload_with_choices: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType'
-                lib_text: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType'
-                lib_textarea: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType'
-                lib_email: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType'
-                lib_option: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType'
-                lib_participant: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType'
-                lib_planning: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType'
-                lib_country: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType'
-                lib_choice: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType'
-                lib_last_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType'
-                lib_first_name: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType'
-                lib_organisation: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType'
+                choice_with_description: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceWithDescriptionType'
+                upload_with_choices: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\UploadWithChoicesType'
+                lib_text: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextType'
+                lib_textarea: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextareaType'
+                lib_email: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\EmailType'
+                lib_option: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OptionType'
+                lib_participant: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ParticipantType'
+                lib_planning: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\PlanningType'
+                lib_country: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\CountryType'
+                lib_choice: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceType'
+                lib_last_name: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\LastNameType'
+                lib_first_name: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\FirstNameType'
+                lib_organisation: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OrganisationType'
         tags:
             - { name: form.type }
     vimeet_app.form_type_package.update_product_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateProductType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateProductType
         arguments:
             -
-                lib_option: 'Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType'
+                lib_option: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OptionType'
         tags:
             - { name: form.type }
     vimeet_app.form_type_library.choice_with_description:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceWithDescriptionType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceWithDescriptionType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.upload_with_choices_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\UploadWithChoicesType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\UploadWithChoicesType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.text_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.textarea_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\TextareaType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\TextareaType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.option_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OptionType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OptionType
         arguments:
             - '@vimeet_infrastructure.application.components.order.order_manager'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.participant_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ParticipantType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ParticipantType
         tags:
             - { name: 'form.type' }
         arguments:
             - '@vimeet_infrastructure.application.components.participant.participant_manager'
     vimeet_app.form_type_library.planning_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\PlanningType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\PlanningType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.country_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\CountryType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\CountryType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.email_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\EmailType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\EmailType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.choice_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\ChoiceType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\ChoiceType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.last_name_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\LastNameType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\LastNameType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.first_name_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\FirstNameType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\FirstNameType
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_library.organisation_type:
-        class: Proximum\Vimeet\Bundle\AppBundle\Form\Type\Library\OrganisationType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\OrganisationType
         tags:
             - { name: 'form.type' }
 

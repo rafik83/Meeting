@@ -3,7 +3,7 @@ services:
     # Event
     #
     vimeet_infrastructure.adapter.delayed_event_dispatcher:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\DelayedEventDispatcher
+        class: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
         arguments:
             - '@event_dispatcher'
         tags:
@@ -13,142 +13,142 @@ services:
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\EventRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\EventRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.type_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TypeRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\TypeRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.category_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CategoryRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.user_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UserRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.participant_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ParticipantRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.sheet_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SheetRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.spot_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\SpotRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\SpotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.rule_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\RuleRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.nomenclature_item_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NomenclatureItemRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureItemRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.schedule_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ScheduleRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\ScheduleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.unavailability_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\UnavailabilityRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\UnavailabilityRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.user.forgotten_password_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ForgottenPasswordTokenRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\User\ForgottenPasswordTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.admin.forgotten_password_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ForgottenPasswordTokenRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Admin\ForgottenPasswordTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.request_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\RequestRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Meeting\RequestRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.happening_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\HappeningRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.happening_participation_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\HappeningParticipationRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\NotificationRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.order_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\OrderRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\MeetingRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.meeting_slot_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\MeetingSlotRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.cart_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\CartRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\CartRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.message_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Meeting\MessageRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.transaction:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TransactionRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\TransactionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository_happening.category_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\CategoryRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.user_activate_account_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\User\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.change_mail_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\ChangeMailTokenRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\ChangeMailTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.happening.speaker:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Happening\SpeakerRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\SpeakerRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.admin_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\AdminRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\AdminRepository
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
     repository.sheet.comment_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\CommentRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\CommentRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.admin_activate_account_token_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.trace_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\TraceRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.sheet.template_repository:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Sheet\TemplateRepository
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\TemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -603,7 +603,7 @@ services:
     vimeet_infrastructure.adapter.salt_generator:
         class: Proximum\Vimeet\Application\Adapter\SaltGenerator
     vimeet_infrastructure.adapter.encoder_adapter:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\EncoderAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\EncoderAdapter
         arguments:
             - '@security.password_encoder'
 
@@ -611,20 +611,20 @@ services:
     # Adapters
     #
     vimeet_infrastructure.adapter.translator_adapter:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\TranslatorAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter
         arguments:
             - '@translator'
     adapter.router:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\RouterAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
     adapter.local_file_storage:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\LocalFileStorageAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter
         arguments:
             - '%kernel.root_dir%/../web'
             - '@datetime'
     adapter.authentication_manager:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\AuthenticationManager
+        class: Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager
         arguments:
             - '@security.token_storage'
             - '@session'
@@ -812,7 +812,7 @@ services:
     # Mailer
     #
     adapter.mailer_adapter:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\MailerAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\MailerAdapter
         arguments:
             - '@mailer'
             - '@twig'
@@ -948,6 +948,6 @@ services:
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
-        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\SheetSearchAdapter
+        class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
              - '@fos_elastica.finder.app.sheet'
