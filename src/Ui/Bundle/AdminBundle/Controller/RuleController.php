@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\DontSeeWhatType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\WhoSeeWhoType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DontSeeWhatType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;

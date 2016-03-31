@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;

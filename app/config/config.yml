@@ -39,7 +39,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form_themes:
-        - "VimeetAppBundle::layout.html.twig"
+        - "AdminBundle::layout.html.twig"
     date:
         timezone: Europe/Paris
 

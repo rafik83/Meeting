@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\CommentType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
 use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterFullType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterPartType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -62,7 +62,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getSheet(),
             $this->sender,
             $owner->getEmail(),
-            'VimeetAppBundle:Mail:Sheet/sheetValidated.html.twig',
+            'MailBundle:Mail:Sheet/sheetValidated.html.twig',
             'sheet_validated',
             $owner->getLocale()
         );
@@ -78,7 +78,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $oldMail = new ChangeOldMailAddressMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'VimeetAppBundle:Mail:ChangeMail/oldMail.html.twig',
+            'MailBundle:Mail:ChangeMail/oldMail.html.twig',
             'change_mail_old',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
@@ -87,7 +87,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $newMail = new ChangeNewMailAddressMail(
             $this->sender,
             $event->getChangeMailToken()->getMail(),
-            'VimeetAppBundle:Mail:ChangeMail/newMail.html.twig',
+            'MailBundle:Mail:ChangeMail/newMail.html.twig',
             'change_mail_new',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken()
@@ -105,7 +105,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminActivateAccountMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'VimeetAppBundle:Mail:Admin/activateAccount.html.twig',
+            'MailBundle:Mail:Admin/activateAccount.html.twig',
             'admin_activate_account',
             $event->getLocale(),
             $event->getActivateAccountToken()->getToken()
@@ -122,7 +122,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminResetPasswordMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'VimeetAppBundle:Mail:Admin/resetPassword.html.twig',
+            'MailBundle:Mail:Admin/resetPassword.html.twig',
             'admin_forgot_password',
             $event->getLocale(),
             $event->getForgottenPasswordToken()->getToken()
@@ -139,7 +139,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new UserActivateAccountMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'VimeetAppBundle:Mail:User/activateAccount.html.twig',
+            'MailBundle:Mail:User/activateAccount.html.twig',
             'user_activate_account',
             $event->getUser()->getLocale(),
             $event->getEvent(),
@@ -157,7 +157,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new UserResetPasswordMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'VimeetAppBundle:Mail:User/resetPassword.html.twig',
+            'MailBundle:Mail:User/resetPassword.html.twig',
             'user_forgot_password',
             $event->getLocale(),
             $event->getEventView()->title,

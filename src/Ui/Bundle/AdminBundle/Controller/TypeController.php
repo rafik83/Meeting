@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeCreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Type\TypeUpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

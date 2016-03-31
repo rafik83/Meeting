@@ -1,5 +1,5 @@
 {% if template['type'] == 'radio' %}
-    {% include 'VimeetAppBundle:Package:choiceField.html.twig' with {
+    {% include 'EventBundle:Package:choiceField.html.twig' with {
     'fields': fields|first.children,
     'choicesTemplate': template['choices']
     } %}

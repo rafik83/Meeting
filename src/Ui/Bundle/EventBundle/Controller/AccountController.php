@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\User\ChangeMailType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

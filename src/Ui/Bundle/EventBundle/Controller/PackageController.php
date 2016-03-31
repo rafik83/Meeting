@@ -17,9 +17,9 @@ use Proximum\Vimeet\Application\Exception\Package\BoughtParticipantAlreadyAddedE
 use Proximum\Vimeet\Application\Exception\Package\EmptyPackageException;
 use Proximum\Vimeet\Application\Exception\Package\ForgotToAddQuantityException;
 use Proximum\Vimeet\Application\Exception\Package\PackageException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\AddProductsType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateProductType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Package\UpdateStepType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\AddProductsType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateProductType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateStepType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

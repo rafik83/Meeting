@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\UpdateBlockType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

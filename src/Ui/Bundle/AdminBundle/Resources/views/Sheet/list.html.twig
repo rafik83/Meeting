@@ -1,4 +1,4 @@
-{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+{% extends 'AdminBundle::base.html.twig' %}
 
 {% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
 
@@ -124,7 +124,7 @@
             </tbody>
         </table>
 
-        {{ include('VimeetAppBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+        {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
         <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
             <div class="modal-dialog">

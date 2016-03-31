@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryCreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Category\CategoryUpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryUpdateType;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -1,4 +1,4 @@
-{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+{% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
     <h1 class="page-header">Types de participation</h1>
@@ -25,5 +25,5 @@
         </tbody>
     </table>
 
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
 {% endblock %}

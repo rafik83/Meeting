@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template\CreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template\DuplicateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;

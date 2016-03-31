@@ -1,4 +1,4 @@
-{% extends 'VimeetAppBundle:Admin:base.html.twig' %}
+{% extends 'AdminBundle::base.html.twig' %}
 
 {% block title 'Catégories de types de participation' %}
 
@@ -32,7 +32,7 @@
         </tbody>
     </table>
 
-    {{ include('VimeetAppBundle:Paginator:paginate.html.twig', {'paginator': categories}) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': categories}) }}
 
     <div class="text-left">
         <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventUpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

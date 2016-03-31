@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin\ActivateAccountPasswordType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -14,10 +14,10 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCateg
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
 use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryCreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\Category\CategoryUpdateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\CreateType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Happening\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
