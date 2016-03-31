@@ -549,7 +549,7 @@ function ChoiceObject(element)
         type: null,
         required: false,
         placeholder: '',
-        choices: ''
+        choices: null
     };
 }
 
@@ -559,7 +559,20 @@ ChoiceObject.prototype.fill = function ()
     this.form.set('type', this.config.type);
     this.form.set('required', this.config.required);
     this.form.set('placeholder', this.config.placeholder);
-    this.form.set('choices', this.config.choices);
+
+    var content = '';
+
+    for (var key in this.config.choices) {
+        if (Object.prototype.hasOwnProperty.call(this.config.choices, key)) {
+            if (content !== '') {
+                content = content + ',';
+            }
+
+            content = content + this.config.choices[key];
+        }
+    }
+
+    this.form.set('choices', content);
 };
 
 ChoiceObject.prototype.save = function ()
@@ -568,7 +581,18 @@ ChoiceObject.prototype.save = function ()
     this.config.type        = this.form.get('type');
     this.config.required    = this.form.get('required');
     this.config.placeholder = this.form.get('placeholder');
-    this.config.choices     = this.form.get('choices');
+
+    var result = {};
+
+    var current = this.form.get('choices').split(',').filter(function(item, pos, self) {
+        return self.indexOf(item) == pos;
+    });
+
+    for (var index = 0; index < current.length; ++index) {
+        result[current[index]] = current[index];
+    }
+
+    this.config.choices = result;
 
     this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label + ' ' + this.config.type;
 };
