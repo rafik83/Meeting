@@ -9,12 +9,12 @@
     </button>
 
     {{ form_start(form) }}
-        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Créer un template</h4>
+                        <h4 class="modal-title" id="create-modal-label">Créer un template</h4>
                     </div>
                     <div class="modal-body">
                         {{ form_errors(form) }}
@@ -43,12 +43,20 @@
                 <tr>
                     <td>{{ template.title }}</td>
                     <td class="text-right">
+                        <a href="{{ path('admin_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
                         <a href="{{ path('admin_template_builder', { 'template': template.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="modal fade clear-on-hidden-modal" id="duplicate-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
