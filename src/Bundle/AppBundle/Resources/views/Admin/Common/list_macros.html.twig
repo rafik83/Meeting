@@ -52,3 +52,9 @@
         </ul>
     </div>
 {% endmacro %}
+
+{% macro state_label(label, value, states) %}
+    <span class="label label-{{ states[value]|default('default') }}">
+        {{ label }}
+    </span>
+{% endmacro %}

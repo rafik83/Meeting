@@ -333,12 +333,17 @@ admin:
         link: Rendez-vous
     meeting_request:
         link: Demandes de rendez-vous
-        list:
-            state:
-                sent: Envoyé
-                approved: Accepté
-                refused: Refusé
-                cancelled: Annulé
+        title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
+        details: Détail
+        set_a_meeting: Placer un RDV
+        from: De
+        to: À
+        createdAt: Date de création
+        state:
+            sent: Envoyé
+            approved: Accepté
+            refused: Refusé
+            cancelled: Annulé
     happening:
         link: Conférences
         title: Conférences
