@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle;
 
-use Proximum\Vimeet\Bundle\InfrastructureBundle\DependencyInjection\Compiler\CartCompilerPass;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DependencyInjection\Compiler\CartCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
