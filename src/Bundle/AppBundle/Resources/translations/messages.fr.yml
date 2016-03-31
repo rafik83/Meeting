@@ -4,7 +4,7 @@ login:
     title: Connexion
     link: Connexion
     logged_as: Bonjour %email%
-    forgotPassword: J'ai oublié mon mot de passe
+    forgotPassword: Mot de passe oublié ?
 
 logout:
     title: Déconnecter
