@@ -48,7 +48,9 @@ class MeetingRequestController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $filter     = [];
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $filters    = [];
         $filtered   = false;
         $filterForm = $this->createFilterForm(
             FilterMeetingRequestType::class,
@@ -56,23 +58,26 @@ class MeetingRequestController extends Controller
         );
 
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filter   = $filterForm->getData();
+            $filters  = $filterForm->getData();
             $filtered = true;
         }
 
         $meetingRequests = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filter);
+            ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filters);
 
         $meetingRequestsAll = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->countAllByEvent($event);
 
+        $filterFormView = $filterForm->createView();
+
         return $this->render('VimeetAppBundle:Admin/MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
             'totalRequest'     => $meetingRequestsAll,
-            'filter_form'      => $filterForm->createView(),
+            'filter_form'      => $filterFormView,
+            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
             'filtered'         => $filtered,
         ]);
     }
