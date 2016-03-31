@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Doctrine\ORM\QueryBuilder\Meeting\Request\RequestQueryBuilder;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\RequestQueryBuilder;
 
 class RequestRepository implements RequestRepositoryInterface
 {
