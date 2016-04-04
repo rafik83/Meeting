@@ -20,6 +20,11 @@ interface TemplateRepositoryInterface
     public function all();
 
     /**
+     * @return Template[]
+     */
+    public function getBaseTemplate();
+
+    /**
      * @param Template $template
      */
     public function add(Template $template);
