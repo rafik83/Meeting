@@ -44,6 +44,15 @@ class FilterType extends AbstractType
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
             ])
+            ->add('follower', FollowerChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.follower.label',
+                'placeholder' => '',
+                'event'       => $options['event'],
+            ])
+            ->add('predefined', PredefinedFiltersChoiceType::class, [
+                'label'       => 'form.filter.label',
+                'placeholder' => '',
+            ])
         ;
     }
 

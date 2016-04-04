@@ -107,6 +107,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
         $this->data         = $data;
         $this->packageData  = $packageData;
         $this->createdAt    = $createdAt;
+        $this->lastLoginAt  = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
         $this->state        = self::STATE_PENDING;
