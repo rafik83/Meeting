@@ -1,5 +1,5 @@
 {% set config = {
-    label: { 'fr': 'Participant' },
+    label: { (locale): 'Participant' },
     numberOfParticipantShown: 1
 }|merge(config|default({})) %}
 

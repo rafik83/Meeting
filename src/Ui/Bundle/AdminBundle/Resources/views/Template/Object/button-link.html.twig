@@ -1,6 +1,6 @@
 {% set config = {
-    label: { 'fr': 'Lien' },
-    help: { 'fr': '' },
+    label: { (locale): 'Lien' },
+    help: { (locale): '' },
     required: false
 }|merge(config|default({})) %}
 

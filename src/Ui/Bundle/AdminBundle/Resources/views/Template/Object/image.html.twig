@@ -1,7 +1,7 @@
 {% set config = {
-    label: { 'fr': 'Image' },
-    placeholder: { 'fr': '' },
-    help: { 'fr': '' },
+    label: { (locale): 'Image' },
+    placeholder: { (locale): '' },
+    help: { (locale): '' },
     required: false,
 }|merge(config|default({})) %}
 

@@ -28,15 +28,23 @@ class Template
     private $value;
 
     /**
+     * @var array
+     */
+    private $locales = [];
+
+    /**
      * Template constructor.
      *
      * @param string $title
      * @param string $value
+     * @param string $locale
      */
-    public function __construct($title, $value)
+    public function __construct($title, $value, $locale)
     {
         $this->title = $title;
         $this->value = $value;
+
+        $this->addLocale($locale);
     }
 
     /**
@@ -91,5 +99,63 @@ class Template
     public function duplicate($title)
     {
         return new $this($title, $this->value);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return Template
+     */
+    public function addLocale($locale)
+    {
+        $this->locales[] = $locale;
+        $this->value     = self::createLocale($this->value, $locale);
+
+        return $this;
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     *
+     * @return array
+     */
+    private static function createLocale($config, $locale) {
+
+        $keys = ['label', 'help', 'placeholder'];
+
+        if (!isset($config['component'])) {
+            return array_map(function ($item) use ($locale) { return self::createLocale($item, $locale); }, $config);
+        }
+
+        if ($config['component'] === 'block') {
+            foreach ($config['config'] as $key => $column) {
+                $config['config'][$key] = self::createLocale($column, $locale);
+            }
+
+            return $config;
+        }
+
+        if ($config['component'] === 'object') {
+            foreach ($config['config'] as $key => $value) {
+                if (in_array($key, $keys)) {
+                    $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
+                }
+            }
+
+            return $config;
+        }
+
+        return $config;
     }
 }

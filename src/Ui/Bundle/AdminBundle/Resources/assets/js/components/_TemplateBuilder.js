@@ -363,7 +363,7 @@ function TemplateObject(element, locale)
         this.object = new CollectionObject(this.element, this.locale);
     }
 
-    this.object.save();
+    this.object.fill();
 }
 
 TemplateObject.prototype.deleteButtonClicked = function (event)
@@ -454,8 +454,6 @@ function EditableTextObject(element, locale)
     this.locale  = locale;
     this.form    = new Form(element);
     this.config  = JSON.parse(this.element.getAttribute('data-config'));
-
-    this.test = this.element.getAttribute('data-config');
 }
 
 EditableTextObject.prototype.fill = function ()
