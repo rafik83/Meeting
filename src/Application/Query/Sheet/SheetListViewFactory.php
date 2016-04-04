@@ -54,21 +54,22 @@ class SheetListViewFactory
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
      * @param Impersonate                 $impersonate
-     * @param TraceRepositoryInterface    $traceRepository
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
+     * @param TraceRepositoryInterface    $traceRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
-        TraceRepositoryInterface $traceRepository,
-        SheetSearchAdapterInterface $sheetSearchAdapter
+        SheetSearchAdapterInterface $sheetSearchAdapter,
+        TraceRepositoryInterface $traceRepository
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
         $this->traceRepository        = $traceRepository;
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
+        $this->traceRepository        = $traceRepository;
     }
 
     /**
@@ -101,6 +102,14 @@ class SheetListViewFactory
      */
     public function createFromSheet(Sheet $sheet, $locale, Admin $admin)
     {
+        $trace = null;
+
+        if ($sheet->isAccepted()) {
+            $trace = $this->traceRepository->getLastAcceptBySheet($sheet);
+        } elseif ($sheet->isValidated()) {
+            $trace = $this->traceRepository->getLastValidateBySheet($sheet);
+        }
+
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
@@ -117,7 +126,7 @@ class SheetListViewFactory
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
-            $this->traceRepository->getLastAcceptBySheet($sheet)
+            $trace
         );
     }
 }

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Query;
-use Elastica\Query\Bool;
+use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
@@ -50,7 +50,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     public function find(Event $event, array $filters, $page, $limit, $locale)
     {
         $query = new Query();
-        $bool  = new Bool();
+        $bool  = new BoolQuery();
 
         $matchEvent = new Match();
         $matchEvent->setField('event', $event->getId());
@@ -71,7 +71,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
                 $bool->addMust($match);
             }
 
-            if (isset($filters['state']) && in_array($filters['state'], [Sheet::STATE_COMPLETE, Sheet::STATE_INCOMPLETE,Sheet::STATE_VALIDATED])) {
+            if (isset($filters['state']) && in_array($filters['state'], [Sheet::STATE_ACCEPTED, Sheet::STATE_PENDING, Sheet::STATE_VALIDATED])) {
                 $match2 = new Match();
                 $match2
                     ->setFieldQuery('state', $filters['state']);
@@ -89,7 +89,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
             if (isset($filters['category']) && $filters['category'] instanceof Category) {
                 $nested = new Nested();
-                $boolQuery = new Bool();
+                $boolQuery = new BoolQuery();
                 $matchQuery = new Match();
                 $matchQuery->setField('categories.id', $filters['category']->getId());
 
