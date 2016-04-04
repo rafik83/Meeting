@@ -285,9 +285,14 @@ admin:
         exit_impersonation: Quitter l'impersonnation
         acceptedAt: 'Acceptée le %at% par %by%'
         trace:
-            accept: 'Acceptée le %at% par %by%'
-            validate: 'Validée le %at% par %by% avec le commentaire: %comment%'
+            accept: 'Acceptée le %at%'
+            author: 'par %by%'
+            comment: 'avec le commentaire: %comment%'
+            auto: 'automatiquement'
+            validate: 'Validée le %at%'
         details:
+            historic:
+                title: Historique
             comments:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
