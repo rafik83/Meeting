@@ -171,6 +171,8 @@ form:
                         label: Fiche acceptée
             template:
                 label: Template
+            sheetTemplate:
+                label: Template de fiche
             translations:
                 prototype:
                     children:
