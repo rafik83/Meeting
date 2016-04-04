@@ -505,10 +505,10 @@ admin_template_duplicate:
     defaults: { _controller: AdminBundle:Template:duplicate }
     methods: [GET, POST]
 admin_template_builder:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:builder }
     methods: [GET]
 admin_template_save:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:save }
     methods: [POST]

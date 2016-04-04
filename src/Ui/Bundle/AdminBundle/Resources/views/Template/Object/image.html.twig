@@ -1,11 +1,11 @@
 {% set config = {
-    label: 'Image',
-    placeholder: '',
-    help: '',
+    label: { 'fr': 'Image' },
+    placeholder: { 'fr': '' },
+    help: { 'fr': '' },
     required: false,
 }|merge(config|default({})) %}
 
-<div class="object" data-object="image"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="image"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">
@@ -31,19 +31,19 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
+                                <input class="form-control" type="text" name="label" />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Placeholder</label>
-                                <textarea class="form-control" name="placeholder">{{ config.placeholder }}</textarea>
+                                <textarea class="form-control" name="placeholder"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Aide</label>
-                                <textarea class="form-control" name="help">{{ config.help }}</textarea>
+                                <textarea class="form-control" name="help"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Requis</label>
-                                <input type="checkbox" name="required"{% if config.required %} checked="checked"{% endif %} />
+                                <input type="checkbox" name="required" />
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -55,5 +55,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="label">{{ config.label }}</div>
+    <div data-bind="label">{{ config.label[locale] }}</div>
 </div>

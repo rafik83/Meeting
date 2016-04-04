@@ -23,6 +23,7 @@ function TemplateBuilder(element)
     this.url        = element.getAttribute('data-template-builder');
     this.menu       = element.querySelector('#template-menu');
     this.openButton = element.querySelector('#template-menu-button');
+    this.locale     = element.getAttribute('data-locale');
     this.wasOpen    = false;
     this.open       = false;
     this.drag       = false;
@@ -175,7 +176,7 @@ TemplateBuilder.prototype.block = function (element)
 TemplateBuilder.prototype.object = function (element)
 {
     // Create object
-    element.templateObject = new TemplateObject(element);
+    element.templateObject = new TemplateObject(element, this.locale);
 };
 
 TemplateBuilder.prototype.save = function ()
@@ -314,11 +315,13 @@ TemplateBlock.prototype.sortable = function (element)
  * Template Object
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function TemplateObject(element)
+function TemplateObject(element, locale)
 {
     this.element         = element;
+    this.locale          = locale;
     this.configureModal  = element.querySelector('.configure-modal');
     this.saveButton      = this.configureModal.querySelector('.save-configuration');
     this.deleteButton    = element.querySelector('.delete-button');
@@ -343,21 +346,21 @@ function TemplateObject(element)
 
     // Object
     if (this.type === 'text') {
-        this.object = new TextObject(this.element);
+        this.object = new TextObject(this.element, this.locale);
     } else if (this.type === 'editable-text') {
-        this.object = new EditableTextObject(this.element);
+        this.object = new EditableTextObject(this.element, this.locale);
     } else if (this.type === 'button-link') {
-        this.object = new ButtonLinkObject(this.element);
+        this.object = new ButtonLinkObject(this.element, this.locale);
     } else if (this.type === 'participant') {
-        this.object = new ParticipantObject(this.element);
+        this.object = new ParticipantObject(this.element, this.locale);
     } else if (this.type === 'choice') {
-        this.object = new ChoiceObject(this.element);
+        this.object = new ChoiceObject(this.element, this.locale);
     } else if (this.type === 'image') {
-        this.object = new ImageObject(this.element);
+        this.object = new ImageObject(this.element, this.locale);
     } else if (this.type === 'tag') {
-        this.object = new TagObject(this.element);
+        this.object = new TagObject(this.element, this.locale);
     } else if (this.type === 'collection') {
-        this.object = new CollectionObject(this.element);
+        this.object = new CollectionObject(this.element, this.locale);
     }
 
     this.object.save();
@@ -411,19 +414,23 @@ TemplateObject.prototype.normalize = function ()
  * TextObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function TextObject(element)
+function TextObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = { content: null, type: null };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 TextObject.prototype.fill = function ()
 {
     this.form.set('content', this.config.content);
     this.form.set('type', this.config.type);
+
+    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
 };
 
 TextObject.prototype.save = function ()
@@ -431,108 +438,112 @@ TextObject.prototype.save = function ()
     this.config.content = this.form.get('content');
     this.config.type    = this.form.get('type');
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content;
+    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
 };
 
 /**
  * EditableTextObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function EditableTextObject(element)
+function EditableTextObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        placeholder: null,
-        help: null,
-        length: null,
-        type: null,
-        required: false
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+
+    this.test = this.element.getAttribute('data-config');
 }
 
 EditableTextObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
-    this.form.set('placeholder', this.config.placeholder);
-    this.form.set('help', this.config.help);
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('placeholder', this.config.placeholder[this.locale]);
+    this.form.set('help', this.config.help[this.locale]);
     this.form.set('length', this.config.length);
     this.form.set('type', this.config.type);
     this.form.set('required', this.config.required);
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 EditableTextObject.prototype.save = function ()
 {
-    this.config.label       = this.form.get('label');
-    this.config.placeholder = this.form.get('placeholder');
-    this.config.help        = this.form.get('help');
-    this.config.length      = this.form.get('length');
-    this.config.type        = this.form.get('type');
-    this.config.required    = this.form.get('required');
+    this.config.label[this.locale]       = this.form.get('label');
+    this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.help[this.locale]        = this.form.get('help');
+    this.config.length                   = this.form.get('length');
+    this.config.type                     = this.form.get('type');
+    this.config.required                 = this.form.get('required');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 /**
  * ButtonLinkObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function ButtonLinkObject(element)
+function ButtonLinkObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = { label: null, url: null };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 ButtonLinkObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
-    this.form.set('help', this.config.help);
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
+
+    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 ButtonLinkObject.prototype.save = function ()
 {
-    this.config.label    = this.form.get('label');
-    this.config.help     = this.form.get('help');
-    this.config.required = this.form.get('required');
+    this.config.label[this.locale]    = this.form.get('label');
+    this.config.help[this.locale]     = this.form.get('help');
+    this.config.required              = this.form.get('required');
 
-    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label;
+    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 /**
  * ParticipantObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function ParticipantObject(element)
+function ParticipantObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        numberOfParticipantShown: 1
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 ParticipantObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
+    this.form.set('label', this.config.label[this.locale]);
     this.form.set('numberOfParticipantShown', this.config.numberOfParticipantShown);
+
+    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown;
 };
 
 ParticipantObject.prototype.save = function ()
 {
-    this.config.label                    = this.form.get('label');
+    this.config.label[this.locale]       = this.form.get('label');
     this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
-    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label + ' ' + this.config.numberOfParticipantShown;
+    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown;
 };
 
 
@@ -540,28 +551,19 @@ ParticipantObject.prototype.save = function ()
  * ChoiceObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function ChoiceObject(element)
+function ChoiceObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        type: null,
-        required: false,
-        placeholder: '',
-        choices: null
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
-ChoiceObject.prototype.fill = function ()
+ChoiceObject.prototype.getContent = function ()
 {
-    this.form.set('label', this.config.label);
-    this.form.set('type', this.config.type);
-    this.form.set('required', this.config.required);
-    this.form.set('placeholder', this.config.placeholder);
-
     var content = '';
 
     for (var key in this.config.choices) {
@@ -574,20 +576,31 @@ ChoiceObject.prototype.fill = function ()
         }
     }
 
-    this.form.set('choices', content);
+    return content;
+};
+
+ChoiceObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('placeholder', this.config.placeholder[this.locale]);
+    this.form.set('type', this.config.type);
+    this.form.set('required', this.config.required);
+    this.form.set('choices', this.getContent());
+
+    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.type;
 };
 
 ChoiceObject.prototype.save = function ()
 {
-    this.config.label       = this.form.get('label');
-    this.config.type        = this.form.get('type');
-    this.config.required    = this.form.get('required');
-    this.config.placeholder = this.form.get('placeholder');
+    this.config.label[this.locale]       = this.form.get('label');
+    this.config.type[this.locale]        = this.form.get('type');
+    this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.required                 = this.form.get('required');
 
     var result = {};
 
     var current = this.form.get('choices').split(',').filter(function(item, pos, self) {
-        return self.indexOf(item) == pos;
+        return self.indexOf(item) === pos;
     });
 
     for (var index = 0; index < current.length; ++index) {
@@ -596,43 +609,40 @@ ChoiceObject.prototype.save = function ()
 
     this.config.choices = result;
 
-    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label + ' ' + this.config.type;
+    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.type;
 };
 
 /**
  * ImageObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function ImageObject(element)
+function ImageObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        placeholder: null,
-        help: null,
-        length: null,
-        type: null,
-        required: false
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 ImageObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
-    this.form.set('placeholder', this.config.placeholder);
-    this.form.set('help', this.config.help);
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('placeholder', this.config.placeholder[this.locale]);
+    this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
 
 ImageObject.prototype.save = function ()
 {
-    this.config.label       = this.form.get('label');
-    this.config.placeholder = this.form.get('placeholder');
-    this.config.help        = this.form.get('help');
-    this.config.required    = this.form.get('required');
+    this.config.label[this.locale]       = this.form.get('label');
+    this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.help[this.locale]        = this.form.get('help');
+    this.config.required                 = this.form.get('required');
 
     this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
 };
@@ -641,69 +651,68 @@ ImageObject.prototype.save = function ()
  * TagObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function TagObject(element)
+function TagObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        tag: null
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 TagObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
+    this.form.set('label', this.config.label[this.locale]);
     this.form.set('tag', this.config.tag);
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 TagObject.prototype.save = function ()
 {
-    this.config.label = this.form.get('label');
-    this.config.tag   = this.form.get('tag');
+    this.config.label[this.locale] = this.form.get('label');
+    this.config.tag                = this.form.get('tag');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 /**
  * CollectionObject
  *
  * @param element
+ * @param locale
  * @constructor
  */
-function CollectionObject(element)
+function CollectionObject(element, locale)
 {
     this.element = element;
+    this.locale  = locale;
     this.form    = new Form(element);
-    this.config  = {
-        label: null,
-        placeholder: null,
-        help: null,
-        required: false,
-        default: 1
-    };
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 }
 
 CollectionObject.prototype.fill = function ()
 {
-    this.form.set('label', this.config.label);
-    this.form.set('placeholder', this.config.placeholder);
-    this.form.set('help', this.config.help);
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('placeholder', this.config.placeholder[this.locale]);
+    this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
     this.form.set('default', this.config.default);
+
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 CollectionObject.prototype.save = function ()
 {
-    this.config.label       = this.form.get('label');
-    this.config.placeholder = this.form.get('placeholder');
-    this.config.help        = this.form.get('help');
-    this.config.required    = this.form.get('required');
-    this.config.default     = this.form.get('default');
+    this.config.label[this.locale]       = this.form.get('label');
+    this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.help[this.locale]        = this.form.get('help');
+    this.config.required                 = this.form.get('required');
+    this.config.default                  = this.form.get('default');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
 };
 
 module.exports = TemplateBuilder;

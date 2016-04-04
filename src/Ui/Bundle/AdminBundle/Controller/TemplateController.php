@@ -41,7 +41,10 @@ class TemplateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('command.sheet.template.create_handler')->handle($create);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $request->getLocale(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:list.html.twig', [
@@ -78,23 +81,26 @@ class TemplateController extends Controller
 
     /**
      * @param Template $template
+     * @param string   $locale
      *
      * @return Response
      */
-    public function builderAction(Template $template)
+    public function builderAction(Template $template, $locale)
     {
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template' => $template,
+            'locale'   => $locale,
         ]);
     }
 
     /**
      * @param Request  $request
      * @param Template $template
+     * @param string   $locale
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, Template $template)
+    public function saveAction(Request $request, Template $template, $locale)
     {
         $config = json_decode($request->getContent(), true);
 

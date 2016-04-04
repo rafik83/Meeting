@@ -1,13 +1,13 @@
 {% set config = {
-    label: 'Texte modifiable',
-    placeholder: '',
-    help: '',
+    label: { 'fr': 'Texte modifiable' },
+    placeholder: { 'fr': '' },
+    help: { 'fr': '' },
     length: null,
     required: false,
     type: 'title'
 }|merge(config|default({})) %}
 
-<div class="object" data-object="editable-text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="editable-text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li>
             <span class="btn btn-link move-button">
@@ -33,29 +33,29 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
+                                <input class="form-control" type="text" name="label" />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Placeholder</label>
-                                <textarea class="form-control" name="placeholder">{{ config.placeholder }}</textarea>
+                                <textarea class="form-control" name="placeholder"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Aide</label>
-                                <textarea class="form-control" name="help">{{ config.help }}</textarea>
+                                <textarea class="form-control" name="help"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Requis</label>
-                                <input type="checkbox" name="required"{% if config.required %} checked="checked"{% endif %} />
+                                <input type="checkbox" name="required" />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Longueur</label>
-                                <input class="form-control" type="number" step="1" name="length" value="{{ config.length }}" />
+                                <input class="form-control" type="number" step="1" name="length" />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Type</label>
                                 <select class="form-control" name="type">
                                     {% for label, value in { 'Titre': 'title', 'Texte': 'text' } %}
-                                        <option value="{{ value }}"{% if value == config.type %} selected="selected"{% endif %}>{{ label }}</option>
+                                        <option value="{{ value }}">{{ label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -69,5 +69,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="label">{{ config.label }}</div>
+    <div data-bind="label">{{ config.label[locale] }}</div>
 </div>
