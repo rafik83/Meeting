@@ -1,54 +1,64 @@
 {% extends 'VimeetAppBundle:Admin:base.html.twig' %}
 
+{% import 'VimeetAppBundle:Admin/Common:list_macros.html.twig' as list_macros %}
+
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(totalRequest, {'%count%': totalRequest}) }}</h1>
 
-    <h2>Liste des demandes de RDV</h2>
+    {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
+        filters:   filters_summary,
+        resetLink: path('admin_meeting_request_list', { 'event': event.id })
+    }) }}
 
-    <h3>Filtrer par statut</h3>
-    {{ form_start(filter_form) }}
-    <div class="col-md-4">
-        {{ form_row(filter_form.state) }}
-        {% if filtered %}
-            <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}" class="btn btn-link">Vider les filtres</a>
-        {% endif %}
-    </div>
-    <div class="col-md-4">
-        {{ form_row(filter_form.submit) }}
-    </div>
-    {{ form_end(filter_form) }}
-    <div class="col-md-4">
-        <h4 class="text-right">Nombre de demande de rendez-vous: {{ totalRequest }}</h4>
-    </div>
-
-    <table class="table">
+    <table class="table table-hover filterable">
         <thead>
         <tr>
-            <th>De</th>
-            <th>à</th>
-            <th>Créé le</th>
-            <th>Statut</th>
-            <th>Action</th>
+            <th>{{ 'admin.meeting_request.from'|trans }}</th>
+            <th>{{ 'admin.meeting_request.to'|trans }}</th>
+            <th>{{ 'admin.meeting_request.createdAt'|trans }}</th>
+            <th>{{ list_macros.choice_as_dropdown(filter_form.state) }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for meeting_request in meeting_requests.results %}
             <tr>
-                <td>{{ meeting_request.sheetNameFrom }}</td>
-                <td>{{ meeting_request.sheetNameTo }}</td>
-                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
-                <td>{{ ('admin.meeting_request.list.state.' ~ meeting_request.state)|trans }}</td>
                 <td>
-                    <a href="{{ path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}) }}" class="btn btn-link">Détails</a>
-                    {% if meeting_request.state == 'approved' %}
-                        <a href="{{ path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }}" class="btn btn-primary">Placer</a>
-                    {% endif %}
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetFromId }) }}">
+                        {{ meeting_request.sheetNameFrom }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetToId }) }}">
+                        {{ meeting_request.sheetNameTo }}
+                    </a>
+                </td>
+                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
+                <td>
+                    {{ list_macros.state_label(
+                        ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
+                        meeting_request.state,
+                        {
+                            'sent': 'default',
+                            'approved': 'success',
+                            'refused': 'danger',
+                            'cancelled': 'danger',
+                        }
+                    ) }}
+                </td>
+                <td class="text-right">
+                    {{ list_macros.btnGroupAndRightMenuDropdown({
+                        ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
+                    }|merge(meeting_request.state != 'approved'
+                        ? {}
+                        : { ('admin.meeting_request.set_a_meeting'|trans): path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }
+                    )) }}
                 </td>
             </tr>
         {% else %}
             <tr>
                 <td colspan="3">
-                    Aucune demande de RDV
+                    {{ 'admin.zero-result'|trans }}
                 </td>
             </tr>
         {% endfor %}

@@ -75,7 +75,9 @@ class RequestViewBuilder
 
         $requestView = new RequestView(
             $request->getId(),
+            $request->getFromSheet()->getId(),
             $sheetNameFrom,
+            $request->getToSheet()->getId(),
             $sheetNameTo,
             $request->getState(),
             $request->getCreatedAt(),

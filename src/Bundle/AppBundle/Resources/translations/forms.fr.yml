@@ -242,6 +242,10 @@ form:
                 label: Fiche
             submit:
                 label: Enregistrer
+    meeting_request_filter:
+        children:
+            state:
+                label: Statut
     meeting_request_create:
         children:
             participants:
@@ -419,19 +423,6 @@ form:
                 label_delete: Supprimer
             submit:
                 label: Envoyer
-    admin:
-        meeting_request:
-            list:
-                filter:
-                    state:
-                        children:
-                            approved: Accepté
-                            refused: Refusé
-                            cancel: Annulé
-                            sent: Envoyé
-                    children:
-                        submit:
-                            label: Filtrer
     change_mail:
         children:
             mail:
