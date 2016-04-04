@@ -11,3 +11,6 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
             type: string
         value:
             type: json_array
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
