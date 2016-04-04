@@ -823,7 +823,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 2
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant'
-        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
 
@@ -834,7 +834,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
-        sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
+        oldSheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
         previewTemplate: '@event_asddays_2016_template_investisseur->preview'
 
@@ -845,7 +845,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
-        sheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
+        oldSheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
         previewTemplate: '@event_asddays_2016_template_investisseur->preview'
         
@@ -856,7 +856,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
-        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
     
@@ -867,7 +867,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
-        sheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
+        oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
         
