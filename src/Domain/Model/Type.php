@@ -252,6 +252,18 @@ class Type implements WhoInterface
         return $this;
     }
 
+    /**
+     * @param array $sheetTemplate
+     *
+     * @return self
+     */
+    public function setOldSheetTemplate(array $sheetTemplate)
+    {
+        $this->oldSheetTemplate = $sheetTemplate;
+
+        return $this;
+    }
+
 
     /**
      * @param array $packageTemplate
@@ -373,7 +385,11 @@ class Type implements WhoInterface
      */
     public function setTemplateByName($name, array $template)
     {
-        $setter = 'set' . ucfirst($name) . 'Template';
+        if (ucfirst($name) === 'Sheet') {
+            $setter = 'setOldSheetTemplate';
+        } else {
+            $setter = 'set' . ucfirst($name) . 'Template';
+        }
 
         if (!method_exists($this, $setter)) {
             throw new \Exception("Method $setter not exists");
