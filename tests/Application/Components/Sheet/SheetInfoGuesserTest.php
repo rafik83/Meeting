@@ -73,7 +73,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $sheet = new Sheet($event, $type, [], [], new \DateTime());
-        $type->setSheetTemplate([
+        $type->setOldSheetTemplate([
             'azer' => [
                 'label' => 'foobar',
                 'template' => [
