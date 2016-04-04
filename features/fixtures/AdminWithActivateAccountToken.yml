@@ -8,6 +8,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Truc"
             - "Muche"
             - "ROLE_ORGANIZER"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>
         events:
             - '@event_rdv_carnot_2016'
     admin_2:
@@ -19,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Bidule"
             - "Chouette"
             - "ROLE_OPERATOR"
+            - <dateTime()>
+        lastLoginAt: <dateTime()>
         events:
             - '@event_rdv_carnot_2016'
 

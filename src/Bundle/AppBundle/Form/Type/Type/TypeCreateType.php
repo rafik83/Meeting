@@ -34,6 +34,9 @@ class TypeCreateType extends AbstractType
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
+            ->add('validationCriteria', TypeValidationCriteriaType::class, [
+                'required' => false,
+            ])
         ;
     }
 

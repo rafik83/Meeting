@@ -16,6 +16,19 @@ admin_logout:
     methods:  [GET]
 
 #
+# Account
+#
+admin_account:
+    path: /account
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Account:index }
+
+admin_update_password:
+    path: /account/password
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Account:updatePassword }
+
+#
 # Create Admin/Organizer
 #
 
@@ -29,14 +42,31 @@ admin_create_admin:
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Admin:create }
 
+admin_update_admin:
+    path: /admin/update/{admin}
+    methods: [GET, POST]
+    defaults: { _controller: VimeetAppBundle:Admin/Admin:update }
+
 #
 # Create Operator
 #
+
+admin_list_operator:
+    path: /operator
+    methods: [GET]
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:list }
 
 admin_create_operator:
     path: /operator/create
     methods: [GET, POST]
     defaults: { _controller: VimeetAppBundle:Admin/Operator:create }
+
+admin_update_operator:
+    path: /operator/update/{operator}
+    methods: [GET, POST]
+    requirements:
+        operator: \d+
+    defaults: { _controller: VimeetAppBundle:Admin/Operator:update }
 
 #
 # Activate Operator account
@@ -471,7 +501,10 @@ admin_template_list:
     defaults: { _controller: VimeetAppBundle:Admin/Template:list }
     methods: [GET, POST]
 admin_template_builder:
-    path: /template/{template}/builder
+    path: /template/{template}
     defaults: { _controller: VimeetAppBundle:Admin/Template:builder }
     methods: [GET]
-
+admin_template_save:
+    path: /template/{template}
+    defaults: { _controller: VimeetAppBundle:Admin/Template:save }
+    methods: [POST]

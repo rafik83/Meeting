@@ -136,14 +136,20 @@ flash:
         admin:
             create:
                 success: Le nouvel utilisateur a bien été créé
+            update:
+                success: L'utilisateur a bien été modifié
         sheet:
             add_comment:
                 success: Votre commentaire a bien été ajouté
         operator:
             create:
                 success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
+            update:
+                success: 'Le collaborateur a été édité avec succès'
         activate_account:
             success: Votre compte a été activé avec succès
+        change_password:
+            success: Votre mot de passe a été changé
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

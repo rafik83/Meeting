@@ -60,4 +60,14 @@ interface AdminRepositoryInterface
      * @return Admin[]
      */
     public function getFollowers(Event $event);
+
+    /**
+     * @param Admin $admin
+     * @param int   $page
+     * @param int   $limit
+     * @param array $filters
+     *
+     * @return Admin[]
+     */
+    public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters);
 }

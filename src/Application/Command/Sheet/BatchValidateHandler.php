@@ -54,7 +54,7 @@ class BatchValidateHandler
 
         // Validate sheets
         foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(new Validate($sheet));
+            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $batchValidate->date, $batchValidate->comment));
         }
 
         return new BatchResult(count($sheets));

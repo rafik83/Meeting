@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
+
 class BatchValidate
 {
     /**
@@ -18,12 +21,28 @@ class BatchValidate
     public $ids;
 
     /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $date;
+
+    /**
      * BatchValidate constructor.
      *
-     * @param array $ids
+     * @param array             $ids
+     * @param Admin             $admin
+     * @param DateTimeInterface $date
+     * @param string            $comment
      */
-    public function __construct(array $ids)
+    public function __construct(array $ids, Admin $admin, DateTimeInterface $date, $comment)
     {
-        $this->ids = $ids;
+        $this->ids     = $ids;
+        $this->admin   = $admin;
+        $this->date    = $date;
+        $this->comment = $comment;
     }
 }

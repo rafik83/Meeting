@@ -30,7 +30,8 @@ class CreateHandler extends AbstractCreateHandler
             $create->locale,
             $create->firstname,
             $create->lastname,
-            $create->role
+            $create->role,
+            $create->date
         );
 
         $password = $this->encoder->encode($admin, $create->password);

@@ -15,7 +15,12 @@
                 {% embed 'VimeetAppBundle:Admin/Common:batch.html.twig' %}
                     {% block actions %}
                         <li>
-                            {{ form_widget(batch_form.validate) }}
+                            {{ form_widget(batch_form.accept) }}
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#validate-comment">
+                                Valider
+                            </a>
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
@@ -46,6 +51,9 @@
                     {{ list_macros.choice_as_dropdown(filter_form.state) }}
                 </th>
                 <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.completed) }}
+                </th>
+                <th>
                     {{ list_macros.choice_as_dropdown(filter_form.category) }}
                 </th>
                 <th>
@@ -72,7 +80,16 @@
                         <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
                     </td>
                     <td>
-                        <span class="label label-default">{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        <span class="label label-default"
+                            {% if sheet.state == 'accepted' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ 'admin.sheet.acceptedAt'|trans({'%at%': sheet.acceptedAt|date('d/m/Y H:i'), '%by%': sheet.acceptedBy}) }}"
+                            {% endif %}
+                        >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                    </td>
+                    <td>
+                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
+                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
+                        </span>
                     </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
@@ -118,5 +135,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="validate-comment">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Valider les fiches</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.validateComment) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        {{ form_widget(batch_form.validate) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     {{ form_end(batch_form) }}
-{% endblock %}
+{% endblock content %}

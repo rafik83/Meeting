@@ -22,6 +22,11 @@ Proximum\Vimeet\Domain\Model\Admin:
             type: string
         role:
             type: string
+        createdAt:
+            type: datetime
+        lastLoginAt:
+            type: datetime
+            nullable: true
     manyToMany:
         events:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

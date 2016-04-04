@@ -8,7 +8,9 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Layla"
             - "GOI"
             - 'ROLE_SUPER_ADMIN'
+            - <dateTimeBetween('-10 days', 'now')>
         events: []
+        lastLoginAt: <dateTime()>
 
     user_orga:
         __construct:
@@ -19,8 +21,11 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Vincent"
             - "LAROSE"
             - 'ROLE_ORGANIZER'
+            - <dateTime()>
         events:
             - '@event_rdv_carnot_2016'
+            - '@event_asddays_2016'
+        lastLoginAt: <dateTime()>
 
     user_co:
         __construct:
@@ -31,5 +36,48 @@ Proximum\Vimeet\Domain\Model\Admin:
             - "Julien"
             - "GAGNARD"
             - 'ROLE_OPERATOR'
+            - <dateTime()>
         events:
             - '@event_rdv_carnot_2016'
+        lastLoginAt: <dateTime()>
+
+    user_co_2:
+        __construct:
+            - "gagnard2@proximumgroup.com"
+            - "AkV6xDVrMTmD285rboI/Z9G31Id+WrvtoaLs/q3A"
+            - "ENwYwD3WZei+Uv9Yl+DkbwlC6EY=" #vimeet_co
+            - 'fr'
+            - "Julien 2"
+            - "GAGNARD 2"
+            - 'ROLE_OPERATOR'
+            - <dateTime()>
+        events:
+            - '@event_rdv_carnot_2016'
+            - '@event_asddays_2016'
+        lastLoginAt: <dateTime()>
+    user_co_3:
+        __construct:
+            - "gagnard3@proximumgroup.com"
+            - "AkV6xDVrMTmD285rboI/Z9G31Id+WrvtoaLs/q3A"
+            - "ENwYwD3WZei+Uv9Yl+DkbwlC6EY=" #vimeet_co
+            - 'fr'
+            - "Julien 3"
+            - "GAGNARD 3"
+            - 'ROLE_OPERATOR'
+            - <dateTime()>
+        events:
+            - '@event_asddays_2016'
+        lastLoginAt: <dateTime()>
+    user_co_4:
+        __construct:
+            - "gagnard4@proximumgroup.com"
+            - "AkV6xDVrMTmD285rboI/Z9G31Id+WrvtoaLs/q3A"
+            - "ENwYwD3WZei+Uv9Yl+DkbwlC6EY=" #vimeet_co
+            - 'fr'
+            - "Julien 4"
+            - "GAGNARD 4"
+            - 'ROLE_OPERATOR'
+            - <dateTime()>
+        events:
+            - '@event_asddays_2016'
+        lastLoginAt: <dateTime()>

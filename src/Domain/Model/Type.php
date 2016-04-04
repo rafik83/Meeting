@@ -83,15 +83,21 @@ class Type implements WhoInterface
     private $categories;
 
     /**
+     * @var ValidationCriteria
+     */
+    private $validationCriteria;
+
+    /**
      * Type constructor.
      *
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event        = $event;
-        $this->translations = new ArrayCollection();
-        $this->categories   = new ArrayCollection();
+        $this->event              = $event;
+        $this->translations       = new ArrayCollection();
+        $this->categories         = new ArrayCollection();
+        $this->validationCriteria = new ValidationCriteria(false);
     }
 
     /**
@@ -331,6 +337,14 @@ class Type implements WhoInterface
         }
 
         return $this->$getter();
+    }
+
+    /**
+     * @return ValidationCriteria
+     */
+    public function getValidationCriteria()
+    {
+        return $this->validationCriteria;
     }
 
     /**

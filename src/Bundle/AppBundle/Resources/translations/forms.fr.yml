@@ -150,6 +150,11 @@ form:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
     type_update:
         children:
+            validationCriteria:
+                label: Critère de validation automatique des fiches de présentation
+                children:
+                    sheetAccepted:
+                        label: Fiche acceptée
             translations:
                 prototype:
                     children:
@@ -159,6 +164,11 @@ form:
                 label: Enregistrer
     type_create:
         children:
+            validationCriteria:
+                label: Critère de validation automatique des fiches de présentation
+                children:
+                    sheetAccepted:
+                        label: Fiche acceptée
             template:
                 label: Template
             translations:
@@ -568,6 +578,8 @@ form:
         children:
             state:
                 label: Etat
+            completed:
+                label: Complétude
             category:
                 label: Catégorie
             type:
@@ -591,13 +603,41 @@ form:
             submit:
                 label: Envoyer
         role:
+            organizer: Organisateur
+            operator: Collaborateur
+            super_admin: Administrateur
+    update_admin:
+        children:
+            email:
+                label: Email
+            password:
+                label: Mot de passe
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            role:
+                label: Type
+            events:
+                label: Événements
+            submit:
+                label: Envoyer
+        role:
             super_admin: Admin
             organizer: Organisateur
+            operator: Collaborateur
     filter_admin:
         role:
             all: Tous les types
             organizer: Organisateur
+            operator: Collaborateur
             super_admin: Admin
+        event:
+            all: Tous les événements
+        children:
+            submit:
+                label: Filtrer
+    filter_operator:
         event:
             all: Tous les événements
         children:
@@ -619,6 +659,18 @@ form:
                 label: Nom
             submit:
                 label: Envoyer
+    update_operator:
+        children:
+            email:
+                label: Email
+            firstname:
+                label: Prénom
+            lastname:
+                label: Nom
+            events:
+                label: Événements disponible pour ce collaborateur
+            submit:
+                label: Envoyer
     admin_activate_account_password:
         children:
             password:
@@ -633,10 +685,26 @@ form:
         children:
             validate:
                 label: Valider
+            validateComment:
+                label: Laisser un commentaire (optionnel)
             assign:
                 label: Assigner
+            accept:
+                label: Accepter
             follower:
                 label: Collaborateur
+    change_password_admin:
+        children:
+            currentPassword:
+                label: Mot de passe actuel
+            plainPassword:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            submit:
+                label: Envoyer
     sheet_template_create:
         children:
             title:

@@ -94,6 +94,12 @@ class SheetRepository implements SheetRepositoryInterface
                 ->setParameter('state', $filters['state']);
         }
 
+        if (isset($filters['completed']) && is_bool($filters['completed'])) {
+            $queryBuilder
+                ->andWhere('sheet.completed = :complete')
+                ->setParameter('complete', $filters['completed']);
+        }
+
         if (isset($filters['category'])) {
             $queryBuilder
                 ->andWhere('category = :category')

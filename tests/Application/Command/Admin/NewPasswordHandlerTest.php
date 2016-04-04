@@ -22,8 +22,9 @@ class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $admin             = new Admin('test@test.fr', 'test', 'test', 'fr', 'jean', 'paul', 'ROLE_ADMIN');
-        $expectedAdmin     = new Admin('test@test.fr', 'test', 'tatatata', 'fr', 'jean', 'paul', 'ROLE_ADMIN');
+        $dateTime          = new \DateTime();
+        $admin             = new Admin('test@test.fr', 'test', 'test', 'fr', 'jean', 'paul', 'ROLE_ADMIN', $dateTime);
+        $expectedAdmin     = new Admin('test@test.fr', 'test', 'tatatata', 'fr', 'jean', 'paul', 'ROLE_ADMIN', $dateTime);
         $command           = new NewPassword($admin);
         $command->password = 'totototo';
 
