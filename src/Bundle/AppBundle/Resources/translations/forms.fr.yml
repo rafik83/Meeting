@@ -150,6 +150,11 @@ form:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
     type_update:
         children:
+            validationCriteria:
+                label: Critère de validation automatique des fiches de présentation
+                children:
+                    sheetAccepted:
+                        label: Fiche acceptée
             translations:
                 prototype:
                     children:
@@ -159,6 +164,11 @@ form:
                 label: Enregistrer
     type_create:
         children:
+            validationCriteria:
+                label: Critère de validation automatique des fiches de présentation
+                children:
+                    sheetAccepted:
+                        label: Fiche acceptée
             template:
                 label: Template
             translations:
@@ -560,13 +570,15 @@ form:
             state:
                 label: Etat
             completed:
-                label: Complète
+                label: Complétude
             category:
                 label: Catégorie
             type:
                 label: Type
             follower:
                 label: Suivi commercial
+            sheet_name:
+                label: Titre de la fiche
     create_admin:
         children:
             email:
@@ -692,6 +704,12 @@ form:
                 label: Titre
             close:
                 label: Annuler
+            submit:
+                label: Enregistrer
+    sheet_template_duplicate:
+        children:
+            title:
+                label: Titre
             submit:
                 label: Enregistrer
     filter:

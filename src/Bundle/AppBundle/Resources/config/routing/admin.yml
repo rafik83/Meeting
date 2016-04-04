@@ -500,8 +500,15 @@ admin_template_list:
     path: /template
     defaults: { _controller: VimeetAppBundle:Admin/Template:list }
     methods: [GET, POST]
+admin_template_duplicate:
+    path: /template/{template}/duplicate
+    defaults: { _controller: VimeetAppBundle:Admin/Template:duplicate }
+    methods: [GET, POST]
 admin_template_builder:
-    path: /template/{template}/builder
+    path: /template/{template}
     defaults: { _controller: VimeetAppBundle:Admin/Template:builder }
     methods: [GET]
-
+admin_template_save:
+    path: /template/{template}
+    defaults: { _controller: VimeetAppBundle:Admin/Template:save }
+    methods: [POST]

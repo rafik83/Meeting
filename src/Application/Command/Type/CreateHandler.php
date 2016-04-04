@@ -41,6 +41,10 @@ class CreateHandler
             $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
         }
 
+        if (isset($create->validationCriteria['sheetAccepted'])) {
+            $type->getValidationCriteria()->setSheetAccepted($create->validationCriteria['sheetAccepted']);
+        }
+
         $this->typeRepository->add($type);
 
         $create->type = $type;

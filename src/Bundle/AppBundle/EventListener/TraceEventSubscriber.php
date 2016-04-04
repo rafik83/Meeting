@@ -43,9 +43,9 @@ class TraceEventSubscriber implements EventSubscriberInterface
         $this->addTrace(
             $event->getSheet(),
             Trace::ACCEPT,
-            $event->getAuthor(),
             $event->getDate(),
-            ''
+            '',
+            $event->getAuthor()
         );
     }
 
@@ -57,27 +57,27 @@ class TraceEventSubscriber implements EventSubscriberInterface
         $this->addTrace(
             $event->getSheet(),
             Trace::VALIDATE,
-            $event->getAuthor(),
             $event->getDate(),
-            $event->getComment()
+            $event->getComment(),
+            $event->getAuthor()
         );
     }
 
     /**
      * @param TraceableInterface $traceable
      * @param string             $action
-     * @param AbstractUser       $user
      * @param DateTimeInterface  $date
      * @param string             $comment
+     * @param AbstractUser|null  $user
      */
-    private function addTrace(TraceableInterface $traceable, $action, AbstractUser $user, DateTimeInterface $date, $comment)
+    private function addTrace(TraceableInterface $traceable, $action, DateTimeInterface $date, $comment, AbstractUser $user = null)
     {
         $trace = new Trace(
             $traceable,
             $action,
-            $user,
             $date,
-            $comment
+            $comment,
+            $user
         );
 
         $this->traceRepository->add($trace);

@@ -81,14 +81,19 @@ class SheetListView
     public $impersonationToken;
 
     /**
+     * @var string
+     */
+    public $traceAction;
+
+    /**
      * @var \DateTimeInterface
      */
-    public $acceptedAt = null;
+    public $traceAt = null;
 
     /**
      * @var string
      */
-    public $acceptedBy = null;
+    public $traceBy = null;
 
     /**
      * SheetListView constructor.
@@ -104,7 +109,7 @@ class SheetListView
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
-     * @param Trace|null           $accepted
+     * @param Trace|null           $trace
      */
     public function __construct(
         $id,
@@ -118,7 +123,7 @@ class SheetListView
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt,
         $impersonationToken,
-        Trace $accepted = null
+        Trace $trace = null
     ) {
         $this->id                 = $id;
         $this->title              = $title;
@@ -132,9 +137,10 @@ class SheetListView
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
 
-        if (null !== $accepted) {
-            $this->acceptedAt = $accepted->getDate();
-            $this->acceptedBy = $accepted->getAuthor();
+        if (null !== $trace) {
+            $this->traceAction = $trace->getAction();
+            $this->traceAt     = $trace->getDate();
+            $this->traceBy     = $trace->getAuthor();
         }
     }
 

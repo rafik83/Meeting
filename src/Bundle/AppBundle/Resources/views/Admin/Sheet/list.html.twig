@@ -7,6 +7,19 @@
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
 
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group">
+                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ form_widget(filter_part_form.sheetName) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
         {{ form_errors(batch_form) }}
 
@@ -30,15 +43,13 @@
                     {% endblock actions %}
                 {% endembed %}
             </div>
-            <div class="col-md-8 text-right">
-                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, true) }}
+            <div class="col-md-4">
+                {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_sheet', { 'event': event.id })
+                }) }}
             </div>
         </div>
-
-        {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
-            filters:   filters_summary,
-            resetLink: path('admin_sheet', { 'event': event.id })
-        }) }}
 
         <table class="table table-hover selectable-row filterable">
             <thead>
@@ -81,8 +92,8 @@
                     </td>
                     <td>
                         <span class="label label-default"
-                            {% if sheet.state == 'accepted' %}
-                                data-toggle="tooltip" data-placement="bottom" title="{{ 'admin.sheet.acceptedAt'|trans({'%at%': sheet.acceptedAt|date('d/m/Y H:i'), '%by%': sheet.acceptedBy}) }}"
+                            {% if sheet.state == 'accepted' or sheet.state == 'validated' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|date('d/m/Y H:i')}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
                             {% endif %}
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>

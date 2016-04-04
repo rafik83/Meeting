@@ -61,16 +61,16 @@ class Trace
     /**
      * @param TraceableInterface $traceable
      * @param string             $action
-     * @param AbstractUser       $abstractUser
      * @param DateTimeInterface  $date
      * @param string             $comment
+     * @param AbstractUser|null  $abstractUser
      */
     public function __construct (
         TraceableInterface $traceable,
         $action,
-        AbstractUser $abstractUser,
         DateTimeInterface $date,
-        $comment
+        $comment,
+        AbstractUser $abstractUser = null
     ) {
         $this->object  = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
         $this->action  = $action;
