@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,18 +26,16 @@ class FilterMeetingRequestType extends AbstractType
     {
         $builder
             ->add('state', ChoiceType::class, [
-                'label'             => false,
+                'label'             => 'form.meeting_request_filter.children.state.label',
                 'choices_as_values' => true,
                 'choices'           => [
-                    'form.admin.meeting_request.list.filter.state.children.approved' => Request::STATE_APPROVED,
-                    'form.admin.meeting_request.list.filter.state.children.cancel'   => Request::STATE_CANCEL,
-                    'form.admin.meeting_request.list.filter.state.children.refused'  => Request::STATE_REFUSED,
-                    'form.admin.meeting_request.list.filter.state.children.sent'     => Request::STATE_SENT,
+                    'admin.meeting_request.state.approved'  => Request::STATE_APPROVED,
+                    'admin.meeting_request.state.cancelled' => Request::STATE_CANCEL,
+                    'admin.meeting_request.state.refused'   => Request::STATE_REFUSED,
+                    'admin.meeting_request.state.sent'      => Request::STATE_SENT,
                 ],
                 'placeholder' => '',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'form.admin.meeting_request.list.filter.children.submit.label',
+                'choice_translation_domain' => 'messages',
             ]);
     }
 

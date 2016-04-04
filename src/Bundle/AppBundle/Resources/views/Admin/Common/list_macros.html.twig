@@ -25,16 +25,36 @@
     </div>
 {% endmacro %}
 
-{% macro choice_as_dropdown(choice) %}
-    <div class="dropdown">
-        <button id="{{ choice.vars.id }}-dropdown" class="btn btn-link btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ choice }}
+{% macro choice_as_dropdown(choice, btn_style = false, dropdown_menu_right = false, input_group = false) %}
+    <div class="{{ input_group ? 'input-group-btn' : 'dropdown' }}">
+        <a href="#" id="{{ choice.vars.id }}-dropdown" {{ btn_style ? 'class="btn btn-default"' : '' }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ choice.vars.label|trans({}, choice.vars.translation_domain) }}
             <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="{{ choice.vars.id }}-dropdown">
-            {% for choice in choice.vars.choices %}
-                <li><a href="?{{ app.request.query.all|merge({'state': choice.value})|url_encode }}">{{ choice.label|trans }}</a></li>
+        </a>
+        <ul class="dropdown-menu {{ dropdown_menu_right ? 'dropdown-menu-right' : '' }}" aria-labelledby="{{ choice.vars.id }}-dropdown">
+            {% set selectedValue = app.request.query.get(choice.vars.id) %}
+
+            {% if selectedValue != null %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): ''})|url_encode }}">
+                        {{ 'admin.filters.all'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for item in choice.vars.choices %}
+                <li {{ selectedValue == item.value ? 'class="active"' : '' }}>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value})|url_encode }}">
+                        {{ item.label|trans }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
+{% endmacro %}
+
+{% macro state_label(label, value, states) %}
+    <span class="label label-{{ states[value]|default('default') }}">
+        {{ label }}
+    </span>
 {% endmacro %}

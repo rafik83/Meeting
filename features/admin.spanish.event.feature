@@ -6,6 +6,7 @@ Feature: Update spanish event
     And the following fixtures files are loaded:
       | EventSpanish.yml |
       | Admin.yml        |
+    And elastica is populate
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"
     Then I should see "Evento en español"

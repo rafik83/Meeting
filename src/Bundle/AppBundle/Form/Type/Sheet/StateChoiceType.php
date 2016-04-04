@@ -25,6 +25,7 @@ class StateChoiceType extends AbstractType
         $resolver->setDefaults([
             'choices_as_values' => true,
             'choices'           => [
+                'event.sheet.state.pending'    => Sheet::STATE_PENDING,
                 'event.sheet.state.accepted'   => Sheet::STATE_ACCEPTED,
                 'event.sheet.state.validated'  => Sheet::STATE_VALIDATED,
             ],

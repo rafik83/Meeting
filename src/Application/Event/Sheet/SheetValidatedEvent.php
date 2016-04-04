@@ -41,11 +41,11 @@ class SheetValidatedEvent extends Event
      * SheetValidatedEvent constructor.
      *
      * @param Sheet             $sheet
-     * @param AbstractUser      $user
      * @param DateTimeInterface $date
      * @param string            $comment
+     * @param AbstractUser      $user
      */
-    public function __construct(Sheet $sheet, AbstractUser $user, DateTimeInterface $date, $comment)
+    public function __construct(Sheet $sheet, DateTimeInterface $date, $comment, AbstractUser $user = null)
     {
         $this->sheet   = $sheet;
         $this->user    = $user;

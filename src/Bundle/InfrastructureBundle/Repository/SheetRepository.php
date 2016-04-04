@@ -112,6 +112,38 @@ class SheetRepository implements SheetRepositoryInterface
                 ->setParameter('type', $filters['type']);
         }
 
+        if (isset($filters['follower'])) {
+            $queryBuilder
+                ->andWhere('sheet.follower = :follower')
+                ->setParameter('follower', $filters['follower']);
+        }
+
+        if (isset($filters['predefined'])) {
+            if ($filters['predefined'] === 'created_today') {
+                $queryBuilder
+                    ->andWhere('sheet.createdAt BETWEEN :begin AND :end')
+                    ->setParameter('begin', (new \DateTime())->format('Y-m-d 0:0:0'))
+                    ->setParameter('end', (new \DateTime())->format('Y-m-d 23:59:59'));
+            } elseif ($filters['predefined'] === 'created_this_week') {
+                $now = new \DateTime();
+                $dayOfWeek = $now->format('N');
+
+                $beginWeek = clone $now;
+
+                if ($dayOfWeek > 1) {
+                    $beginWeek->modify(sprintf('-%s day', $dayOfWeek - 1));
+                }
+
+                $endWeek = clone $beginWeek;
+                $endWeek->modify('+6 day');
+
+                $queryBuilder
+                    ->andWhere('sheet.createdAt BETWEEN :begin AND :end')
+                    ->setParameter('begin', $beginWeek->format('Y-m-d 0:0:0'))
+                    ->setParameter('end', $endWeek->format('Y-m-d 23:59:59'));
+            }
+        }
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }
 

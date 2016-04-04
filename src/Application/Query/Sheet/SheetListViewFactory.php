@@ -13,20 +13,20 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 
 class SheetListViewFactory
 {
     /**
-     * @var SheetRepositoryInterface
+     * @var SheetSearchAdapterInterface
      */
-    private $sheetRepository;
+    private $sheetSearchAdapter;
 
     /**
      * @var SheetInfoGuesser
@@ -51,23 +51,23 @@ class SheetListViewFactory
     /**
      * SheetOwnerView constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
-     * @param ParticipantInfoGuesser   $participantInfoGuesser
-     * @param Impersonate              $impersonate
-     * @param TraceRepositoryInterface $traceRepository
+     * @param SheetInfoGuesser            $sheetInfoGuesser
+     * @param ParticipantInfoGuesser      $participantInfoGuesser
+     * @param Impersonate                 $impersonate
+     * @param SheetSearchAdapterInterface $sheetSearchAdapter
+     * @param TraceRepositoryInterface    $traceRepository
      */
     public function __construct(
-        SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
+        SheetSearchAdapterInterface $sheetSearchAdapter,
         TraceRepositoryInterface $traceRepository
     ) {
-        $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
+        $this->sheetSearchAdapter     = $sheetSearchAdapter;
         $this->traceRepository        = $traceRepository;
     }
 
@@ -83,7 +83,8 @@ class SheetListViewFactory
      */
     public function paginate(Event $event, array $filters, $page, $limit, $locale, Admin $admin)
     {
-        $sheets          = $this->sheetRepository->paginate($filters, $page, $limit, $event, $locale);
+        $sheets = $this->sheetSearchAdapter->find($event, $filters, $page, $limit, $locale);
+
         $sheets->results = array_map(function (Sheet $sheet) use ($locale, $admin) {
             return $this->createFromSheet($sheet, $locale, $admin);
         }, $sheets->results);
@@ -100,6 +101,14 @@ class SheetListViewFactory
      */
     public function createFromSheet(Sheet $sheet, $locale, Admin $admin)
     {
+        $trace = null;
+
+        if ($sheet->isAccepted()) {
+            $trace = $this->traceRepository->getLastAcceptBySheet($sheet);
+        } elseif ($sheet->isValidated()) {
+            $trace = $this->traceRepository->getLastValidateBySheet($sheet);
+        }
+
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
@@ -116,7 +125,7 @@ class SheetListViewFactory
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
-            $this->traceRepository->getLastAcceptBySheet($sheet)
+            $trace
         );
     }
 }

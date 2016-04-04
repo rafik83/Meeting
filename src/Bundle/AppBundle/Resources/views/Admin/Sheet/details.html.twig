@@ -111,11 +111,14 @@
     </div>
 
     {% if details.traces %}
-    <h3>Historique</h3>
+    <h3>{{ 'admin.sheet.details.historic.title'|trans }}</h3>
     <div class="row">
         <ul>
             {% for trace in details.traces %}
-                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|date('d/m/Y H:i'), '%by%': trace.author, '%comment%': trace.comment}) }}</li>
+                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|date('d/m/Y H:i')}) }}
+                    {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
+                    {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
+                </li>
             {% endfor %}
         </ul>
     </div>
