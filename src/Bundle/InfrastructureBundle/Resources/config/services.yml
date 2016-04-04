@@ -926,8 +926,24 @@ services:
     query.sheet.sheet_list_view_factory:
         class: Proximum\Vimeet\Application\Query\Sheet\SheetListViewFactory
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@security.impersonate'
+            - '@adapter.sheet_search_adapter'
             - '@repository.trace_repository'
+
+    #
+    # Elastic Transformer
+    #
+    transformer.elastic.sheet_elastic_transformer:
+        class: Proximum\Vimeet\Application\Transformer\Elastic\SheetElasticTransformer
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    #
+    # Elastic Adapter
+    #
+    adapter.sheet_search_adapter:
+        class: Proximum\Vimeet\Bundle\InfrastructureBundle\Adapter\SheetSearchAdapter
+        arguments:
+             - '@fos_elastica.finder.app.sheet'

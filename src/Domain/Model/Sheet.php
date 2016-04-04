@@ -317,9 +317,11 @@ class Sheet implements BillingInfoInterface, TraceableInterface
      */
     public function getOwner()
     {
-        foreach ($this->getParticipants() as $participant) {
-            if ($participant->isOwner()) {
-                return $participant;
+        if ($this->participants !== null) {
+            foreach ($this->getParticipants() as $participant) {
+                if ($participant->isOwner()) {
+                    return $participant;
+                }
             }
         }
 

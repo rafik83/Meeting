@@ -19,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: "@type_exposant"
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        data: []
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:

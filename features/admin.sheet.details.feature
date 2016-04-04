@@ -11,7 +11,8 @@ Feature: See sheet details
       | User.yml                               |
       | TwoSheetSeveralParticipantWithData.yml |
       | Admin.yml                              |
-    Given I am logged with "test@test.com" on admin
+    Given elastica is populate
+    And I am logged with "test@test.com" on admin
     And I go to "/admin/fr/event"
 
   Scenario: I can see the details of a sheet

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,8 +25,8 @@ class PredefinedFiltersChoiceType extends AbstractType
         $resolver->setDefaults([
             'choices_as_values' => true,
             'choices'           => [
-                'admin.sheet.created_today'     => 'created_today',
-                'admin.sheet.created_this_week' => 'created_this_week',
+                'admin.sheet.created_today'     => Constant::CREATED_TODAY,
+                'admin.sheet.created_this_week' => Constant::CREATED_THIS_WEEK,
             ],
         ]);
     }

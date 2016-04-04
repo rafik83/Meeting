@@ -7,6 +7,19 @@
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
 
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group">
+                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ form_widget(filter_part_form.sheetName) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
         {{ form_errors(batch_form) }}
 
@@ -30,15 +43,13 @@
                     {% endblock actions %}
                 {% endembed %}
             </div>
-            <div class="col-md-8 text-right">
-                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, true) }}
+            <div class="col-md-4">
+                {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_sheet', { 'event': event.id })
+                }) }}
             </div>
         </div>
-
-        {{ include('VimeetAppBundle:Admin/Common:filters_summary.html.twig', {
-            filters:   filters_summary,
-            resetLink: path('admin_sheet', { 'event': event.id })
-        }) }}
 
         <table class="table table-hover selectable-row filterable">
             <thead>

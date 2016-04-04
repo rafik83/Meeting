@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
 use Proximum\Vimeet\Bundle\AppBundle\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\BatchType;
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterFullType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,18 +42,24 @@ class SheetController extends Controller
 
         $locale   = $event->getAvailableLocale($request->getLocale());
 
-        $filters    = [];
-        $filterForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $locale]);
-        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+        $filters        = [];
+        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, ['event' => $event, 'locale' => $locale]);
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, ['event'  => $event, 'locale' => $locale]);
+        $filterPartForm->handleRequest(Request::create($request->getUri()));
+        $filtered       = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
 
         if ($filtered) {
-            $filters = $filterForm->getData();
+            $filters = $filterFullForm->getData();
         }
 
         // Pagination
-        $sheets = $this
-            ->get('query.sheet.sheet_list_view_factory')
-            ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+        try {
+            $sheets = $this
+                ->get('query.sheet.sheet_list_view_factory')
+                ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+        } catch (UnavailableCurrentPageException $ex) {
+            throw $this->createNotFoundException($ex->getMessage());
+        }
 
         // Batch
         $batch     = new Batch($this->getUser(), new \DateTime());
@@ -61,15 +69,16 @@ class SheetController extends Controller
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
 
-        $filterFormView = $filterForm->createView();
+        $filterFormView = $filterFullForm->createView();
 
         return $this->render('VimeetAppBundle:Admin/Sheet:list.html.twig', [
-            'event'           => $event,
-            'sheets'          => $sheets,
-            'filter_form'     => $filterFormView,
-            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
-            'filtered'        => $filtered,
-            'batch_form'      => $batchForm->createView(),
+            'event'            => $event,
+            'sheets'           => $sheets,
+            'filter_form'      => $filterFormView,
+            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filtered'         => $filtered,
+            'batch_form'       => $batchForm->createView(),
+            'filter_part_form' => $filterPartForm->createView(),
         ]);
     }
 
