@@ -52,6 +52,9 @@ class SheetDetailsViewFactory
      */
     private $commentRepository;
 
+    /**
+     * @var TraceRepositoryInterface
+     */
     private $traceRepository;
 
     /**
