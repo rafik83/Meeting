@@ -11,8 +11,17 @@ default_event:
     path: /
     methods: [GET]
 
+default_admin:
+    path: /admin
+    host: '%domain%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /admin/%locale%/
+        permanent: true
+    methods: [GET]
+
 vimeet_admin:
-    resource: '@VimeetAppBundle/Resources/config/routing/admin.yml'
+    resource: '@AdminBundle/Resources/config/routing.yml'
     prefix:   /admin/{_locale}
     requirements:
         _locale: fr|en
@@ -21,5 +30,5 @@ vimeet_admin:
     host:     '%domain%'
 
 vimeet_event:
-    resource: '@VimeetAppBundle/Resources/config/routing/event.yml'
+    resource: '@EventBundle/Resources/config/routing.yml'
     prefix:   /{_locale}

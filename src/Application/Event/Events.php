@@ -14,4 +14,5 @@ final class Events
 {
     const SHEET_VALIDATED = 'sheet.validated';
     const SHEET_ACCEPTED  = 'sheet.accepted';
+    const USER_MAIL_CHANGED = 'change_mail';
 }

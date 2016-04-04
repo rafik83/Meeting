@@ -1,0 +1,111 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+
+use Proximum\Vimeet\Application\Command\Type\Create;
+use Proximum\Vimeet\Application\Command\Type\Update;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class TypeController extends Controller
+{
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function listAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $types = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
+
+        return $this->render('AdminBundle:Type:list.html.twig', [
+            'event' => $event,
+            'types' => $types,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function createAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $create = new Create($event);
+        $form   = $this->createForm(TypeCreateType::class, $create, [
+            'action' => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.type.create_handler')->handle($create);
+            $this->addFlash('success', 'flash.admin.type.create.success');
+
+            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Type:create.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Type    $type
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request, Event $event, Type $type)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $type->getEvent()) {
+            throw $this->createNotFoundException('Type not found.');
+        }
+
+        $update = new Update($type);
+        $form   = $this->createForm(TypeUpdateType::class, $update, [
+            'action' => $this->generateUrl('admin_type_update', ['event' => $event->getId(), 'type' => $type->getId()]),
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.vimeet.application.command.type.update_handler')->handle($update);
+            $this->addFlash('success', 'flash.admin.type.update.success');
+
+            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Type:update.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+}

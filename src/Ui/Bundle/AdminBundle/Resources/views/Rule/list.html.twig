@@ -1,0 +1,51 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>Ajouter une règle</h2>
+
+    {{ form(form) }}
+
+    <h2>Liste des règles</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Qui</th>
+                <th>Voit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in rules %}
+                <tr>
+                    <td>
+                        {% if rule.seerType %}
+                            Type "{{ rule.seerType.getTitle(locale) }}"
+                        {% elseif rule.seerCategory %}
+                            Catégorie "{{ rule.seerCategory.getTitle(locale) }}"
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rule.seeableType %}
+                            Type "{{ rule.seeableType.getTitle(locale) }}"
+                        {% elseif rule.seeableCategory %}
+                            Catégorie "{{ rule.seeableCategory.getTitle(locale) }}"
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_who_see_who_dont_see_what', { 'event': event.id, 'seerIdentifier': rule.seer.identifier, 'seerId': rule.seer.id, 'seeableIdentifier': rule.seeable.identifier, 'seeableId': rule.seeable.id }) }}" class="btn btn-primary btn-sm">Ne voit pas quoi</a>
+                        <form action="{{ path('admin_rule_delete', { 'event': event.id, 'rule': rule.id }) }}" method="POST" style="display: inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+{% endblock %}

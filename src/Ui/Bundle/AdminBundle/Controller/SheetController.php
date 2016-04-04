@@ -1,0 +1,178 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+
+use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
+use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
+use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class SheetController extends Controller
+{
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function listAction(Request $request, Event $event)
+    {
+        // Access
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $locale   = $event->getAvailableLocale($request->getLocale());
+
+        $filters        = [];
+        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, ['event' => $event, 'locale' => $locale]);
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, ['event'  => $event, 'locale' => $locale]);
+        $filterPartForm->handleRequest(Request::create($request->getUri()));
+        $filtered       = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
+
+        if ($filtered) {
+            $filters = $filterFullForm->getData();
+        }
+
+        // Pagination
+        try {
+            $sheets = $this
+                ->get('query.sheet.sheet_list_view_factory')
+                ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+        } catch (UnavailableCurrentPageException $ex) {
+            throw $this->createNotFoundException($ex->getMessage());
+        }
+
+        // Batch
+        $batch     = new Batch($this->getUser(), new \DateTime());
+        $batchForm = $this->createForm(BatchType::class, $batch, [
+            'ids'    => $sheets->map(function (SheetListView $listView) { return $listView->id; }),
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
+        ]);
+
+        $filterFormView = $filterFullForm->createView();
+
+        return $this->render('AdminBundle:Sheet:list.html.twig', [
+            'event'            => $event,
+            'sheets'           => $sheets,
+            'filter_form'      => $filterFormView,
+            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filtered'         => $filtered,
+            'batch_form'       => $batchForm->createView(),
+            'filter_part_form' => $filterPartForm->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse
+     */
+    public function batchAction(Request $request, Event $event)
+    {
+        $batch     = new Batch($this->getUser(), new \DateTime());
+        $batchForm = $this->createForm(BatchType::class, $batch, [
+            'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
+        ]);
+
+        if ($batchForm->handleRequest($request)->isSubmitted()) {
+            if ($batchForm->isValid()) {
+                $batch->validate = $batchForm->get('validate')->isClicked();
+                $batch->assign   = $batchForm->get('assign')->isClicked();
+                $batch->accept   = $batchForm->get('accept')->isClicked();
+
+                $result = $this->get('command.sheet.batch_handler')->handle($batch);
+
+                if ($batch->validate) {
+                    $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count, ['%count%' => $result->count]));
+                } elseif ($batch->assign && $batch->follower) {
+                    $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count, ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
+                }
+            } else {
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
+            }
+        }
+
+        return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
+    }
+
+    /**
+     * @param string $type
+     * @param string $data
+     * @param array  $options
+     *
+     * @return FormInterface
+     */
+    private function createFilterForm($type, $data, array $options = [])
+    {
+        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+            'method'          => 'GET',
+            'csrf_protection' => false,
+            'required'        => false,
+        ]));
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     *
+     * @return Response
+     */
+    public function detailsAction(Request $request, Event $event, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
+
+        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
+
+        $form = $this->createForm(CommentType::class, $addComment, [
+            'action' => $this->generateUrl('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]),
+            'method' => 'POST',
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.sheet.add_comment_handler')->handle($addComment);
+            $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
+
+            return $this->redirectToRoute('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
+        return $this->render('AdminBundle:Sheet:details.html.twig', [
+            'event'   => $event,
+            'sheet'   => $sheet,
+            'details' => $details,
+            'form'    => $form->createView(),
+        ]);
+    }
+}

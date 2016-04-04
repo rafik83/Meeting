@@ -1,0 +1,4 @@
+services:
+#    mail.example:
+#        class: Proximum\Vimeet\Ui\Bundle\MailBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

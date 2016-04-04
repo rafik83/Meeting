@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository;
+use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class ActivateAccountPasswordHandler
@@ -33,21 +33,21 @@ class ActivateAccountPasswordHandler
     private $saltGenerator;
 
     /**
-     * @var ActivateAccountTokenRepository
+     * @var ActivateAccountTokenRepositoryInterface
      */
     private $activateAccountTokenRepository;
 
     /**
-     * @param AdminRepositoryInterface       $adminRepository
-     * @param PasswordEncoderInterface       $encoder
-     * @param SaltGeneratorInterface         $saltGenerator
-     * @param ActivateAccountTokenRepository $activateAccountTokenRepository
+     * @param AdminRepositoryInterface                $adminRepository
+     * @param PasswordEncoderInterface                $encoder
+     * @param SaltGeneratorInterface                  $saltGenerator
+     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
-        ActivateAccountTokenRepository $activateAccountTokenRepository
+        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
     ) {
         $this->adminRepository                = $adminRepository;
         $this->encoder                        = $encoder;

@@ -1,0 +1,60 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+
+    <div data-template-builder="{{ path('admin_template_save', { 'template': template.id }) }}" class="template-builder">
+
+        <div class="container-fluid">
+            <h1 class="page-header">{{ template.title }} <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button></h1>
+        </div>
+
+        <div class="block">
+            <span class="delete"></span>
+            <div class="template-container container-fluid block-inner" id="template-container">
+                {% for uid, item in template.value|default([]) %}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="slide-menu-container" id="template-menu">
+            <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </button>
+            <div class="slide-menu-wrapper">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">Blocks</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">Objets</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="blocks">
+                        <div id="block-list" class="block-list">
+                            {{ include('AdminBundle:Template/Block:8-4.html.twig') }}
+                            {{ include('AdminBundle:Template/Block:6-6.html.twig') }}
+                            {{ include('AdminBundle:Template/Block:12.html.twig') }}
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="objects">
+                        <div id="object-list" class="object-list">
+                            {{ include('AdminBundle:Template/Object:text.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:editable-text.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:button-link.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:participant.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:choice.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:image.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:tag.html.twig') }}
+                            {{ include('AdminBundle:Template/Object:collection.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

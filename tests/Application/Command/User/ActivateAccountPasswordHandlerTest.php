@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPasswordHandler;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\User\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository                 = $this->prophesize(UserRepositoryInterface::class);
         $encoder                        = $this->prophesize(PasswordEncoderInterface::class);
         $saltGenerator                  = $this->prophesize(SaltGeneratorInterface::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
 
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__SALT__');
         $encoder->encode(Argument::that(function (User $encodedUser) use ($user) {
