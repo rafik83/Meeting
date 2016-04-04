@@ -49,6 +49,8 @@ elao_apt_preferences:
   - nodejs@nodesource_0_12
   # App
   - mysql@dotdeb
+  # Elasticsearch
+  - elasticsearch@elasticsearch_1_7
 
 elao_apt_packages: []
 
@@ -236,3 +238,11 @@ _all_nginx_configs:
 elao_npm_packages:
   - name:    gulp
     version: 3
+
+#################
+# Elasticsearch #
+#################
+
+elao_elasticsearch_plugins:
+  - name:       head
+    repository: mobz/elasticsearch-head
