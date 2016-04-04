@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
+use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -24,20 +25,26 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         //Context
         $event = new Event();
-        $event->setLocales([]);
-        $template = new Template('test', [], [], [], '', '');
+        $event->setLocales(['fr']);
+        $template      = new Template('test', [], [], [], '', '');
+        $sheetTemplate = new SheetTemplate('base toto', '');
+
 
         //Expected
+        $expectedSheetTemplate = new SheetTemplate('toto', '');
+        $expectedSheetTemplate->setEvent($event);
         $expectedType = new Type($event);
         $expectedType->setTemplate($template);
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
+        $expectedType->setSheetTemplate($expectedSheetTemplate);
 
         //Command
-        $create = new Create($event);
+        $create = new Create($event, 'fr');
         $create->template = $template;
         $create->translations['fr']['title'] = 'toto';
         $create->validationCriteria['sheetAccepted'] = true;
+        $create->sheetTemplate = $sheetTemplate;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
