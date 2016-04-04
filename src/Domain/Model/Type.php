@@ -169,6 +169,14 @@ class Type implements WhoInterface
     }
 
     /**
+     * @return SheetTemplate
+     */
+    public function getNewSheetTemplate()
+    {
+        return $this->sheetTemplate;
+    }
+
+    /**
      * Get sheetTemplate.
      *
      * @return array

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
