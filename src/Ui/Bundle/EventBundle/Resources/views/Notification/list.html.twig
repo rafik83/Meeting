@@ -1,0 +1,32 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <h2>Notifications</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Message</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notifications %}
+                <tr{% if not notification.read %} class="notification-not-read"{% endif %}>
+                    <td>{{ ('notification.' ~ notification.action ~ '.action')|trans({}, 'notifications') }}</td>
+                    <td>
+                        {% if notification.url %}
+                            <a href="{{ notification.id ? path('event_notification_read', { 'notification': notification.id }) : notification.url }}">{{ notification.message }}</a>
+                        {% else %}
+                            {{ notification.message }}
+                        {% endif %}
+                    </td>
+                    <td>{{ notification.date|date('d/m/Y H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

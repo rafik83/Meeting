@@ -1,0 +1,65 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h2>Liste des lieux</h2>
+
+    <h3>Filtrer par statut</h3>
+
+    {{ form_start(filter_form) }}
+        <div class="row">
+            {{ form_row(filter_form.reference, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.meetingCapacity, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.seatCapacity, { 'group_attr': { 'class': 'col-md-4' } }) }}
+        </div>
+        <div class="row">
+            {{ form_row(filter_form.size, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            {{ form_row(filter_form.active, { 'group_attr': { 'class': 'col-md-4' } }) }}
+            <div class="col-md-4 text-right">
+                {% if filtered %}
+                    <a href="{{ path('admin_spot_list', { 'event': event.id }) }}" class="btn btn-link"><i class="glyphicon glyphicon-remove"></i> Vider les filtres</a>
+                {% endif %}
+                {{ form_widget(filter_form.submit) }}
+            </div>
+        </div>
+    {{ form_end(filter_form) }}
+
+    <form action="{{ path('admin_spot_batch', { 'event': event.id }) }}" method="POST">
+        <div class="text-right mg-bt">
+            <a href="{{ path('admin_spot_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.spot.listSpot.add'|trans }}</a>
+            <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">Créer en lot</a>
+            <button class="btn btn-primary" name="delete" value="1" type="submit">{{ 'admin.spot.delete'|trans }}</button>
+            <button class="btn btn-primary" name="enable" value="1" type="submit">{{ 'admin.spot.enable'|trans }}</button>
+            <button class="btn btn-primary" name="disable" value="1" type="submit">{{ 'admin.spot.disable'|trans }}</button>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'admin.spot.listSpot.reference'|trans }}</th>
+                    <th>{{ 'admin.spot.listSpot.size'|trans }}</th>
+                    <th>{{ 'admin.spot.listSpot.meetingCapacity'|trans }}</th>
+                    <th>{{ 'admin.spot.listSpot.seatCapacity'|trans }}</th>
+                    <th>{{ 'admin.spot.listSpot.active'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for spot in spots %}
+                    <tr>
+                        <td><input id="{{ 'admin.spot.list.checkbox'|trans }}" type="checkbox" name="ids[]" value="{{ spot.id }}" title="{{ spot.reference }}" /></td>
+                        <td class="updatable" data-type="string" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
+                        <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
+                        <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
+                        <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
+                        <td>{{ spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+
+{% endblock %}

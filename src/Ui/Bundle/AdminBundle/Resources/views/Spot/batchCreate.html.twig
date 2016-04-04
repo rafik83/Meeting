@@ -1,0 +1,14 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% form_theme form 'AdminBundle:Spot:theme.html.twig' %}
+
+{% block content %}
+
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>{{ 'admin.spot.batch_create.title'|trans }}</h2>
+
+    {{ form(form) }}
+
+{% endblock %}
+

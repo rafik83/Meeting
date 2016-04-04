@@ -1,0 +1,167 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+
+{% block list_title 'admin.sheet.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ block('list_title') }}</h1>
+
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group">
+                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ form_widget(filter_part_form.sheetName) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
+    {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
+        {{ form_errors(batch_form) }}
+
+        <div class="row filters">
+            <div class="col-md-4">
+                {% embed 'AdminBundle:Common:batch.html.twig' %}
+                    {% block actions %}
+                        <li>
+                            {{ form_widget(batch_form.accept) }}
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#validate-comment">
+                                Valider
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
+                                {{ 'admin.sheet.commercialFollowUp'|trans }}
+                            </a>
+                        </li>
+                    {% endblock actions %}
+                {% endembed %}
+            </div>
+            <div class="col-md-4">
+                {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_sheet', { 'event': event.id })
+                }) }}
+            </div>
+        </div>
+
+        <table class="table table-hover selectable-row filterable">
+            <thead>
+            <tr>
+                <th class="minwidth">
+                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
+                </th>
+                <th></th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.state) }}
+                </th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.completed) }}
+                </th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.category) }}
+                </th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.type) }}
+                </th>
+                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
+                <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
+                <th>
+                    {{ list_macros.choice_as_dropdown(filter_form.follower) }}
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="sheet-table">
+            {% for sheet in sheets.results %}
+                <tr>
+                    <td>
+                        {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
+                            {{ sheet.title }}
+                        </a><br>
+                        <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
+                    </td>
+                    <td>
+                        <span class="label label-default"
+                            {% if sheet.state == 'accepted' or sheet.state == 'validated' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|date('d/m/Y H:i')}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
+                            {% endif %}
+                        >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                    </td>
+                    <td>
+                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
+                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
+                        </span>
+                    </td>
+                    <td>{{ sheet.categories|join(', ') }}</td>
+                    <td>{{ sheet.type }}</td>
+                    <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if sheet.lastLoginAt %}
+                            {{ sheet.lastLoginAt|date('d/m/Y H:i') }}
+                        {% endif %}
+                    </td>
+                    <td>{{ sheet.follower }}</td>
+                    <td class="text-right">
+                        {{ list_macros.btnGroupAndRightMenuDropdown({
+                            ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
+                            ('admin.order.link'|trans): path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }),
+                            ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
+                        }) }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{ 'admin.sheet.commercialFollowUp'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.follower) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                        {{ form_widget(batch_form.assign) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="validate-comment">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Valider les fiches</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.validateComment) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        {{ form_widget(batch_form.validate) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(batch_form) }}
+{% endblock content %}

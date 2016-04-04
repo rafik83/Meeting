@@ -1,0 +1,69 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(totalRequest, {'%count%': totalRequest}) }}</h1>
+
+    {{ include('AdminBundle:Common:filters_summary.html.twig', {
+        filters:   filters_summary,
+        resetLink: path('admin_meeting_request_list', { 'event': event.id })
+    }) }}
+
+    <table class="table table-hover filterable">
+        <thead>
+        <tr>
+            <th>{{ 'admin.meeting_request.from'|trans }}</th>
+            <th>{{ 'admin.meeting_request.to'|trans }}</th>
+            <th>{{ 'admin.meeting_request.createdAt'|trans }}</th>
+            <th>{{ list_macros.choice_as_dropdown(filter_form.state) }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for meeting_request in meeting_requests.results %}
+            <tr>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetFromId }) }}">
+                        {{ meeting_request.sheetNameFrom }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': meeting_request.sheetToId }) }}">
+                        {{ meeting_request.sheetNameTo }}
+                    </a>
+                </td>
+                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
+                <td>
+                    {{ list_macros.state_label(
+                        ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
+                        meeting_request.state,
+                        {
+                            'sent': 'default',
+                            'approved': 'success',
+                            'refused': 'danger',
+                            'cancelled': 'danger',
+                        }
+                    ) }}
+                </td>
+                <td class="text-right">
+                    {{ list_macros.btnGroupAndRightMenuDropdown({
+                        ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
+                    }|merge(meeting_request.state != 'approved'
+                        ? {}
+                        : { ('admin.meeting_request.set_a_meeting'|trans): path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }
+                    )) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">
+                    {{ 'admin.zero-result'|trans }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': meeting_requests}) }}
+{% endblock %}

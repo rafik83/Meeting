@@ -1,0 +1,41 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>{{ 'admin.happening.title'|trans }}</h2>
+
+    <h3>{{ 'admin.happening_category.title'|trans }}</h3>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Position</th>
+            <th>Titre</th>
+            <th>Picto</th>
+            <th>
+                <a href="{{ path('admin_happening_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
+                    {{ 'admin.happening_category.add'|trans }}
+                </a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.position }}</td>
+                <td>{{ category.title }}</td>
+                <td>{{ category.picto }}</td>
+                <td>
+                    <a href="{{ path('admin_happening_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-default">
+                        {{ 'admin.happening_category.update'|trans }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-left">
+        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour</a>
+    </div>
+{% endblock %}

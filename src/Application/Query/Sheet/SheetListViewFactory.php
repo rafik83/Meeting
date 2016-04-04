@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Bundle\AppBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -20,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class SheetListViewFactory
 {
@@ -49,7 +49,7 @@ class SheetListViewFactory
     private $traceRepository;
 
     /**
-     * SheetOwnerView constructor.
+     * SheetListViewFactory constructor.
      *
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
@@ -67,6 +67,7 @@ class SheetListViewFactory
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
+        $this->traceRepository        = $traceRepository;
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
         $this->traceRepository        = $traceRepository;
     }

@@ -13,12 +13,12 @@ _errors:
 event_login_user:
     path:     /{_locale}/login/{user}
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Event/Security:loginUser }
+    defaults: { _controller: EventBundle:Security:loginUser }
 
 admin_login_user:
     path:     /admin/{_locale}/login/{admin}
     methods:  [GET]
-    defaults: { _controller: VimeetAppBundle:Admin/Security:loginUser }
+    defaults: { _controller: AdminBundle:Security:loginUser }
 
 _main:
     resource: routing.yml

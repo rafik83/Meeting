@@ -1,0 +1,109 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
+
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\EventView;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
+
+class SecurityController extends Controller
+{
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     *
+     * @return Response|RedirectResponse
+     */
+    public function loginAction(Request $request, EventView $eventView)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('event');
+        }
+
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        $user = ['username' => $authenticationUtils->getLastUsername()];
+
+        $form = $this->createForm(LoginType::class, $user, [
+            'action' => $this->generateUrl('event_login_check'),
+        ]);
+
+        $users = $this->get('kernel')->getEnvironment() === 'dev' ?
+            $this->get('vimeet_infrastructure.repository.user_repository')->all() :
+            [];
+
+        return $this->render('EventBundle:Security:login.html.twig', [
+            'eventView' => $eventView,
+            'error'     => $error,
+            'form'      => $form->createView(),
+            'users'     => $users,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     *
+     * @return Response|RedirectResponse
+     */
+    public function logoutConfirmationAction(Request $request, EventView $eventView)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        return $this->render('EventBundle:Security:logout_confirmation.html.twig', [
+            'eventView' => $eventView,
+        ]);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function loginUserAction(User $user)
+    {
+        $this->get('adapter.authentication_manager')->authenticate($user, 'main');
+
+        return $this->redirectToRoute('event');
+    }
+
+    /**
+     * @param EventView $eventView
+     *
+     * @return Response
+     */
+    public function impersonatingUserAction(EventView $eventView)
+    {
+        $impersonatingUser = null;
+
+        if (null !== $token = $this->get('security.token_storage')->getToken()) {
+            $roles = $token->getRoles();
+
+            foreach ($roles as $role) {
+                if ($role instanceof SwitchUserRole) {
+                    $impersonatingUser = $role->getSource()->getUser();
+                }
+            }
+        }
+
+        return $this->render('EventBundle:Security:impersonating.html.twig', [
+            'impersonatingUser' => $impersonatingUser,
+            'eventView'         => $eventView,
+        ]);
+    }
+}
