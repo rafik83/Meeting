@@ -25,6 +25,11 @@ class Update
     public $translations = [];
 
     /**
+     * @var array
+     */
+    public $validationCriteria = [];
+
+    /**
      * Update constructor.
      *
      * @param Type $type
@@ -32,6 +37,7 @@ class Update
     public function __construct(Type $type)
     {
         $this->type = $type;
+        $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
 
         foreach ($type->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

@@ -68,4 +68,18 @@ class Template
     {
         return $this->value;
     }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     *
+     * @return Template
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
 }

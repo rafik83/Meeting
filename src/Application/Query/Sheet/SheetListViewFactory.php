@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 
 class SheetListViewFactory
 {
@@ -43,23 +44,31 @@ class SheetListViewFactory
     private $impersonate;
 
     /**
+     * @var TraceRepositoryInterface
+     */
+    private $traceRepository;
+
+    /**
      * SheetOwnerView constructor.
      *
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
      * @param Impersonate                 $impersonate
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
+     * @param TraceRepositoryInterface    $traceRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
-        SheetSearchAdapterInterface $sheetSearchAdapter
+        SheetSearchAdapterInterface $sheetSearchAdapter,
+        TraceRepositoryInterface $traceRepository
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
+        $this->traceRepository        = $traceRepository;
     }
 
     /**
@@ -96,6 +105,7 @@ class SheetListViewFactory
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
             $sheet->getState(),
+            $sheet->isCompleted(),
             array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
@@ -106,7 +116,8 @@ class SheetListViewFactory
             $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
-            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser())
+            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
+            $this->traceRepository->getLastAcceptBySheet($sheet)
         );
     }
 }

@@ -49,6 +49,22 @@
             }
         }
 
+    }
+
+    .object-list {
+
+        .object {
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+
+            .block-buttons {
+                display: none;
+            }
+
+        }
 
     }
 
@@ -61,6 +77,7 @@
     right: 10px;
     bottom: 10px;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 100px 0;
 
     .block {
@@ -81,7 +98,7 @@
             }
         }
 
-        .block-buttons {
+        >.block-buttons {
             position: absolute;
             left: 0;
             top: 0;
@@ -93,5 +110,14 @@
             width: 40px;
             padding: 10px 0;
         }
+    }
+
+    .object {
+
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 15px;
+
     }
 }

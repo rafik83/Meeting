@@ -62,7 +62,7 @@ class SheetController extends Controller
         }
 
         // Batch
-        $batch     = new Batch();
+        $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) { return $listView->id; }),
             'event'  => $event,
@@ -90,7 +90,7 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
-        $batch     = new Batch();
+        $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
@@ -101,6 +101,7 @@ class SheetController extends Controller
             if ($batchForm->isValid()) {
                 $batch->validate = $batchForm->get('validate')->isClicked();
                 $batch->assign   = $batchForm->get('assign')->isClicked();
+                $batch->accept   = $batchForm->get('accept')->isClicked();
 
                 $result = $this->get('command.sheet.batch_handler')->handle($batch);
 

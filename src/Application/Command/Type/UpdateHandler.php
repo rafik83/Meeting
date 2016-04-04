@@ -38,6 +38,10 @@ class UpdateHandler
             $type->getTranslations()->get($locale)->update($translation['title']);
         }
 
+        if (isset($update->validationCriteria['sheetAccepted'])) {
+            $type->getValidationCriteria()->setSheetAccepted($update->validationCriteria['sheetAccepted']);
+        }
+
         $this->typeRepository->set($type);
     }
 }

@@ -43,6 +43,11 @@
                                 </a>
                             </li>
                         {% endif %}
+                        {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                            <li>
+                                <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -70,6 +75,11 @@
                                         </a>
                                     </li>
                                 {% endif %}
+                                {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                                    <li>
+                                        <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% endif %}
@@ -82,6 +92,10 @@
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-header">Langues</li>
                             {{ include('VimeetAppBundle:Admin/Common:locales.html.twig', { 'locales': ['fr', 'en'] }) }}
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="{{ path('admin_account') }}">{{ 'admin.account.link'|trans }}</a>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{{ path('admin_logout') }}">

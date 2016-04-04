@@ -49,6 +49,14 @@ class ValidateHandler
         }
 
         $this->sheetRepository->set($validate->sheet->markAsValidated());
-        $this->eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($validate->sheet));
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_VALIDATED,
+            new SheetValidatedEvent(
+                $validate->sheet,
+                $validate->date,
+                $validate->comment,
+                $validate->admin
+            )
+        );
     }
 }

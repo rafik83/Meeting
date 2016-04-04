@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Trace;
+
 class SheetListView
 {
     /**
@@ -79,11 +81,22 @@ class SheetListView
     public $impersonationToken;
 
     /**
+     * @var \DateTimeInterface
+     */
+    public $acceptedAt = null;
+
+    /**
+     * @var string
+     */
+    public $acceptedBy = null;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
      * @param string               $title
      * @param string               $state
+     * @param bool                 $completed
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -91,28 +104,45 @@ class SheetListView
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
+     * @param Trace|null           $accepted
      */
     public function __construct(
         $id,
         $title,
         $state,
+        $completed,
         array $categories,
         $type,
         SheetParticipantView $owner,
         $follower,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt,
-        $impersonationToken
+        $impersonationToken,
+        Trace $accepted = null
     ) {
         $this->id                 = $id;
         $this->title              = $title;
-        $this->state       = $state;
+        $this->state              = $state;
+        $this->completed          = $completed;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
-        $this->follower    = $follower;
+        $this->follower           = $follower;
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
+
+        if (null !== $accepted) {
+            $this->acceptedAt = $accepted->getDate();
+            $this->acceptedBy = $accepted->getAuthor();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncomplete()
+    {
+        return false === $this->completed;
     }
 }

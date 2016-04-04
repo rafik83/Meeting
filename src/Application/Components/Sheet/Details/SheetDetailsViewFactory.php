@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 
 class SheetDetailsViewFactory
 {
@@ -51,6 +52,8 @@ class SheetDetailsViewFactory
      */
     private $commentRepository;
 
+    private $traceRepository;
+
     /**
      * SheetDetailsViewFactory constructor.
      *
@@ -60,6 +63,7 @@ class SheetDetailsViewFactory
      * @param BillingViewFactory         $billingViewFactory
      * @param BlockDataViewFactory       $blockDataViewFactory
      * @param CommentRepositoryInterface $commentRepository
+     * @param TraceRepositoryInterface   $traceRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -67,7 +71,8 @@ class SheetDetailsViewFactory
         RequestRepositoryInterface $requestRepository,
         BillingViewFactory $billingViewFactory,
         BlockDataViewFactory $blockDataViewFactory,
-        CommentRepositoryInterface $commentRepository
+        CommentRepositoryInterface $commentRepository,
+        TraceRepositoryInterface $traceRepository
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -75,6 +80,7 @@ class SheetDetailsViewFactory
         $this->billingViewFactory     = $billingViewFactory;
         $this->blockDataViewFactory   = $blockDataViewFactory;
         $this->commentRepository      = $commentRepository;
+        $this->traceRepository        = $traceRepository;
     }
 
     /**
@@ -113,7 +119,9 @@ class SheetDetailsViewFactory
             // Refused propositions
             $this->requestRepository->countRefusedPropositionReceivedBySheet($sheet),
             // Comments
-            $this->commentRepository->getCommentsBySheet($sheet)
+            $this->commentRepository->getCommentsBySheet($sheet),
+            // Trace for accepted
+            $this->traceRepository->getAllTracesByObject($sheet)
         );
     }
 }

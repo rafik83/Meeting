@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\TraceEvent;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -25,14 +27,19 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
-        $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $event   = new Event();
+        $type    = new Type($event);
+        $sheet   = new Sheet($event, $type, [], [], new \DateTime());
+        $expectedSheet = clone $sheet;
+        $expectedSheet->markAsValidated();
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
+        $date    = new \DateTime();
+        $comment = 'truc muche';
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
-        $command = new Validate($sheet);
+        $command = new Validate($sheet, $admin, $date, $comment);
 
         $this->assertFalse($sheet->isValidated());
 
@@ -43,7 +50,7 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->isValidated();
         }))->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet, $date, $comment, $admin))->shouldBeCalled();
 
         $this->assertTrue($sheet->isValidated());
     }

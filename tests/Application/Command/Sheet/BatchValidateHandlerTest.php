@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -24,8 +25,12 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
-        $type  = new Type($event);
+        $event   = new Event();
+        $type    = new Type($event);
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
+        $date    = new \DateTime();
+        $comment = 'truc muche';
+
         $sheet1 = new Sheet($event, $type, [], [], new \DateTime());
         $sheet2 = new Sheet($event, $type, [], [], new \DateTime());
         $sheet3 = new Sheet($event, $type, [], [], new \DateTime());
@@ -39,7 +44,7 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
             return !$validate->sheet->isValidated();
         }))->shouldBeCalledTimes(2);
 
-        $command = new BatchValidate([1, 2, 3]);
+        $command = new BatchValidate([1, 2, 3], $admin, $date, $comment);
 
         $handler = new BatchValidateHandler($sheetRepository->reveal(), $validateHandler->reveal());
         $result  = $handler->handle($command);

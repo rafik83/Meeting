@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 
 class Batch
@@ -27,10 +28,40 @@ class Batch
     /**
      * @var bool
      */
+    public $accept;
+
+    /**
+     * @var bool
+     */
     public $assign;
 
     /**
      * @var Admin
      */
     public $follower;
+
+    /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $date;
+
+    /**
+     * @var string
+     */
+    public $validateComment;
+
+    /**
+     * @param Admin             $admin
+     * @param DateTimeInterface $date
+     */
+    public function __construct(Admin $admin, DateTimeInterface $date)
+    {
+        $this->admin = $admin;
+        $this->date  = $date;
+    }
 }

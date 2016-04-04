@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Model\ValidationCriteria:
+    type:  embeddable
+    fields:
+        sheetAccepted:
+            type: boolean

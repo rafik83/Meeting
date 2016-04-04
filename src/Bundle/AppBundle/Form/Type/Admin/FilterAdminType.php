@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Bundle\AppBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventEntityType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Event\EventChoiceType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,10 +33,11 @@ class FilterAdminType extends AbstractType
                 'choices'           => [
                     'form.filter_admin.role.all'         => null,
                     'form.filter_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
+                    'form.filter_admin.role.operator'    => Admin::ROLE_OPERATOR,
                     'form.filter_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
                 ],
             ])
-            ->add('event', EventEntityType::class, [
+            ->add('event', EventChoiceType::class, [
                 'label'       => false,
                 'required'    => false,
                 'expanded'    => false,

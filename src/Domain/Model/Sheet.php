@@ -16,11 +16,11 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 /**
  * "Fiche de participation".
  */
-class Sheet implements BillingInfoInterface
+class Sheet implements BillingInfoInterface, TraceableInterface
 {
-    const STATE_COMPLETE   = 'complete';
-    const STATE_INCOMPLETE = 'incomplete';
-    const STATE_VALIDATED  = 'validated';
+    const STATE_PENDING   = 'pending';
+    const STATE_VALIDATED = 'validated';
+    const STATE_ACCEPTED  = 'accepted';
 
     /**
      * @var int
@@ -77,7 +77,12 @@ class Sheet implements BillingInfoInterface
      *
      * @var string
      */
-    private $state = self::STATE_INCOMPLETE;
+    private $state = self::STATE_PENDING;
+
+    /**
+     * @var bool
+     */
+    private $completed = false;
 
     /**
      * "Suivi commercial"
@@ -105,7 +110,8 @@ class Sheet implements BillingInfoInterface
         $this->lastLoginAt  = $createdAt;
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
-        $this->state        = self::STATE_INCOMPLETE;
+        $this->state        = self::STATE_PENDING;
+        $this->completed    = false;
     }
 
     /**
@@ -116,6 +122,14 @@ class Sheet implements BillingInfoInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceableName()
+    {
+        return 'sheet';
     }
 
     /**
@@ -371,7 +385,7 @@ class Sheet implements BillingInfoInterface
      */
     public function markAsIncomplete()
     {
-        $this->state = self::STATE_INCOMPLETE;
+        $this->completed = false;
 
         return $this;
     }
@@ -381,7 +395,7 @@ class Sheet implements BillingInfoInterface
      */
     public function markAsComplete()
     {
-        $this->state = self::STATE_COMPLETE;
+        $this->completed = true;
 
         return $this;
     }
@@ -397,11 +411,37 @@ class Sheet implements BillingInfoInterface
     }
 
     /**
+     * @return Sheet
+     */
+    public function markAsAccepted()
+    {
+        $this->state = self::STATE_ACCEPTED;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isValidated()
     {
         return self::STATE_VALIDATED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAccepted()
+    {
+        return self::STATE_ACCEPTED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        return true === $this->completed;
     }
 
     /**

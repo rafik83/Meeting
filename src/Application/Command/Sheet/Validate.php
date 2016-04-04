@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Validate
@@ -20,12 +21,33 @@ class Validate
     public $sheet;
 
     /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $date;
+
+    /**
+     * @var string
+     */
+    public $comment;
+
+    /**
      * Validate constructor.
      *
-     * @param Sheet $sheet
+     * @param Sheet              $sheet
+     * @param Admin              $admin
+     * @param \DateTimeInterface $date
+     * @param string             $comment
      */
-    public function __construct(Sheet $sheet)
+    public function __construct(Sheet $sheet, Admin $admin, \DateTimeInterface $date, $comment)
     {
-        $this->sheet = $sheet;
+        $this->sheet   = $sheet;
+        $this->admin   = $admin;
+        $this->date    = $date;
+        $this->comment = $comment;
     }
 }

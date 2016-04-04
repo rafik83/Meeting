@@ -24,7 +24,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $command            = new Create('fr');
+        $dateTime           = new \DateTime();
+        $command            = new Create('fr', $dateTime);
         $command->email     = 'test@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
@@ -32,8 +33,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->role      = Admin::ROLE_ORGANIZER;
         $command->events    = [];
 
-        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER);
-        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER);
+        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
+        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
@@ -55,7 +56,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event  = new Event();
         $event2 = new Event();
-        $command            = new Create('fr');
+        $dateTime           = new \DateTime();
+        $command            = new Create('fr', $dateTime);
         $command->email     = 'test@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
@@ -66,8 +68,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             1 => $event2,
         ];
 
-        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER);
-        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER);
+        $admin         = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
+        $expectedAdmin = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
         $expectedAdmin->addEvent($event);
         $expectedAdmin->addEvent($event2);
 
@@ -91,7 +93,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
-        $command            = new Create('fr');
+        $dateTime           = new \DateTime();
+        $command            = new Create('fr', $dateTime);
         $command->email     = 'test@test.com';
         $command->password  = 'password';
         $command->firstname = 'toto';
