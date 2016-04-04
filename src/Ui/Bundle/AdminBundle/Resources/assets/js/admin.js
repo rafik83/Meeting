@@ -4,6 +4,7 @@ var $               = require('jquery'),
     CheckAll        = require('./components/_CheckAll'),
     TemplateBuilder = require('./components/_TemplateBuilder'),
     Batch           = require('./components/_Batch'),
+    Slots           = require('./components/_Slots'),
     Update          = require('./components/_Update');
 
 require('elao-form.js');
@@ -39,6 +40,7 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-check-all]'), function (element) { new CheckAll(element, element.getAttribute('data-check-all')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
+    [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
 }
 
 // Call init function when element is added to DOM
