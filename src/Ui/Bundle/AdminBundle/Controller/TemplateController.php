@@ -33,7 +33,7 @@ class TemplateController extends Controller
      */
     public function listAction(Request $request)
     {
-        $templates = $this->get('repository.sheet.template_repository')->all();
+        $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
 
         $create = new Create();
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
