@@ -7,8 +7,8 @@
   "private": true,
   "dependencies": {
     "jquery": "2.1.1",
-    "elao-form.js": "0.1.*",
-    "bootstrap-sass": "3.3.6"
+    "bootstrap-sass": "3.3.6",
+    "elao-form.js": "0.1.*"
   },
   "napa": {},
   "scripts": {
@@ -44,7 +44,10 @@
       "depends": "jquery:jQuery"
     },
     "bootstrap.collapse": {
-      "depends": ["jquery:jQuery", "bootstrap.transition"]
+      "depends": [
+        "jquery:jQuery",
+        "bootstrap.transition"
+      ]
     },
     "bootstrap.tab": {
       "depends": "jquery:jQuery"
