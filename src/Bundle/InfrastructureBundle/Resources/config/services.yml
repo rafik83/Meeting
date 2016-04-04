@@ -588,6 +588,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
             - '@repository.sheet.template_repository'
+    command.sheet.template.duplicate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler
+        arguments:
+            - '@repository.sheet.template_repository'
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:

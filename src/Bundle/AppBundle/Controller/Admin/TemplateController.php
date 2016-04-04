@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Bundle\AppBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
+use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template\CreateType;
+use Proximum\Vimeet\Bundle\AppBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,6 +47,32 @@ class TemplateController extends Controller
         return $this->render('VimeetAppBundle:Admin/Template:list.html.twig', [
             'templates' => $templates,
             'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request  $request
+     * @param Template $template
+     *
+     * @return RedirectResponse|Response
+     */
+    public function duplicateAction(Request $request, Template $template)
+    {
+        $duplicate = new Duplicate($template);
+        $form      = $this->createForm(DuplicateType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_template_duplicate', ['template' => $template->getId()]),
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+
+            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+        }
+
+        return $this->render('VimeetAppBundle:Admin/Template:duplicate.html.twig', [
+            'template' => $template,
+            'form'     => $form->createView(),
         ]);
     }
 

@@ -25,6 +25,15 @@ function init(target) {
         modal.find('.modal-body').html(body );
     });
 
+    $('.clear-on-hidden-modal')
+        .on('show.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal').find('.modal-content').html($(e.target).data('placeholder'));
+        })
+        .on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal').find('.modal-content').empty();
+        })
+    ;
+
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
     [].forEach.call(target.querySelectorAll('[data-check-all]'), function (element) { new CheckAll(element, element.getAttribute('data-check-all')); });
