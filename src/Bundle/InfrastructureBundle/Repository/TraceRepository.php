@@ -64,6 +64,26 @@ class TraceRepository implements TraceRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getLastValidateBySheet(TraceableInterface $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('trace')
+            ->from(Trace::class, 'trace', 'trace.id')
+            ->where('trace.object = :object')
+            ->setParameter('object', sprintf('%s%s', $sheet->getTraceableName(), $sheet->getId()))
+            ->andWhere('trace.action = :action')
+            ->setParameter('action', Trace::VALIDATE)
+            ->orderBy('trace.date', 'DESC')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAllTracesByObject(TraceableInterface $traceable)
     {
         $queryBuilder = $this

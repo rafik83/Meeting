@@ -101,6 +101,14 @@ class SheetListViewFactory
      */
     public function createFromSheet(Sheet $sheet, $locale, Admin $admin)
     {
+        $trace = null;
+
+        if ($sheet->isAccepted()) {
+            $trace = $this->traceRepository->getLastAcceptBySheet($sheet);
+        } elseif ($sheet->isValidated()) {
+            $trace = $this->traceRepository->getLastValidateBySheet($sheet);
+        }
+
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
@@ -117,7 +125,7 @@ class SheetListViewFactory
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
-            $this->traceRepository->getLastAcceptBySheet($sheet)
+            $trace
         );
     }
 }

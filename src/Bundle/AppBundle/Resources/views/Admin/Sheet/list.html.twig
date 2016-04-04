@@ -92,8 +92,8 @@
                     </td>
                     <td>
                         <span class="label label-default"
-                            {% if sheet.state == 'accepted' %}
-                                data-toggle="tooltip" data-placement="bottom" title="{{ 'admin.sheet.acceptedAt'|trans({'%at%': sheet.acceptedAt|date('d/m/Y H:i'), '%by%': sheet.acceptedBy}) }}"
+                            {% if sheet.state == 'accepted' or sheet.state == 'validated' %}
+                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|date('d/m/Y H:i')}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
                             {% endif %}
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
