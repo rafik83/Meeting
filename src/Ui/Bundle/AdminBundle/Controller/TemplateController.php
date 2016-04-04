@@ -87,8 +87,6 @@ class TemplateController extends Controller
      */
     public function builderAction(Template $template, $locale)
     {
-        $template->addLocale($locale);
-
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template' => $template,
             'locale'   => $locale,

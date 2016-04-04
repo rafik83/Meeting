@@ -4,8 +4,20 @@
 
     <div data-template-builder="{{ path('admin_template_save', { 'template': template.id, 'locale': locale }) }}" data-locale="{{ locale }}" class="template-builder">
 
-        <div class="container-fluid">
-            <h1 class="page-header">{{ template.title }} <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button></h1>
+        <div class="container-fluid page-header">
+            <h1 class="pull-left">
+                {{ template.title }}
+            </h1>
+            <div class="h1">
+                {% for locale in template.locales %}
+                    <a class="btn btn-link" href="{{ path('admin_template_builder', { 'template': template.id, 'locale': locale }) }}">{{ locale|locale }}</a>
+                {% endfor %}
+                <button class="btn btn-link"><i class="glyphicon glyphicon-plus"></i></button>
+                <div>
+                    
+                </div>
+                <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button>
+            </div>
         </div>
 
         <div class="block">
