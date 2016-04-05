@@ -512,3 +512,17 @@ admin_template_save:
     path: /template/{template}
     defaults: { _controller: AdminBundle:Template:save }
     methods: [POST]
+
+
+#
+# Organizer Template
+#
+admin_organizer_template_list:
+    path: /organizer/template
+    defaults: { _controller: AdminBundle:Template:listOrganizerTemplate }
+    methods: [GET, POST]
+
+admin_organizer_template_duplicate:
+    path: /organizer/template/{template}/duplicate
+    defaults: { _controller: AdminBundle:Template:duplicateOrganizerTemplate }
+    methods: [GET, POST]
