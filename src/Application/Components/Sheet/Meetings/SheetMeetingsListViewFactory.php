@@ -11,9 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Meetings;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -39,41 +37,66 @@ class SheetMeetingsListViewFactory
     /**
      * @param Event  $event
      * @param string $locale
-     * @param int    $page
-     * @param int    $limit
      *
-     * @return PaginatedResult
+     * @return array
      */
-    public function paginate(Event $event, $locale, $page, $limit)
+    public function findAll(Event $event, $locale)
     {
         $sheets = $this->sheetRepository
-            ->getSheetsMeetingsStats($event, $locale, $page, $limit);
+            ->getSheetsMeetingsStats($event, $locale);
 
         $sheets = array_map(function (array $sheet) use ($locale) {
-            return $this->createFromSheet($sheet[0], $locale, $sheet['requestsNumber'], $sheet['meetingsNumber'], $sheet['requestsTransformation']);
+            return $this->createFromSheet(
+                $sheet[0],
+                $locale,
+                $sheet['meetingsRequestsNumber'],
+                $sheet['meetingsPropositionsNumber'],
+                $sheet['requestsNumber'],
+                $sheet['propositionsNumber'],
+                $sheet['requestsTransformation'],
+                $sheet['propositionsTransformation'],
+                $sheet['transformationTotal']
+            );
         }, $sheets);
 
         return $sheets;
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param int    $requestsNumber
-     * @param int    $meetingsNumber
-     * @param float  $requestsTranformation
+     * @param Sheet $sheet
+     * @param int   $locale
+     * @param int   $meetingsRequestsNumber
+     * @param int   $meetingsPropositionsNumber
+     * @param int   $requestsNumber
+     * @param int   $propositionsNumber
+     * @param float $requestsTransformation
+     * @param float $propositionsTransformation
+     * @param float $transformationTotal
      *
      * @return SheetMeetingsListView
      */
-    public function createFromSheet(Sheet $sheet, $locale, $requestsNumber, $meetingsNumber, $requestsTranformation)
-    {
+    public function createFromSheet(
+        Sheet $sheet,
+        $locale,
+        $meetingsRequestsNumber,
+        $meetingsPropositionsNumber,
+        $requestsNumber,
+        $propositionsNumber,
+        $requestsTransformation,
+        $propositionsTransformation,
+        $transformationTotal
+    ) {
         return new SheetMeetingsListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
             $sheet->getType()->getTitle($locale),
+            $meetingsRequestsNumber,
+            $meetingsPropositionsNumber,
             $requestsNumber,
-            $meetingsNumber,
-            $requestsTranformation
+            $propositionsNumber,
+            $requestsTransformation,
+            $propositionsTransformation,
+            $transformationTotal
         );
     }
 }

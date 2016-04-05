@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
@@ -34,24 +33,16 @@ class SheetRepository implements SheetRepositoryInterface
     private $typeRepository;
 
     /**
-     * @var Paginator
-     */
-    private $paginator;
-
-    /**
      * SheetRepository constructor.
      *
      * @param EntityManager           $entityManager
-     * @param Paginator               $paginator
      * @param TypeRepositoryInterface $typeRepository
      */
     public function __construct(
         EntityManager $entityManager,
-        Paginator $paginator,
         TypeRepositoryInterface $typeRepository
     ) {
         $this->entityManager  = $entityManager;
-        $this->paginator      = $paginator;
         $this->typeRepository = $typeRepository;
 
     }
@@ -76,23 +67,36 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsMeetingsStats(Event $event, $locale, $page, $limit)
+    public function getSheetsMeetingsStats(Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, type, typeTranslation, COUNT(DISTINCT meetings.id) AS meetingsNumber, COUNT(DISTINCT requests.id) AS requestsNumber, CASE WHEN (COUNT(DISTINCT requests.id) > 0) THEN COUNT(DISTINCT meetings.id)/COUNT(DISTINCT requests.id) * 100 ELSE 0 END AS requestsTransformation')
+            ->select('sheet, type, typeTranslation')
+            ->addSelect('COUNT(DISTINCT meetings_from_requests.id) AS meetingsRequestsNumber')
+            ->addSelect('COUNT(DISTINCT meetings_from_propositions.id) AS meetingsPropositionsNumber')
+            ->addSelect('(COUNT(DISTINCT meetings_from_propositions.id) + COUNT(DISTINCT meetings_from_requests.id)) AS meetingsTotal')
+            ->addSelect('COUNT(DISTINCT requests.id) AS requestsNumber')
+            ->addSelect('COUNT(DISTINCT propositions.id) AS propositionsNumber')
+            ->addSelect('(COUNT(DISTINCT requests.id) + COUNT(DISTINCT propositions.id)) AS requestsTotal')
+            ->addSelect('CASE WHEN (COUNT(DISTINCT requests.id) > 0) THEN COUNT(DISTINCT meetings_from_requests.id)/COUNT(DISTINCT requests.id) * 100 ELSE 0 END AS requestsTransformation')
+            ->addSelect('CASE WHEN (COUNT(DISTINCT propositions.id) > 0) THEN COUNT(DISTINCT meetings_from_propositions.id)/COUNT(DISTINCT propositions.id) * 100 ELSE 0 END AS propositionsTransformation')
+            ->addSelect('CASE WHEN (COUNT(DISTINCT requests.id) + COUNT(DISTINCT propositions.id) > 0) THEN (COUNT(DISTINCT meetings_from_propositions.id) + COUNT(DISTINCT meetings_from_requests.id))/(COUNT(DISTINCT requests.id) + COUNT(DISTINCT propositions.id)) * 100 ELSE 0 END AS transformationTotal')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
             ->setParameter('event', $event)
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
-            ->join(Request::class, 'requests', 'WITH', 'requests.to = sheet OR requests.from = sheet')
-            ->leftJoin(Meeting::class, 'meetings', 'WITH', 'meetings.toSheet = sheet OR meetings.fromSheet = sheet')
+            ->leftJoin(Request::class, 'requests', 'WITH', 'requests.from = sheet AND requests.state = :state')
+            ->leftJoin(Request::class, 'propositions', 'WITH', 'propositions.to = sheet AND propositions.state = :state')
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->leftJoin(Meeting::class, 'meetings_from_requests', 'WITH', 'meetings_from_requests.fromSheet = sheet')
+            ->leftJoin(Meeting::class, 'meetings_from_propositions', 'WITH', 'meetings_from_propositions.toSheet = sheet')
             ->groupBy('sheet.id')
-            ->orderBy('requestsTransformation', 'desc')
-            ->addOrderBy('requestsNumber', 'desc')
-            ->addOrderBy('meetingsNumber', 'desc');
+            ->having('requestsTotal > 0 OR meetingsTotal > 0')
+            ->orderBy('transformationTotal', 'desc')
+            ->addOrderBy('meetingsTotal', 'desc')
+            ->addOrderBy('requestsTotal', 'desc');
 
         return $queryBuilder->getQuery()->getResult();
     }

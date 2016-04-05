@@ -30,12 +30,22 @@ class SheetMeetingsListView
     /**
      * @var int
      */
+    public $meetingsRequestsNumber;
+
+    /**
+     * @var int
+     */
+    public $meetingsPropositionsNumber;
+
+    /**
+     * @var int
+     */
     public $requestsNumber;
 
     /**
      * @var int
      */
-    public $meetingsNumber;
+    public $propositionsNumber;
 
     /**
      * @var float
@@ -43,20 +53,36 @@ class SheetMeetingsListView
     public $requestsTransformation;
 
     /**
-     * @param int    $id
-     * @param string $title
-     * @param string $type
-     * @param int    $requestsNumber
-     * @param int    $meetingsNumber
-     * @param float  $requestsTransformation
+     * @var float
      */
-    public function __construct($id, $title, $type, $requestsNumber, $meetingsNumber, $requestsTransformation)
-    {
-        $this->id                    = $id;
-        $this->title                 = $title;
-        $this->type                  = $type;
-        $this->requestsNumber        = $requestsNumber;
-        $this->meetingsNumber        = $meetingsNumber;
-        $this->requestsTranformation = $requestsTransformation;
+    public $propositionsTransformation;
+
+    /**
+     * @var float
+     */
+    public $transformationTotal;
+
+    public function __construct(
+        $id,
+        $title,
+        $type,
+        $meetingsRequestsNumber,
+        $meetingsPropositionsNumber,
+        $requestsNumber,
+        $propositionsNumber,
+        $requestsTransformation,
+        $propositionsTransformation,
+        $transformationTotal
+    ) {
+        $this->id                         = $id;
+        $this->title                      = $title;
+        $this->type                       = $type;
+        $this->meetingsRequestsNumber     = $meetingsRequestsNumber;
+        $this->meetingsPropositionsNumber = $meetingsPropositionsNumber;
+        $this->requestsNumber             = $requestsNumber;
+        $this->propositionsNumber         = $propositionsNumber;
+        $this->requestsTransformation     = $requestsTransformation;
+        $this->propositionsTransformation = $propositionsTransformation;
+        $this->transformationTotal        = $transformationTotal;
     }
 }

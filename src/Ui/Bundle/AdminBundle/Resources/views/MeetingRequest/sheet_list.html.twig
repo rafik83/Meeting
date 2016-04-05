@@ -6,11 +6,14 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Fiche de participation</th>
+                <th>{{ sheets|length }} fiches de participation</th>
                 <th>Type</th>
-                <th>Demandes de RDV</th>
-                <th>RDV</th>
-                <th>% transformation</th>
+                <th class="col-xs-1">Demandes de RDV acceptées</th>
+                <th class="col-xs-1">Demandes transformées en RDV</th>
+                <th class="col-xs-1">Propositions de RDV acceptées</th>
+                <th class="col-xs-1">Propositions transformées en RDV</th>
+                <th class="col-xs-1">Total demandes de RDV</th>
+                <th class="col-xs-1">Total RDV transformés</th>
             </tr>
         </thead>
 
@@ -29,10 +32,22 @@
                     {{ sheet.requestsNumber }}
                 </td>
                 <td>
-                    {{ sheet.meetingsNumber }}
+                    {{ sheet.meetingsRequestsNumber }}
+                    <span class="label label-default">{{ sheet.requestsTransformation|number_format }}%</span>
                 </td>
                 <td>
-                    {{ sheet.requestsTranformation|number_format(2) }}
+                    {{ sheet.propositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.meetingsPropositionsNumber }}
+                    <span class="label label-default">{{ sheet.propositionsTransformation|number_format }}%</span>
+                </td>
+                <td>
+                    {{ sheet.requestsNumber + sheet.propositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
+                    <span class="label label-default">{{ sheet.transformationTotal|number_format }}%</span>
                 </td>
             </tr>
         {% endfor %}
