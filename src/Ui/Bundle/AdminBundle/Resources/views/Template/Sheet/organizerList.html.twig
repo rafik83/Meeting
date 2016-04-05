@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+
 {% block content %}
 
     <h1 class="page-header">Templates de fiche</h1>
@@ -36,7 +38,7 @@
         <thead>
         <tr>
             <th>Titre</th>
-            <th>Événement/Type(s)</th>
+            <th>{{ list_macros.choice_as_dropdown(filter_form.event) }}</th>
             <th>Date de création</th>
             <th class="text-right">Action</th>
         </tr>

@@ -16,9 +16,11 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerDuplicateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +28,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TemplateController extends Controller
 {
+    /**
+     * @param string $type
+     * @param string $data
+     * @param array  $options
+     *
+     * @return FormInterface
+     */
+    private function createFilterForm($type, $data, array $options = [])
+    {
+        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+            'method'          => 'GET',
+            'csrf_protection' => false,
+            'required'        => false,
+        ]));
+    }
+
     /**
      * @return Response
      */
@@ -65,11 +83,21 @@ class TemplateController extends Controller
             );
         }
 
+        $filters    = [];
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, [
+            'admin'  => $organizer,
+        ]);
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+
+        if ($filtered) {
+            $filters = $filterForm->getData();
+        }
+
         $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
-        $templates = $this->get('repository.sheet.template_repository')->getTemplateForGivenEvents($events);
+        $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
 
         $create = new OrganizerCreate(new \DateTime());
-        $form = $this->createForm(OrganizerCreateType::class, $create, [
+        $form   = $this->createForm(OrganizerCreateType::class, $create, [
             'submit' => true,
             'admin'  => $organizer,
         ]);
@@ -81,8 +109,9 @@ class TemplateController extends Controller
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
-            'templates' => $templates,
-            'form'      => $form->createView(),
+            'templates'   => $templates,
+            'form'        => $form->createView(),
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

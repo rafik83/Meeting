@@ -738,3 +738,7 @@ form:
                 label: Enregistrer
     filter:
         label: Filtrer
+    filter_sheet_template_organizer:
+        children:
+            event:
+                label: Événement/Type(s)
