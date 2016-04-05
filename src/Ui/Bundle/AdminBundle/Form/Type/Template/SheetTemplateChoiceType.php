@@ -74,8 +74,13 @@ class SheetTemplateChoiceType extends AbstractType
 
         $templates = [];
 
-        empty($baseTemplates)      ? :$templates['form.type_template.sheet.base'] = $baseTemplates;
-        empty($organizerTemplates) ? :$templates['form.type_template.sheet.organizer'] = $organizerTemplates;
+        if (!empty($baseTemplates)) {
+            $templates['form.type_template.sheet.base'] = $baseTemplates;
+        }
+
+        if (!empty($organizerTemplates)) {
+            $templates['form.type_template.sheet.organizer'] = $organizerTemplates;
+        }
 
         return $templates;
     }
