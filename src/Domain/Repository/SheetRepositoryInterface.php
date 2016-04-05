@@ -30,15 +30,14 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
-     * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
      * @param Event  $event
      * @param string $locale
+     * @param int    $page
+     * @param int    $limit
      *
-     * @return PaginatedResult
+     * @return array
      */
-    public function paginate(array $filters, $page, $limit, Event $event, $locale);
+    public function getSheetsMeetingsStats(Event $event, $locale, $page, $limit);
 
     /**
      * @param int|User  $user

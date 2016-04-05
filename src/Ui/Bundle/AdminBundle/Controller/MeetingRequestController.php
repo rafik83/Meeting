@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -169,5 +170,27 @@ class MeetingRequestController extends Controller
             ->findAvailableSlotIdByParticipantsIds($participants);
 
         return new JsonResponse($slots);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function sheetListAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $sheets = $this
+            ->get('sheet.sheet_meetings_list_view_factory')
+            ->paginate($event, $locale, $request->query->getInt('page', 1), 20);
+
+        return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
+            'event'  => $event,
+            'sheets' => $sheets,
+        ]);
     }
 }

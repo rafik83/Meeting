@@ -297,6 +297,13 @@ admin_meeting_request_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
 
+admin_meeting_request_sheets_list:
+    path: /event/{event}/meeting-request/sheets
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
+
 admin_meeting_request_position:
     path: /event/{event}/meeting-request/{meetingRequest}/position
     requirements:

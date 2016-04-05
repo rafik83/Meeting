@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -74,77 +76,25 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate(array $filters, $page, $limit, Event $event, $locale)
+    public function getSheetsMeetingsStats(Event $event, $locale, $page, $limit)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, type, category, typeTranslation')
+            ->select('sheet, type, typeTranslation, COUNT(DISTINCT meetings.id) AS meetingsNumber, COUNT(DISTINCT requests.id) AS requestsNumber, CASE WHEN (COUNT(DISTINCT requests.id) > 0) THEN COUNT(DISTINCT meetings.id)/COUNT(DISTINCT requests.id) * 100 ELSE 0 END AS requestsTransformation')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
-            ->join('type.categories', 'category')
             ->setParameter('event', $event)
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.owner = TRUE');
+            ->join(Request::class, 'requests', 'WITH', 'requests.to = sheet OR requests.from = sheet')
+            ->leftJoin(Meeting::class, 'meetings', 'WITH', 'meetings.toSheet = sheet OR meetings.fromSheet = sheet')
+            ->groupBy('sheet.id')
+            ->orderBy('requestsTransformation', 'desc')
+            ->addOrderBy('requestsNumber', 'desc')
+            ->addOrderBy('meetingsNumber', 'desc');
 
-        if (isset($filters['state'])) {
-            $queryBuilder
-                ->andWhere('sheet.state = :state')
-                ->setParameter('state', $filters['state']);
-        }
-
-        if (isset($filters['completed']) && is_bool($filters['completed'])) {
-            $queryBuilder
-                ->andWhere('sheet.completed = :complete')
-                ->setParameter('complete', $filters['completed']);
-        }
-
-        if (isset($filters['category'])) {
-            $queryBuilder
-                ->andWhere('category = :category')
-                ->setParameter('category', $filters['category']);
-        }
-
-        if (isset($filters['type'])) {
-            $queryBuilder
-                ->andWhere('type = :type')
-                ->setParameter('type', $filters['type']);
-        }
-
-        if (isset($filters['follower'])) {
-            $queryBuilder
-                ->andWhere('sheet.follower = :follower')
-                ->setParameter('follower', $filters['follower']);
-        }
-
-        if (isset($filters['predefined'])) {
-            if ($filters['predefined'] === 'created_today') {
-                $queryBuilder
-                    ->andWhere('sheet.createdAt BETWEEN :begin AND :end')
-                    ->setParameter('begin', (new \DateTime())->format('Y-m-d 0:0:0'))
-                    ->setParameter('end', (new \DateTime())->format('Y-m-d 23:59:59'));
-            } elseif ($filters['predefined'] === 'created_this_week') {
-                $now = new \DateTime();
-                $dayOfWeek = $now->format('N');
-
-                $beginWeek = clone $now;
-
-                if ($dayOfWeek > 1) {
-                    $beginWeek->modify(sprintf('-%s day', $dayOfWeek - 1));
-                }
-
-                $endWeek = clone $beginWeek;
-                $endWeek->modify('+6 day');
-
-                $queryBuilder
-                    ->andWhere('sheet.createdAt BETWEEN :begin AND :end')
-                    ->setParameter('begin', $beginWeek->format('Y-m-d 0:0:0'))
-                    ->setParameter('end', $endWeek->format('Y-m-d 23:59:59'));
-            }
-        }
-
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
