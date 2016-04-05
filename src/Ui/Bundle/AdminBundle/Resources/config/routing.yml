@@ -520,11 +520,11 @@ admin_template_builder:
     methods: [GET]
     requirements:
         template: \d+
-        locale: '[a-z]{2}'
+        locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_save:
     path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:save }
     methods: [POST]
     requirements:
         template: \d+
-        locale: '[a-z]{2}'
+        locale: '[a-z]{2}(_[A-Z]{2})?'
