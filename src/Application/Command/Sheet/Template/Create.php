@@ -10,10 +10,25 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use DateTimeInterface;
+
 class Create
 {
     /**
      * @var string
      */
     public $title;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $createdAt;
+
+    /**
+     * @param DateTimeInterface $createdAt
+     */
+    public function __construct(DateTimeInterface $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
 }
