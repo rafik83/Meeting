@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Sheet;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
@@ -71,7 +72,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->select('template')
             ->from(Template::class, 'template')
             ->join('template.event', 'event', 'WITH', 'event.id IN (:events)')
-            ->setParameter('events', array_map(function ($event) { return $event->getId(); }, $events));
+            ->setParameter('events', array_map(function (EventInterface $event) { return $event->getId(); }, $events));
 
         return $queryBuilder->getQuery()->getResult();
     }
