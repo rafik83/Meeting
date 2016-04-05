@@ -25,7 +25,7 @@ class Template
     /**
      * @var string
      */
-    private $value;
+    private $value = [];
 
     /**
      * @var array
@@ -37,14 +37,16 @@ class Template
      *
      * @param string $title
      * @param string $value
-     * @param string $locale
+     * @param array  $locales
      */
-    public function __construct($title, $value, $locale)
+    public function __construct($title, $value, array $locales)
     {
         $this->title = $title;
         $this->value = $value;
 
-        $this->addLocale($locale);
+        foreach ($locales as $locale) {
+            $this->addLocale($locale);
+        }
     }
 
     /**
@@ -98,7 +100,7 @@ class Template
      */
     public function duplicate($title)
     {
-        return new $this($title, $this->value);
+        return new $this($title, $this->value, $this->locales);
     }
 
     /**

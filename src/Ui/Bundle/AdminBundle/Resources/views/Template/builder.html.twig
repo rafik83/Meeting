@@ -2,82 +2,78 @@
 
 {% block content %}
 
-    <div data-template-builder="{{ path('admin_template_save', { 'template': template.id, 'locale': locale }) }}" data-locale="{{ locale }}" class="template-builder">
+    <div data-template-builder="{{ path('admin_template_save', { 'template': template.id, 'locale': locale }) }}" data-locale="{{ locale }}" class="template-builder-root">
 
-        <div class="container-fluid page-header">
+        <div class="template-header">
             <h1 class="pull-left">
                 {{ template.title }}
             </h1>
-            <div class="h1">
-                {% for locale in template.locales %}
-                    <a class="btn btn-link" href="{{ path('admin_template_builder', { 'template': template.id, 'locale': locale }) }}">{{ locale|locale }}</a>
-                {% endfor %}
-                <button class="btn btn-link" data-toggle="modal" data-target="#add-locale-modal">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
+            <div class="btn-toolbar" role="toolbar" aria-label="Template actions">
+                <div class="btn-group dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="locale-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{ locale|locale }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="locale-dropdown">
+                        {% for template_locale in template.locales %}
+                            <li{% if template_locale == locale %} class="active"{% endif %}><a href="{{ path('admin_template_builder', { 'template': template.id, 'locale': template_locale }) }}">{{ template_locale|locale }}</a></li>
+                        {% endfor %}
+                        <li>
+                            <button class="text-center" data-toggle="modal" data-target="#add-locale-modal">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
                 <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button>
             </div>
         </div>
 
-        {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_row(add_locale_form.locale) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        {{ form_row(add_locale_form.submit) }}
-                    </div>
+        <div class="template-builder">
+
+            <div class="block">
+                <span class="delete"></span>
+                <div class="template-container container-fluid block-inner" id="template-container">
+                    {% for uid, item in template.value|default([]) %}
+                        {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale }, false) }}
+                    {% endfor %}
                 </div>
             </div>
-        {{ form_end(add_locale_form) }}
 
-        <div class="block">
-            <span class="delete"></span>
-            <div class="template-container container-fluid block-inner" id="template-container">
-                {% for uid, item in template.value|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale }, false) }}
-                {% endfor %}
-            </div>
-        </div>
+            <div class="slide-menu-container" id="template-menu">
+                <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </button>
+                <div class="slide-menu-wrapper">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">Blocks</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">Objets</a>
+                        </li>
+                    </ul>
 
-        <div class="slide-menu-container" id="template-menu">
-            <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">
-                <i class="glyphicon glyphicon-chevron-left"></i>
-            </button>
-            <div class="slide-menu-wrapper">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">Blocks</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">Objets</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="blocks">
-                        <div id="block-list" class="block-list">
-                            {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale }, false) }}
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="blocks">
+                            <div id="block-list" class="block-list">
+                                {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale }, false) }}
+                            </div>
                         </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="objects">
-                        <div id="object-list" class="object-list">
-                            {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:choice.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}
+                        <div role="tabpanel" class="tab-pane" id="objects">
+                            <div id="object-list" class="object-list">
+                                {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:choice.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale }, false) }}
+                                {{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,5 +81,23 @@
         </div>
 
     </div>
+
+    {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(add_locale_form.locale) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    {{ form_row(add_locale_form.submit) }}
+                </div>
+            </div>
+        </div>
+    {{ form_end(add_locale_form) }}
 
 {% endblock %}

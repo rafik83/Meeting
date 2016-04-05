@@ -37,7 +37,7 @@ class TemplateController extends Controller
     {
         $templates = $this->get('repository.sheet.template_repository')->all();
 
-        $create = new Create();
+        $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
