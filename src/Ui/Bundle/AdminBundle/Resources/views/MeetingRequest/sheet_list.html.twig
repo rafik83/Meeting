@@ -4,14 +4,17 @@
     <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
 
     <table class="table table-hover">
-        <tr>
-            <th>Fiche de participation</th>
-            <th>Type</th>
-            <th>Demandes de RDV</th>
-            <th>RDV</th>
-            <th>% transformation</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Fiche de participation</th>
+                <th>Type</th>
+                <th>Demandes de RDV</th>
+                <th>RDV</th>
+                <th>% transformation</th>
+            </tr>
+        </thead>
 
+        <tbody>
         {% for sheet in sheets %}
             <tr>
                 <td>
@@ -33,5 +36,6 @@
                 </td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}

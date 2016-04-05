@@ -349,6 +349,8 @@ admin:
             approved: Accepté
             refused: Refusé
             cancelled: Annulé
+    meeting_request_sheets_list:
+        link: Par fiche de participation
     happening:
         link: Conférences
         title: Conférences
