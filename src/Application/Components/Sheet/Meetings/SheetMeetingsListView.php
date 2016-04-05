@@ -62,6 +62,18 @@ class SheetMeetingsListView
      */
     public $transformationTotal;
 
+    /**
+     * @param int    $id
+     * @param string $title
+     * @param string $type
+     * @param int    $meetingsRequestsNumber
+     * @param int    $meetingsPropositionsNumber
+     * @param int    $requestsNumber
+     * @param int    $propositionsNumber
+     * @param float  $requestsTransformation
+     * @param float  $propositionsTransformation
+     * @param float  $transformationTotal
+     */
     public function __construct(
         $id,
         $title,
