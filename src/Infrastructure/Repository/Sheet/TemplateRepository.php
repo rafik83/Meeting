@@ -63,6 +63,22 @@ class TemplateRepository implements TemplateRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getTemplateForGivenEvents(array $events)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(Template::class, 'template')
+            ->join('template.event', 'event', 'WITH', 'event.id IN (:events)')
+            ->setParameter('events', array_map(function ($event) { return $event->getId(); }, $events));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(Template $template)
     {
         $this->entityManager->persist($template);
