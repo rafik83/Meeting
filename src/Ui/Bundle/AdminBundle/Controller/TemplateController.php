@@ -12,9 +12,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
+use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerDuplicateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,9 +36,11 @@ class TemplateController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
 
-        $create = new Create();
+        $create = new Create(new \DateTime());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -50,6 +55,37 @@ class TemplateController extends Controller
         ]);
     }
 
+    public function listOrganizerTemplateAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $organizer = $this->getUser();
+        if (!$organizer->isOrganizer()) {
+            throw $this->createAccessDeniedException(
+                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
+            );
+        }
+
+        $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
+        $templates = $this->get('repository.sheet.template_repository')->getTemplateForGivenEvents($events);
+
+        $create = new OrganizerCreate(new \DateTime());
+        $form = $this->createForm(OrganizerCreateType::class, $create, [
+            'submit' => true,
+            'admin'  => $organizer,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $result = $this->get('command.sheet.template.organizer_create_handler')->handle($create);
+
+            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+        }
+
+        return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
+            'templates' => $templates,
+            'form'      => $form->createView(),
+        ]);
+    }
+
     /**
      * @param Request  $request
      * @param Template $template
@@ -58,10 +94,38 @@ class TemplateController extends Controller
      */
     public function duplicateAction(Request $request, Template $template)
     {
-        $duplicate = new Duplicate($template);
+        $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
             'action' => $this->generateUrl('admin_template_duplicate', ['template' => $template->getId()]),
             'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+
+            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+        }
+
+        return $this->render('AdminBundle:Template:duplicate.html.twig', [
+            'template' => $template,
+            'form'     => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request  $request
+     * @param Template $template
+     *
+     * @return RedirectResponse|Response
+     */
+    public function duplicateOrganizerTemplateAction(Request $request, Template $template)
+    {
+        $duplicate = new Duplicate($template, new \DateTime());
+
+        $form      = $this->createForm(OrganizerDuplicateType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_organizer_template_duplicate', ['template' => $template->getId()]),
+            'submit' => true,
+            'admin'  => $this->getUser(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -83,6 +147,19 @@ class TemplateController extends Controller
      */
     public function builderAction(Template $template)
     {
+        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+
+        $admin = $this->getUser();
+        if (!$admin->isSuperAdmin()) {
+            $events = $this->get('vimeet_infrastructure.repository.event_repository')->getEventsByAdmin($admin);
+
+            if (!in_array($template->getEvent(), $events)) {
+                throw $this->createAccessDeniedException(
+                    sprintf('%s %s %s is not an authorized admin to edit this template', $admin->getRole(), $admin->getEmail(), $admin->getDisplayName())
+                );
+            }
+        }
+
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template' => $template,
         ]);
