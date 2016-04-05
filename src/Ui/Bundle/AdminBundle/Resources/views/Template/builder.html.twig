@@ -12,13 +12,30 @@
                 {% for locale in template.locales %}
                     <a class="btn btn-link" href="{{ path('admin_template_builder', { 'template': template.id, 'locale': locale }) }}">{{ locale|locale }}</a>
                 {% endfor %}
-                <button class="btn btn-link"><i class="glyphicon glyphicon-plus"></i></button>
-                <div>
-                    
-                </div>
+                <button class="btn btn-link" data-toggle="modal" data-target="#add-locale-modal">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
                 <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button>
             </div>
         </div>
+
+        {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(add_locale_form.locale) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                        {{ form_row(add_locale_form.submit) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(add_locale_form) }}
 
         <div class="block">
             <span class="delete"></span>

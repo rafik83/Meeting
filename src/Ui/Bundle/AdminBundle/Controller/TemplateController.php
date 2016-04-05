@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
@@ -87,9 +89,47 @@ class TemplateController extends Controller
      */
     public function builderAction(Template $template, $locale)
     {
-        return $this->render('AdminBundle:Template:builder.html.twig', [
+        $addLocale     = new AddLocale($template);
+        $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
+            'submit'   => true,
             'template' => $template,
-            'locale'   => $locale,
+        ]);
+
+        return $this->render('AdminBundle:Template:builder.html.twig', [
+            'template'        => $template,
+            'locale'          => $locale,
+            'add_locale_form' => $addLocaleForm->createView()
+        ]);
+    }
+
+    /**
+     * @param Request  $request
+     * @param Template $template
+     *
+     * @return RedirectResponse
+     */
+    public function addLocaleAction(Request $request, Template $template)
+    {
+        $addLocale     = new AddLocale($template);
+        $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        if ($addLocaleForm->handleRequest($request)->isSubmitted() && $addLocaleForm->isValid()) {
+            $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
+
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $template->getId(),
+                'locale'   => $addLocale->locale,
+            ]);
+        }
+
+        return $this->redirectToRoute('admin_template_builder', [
+            'template' => $template->getId(),
+            'locale'   => $template->getFirstLocale(),
         ]);
     }
 

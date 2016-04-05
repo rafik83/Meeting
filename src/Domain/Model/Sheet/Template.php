@@ -112,6 +112,14 @@ class Template
     }
 
     /**
+     * @return string
+     */
+    public function getFirstLocale()
+    {
+        return reset($this->locales);
+    }
+
+    /**
      * @param $locale
      *
      * @return Template

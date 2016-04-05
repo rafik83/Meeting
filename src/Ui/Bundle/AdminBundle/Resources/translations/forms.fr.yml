@@ -714,3 +714,9 @@ form:
                 label: Enregistrer
     filter:
         label: Filtrer
+    sheet_template_add_locale:
+        children:
+            locale:
+                label: Langue
+            submit:
+                label: Ajouter
