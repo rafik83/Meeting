@@ -1,5 +1,6 @@
 var $               = require('jquery'),
     bootstrap       = require('bootstrap'),
+    tablesort       = require('tablesort'),
     Confirm         = require('./components/_Confirm'),
     CheckAll        = require('./components/_CheckAll'),
     TemplateBuilder = require('./components/_TemplateBuilder'),
@@ -34,6 +35,36 @@ function init(target) {
             $(e.target).removeData('bs.modal').find('.modal-content').empty();
         })
     ;
+
+    /* tablesort */
+    function cleanNumber(i) {
+        return i.replace(/[^\-?0-9.]/g, '');
+    }
+
+    function compareNumber(a, b) {
+        a = parseFloat(a);
+        b = parseFloat(b);
+
+        a = isNaN(a) ? 0 : a;
+        b = isNaN(b) ? 0 : b;
+
+        return a - b;
+    }
+
+    tablesort.extend('number', function(item) {
+        return item.match(/^-?(\d)*-?([,\.]){0,1}-?(\d)+([E,e][\-+][\d]+)?%?$/); // Number
+    }, function(a, b) {
+        a = cleanNumber(a);
+        b = cleanNumber(b);
+        return compareNumber(b, a);
+    });
+
+    [].forEach.call(target.querySelectorAll('table.sortable'), function (element) {
+        tablesort(element,  {
+            descending: true
+        });
+    });
+    /* tablesort */
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });

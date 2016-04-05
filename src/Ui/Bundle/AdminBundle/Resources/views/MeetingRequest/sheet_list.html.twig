@@ -3,17 +3,20 @@
 {% block content %}
     <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
 
-    <table class="table table-hover">
+    <table class="table table-hover sortable">
         <thead>
             <tr>
                 <th>{{ sheets|length }} fiches de participation</th>
                 <th>Type</th>
                 <th class="col-xs-1">Demandes de RDV acceptées</th>
                 <th class="col-xs-1">Demandes transformées en RDV</th>
+                <th>%</th>
                 <th class="col-xs-1">Propositions de RDV acceptées</th>
                 <th class="col-xs-1">Propositions transformées en RDV</th>
+                <th>%</th>
                 <th class="col-xs-1">Total demandes de RDV</th>
                 <th class="col-xs-1">Total RDV transformés</th>
+                <th>%</th>
             </tr>
         </thead>
 
@@ -33,30 +36,27 @@
                 </td>
                 <td>
                     {{ sheet.meetingsRequestsNumber }}
-
-                    {% if sheet.requestsNumber > 0 %}
-                        <span class="label label-default">{{ sheet.requestsTransformation|number_format }}%</span>
-                    {% endif %}
+                </td>
+                <td>
+                    {{ sheet.requestsTransformation|number_format }}
                 </td>
                 <td>
                     {{ sheet.propositionsNumber }}
                 </td>
                 <td>
                     {{ sheet.meetingsPropositionsNumber }}
-
-                    {% if sheet.propositionsNumber > 0 %}
-                        <span class="label label-default">{{ sheet.propositionsTransformation|number_format }}%</span>
-                    {% endif %}
+                </td>
+                <td>
+                    {{ sheet.propositionsTransformation|number_format }}
                 </td>
                 <td>
                     {{ sheet.requestsNumber + sheet.propositionsNumber }}
                 </td>
                 <td>
                     {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
-
-                    {% if sheet.requestsNumber + sheet.propositionsNumber > 0 %}
-                        <span class="label label-default">{{ sheet.transformationTotal|number_format }}%</span>
-                    {% endif %}
+                </td>
+                <td>
+                    {{ sheet.transformationTotal|number_format }}
                 </td>
             </tr>
         {% endfor %}
