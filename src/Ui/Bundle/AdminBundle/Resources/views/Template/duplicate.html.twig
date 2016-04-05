@@ -6,6 +6,9 @@
     </div>
     <div class="modal-body">
         {{ form_row(form.title) }}
+        {% if form.event is defined %}
+            {{ form_row(form.event) }}
+        {% endif %}
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
