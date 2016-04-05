@@ -8,3 +8,15 @@ services:
             - '@repository.sheet.template_repository'
         tags:
             - { name: form.type }
+    form_type_sheet_template.organizer_create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerCreateType
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: form.type }
+    form_type_sheet_template.organizer_duplicate_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerDuplicateType
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: form.type }
