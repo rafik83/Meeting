@@ -712,10 +712,28 @@ form:
                 label: Annuler
             submit:
                 label: Enregistrer
+    organizer_sheet_template_create:
+        children:
+            title:
+                label: Titre
+            event:
+                label: Choisir un événement pour ce Template de fiche
+            close:
+                label: Annuler
+            submit:
+                label: Enregistrer
     sheet_template_duplicate:
         children:
             title:
                 label: Titre
+            submit:
+                label: Enregistrer
+    organizer_sheet_template_duplicate:
+        children:
+            title:
+                label: Titre
+            event:
+                label: Choisir un événement pour ce Template de fiche
             submit:
                 label: Enregistrer
     filter:

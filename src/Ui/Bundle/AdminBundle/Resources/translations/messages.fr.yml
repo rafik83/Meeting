@@ -445,3 +445,4 @@ admin:
             title: Création du mot de passe pour votre compte collaborateur
     template_list:
         link: Templates
+        organizer_link: Mes Templates
