@@ -32,6 +32,7 @@ class TypeCreateType extends AbstractType
                 'placeholder' => '',
             ])
             ->add('sheetTemplate', SheetTemplateChoiceType::class, [
+                'events'      => $options['events'],
                 'required'    => true,
                 'expanded'    => false,
                 'multiple'    => false,
@@ -52,6 +53,7 @@ class TypeCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['events']);
         $resolver->setDefaults([
             'data_class'    => 'Proximum\Vimeet\Application\Command\Type\Create',
             'csrf_token_id' => 'type_create',
