@@ -21,19 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class OrganizerDuplicateType extends AbstractType
 {
     /**
-     * @var EventRepositoryInterface
-     */
-    private $eventRepository;
-
-    /**
-     * @param EventRepositoryInterface $eventRepository
-     */
-    public function __construct(EventRepositoryInterface $eventRepository)
-    {
-        $this->eventRepository = $eventRepository;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)

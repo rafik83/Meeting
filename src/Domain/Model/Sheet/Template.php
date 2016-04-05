@@ -129,6 +129,14 @@ class Template
     }
 
     /**
+     * @return DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @param string            $title
      * @param DateTimeInterface $createdAt
      *
