@@ -148,7 +148,7 @@ class Template
 
         if ($config['component'] === 'object') {
             foreach ($config['config'] as $key => $value) {
-                if (in_array($key, $keys)) {
+                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
                     $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
                 }
             }

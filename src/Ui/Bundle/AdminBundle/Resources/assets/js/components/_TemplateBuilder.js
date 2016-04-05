@@ -427,7 +427,7 @@ function TextObject(element, locale)
 
 TextObject.prototype.fill = function ()
 {
-    this.form.set('content', this.config.content);
+    this.form.set('content', this.config.content[this.locale]);
     this.form.set('type', this.config.type);
 
     this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
@@ -435,8 +435,8 @@ TextObject.prototype.fill = function ()
 
 TextObject.prototype.save = function ()
 {
-    this.config.content = this.form.get('content');
-    this.config.type    = this.form.get('type');
+    this.config.content[this.locale] = this.form.get('content');
+    this.config.type                 = this.form.get('type');
 
     this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
 };
