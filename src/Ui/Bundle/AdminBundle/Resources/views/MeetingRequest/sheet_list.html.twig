@@ -33,21 +33,30 @@
                 </td>
                 <td>
                     {{ sheet.meetingsRequestsNumber }}
-                    <span class="label label-default">{{ sheet.requestsTransformation|number_format }}%</span>
+
+                    {% if sheet.requestsNumber > 0 %}
+                        <span class="label label-default">{{ sheet.requestsTransformation|number_format }}%</span>
+                    {% endif %}
                 </td>
                 <td>
                     {{ sheet.propositionsNumber }}
                 </td>
                 <td>
                     {{ sheet.meetingsPropositionsNumber }}
-                    <span class="label label-default">{{ sheet.propositionsTransformation|number_format }}%</span>
+
+                    {% if sheet.propositionsNumber > 0 %}
+                        <span class="label label-default">{{ sheet.propositionsTransformation|number_format }}%</span>
+                    {% endif %}
                 </td>
                 <td>
                     {{ sheet.requestsNumber + sheet.propositionsNumber }}
                 </td>
                 <td>
                     {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
-                    <span class="label label-default">{{ sheet.transformationTotal|number_format }}%</span>
+
+                    {% if sheet.requestsNumber + sheet.propositionsNumber > 0 %}
+                        <span class="label label-default">{{ sheet.transformationTotal|number_format }}%</span>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
