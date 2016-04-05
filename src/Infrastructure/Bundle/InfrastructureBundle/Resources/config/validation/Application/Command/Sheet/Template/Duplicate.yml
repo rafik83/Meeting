@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate:
+    properties:
+        title:
+            - NotBlank: ~

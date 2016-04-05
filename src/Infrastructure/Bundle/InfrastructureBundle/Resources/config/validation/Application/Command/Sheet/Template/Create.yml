@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Sheet\Template\Create:
+    properties:
+        title:
+            - NotBlank: ~
