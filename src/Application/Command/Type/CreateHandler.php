@@ -45,10 +45,14 @@ class CreateHandler
             $type->getValidationCriteria()->setSheetAccepted($create->validationCriteria['sheetAccepted']);
         }
 
-        $sheetTemplate = $create->sheetTemplate->duplicate(
-            $type->getTitle($create->event->getAvailableLocale($create->locale))
-        );
-        $sheetTemplate->setEvent($create->event);
+        if ($create->sheetTemplate->getEvent() === $create->event) {
+            $sheetTemplate = $create->sheetTemplate;
+        } else {
+            $sheetTemplate = $create->sheetTemplate->duplicate(
+                $type->getTitle($create->event->getAvailableLocale($create->locale))
+            );
+            $sheetTemplate->setEvent($create->event);
+        }
 
         $type->setSheetTemplate($sheetTemplate);
 
