@@ -12,26 +12,60 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Meetings;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetMeetingsListViewFactory
 {
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $requestRepository;
+
+    /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
+     * @var MeetingSlotRepositoryInterface
+     */
+    private $meetingSlotRepository;
+
     /**
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param RequestRepositoryInterface     $requestRepository
+     * @param MeetingRepositoryInterface     $meetingRepository
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param SheetInfoGuesser               $sheetInfoGuesser
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
-        $this->sheetRepository  = $sheetRepository;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->sheetRepository       = $sheetRepository;
+        $this->requestRepository     = $requestRepository;
+        $this->meetingRepository     = $meetingRepository;
+        $this->meetingRepository     = $meetingRepository;
+        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->sheetInfoGuesser      = $sheetInfoGuesser;
     }
 
     /**
@@ -42,20 +76,21 @@ class SheetMeetingsListViewFactory
      */
     public function findAll(Event $event, $locale)
     {
-        $sheets = $this->sheetRepository
-            ->getSheetsMeetingsStats($event, $locale);
+        $sheets = $this->sheetRepository->getSheets($event, $locale);
 
-        $sheets = array_map(function (array $sheet) use ($locale) {
+        $sheets = array_map(function (Sheet $sheet) use ($locale) {
+            $participantIds = array_map(function (Participant $participant) {
+                return $participant->getId();
+            }, $sheet->getParticipants()->toArray());
+
             return $this->createFromSheet(
-                $sheet[0],
+                $sheet,
                 $locale,
-                $sheet['meetingsRequestsNumber'],
-                $sheet['meetingsPropositionsNumber'],
-                $sheet['requestsNumber'],
-                $sheet['propositionsNumber'],
-                $sheet['requestsTransformation'],
-                $sheet['propositionsTransformation'],
-                $sheet['transformationTotal']
+                $this->meetingRepository->countMeetingsFromSheet($sheet),
+                $this->meetingRepository->countMeetingsToSheet($sheet),
+                $this->requestRepository->countApprovedRequestSentBySheet($sheet),
+                $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
+                count($this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($participantIds, true))
             );
         }, $sheets);
 
@@ -69,9 +104,7 @@ class SheetMeetingsListViewFactory
      * @param int   $meetingsPropositionsNumber
      * @param int   $requestsNumber
      * @param int   $propositionsNumber
-     * @param float $requestsTransformation
-     * @param float $propositionsTransformation
-     * @param float $transformationTotal
+     * @param int   $slots
      *
      * @return SheetMeetingsListView
      */
@@ -82,10 +115,11 @@ class SheetMeetingsListViewFactory
         $meetingsPropositionsNumber,
         $requestsNumber,
         $propositionsNumber,
-        $requestsTransformation,
-        $propositionsTransformation,
-        $transformationTotal
+        $slots
     ) {
+        $requestsTransformation = $meetingsRequestsNumber === 0 ? 0 : 100 * $meetingsRequestsNumber / $requestsNumber;
+        $propositionsTransformation = $meetingsPropositionsNumber === 0 ? 0 : 100 * $meetingsPropositionsNumber / $propositionsNumber;
+
         return new SheetMeetingsListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
@@ -96,7 +130,9 @@ class SheetMeetingsListViewFactory
             $propositionsNumber,
             $requestsTransformation,
             $propositionsTransformation,
-            $transformationTotal
+            $requestsNumber + $propositionsNumber === 0 ? 0 : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / ($requestsNumber + $propositionsNumber),
+            $requestsNumber + $propositionsNumber === 0 ? 0 : 100 * $meetingsRequestsNumber / ($requestsNumber + $propositionsNumber),
+            $slots === 0 ? 0 : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / $slots
         );
     }
 }

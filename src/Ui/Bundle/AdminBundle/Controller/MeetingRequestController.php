@@ -211,7 +211,6 @@ class MeetingRequestController extends Controller
 
         $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
-        return new Response('<html><body>hello</body></html>');
-        // return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
+        return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
     }
 }

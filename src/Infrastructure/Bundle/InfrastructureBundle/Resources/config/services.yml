@@ -719,6 +719,9 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory

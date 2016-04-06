@@ -17,8 +17,10 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
@@ -161,5 +163,25 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->execute();
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsFromSheet(Sheet $sheet)
+    {
+        $queryBuilder = new MeetingQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsToSheet(Sheet $sheet)
+    {
+        $queryBuilder = new MeetingQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
     }
 }

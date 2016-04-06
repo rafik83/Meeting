@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Exception\MeetingRequest\SlotUnavailableException;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
