@@ -36,6 +36,8 @@ Proximum\Vimeet\Domain\Model\Event:
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
+        configuration:
+            class: Proximum\Vimeet\Domain\Model\Event\Configuration
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\EventTranslation
