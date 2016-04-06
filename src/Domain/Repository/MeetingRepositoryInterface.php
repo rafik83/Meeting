@@ -41,4 +41,9 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findByParticipant(Participant $participant);
+
+    /**
+     * @param Event $event
+     */
+    public function deleteAll(Event $event);
 }
