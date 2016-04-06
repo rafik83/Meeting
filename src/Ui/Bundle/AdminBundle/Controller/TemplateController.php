@@ -118,13 +118,17 @@ class TemplateController extends Controller
             'template' => $template,
         ]);
 
-        if ($addLocaleForm->handleRequest($request)->isSubmitted() && $addLocaleForm->isValid()) {
-            $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
+        if ($addLocaleForm->handleRequest($request)->isSubmitted()) {
+            if ($addLocaleForm->isValid()) {
+                $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
 
-            return $this->redirectToRoute('admin_template_builder', [
-                'template' => $template->getId(),
-                'locale'   => $addLocale->locale,
-            ]);
+                return $this->redirectToRoute('admin_template_builder', [
+                    'template' => $template->getId(),
+                    'locale'   => $addLocale->locale,
+                ]);
+            } else {
+                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
+            }
         }
 
         return $this->redirectToRoute('admin_template_builder', [

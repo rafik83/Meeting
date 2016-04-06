@@ -1,0 +1,7 @@
+Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale:
+    properties:
+        template:
+            - NotBlank: ~
+        locale:
+            - NotBlank: ~
+            - Regex: '/^[a-z]{2}(_[A-Z]{2})?$/'
