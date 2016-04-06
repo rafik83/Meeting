@@ -602,6 +602,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
             - '@repository.admin_repository'
+    command.sheet.template.organizer_create_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreateHandler
+        arguments:
+            - '@repository.sheet.template_repository'
 
     #
     # Security

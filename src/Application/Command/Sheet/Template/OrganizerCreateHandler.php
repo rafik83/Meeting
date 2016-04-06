@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
-class CreateHandler
+class OrganizerCreateHandler
 {
     /**
      * @var TemplateRepositoryInterface
@@ -31,13 +31,15 @@ class CreateHandler
     }
 
     /**
-     * @param Create $create
+     * @param OrganizerCreate $create
      *
      * @return CreateResult
      */
-    public function handle(Create $create)
+    public function handle(OrganizerCreate $create)
     {
         $template = new Template($create->title, '', $create->createdAt);
+        $template->setEvent($create->event);
+
         $this->templateRepository->add($template);
 
         return new CreateResult($template);

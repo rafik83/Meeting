@@ -11,13 +11,19 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class OrganizerCreate
 {
     /**
      * @var string
      */
     public $title;
+
+    /**
+     * @var Event
+     */
+    public $event;
 
     /**
      * @var DateTimeInterface

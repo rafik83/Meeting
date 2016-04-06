@@ -36,7 +36,12 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
-        $template = $duplicate->template->duplicate($duplicate->title);
+        $template = $duplicate->template->duplicate($duplicate->title, $duplicate->createdAt);
+
+        if (null !== $duplicate->event) {
+            $template->setEvent($duplicate->event);
+        }
+
         $this->templateRepository->add($template);
 
         return new DuplicateResult($template);
