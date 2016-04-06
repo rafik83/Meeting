@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Admin;
+namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
 use DateTime;
 use Proximum\Vimeet\Application\Command\Admin\ForgottenPassword;

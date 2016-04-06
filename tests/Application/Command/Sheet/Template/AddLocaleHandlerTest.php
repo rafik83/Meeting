@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet\Template;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler;

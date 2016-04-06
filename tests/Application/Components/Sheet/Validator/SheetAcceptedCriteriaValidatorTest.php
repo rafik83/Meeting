@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet\Validator;
+namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Validator;
 
 use Proximum\Vimeet\Application\Components\Sheet\Validator\CriteriaValidatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Validator\SheetAcceptedCriteriaValidator;

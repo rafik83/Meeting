@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Adapter;
+namespace Proximum\Vimeet\Tests\Application\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\SaltGenerator;
 

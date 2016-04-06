@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Event;
+namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;

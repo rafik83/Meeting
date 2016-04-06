@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Meeting;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;

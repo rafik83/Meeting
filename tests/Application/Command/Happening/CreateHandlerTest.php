@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Happening;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;

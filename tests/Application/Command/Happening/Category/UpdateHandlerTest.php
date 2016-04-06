@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Happening\Category;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Category;
 
 use Proximum\Vimeet\Application\Command\Happening\Category\Update;
 use Proximum\Vimeet\Application\Command\Happening\Category\UpdateHandler;

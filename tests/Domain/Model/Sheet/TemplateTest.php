@@ -47,7 +47,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr']);
+        ], ['fr'], $createdAt);
 
         $expected = new Template('My template', [
             'ec74be5e' => [

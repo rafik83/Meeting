@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Participant\Choice;
+namespace Proximum\Vimeet\Tests\Application\Components\Participant\Choice;
 
 use Proximum\Vimeet\Application\Components\Library\Choice\ChoiceBuilder;
 use Proximum\Vimeet\Application\Components\Library\Choice\Exception\LanguageNotFoundException;

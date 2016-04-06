@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler;

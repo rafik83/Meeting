@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Cart\Carts;
+namespace Proximum\Vimeet\Tests\Application\Components\Cart\Carts;
 
 use Proximum\Vimeet\Application\Components\Cart\CartRow;
 use Proximum\Vimeet\Application\Components\Cart\Carts\LibOptionCart;

@@ -5,8 +5,8 @@
     "type": "project",
     "autoload": {
         "psr-4": {
+            "Proximum\\Vimeet\\Tests\\": "tests/",
             "Proximum\\Vimeet\\": "src/",
-            "Tests\\": "tests/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
         "files": [ "app/AppKernel.php" ]

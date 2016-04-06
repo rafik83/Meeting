@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Participant;
+namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;

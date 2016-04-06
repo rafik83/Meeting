@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Rule;
+namespace Proximum\Vimeet\Tests\Application\Components\Rule;
 
 use Proximum\Vimeet\Application\Components\Rule\RuleManager;
 use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
