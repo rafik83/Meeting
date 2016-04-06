@@ -137,6 +137,19 @@
                 padding: 10px;
                 margin: 15px;
 
+                >.block-buttons {
+                    border-bottom: 1px solid #eee;
+
+                    .btn {
+                        padding-left: 3px;
+                        padding-right: 3px;
+                    }
+                }
+
+                .object-title {
+                    font-weight: bold;
+                }
+
             }
         }
 
