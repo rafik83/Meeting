@@ -52,6 +52,9 @@ class SheetDetailsViewFactory
      */
     private $commentRepository;
 
+    /**
+     * @var TraceRepositoryInterface
+     */
     private $traceRepository;
 
     /**
@@ -112,10 +115,14 @@ class SheetDetailsViewFactory
             $this->blockDataViewFactory->createBlockViews($sheet, $locale),
             // Approved requests
             $this->requestRepository->countApprovedRequestSentBySheet($sheet),
-            // Pending propositions
-            $this->requestRepository->countPendingPropositionReceivedBySheet($sheet),
+            // Pending requests
+            $this->requestRepository->countPendingRequestSentBySheet($sheet),
             // Refused requests
             $this->requestRepository->countRefusedRequestSentBySheet($sheet),
+            // Approved propositions
+            $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
+            // Pending propositions
+            $this->requestRepository->countPendingPropositionReceivedBySheet($sheet),
             // Refused propositions
             $this->requestRepository->countRefusedPropositionReceivedBySheet($sheet),
             // Comments

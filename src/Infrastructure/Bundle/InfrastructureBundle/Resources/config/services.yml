@@ -39,7 +39,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.spot_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SpotRepository
@@ -709,6 +708,11 @@ services:
             - '@sheet.block.block_data_view_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
+    sheet.sheet_meetings_list_view_factory:
+        class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
 

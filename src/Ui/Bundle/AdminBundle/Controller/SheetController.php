@@ -145,7 +145,9 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $request->getLocale());
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);
 
         $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
 
