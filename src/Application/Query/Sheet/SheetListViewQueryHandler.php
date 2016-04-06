@@ -16,12 +16,11 @@ use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
-class SheetListViewFactory
+class SheetListViewQueryHandler
 {
     /**
      * @var SheetSearchAdapterInterface
@@ -73,59 +72,36 @@ class SheetListViewFactory
     }
 
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
-     * @param string $locale
-     * @param Admin  $admin
-     *
-     * @return PaginatedResult
-     */
-    public function paginate(Event $event, array $filters, $page, $limit, $locale, Admin $admin)
-    {
-        $sheets = $this->sheetSearchAdapter->find($event, $filters, $page, $limit, $locale);
-
-        $sheets->results = array_map(function (Sheet $sheet) use ($locale, $admin) {
-            return $this->createFromSheet($sheet, $locale, $admin);
-        }, $sheets->results);
-
-        return $sheets;
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param Admin  $admin
+     * @param SheetListViewQuery $query
      *
      * @return SheetListView
      */
-    public function createFromSheet(Sheet $sheet, $locale, Admin $admin)
+    public function handle(SheetListViewQuery $query)
     {
         $trace = null;
 
-        if ($sheet->isAccepted()) {
-            $trace = $this->traceRepository->getLastAcceptBySheet($sheet);
-        } elseif ($sheet->isValidated()) {
-            $trace = $this->traceRepository->getLastValidateBySheet($sheet);
+        if ($query->sheet->isAccepted()) {
+            $trace = $this->traceRepository->getLastAcceptBySheet($query->sheet);
+        } elseif ($query->sheet->isValidated()) {
+            $trace = $this->traceRepository->getLastValidateBySheet($query->sheet);
         }
 
         return new SheetListView(
-            $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetInfo($sheet),
-            $sheet->getState(),
-            $sheet->isCompleted(),
-            array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
-            $sheet->getType()->getTitle($locale),
+            $query->sheet->getId(),
+            $this->sheetInfoGuesser->guessSheetInfo($query->sheet),
+            $query->sheet->getState(),
+            $query->sheet->isCompleted(),
+            array_map(function (Category $category) use ($query) { return $category->getTitle($query->locale); }, $query->sheet->getType()->getCategories()->toArray()),
+            $query->sheet->getType()->getTitle($query->locale),
             new SheetParticipantView(
-                $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner()),
-                $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner()),
-                $sheet->getOwner()->getUser()->getEmail()
+                $this->participantInfoGuesser->guessParticipantFirstName($query->sheet->getOwner()),
+                $this->participantInfoGuesser->guessParticipantLastName($query->sheet->getOwner()),
+                $query->sheet->getOwner()->getUser()->getEmail()
             ),
-            $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
-            $sheet->getCreatedAt(),
-            $sheet->getLastLoginAt(),
-            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
+            $query->sheet->getFollower() ? $query->sheet->getFollower()->getDisplayName() : '',
+            $query->sheet->getCreatedAt(),
+            $query->sheet->getLastLoginAt(),
+            $this->impersonate->getEncodedToken($query->admin, $query->sheet->getOwner()->getUser()),
             $trace
         );
     }
