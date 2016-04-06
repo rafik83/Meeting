@@ -31,6 +31,9 @@
                             <div class="form-group">
                                 <label class="form-label">Label</label>
                                 <input class="form-control" type="text" name="label" />
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Tag</label>

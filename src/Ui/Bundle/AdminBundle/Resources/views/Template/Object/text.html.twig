@@ -31,6 +31,9 @@
                             <div class="form-group">
                                 <label class="form-label">Contenu</label>
                                 <textarea class="form-control" name="content"></textarea>
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.content[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Type</label>

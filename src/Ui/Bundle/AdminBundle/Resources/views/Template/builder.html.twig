@@ -35,7 +35,7 @@
                 <span class="delete"></span>
                 <div class="template-container container-fluid block-inner" id="template-container">
                     {% for uid, item in template.value|default([]) %}
-                        {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale }, false) }}
+                        {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': template.fallback }, false) }}
                     {% endfor %}
                 </div>
             </div>
