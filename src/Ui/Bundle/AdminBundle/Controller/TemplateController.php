@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
+use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
@@ -89,6 +90,10 @@ class TemplateController extends Controller
      */
     public function builderAction(Template $template, $locale)
     {
+        if (!$template->hasLocale($locale)) {
+            throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
+        }
+
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
             'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
@@ -146,15 +151,12 @@ class TemplateController extends Controller
      */
     public function saveAction(Request $request, Template $template, $locale)
     {
-        $config = json_decode($request->getContent(), true);
-
-        $template->setValue($config);
-
-        foreach ($template->getLocales() as $locale) {
-            $template->addLocale($locale);
+        if (!$template->hasLocale($locale)) {
+            return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
         }
 
-        $this->get('repository.sheet.template_repository')->set($template);
+        $config = json_decode($request->getContent(), true);
+        $this->get('command.sheet.template.save_handler')->handle(new Save($template, $config));
 
         return new JsonResponse();
     }
