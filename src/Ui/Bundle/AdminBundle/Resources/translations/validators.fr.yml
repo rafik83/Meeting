@@ -1,4 +1,5 @@
 validators:
+    hexadecimal: Cette valeur doit être au format héxadécimal
     field:
         required: Ce champ est requis
     email: L'adresse mail saisie n'est pas valide

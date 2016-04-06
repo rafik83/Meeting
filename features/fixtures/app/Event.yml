@@ -5,6 +5,12 @@ Proximum\Vimeet\Domain\Model\Address (local):
             - 92370
             - CHAVILLE
             - fr
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_rdv_carnot_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#FFFFFF'
 
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
@@ -13,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [fr, en]
         fallback: fr
+        configuration: '@configuration_rdv_carnot_2016'
         organiserName: PROXIMUM
         paymentAddress: "@payment_address_event_rdv_carnot_2016"
         organiserEmail: accounts@proximumgroup.com

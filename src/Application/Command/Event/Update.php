@@ -50,6 +50,21 @@ class Update
     public $vat;
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
+     * @var string
+     */
+    public $textColor;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -61,6 +76,9 @@ class Update
         $this->translations = [];
         $this->mode         = $event->getMode();
         $this->vat          = $event->getVat();
+        $this->leftColor    = $event->getConfiguration()->getLeftColor();
+        $this->rightColor   = $event->getConfiguration()->getRightColor();
+        $this->textColor    = $event->getConfiguration()->getTextColor();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

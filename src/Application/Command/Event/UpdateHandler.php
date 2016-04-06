@@ -35,6 +35,9 @@ class UpdateHandler
     {
         $event = $update->event;
         $event->update($update->title, $update->locales, $update->fallback, $update->mode, $update->vat);
+        $event->getConfiguration()->setLeftColor($update->leftColor);
+        $event->getConfiguration()->setRightColor($update->rightColor);
+        $event->getConfiguration()->setTextColor($update->textColor);
 
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
