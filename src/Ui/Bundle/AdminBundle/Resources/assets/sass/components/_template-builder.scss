@@ -140,9 +140,11 @@
                 >.block-buttons {
                     border-bottom: 1px solid #eee;
 
-                    .btn {
-                        padding-left: 3px;
-                        padding-right: 3px;
+                    >li {
+                        >.btn {
+                            padding-left: 3px;
+                            padding-right: 3px;
+                        }
                     }
                 }
 
