@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-class Create
+use Proximum\Vimeet\Domain\Model\Sheet\Template;
+
+class AddLocale
 {
     /**
-     * @var string
+     * @var Template
      */
-    public $title;
+    public $template;
 
     /**
      * @var string
@@ -23,12 +25,12 @@ class Create
     public $locale;
 
     /**
-     * Create constructor.
+     * AddLocale constructor.
      *
-     * @param string $locale
+     * @param Template $template
      */
-    public function __construct($locale)
+    public function __construct(Template $template)
     {
-        $this->locale = $locale;
+        $this->template = $template;
     }
 }

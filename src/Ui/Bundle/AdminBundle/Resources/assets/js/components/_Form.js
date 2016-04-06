@@ -171,4 +171,13 @@ Form.prototype.checkRadio = function (inputs, value)
     }
 };
 
+Form.prototype.bind = function (name, value)
+{
+    var element = this.element.querySelector('[data-bind="' + name + '"]');
+
+    if (element !== null && element !== undefined) {
+        element.innerHTML = value ? value : '...';
+    }
+};
+
 module.exports = Form;
