@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
+use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Create
@@ -32,6 +33,11 @@ class Create
     public $template;
 
     /**
+     * @var SheetTemplate
+     */
+    public $sheetTemplate;
+
+    /**
      * @var array
      */
     public $validationCriteria = [];
@@ -42,13 +48,20 @@ class Create
     public $translations = [];
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * Create constructor.
      *
-     * @param Event $event
+     * @param Event  $event
+     * @param string $locale
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $locale)
     {
-        $this->event = $event;
+        $this->event  = $event;
+        $this->locale = $locale;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

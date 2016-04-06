@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class Template
 {
     /**
@@ -26,6 +28,11 @@ class Template
      * @var string
      */
     private $value;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * Template constructor.
@@ -67,6 +74,22 @@ class Template
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
     }
 
     /**

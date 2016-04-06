@@ -6,7 +6,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: "@template_exhibitor->participant"
-        sheetTemplate: "@template_exhibitor->sheet"
+        oldSheetTemplate: "@template_exhibitor->sheet"
         packageTemplate: "@template_exhibitor->package"
         previewTemplate: "@template_exhibitor->preview"
 
@@ -17,7 +17,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: "@template_exhibitor->participant"
-        sheetTemplate: "@template_exhibitor->sheet"
+        oldSheetTemplate: "@template_exhibitor->sheet"
         packageTemplate: "@template_exhibitor->package"
         previewTemplate: "@template_exhibitor->preview"
 
@@ -28,7 +28,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: "@template_visitor->participant"
-        sheetTemplate: "@template_visitor->sheet"
+        oldSheetTemplate: "@template_visitor->sheet"
         packageTemplate: "@template_visitor->package"
         previewTemplate: "@template_visitor->preview"
         viewTemplate: "@template_visitor->view"
@@ -40,7 +40,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: "@template_visitor->participant"
-        sheetTemplate: "@template_visitor->sheet"
+        oldSheetTemplate: "@template_visitor->sheet"
         packageTemplate: "@template_visitor->package"
         previewTemplate: "@template_visitor->preview"
         viewTemplate: "@template_visitor->view"
@@ -52,7 +52,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxPlanning: 4
         freeParticipant: 1
         participantTemplate: "@template_exhibitor->participant"
-        sheetTemplate: "@template_exhibitor->sheet"
+        oldSheetTemplate: "@template_exhibitor->sheet"
         packageTemplate: "@template_exhibitor->package"
         previewTemplate: "@template_exhibitor->preview"
 
