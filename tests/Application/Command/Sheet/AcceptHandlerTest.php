@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\Sheet\Accept;
 use Proximum\Vimeet\Application\Command\Sheet\AcceptHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
-use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
