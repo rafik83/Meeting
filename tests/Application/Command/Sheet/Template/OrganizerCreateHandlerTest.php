@@ -23,12 +23,12 @@ class OrganizerCreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime = new \DateTime();
         $event    = new Event();
-        $create   = new OrganizerCreate($dateTime);
+        $create   = new OrganizerCreate();
         $create->title = 'Toto';
         $create->event = $event;
 
         //expected
-        $expectedTemplate = new Template('Toto', '', $dateTime);
+        $expectedTemplate = new Template('Toto', [], [], $dateTime);
         $expectedTemplate->setEvent($event);
         $expectedResult   = new CreateResult($expectedTemplate);
 
@@ -37,7 +37,7 @@ class OrganizerCreateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
-        $handler = new OrganizerCreateHandler($templateRepository->reveal());
+        $handler = new OrganizerCreateHandler($templateRepository->reveal(), $dateTime);
         $result = $handler->handle($create);
 
         $this->assertEquals($expectedResult, $result);

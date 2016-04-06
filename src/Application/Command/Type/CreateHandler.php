@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -22,11 +23,20 @@ class CreateHandler
     private $typeRepository;
 
     /**
-     * @param TypeRepositoryInterface $typeRepository
+     * @var \DateTimeInterface
      */
-    public function __construct(TypeRepositoryInterface $typeRepository)
+    private $dateTime;
+
+    /**
+     * CreateHandler constructor.
+     *
+     * @param TypeRepositoryInterface $typeRepository
+     * @param \DateTimeInterface      $dateTime
+     */
+    public function __construct(TypeRepositoryInterface $typeRepository, \DateTimeInterface $dateTime)
     {
         $this->typeRepository = $typeRepository;
+        $this->dateTime       = $dateTime;
     }
 
     /**
@@ -48,9 +58,11 @@ class CreateHandler
         if ($create->sheetTemplate->getEvent() === $create->event) {
             $sheetTemplate = $create->sheetTemplate;
         } else {
-            $sheetTemplate = $create->sheetTemplate->duplicate(
+            $sheetTemplate = new Template(
                 $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->createdAt
+                $create->sheetTemplate->getValue(),
+                $create->sheetTemplate->getLocales(),
+                $this->dateTime
             );
             $sheetTemplate->setEvent($create->event);
         }

@@ -21,13 +21,20 @@ class OrganizerCreateHandler
     private $templateRepository;
 
     /**
-     * CreateHandler constructor.
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
+     * OrganizerCreateHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface          $dateTime
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {
         $this->templateRepository = $templateRepository;
+        $this->dateTime           = $dateTime;
     }
 
     /**
@@ -37,7 +44,7 @@ class OrganizerCreateHandler
      */
     public function handle(OrganizerCreate $create)
     {
-        $template = new Template($create->title, '', $create->createdAt);
+        $template = new Template($create->title, [], [], $this->dateTime);
         $template->setEvent($create->event);
 
         $this->templateRepository->add($template);

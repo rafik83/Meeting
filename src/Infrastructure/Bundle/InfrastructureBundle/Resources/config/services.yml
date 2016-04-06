@@ -244,6 +244,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@datetime'
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
             class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
             arguments:
@@ -594,10 +595,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
             - '@repository.sheet.template_repository'
+            - '@datetime'
     command.sheet.template.duplicate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler
         arguments:
             - '@repository.sheet.template_repository'
+            - '@datetime'
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:

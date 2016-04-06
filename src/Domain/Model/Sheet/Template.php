@@ -60,8 +60,9 @@ class Template
      */
     public function __construct($title, array $value, array $locales, \DateTimeInterface $createdAt)
     {
-        $this->title = $title;
-        $this->value = $value;
+        $this->title     = $title;
+        $this->value     = $value;
+        $this->createdAt = $createdAt;
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);

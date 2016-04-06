@@ -28,11 +28,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $event->setLocales(['fr']);
         $template      = new Template('test', [], [], [], '', '');
-        $sheetTemplate = new SheetTemplate('base toto', '', $dateTime);
+        $sheetTemplate = new SheetTemplate('base toto', [], [], $dateTime);
 
 
         //Expected
-        $expectedSheetTemplate = new SheetTemplate('toto', '', $dateTime);
+        $expectedSheetTemplate = new SheetTemplate('toto', [], [], $dateTime);
         $expectedSheetTemplate->setEvent($event);
         $expectedType = new Type($event);
         $expectedType->setTemplate($template);
@@ -41,7 +41,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedType->setSheetTemplate($expectedSheetTemplate);
 
         //Command
-        $create = new Create($event, 'fr', $dateTime);
+        $create = new Create($event, 'fr');
         $create->template = $template;
         $create->translations['fr']['title'] = 'toto';
         $create->validationCriteria['sheetAccepted'] = true;
@@ -52,7 +52,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $typeRepository->add($expectedType)->shouldBeCalled();
 
         //Handler
-        $handler = new CreateHandler($typeRepository->reveal());
+        $handler = new CreateHandler($typeRepository->reveal(), $dateTime);
         $handler->handle($create);
     }
 }

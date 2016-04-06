@@ -22,12 +22,12 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $template = new Template('Toto', '', $dateTime);
+        $template = new Template('Toto', [], [], $dateTime);
         $duplicate   = new Duplicate($template, $dateTime);
         $duplicate->title = 'Machin';
 
         //expected
-        $expectedTemplate = new Template('Machin', '', $dateTime);
+        $expectedTemplate = new Template('Machin', [], [], $dateTime);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
@@ -35,7 +35,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
-        $handler = new DuplicateHandler($templateRepository->reveal());
+        $handler = new DuplicateHandler($templateRepository->reveal(), $dateTime);
         $result = $handler->handle($duplicate);
 
         $this->assertEquals($expectedResult, $result);
@@ -46,7 +46,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $event  = new Event();
         $event2 = new Event();
-        $template = new Template('Toto', '', $dateTime);
+        $template = new Template('Toto', [], [], $dateTime);
         $template->setEvent($event);
 
         $duplicate   = new Duplicate($template, $dateTime);
@@ -54,7 +54,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $duplicate->event = $event2;
 
         //expected
-        $expectedTemplate = new Template('Machin', '', $dateTime);
+        $expectedTemplate = new Template('Machin', [], [], $dateTime);
         $expectedTemplate->setEvent($event2);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
@@ -63,7 +63,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
-        $handler = new DuplicateHandler($templateRepository->reveal());
+        $handler = new DuplicateHandler($templateRepository->reveal(), $dateTime);
         $result = $handler->handle($duplicate);
 
         $this->assertEquals($expectedResult, $result);

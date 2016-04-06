@@ -29,6 +29,7 @@ class CreateHandler
      * CreateHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface          $dateTime
      */
     public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {

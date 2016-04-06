@@ -102,7 +102,7 @@ class TemplateController extends Controller
         $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
         $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
 
-        $create = new OrganizerCreate(new \DateTime());
+        $create = new OrganizerCreate();
         $form   = $this->createForm(OrganizerCreateType::class, $create, [
             'submit' => true,
             'admin'  => $organizer,

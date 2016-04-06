@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
 class DuplicateHandler
@@ -20,13 +21,20 @@ class DuplicateHandler
     private $templateRepository;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
      * DuplicateHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface          $dateTime
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {
         $this->templateRepository = $templateRepository;
+        $this->dateTime           = $dateTime;
     }
 
     /**
@@ -36,7 +44,12 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
-        $template = $duplicate->template->duplicate($duplicate->title, $duplicate->createdAt);
+        $template = new Template(
+            $duplicate->title,
+            $duplicate->template->getValue(),
+            $duplicate->template->getLocales(),
+            $this->dateTime
+        );
 
         if (null !== $duplicate->event) {
             $template->setEvent($duplicate->event);
