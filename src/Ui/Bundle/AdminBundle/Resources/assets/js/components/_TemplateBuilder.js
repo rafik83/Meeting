@@ -430,7 +430,7 @@ TextObject.prototype.fill = function ()
     this.form.set('content', this.config.content[this.locale]);
     this.form.set('type', this.config.type);
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
+    this.form.bind('content', this.config.content[this.locale]);
 };
 
 TextObject.prototype.save = function ()
@@ -438,7 +438,7 @@ TextObject.prototype.save = function ()
     this.config.content[this.locale] = this.form.get('content');
     this.config.type                 = this.form.get('type');
 
-    this.element.querySelector('[data-bind="content"]').innerHTML = '' + this.config.content[this.locale];
+    this.form.bind('content', this.config.content[this.locale]);
 };
 
 /**
@@ -465,7 +465,7 @@ EditableTextObject.prototype.fill = function ()
     this.form.set('type', this.config.type);
     this.form.set('required', this.config.required);
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 EditableTextObject.prototype.save = function ()
@@ -477,7 +477,7 @@ EditableTextObject.prototype.save = function ()
     this.config.type                     = this.form.get('type');
     this.config.required                 = this.form.get('required');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 /**
@@ -501,7 +501,7 @@ ButtonLinkObject.prototype.fill = function ()
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
 
-    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('link', this.config.label[this.locale]);
 };
 
 ButtonLinkObject.prototype.save = function ()
@@ -510,7 +510,7 @@ ButtonLinkObject.prototype.save = function ()
     this.config.help[this.locale]     = this.form.get('help');
     this.config.required              = this.form.get('required');
 
-    this.element.querySelector('[data-bind="link"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('link', this.config.label[this.locale]);
 };
 
 /**
@@ -533,7 +533,7 @@ ParticipantObject.prototype.fill = function ()
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('numberOfParticipantShown', this.config.numberOfParticipantShown);
 
-    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown;
+    this.form.bind('participant', this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown);
 };
 
 ParticipantObject.prototype.save = function ()
@@ -541,7 +541,7 @@ ParticipantObject.prototype.save = function ()
     this.config.label[this.locale]       = this.form.get('label');
     this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
-    this.element.querySelector('[data-bind="participant"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown;
+    this.form.bind('participant', this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown);
 };
 
 
@@ -585,7 +585,7 @@ ChoiceObject.prototype.fill = function ()
     this.form.set('required', this.config.required);
     this.form.set('choices', this.getContent());
 
-    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.type;
+    this.form.bind('choice', + this.config.label[this.locale] + ' ' + this.config.type);
 };
 
 ChoiceObject.prototype.save = function ()
@@ -607,7 +607,7 @@ ChoiceObject.prototype.save = function ()
 
     this.config.choices = result;
 
-    this.element.querySelector('[data-bind="choice"]').innerHTML = '' + this.config.label[this.locale] + ' ' + this.config.type;
+    this.form.bind('choice', this.config.label[this.locale] + ' ' + this.config.type);
 };
 
 /**
@@ -632,7 +632,7 @@ ImageObject.prototype.fill = function ()
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+    this.form.bind('label', this.config.label);
 };
 
 ImageObject.prototype.save = function ()
@@ -642,7 +642,7 @@ ImageObject.prototype.save = function ()
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label;
+    this.form.bind('label', this.config.label);
 };
 
 /**
@@ -665,7 +665,7 @@ TagObject.prototype.fill = function ()
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('tag', this.config.tag);
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 TagObject.prototype.save = function ()
@@ -673,7 +673,7 @@ TagObject.prototype.save = function ()
     this.config.label[this.locale] = this.form.get('label');
     this.config.tag                = this.form.get('tag');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 /**
@@ -699,7 +699,7 @@ CollectionObject.prototype.fill = function ()
     this.form.set('required', this.config.required);
     this.form.set('default', this.config.default);
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 CollectionObject.prototype.save = function ()
@@ -710,7 +710,7 @@ CollectionObject.prototype.save = function ()
     this.config.required                 = this.form.get('required');
     this.config.default                  = this.form.get('default');
 
-    this.element.querySelector('[data-bind="label"]').innerHTML = '' + this.config.label[this.locale];
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 module.exports = TemplateBuilder;
