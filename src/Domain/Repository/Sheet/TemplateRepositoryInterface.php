@@ -25,6 +25,13 @@ interface TemplateRepositoryInterface
     public function getBaseTemplate();
 
     /**
+     * @param array $events
+     *
+     * @return Template[]
+     */
+    public function getTemplateForGivenEvents(array $events);
+
+    /**
      * @param Template $template
      */
     public function add(Template $template);
