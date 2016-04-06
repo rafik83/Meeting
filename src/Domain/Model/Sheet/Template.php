@@ -23,7 +23,7 @@ class Template
     private $title;
 
     /**
-     * @var string
+     * @var array
      */
     private $value = [];
 
@@ -36,10 +36,10 @@ class Template
      * Template constructor.
      *
      * @param string $title
-     * @param string $value
+     * @param array  $value
      * @param array  $locales
      */
-    public function __construct($title, $value, array $locales)
+    public function __construct($title, array $value, array $locales)
     {
         $this->title = $title;
         $this->value = $value;
