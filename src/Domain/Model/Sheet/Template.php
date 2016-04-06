@@ -135,6 +135,16 @@ class Template
     }
 
     /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
+    }
+
+    /**
      * @param array  $config
      * @param string $locale
      *

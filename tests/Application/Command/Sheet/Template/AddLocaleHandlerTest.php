@@ -92,4 +92,48 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new AddLocaleHandler($templateRepository->reveal());
         $handler->handle($command);
     }
+
+    public function testHandleHasLocale()
+    {
+        $template = new Template('My template', [
+            'ec74be5e' => [
+                'component' => 'object',
+                'type'      => 'text',
+                'config'    => [
+                    'content' => ['fr' => 'Lorem ipsum']
+                ],
+            ],
+            '211b2168' => [
+                'component' => 'block',
+                'type'      => '8-4',
+                'config'    => [
+                    [
+                        '0aea62b2' => [
+                            'component' => 'object',
+                            'type'      => 'editable-text',
+                            'config'    => [
+                                'label'       => ['fr' => 'Titre'],
+                                'placeholder' => ['fr' => 'Le titre'],
+                                'help'        => ['fr' => 'Ici le titre'],
+                                'length'      => 100,
+                                'required'    => true,
+                            ]
+                        ]
+                    ],
+                    [
+
+                    ]
+                ]
+            ],
+        ], ['fr']);
+
+        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository->set()->shouldNotBeCalled();
+
+        $command = new AddLocale($template);
+        $command->locale = 'fr';
+
+        $handler = new AddLocaleHandler($templateRepository->reveal());
+        $handler->handle($command);
+    }
 }

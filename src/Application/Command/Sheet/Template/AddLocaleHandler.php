@@ -34,6 +34,8 @@ class AddLocaleHandler
      */
     public function handle(AddLocale $command)
     {
-        $this->templateRepository->set($command->template->addLocale($command->locale));
+        if (!$command->template->hasLocale($command->locale)) {
+            $this->templateRepository->set($command->template->addLocale($command->locale));
+        }
     }
 }
