@@ -131,6 +131,12 @@ form:
                 label: Mode
             vat:
                 label: TVA
+            textColor:
+                label: Couleur du texte
+            leftColor:
+                label: Couleur habillage de gauche
+            rightColor:
+                label: Couleur habillage de droite
             translations:
                 prototype:
                     children:
