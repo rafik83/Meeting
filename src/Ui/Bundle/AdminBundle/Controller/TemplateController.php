@@ -148,7 +148,13 @@ class TemplateController extends Controller
     {
         $config = json_decode($request->getContent(), true);
 
-        $this->get('repository.sheet.template_repository')->set($template->setValue($config));
+        $template->setValue($config);
+
+        foreach ($template->getLocales() as $locale) {
+            $template->addLocale($locale);
+        }
+
+        $this->get('repository.sheet.template_repository')->set($template);
 
         return new JsonResponse();
     }

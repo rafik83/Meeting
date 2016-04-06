@@ -128,8 +128,11 @@ class Template
      */
     public function addLocale($locale)
     {
-        $this->locales[] = $locale;
-        $this->value     = self::createLocale($this->value, $locale);
+        if (!$this->hasLocale($locale)) {
+            $this->locales[] = $locale;
+        }
+
+        $this->value = self::createLocale($this->value, $locale);
 
         return $this;
     }
