@@ -3,23 +3,25 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
+namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Block\RowDataView;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\ParticipantDataView;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreview;
 use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SheetPreviewFactory
+class SheetPreviewQueryHandler
 {
     /**
      * @var ParticipantManager
@@ -44,24 +46,22 @@ class SheetPreviewFactory
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
+     * @param SheetPreviewQuery $query
      *
      * @return SheetPreview
      */
-    public function createFromSheet(Sheet $sheet, User $user, $locale)
+    public function handle(SheetPreviewQuery $query)
     {
-        $steps = array_slice(array_keys($sheet->getType()->getPackageTemplate()), 0, 1, false);
+        $steps = array_slice(array_keys($query->sheet->getType()->getPackageTemplate()), 0, 1, false);
 
         return new SheetPreview(
-            $locale,
-            $sheet->getId(),
-            $sheet->getType()->getTitle($locale),
-            $this->createParticipantViews($sheet, $user, $locale),
-            $this->participantManager->canAddParticipant($sheet),
-            $this->blockDataViewFactory->createBlockViews($sheet, $locale),
-            $sheet->getOrders()->count(),
+            $query->locale,
+            $query->sheet->getId(),
+            $query->sheet->getType()->getTitle($query->locale),
+            $this->createParticipantViews($query->sheet, $query->user, $query->locale),
+            $this->participantManager->canAddParticipant($query->sheet),
+            $this->blockDataViewFactory->createBlockViews($query->sheet, $query->locale),
+            $query->sheet->getOrders()->count(),
             current($steps)
         );
     }

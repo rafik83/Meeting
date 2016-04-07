@@ -865,11 +865,6 @@ services:
         arguments:
             - '@template.tagged_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
-    sheet.sheet_preview_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Preview\SheetPreviewFactory
-        arguments:
-            - '@vimeet_infrastructure.application.components.participant.participant_manager'
-            - '@sheet.block.block_data_view_factory'
     sheet.state_setter:
         class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
         arguments:
@@ -1110,7 +1105,7 @@ services:
     #
     # Queries
     #
-    query.sheet.sheet_list_view_factory:
+    query.sheet.sheet_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQueryHandler
         arguments:
             - '@adapter.sheet_search_adapter'
@@ -1120,7 +1115,13 @@ services:
             - '@repository.trace_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
-
+    query.sheet.sheet_preview_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\SheetPreviewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@sheet.block.block_data_view_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetPreviewQuery }
     #
     # Elastic Transformer
     #

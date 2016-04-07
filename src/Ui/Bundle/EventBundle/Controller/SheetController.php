@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
+use Proximum\Vimeet\Application\Query\Sheet\SheetPreviewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -47,7 +48,7 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
-        $preview = $this->get('sheet.sheet_preview_factory')->createFromSheet($sheet, $this->getUser(), $locale);
+        $preview = $this->get('tactician.commandbus.query')->handle(new SheetPreviewQuery($sheet, $this->getUser(), $locale));
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'sheet'         => $sheet,
