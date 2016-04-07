@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Adapter;
+namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
