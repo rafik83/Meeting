@@ -68,6 +68,11 @@ class SheetMeetingsListView
     public $transformationTotal;
 
     /**
+     * @var int
+     */
+    public $availableSlots;
+
+    /**
      * @var float
      */
     public $filling;
@@ -84,6 +89,7 @@ class SheetMeetingsListView
      * @param float  $propositionsTransformation
      * @param float  $transformationTotal
      * @param float  $requestsPropositionsTransformation
+     * @param int    $availableSlots
      * @param float  $filling
      */
     public function __construct(
@@ -98,6 +104,7 @@ class SheetMeetingsListView
         $propositionsTransformation,
         $transformationTotal,
         $requestsPropositionsTransformation,
+        $availableSlots,
         $filling
     ) {
         $this->id                                 = $id;
@@ -110,7 +117,8 @@ class SheetMeetingsListView
         $this->requestsTransformation             = $requestsTransformation;
         $this->propositionsTransformation         = $propositionsTransformation;
         $this->transformationTotal                = $transformationTotal;
-        $this->filling                            = $filling;
         $this->requestsPropositionsTransformation = $requestsPropositionsTransformation;
+        $this->availableSlots                     = $availableSlots;
+        $this->filling                            = $filling;
     }
 }

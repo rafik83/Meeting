@@ -182,13 +182,18 @@ class MeetingRequestController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $sheets = $this
+        $sheetMeetingsListViews = $this
             ->get('sheet.sheet_meetings_list_view_factory')
             ->findAll($event, $locale);
 
+        $meetingsMetrics = $this
+            ->get('sheet.meetings_metrics_view_factory')
+            ->getFromSheets($sheetMeetingsListViews);
+
         return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
-            'event'  => $event,
-            'sheets' => $sheets,
+            'event'            => $event,
+            'sheets'           => $sheetMeetingsListViews,
+            'meetings_metrics' => $meetingsMetrics,
         ]);
     }
 

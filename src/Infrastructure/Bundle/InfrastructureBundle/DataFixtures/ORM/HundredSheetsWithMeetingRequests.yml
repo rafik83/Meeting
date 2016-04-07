@@ -515,3 +515,170 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - <dateTimeBetween('-3 days', 'now')>
             - '@mr_user49'
         state: 'approved'
+    mr_meeting_request_sheet150_to_sheet{10..20}:
+        __construct:
+            - '@mr_sheet_investissor150'
+            - ['@mr_participant_investissor150']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user150'
+        state: 'approved'
+    mr_meeting_request_sheet151_to_sheet{15..25}:
+        __construct:
+            - '@mr_sheet_investissor151'
+            - ['@mr_participant_investissor151']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user151'
+        state: 'approved'
+    mr_meeting_request_sheet152_to_sheet{15..20}:
+        __construct:
+            - '@mr_sheet_investissor152'
+            - ['@mr_participant_investissor152']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user152'
+        state: 'approved'
+    mr_meeting_request_sheet153_to_sheet{154..164}:
+        __construct:
+            - '@mr_sheet_investissor153'
+            - ['@mr_participant_investissor153']
+            - '@mr_sheet_investissor<current()>'
+            - ['@mr_participant_investissor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user153'
+        state: 'approved'
+    mr_meeting_request_sheet154_to_sheet{155..175}:
+        __construct:
+            - '@mr_sheet_investissor154'
+            - ['@mr_participant_investissor154']
+            - '@mr_sheet_investissor<current()>'
+            - ['@mr_participant_investissor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user154'
+        state: 'approved'
+    mr_meeting_request_sheet154_to_sheet{30..55}:
+        __construct:
+            - '@mr_sheet_investissor154'
+            - ['@mr_participant_investissor154']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user154'
+        state: 'approved'
+    mr_meeting_request_sheet155_to_sheet{156..186}:
+        __construct:
+            - '@mr_sheet_investissor155'
+            - ['@mr_participant_investissor155']
+            - '@mr_sheet_investissor<current()>'
+            - ['@mr_participant_investissor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user155'
+        state: 'approved'
+    mr_meeting_request_sheet155_to_sheet{20..45}:
+        __construct:
+            - '@mr_sheet_investissor155'
+            - ['@mr_participant_investissor155']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user155'
+        state: 'approved'
+    mr_meeting_request_sheet156_to_sheet{157..190}:
+        __construct:
+            - '@mr_sheet_investissor156'
+            - ['@mr_participant_investissor156']
+            - '@mr_sheet_investissor<current()>'
+            - ['@mr_participant_investissor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user156'
+        state: 'approved'
+    mr_meeting_request_sheet156_to_sheet{10..55}:
+        __construct:
+            - '@mr_sheet_investissor156'
+            - ['@mr_participant_investissor156']
+            - '@mr_sheet_exhibitor<current()>'
+            - ['@mr_participant_exhibitor<current()>']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@mr_user156'
+        state: 'approved'
+
+Proximum\Vimeet\Domain\Model\Unavailability:
+    mr_participant_exhibitor1_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor1'
+            - <date('2016-10-18 13:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 15:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor10_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor10'
+            - <date('2016-10-18 8:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 10:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor20_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor20'
+            - <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 15:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor20_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor20'
+            - <date('2016-10-19 8:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 10:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor20_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor20'
+            - <date('2016-10-19 15:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 18:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor30_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor30'
+            - <date('2016-10-18 8:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 12:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor30_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor30'
+            - <date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 18:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor40_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor40'
+            - <date('2016-10-18 8:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor40_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor40'
+            - <date('2016-10-19 15:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 18:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor50_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor50'
+            - <date('2016-10-19 08:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 18:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor51_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor51'
+            - <date('2016-10-19 11:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor52_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor52'
+            - <date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 18:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor53_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor53'
+            - <date('2016-10-18 08:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 15:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor54_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor54'
+            - <date('2016-10-18 08:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-18 10:00:00', 'Europe/Paris', 'UTC')>
+    mr_participant_exhibitor55_unavailability:
+        __construct:
+            - '@mr_participant_exhibitor55'
+            - <date('2016-10-19 08:00:00', 'Europe/Paris', 'UTC')>
+            - <date('2016-10-19 12:00:00', 'Europe/Paris', 'UTC')>
