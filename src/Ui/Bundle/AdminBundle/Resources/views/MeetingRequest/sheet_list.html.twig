@@ -3,9 +3,49 @@
 {% block content %}
     <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
 
-    <a href="{{ path('admin_transform_requests_to_meetings', { 'event': event.id }) }}" class="btn btn-success">
-        Générer les rendez-vous
-    </a>
+    <p>
+        <a href="{{ path('admin_transform_requests_to_meetings', { 'event': event.id }) }}" class="btn btn-success">
+            Générer les rendez-vous
+        </a>
+    </p>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Demandes de RDV</div>
+                <div class="panel-body text-center">
+                    <h2>{{ requests_total }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">RDV</div>
+                <div class="panel-body text-center">
+                    <h2>{{ meetings_total }} <span class="label label-default">{{ transformation_total|number_format }} %</span></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Moyenne part des RDV demandés</div>
+                <div class="panel-body text-center">
+                    <h2>{{ average_requests_propositions_transformation|number_format }} %</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Moyenne utilisation des slots</div>
+                <div class="panel-body text-center">
+                    <h2>{{ average_filling|number_format }} %</h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <table class="table table-hover sortable">
         <thead>
@@ -21,8 +61,9 @@
                 <th class="text-right">Total demandes</th>
                 <th class="text-right">Total RDV</th>
                 <th class="text-right">%</th>
-                <th class="text-right">% RDV demandés / Total</th>
-                <th class="text-right">% remplissage planning</th>
+                <th class="text-right">Part des RDV demandés / Total RDV</th>
+                <th class="text-right">Slots</th>
+                <th class="text-right">% utilisation slots</th>
             </tr>
         </thead>
 
@@ -66,6 +107,9 @@
                 </td>
                 <td class="text-right">
                     {{ sheet.requestsPropositionsTransformation|number_format }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.availableSlots }}
                 </td>
                 <td class="text-right">
                     {{ sheet.filling|number_format }}

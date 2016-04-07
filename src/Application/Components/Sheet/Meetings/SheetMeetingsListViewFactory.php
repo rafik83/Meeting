@@ -72,13 +72,13 @@ class SheetMeetingsListViewFactory
      * @param Event  $event
      * @param string $locale
      *
-     * @return array
+     * @return SheetMeetingsListView[]
      */
     public function findAll(Event $event, $locale)
     {
         $sheets = $this->sheetRepository->getSheets($event, $locale);
 
-        $sheets = array_map(function (Sheet $sheet) use ($locale) {
+        $sheetMeetingsListViews = array_map(function (Sheet $sheet) use ($locale) {
             $participantIds = array_map(function (Participant $participant) {
                 return $participant->getId();
             }, $sheet->getParticipants()->toArray());
@@ -94,7 +94,7 @@ class SheetMeetingsListViewFactory
             );
         }, $sheets);
 
-        return $sheets;
+        return $sheetMeetingsListViews;
     }
 
     /**
@@ -104,7 +104,7 @@ class SheetMeetingsListViewFactory
      * @param int   $meetingsPropositionsNumber
      * @param int   $requestsNumber
      * @param int   $propositionsNumber
-     * @param int   $slots
+     * @param int   $availableSlots
      *
      * @return SheetMeetingsListView
      */
@@ -115,10 +115,27 @@ class SheetMeetingsListViewFactory
         $meetingsPropositionsNumber,
         $requestsNumber,
         $propositionsNumber,
-        $slots
+        $availableSlots
     ) {
-        $requestsTransformation = $meetingsRequestsNumber === 0 ? 0 : 100 * $meetingsRequestsNumber / $requestsNumber;
-        $propositionsTransformation = $meetingsPropositionsNumber === 0 ? 0 : 100 * $meetingsPropositionsNumber / $propositionsNumber;
+        $requestsTransformation = $meetingsRequestsNumber === 0
+            ? 0
+            : 100 * $meetingsRequestsNumber / $requestsNumber;
+
+        $propositionsTransformation = $meetingsPropositionsNumber === 0
+            ? 0
+            : 100 * $meetingsPropositionsNumber / $propositionsNumber;
+
+        $transformationTotal = $requestsNumber + $propositionsNumber === 0
+            ? 0
+            : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / ($requestsNumber + $propositionsNumber);
+
+        $requestsPropositionsTransformation = $requestsNumber + $propositionsNumber === 0
+            ? 0
+            : 100 * $meetingsRequestsNumber / ($requestsNumber + $propositionsNumber);
+
+        $filling = $availableSlots === 0
+            ? 0
+            : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / $availableSlots;
 
         return new SheetMeetingsListView(
             $sheet->getId(),
@@ -130,9 +147,10 @@ class SheetMeetingsListViewFactory
             $propositionsNumber,
             $requestsTransformation,
             $propositionsTransformation,
-            $requestsNumber + $propositionsNumber === 0 ? 0 : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / ($requestsNumber + $propositionsNumber),
-            $requestsNumber + $propositionsNumber === 0 ? 0 : 100 * $meetingsRequestsNumber / ($requestsNumber + $propositionsNumber),
-            $slots === 0 ? 0 : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / $slots
+            $transformationTotal,
+            $requestsPropositionsTransformation,
+            $availableSlots,
+            $filling
         );
     }
 }
