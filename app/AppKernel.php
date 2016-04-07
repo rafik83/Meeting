@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Elao\ErrorNotifierBundle\ElaoErrorNotifierBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new League\Tactician\Bundle\TacticianBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
