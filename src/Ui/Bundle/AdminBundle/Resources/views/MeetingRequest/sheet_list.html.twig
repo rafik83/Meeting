@@ -12,15 +12,17 @@
             <tr>
                 <th>{{ sheets|length }} fiches de participation</th>
                 <th>Type</th>
-                <th class="col-xs-1">Demandes de RDV acceptées</th>
-                <th class="col-xs-1">Demandes transformées en RDV</th>
-                <th>%</th>
-                <th class="col-xs-1">Propositions de RDV acceptées</th>
-                <th class="col-xs-1">Propositions transformées en RDV</th>
-                <th>%</th>
-                <th class="col-xs-1">Total demandes de RDV</th>
-                <th class="col-xs-1">Total RDV transformés</th>
-                <th>%</th>
+                <th class="text-right">Demandes acceptées</th>
+                <th class="text-right">Demandes transformées</th>
+                <th class="text-right">%</th>
+                <th class="text-right">Propositions acceptées</th>
+                <th class="text-right">Propositions transformées</th>
+                <th class="text-right">%</th>
+                <th class="text-right">Total demandes</th>
+                <th class="text-right">Total RDV</th>
+                <th class="text-right">%</th>
+                <th class="text-right">% RDV demandés / Total</th>
+                <th class="text-right">% remplissage planning</th>
             </tr>
         </thead>
 
@@ -35,32 +37,38 @@
                 <td>
                     {{ sheet.type }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsRequestsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsTransformation|number_format }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.propositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsPropositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.propositionsTransformation|number_format }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsNumber + sheet.propositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.transformationTotal|number_format }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.requestsPropositionsTransformation|number_format }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.filling|number_format }}
                 </td>
             </tr>
         {% endfor %}

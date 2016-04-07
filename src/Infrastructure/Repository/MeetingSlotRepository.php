@@ -52,7 +52,23 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAvailableSlotIdByParticipantsIds(array $ids)
+    public function countByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(slot.id)')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
+            ->where('slot.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAvailableSlotIdByParticipantsIds(array $ids, $ignoreMeetings = false)
     {
         $queryBuilder = $this
             ->entityManager
@@ -60,9 +76,13 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->select('slot.id')
             ->from(MeetingSlot::class, 'slot', 'slot.id');
 
-        // Participants have not already a meeting at this slot
-        $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id IN (:ids) OR tp.id IN (:ids)) AND m.slot = slot)');
+        if (!$ignoreMeetings) {
+            // Participants have not already a meeting at this slot
+            $queryBuilder
+                ->andWhere(
+                    'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id IN (:ids) OR tp.id IN (:ids)) AND m.slot = slot)'
+                );
+        }
 
         // Participants have not unavailability during this slot
         $queryBuilder

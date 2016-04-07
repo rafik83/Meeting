@@ -23,9 +23,17 @@ interface MeetingSlotRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event);
+
+    /**
      * @param array $ids
+     * @param bool  $ignoreMeetings
      *
      * @return array
      */
-    public function findAvailableSlotIdByParticipantsIds(array $ids);
+    public function findAvailableSlotIdByParticipantsIds(array $ids, $ignoreMeetings = false);
 }

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Exception\MeetingRequest\SlotUnavailableException;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -75,28 +74,23 @@ class RequestsToMeetingsHandler
         // Get event slots
         $eventSlots = $this->meetingSlotRepository->findByEvent($event);
 
-        $requestsPositioned = [];
-        $sheetSlots         = [];
-        $sheetRequests      = [];
-        $sheetPropositions  = [];
+        $sheetSlots    = [];
+        $sheetRequests = [];
 
         foreach ($sheets as $sheet) {
             $ids = array_map(function (Participant $participant) {
                 return $participant->getId();
             }, $sheet->getParticipants()->toArray());
 
-            $sheetSlots[$sheet->getId()]        = $this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($ids);
-            $sheetRequests[$sheet->getId()]     = $this->requestRepository->getApprovedRequestSentBySheet($sheet);
-            $sheetPropositions[$sheet->getId()] = $this->requestRepository->getApprovedPropositionReceivedBySheet($sheet);
+            $sheetSlots[$sheet->getId()]    = $this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($ids);
+            $sheetRequests[$sheet->getId()] = $this->requestRepository->getApprovedRequestSentBySheet($sheet);
         }
 
         while (true) {
             $createdMeeting = false;
 
             foreach ($sheets as $sheet) {
-                if (!isset($sheetRequests[$sheet->getId()]) && !isset($sheetPropositions[$sheet->getId()])
-                    && !count($sheetRequests[$sheet->getId()]) && !count($sheetPropositions[$sheet->getId()])
-                ) {
+                if (!isset($sheetRequests[$sheet->getId()]) && !count($sheetRequests[$sheet->getId()])) {
                     continue;
                 }
 
@@ -108,11 +102,6 @@ class RequestsToMeetingsHandler
                 $request = array_shift($sheetRequests[$sheet->getId()]);
 
                 if (null === $request) {
-                    continue;
-                }
-
-                // Request or proposition already positioned ?
-                if (false !== array_search($request->getId(), $requestsPositioned)) {
                     continue;
                 }
 
@@ -147,8 +136,6 @@ class RequestsToMeetingsHandler
                 // Remove slot for the two sheets
                 $this->removeSlot($slotId, $sheetSlots[$request->getFromSheet()->getId()]);
                 $this->removeSlot($slotId, $sheetSlots[$request->getToSheet()->getId()]);
-
-                $requestsPositioned[] = $request->getId();
 
                 $createdMeeting = true;
             }
