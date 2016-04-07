@@ -233,7 +233,7 @@ class Template
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      *
      * @return float
      */
