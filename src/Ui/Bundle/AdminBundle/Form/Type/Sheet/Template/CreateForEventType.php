@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template;
 
-use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate;
+use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateForEventType extends AbstractType
@@ -48,7 +47,7 @@ class CreateForEventType extends AbstractType
     {
         $resolver->setRequired(['admin']);
         $resolver->setDefaults([
-            'data_class' => OrganizerCreate::class,
+            'data_class' => CreateForEvent::class,
         ]);
     }
 

@@ -116,10 +116,10 @@ class TemplateController extends Controller
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
-            'templates'      => $templates,
-            'form'           => $form->createView(),
-            'filter_form'    => $filterFormView,
-            'filter_summary' => $filterSummary,
+            'templates'       => $templates,
+            'form'            => $form->createView(),
+            'filter_form'     => $filterFormView,
+            'filters_summary' => $filterSummary,
         ]);
     }
 
