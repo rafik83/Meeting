@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Transformer\Elastic;
+namespace Proximum\Vimeet\Infrastructure\Elastica\Transformer;
 
 use Elastica\Document;
 use FOS\ElasticaBundle\Exception\InvalidArgumentTypeException;
