@@ -97,6 +97,8 @@ class TemplateController extends Controller
         if ($filtered) {
             $filters = $filterForm->getData();
         }
+        $filterFormView = $filterForm->createView();
+        $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
         $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
         $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
@@ -114,9 +116,10 @@ class TemplateController extends Controller
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
-            'templates'   => $templates,
-            'form'        => $form->createView(),
-            'filter_form' => $filterForm->createView(),
+            'templates'      => $templates,
+            'form'           => $form->createView(),
+            'filter_form'    => $filterFormView,
+            'filter_summary' => $filterSummary,
         ]);
     }
 
