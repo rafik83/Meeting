@@ -162,5 +162,5 @@ tactician:
                 - tactician.middleware.command_handler
         query:
             middleware:
-                - tactician.middleware.validator    
+                - tactician.middleware.validator
                 - tactician.middleware.command_handler
