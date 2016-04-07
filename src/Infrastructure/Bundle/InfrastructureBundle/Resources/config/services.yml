@@ -609,6 +609,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler
         arguments:
             - '@repository.sheet.template_repository'
+            - '@datetime'
     command.sheet.template.add_locale_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler
         arguments:
