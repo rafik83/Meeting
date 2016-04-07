@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrganizerCreateType extends AbstractType
+class CreateForEventType extends AbstractType
 {
     /**
      * {@inheritdoc}

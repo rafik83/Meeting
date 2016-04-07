@@ -9,10 +9,10 @@ services:
         tags:
             - { name: form.type }
     form_type_sheet_template.organizer_create_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerCreateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType
         tags:
             - { name: form.type }
     form_type_sheet_template.organizer_duplicate_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerDuplicateType
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType
         tags:
             - { name: form.type }

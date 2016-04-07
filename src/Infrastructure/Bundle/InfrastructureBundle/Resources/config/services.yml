@@ -596,8 +596,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
             - '@repository.admin_repository'
-    command.sheet.template.organizer_create_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreateHandler
+    command.sheet.template.create_for_event_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler
         arguments:
             - '@repository.sheet.template_repository'
 
