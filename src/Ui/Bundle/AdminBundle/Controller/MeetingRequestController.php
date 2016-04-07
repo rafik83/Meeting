@@ -188,41 +188,14 @@ class MeetingRequestController extends Controller
             ->get('sheet.sheet_meetings_list_view_factory')
             ->findAll($event, $locale);
 
-        $meetingsTotal                           = 0;
-        $requestsTotal                           = 0;
-        $slotsTotal                              = 0;
-        $fillingTotal                            = 0;
-        $requestsPropositionsTransformationTotal = 0;
-        $sheetsTotalForRequestsTransformation    = 0;
-        $sheetsTotal                             = count($sheetMeetingsListViews);
-
-        foreach ($sheetMeetingsListViews as $sheet) {
-            $meetingsTotal += $sheet->meetingsRequestsNumber;
-            $requestsTotal += $sheet->requestsNumber;
-            $slotsTotal += $sheet->availableSlots;
-            $fillingTotal += $sheet->filling;
-
-            if ($sheet->requestsNumber) {
-                $requestsPropositionsTransformationTotal += $sheet->requestsPropositionsTransformation;
-                $sheetsTotalForRequestsTransformation++;
-            }
-        }
-
-        $transformationTotal = !$requestsTotal ? 0 : 100 * $meetingsTotal / $requestsTotal;
-        $averageFilling      = !$sheetsTotal ? 0 : $fillingTotal / $sheetsTotal;
-
-        $averageRequestsPropositionsTransformation = !$sheetsTotalForRequestsTransformation
-            ? 0
-            : $requestsPropositionsTransformationTotal / $sheetsTotalForRequestsTransformation;
+        $meetingsMetrics = $this
+            ->get('sheet.meetings_metrics_view_factory')
+            ->getFromSheets($sheetMeetingsListViews);
 
         return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
-            'event'                                        => $event,
-            'sheets'                                       => $sheetMeetingsListViews,
-            'meetings_total'                               => $meetingsTotal,
-            'requests_total'                               => $requestsTotal,
-            'transformation_total'                         => $transformationTotal,
-            'average_filling'                              => $averageFilling,
-            'average_requests_propositions_transformation' => $averageRequestsPropositionsTransformation,
+            'event'            => $event,
+            'sheets'           => $sheetMeetingsListViews,
+            'meetings_metrics' => $meetingsMetrics,
         ]);
     }
 

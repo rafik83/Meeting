@@ -14,7 +14,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading text-center">Demandes de RDV</div>
                 <div class="panel-body text-center">
-                    <h2>{{ requests_total }}</h2>
+                    <h2>{{ meetings_metrics.requestsTotal }}</h2>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading text-center">RDV</div>
                 <div class="panel-body text-center">
-                    <h2>{{ meetings_total }} <span class="label label-default">{{ transformation_total|number_format }} %</span></h2>
+                    <h2>{{ meetings_metrics.meetingsTotal }} <span class="label label-default">{{ meetings_metrics.transformationTotal|number_format }} %</span></h2>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading text-center">Moyenne part des RDV demandés</div>
                 <div class="panel-body text-center">
-                    <h2>{{ average_requests_propositions_transformation|number_format }} %</h2>
+                    <h2>{{ meetings_metrics.averageRequestsPropositionsTransformation|number_format }} %</h2>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading text-center">Moyenne utilisation des slots</div>
                 <div class="panel-body text-center">
-                    <h2>{{ average_filling|number_format }} %</h2>
+                    <h2>{{ meetings_metrics.averageFilling|number_format }} %</h2>
                 </div>
             </div>
         </div>
