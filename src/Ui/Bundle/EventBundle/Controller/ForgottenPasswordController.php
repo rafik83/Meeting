@@ -45,7 +45,7 @@ class ForgottenPasswordController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.user.forgotten_password_handler')->handle($forgottenPassword);
+                $this->get('tactician.commandbus')->handle($forgottenPassword);
                 $this->addFlash('success', 'flash.reset_password_token.success');
 
                 return $this->redirectToRoute('event');
@@ -83,7 +83,7 @@ class ForgottenPasswordController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.user.new_password_handler')->handle($newPassword);
+            $this->get('tactician.commandbus')->handle($newPassword);
             $this->get('adapter.authentication_manager')->authenticate($forgottenPasswordToken->getUser(), 'main');
             $this->addFlash('success', 'flash.new_password.success');
 

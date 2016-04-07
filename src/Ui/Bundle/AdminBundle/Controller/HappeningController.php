@@ -69,7 +69,7 @@ class HappeningController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.create_handler')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.happening.create.success');
 
             return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
@@ -109,7 +109,7 @@ class HappeningController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.update.success');
 
             return $this->redirectToRoute('admin_happening_update', ['event' => $event->getId(), 'happening' => $happening->getId()]);
@@ -159,7 +159,7 @@ class HappeningController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.category.create_handler')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.happening.category.create.success');
 
             return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);
@@ -194,7 +194,7 @@ class HappeningController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.category.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.category.update.success');
 
             return $this->redirectToRoute('admin_happening_category_list', ['event' => $event->getId()]);

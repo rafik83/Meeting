@@ -37,7 +37,7 @@ class AccountController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.admin.change_password_handler')->handle($changePassword);
+            $this->get('tactician.commandbus')->handle($changePassword);
             $this->addFlash('success', 'flash.admin.change_password.success');
 
             return $this->redirectToRoute('admin_account');

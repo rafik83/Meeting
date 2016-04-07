@@ -55,7 +55,7 @@ class SpeakerController extends Controller
         $form    = $this->createForm(CreateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.speaker.create_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.speaker.create.success');
 
             return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
@@ -82,7 +82,7 @@ class SpeakerController extends Controller
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.happening.speaker.update_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.speaker.update.success');
 
             return $this->redirectToRoute('admin_happening_speaker_update', ['event' => $event->getId(), 'speaker' => $speaker->getId()]);
@@ -126,7 +126,7 @@ class SpeakerController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $this->get('command.happening.speaker.delete_handler')->handle(new Delete($speaker));
+        $this->get('tactician.commandbus')->handle(new Delete($speaker));
         $this->addFlash('success', 'flash.admin.speaker.delete.success');
 
         return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);

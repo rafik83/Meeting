@@ -41,8 +41,7 @@ class ChangePasswordController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.application.command.user.change_password')->handle($changePassword);
-
+            $this->get('tactician.commandbus')->handle($changePassword);
             $this->addFlash('success', 'flash.change_password.success');
 
             return $this->redirectToRoute('event');

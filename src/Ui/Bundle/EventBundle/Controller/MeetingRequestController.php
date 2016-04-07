@@ -112,7 +112,7 @@ class MeetingRequestController extends Controller
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, ['sheet' => $from]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler')->handle($createRequest);
+            $this->get('tactician.commandbus')->handle($createRequest);
             $this->addFlash('success', 'flash.meeting_request.create.success');
 
             return $this->redirectToRoute('event_catalog_category', ['categoryView' => $categoryView->id]);
@@ -148,7 +148,7 @@ class MeetingRequestController extends Controller
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, ['sheet' => $sheet]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler')->handle($approveRequest);
+            $this->get('tactician.commandbus')->handle($approveRequest);
             $this->addFlash('success', 'flash.meeting_request.approved.success');
 
             return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
@@ -187,7 +187,7 @@ class MeetingRequestController extends Controller
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler')->handle($refuseRequest);
+            $this->get('tactician.commandbus')->handle($refuseRequest);
             $this->addFlash('success', 'flash.meeting_request.refused.success');
 
             return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
@@ -281,7 +281,7 @@ class MeetingRequestController extends Controller
         $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler')->handle($cancelRequest);
+            $this->get('tactician.commandbus')->handle($cancelRequest);
             $this->addFlash('success', 'flash.meeting_request.cancelled.success');
 
             return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);
@@ -319,17 +319,15 @@ class MeetingRequestController extends Controller
         if ($meetingRequest->getFromSheet() === $sheet) {
             $command = new UpdateRequestFrom($meetingRequest, new \DateTime(), $this->getUser());
             $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, ['sheet' => $sheet]);
-            $handler = $this->get('vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler');
         } elseif ($meetingRequest->getToSheet() === $sheet) {
             $command = new UpdateRequestTo($meetingRequest, new \DateTime(), $this->getUser());
             $form    = $this->createForm(MeetingRequestUpdateToType::class, $command, ['sheet' => $sheet]);
-            $handler = $this->get('vimeet_infrastructure.vimeet.application.command.meeting.update_request_to_handler');
         } else {
             throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $handler->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.meeting_request.edit.success');
 
             return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);

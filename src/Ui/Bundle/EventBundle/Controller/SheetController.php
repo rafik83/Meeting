@@ -97,7 +97,7 @@ class SheetController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.sheet.update_block_handler')->handle($updateBlock);
+                $this->get('tactician.commandbus')->handle($updateBlock);
                 $this->addFlash('success', 'flash.sheet.update_block.success');
 
                 // Go to the sheet

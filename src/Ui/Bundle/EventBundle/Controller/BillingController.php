@@ -52,10 +52,7 @@ class BillingController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.billing.update_handler')
-                    ->handle($update);
-
+                $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.sheet.update_billing.success');
 
                 return $this->redirectToRoute('event_sheet_package_payment_mode', [
@@ -109,9 +106,7 @@ class BillingController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.order.create_handler')
-                ->handle($createOrder);
-
+            $this->get('tactician.commandbus')->handle($createOrder);
             $this->addFlash('success', 'flash.package.payment_mode.success');
 
             // Go to the list of orders

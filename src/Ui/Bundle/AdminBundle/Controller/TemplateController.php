@@ -65,7 +65,7 @@ class TemplateController extends Controller
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.create_handler')->handle($create);
+            $result = $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('admin_template_builder', [
                 'template' => $result->template->getId(),
@@ -116,7 +116,7 @@ class TemplateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.create_for_event_handler')->handle($create);
+            $result = $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
@@ -144,7 +144,7 @@ class TemplateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+            $result = $this->get('tactician.commandbus')->handle($duplicate);
 
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
@@ -172,7 +172,7 @@ class TemplateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+            $result = $this->get('tactician.commandbus')->handle($duplicate);
 
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
@@ -239,7 +239,7 @@ class TemplateController extends Controller
 
         if ($addLocaleForm->handleRequest($request)->isSubmitted()) {
             if ($addLocaleForm->isValid()) {
-                $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
+                $this->get('tactician.commandbus')->handle($addLocale);
 
                 return $this->redirectToRoute('admin_template_builder', [
                     'template' => $template->getId(),
@@ -270,7 +270,7 @@ class TemplateController extends Controller
         }
 
         $config = json_decode($request->getContent(), true);
-        $this->get('command.sheet.template.save_handler')->handle(new Save($template, $config));
+        $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
         return new JsonResponse();
     }

@@ -141,9 +141,7 @@ class MeetingRequestController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler')
-                ->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
             return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
@@ -204,11 +202,7 @@ class MeetingRequestController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $requestsToMeetings = new RequestsToMeetings($event, new \DateTime());
-
-        $this
-            ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.request_to_meetings_handler')
-            ->handle($requestsToMeetings);
-
+        $this->get('tactician.commandbus')->handle($requestsToMeetings);
         $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
         return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);

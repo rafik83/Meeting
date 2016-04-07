@@ -81,9 +81,7 @@ class PackageController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.package.update_step_handler')
-                    ->handle($updateStep);
+                $this->get('tactician.commandbus')->handle($updateStep);
 
                 return $this->redirect($this->urlAfterUpdateStep($request, $sheet, $step));
             } catch (BoughtParticipantAlreadyAddedException $exception) {
@@ -179,10 +177,7 @@ class PackageController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this
-                    ->get('vimeet_infrastructure.vimeet.application.command.package.add_products_handler')
-                    ->handle($addProducts);
-
+                $this->get('tactician.commandbus')->handle($addProducts);
                 $this->addFlash('success', 'flash.package.add_products.success');
 
                 return $this->redirectToRoute('event_sheet_package_cart', ['sheet' => $sheet->getId()]);
@@ -277,28 +272,16 @@ class PackageController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.package.update_product_handler')
-                ->handle($updateProduct);
+            $this->get('tactician.commandbus')->handle($updateProduct);
 
             if ($updateProduct->isNegative()) {
                 $this->addFlash('success', 'flash.package.update_product.created_negative_order');
 
-                return $this->redirectToRoute(
-                    'event_sheet_list_orders',
-                    [
-                        'sheet' => $sheet->getId(),
-                    ]
-                );
+                return $this->redirectToRoute('event_sheet_list_orders', ['sheet' => $sheet->getId()]);
             } elseif ($updateProduct->isPositive()) {
                 $this->addFlash('success', 'flash.package.update_product.added_updated_product_to_cart');
 
-                return $this->redirectToRoute(
-                    'event_sheet_package_cart',
-                    [
-                        'sheet' => $sheet->getId(),
-                    ]
-                );
+                return $this->redirectToRoute('event_sheet_package_cart', ['sheet' => $sheet->getId()]);
             }
 
             $form->addError(new FormError('Aucune modification effectuée'));

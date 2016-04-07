@@ -43,7 +43,7 @@ class AccountController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.user.change_mail_handler')->handle($changeMail);
+                $this->get('tactician.commandbus')->handle($changeMail);
                 $this->addFlash('success', 'flash.change_mail.success');
 
                 return $this->redirectToRoute('event');
@@ -79,7 +79,7 @@ class AccountController extends Controller
         $user                 = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
 
-        $this->get('command.user.change_mail_activation_handler')->handle($changeMailActivation);
+        $this->get('tactician.commandbus')->handle($changeMailActivation);
         $this->get('adapter.authentication_manager')->authenticate($user, 'main');
         $this->addFlash('success', 'flash.change_mail_activate.success');
 

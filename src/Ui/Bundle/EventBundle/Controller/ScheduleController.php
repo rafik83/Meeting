@@ -73,7 +73,7 @@ class ScheduleController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.event.schedule.unavailability.add.success');
 
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
@@ -109,7 +109,7 @@ class ScheduleController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.update_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.event.schedule.unavailability.update.success');
 
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
@@ -134,7 +134,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $command = new Remove($unavailability);
-        $this->get('vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler')->handle($command);
+        $this->get('tactician.commandbus')->handle($command);
         $this->addFlash('success', 'flash.event.schedule.unavailability.remove.success');
 
         return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
@@ -165,9 +165,7 @@ class ScheduleController extends Controller
 
         // Handle form
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.components.happening.participate_handler')
-                ->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
 
             $this->addFlash('success', 'flash.event.schedule.happening.participate.success');
 
@@ -193,11 +191,7 @@ class ScheduleController extends Controller
      */
     public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening, Participant $participant)
     {
-        // Unparticipate
-        $this
-            ->get('vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler')
-            ->handle(new Unparticipate($happening, $participant));
-
+        $this->get('tactician.commandbus')->handle(new Unparticipate($happening, $participant));
         $this->addFlash('success', 'flash.event.schedule.happening.unparticipate.success');
 
         return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);

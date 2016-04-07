@@ -56,7 +56,7 @@ class RegisterController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 // Register and authenticate the user
-                $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
+                $this->get('tactician.commandbus')->handle($register);
                 $this->get('adapter.authentication_manager')->authenticate($register->user, 'main');
                 $this->addFlash('success', 'flash.event.register.success');
 
@@ -107,7 +107,7 @@ class RegisterController extends Controller
             try {
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $create->data);
-                $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
+                $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet

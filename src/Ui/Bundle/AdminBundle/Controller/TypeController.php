@@ -63,7 +63,7 @@ class TypeController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.type.create_handler')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.type.create.success');
 
             return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
@@ -98,7 +98,7 @@ class TypeController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.type.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.type.update.success');
 
             return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);

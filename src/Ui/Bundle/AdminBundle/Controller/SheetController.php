@@ -103,7 +103,7 @@ class SheetController extends Controller
                 $batch->assign   = $batchForm->get('assign')->isClicked();
                 $batch->accept   = $batchForm->get('accept')->isClicked();
 
-                $result = $this->get('command.sheet.batch_handler')->handle($batch);
+                $result = $this->get('tactician.commandbus')->handle($batch);
 
                 if ($batch->validate) {
                     $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count, ['%count%' => $result->count]));
@@ -161,7 +161,7 @@ class SheetController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.sheet.add_comment_handler')->handle($addComment);
+            $this->get('tactician.commandbus')->handle($addComment);
             $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
 
             return $this->redirectToRoute('admin_sheet_details', [

@@ -63,7 +63,7 @@ class CategoryController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.category.create_handler')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.category.create.success');
 
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
@@ -99,7 +99,7 @@ class CategoryController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.category.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.category.update.success');
 
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
