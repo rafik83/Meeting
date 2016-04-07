@@ -34,13 +34,18 @@
     </div>
     {{ form_end(form) }}
 
+    {{ include('AdminBundle:Common:filters_summary.html.twig', {
+        filters:   filters_summary,
+        resetLink: path('admin_organizer_template_list')
+    }) }}
+
     <table class="table">
         <thead>
         <tr>
-            <th>Titre</th>
+            <th>{{ 'admin.organizer_template_list.table.column.title'|trans }}</th>
             <th>{{ list_macros.choice_as_dropdown(filter_form.event) }}</th>
-            <th>Date de création</th>
-            <th class="text-right">Action</th>
+            <th>{{ 'admin.organizer_template_list.table.column.date'|trans }}</th>
+            <th class="text-right">{{ 'admin.organizer_template_list.table.column.action'|trans }}</th>
         </tr>
         </thead>
         <tbody>

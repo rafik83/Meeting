@@ -12,16 +12,16 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
+use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
-use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerCreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\OrganizerDuplicateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -79,6 +79,11 @@ class TemplateController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
     public function listOrganizerTemplateAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
@@ -98,26 +103,29 @@ class TemplateController extends Controller
         if ($filtered) {
             $filters = $filterForm->getData();
         }
+        $filterFormView = $filterForm->createView();
+        $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
         $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
         $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
 
-        $create = new OrganizerCreate();
-        $form   = $this->createForm(OrganizerCreateType::class, $create, [
+        $create = new CreateForEvent(new \DateTime());
+        $form   = $this->createForm(CreateForEventType::class, $create, [
             'submit' => true,
             'admin'  => $organizer,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.organizer_create_handler')->handle($create);
+            $result = $this->get('command.sheet.template.create_for_event_handler')->handle($create);
 
             return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
-            'templates'   => $templates,
-            'form'        => $form->createView(),
-            'filter_form' => $filterForm->createView(),
+            'templates'       => $templates,
+            'form'            => $form->createView(),
+            'filter_form'     => $filterFormView,
+            'filters_summary' => $filterSummary,
         ]);
     }
 
@@ -157,7 +165,7 @@ class TemplateController extends Controller
     {
         $duplicate = new Duplicate($template, new \DateTime());
 
-        $form      = $this->createForm(OrganizerDuplicateType::class, $duplicate, [
+        $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
             'action' => $this->generateUrl('admin_organizer_template_duplicate', ['template' => $template->getId()]),
             'submit' => true,
             'admin'  => $this->getUser(),

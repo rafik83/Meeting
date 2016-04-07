@@ -10,20 +10,20 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
+use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
-use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate;
-use Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
-class OrganizerCreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime = new \DateTime();
         $event    = new Event();
-        $create   = new OrganizerCreate();
+        $create   = new CreateForEvent();
         $create->title = 'Toto';
         $create->event = $event;
 
@@ -37,7 +37,7 @@ class OrganizerCreateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
-        $handler = new OrganizerCreateHandler($templateRepository->reveal(), $dateTime);
+        $handler = new CreateForEventHandler($templateRepository->reveal(), $dateTime);
         $result = $handler->handle($create);
 
         $this->assertEquals($expectedResult, $result);
