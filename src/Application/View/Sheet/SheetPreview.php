@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Sheet\Preview;
+namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataView;
 
