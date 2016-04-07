@@ -241,7 +241,7 @@ class Template
     {
         list ($set, $total) = self::countLocale($this->value, $locale, $this->getFallback());
 
-        return $set / $total * 100;
+        return $total > 0 ? $set / $total * 100 : 100;
     }
 
     /**
