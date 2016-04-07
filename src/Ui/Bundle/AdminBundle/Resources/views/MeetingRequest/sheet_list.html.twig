@@ -4,7 +4,7 @@
     <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
 
     <p>
-        <a href="{{ path('admin_transform_requests_to_meetings', { 'event': event.id }) }}" class="btn btn-success">
+        <a href="{{ path('admin_transform_requests_to_meetings', { 'event': event.id }) }}" class="btn btn-success" data-loading-link="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Génération des RDV en cours...'|e }}">
             Générer les rendez-vous
         </a>
     </p>
