@@ -12,9 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
-use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
+use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
@@ -54,9 +55,8 @@ class SheetController extends Controller
 
         // Pagination
         try {
-            $sheets = $this
-                ->get('query.sheet.sheet_list_view_factory')
-                ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $query  = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
             throw $this->createNotFoundException($ex->getMessage());
         }

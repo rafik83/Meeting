@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Trace;
 

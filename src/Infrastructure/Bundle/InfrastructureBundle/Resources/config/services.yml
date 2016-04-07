@@ -955,13 +955,15 @@ services:
     # Queries
     #
     query.sheet.sheet_list_view_factory:
-        class: Proximum\Vimeet\Application\Query\Sheet\SheetListViewFactory
+        class: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQueryHandler
         arguments:
+            - '@adapter.sheet_search_adapter'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
             - '@security.impersonate'
-            - '@adapter.sheet_search_adapter'
             - '@repository.trace_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
 
     #
     # Elastic Transformer
