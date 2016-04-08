@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Proximum\Vimeet\Application\Command\Meeting\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\CancelType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\CancelType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateType;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\AbstractPasswordType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActivateAccountPasswordType extends AbstractPasswordType

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Query\Sheet\SheetPreviewQuery;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\UpdateBlockType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,6 +36,9 @@ class SheetController extends Controller
      */
     public function sheetAction(Request $request, EventView $eventView, Sheet $sheet, $locale = null)
     {
+        // We must refresh sheet to make behat feature working ...
+        $this->getDoctrine()->getManager()->refresh($sheet);
+
         $locale = $locale ? : $request->getLocale();
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
