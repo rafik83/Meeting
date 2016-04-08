@@ -634,7 +634,7 @@ ImageObject.prototype.fill = function ()
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
 
-    this.form.bind('label', this.config.label);
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 ImageObject.prototype.save = function ()
@@ -644,7 +644,7 @@ ImageObject.prototype.save = function ()
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
 
-    this.form.bind('label', this.config.label);
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 /**
