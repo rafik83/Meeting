@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
-use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
