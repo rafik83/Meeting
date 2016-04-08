@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType
 {
@@ -28,14 +27,5 @@ class LoginType extends AbstractType
             ->add('password', PasswordType::class)
             ->add('username', EmailType::class)
             ->add('submit', SubmitType::class);
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'method' => 'POST',
-        ]);
     }
 }
