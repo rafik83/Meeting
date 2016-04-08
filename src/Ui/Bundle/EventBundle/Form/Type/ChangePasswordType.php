@@ -25,11 +25,11 @@ class ChangePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('currentPassword', PasswordType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'type'            => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
             ])
+            ->add('currentPassword', PasswordType::class)
         ;
     }
 
