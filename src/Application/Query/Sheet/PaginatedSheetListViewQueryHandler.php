@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\View\Sheet\SheetParticipantView;
 use Proximum\Vimeet\Domain\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
