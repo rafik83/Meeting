@@ -42,4 +42,12 @@ class ChangePasswordType extends AbstractType
             'data_class' => ChangePassword::class,
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'change_password_user';
+    }
 }
