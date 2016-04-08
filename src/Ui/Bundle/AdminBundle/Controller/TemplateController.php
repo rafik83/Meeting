@@ -118,7 +118,10 @@ class TemplateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
@@ -146,7 +149,10 @@ class TemplateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($duplicate);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:duplicate.html.twig', [
@@ -174,7 +180,10 @@ class TemplateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($duplicate);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:duplicate.html.twig', [
@@ -252,7 +261,7 @@ class TemplateController extends Controller
 
         return $this->redirectToRoute('admin_template_builder', [
             'template' => $template->getId(),
-            'locale'   => $template->getFirstLocale(),
+            'locale'   => $template->getFallback(),
         ]);
     }
 

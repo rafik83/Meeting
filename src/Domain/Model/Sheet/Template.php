@@ -160,14 +160,6 @@ class Template
      */
     public function getFallback()
     {
-        return $this->getFirstLocale();
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstLocale()
-    {
         return reset($this->locales);
     }
 
