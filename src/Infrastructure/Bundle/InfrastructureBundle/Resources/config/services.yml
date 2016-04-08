@@ -891,6 +891,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.block.block_data_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory
+    sheet.template.completeness_calculator:
+        class: Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator
 
     #
     # Rule Component

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
+use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
@@ -224,10 +225,13 @@ class TemplateController extends Controller
             'template' => $template,
         ]);
 
+        $completeness = $this->get('sheet.template.completeness_calculator')->compute($template);
+
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
-            'add_locale_form' => $addLocaleForm->createView()
+            'add_locale_form' => $addLocaleForm->createView(),
+            'completeness'    => $completeness,
         ]);
     }
 
