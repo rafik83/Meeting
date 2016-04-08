@@ -44,7 +44,7 @@ class CreateForEventHandler
      */
     public function handle(CreateForEvent $create)
     {
-        $template = new Template($create->title, [], [], $this->dateTime);
+        $template = new Template($create->title, [], $create->event->getLocales(), $this->dateTime);
         $template->setEvent($create->event);
 
         $this->templateRepository->add($template);
