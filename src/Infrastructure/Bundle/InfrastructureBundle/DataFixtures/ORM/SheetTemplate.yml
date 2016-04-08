@@ -2,6 +2,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
   template_asd_days:
       __construct: false
       title: "Template ASD Days"
+      locales: ['fr']
       createdAt: <dateTimeBetween('-10days', 'now')>
       value:
           69b3cde3:
@@ -13,9 +14,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                   component: "object"
                   type: "editable-text"
                   config:
-                    label: "Titre de votre fiche"
-                    placeholder: "Société en une phrase"
-                    help: ""
+                    label:
+                      fr: "Titre de votre fiche"
+                    placeholder:
+                      fr: "Société en une phrase"
+                    help:
+                      fr: ""
                     length: "200"
                     type: "title"
                     required: true
@@ -28,9 +32,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                         component: "object"
                         type: "image"
                         config:
-                          label: "Logo"
-                          placeholder: ""
-                          help: ""
+                          label:
+                            fr: "Logo"
+                          placeholder:
+                            fr: ""
+                          help:
+                            fr: ""
                           length: null
                           type: null
                           required: false
@@ -43,25 +50,30 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                               component: "object"
                               type: "tag"
                               config:
-                                label: "Catégorie"
+                                label:
+                                  fr: "Catégorie"
                                 tag: "sheet_organization"
                           -
                             90713a3d:
                               component: "object"
                               type: "button-link"
                               config:
-                                label: "Site internet"
-                                url: null
-                                help: ""
+                                label:
+                                  fr: "Site internet"
+                                help:
+                                  fr: ""
                                 required: false
                     -
                       d691d21c:
                         component: "object"
                         type: "editable-text"
                         config:
-                          label: "Description d'activité"
-                          placeholder: ""
-                          help: ""
+                          label:
+                            fr: "Description d'activité"
+                          placeholder:
+                            fr: ""
+                          help:
+                            fr: ""
                           length: "500"
                           type: "text"
                           required: false
@@ -69,18 +81,24 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Compétences Aéronautiques"
-                    placeholder: ""
-                    help: ""
+                    label:
+                      fr: "Compétences Aéronautiques"
+                    placeholder:
+                      fr: ""
+                    help:
+                      fr: ""
                     required: false
                     default: "1"
                 2423e6ea:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Compétences Défenses"
-                    placeholder: ""
-                    help: ""
+                    label:
+                      fr: "Compétences Défenses"
+                    placeholder:
+                      fr: ""
+                    help:
+                      fr: ""
                     required: false
                     default: "1"
                 75adad94:
@@ -92,38 +110,48 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                         component: "object"
                         type: "image"
                         config:
-                          label: "Slideshow"
-                          placeholder: ""
-                          help: ""
-                          length: null
-                          type: null
+                          label:
+                            fr: "Slideshow"
+                          placeholder:
+                            fr: ""
+                          help:
+                            fr: ""
                           required: false
                     -
                       1adc1873:
                         component: "object"
                         type: "collection"
                         config:
-                          label: "Clients de référence"
-                          placeholder: "Vos clients de référence"
-                          help: ""
+                          label:
+                            fr: "Clients de référence"
+                          placeholder:
+                            fr: "Vos clients de référence"
+                          help:
+                            fr: ""
                           required: true
                           default: "1"
                       46663c1d:
                         component: "object"
                         type: "collection"
                         config:
-                          label: "Projets innovant"
-                          placeholder: "Vos projets innovant"
-                          help: ""
+                          label:
+                            fr: "Projets innovant"
+                          placeholder:
+                            fr: "Vos projets innovant"
+                          help:
+                            fr: ""
                           required: false
                           default: "3"
                 097ab5e8:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Equipements, technologies et process"
-                    placeholder: ""
-                    help: ""
+                    label:
+                      fr: "Equipements, technologies et process"
+                    placeholder:
+                      fr: ""
+                    help:
+                      fr: ""
                     required: false
                     default: "3"
               -
@@ -131,42 +159,55 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Groupe / Membre"
-                    placeholder: ""
-                    help: ""
+                    label:
+                      fr: "Groupe / Membre"
+                    placeholder:
+                      fr: ""
+                    help:
+                      fr: ""
                     required: false
                     default: "3"
                 696dc236:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Repères"
-                    placeholder: ""
-                    help: ""
+                    label:
+                      fr: "Repères"
+                    placeholder:
+                      fr: ""
+                    help:
+                      fr: ""
                     required: false
                     default: "3"
                 a23a2f5d:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Certifications"
-                    placeholder: "vos certifications"
-                    help: ""
+                    label:
+                      fr: "Certifications"
+                    placeholder:
+                      fr: "vos certifications"
+                    help:
+                      fr: ""
                     required: false
                     default: "3"
                 bef61d39:
                   component: "object"
                   type: "participant"
                   config:
-                    label: "Participants"
+                    label:
+                      fr: "Participants"
                     numberOfParticipantShown: "3"
                 211efd1f:
                   component: "object"
                   type: "collection"
                   config:
-                    label: "Médias"
-                    placeholder: "Vos médias"
-                    help: ""
+                    label:
+                      fr: "Médias"
+                    placeholder:
+                      fr: "Vos médias"
+                    help:
+                      fr: ""
                     required: false
                     default: "3"
           69962d34:
@@ -178,7 +219,8 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                   component: "object"
                   type: "text"
                   config:
-                    content: "Objectif de participation"
+                    content:
+                      fr: "Objectif de participation"
                     type: "titre"
                 76a5e149:
                   component: "block"
@@ -189,18 +231,24 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                         component: "object"
                         type: "collection"
                         config:
-                          label: "Offres"
-                          placeholder: "Vos offres"
-                          help: "Vos offres"
+                          label:
+                            fr: "Offres"
+                          placeholder:
+                            fr: "Vos offres"
+                          help:
+                            fr: "Vos offres"
                           required: true
                           default: "3"
                       63ccc105:
                         component: "object"
                         type: "collection"
                         config:
-                          label: "Besoins"
-                          placeholder: "Vos besoins"
-                          help: "Vos besoins"
+                          label:
+                            fr: "Besoins"
+                          placeholder:
+                            fr: "Vos besoins"
+                          help:
+                            fr: "Vos besoins"
                           required: true
                           default: "3"
                     -
@@ -208,9 +256,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
                         component: "object"
                         type: "editable-text"
                         config:
-                          label: "Description"
-                          placeholder: "Description"
-                          help: "Description"
+                          label:
+                            fr: "Description"
+                          placeholder:
+                            fr: "Description"
+                          help:
+                            fr: "Description"
                           length: "500"
                           type: "text"
                           required: false
