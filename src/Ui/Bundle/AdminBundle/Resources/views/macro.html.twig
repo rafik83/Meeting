@@ -25,3 +25,64 @@
         {{ values|slice(0, values|length - 1)|join(', ') }} {{ 'and'|trans }} {{ values|last }}
     {% endif %}
 {% endmacro %}
+
+{% macro btnGroupAndRightMenuDropdown(links) %}
+    <div class="btn-group">
+        {% for label, link in links %}
+            {% if loop.first %}
+                <a href="{{ link }}" class="btn btn-default btn-sm">
+                    {{ label }}
+                </a>
+            {% elseif loop.index == 2 %}
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+            {% endif %}
+
+            {% if loop.index > 1 %}
+                <li>
+                    <a href="{{ link }}">{{ label }}</a>
+                </li>
+            {% endif %}
+
+            {% if loop.last %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro choice_as_dropdown(choice, btn_style = false, dropdown_menu_right = false, input_group = false) %}
+    <div class="{{ input_group ? 'input-group-btn' : 'dropdown' }}">
+        <a href="#" id="{{ choice.vars.id }}-dropdown" {{ btn_style ? 'class="btn btn-default"' : '' }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ choice.vars.label|trans({}, choice.vars.translation_domain) }}
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu {{ dropdown_menu_right ? 'dropdown-menu-right' : '' }}" aria-labelledby="{{ choice.vars.id }}-dropdown">
+            {% set selectedValue = app.request.query.get(choice.vars.id) %}
+
+            {% if selectedValue != null %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): ''})|url_encode }}">
+                        {{ 'admin.filters.all'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for item in choice.vars.choices %}
+                <li {{ selectedValue == item.value ? 'class="active"' : '' }}>
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value})|url_encode }}">
+                        {{ item.label|trans }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro state_label(label, value, states) %}
+    <span class="label label-{{ states[value]|default('default') }}">
+        {{ label }}
+    </span>
+{% endmacro %}

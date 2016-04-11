@@ -79,6 +79,11 @@ function init(target) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
         element.addEventListener('click', function () { loadingButton.start(); });
     });
+
+    // Disable click on <a href="#"></a>
+    [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
+        element.addEventListener('click', function (event) { event.preventDefault(); });
+    });
 }
 
 // Call init function when element is added to DOM
