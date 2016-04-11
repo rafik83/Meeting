@@ -224,13 +224,15 @@ class TemplateController extends Controller
             'template' => $template,
         ]);
 
-        $completeness = $this->get('sheet.template.completeness_calculator')->compute($template);
+        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
+        $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
 
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
             'add_locale_form' => $addLocaleForm->createView(),
             'completeness'    => $completeness,
+            'nomenclatures'   => $nomenclatures
         ]);
     }
 
