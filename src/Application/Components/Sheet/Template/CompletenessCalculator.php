@@ -108,7 +108,7 @@ class CompletenessCalculator
     private function convertToPercent(array $counts, $max)
     {
         return array_map(function ($count) use ($max) {
-            return $count / $max * 100;
+            return $max === 0 ? 100 : ($count / $max * 100);
         }, $counts);
     }
 }
