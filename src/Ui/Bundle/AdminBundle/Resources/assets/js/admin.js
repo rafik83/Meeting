@@ -17,6 +17,7 @@ function init(target) {
 
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
+    $('[data-toggle="popover"]', target).popover();
 
     $('.button-based-modal').on('show.bs.modal', function (event) {
         var modal  = $(this);

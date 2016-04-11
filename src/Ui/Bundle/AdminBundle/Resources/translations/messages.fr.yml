@@ -1,5 +1,8 @@
 greetings: 'Bonjour !'
 
+and: et
+and_more: et %count% autre|et %count% autres
+
 login:
     title: Connexion
     link: Connexion
@@ -452,6 +455,7 @@ admin:
         table:
             column:
                 title: Titre
+                locales: Langues
                 date: Date de création
                 action: Action
 

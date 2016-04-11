@@ -34,6 +34,7 @@ class AppExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter('html', [$this, 'html'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('locales', [$this, 'locales']),
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
@@ -131,6 +132,19 @@ class AppExtension extends \Twig_Extension
         asort($items);
 
         return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $items));
+    }
+
+    /**
+     * @param array  $locales
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function locales(array $locales, $locale = null)
+    {
+        return array_map(function ($code) use ($locale) {
+            return $this->localeHelper->locale($code, $locale);
+        }, $locales);
     }
 
     /**

@@ -1,5 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
 {% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
 
 {% block content %}
@@ -81,6 +82,7 @@
         <thead>
         <tr>
             <th>{{ 'admin.organizer_template_list.table.column.title'|trans }}</th>
+            <th>{{ 'admin.organizer_template_list.table.column.locales'|trans }}</th>
             <th class="text-right">{{ 'admin.organizer_template_list.table.column.action'|trans }}</th>
         </tr>
         </thead>
@@ -88,6 +90,7 @@
         {% for template in base_templates %}
             <tr>
                 <td>{{ template.title }}</td>
+                <td>{{ macro.more(template.locales|locales, 3) }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_organizer_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
                 </td>
