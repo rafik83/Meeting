@@ -1,24 +1,15 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% form_theme form 'AdminBundle:Happening:theme.html.twig' %}
+{% block title 'admin.happening.addTitle'|trans %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+{% block form_title 'admin.happening.addTitle'|trans %}
 
-    <h2>{{ 'admin.happening.title'|trans }}</h2>
-
-    <h3>{{ 'admin.happening.add'|trans }}</h3>
-
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
-        {{ form_row(form.category) }}
-        {{ form_row(form.begin) }}
-        {{ form_row(form.end) }}
-        {{ form_row(form.translations) }}
-        {{ form_row(form.talkings) }}
-        <div class="text-right">
-            <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
-            {{ form_widget(form.submit) }}
-        </div>
-    {{ form_end(form) }}
+{% block form_content %}
+    {{ form_row(form.category) }}
+    {{ form_row(form.begin) }}
+    {{ form_row(form.end) }}
+    {{ form_row(form.translations) }}
+    {{ form_row(form.talkings) }}
 {% endblock %}
+
+{% block goback_link path('admin_happening_list', { 'event': event.id }) %}
