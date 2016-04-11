@@ -45,7 +45,7 @@ nomenclature: '',
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Nomenclature</label>
-                                <select name="nomenclature">
+                                <select class="form-control" name="nomenclature">
                                     {% if nomenclatures is defined %}
                                         {% for nomenclature in nomenclatures %}
                                             <option value="{{ nomenclature.id }}">{{ nomenclature.label }}</option>
