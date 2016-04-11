@@ -1,10 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">
-        {{ 'admin.happening.title'|trans }}
-
-    </h1>
+    <h1 class="page-header">{{ 'admin.happening.title'|trans }}</h1>
 
     <div>
         <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
