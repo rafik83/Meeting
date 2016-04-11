@@ -366,12 +366,28 @@ admin:
         title: Catégories de conférences
         add: Ajouter
         update: Modifier
+        table:
+            column:
+                position: Position
+                title: Titre
+                picto: Picto
     happening_speaker:
         link: Intervenants
         title: Intervenants
         happenings: Conférences
         add: Ajouter
         update: Modifier
+        table:
+            column:
+                name: Nom
+                function: Fonction
+                company: Société
+        no-result: Aucun intervenant.
+        action:
+            edit: Modifier
+            see: Voir
+            delete: Supprimer
+            confirmDelete: Confirmer la suppression
     spot:
         link: Lieux
         active:
