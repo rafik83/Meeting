@@ -1,23 +1,21 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+<h1 class="page-header">{{ 'admin.happening_category.title'|trans }}</h1>
 
-    <h2>{{ 'admin.happening.title'|trans }}</h2>
-
-    <h3>{{ 'admin.happening_category.title'|trans }}</h3>
+    <div>
+        <a href="{{ path('admin_happening_category_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+            {{ 'admin.happening_category.add'|trans }}
+        </a>
+    </div>
 
     <table class="table">
         <thead>
         <tr>
-            <th>Position</th>
-            <th>Titre</th>
-            <th>Picto</th>
-            <th>
-                <a href="{{ path('admin_happening_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
-                    {{ 'admin.happening_category.add'|trans }}
-                </a>
-            </th>
+            <th>{{ 'admin.happening_category.table.column.position'|trans }}</th>
+            <th>{{ 'admin.happening_category.table.column.title'|trans }}</th>
+            <th>{{ 'admin.happening_category.table.column.picto'|trans }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -26,7 +24,7 @@
                 <td>{{ category.position }}</td>
                 <td>{{ category.title }}</td>
                 <td>{{ category.picto }}</td>
-                <td>
+                <td class="text-right">
                     <a href="{{ path('admin_happening_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-default">
                         {{ 'admin.happening_category.update'|trans }}
                     </a>
@@ -35,7 +33,4 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="text-left">
-        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour</a>
-    </div>
 {% endblock %}
