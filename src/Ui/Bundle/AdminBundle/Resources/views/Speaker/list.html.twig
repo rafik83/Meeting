@@ -5,23 +5,22 @@
 {% block title 'admin.happening_speaker.title'|trans %}
 
 {% block content %}
+<h1 class="page-header">{{ 'admin.happening_speaker.title'|trans }}</h1>
 
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>{{ 'admin.happening_speaker.title'|trans }}</h2>
+    <div>
+        <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+            {{ 'admin.happening_speaker.add'|trans }}
+        </a>
+    </div>
 
     <table class="table">
         <thead>
         <tr>
-            <th>Nom</th>
-            <th>Fonction</th>
-            <th>Société</th>
+            <th>{{ 'admin.happening_speaker.table.column.name'|trans }}</th>
+            <th>{{ 'admin.happening_speaker.table.column.function'|trans }}</th>
+            <th>{{ 'admin.happening_speaker.table.column.company'|trans }}</th>
             <th>{{ 'admin.happening_speaker.happenings'|trans }}</th>
-            <th>
-                <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
-                    {{ 'admin.happening_speaker.add'|trans }}
-                </a>
-            </th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -37,20 +36,20 @@
                             {% endfor %}
                         </ul>
                     </td>
-                    <td>
-                        <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Voir</a>
-                        <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <td class="text-right">
+                        <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.happening_speaker.action.see'|trans }}</a>
+                        <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.happening_speaker.action.edit'|trans }}</a>
                         {{ macro.delete_button(
                             path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
-                            'Supprimer',
-                            { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'Confirmer la suppression' }
+                            'admin.happening_speaker.action.delete'|trans,
+                            { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
                         ) }}
                     </td>
                 </tr>
             {% else %}
                 <tr>
                     <td colspan="4" class="text-center">
-                        Aucun intervenant.
+                        {{ 'admin.happening_speaker.no-result'|trans }}
                     </td>
                 </tr>
             {% endfor %}
