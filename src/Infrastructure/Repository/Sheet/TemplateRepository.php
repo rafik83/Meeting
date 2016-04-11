@@ -80,7 +80,22 @@ class TemplateRepository implements TemplateRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function listOrganizerTemplate(array $events, array $filters)
+    public function getBaseTemplates()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(Template::class, 'template')
+            ->where('template.event IS NULL');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganizerTemplates(array $events, array $filters)
     {
         $queryBuilder = $this
             ->entityManager

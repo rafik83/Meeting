@@ -32,12 +32,17 @@ interface TemplateRepositoryInterface
     public function getTemplateForGivenEvents(array $events);
 
     /**
+     * @return Template[]
+     */
+    public function getBaseTemplates();
+
+    /**
      * @param array $events
      * @param array $filters
      *
      * @return Template[]
      */
-    public function listOrganizerTemplate(array $events, array $filters);
+    public function getOrganizerTemplates(array $events, array $filters);
 
     /**
      * @param Template $template

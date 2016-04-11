@@ -95,19 +95,19 @@ class TemplateController extends Controller
         }
 
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, [
-            'admin'  => $organizer,
-        ]);
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $organizer]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
             $filters = $filterForm->getData();
         }
+
         $filterFormView = $filterForm->createView();
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
-        $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
-        $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
+        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
+        $baseTemplates      = $this->get('repository.sheet.template_repository')->getBaseTemplates();
+        $organizerTemplates = $this->get('repository.sheet.template_repository')->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
@@ -125,10 +125,11 @@ class TemplateController extends Controller
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
-            'templates'       => $templates,
-            'form'            => $form->createView(),
-            'filter_form'     => $filterFormView,
-            'filters_summary' => $filterSummary,
+            'base_templates'      => $baseTemplates,
+            'organizer_templates' => $organizerTemplates,
+            'form'                => $form->createView(),
+            'filter_form'         => $filterFormView,
+            'filters_summary'     => $filterSummary,
         ]);
     }
 

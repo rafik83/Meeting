@@ -56,7 +56,7 @@ class Event implements EventInterface
     /**
      * @var array
      */
-    private $locales;
+    private $locales = [];
 
     /**
      * @var string

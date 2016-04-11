@@ -51,7 +51,7 @@ class DuplicateHandler
             $this->dateTime
         );
 
-        if (null !== $duplicate->event) {
+        if ($duplicate->event) {
             $template->setEvent($duplicate->event);
         }
 
