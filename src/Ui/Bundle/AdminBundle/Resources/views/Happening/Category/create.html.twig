@@ -1,22 +1,13 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+{% block title 'admin.happening_category.addTitle'|trans %}
 
-    <h2>{{ 'admin.happening.title'|trans }}</h2>
+{% block form_title 'admin.happening_category.addTitle'|trans %}
 
-    <h3>{{ 'admin.happening_category.title'|trans }}</h3>
-
-    <h4>{{ 'admin.happening_category.add'|trans }}</h4>
-
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
+{% block form_content %}
     {{ form_row(form.position) }}
     {{ form_row(form.picto) }}
     {{ form_row(form.translations) }}
-    <div class="text-right">
-        <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}" class="btn btn-link">&larr; Retour à la liste</a>
-        {{ form_widget(form.submit) }}
-    </div>
-    {{ form_end(form) }}
 {% endblock %}
+
+{% block goback_link path('admin_happening_category_list', {event: event.id}) %}
