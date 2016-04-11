@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\TypeTemplateField\Text;
+namespace Proximum\Vimeet\Tests\Application\Command\TypeTemplateField\Text;
 
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Position\Position;
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Position\PositionHandler;

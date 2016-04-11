@@ -1,0 +1,17 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form 'EventBundle::library.html.twig' %}
+
+{% block title 'event.sheet.package.products.title'|trans %}
+
+{% block content %}
+    <h2>{{ 'event.sheet.package.products.title'|trans }}</h2>
+
+    {{ form(form) }}
+
+    <hr>
+
+    <a class="btn btn-link" href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">
+        {{ 'event.link.product.cancel'|trans() }}
+    </a>
+{% endblock %}

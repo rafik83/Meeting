@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event\Configuration;
 
 /**
  * "Evènement".
@@ -108,11 +109,17 @@ class Event implements EventInterface
     private $elementToJoinWithInvoice;
 
     /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->translations = new ArrayCollection();
+        $this->translations  = new ArrayCollection();
+        $this->configuration = new Configuration('', '', '');
     }
 
     /**
@@ -133,6 +140,14 @@ class Event implements EventInterface
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 
     /**

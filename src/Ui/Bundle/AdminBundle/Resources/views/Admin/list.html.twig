@@ -1,0 +1,70 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h2>{{ 'admin.admin_list.title'|trans }}</h2>
+    <div class="col-xs-12">
+        {{ form_start(filter_form) }}
+        <div class="col-xs-4">
+            {{ form_row(filter_form.role) }}
+        </div>
+        <div class="col-xs-4">
+            {{ form_row(filter_form.event) }}
+        </div>
+        <div class="col-xs-4">
+            {{ form_row(filter_form.submit) }}
+            {% if filtered %}
+                <a href="{{ path('admin_list_admin') }}" class="btn btn-link">{{ 'admin.admin_list.filter.empty_filter'|trans }}</a>
+            {% endif %}
+        </div>
+        {{ form_rest(filter_form) }}
+        {{ form_end(filter_form) }}
+    </div>
+    <a href="{{ path('admin_create_admin') }}" class="btn btn-primary">{{ 'admin.admin_list.action.create'|trans }}</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.admin_list.table.title.lastname'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.firstname'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.email'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.role'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.events'|trans }}</th>
+            <th>{{ 'admin.admin_list.table.title.actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for admin in admins %}
+            <tr>
+                <td>{{ admin.lastname }}</td>
+                <td>{{ admin.firstname }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ ('admin.role.' ~ admin.role)|trans }}</td>
+                <td>
+                    {% if admin.isSuperAdmin %}
+                        {% if admin.events|length == 0 %}
+                            {{ 'admin.admin_list.table.content.super_admin.events.all'|trans }}
+                        {% else %}
+                            <ul>
+                                {% for event in admin.events %}
+                                    <li>{{ event.title }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% else %}
+                        {% if admin.events|length == 0 %}
+                            {{ 'admin.admin_list.table.content.admin.events.none'|trans }}
+                        {% else %}
+                            <ul>
+                                {% for event in admin.events %}
+                                    <li>{{ event.title }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td><a href="{{ path('admin_update_admin', {'admin': admin.id}) }}" class="btn btn-default">{{ 'admin.admin_list.table.content.update'|trans }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': admins}) }}
+{% endblock %}

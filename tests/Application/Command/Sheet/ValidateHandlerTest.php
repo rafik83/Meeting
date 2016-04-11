@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
@@ -50,7 +50,7 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->isValidated();
         }))->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet, $admin, $date, $comment))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_VALIDATED, new SheetValidatedEvent($sheet, $date, $comment, $admin))->shouldBeCalled();
 
         $this->assertTrue($sheet->isValidated());
     }

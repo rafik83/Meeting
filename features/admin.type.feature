@@ -9,6 +9,7 @@ Feature: add type
       | app/Type.yml        |
       | app/Category.yml    |
       | Admin.yml           |
+      | template/Sheet.yml  |
     And I am logged with "test@test.com" on admin
 
   Scenario: add a type
@@ -19,6 +20,7 @@ Feature: add type
     Then the response status code should be 200
     And I fill in the following:
       | type_create_template              | 1    |
+      | type_create_sheetTemplate         | 0    |
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |
     And I press "form.type_create.children.submit.label"

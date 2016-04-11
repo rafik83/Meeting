@@ -25,10 +25,13 @@ class AppKernel extends Kernel
             new Elao\ErrorNotifierBundle\ElaoErrorNotifierBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new League\Tactician\Bundle\TacticianBundle(),
 
             // Vimeet
-            new Proximum\Vimeet\Bundle\InfrastructureBundle\VimeetInfrastructureBundle(),
-            new Proximum\Vimeet\Bundle\AppBundle\VimeetAppBundle(),
+            new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
+            new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),
+            new Proximum\Vimeet\Ui\Bundle\AdminBundle\AdminBundle(),
+            new Proximum\Vimeet\Ui\Bundle\MailBundle\MailBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

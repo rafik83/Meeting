@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -73,7 +73,7 @@ class SheetInfoGuesserTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $sheet = new Sheet($event, $type, [], [], new \DateTime());
-        $type->setSheetTemplate([
+        $type->setOldSheetTemplate([
             'azer' => [
                 'label' => 'foobar',
                 'template' => [

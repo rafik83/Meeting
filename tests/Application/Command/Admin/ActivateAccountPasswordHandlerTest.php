@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Admin;
+namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler;
-use Proximum\Vimeet\Bundle\InfrastructureBundle\Repository\Admin\ActivateAccountTokenRepository;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +33,7 @@ class ActivateAccountPasswordHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository                = $this->prophesize(AdminRepositoryInterface::class);
         $encoder                        = $this->prophesize(PasswordEncoderInterface::class);
         $saltGenerator                  = $this->prophesize(SaltGeneratorInterface::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepository::class);
+        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
 
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
         $encoder->encode(Argument::that(function (Admin $encodedOperator) use ($operator) {

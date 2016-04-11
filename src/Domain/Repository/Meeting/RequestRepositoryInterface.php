@@ -40,7 +40,21 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
+    public function getApprovedRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
     public function getPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getApprovedPropositionReceivedBySheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet
@@ -51,6 +65,7 @@ interface RequestRepositoryInterface
 
     /**
      * @param Event $event
+     *
      * @return int
      */
     public function countAllByEvent(Event $event);
@@ -95,6 +110,20 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countRefusedRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countPendingRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countApprovedPropositionReceivedBySheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet

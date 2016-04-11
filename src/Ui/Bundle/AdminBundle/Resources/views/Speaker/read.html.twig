@@ -1,0 +1,53 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}Intevenant {{ speaker.name }}{% endblock %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>{{ block('title') }}</h2>
+
+    <table class="table">
+        <tr>
+            <th>Nom</th>
+            <td>{{ speaker.name }}</td>
+        </tr>
+        <tr>
+            <th>Fonction</th>
+            <td>{{ speaker.function }}</td>
+        </tr>
+        <tr>
+            <th>Société</th>
+            <td>{{ speaker.organization }}</td>
+        </tr>
+        <tr>
+            <th>Logo de la société</th>
+            <td>{% if speaker.logo %}<img src="{{ speaker.logo }}" class="img-responsive" />{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Photo de l'intervant</th>
+            <td>{% if speaker.photo %}<img src="{{ speaker.photo }}" class="img-responsive" />{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Sous-événements</th>
+            <td>
+                <ul>
+                    {% for happening in happenings %}
+                        <li>
+                            {% if happening.canUpdate %}
+                                <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}">{{ happening.title }}</a>
+                            {% else %}
+                                {{ happening.title }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <div>
+        <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">← Retour à la liste</a>
+    </div>
+
+{% endblock %}

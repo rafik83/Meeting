@@ -1,0 +1,10 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+    <h2>Catalogue "{{ categoryView.title }}"</h2>
+
+    {% for sheet in sheets %}
+        {{ include(template_from_string(sheet.type.previewTemplate), { 'sheet': sheet }) }}
+        <a href="{{ path('event_catalog_sheet', { 'sheet': sheet.id, 'categoryView': categoryView.id }) }}" class="btn btn-primary">{{ 'event.catalog.category.seeSheet'|trans }}</a>
+    {% endfor %}
+{% endblock %}

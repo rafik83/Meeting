@@ -1,3 +1,10 @@
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_rdv_carnot_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#FFFFFF'
+
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
         title: Evento en español
@@ -5,6 +12,7 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [es]
         fallback: es
+        configuration: '@configuration_rdv_carnot_2016'
         organiserName: PROXIMUM
         paymentAddress: '@payment_address_event_spanish'
         organiserEmail: accounts@proximumgroup.com
@@ -126,7 +134,7 @@ Proximum\Vimeet\Domain\Model\Type:
                     item1: { label: { es: "Item 1" } }
                     item2: { label: { es: "Item 2" } }
                     item3: { label: { es: "Item 3" } }
-        sheetTemplate:
+        oldSheetTemplate:
             563cae566af03:
                 label:
                     es: "Empresa"
@@ -237,7 +245,7 @@ Proximum\Vimeet\Domain\Model\Type:
                 label: { es: "Primer nombre" }
                 tags: ["participant_firstname"]
                 position: 2
-        sheetTemplate:
+        oldSheetTemplate:
             563cae566af03:
                 label:
                     es: "Empresa"

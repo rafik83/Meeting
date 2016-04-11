@@ -1,0 +1,53 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <p>{{ eventView.description }}</p>
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') and sheets is not empty %}
+        <ul>
+            <li>
+                <a href="{{ path('event_catalog') }}">
+                    {{ 'event.link.see_catalog'|trans }}
+                </a>
+            </li>
+            {% for sheet in sheets %}
+                <li>
+                    <a href="{{ path('event_sheet', { 'sheet': sheet.id }) }}">
+                        {{ 'event.link.see_my_sheet'|trans({ '%type%': sheet.typeTitle }) }}
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ path('event_meeting_list_request', { 'sheet': sheet.id }) }}">
+                                {{ 'event.link.see_meeting_request'|trans() }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('event_meeting_list_proposition', { 'sheet': sheet.id }) }}">
+                                {{ 'event.link.see_meeting_proposition'|trans() }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('event_sheet_schedule', { 'sheet': sheet.id }) }}">
+                                {{ 'event.link.see_schedule'|trans({ '%type%': sheet.typeTitle }) }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <ul>
+            {% for type in types %}
+                <li>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('event_participate', { 'typeView': type.id }) }}">{{ type.title }}</a>
+                    {% else %}
+                        <a href="{{ path('event_register', { 'typeView': type.id }) }}">{{ type.title }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

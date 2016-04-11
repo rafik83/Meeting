@@ -1,0 +1,13 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'event.meeting.cancelRequest.title'|trans %}
+
+{% block content %}
+    <h1>{{ 'event.meeting.cancelRequest.title'|trans }}</h1>
+    <h2>{{ 'event.meeting.cancelRequest.label'|trans({'%toName%': toName, '%fromName%': fromName}) }}</h2>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -67,11 +67,11 @@ class SheetDetailsView
     public $approvedRequests;
 
     /**
-     * "nbre de propositions en attente"
+     * "nbre de demandes en attente"
      *
      * @var int
      */
-    public $pendingPropositions;
+    public $pendingRequests;
 
     /**
      * "nbre de demandes refusées"
@@ -81,11 +81,25 @@ class SheetDetailsView
     public $refusedRequests;
 
     /**
+     * "nbre de propositions validées"
+     *
+     * @var int
+     */
+    public $approvedPropositions;
+
+    /**
+     * "nbre de propositions en attente"
+     *
+     * @var int
+     */
+    public $pendingPropositions;
+
+    /**
      * "nbre de proposition refusées"
      *
      * @var int
      */
-    public $refusePropositions;
+    public $refusedPropositions;
 
     /**
      * @var Comment[]
@@ -109,27 +123,31 @@ class SheetDetailsView
      * @param BillingView     $billing
      * @param BlockDataView[] $blocks
      * @param int             $approvedRequests
-     * @param int             $pendingPropositions
+     * @param int             $pendingRequests
      * @param int             $refusedRequests
-     * @param int             $refusePropositions
+     * @param int             $approvedPropositions
+     * @param int             $pendingPropositions
+     * @param int             $refusedPropositions
      * @param Comment[]       $comments
      * @param Trace[]         $traces
      */
-    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingPropositions, $refusedRequests, $refusePropositions, array $comments, array $traces)
+    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingRequests, $refusedRequests, $approvedPropositions, $pendingPropositions, $refusedPropositions, array $comments, array $traces)
     {
-        $this->title               = $title;
-        $this->state               = $state;
-        $this->participants        = $participants;
-        $this->ownerEmail          = $ownerEmail;
-        $this->ownerPhone          = $ownerPhone;
-        $this->package             = $package;
-        $this->billing             = $billing;
-        $this->blocks              = $blocks;
-        $this->approvedRequests    = $approvedRequests;
-        $this->pendingPropositions = $pendingPropositions;
-        $this->refusedRequests     = $refusedRequests;
-        $this->refusePropositions  = $refusePropositions;
-        $this->comments            = $comments;
-        $this->traces              = $traces;
+        $this->title                = $title;
+        $this->state                = $state;
+        $this->participants         = $participants;
+        $this->ownerEmail           = $ownerEmail;
+        $this->ownerPhone           = $ownerPhone;
+        $this->package              = $package;
+        $this->billing              = $billing;
+        $this->blocks               = $blocks;
+        $this->approvedRequests     = $approvedRequests;
+        $this->pendingRequests      = $pendingRequests;
+        $this->refusedRequests      = $refusedRequests;
+        $this->approvedPropositions = $approvedPropositions;
+        $this->pendingPropositions  = $pendingPropositions;
+        $this->refusedPropositions  = $refusedPropositions;
+        $this->comments             = $comments;
+        $this->traces               = $traces;
     }
 }

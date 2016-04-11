@@ -28,6 +28,13 @@ interface TraceRepositoryInterface
     public function getLastAcceptBySheet(TraceableInterface $sheet);
 
     /**
+     * @param TraceableInterface $sheet
+     *
+     * @return Trace
+     */
+    public function getLastValidateBySheet(TraceableInterface $sheet);
+
+    /**
      * @param TraceableInterface $traceable
      *
      * @return Trace[]

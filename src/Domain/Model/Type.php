@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
 
 /**
  * "Type de participation".
@@ -45,7 +46,12 @@ class Type implements WhoInterface
     /**
      * @var array
      */
-    private $sheetTemplate = [];
+    private $oldSheetTemplate = [];
+
+    /**
+     * @var SheetTemplate
+     */
+    private $sheetTemplate;
 
     /**
      * @var array
@@ -83,15 +89,21 @@ class Type implements WhoInterface
     private $categories;
 
     /**
+     * @var ValidationCriteria
+     */
+    private $validationCriteria;
+
+    /**
      * Type constructor.
      *
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event        = $event;
-        $this->translations = new ArrayCollection();
-        $this->categories   = new ArrayCollection();
+        $this->event              = $event;
+        $this->translations       = new ArrayCollection();
+        $this->categories         = new ArrayCollection();
+        $this->validationCriteria = new ValidationCriteria(false);
     }
 
     /**
@@ -153,7 +165,25 @@ class Type implements WhoInterface
      */
     public function getSheetTemplate()
     {
+        return $this->getOldSheetTemplate();
+    }
+
+    /**
+     * @return SheetTemplate
+     */
+    public function getNewSheetTemplate()
+    {
         return $this->sheetTemplate;
+    }
+
+    /**
+     * Get sheetTemplate.
+     *
+     * @return array
+     */
+    public function getOldSheetTemplate()
+    {
+        return $this->oldSheetTemplate;
     }
 
     /**
@@ -219,16 +249,29 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param array $sheetTemplate
+     * @param SheetTemplate $sheetTemplate
      *
      * @return self
      */
-    public function setSheetTemplate(array $sheetTemplate)
+    public function setSheetTemplate(SheetTemplate $sheetTemplate)
     {
         $this->sheetTemplate = $sheetTemplate;
 
         return $this;
     }
+
+    /**
+     * @param array $sheetTemplate
+     *
+     * @return self
+     */
+    public function setOldSheetTemplate(array $sheetTemplate)
+    {
+        $this->oldSheetTemplate = $sheetTemplate;
+
+        return $this;
+    }
+
 
     /**
      * @param array $packageTemplate
@@ -302,7 +345,7 @@ class Type implements WhoInterface
     public function setTemplate(Template $template)
     {
         $this->participantTemplate = $template->getParticipant();
-        $this->sheetTemplate       = $template->getSheet();
+        $this->oldSheetTemplate    = $template->getSheet();
         $this->packageTemplate     = $template->getPackage();
         $this->previewTemplate     = $template->getPreview();
         $this->viewTemplate        = $template->getView();
@@ -334,6 +377,14 @@ class Type implements WhoInterface
     }
 
     /**
+     * @return ValidationCriteria
+     */
+    public function getValidationCriteria()
+    {
+        return $this->validationCriteria;
+    }
+
+    /**
      * @param string $name
      * @param array $template
      *
@@ -342,7 +393,11 @@ class Type implements WhoInterface
      */
     public function setTemplateByName($name, array $template)
     {
-        $setter = 'set' . ucfirst($name) . 'Template';
+        if (ucfirst($name) === 'Sheet') {
+            $setter = 'setOldSheetTemplate';
+        } else {
+            $setter = 'set' . ucfirst($name) . 'Template';
+        }
 
         if (!method_exists($this, $setter)) {
             throw new \Exception("Method $setter not exists");

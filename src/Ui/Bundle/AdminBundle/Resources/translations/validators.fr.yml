@@ -1,0 +1,36 @@
+validators:
+    hexadecimal: Cette valeur doit être au format héxadécimal
+    field:
+        required: Ce champ est requis
+    email: L'adresse mail saisie n'est pas valide
+    emailDoesNotExist: L'email saisi n'existe pas
+    emailAlreadyExist: Cet email est déjà utilisé, vous ne pouvez pas l'utiliser
+    sameEmail: Vous utilisez déjà cet email
+    password:
+        min: Le mot de passe doit comporter au moins {{ limit }} caractères
+        mismatch: Les 2 mots de passe ne sont pas identiques
+    currentPassword: Le mot de passe actuel n'est pas correct
+    option:
+        quantityMustBeAdded: Vous devez ajouter une quantité si vous sélectionnez cette option
+        participant:
+            optionCanNotBeUnselected: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
+            alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
+    constraint:
+        daterange: L'heure de début doit être antérieure à l'heure de fin
+        spot_reference_recipe:
+            range: La valeur de début doit être inférieure à la valeur de fin
+    position_meeting:
+        fromParticipants:
+            count:
+                min: Vous devez choisir au moins {{ limit }} participant
+        toParticipants:
+            count:
+                min: Vous devez choisir au moins {{ limit }} participant
+
+    unavailability:
+        participants:
+            count:
+                min: Vous devez choisir au moins {{ limit }} participant
+    spot:
+        reference:
+            unique: Cette identifiant est déjà utilisé

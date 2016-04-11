@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Operator;
+namespace Proximum\Vimeet\Tests\Application\Command\Operator;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Operator\Update;

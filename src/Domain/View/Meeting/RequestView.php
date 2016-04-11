@@ -19,15 +19,26 @@ class RequestView
      * @var int
      */
     public $id;
+
     /**
      * @var string
      */
     public $sheetNameFrom;
 
     /**
+     * @var int
+     */
+    public $sheetFromId;
+
+    /**
      * @var string
      */
     public $sheetNameTo;
+
+    /**
+     * @var int
+     */
+    public $sheetToId;
 
     /**
      * @var string
@@ -81,16 +92,20 @@ class RequestView
 
     /**
      * @param int                $id
+     * @param int                $sheetFromId
      * @param string             $sheetNameFrom
+     * @param int                $sheetToId
      * @param string             $sheetNameTo
      * @param string             $state
      * @param \DateTimeInterface $createdAt
      * @param string             $message
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, $state, \DateTimeInterface $createdAt, $message)
+    public function __construct($id, $sheetFromId, $sheetNameFrom, $sheetToId, $sheetNameTo, $state, \DateTimeInterface $createdAt, $message)
     {
         $this->id               = $id;
+        $this->sheetFromId      = $sheetFromId;
         $this->sheetNameFrom    = $sheetNameFrom;
+        $this->sheetToId        = $sheetToId;
         $this->sheetNameTo      = $sheetNameTo;
         $this->state            = $state;
         $this->createdAt        = $createdAt;

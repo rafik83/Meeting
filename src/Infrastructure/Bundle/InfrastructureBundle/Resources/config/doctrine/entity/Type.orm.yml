@@ -1,0 +1,48 @@
+Proximum\Vimeet\Domain\Model\Type:
+    type:  entity
+    table: type
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        position:
+            type: integer
+        participantTemplate:
+            type: json_array
+        oldSheetTemplate:
+            type: json_array
+        packageTemplate:
+            type: json_array
+        maxParticipant:
+            type: integer
+        maxPlanning:
+            type: integer
+        freeParticipant:
+            type: integer
+        previewTemplate:
+            type: text
+        viewTemplate:
+            type: text
+    embedded:
+        validationCriteria:
+            class: Proximum\Vimeet\Domain\Model\ValidationCriteria
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
+            mappedBy: type
+            indexBy: locale
+            cascade: ["persist"]
+    manyToMany:
+        categories:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+            mappedBy: types
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        sheetTemplate:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Template
+            inversedBy: types
+            cascade:
+                - persist

@@ -1,0 +1,6 @@
+{% for key, subfield in fields %}
+    {% include 'EventBundle:Package:row.html.twig' with {
+        'field': subfield,
+        'fieldTemplate': choicesTemplate,
+    } %}
+{% endfor %}

@@ -1,0 +1,89 @@
+Proximum\Vimeet\Domain\Model\ValidationCriteria (local):
+    validation_criteria_event_rdv_carnot_2016:
+        __construct:
+            - false
+
+Proximum\Vimeet\Domain\Model\Type:
+    type_exposant:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 0
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@template_exhibitor->participant'
+        oldSheetTemplate: '@template_exhibitor->sheet'
+        packageTemplate: '@template_exhibitor->package'
+        previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+
+    type_investisseur:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 1
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@template_exhibitor->participant'
+        oldSheetTemplate: '@template_exhibitor->sheet'
+        packageTemplate: '@template_exhibitor->package'
+        previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+
+    type_visiteur:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@template_visitor->participant'
+        oldSheetTemplate: '@template_visitor->sheet'
+        packageTemplate: '@template_visitor->package'
+        previewTemplate: '@template_visitor->preview'
+        viewTemplate: '@template_visitor->view'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+
+    type_visiteur_visio:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 3
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@template_visitor->participant'
+        oldSheetTemplate: '@template_visitor->sheet'
+        packageTemplate: '@template_visitor->package'
+        previewTemplate: '@template_visitor->preview'
+        viewTemplate: '@template_visitor->view'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+
+    type_institute_carnot:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 4
+        maxParticipant: 4
+        maxPlanning: 4
+        freeParticipant: 1
+        participantTemplate: '@template_exhibitor->participant'
+        oldSheetTemplate: '@template_exhibitor->sheet'
+        packageTemplate: '@template_exhibitor->package'
+        previewTemplate: '@template_exhibitor->preview'
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+
+Proximum\Vimeet\Domain\Model\TypeTranslation:
+    type_exposant_fr:
+        __construct: ['@type_exposant', fr, "Exposant"]
+    type_exposant_en:
+        __construct: ['@type_exposant', en, "Exhibitor"]
+    type_investisseur_fr:
+        __construct: ['@type_investisseur', fr, "Investisseur"]
+    type_investisseur_en:
+        __construct: ['@type_investisseur', en, "Investor"]
+    type_visiteur_fr:
+        __construct: ['@type_visiteur', fr, "Visiteur"]
+    type_visiteur_en:
+        __construct: ['@type_visiteur', en, "Visitor"]
+    type_visiteur_visio_fr:
+        __construct: ['@type_visiteur_visio', fr, "Visio"]
+    type_visiteur_visio_en:
+        __construct: ['@type_visiteur_visio', en, "Visio"]
+    type_institute_carnot_fr:
+        __construct: ['@type_institute_carnot', fr, "Institut Carnot"]
+    type_institute_carnot_en:
+        __construct: ['@type_institute_carnot', en, "Carnot Institute"]

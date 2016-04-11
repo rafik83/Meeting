@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Meeting;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Order\CreateHandler;

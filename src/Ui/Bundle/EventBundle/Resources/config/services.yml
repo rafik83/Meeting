@@ -1,0 +1,307 @@
+services:
+    #
+    # Params converters
+    #
+    vimeet_app.param_converter.event_domain_param_converter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventViewDomainParamConverter
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: 'request.param_converter', priority: 2, converter: 'event_domain_param_converter' }
+    vimeet_app.param_converter.participant_type_view_param_converter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\TypeViewParamConverter
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: 'request.param_converter', priority: 2, converter: 'participant_type_view_param_converter' }
+    vimeet_app.param_converter.category_view_param_converter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\CategoryViewParamConverter
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
+
+    #
+    # Security
+    #
+    security.admin_event_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminEventAccessVoter
+        arguments:
+            - '@components.security.admin_event_access'
+        tags:
+            - { name: security.voter }
+
+    #
+    # Form extension
+    #
+    vimeet_app.form_extension.translation_domain_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\TranslationDomainExtension
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    #
+    # Form type
+    #
+    vimeet_app.form_type_meeting.request_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting.request_update_from_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateFromType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting.request_update_to_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_participant.participant_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantChoiceType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_participant.meeting_participant_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\MeetingParticipantChoiceType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_participant.participant_entity_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantEntityType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting.meeting_request_update_to_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_meeting.approve_request_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting.refuse_request_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestRefuseType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting.meeting_request_cancel_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_meeting_request.meeting_request:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\PositionMeetingType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+
+    #
+    # Event Listener
+    #
+    vimeet_app.domain_event_listener:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
+        arguments:
+            - '@router.default'
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request' }
+    vimeet_app.vimeet.application.event.notification_event_listener:
+        class: Proximum\Vimeet\Application\Event\NotificationEventListener
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    event_listener.login_event_listener:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@request_stack'
+            - '@command.admin.update_last_login_handler'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
+    event_listener.mail_event_subscriber:
+        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: kernel.event_subscriber }
+    event_listener.trace_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
+        arguments:
+            - '@repository.trace_repository'
+        tags:
+            - { name: kernel.event_subscriber }
+    event_listener.sheet_validator_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetValidatorEventSubscriber
+        arguments:
+             - '@components.sheet.sheet_validator'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    #
+    # Library
+    #
+    vimeet_app.form_type_library.choice_with_description:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceWithDescriptionType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.upload_with_choices_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\UploadWithChoicesType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.text_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.textarea_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextareaType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.option_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OptionType
+        arguments:
+            - '@vimeet_infrastructure.application.components.order.order_manager'
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.participant_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ParticipantType
+        tags:
+            - { name: 'form.type' }
+        arguments:
+            - '@vimeet_infrastructure.application.components.participant.participant_manager'
+    vimeet_app.form_type_library.planning_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\PlanningType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.country_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\CountryType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.email_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\EmailType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.last_name_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\LastNameType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.first_name_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\FirstNameType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type_library.organisation_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OrganisationType
+        tags:
+            - { name: 'form.type' }
+    vimeet_app.form_type.data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\DataType
+        arguments:
+            -
+                choice_with_description: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceWithDescriptionType'
+                upload_with_choices: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\UploadWithChoicesType'
+                lib_text: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextType'
+                lib_textarea: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextareaType'
+                lib_email: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\EmailType'
+                lib_option: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OptionType'
+                lib_participant: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ParticipantType'
+                lib_planning: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\PlanningType'
+                lib_country: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\CountryType'
+                lib_choice: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceType'
+                lib_last_name: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\LastNameType'
+                lib_first_name: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\FirstNameType'
+                lib_organisation: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OrganisationType'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_package.data_product_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\DataProductType
+        arguments:
+            -
+                choice_with_description: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceWithDescriptionType'
+                upload_with_choices: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\UploadWithChoicesType'
+                lib_text: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextType'
+                lib_textarea: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TextareaType'
+                lib_email: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\EmailType'
+                lib_option: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OptionType'
+                lib_participant: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ParticipantType'
+                lib_planning: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\PlanningType'
+                lib_country: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\CountryType'
+                lib_choice: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\ChoiceType'
+                lib_last_name: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\LastNameType'
+                lib_first_name: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\FirstNameType'
+                lib_organisation: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OrganisationType'
+        tags:
+            - { name: form.type }
+
+    #
+    # Twig extension
+    #
+    vimeet_app.twig_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig\AppExtension
+        public: false
+        arguments:
+            - '@sonata.intl.templating.helper.locale'
+        tags:
+            - { name: 'twig.extension' }
+
+    #
+    # Security
+    #
+    security.impersonate:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate
+        arguments:
+            - '@security.user.provider.concrete.admin_provider'
+            - '@security.user.provider.concrete.user_provider'
+            - '%secret%'
+
+    security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchUserListener
+        public: false
+        abstract: true
+        arguments:
+            - '@security.token_storage'
+            - ~
+            - ~
+            - ~
+            - '@security.access.decision_manager'
+            - '@?logger'
+            - ~
+            - ~
+            - '@?event_dispatcher'
+            - '@security.impersonate'
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: monolog.logger, channel: security }
+
+    #
+    # Services
+    #
+    error_factory:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
+        arguments:
+            - '@translator'
+
+    filter_summary:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
+        arguments:
+            - '@translator'

@@ -1,0 +1,21 @@
+Proximum\Vimeet\Application\Command\Event\Update:
+    properties:
+        title:
+            - NotBlank: ~
+        vat:
+            - NotBlank: ~
+        textColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        leftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        rightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal

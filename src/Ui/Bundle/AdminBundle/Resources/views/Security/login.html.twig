@@ -1,0 +1,45 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'login.title'|trans %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ 'login.title'|trans }}</div>
+                <div class="panel-body">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {{ form_start(form) }}
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.password) }}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.submit) }}
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="{{ path('admin_forgot_password') }}" class="btn btn-link">{{ 'login.forgotPassword'|trans }}</a>
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {% if admins is not empty %}
+                <div class="well">
+                    <h3>1-click login</h3>
+                    <ul>
+                        {% for admin in admins %}
+                            <li><a href="{{ path('admin_login_user', { 'admin': admin.id }) }}">{{ admin.username }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Components\Template\TemplateFactory;
@@ -27,7 +27,7 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event = new Event();
         $type  = new Type($event);
-        $type->setSheetTemplate(
+        $type->setOldSheetTemplate(
             [
                 '563cae566af03' => [
                     'label'         => ['fr' => 'Société', 'en' => 'Company'],

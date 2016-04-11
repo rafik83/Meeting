@@ -35,4 +35,7 @@
     - role: elao.mysql
     - role: elao.phpmyadmin
       when: _env == 'dev'
+    # Elasticsearch
+    - role: elao.java
+    - role: elao.elasticsearch
     # App

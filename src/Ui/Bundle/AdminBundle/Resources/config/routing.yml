@@ -1,0 +1,557 @@
+#
+# Login/Logout
+#
+
+admin_login:
+    path:     /login
+    methods:  [GET]
+    defaults: { _controller: AdminBundle:Security:login }
+
+admin_login_check:
+    path:     /login_check
+    methods:  [POST]
+
+admin_logout:
+    path:     /logout
+    methods:  [GET]
+
+#
+# Account
+#
+admin_account:
+    path: /account
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Account:index }
+
+admin_update_password:
+    path: /account/password
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Account:updatePassword }
+
+#
+# Create Admin/Organizer
+#
+
+admin_list_admin:
+    path: /admin
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Admin:list }
+
+admin_create_admin:
+    path: /admin/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Admin:create }
+
+admin_update_admin:
+    path: /admin/update/{admin}
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Admin:update }
+
+#
+# Create Operator
+#
+
+admin_list_operator:
+    path: /operator
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Operator:list }
+
+admin_create_operator:
+    path: /operator/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Operator:create }
+
+admin_update_operator:
+    path: /operator/update/{operator}
+    methods: [GET, POST]
+    requirements:
+        operator: \d+
+    defaults: { _controller: AdminBundle:Operator:update }
+
+#
+# Activate Operator account
+#
+
+admin_operator_activate_account:
+    path: /activate-account/{token}
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:ActivateAccount:password }
+
+#
+# Forgot password
+#
+admin_forgot_password:
+    path: /forgot-password
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:ForgottenPassword:forgottenPassword }
+
+admin_create_new_password:
+    path: /reset-password/{token}
+    methods:  [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: AdminBundle:ForgottenPassword:createNewPassword }
+
+#
+# Event
+#
+
+admin_event_list:
+    path: /event
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event:list }
+
+admin_event_read:
+    path: /event/{event}
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event:read }
+
+admin_event_update:
+    path: /event/{event}/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:update }
+
+#
+# Rule
+#
+
+admin_rule_list:
+    path: /event/{event}/who-see-who
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Rule:list }
+
+admin_who_see_who_dont_see_what:
+    path: /event/{event}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Rule:what }
+    requirements:
+        event: \d+
+        seerIdentifier: category|type
+        seerId: \d+
+        seeableIdentifier: category|type
+        seeableId: \d+
+
+admin_rule_delete:
+    path: /event/{event}/who-see-who/{rule}/delete
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Rule:delete }
+
+#
+# Type
+#
+
+admin_type_list:
+    path: /event/{event}/type
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Type:list }
+
+admin_type_create:
+    path: /event/{event}/type/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Type:create }
+
+admin_type_update:
+    path: /event/{event}/type/{type}/update
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Type:update }
+
+admin_type_template_field_list:
+    path: /event/{event}/type/{type}/form
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:TypeTemplateField:list }
+
+admin_type_template_field_add:
+    path: /event/{event}/type/{type}/form/field/add/{libType}/{position}/to/{templateName}/{group}
+    requirements:
+        event: \d+
+        type: \d+
+        position: \d+
+        templateName: \w+
+        group: \w+
+        libType: \w+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:TypeTemplateField:fieldAdd }
+
+admin_type_template_field_update:
+    path: /event/{event}/type/{type}/form/field/update/{templateName}/{group}/{row}
+    requirements:
+        event: \d+
+        type: \d+
+        templateName: \w+
+        group: \w+
+        row: \w+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:TypeTemplateField:fieldUpdate }
+
+admin_type_template_field_position:
+    path: /event/{event}/type/{type}/form/field/position/{templateName}/{group}
+    requirements:
+        event: \d+
+        type: \d+
+        templateName: \w+
+        group: \w+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:TypeTemplateField:fieldPosition }
+
+#
+# Category
+#
+
+admin_category_list:
+    path: /event/{event}/category
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Category:list }
+
+admin_category_create:
+    path: /event/{event}/category/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Category:create }
+
+admin_category_update:
+    path: /event/{event}/category/{category}/update
+    requirements:
+        event: \d+
+        category: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Category:update }
+
+#
+# Meeting
+#
+
+admin_meeting_list:
+    path: /event/{event}/meeting
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Meeting:list }
+
+#
+# Spot
+#
+
+admin_spot_list:
+    path: /event/{event}/spot
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Spot:list }
+
+admin_spot_batch:
+    path: /event/{event}/spot/batch
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Spot:batch }
+
+admin_spot_create:
+    path: /event/{event}/spot/create
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:create }
+
+admin_spot_batch_create:
+    path: /event/{event}/spot/create/batch
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:batchCreate }
+
+admin_spot_update:
+    path: /event/{event}/spot/update
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:update }
+
+#
+# Meeting Request
+#
+
+admin_meeting_request_list:
+    path: /event/{event}/meeting-request
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:list }
+
+admin_meeting_request_sheets_list:
+    path: /event/{event}/meeting-request/sheets
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
+
+admin_transform_requests_to_meetings:
+    path: /event/{event}/meeting-request/transform-requests-to-meetings
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
+
+admin_meeting_request_position:
+    path: /event/{event}/meeting-request/{meetingRequest}/position
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:MeetingRequest:position }
+
+admin_meeting_request_details:
+    path: /event/{event}/meeting-request/{meetingRequest}/details
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:showDetail }
+
+admin_meeting_request_slots:
+    path: /event/{event}/meeting-request/{meetingRequest}/slots
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:slots }
+
+#
+# Sheet
+#
+admin_sheet:
+    path: /event/{event}/sheet
+    requirements:
+        id: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet:list }
+admin_sheet_details:
+    path: /event/{event}/sheet/{sheet}
+    requirements:
+        id: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet:details }
+admin_sheet_batch:
+    path: /event/{event}/sheet/batch
+    requirements:
+        id: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Sheet:batch }
+
+#
+# Billing
+#
+admin_sheet_billing:
+    path: /event/{event}/sheet/{sheet}/billing
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Billing:list }
+
+#
+# Order
+#
+admin_sheet_order_edit:
+    path: /event/{event}/order/{order}/edit
+    requirements:
+        order: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Order:edit }
+admin_sheet_order_add_row:
+    path: /event/{event}/order/{order}/group/{group}/row/add
+    requirements:
+        order: \d+
+        group: '[a-zA-Z0-9\-]+'
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Order:addRow }
+admin_sheet_order_remove_row:
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
+    requirements:
+        order: \d+
+        group: '[a-zA-Z0-9\-]+'
+        row: '[a-zA-Z0-9\-]+'
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Order:removeRow }
+admin_sheet_order_update_row:
+    path: /event/{event}/order/{order}/group/{group}/row/{row}/update
+    requirements:
+        order: \d+
+        group: '[a-zA-Z0-9\-]+'
+        row: '[a-zA-Z0-9\-]+'
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Order:updateRow }
+
+#
+# Transaction
+#
+admin_sheet_transaction_create:
+    path: /event/{event}/sheet/{sheet}/transaction/create
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Transaction:create }
+admin_sheet_transaction_update:
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/update
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Transaction:update }
+admin_sheet_transaction_remove:
+    path: /event/{event}/sheet/{sheet}/transaction/{transaction}/remove
+    requirements:
+        sheet: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Transaction:remove }
+
+#
+# Happening
+#
+admin_happening_list:
+    path: /event/{event}/happening
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Happening:list }
+admin_happening_create:
+    path: /event/{event}/happening/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Happening:create }
+admin_happening_update:
+    path: /event/{event}/happening/{happening}/update
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Happening:update }
+
+#
+# Happening Category
+#
+admin_happening_category_list:
+    path: /event/{event}/happening/category
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Happening:listCategory }
+admin_happening_category_create:
+    path: /event/{event}/happening/category/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Happening:createCategory }
+admin_happening_category_update:
+    path: /event/{event}/happening/category/{category}/update
+    requirements:
+        event: \d+
+        category: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Happening:updateCategory }
+
+#
+# Happening Speaker
+#
+admin_happening_speaker_list:
+    path: /event/{event}/happening/speaker
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Speaker:list }
+admin_happening_speaker_create:
+    path: /event/{event}/happening/speaker/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Speaker:create }
+admin_happening_speaker_update:
+    path: /event/{event}/happening/speaker/{speaker}/update
+    requirements:
+        event: \d+
+        speaker: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Speaker:update }
+admin_happening_speaker_read:
+    path: /event/{event}/happening/speaker/{speaker}/read
+    requirements:
+        event: \d+
+        speaker: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Speaker:read }
+admin_happening_speaker_delete:
+    path: /event/{event}/happening/speaker/{speaker}/delete
+    requirements:
+        event: \d+
+        speaker: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Speaker:delete }
+
+#
+# Template
+#
+admin_template_list:
+    path: /template
+    defaults: { _controller: AdminBundle:Template:list }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+admin_template_duplicate:
+    path: /template/{template}/duplicate
+    defaults: { _controller: AdminBundle:Template:duplicate }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+admin_template_add_locale:
+    path: /template/{template}/locale
+    defaults: { _controller: AdminBundle:Template:addLocale }
+    methods: [POST]
+    requirements:
+        template: \d+
+admin_template_builder:
+    path: /template/{template}/{locale}
+    defaults: { _controller: AdminBundle:Template:builder }
+    methods: [GET]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+admin_template_save:
+    path: /template/{template}/{locale}
+    defaults: { _controller: AdminBundle:Template:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+
+#
+# Organizer Template
+#
+admin_organizer_template_list:
+    path: /organizer/template
+    defaults: { _controller: AdminBundle:Template:listOrganizerTemplate }
+    methods: [GET, POST]
+
+admin_organizer_template_duplicate:
+    path: /organizer/template/{template}/duplicate
+    defaults: { _controller: AdminBundle:Template:duplicateOrganizerTemplate }
+    methods: [GET, POST]

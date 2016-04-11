@@ -1,0 +1,32 @@
+<div class="block" data-block="4-8"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+    <div class="block-buttons">
+        <ul class="list-unstyled">
+            <li>
+                <span class="btn btn-link move-button">
+                    <i class="glyphicon glyphicon-move"></i>
+                </span>
+            </li>
+            <li>
+                <button class="btn btn-link delete-button">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="block-inner">
+                {% for uid, item in config[1]|default([]) %}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': fallback|default(false) }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="block-inner">
+                {% for uid, item in config[0]|default([]) %}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': fallback|default(false) }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.fromParticipants) }}
+        {{ form_row(form.toParticipants) }}
+        {{ form_row(form.slot, { 'attr': {
+            'data-slot': true,
+            'data-url': path('admin_meeting_request_slots', { 'event': event.id, 'meetingRequest': meeting_request.id }),
+            'data-from-participants': '#' ~ form.fromParticipants.vars.id,
+            'data-to-participants': '#' ~ form.toParticipants.vars.id,
+        } }) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input:disabled ~ span {
+            color: #ccc;
+        }
+    </style>
+{% endblock %}
+

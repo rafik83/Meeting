@@ -1,0 +1,43 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.happening.title'|trans }}
+
+    </h1>
+
+    <div>
+        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+            {{ 'admin.happening.add'|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.happening.list.title'|trans }}</th>
+            <th>{{ 'admin.happening.list.speaker'|trans }}</th>
+            <th>{{ 'admin.happening.list.begin'|trans }}</th>
+            <th>{{ 'admin.happening.list.end'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for happening in happenings %}
+            <tr>
+                <td>{{ happening.title }}</td>
+                <td>{{ happening.speakers|join(', ') }}</td>
+                <td>{{ happening.begin|date('d/m/Y H\\hi') }}</td>
+                <td>{{ happening.end|date('d/m/Y H\\hi') }}</td>
+                <td class="text-right">
+                    {% if happening.canUpdate %}
+                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">
+                            {{ 'admin.happening.update'|trans }}
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

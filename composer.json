@@ -5,15 +5,15 @@
     "type": "project",
     "autoload": {
         "psr-4": {
+            "Proximum\\Vimeet\\Tests\\": "tests/",
             "Proximum\\Vimeet\\": "src/",
-            "Tests\\": "tests/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
         "files": [ "app/AppKernel.php" ]
     },
     "require": {
         "php": ">=5.3.9",
-        "symfony/symfony": "~3.0",
+        "symfony/symfony": "~3.0.2",
         "doctrine/orm": "^2.5.0",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -22,8 +22,12 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.1",
 
+        "league/tactician": "^1.0",
+        "league/tactician-bundle": "~0.4",
+        "league/tactician-doctrine": "^1.0",
         "sonata-project/intl-bundle": "2.2.*@dev",
         "friendsofsymfony/elastica-bundle": "3.2.*@dev",
+        "pagerfanta/pagerfanta": "^1.0",
         "elao/form-bundle": "^2.0.1",
         "elao/form-translation-bundle": "~1.4",
         "elao/theme-twitter-bootstrap-3-bundle": "2.0",

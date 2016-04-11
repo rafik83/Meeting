@@ -1,0 +1,17 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.event.update.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    {{ form_row(form.translations) }}
+    {{ form_row(form.locales, {widget_columns: 3}) }}
+    {{ form_row(form.fallback, {widget_columns: 3}) }}
+    {{ form_row(form.mode, {inline: true}) }}
+    {{ form_row(form.vat, {widget_columns: 2}) }}
+    {{ form_row(form.leftColor, {widget_columns: 2}) }}
+    {{ form_row(form.rightColor, {widget_columns: 2}) }}
+    {{ form_row(form.textColor, {widget_columns: 2}) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

@@ -1,0 +1,16 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {% for key, child in form if key not in ['submit'] %}
+            {{ form_row(child) }}
+        {% endfor %}
+        <div>
+            <a href="{{ path('event_sheet_schedule_meeting', {  'sheet': sheet.id, 'meeting': meeting.id }) }}" class="btn btn-text">Retour</a>
+            {{ form_widget(form.submit) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,9 @@
+Proximum\Vimeet\Domain\Model\Event\Configuration:
+    type:  embeddable
+    fields:
+        leftColor:
+            type: string
+        rightColor:
+            type: string
+        textColor:
+            type: string

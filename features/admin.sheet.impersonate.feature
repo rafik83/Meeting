@@ -12,6 +12,7 @@ Feature: Impersonation
       | Sheet.yml                       |
       | OneSheetSeveralParticipants.yml |
       | Admin.yml                       |
+    And elastica is populate
     And I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     And I follow "admin.sheet.link"

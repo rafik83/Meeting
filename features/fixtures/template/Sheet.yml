@@ -1,0 +1,216 @@
+Proximum\Vimeet\Domain\Model\Sheet\Template:
+  template_asd_days:
+      __construct: false
+      title: "Template ASD Days"
+      createdAt: <dateTimeBetween('-10days', 'now')>
+      value:
+          69b3cde3:
+            component: "block"
+            type: "8-4"
+            config:
+              -
+                dcc42d3d:
+                  component: "object"
+                  type: "editable-text"
+                  config:
+                    label: "Titre de votre fiche"
+                    placeholder: "Société en une phrase"
+                    help: ""
+                    length: "200"
+                    type: "title"
+                    required: true
+                291c7190:
+                  component: "block"
+                  type: "6-6"
+                  config:
+                    -
+                      1b9a00b3:
+                        component: "object"
+                        type: "image"
+                        config:
+                          label: "Logo"
+                          placeholder: ""
+                          help: ""
+                          length: null
+                          type: null
+                          required: false
+                      6fe62a03:
+                        component: "block"
+                        type: "6-6"
+                        config:
+                          -
+                            fb030569:
+                              component: "object"
+                              type: "tag"
+                              config:
+                                label: "Catégorie"
+                                tag: "sheet_organization"
+                          -
+                            90713a3d:
+                              component: "object"
+                              type: "button-link"
+                              config:
+                                label: "Site internet"
+                                url: null
+                                help: ""
+                                required: false
+                    -
+                      d691d21c:
+                        component: "object"
+                        type: "editable-text"
+                        config:
+                          label: "Description d'activité"
+                          placeholder: ""
+                          help: ""
+                          length: "500"
+                          type: "text"
+                          required: false
+                e438c993:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Compétences Aéronautiques"
+                    placeholder: ""
+                    help: ""
+                    required: false
+                    default: "1"
+                2423e6ea:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Compétences Défenses"
+                    placeholder: ""
+                    help: ""
+                    required: false
+                    default: "1"
+                75adad94:
+                  component: "block"
+                  type: "6-6"
+                  config:
+                    -
+                      848e283e:
+                        component: "object"
+                        type: "image"
+                        config:
+                          label: "Slideshow"
+                          placeholder: ""
+                          help: ""
+                          length: null
+                          type: null
+                          required: false
+                    -
+                      1adc1873:
+                        component: "object"
+                        type: "collection"
+                        config:
+                          label: "Clients de référence"
+                          placeholder: "Vos clients de référence"
+                          help: ""
+                          required: true
+                          default: "1"
+                      46663c1d:
+                        component: "object"
+                        type: "collection"
+                        config:
+                          label: "Projets innovant"
+                          placeholder: "Vos projets innovant"
+                          help: ""
+                          required: false
+                          default: "3"
+                097ab5e8:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Equipements, technologies et process"
+                    placeholder: ""
+                    help: ""
+                    required: false
+                    default: "3"
+              -
+                79271999:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Groupe / Membre"
+                    placeholder: ""
+                    help: ""
+                    required: false
+                    default: "3"
+                696dc236:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Repères"
+                    placeholder: ""
+                    help: ""
+                    required: false
+                    default: "3"
+                a23a2f5d:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Certifications"
+                    placeholder: "vos certifications"
+                    help: ""
+                    required: false
+                    default: "3"
+                bef61d39:
+                  component: "object"
+                  type: "participant"
+                  config:
+                    label: "Participants"
+                    numberOfParticipantShown: "3"
+                211efd1f:
+                  component: "object"
+                  type: "collection"
+                  config:
+                    label: "Médias"
+                    placeholder: "Vos médias"
+                    help: ""
+                    required: false
+                    default: "3"
+          69962d34:
+            component: "block"
+            type: "12"
+            config:
+              -
+                27db4a35:
+                  component: "object"
+                  type: "text"
+                  config:
+                    content: "Objectif de participation"
+                    type: "titre"
+                76a5e149:
+                  component: "block"
+                  type: "6-6"
+                  config:
+                    -
+                      03b394ac:
+                        component: "object"
+                        type: "collection"
+                        config:
+                          label: "Offres"
+                          placeholder: "Vos offres"
+                          help: "Vos offres"
+                          required: true
+                          default: "3"
+                      63ccc105:
+                        component: "object"
+                        type: "collection"
+                        config:
+                          label: "Besoins"
+                          placeholder: "Vos besoins"
+                          help: "Vos besoins"
+                          required: true
+                          default: "3"
+                    -
+                      d927a04b:
+                        component: "object"
+                        type: "editable-text"
+                        config:
+                          label: "Description"
+                          placeholder: "Description"
+                          help: "Description"
+                          length: "500"
+                          type: "text"
+                          required: false

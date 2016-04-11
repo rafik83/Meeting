@@ -49,6 +49,7 @@ class DeleteHandler
             throw new DeleteNotAllowedException('You are not allowed to delete this participant');
         }
 
+        $delete->sheet->removeParticipant($delete->participant);
         $this->participantRepository->delete($delete->participant);
     }
 }

@@ -39,7 +39,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form_themes:
-        - "VimeetAppBundle::layout.html.twig"
+        - "AdminBundle::layout.html.twig"
     date:
         timezone: Europe/Paris
 
@@ -69,7 +69,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: %kernel.root_dir%/../src/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
+                dir: %kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
                 alias: Entity
                 is_bundle: false
 
@@ -98,9 +98,48 @@ sonata_intl:
 # Elastica
 fos_elastica:
     clients:
-        default: { host: localhost, port: 9200 }
+        default: { host: %elastic_host%, port: %elastic_port% }
     indexes:
-        app: ~
+        app:
+            index_name: app_%kernel.environment%
+            settings:
+                index:
+                    analysis:
+                        analyzer:
+                            sheetAnalyzer:
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase"]
+            types:
+                sheet:
+                    mappings:
+                        id:
+                            type: integer
+                        sheetName:
+                            type: string
+                        state:
+                            type: string
+                        categories:
+                            type: nested
+                        type:
+                            type: integer
+                        followUp:
+                            type: integer
+                        participantNumber:
+                            type: integer
+                        event:
+                            type: integer
+                        owner:
+                            type: integer
+                        createdAt:
+                            type: date
+                    persistence:
+                        model_to_elastica_transformer:
+                            service: transformer.elastic.sheet_elastic_transformer
+                        driver: orm
+                        model: Proximum\Vimeet\Domain\Model\Sheet
+                        provider: ~
+                        listener: ~
+                        finder: ~
 
 # From translation
 elao_form_translation:
@@ -112,5 +151,16 @@ services:
        tags:
            - { name: twig.extension }
 
-vimeet_app:
+infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+
+tactician:
+    commandbus:
+        default:
+            middleware:
+                - tactician.middleware.doctrine
+                - tactician.middleware.command_handler
+        query:
+            middleware:
+                - tactician.middleware.validator
+                - tactician.middleware.command_handler

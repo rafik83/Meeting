@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface MeetingRepositoryInterface
 {
@@ -41,4 +42,23 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findByParticipant(Participant $participant);
+
+    /**
+     * @param Event $event
+     */
+    public function deleteAll(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countMeetingsFromSheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countMeetingsToSheet(Sheet $sheet);
 }

@@ -1,0 +1,40 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'Catégories de types de participation' %}
+
+{% block content %}
+    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+
+    <h2>Catégories de types de participation</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>
+                <a href="{{ path('admin_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
+                    {{ 'admin.category.add'|trans }}
+                </a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories.results %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td>
+                    <a href="{{ path('admin_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-primary btn-sm">
+                        {{ 'admin.category.update'|trans }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': categories}) }}
+
+    <div class="text-left">
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+    </div>
+{% endblock %}

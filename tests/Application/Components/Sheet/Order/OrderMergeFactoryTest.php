@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet\Order;
+namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Order;
 
 use Proximum\Vimeet\Application\Components\Sheet\Order\GroupFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderMerge;
