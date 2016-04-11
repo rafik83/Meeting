@@ -355,7 +355,9 @@ admin:
         link: Conférences
         title: Conférences
         add: Ajouter
+        addTitle: Ajouter une conférence
         update: Modifier
+        updateTitle: Modifier une conférence
         list:
             title: Titre
             speaker: Intervenants
@@ -365,7 +367,9 @@ admin:
         link: Catégories de conférences
         title: Catégories de conférences
         add: Ajouter
+        addTitle: Ajouter une catégorie de conférences
         update: Modifier
+        updateTitle: Modifier une catégorie de conférences
         table:
             column:
                 position: Position
