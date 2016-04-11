@@ -376,7 +376,9 @@ admin:
         title: Intervenants
         happenings: Conférences
         add: Ajouter
+        addTitle: Ajouter un intervenant
         update: Modifier
+        updateTitle: Modifier un intervenant
         table:
             column:
                 name: Nom
