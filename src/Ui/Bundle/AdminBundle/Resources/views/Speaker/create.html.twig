@@ -12,3 +12,5 @@
     {{ form_row(form.logo) }}
     {{ form_row(form.photo) }}
 {% endblock %}
+
+{% block goback_link path('admin_happening_speaker_list', {event: event.id}) %}
