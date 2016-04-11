@@ -361,6 +361,8 @@ function TemplateObject(element, locale)
         this.object = new TagObject(this.element, this.locale);
     } else if (this.type === 'collection') {
         this.object = new CollectionObject(this.element, this.locale);
+    } else if (this.type === 'nomenclature') {
+        this.object = new NomenclatureObject(this.element, this.locale);
     }
 
     this.object.fill();
@@ -672,6 +674,39 @@ TagObject.prototype.save = function ()
 {
     this.config.label[this.locale] = this.form.get('label');
     this.config.tag                = this.form.get('tag');
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+/**
+ * NomenclatureObject
+ *
+ * @param element
+ * @param locale
+ * @constructor
+ */
+function NomenclatureObject(element, locale)
+{
+    this.element = element;
+    this.locale  = locale;
+    this.form    = new Form(element);
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+}
+
+NomenclatureObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('help', this.config.help[this.locale]);
+    this.form.set('nomenclature', this.config.nomenclature);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+NomenclatureObject.prototype.save = function ()
+{
+    this.config.label[this.locale] = this.form.get('label');
+    this.config.help[this.locale]  = this.form.get('help');
+    this.config.nomenclature       = this.form.get('nomenclature');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
