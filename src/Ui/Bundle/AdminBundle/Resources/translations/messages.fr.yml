@@ -382,12 +382,16 @@ admin:
                 name: Nom
                 function: Fonction
                 company: Société
+                logoCompany: Logo de la société
+                photo: Photo de l'intervenant
+                subEvent: Sous-événements
         no-result: Aucun intervenant.
         action:
             edit: Modifier
             see: Voir
             delete: Supprimer
             confirmDelete: Confirmer la suppression
+
     spot:
         link: Lieux
         active:
