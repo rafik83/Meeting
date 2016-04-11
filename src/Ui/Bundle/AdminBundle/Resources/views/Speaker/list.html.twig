@@ -37,13 +37,23 @@
                         </ul>
                     </td>
                     <td class="text-right">
-                        <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.happening_speaker.action.see'|trans }}</a>
-                        <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.happening_speaker.action.edit'|trans }}</a>
-                        {{ macro.delete_button(
-                            path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
-                            'admin.happening_speaker.action.delete'|trans,
-                            { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
-                        ) }}
+                        <div class="btn-group">
+                        <a href="{{ path('admin_happening_speaker_read', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-default btn-sm">{{ 'admin.happening_speaker.action.see'|trans }}</a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}">{{ 'admin.happening_speaker.action.edit'|trans }}</a></li>
+                                <li>
+                                    {{ macro.delete_button(
+                                    path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
+                                    'admin.happening_speaker.action.delete'|trans,
+                                    { 'class': '', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
+                                    ) }}
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             {% else %}
