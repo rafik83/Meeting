@@ -4,7 +4,7 @@
     <h1 class="page-header">{{ 'admin.happening.title'|trans }}</h1>
 
     <div>
-        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+        <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-primary new-action">
             {{ 'admin.happening.add'|trans }}
         </a>
     </div>
@@ -28,7 +28,7 @@
                 <td>{{ happening.end|date('d/m/Y H\\hi') }}</td>
                 <td class="text-right">
                     {% if happening.canUpdate %}
-                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default">
+                        <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default btn-sm">
                             {{ 'admin.happening.update'|trans }}
                         </a>
                     {% endif %}
