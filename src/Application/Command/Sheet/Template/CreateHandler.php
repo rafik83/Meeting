@@ -37,7 +37,7 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $template = new Template($create->title, [], [$create->locale]);
+        $template = new Template($create->title, [], $create->createdAt, [$create->locale]);
         $this->templateRepository->add($template);
 
         return new CreateResult($template);

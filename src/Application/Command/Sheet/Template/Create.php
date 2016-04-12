@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use DateTimeInterface;
+
 class Create
 {
     /**
@@ -18,17 +20,22 @@ class Create
     public $title;
 
     /**
+     * @var DateTimeInterface
+     */
+    public $createdAt;
+
+    /**
      * @var string
      */
     public $locale;
 
     /**
-     * Create constructor.
-     *
-     * @param string $locale
+     * @param DateTimeInterface $createdAt
+     * @param string            $locale
      */
-    public function __construct($locale)
+    public function __construct(DateTimeInterface $createdAt, $locale)
     {
-        $this->locale = $locale;
+        $this->createdAt = $createdAt;
+        $this->locale    = $locale;
     }
 }

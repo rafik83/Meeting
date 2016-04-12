@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
@@ -53,15 +54,22 @@ class Create
     public $locale;
 
     /**
+     * @var DateTimeInterface
+     */
+    public $createdAt;
+
+    /**
      * Create constructor.
      *
-     * @param Event  $event
-     * @param string $locale
+     * @param Event             $event
+     * @param string            $locale
+     * @param DateTimeInterface $createdAt
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event, $locale, DateTimeInterface $createdAt)
     {
-        $this->event  = $event;
-        $this->locale = $locale;
+        $this->event     = $event;
+        $this->locale    = $locale;
+        $this->createdAt = $createdAt;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

@@ -43,5 +43,6 @@ Proximum\Vimeet\Domain\Model\Type:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         sheetTemplate:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Template
+            inversedBy: types
             cascade:
                 - persist

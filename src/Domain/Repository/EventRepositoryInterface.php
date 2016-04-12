@@ -25,6 +25,13 @@ interface EventRepositoryInterface
     public function getListByAdmin(Admin $admin);
 
     /**
+     * @param Admin $admin
+     *
+     * @return Event[]
+     */
+    public function getEventsByAdmin(Admin $admin);
+
+    /**
      * @return EventListView[]
      */
     public function getList();

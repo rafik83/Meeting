@@ -13,6 +13,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
             type: json_array
         value:
             type: json_array
+        createdAt:
+            type: datetime
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            mappedBy: sheetTemplate

@@ -49,7 +49,8 @@ class CreateHandler
             $sheetTemplate = $create->sheetTemplate;
         } else {
             $sheetTemplate = $create->sheetTemplate->duplicate(
-                $type->getTitle($create->event->getAvailableLocale($create->locale))
+                $type->getTitle($create->event->getAvailableLocale($create->locale)),
+                $create->createdAt
             );
             $sheetTemplate->setEvent($create->event);
         }

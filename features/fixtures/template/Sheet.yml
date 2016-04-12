@@ -2,6 +2,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
   template_asd_days:
       __construct: false
       title: "Template ASD Days"
+      createdAt: <dateTimeBetween('-10days', 'now')>
       value:
           69b3cde3:
             component: "block"

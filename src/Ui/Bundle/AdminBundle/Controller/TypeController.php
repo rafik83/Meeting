@@ -54,7 +54,7 @@ class TypeController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $create = new Create($event, $request->getLocale());
+        $create = new Create($event, $request->getLocale(), new \DateTime());
         $form   = $this->createForm(TypeCreateType::class, $create, [
             'action' => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
             'method' => 'POST',

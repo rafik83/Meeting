@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Template
 {
@@ -40,16 +42,28 @@ class Template
     private $event;
 
     /**
+     * @var Type[]
+     */
+    private $types;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $createdAt;
+
+    /**
      * Template constructor.
      *
-     * @param string $title
-     * @param array  $value
-     * @param array  $locales
+     * @param string            $title
+     * @param array             $value
+     * @param DateTimeInterface $createdAt
+     * @param array             $locales
      */
-    public function __construct($title, array $value, array $locales)
+    public function __construct($title, array $value, DateTimeInterface $createdAt, array $locales)
     {
-        $this->title = $title;
-        $this->value = $value;
+        $this->title     = $title;
+        $this->value     = $value;
+        $this->createdAt = $createdAt;
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);
@@ -95,6 +109,14 @@ class Template
     }
 
     /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+    /**
      * @param Event $event
      */
     public function setEvent($event)
@@ -117,13 +139,22 @@ class Template
     }
 
     /**
-     * @param string $title
+     * @return DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param string            $title
+     * @param DateTimeInterface $createdAt
      *
      * @return Template
      */
-    public function duplicate($title)
+    public function duplicate($title, DateTimeInterface $createdAt)
     {
-        return new $this($title, $this->value, $this->locales);
+        return new $this($title, $this->value, $createdAt, $this->locales);
     }
 
     /**

@@ -1,0 +1,83 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+
+{% block content %}
+
+    <h1 class="page-header">Templates de fiche</h1>
+
+    <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
+        Créer un template
+    </button>
+
+    {{ form_start(form) }}
+    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="create-modal-label">Créer un template</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_errors(form) }}
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.event) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {{ 'form.organizer_sheet_template_create.children.close.label'|trans({}, 'forms') }}
+                    </button>
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    {{ include('AdminBundle:Common:filters_summary.html.twig', {
+        filters:   filters_summary,
+        resetLink: path('admin_organizer_template_list')
+    }) }}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.organizer_template_list.table.column.title'|trans }}</th>
+            <th>{{ list_macros.choice_as_dropdown(filter_form.event) }}</th>
+            <th>{{ 'admin.organizer_template_list.table.column.date'|trans }}</th>
+            <th class="text-right">{{ 'admin.organizer_template_list.table.column.action'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for template in templates %}
+            <tr>
+                <td>{{ template.title }}</td>
+                <td>
+                    {{ template.event.title }}
+                    {% if template.types is not null %}
+                        <ul>
+                            {% for type in template.types %}
+                                <li>{{ type.getTitle(type.event.getAvailableLocale(app.request.locale)) }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+                <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_organizer_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
+                    <a href="{{ path('admin_template_builder', { 'template': template.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="modal fade clear-on-hidden-modal" id="duplicate-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
