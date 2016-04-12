@@ -10,10 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
-class CreateHandler
+class AddLocaleHandler
 {
     /**
      * @var TemplateRepositoryInterface
@@ -21,7 +20,7 @@ class CreateHandler
     private $templateRepository;
 
     /**
-     * CreateHandler constructor.
+     * AddLocaleHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
      */
@@ -31,15 +30,12 @@ class CreateHandler
     }
 
     /**
-     * @param Create $create
-     *
-     * @return CreateResult
+     * @param AddLocale $command
      */
-    public function handle(Create $create)
+    public function handle(AddLocale $command)
     {
-        $template = new Template($create->title, [], $create->createdAt, [$create->locale]);
-        $this->templateRepository->add($template);
-
-        return new CreateResult($template);
+        if (!$command->template->hasLocale($command->locale)) {
+            $this->templateRepository->set($command->template->addLocale($command->locale));
+        }
     }
 }

@@ -1,3 +1,5 @@
+{% set numberPages = 3 %}
+
 {% if paginator is not null and paginator.pages > 1 %}
     <nav class="text-center">
         <ul class="pagination">
@@ -9,16 +11,42 @@
                 </li>
             {% else %}
                 <li class="disabled">
-                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.page })|url_encode }}" aria-label="Next">
+                    <a href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
             {% endif %}
-            {% for page in 1..paginator.pages %}
+
+            {% if paginator.page > numberPages + 1 %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({ 'page': 1 })|url_encode }}" aria-label="First">
+                        <span aria-hidden="true">1</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if paginator.page > numberPages + 2 %}
+                <li><a href="#">...</a></li>
+            {% endif %}
+
+            {% for page in (paginator.page - numberPages)..(paginator.page + numberPages) if page >= 1 and page <= paginator.pages %}
                 <li{% if page == paginator.page %} class="active"{% endif %}>
                     <a href="?{{ app.request.query.all|merge({ 'page': page })|url_encode }}">{{ page }}</a>
                 </li>
             {% endfor %}
+
+            {% if paginator.page < paginator.pages - numberPages - 1 %}
+                <li><a href="#">...</a></li>
+            {% endif %}
+
+            {% if paginator.page <= paginator.pages - numberPages - 1 %}
+                <li>
+                    <a href="?{{ app.request.query.all|merge({ 'page': paginator.pages })|url_encode }}" aria-label="Last">
+                        <span aria-hidden="true">{{ paginator.pages }}</span>
+                    </a>
+                </li>
+            {% endif %}
+
             {% if paginator.page < paginator.pages %}
                 <li>
                     <a href="?{{ app.request.query.all|merge({ 'page': paginator.page + 1 })|url_encode }}" aria-label="Next">

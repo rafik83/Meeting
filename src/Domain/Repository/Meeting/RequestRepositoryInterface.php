@@ -101,6 +101,20 @@ interface RequestRepositoryInterface
      *
      * @return int
      */
+    public function countPendingRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countApprovedPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
     public function countRefusedPropositionReceivedBySheet(Sheet $sheet);
 
     /**

@@ -297,6 +297,13 @@ admin_meeting_request_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
 
+admin_meeting_request_sheets_list:
+    path: /event/{event}/meeting-request/sheets
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
+
 admin_meeting_request_position:
     path: /event/{event}/meeting-request/{meetingRequest}/position
     requirements:
@@ -500,19 +507,34 @@ admin_template_list:
     path: /template
     defaults: { _controller: AdminBundle:Template:list }
     methods: [GET, POST]
+    requirements:
+        template: \d+
 admin_template_duplicate:
     path: /template/{template}/duplicate
     defaults: { _controller: AdminBundle:Template:duplicate }
     methods: [GET, POST]
+    requirements:
+        template: \d+
+admin_template_add_locale:
+    path: /template/{template}/locale
+    defaults: { _controller: AdminBundle:Template:addLocale }
+    methods: [POST]
+    requirements:
+        template: \d+
 admin_template_builder:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:builder }
     methods: [GET]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_save:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:save }
     methods: [POST]
-
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
 
 #
 # Organizer Template
@@ -526,3 +548,6 @@ admin_organizer_template_duplicate:
     path: /organizer/template/{template}/duplicate
     defaults: { _controller: AdminBundle:Template:duplicateOrganizerTemplate }
     methods: [GET, POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'

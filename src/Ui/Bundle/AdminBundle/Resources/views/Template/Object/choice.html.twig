@@ -1,13 +1,14 @@
 {% set config = {
-    label: 'Choix',
+    label: { (locale): 'Choix' },
+    placeholder: { (locale): '' },
     type: null,
     required: false,
-    placeholder: '',
     choices: {}
 }|merge(config|default({})) %}
 
-<div class="object" data-object="choice"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="choice"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
+        <li class="object-title">Choix</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -32,33 +33,39 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
+                                <input class="form-control" type="text" name="label" />
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Type:</label><br>
 
                                 <label>
-                                    <input type="radio" name="type" value="select" {% if config.type == "select" %}checked{% endif %}> SELECT
+                                    <input type="radio" name="type" value="select"> SELECT
                                 </label><br>
                                 <label>
-                                    <input type="radio" name="type" value="radio" {% if config.type == "radio" %}checked{% endif %}> RADIO
+                                    <input type="radio" name="type" value="radio"> RADIO
                                 </label><br>
                                 <label>
-                                    <input type="radio" name="type" value="checkbox" {% if config.type == "checkbox" %}checked{% endif %}> CHECKBOX
+                                    <input type="radio" name="type" value="checkbox"> CHECKBOX
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Placeholder</label>
-                                <input type="text" class="form-control" name="placeholder" value="{{ config.placeholder }}">
+                                <input type="text" class="form-control" name="placeholder">
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.placeholder[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Requis</label>
-                                <input type="checkbox" name="required"{% if config.required %} checked="checked"{% endif %} />
+                                <input type="checkbox" name="required" />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Choix</label>
                                 <span>Split the choices with a coma ','</span>
-                                <textarea class="form-control" name="choices">{{ config.choices|join(',') }}</textarea>
+                                <textarea class="form-control" name="choices"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -70,5 +77,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="choice">{{ config.label }}</div>
+    <div data-bind="choice">{{ config.label[locale] }}</div>
 </div>

@@ -27,9 +27,14 @@ class Template
     private $title;
 
     /**
-     * @var string
+     * @var array
      */
-    private $value;
+    private $value = [];
+
+    /**
+     * @var array
+     */
+    private $locales = [];
 
     /**
      * @var Event
@@ -50,14 +55,19 @@ class Template
      * Template constructor.
      *
      * @param string            $title
-     * @param string            $value
+     * @param array             $value
      * @param DateTimeInterface $createdAt
+     * @param array             $locales
      */
-    public function __construct($title, $value, DateTimeInterface $createdAt)
+    public function __construct($title, array $value, DateTimeInterface $createdAt, array $locales)
     {
         $this->title     = $title;
         $this->value     = $value;
         $this->createdAt = $createdAt;
+
+        foreach ($locales as $locale) {
+            $this->addLocale($locale);
+        }
     }
 
     /**
@@ -144,6 +154,158 @@ class Template
      */
     public function duplicate($title, DateTimeInterface $createdAt)
     {
-        return new $this($title, $this->value, $createdAt);
+        return new $this($title, $this->value, $createdAt, $this->locales);
+    }
+
+    /**
+     * Get locales
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->getFirstLocale();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstLocale()
+    {
+        return reset($this->locales);
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return Template
+     */
+    public function addLocale($locale)
+    {
+        if (!$this->hasLocale($locale)) {
+            $this->locales[] = $locale;
+        }
+
+        $this->value = self::createLocale($this->value, $locale);
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     *
+     * @return array
+     */
+    private static function createLocale($config, $locale) {
+
+        $keys = ['label', 'help', 'placeholder'];
+
+        if (!isset($config['component'])) {
+            return array_map(function ($item) use ($locale) { return self::createLocale($item, $locale); }, $config);
+        }
+
+        if ($config['component'] === 'block') {
+            foreach ($config['config'] as $key => $column) {
+                $config['config'][$key] = self::createLocale($column, $locale);
+            }
+
+            return $config;
+        }
+
+        if ($config['component'] === 'object') {
+            foreach ($config['config'] as $key => $value) {
+                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
+                    $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
+                }
+            }
+
+            return $config;
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return float
+     */
+    public function getRate($locale)
+    {
+        list ($set, $total) = self::countLocale($this->value, $locale, $this->getFallback());
+
+        return $set / $total * 100;
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return array
+     */
+    private static function countLocale($config, $locale, $fallback)
+    {
+        $set   = 0;
+        $total = 0;
+
+        $keys = ['label', 'help', 'placeholder'];
+
+        if (!isset($config['component'])) {
+            foreach ($config as $item) {
+                list($s, $t) = self::countLocale($item, $locale, $fallback);
+                $set   += $s;
+                $total += $t;
+            }
+
+            return [$set, $total];
+        }
+
+        if ($config['component'] === 'block') {
+            foreach ($config['config'] as $key => $column) {
+                list($s, $t) = self::countLocale($column, $locale, $fallback);
+                $set   += $s;
+                $total += $t;
+            }
+
+            return [$set, $total];
+        }
+
+        if ($config['component'] === 'object') {
+            foreach ($config['config'] as $key => $value) {
+                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
+                    if (!empty($value[$fallback])) {
+                        if (!empty($value[$locale])) {
+                            $set++;
+                        }
+
+                        $total++;
+                    }
+                }
+            }
+
+            return [$set, $total];
+        }
+
+        return [$set, $total];
     }
 }

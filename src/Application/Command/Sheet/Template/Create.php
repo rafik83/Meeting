@@ -25,10 +25,17 @@ class Create
     public $createdAt;
 
     /**
-     * @param DateTimeInterface $createdAt
+     * @var string
      */
-    public function __construct(DateTimeInterface $createdAt)
+    public $locale;
+
+    /**
+     * @param DateTimeInterface $createdAt
+     * @param string            $locale
+     */
+    public function __construct(DateTimeInterface $createdAt, $locale)
     {
         $this->createdAt = $createdAt;
+        $this->locale    = $locale;
     }
 }

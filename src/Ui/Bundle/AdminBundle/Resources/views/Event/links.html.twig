@@ -56,6 +56,11 @@
             {{ 'admin.meeting.link'|trans }}
             </a>
         </li>
+        <li>
+            <a href="{{ path('admin_meeting_request_sheets_list', { 'event': event.id }) }}">
+                {{ 'admin.meeting_request_sheets_list.link'|trans }}
+            </a>
+        </li>
     </ul>
 </li>
 <li class="dropdown-submenu">

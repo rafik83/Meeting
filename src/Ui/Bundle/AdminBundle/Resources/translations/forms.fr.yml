@@ -742,3 +742,9 @@ form:
         children:
             event:
                 label: Événement/Type(s)
+    sheet_template_add_locale:
+        children:
+            locale:
+                label: Langue
+            submit:
+                label: Ajouter

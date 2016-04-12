@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
+use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
@@ -58,13 +61,16 @@ class TemplateController extends Controller
 
         $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
 
-        $create = new Create(new \DateTime());
+        $create = new Create(new \DateTime(), $request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('command.sheet.template.create_handler')->handle($create);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $request->getLocale(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:list.html.twig', [
@@ -179,10 +185,11 @@ class TemplateController extends Controller
 
     /**
      * @param Template $template
+     * @param string   $locale
      *
      * @return Response
      */
-    public function builderAction(Template $template)
+    public function builderAction(Template $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
 
@@ -197,8 +204,21 @@ class TemplateController extends Controller
             }
         }
 
-        return $this->render('AdminBundle:Template:builder.html.twig', [
+        if (!$template->hasLocale($locale)) {
+            throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
+        }
+
+        $addLocale     = new AddLocale($template);
+        $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
+            'submit'   => true,
             'template' => $template,
+        ]);
+
+        return $this->render('AdminBundle:Template:builder.html.twig', [
+            'template'        => $template,
+            'locale'          => $locale,
+            'add_locale_form' => $addLocaleForm->createView()
         ]);
     }
 
@@ -206,13 +226,51 @@ class TemplateController extends Controller
      * @param Request  $request
      * @param Template $template
      *
+     * @return RedirectResponse
+     */
+    public function addLocaleAction(Request $request, Template $template)
+    {
+        $addLocale     = new AddLocale($template);
+        $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        if ($addLocaleForm->handleRequest($request)->isSubmitted()) {
+            if ($addLocaleForm->isValid()) {
+                $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
+
+                return $this->redirectToRoute('admin_template_builder', [
+                    'template' => $template->getId(),
+                    'locale'   => $addLocale->locale,
+                ]);
+            } else {
+                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
+            }
+        }
+
+        return $this->redirectToRoute('admin_template_builder', [
+            'template' => $template->getId(),
+            'locale'   => $template->getFirstLocale(),
+        ]);
+    }
+
+    /**
+     * @param Request  $request
+     * @param Template $template
+     * @param string   $locale
+     *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, Template $template)
+    public function saveAction(Request $request, Template $template, $locale)
     {
-        $config = json_decode($request->getContent(), true);
+        if (!$template->hasLocale($locale)) {
+            return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
+        }
 
-        $this->get('repository.sheet.template_repository')->set($template->setValue($config));
+        $config = json_decode($request->getContent(), true);
+        $this->get('command.sheet.template.save_handler')->handle(new Save($template, $config));
 
         return new JsonResponse();
     }
