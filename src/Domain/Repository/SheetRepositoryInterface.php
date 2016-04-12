@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
-use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface SheetRepositoryInterface
 {
@@ -30,15 +29,12 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
-     * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
      * @param Event  $event
      * @param string $locale
      *
-     * @return PaginatedResult
+     * @return array
      */
-    public function paginate(array $filters, $page, $limit, Event $event, $locale);
+    public function getSheetsMeetingsStats(Event $event, $locale);
 
     /**
      * @param int|User  $user

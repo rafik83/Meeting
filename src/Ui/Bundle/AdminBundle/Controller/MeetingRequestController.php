@@ -170,4 +170,26 @@ class MeetingRequestController extends Controller
 
         return new JsonResponse($slots);
     }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function sheetListAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $sheets = $this
+            ->get('sheet.sheet_meetings_list_view_factory')
+            ->findAll($event, $locale);
+
+        return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
+            'event'  => $event,
+            'sheets' => $sheets,
+        ]);
+    }
 }

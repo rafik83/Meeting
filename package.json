@@ -8,7 +8,8 @@
   "dependencies": {
     "jquery": "2.1.1",
     "bootstrap-sass": "3.3.6",
-    "elao-form.js": "0.1.*"
+    "elao-form.js": "0.1.*",
+    "tablesort": "4.0.1"
   },
   "napa": {},
   "scripts": {
