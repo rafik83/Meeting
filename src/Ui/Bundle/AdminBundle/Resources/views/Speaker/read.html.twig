@@ -46,20 +46,22 @@
         </tr>
     </table>
 
-    <div class="form-group submit-section">
-        <div class="col-sm-3">
-                <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
-                    {{ 'admin.goback.link'|trans }}
-                </a>
-        </div>
-        <div class="col-sm-9 text-right">
-            <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.happening_speaker.action.edit'|trans }}</a>
-            {{ macro.delete_button(
-            path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
-            'admin.happening_speaker.action.delete'|trans,
-            { 'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
-            ) }}
+    <div class="form-horizontal">
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                    <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        {{ 'admin.goback.link'|trans }}
+                    </a>
+            </div>
+            <div class="col-sm-9 text-right">
+                <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.happening_speaker.action.edit'|trans }}</a>
+                {{ macro.delete_button(
+                    path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
+                    'admin.happening_speaker.action.delete'|trans,
+                    { 'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
+                ) }}
+            </div>
         </div>
     </div>
 {% endblock %}
