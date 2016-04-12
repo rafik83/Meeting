@@ -1,0 +1,65 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
+
+    <table class="table table-hover sortable">
+        <thead>
+            <tr>
+                <th>{{ sheets|length }} fiches de participation</th>
+                <th>Type</th>
+                <th class="col-xs-1">Demandes de RDV acceptées</th>
+                <th class="col-xs-1">Demandes transformées en RDV</th>
+                <th>%</th>
+                <th class="col-xs-1">Propositions de RDV acceptées</th>
+                <th class="col-xs-1">Propositions transformées en RDV</th>
+                <th>%</th>
+                <th class="col-xs-1">Total demandes de RDV</th>
+                <th class="col-xs-1">Total RDV transformés</th>
+                <th>%</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for sheet in sheets %}
+            <tr>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
+                        {{ sheet.title }}
+                    </a>
+                </td>
+                <td>
+                    {{ sheet.type }}
+                </td>
+                <td>
+                    {{ sheet.requestsNumber }}
+                </td>
+                <td>
+                    {{ sheet.meetingsRequestsNumber }}
+                </td>
+                <td>
+                    {{ sheet.requestsTransformation|number_format }}
+                </td>
+                <td>
+                    {{ sheet.propositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.meetingsPropositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.propositionsTransformation|number_format }}
+                </td>
+                <td>
+                    {{ sheet.requestsNumber + sheet.propositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
+                </td>
+                <td>
+                    {{ sheet.transformationTotal|number_format }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
