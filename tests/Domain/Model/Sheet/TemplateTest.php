@@ -84,12 +84,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $template->addLocale('en'));
     }
 
-    public function testGetFirstLocale()
+    public function testGetFallback()
     {
         $template = new Template('My template', [], ['fr', 'en'], new \DateTime());
 
-        $this->assertEquals('fr', $template->getFirstLocale());
-        $this->assertEquals('fr', $template->addLocale('de')->getFirstLocale());
+        $this->assertEquals('fr', $template->getFallback());
+        $this->assertEquals('fr', $template->addLocale('de')->getFallback());
     }
 
     public function testHasLocale()

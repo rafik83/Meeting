@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
 
 /**
  * Calculate the completeness of translations for each locales of a template.
@@ -18,11 +18,11 @@ use Proximum\Vimeet\Domain\Model\Sheet\Template;
 class CompletenessCalculator
 {
     /**
-     * @param Template $template
+     * @param SheetTemplate $template
      *
      * @return array
      */
-    public function compute(Template $template)
+    public function compute(SheetTemplate $template)
     {
         $translatables = $this->getTranslatables($template->getValue());
         $translated    = $this->getTranslated($translatables);
@@ -108,7 +108,7 @@ class CompletenessCalculator
     private function convertToPercent(array $counts, $max)
     {
         return array_map(function ($count) use ($max) {
-            return $count / $max * 100;
+            return $max === 0 ? 100 : ($count / $max * 100);
         }, $counts);
     }
 }

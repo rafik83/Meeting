@@ -156,3 +156,6 @@ flash:
         success: Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l'activer
     change_mail_activate:
         success: Votre nouveau mail est maintenant associé à votre compte
+    template:
+        incomplete_translations:
+            warning: Vous avez des traductions manquantes.

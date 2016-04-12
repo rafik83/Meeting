@@ -17,6 +17,7 @@ function init(target) {
 
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
+    $('[data-toggle="popover"]', target).popover();
 
     $('.button-based-modal').on('show.bs.modal', function (event) {
         var modal  = $(this);
@@ -77,6 +78,11 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
         element.addEventListener('click', function () { loadingButton.start(); });
+    });
+
+    // Disable click on <a href="#"></a>
+    [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
+        element.addEventListener('click', function (event) { event.preventDefault(); });
     });
 }
 

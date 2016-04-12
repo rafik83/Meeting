@@ -35,7 +35,7 @@
                     <h3>1-click login</h3>
                     <ul>
                         {% for admin in admins %}
-                            <li><a href="{{ path('admin_login_user', { 'admin': admin.id }) }}">{{ admin.username }}</a></li>
+                            <li><a href="{{ path('admin_login_user', { 'admin': admin.id }) }}">{{ admin.username }} ({{ admin.roles|join(', ')|replace({ 'ROLE_': '', '_': ' ' }) }})</a></li>
                         {% endfor %}
                     </ul>
                 </div>

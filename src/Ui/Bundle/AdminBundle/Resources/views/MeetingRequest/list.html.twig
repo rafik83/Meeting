@@ -1,6 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+{% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
     <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(totalRequest, {'%count%': totalRequest}) }}</h1>
@@ -16,7 +16,7 @@
             <th>{{ 'admin.meeting_request.from'|trans }}</th>
             <th>{{ 'admin.meeting_request.to'|trans }}</th>
             <th>{{ 'admin.meeting_request.createdAt'|trans }}</th>
-            <th>{{ list_macros.choice_as_dropdown(filter_form.state) }}</th>
+            <th>{{ macro.choice_as_dropdown(filter_form.state) }}</th>
             <th></th>
         </tr>
         </thead>
@@ -35,7 +35,7 @@
                 </td>
                 <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
                 <td>
-                    {{ list_macros.state_label(
+                    {{ macro.state_label(
                         ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
                         meeting_request.state,
                         {
@@ -47,7 +47,7 @@
                     ) }}
                 </td>
                 <td class="text-right">
-                    {{ list_macros.btnGroupAndRightMenuDropdown({
+                    {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
                     }|merge(meeting_request.state != 'approved'
                         ? {}

@@ -1,6 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+{% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block list_title 'admin.sheet.title'|trans %}
 
@@ -12,7 +12,7 @@
             {{ form_start(filter_part_form) }}
 
             <div class="input-group">
-                {{ list_macros.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
                 {{ form_widget(filter_part_form.sheetName) }}
             </div>
 
@@ -59,21 +59,21 @@
                 </th>
                 <th></th>
                 <th>
-                    {{ list_macros.choice_as_dropdown(filter_form.state) }}
+                    {{ macro.choice_as_dropdown(filter_form.state) }}
                 </th>
                 <th>
-                    {{ list_macros.choice_as_dropdown(filter_form.completed) }}
+                    {{ macro.choice_as_dropdown(filter_form.completed) }}
                 </th>
                 <th>
-                    {{ list_macros.choice_as_dropdown(filter_form.category) }}
+                    {{ macro.choice_as_dropdown(filter_form.category) }}
                 </th>
                 <th>
-                    {{ list_macros.choice_as_dropdown(filter_form.type) }}
+                    {{ macro.choice_as_dropdown(filter_form.type) }}
                 </th>
                 <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
                 <th>
-                    {{ list_macros.choice_as_dropdown(filter_form.follower) }}
+                    {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
                 <th></th>
             </tr>
@@ -112,7 +112,7 @@
                     </td>
                     <td>{{ sheet.follower }}</td>
                     <td class="text-right">
-                        {{ list_macros.btnGroupAndRightMenuDropdown({
+                        {{ macro.btnGroupAndRightMenuDropdown({
                             ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
                             ('admin.order.link'|trans): path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }),
                             ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
