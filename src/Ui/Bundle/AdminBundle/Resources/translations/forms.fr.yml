@@ -382,7 +382,6 @@ form:
         children:
             amount:
                 label: Montant
-
             date:
                 label: Date
             mode:
@@ -487,13 +486,13 @@ form:
     filter_spot_type:
         children:
             reference:
-                label: Votre identifiant alphanumérique
+                label: Identifiant
             size:
                 label: Taille en m²
             meetingCapacity:
-                label: Capacité du nombre de RDV
+                label: Nombre de RDV
             seatCapacity:
-                label: Capacité du nombre de places assises
+                label: Places assises
             active:
                 label: Actif
             filters:
@@ -508,13 +507,13 @@ form:
     spot_create:
         children:
             reference:
-                label: Votre identifiant alphanumérique
+                label: Identifiant
             size:
                 label: Taille en m²
             meetingCapacity:
-                label: Capacité du nombre de RDV
+                label: Nombre de rendez-vous en simultané
             seatCapacity:
-                label: Capacité du nombre de places assises
+                label: Nombre de places assises
             active:
                 label: Actif
             filters:
@@ -525,17 +524,17 @@ form:
                 no:
                     label: Non
             submit:
-                label: Envoyer
+                label: Enregistrer
     spot_batch_create:
         children:
             recipes:
-                label: Vos identifiants
+                label: Identifiants du lot
                 label_add: Ajouter
                 label_delete: Supprimer
                 prototype:
                     children:
                         prefix:
-                            label: Préfix
+                            label: Préfixe
                         start:
                             label: Début
                         end:
@@ -549,7 +548,7 @@ form:
             active:
                 label: Actif
             submit:
-                label: Envoyer
+                label: Enregistrer
     admin_lib_add:
         children:
             submit:

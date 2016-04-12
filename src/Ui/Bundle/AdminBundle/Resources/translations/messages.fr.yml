@@ -404,16 +404,17 @@ admin:
 
     spot:
         link: Lieux
+        title: Lieux
         active:
             yes: Oui
             no: Non
         listSpot:
-            reference: Référence
+            reference: Identifiant
             size: Taille (en m²)
-            meetingCapacity: Capacité de rendez-vous simultané
-            seatCapacity: Capacité de places assises
+            meetingCapacity: Nombre de rendez-vous en simultané
+            seatCapacity: Nombre de places assises
             active: Actif
-            add: Ajouter
+            add: Créer un lieu
             yes: Oui
             no: Non
         createSpot:
