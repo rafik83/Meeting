@@ -376,6 +376,7 @@ admin:
                 title: Titre
                 picto: Picto
     happening_speaker:
+        speakerName: 'Intervenant %name%'
         link: Intervenants
         title: Intervenants
         happenings: Conférences
