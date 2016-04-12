@@ -29,7 +29,7 @@ class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
         $create->event = $event;
 
         //expected
-        $expectedTemplate = new Template('Toto', [], [], $dateTime);
+        $expectedTemplate = new Template('Toto', [], ['fr'], $dateTime);
         $expectedTemplate->setEvent($event);
         $expectedResult   = new CreateResult($expectedTemplate);
 

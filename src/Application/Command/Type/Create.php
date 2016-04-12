@@ -60,8 +60,8 @@ class Create
      */
     public function __construct(Event $event, $locale)
     {
-        $this->event     = $event;
-        $this->locale    = $locale;
+        $this->event  = $event;
+        $this->locale = $locale;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

@@ -93,6 +93,7 @@ init-db:
 	bin/console doctrine:schema:drop --force
 	bin/console doctrine:schema:create
 	bin/console doctrine:fixtures:load -n
+	sleep 1
 	bin/console fos:elastica:populate
 
 init-db@test:

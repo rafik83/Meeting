@@ -555,3 +555,5 @@ admin_organizer_template_duplicate:
     path: /organizer/template/{template}/duplicate
     defaults: { _controller: AdminBundle:Template:duplicateOrganizerTemplate }
     methods: [GET, POST]
+    requirements:
+        template: \d+

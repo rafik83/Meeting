@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use DateTimeInterface;
 
 class Template
 {
@@ -151,6 +152,17 @@ class Template
     }
 
     /**
+     * @param string            $title
+     * @param DateTimeInterface $createdAt
+     *
+     * @return Template
+     */
+    public function duplicate($title, DateTimeInterface $createdAt)
+    {
+        return new $this($title, $this->value, $createdAt, $this->locales);
+    }
+
+    /**
      * Get locales
      *
      * @return array
@@ -238,5 +250,70 @@ class Template
         }
 
         return $config;
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return float
+     */
+    public function getRate($locale)
+    {
+        list ($set, $total) = self::countLocale($this->value, $locale, $this->getFallback());
+
+        return $set / $total * 100;
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return array
+     */
+    private static function countLocale($config, $locale, $fallback)
+    {
+        $set   = 0;
+        $total = 0;
+
+        $keys = ['label', 'help', 'placeholder'];
+
+        if (!isset($config['component'])) {
+            foreach ($config as $item) {
+                list($s, $t) = self::countLocale($item, $locale, $fallback);
+                $set   += $s;
+                $total += $t;
+            }
+
+            return [$set, $total];
+        }
+
+        if ($config['component'] === 'block') {
+            foreach ($config['config'] as $key => $column) {
+                list($s, $t) = self::countLocale($column, $locale, $fallback);
+                $set   += $s;
+                $total += $t;
+            }
+
+            return [$set, $total];
+        }
+
+        if ($config['component'] === 'object') {
+            foreach ($config['config'] as $key => $value) {
+                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
+                    if (!empty($value[$fallback])) {
+                        if (!empty($value[$locale])) {
+                            $set++;
+                        }
+
+                        $total++;
+                    }
+                }
+            }
+
+            return [$set, $total];
+        }
+
+        return [$set, $total];
     }
 }

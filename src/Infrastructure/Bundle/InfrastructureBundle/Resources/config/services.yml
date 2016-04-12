@@ -755,6 +755,7 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin }
+
     command.sheet.template.create_for_event_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler
         arguments:

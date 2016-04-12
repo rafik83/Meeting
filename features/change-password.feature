@@ -12,17 +12,17 @@ Feature: Change password
   Scenario: Change the password successfully
     When I follow "change_password.link"
     And I fill in the following:
-      |form.change_password.children.currentPassword.label               |p@ssw0rd     |
-      |form.change_password.children.plainPassword.children.first.label  |new-p@ssw0rd |
-      |form.change_password.children.plainPassword.children.second.label |new-p@ssw0rd |
-    And I press "form.change_password.children.submit.label"
+      |form.change_password_user.children.currentPassword.label               |p@ssw0rd     |
+      |form.change_password_user.children.plainPassword.children.first.label  |new-p@ssw0rd |
+      |form.change_password_user.children.plainPassword.children.second.label |new-p@ssw0rd |
+    And I press "form.change_password_user.children.submit.label"
     And I should see "flash.change_password.success"
 
   Scenario: Change the password failed
     When I follow "change_password.link"
     And I fill in the following:
-      |form.change_password.children.currentPassword.label               |whatever-wrong-password     |
-      |form.change_password.children.plainPassword.children.first.label  |new-p@ssw0rd                |
-      |form.change_password.children.plainPassword.children.second.label |new-p@ssw0rd                |
-    And I press "form.change_password.children.submit.label"
+      |form.change_password_user.children.currentPassword.label               |whatever-wrong-password     |
+      |form.change_password_user.children.plainPassword.children.first.label  |new-p@ssw0rd                |
+      |form.change_password_user.children.plainPassword.children.second.label |new-p@ssw0rd                |
+    And I press "form.change_password_user.children.submit.label"
     And I should see "validators.currentPassword"
