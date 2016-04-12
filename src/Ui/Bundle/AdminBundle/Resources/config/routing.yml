@@ -507,15 +507,31 @@ admin_template_list:
     path: /template
     defaults: { _controller: AdminBundle:Template:list }
     methods: [GET, POST]
+    requirements:
+        template: \d+
 admin_template_duplicate:
     path: /template/{template}/duplicate
     defaults: { _controller: AdminBundle:Template:duplicate }
     methods: [GET, POST]
+    requirements:
+        template: \d+
+admin_template_add_locale:
+    path: /template/{template}/locale
+    defaults: { _controller: AdminBundle:Template:addLocale }
+    methods: [POST]
+    requirements:
+        template: \d+
 admin_template_builder:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:builder }
     methods: [GET]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_save:
-    path: /template/{template}
+    path: /template/{template}/{locale}
     defaults: { _controller: AdminBundle:Template:save }
     methods: [POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'

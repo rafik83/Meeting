@@ -595,6 +595,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
             - '@repository.admin_repository'
+    command.sheet.template.add_locale_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler
+        arguments:
+            - '@repository.sheet.template_repository'
+    command.sheet.template.save_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\SaveHandler
+        arguments:
+            - '@repository.sheet.template_repository'
 
     #
     # Security

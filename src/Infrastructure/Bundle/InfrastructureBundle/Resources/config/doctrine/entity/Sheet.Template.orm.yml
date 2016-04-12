@@ -9,6 +9,8 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
     fields:
         title:
             type: string
+        locales:
+            type: json_array
         value:
             type: json_array
     manyToOne:

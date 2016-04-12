@@ -1,7 +1,11 @@
-{% set config = { 'content': 'Texte non modifiable', 'type': 'titre' }|merge(config|default({})) %}
+{% set config = {
+    'content': { (locale): 'Texte non modifiable' },
+    'type': 'titre'
+}|merge(config|default({})) %}
 
-<div class="object" data-object="text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
+        <li class="object-title">Texte non éditable</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -26,13 +30,16 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Contenu</label>
-                                <textarea class="form-control" name="content">{{ config.content }}</textarea>
+                                <textarea class="form-control" name="content"></textarea>
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.content[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Type</label>
                                 <select class="form-control" name="type">
                                     {% for label, value in { 'Titre': 'titre', 'Texte': 'texte' } %}
-                                        <option value="{{ value }}"{% if value == config.type %} selected="selected"{% endif %}>{{ label }}</option>
+                                        <option value="{{ value }}">{{ label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -46,5 +53,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="content">{{ config.content }}</div>
+    <div data-bind="content">{{ config.content[locale] }}</div>
 </div>

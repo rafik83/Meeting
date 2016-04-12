@@ -1,10 +1,11 @@
 {% set config = {
-    label: 'Tag',
+    label: { (locale): 'Tag' },
     tag: ''
 }|merge(config|default({})) %}
 
-<div class="object" data-object="tag"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="tag"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
+        <li class="object-title">Tag</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -29,7 +30,10 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
+                                <input class="form-control" type="text" name="label" />
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Tag</label>
@@ -39,7 +43,7 @@
                                         'Nom': 'participant_lastname',
                                         'Organization': 'sheet_organization'
                                     } %}
-                                        <option value="{{ value }}"{% if value == config.tag %} selected="selected"{% endif %}>{{ label }}</option>
+                                        <option value="{{ value }}">{{ label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -53,5 +57,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="label">{{ config.label }}</div>
+    <div data-bind="label">{{ config.label[locale] }}</div>
 </div>

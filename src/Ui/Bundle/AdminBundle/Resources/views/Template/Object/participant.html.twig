@@ -1,10 +1,11 @@
 {% set config = {
-    label: 'Participant',
+    label: { (locale): 'Participant' },
     numberOfParticipantShown: 1
 }|merge(config|default({})) %}
 
-<div class="object" data-object="participant"{% if uid is defined %} data-uid="{{ uid }}"{% endif %}>
+<div class="object" data-object="participant"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
+        <li class="object-title">Les participants</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -29,11 +30,14 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" value="{{ config.label }}" />
+                                <input class="form-control" type="text" name="label" />
+                                {% if fallback|default(false) and locale != fallback %}
+                                    <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Nombre de participants affichés sur la fiche</label>
-                                <input class="form-control" type="number" name="numberOfParticipantShown" value="{{ config.numberOfParticipantShown }}" />
+                                <input class="form-control" type="number" name="numberOfParticipantShown" />
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -45,5 +49,5 @@
             </form>
         </li>
     </ul>
-    <div data-bind="participant">{{ config.label }}</div>
+    <div data-bind="participant">{{ config.label[locale] }}</div>
 </div>

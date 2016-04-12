@@ -10,10 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
-class CreateHandler
+class SaveHandler
 {
     /**
      * @var TemplateRepositoryInterface
@@ -21,7 +20,7 @@ class CreateHandler
     private $templateRepository;
 
     /**
-     * CreateHandler constructor.
+     * SaveHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
      */
@@ -31,15 +30,16 @@ class CreateHandler
     }
 
     /**
-     * @param Create $create
-     *
-     * @return CreateResult
+     * @param Save $save
      */
-    public function handle(Create $create)
+    public function handle(Save $save)
     {
-        $template = new Template($create->title, [], [$create->locale]);
-        $this->templateRepository->add($template);
+        $save->template->setValue($save->value);
 
-        return new CreateResult($template);
+        foreach ($save->template->getLocales() as $locale) {
+            $save->template->addLocale($locale);
+        }
+
+        $this->templateRepository->set($save->template);
     }
 }
