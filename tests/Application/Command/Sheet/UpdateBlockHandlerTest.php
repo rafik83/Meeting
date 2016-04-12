@@ -27,7 +27,7 @@ class UpdateBlockHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event = new Event();
         $type  = new Type($event);
-        $type->setSheetTemplate(
+        $type->setOldSheetTemplate(
             [
                 '563cae566af03' => [
                     'label'         => ['fr' => 'Société', 'en' => 'Company'],

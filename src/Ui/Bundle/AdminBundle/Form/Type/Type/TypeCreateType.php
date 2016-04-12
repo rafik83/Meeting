@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -28,6 +29,12 @@ class TypeCreateType extends AbstractType
     {
         $builder
             ->add('template', TemplateChoiceType::class, [
+                'placeholder' => '',
+            ])
+            ->add('sheetTemplate', SheetTemplateChoiceType::class, [
+                'required'    => true,
+                'expanded'    => false,
+                'multiple'    => false,
                 'placeholder' => '',
             ])
             ->add('translations', CollectionType::class, [
