@@ -14,11 +14,13 @@
         {% endblock %}
     </head>
     <body>
-        {{ include('AdminBundle:Common:menu.html.twig') }}
-        <div class="container-fluid">
-            {{ include('AdminBundle::flashes.html.twig') }}
-            {% block content %}{% endblock %}
-        </div>
+        {% block body %}
+            {{ include('AdminBundle:Common:menu.html.twig') }}
+            <div class="container-fluid">
+                {{ include('AdminBundle::flashes.html.twig') }}
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
         {% block javascripts %}
             <script src="{{ asset('assets/js/admin.js') }}"></script>
         {% endblock %}
