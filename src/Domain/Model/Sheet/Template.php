@@ -139,6 +139,8 @@ class Template
     {
         $this->value = $value;
 
+        $this->fixValue($this->locales);
+
         return $this;
     }
 
@@ -189,10 +191,22 @@ class Template
     {
         if (!$this->hasLocale($locale)) {
             $this->locales[] = $locale;
-            $this->value     = self::createLocale($this->value, $locale);
+            $this->fixValue([$locale]);
         }
 
         return $this;
+    }
+
+    /**
+     * Consolidate value for each locales
+     *
+     * @param array $locales
+     */
+    private function fixValue(array $locales)
+    {
+        foreach ($locales as $locale) {
+            $this->value = self::createLocale($this->value, $locale);
+        }
     }
 
     /**
