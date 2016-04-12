@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet\Template;
+namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Group;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;

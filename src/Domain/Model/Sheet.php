@@ -175,6 +175,18 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return Sheet
+     */
+    public function removeParticipant(Participant $participant)
+    {
+        $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    /**
      * Get data.
      *
      * @return array

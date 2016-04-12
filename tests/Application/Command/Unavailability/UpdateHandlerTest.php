@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Unavailability;
+namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler;

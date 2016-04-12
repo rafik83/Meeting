@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\Cancel;
 use Proximum\Vimeet\Application\Command\Meeting\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\CancelType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\CancelType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateType;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -70,7 +70,7 @@ class MeetingController extends Controller
         $form   = $this->createForm(CancelType::class, $cancel);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler')->handle($cancel);
+            $this->get('tactician.commandbus')->handle($cancel);
             $this->addFlash('success', 'flash.event.schedule.meeting.cancel.success');
 
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
@@ -100,7 +100,7 @@ class MeetingController extends Controller
         $form   = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.meeting.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.event.schedule.meeting.update.success');
 
             return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);

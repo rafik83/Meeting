@@ -585,14 +585,14 @@ ChoiceObject.prototype.fill = function ()
     this.form.set('required', this.config.required);
     this.form.set('choices', this.getContent());
 
-    this.form.bind('choice', + this.config.label[this.locale] + ' ' + this.config.type);
+    this.form.bind('choice', this.config.label[this.locale] + ' ' + this.config.type);
 };
 
 ChoiceObject.prototype.save = function ()
 {
     this.config.label[this.locale]       = this.form.get('label');
-    this.config.type[this.locale]        = this.form.get('type');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.type                     = this.form.get('type');
     this.config.required                 = this.form.get('required');
 
     var result = {};

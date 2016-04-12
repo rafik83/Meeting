@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Event;
+namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
@@ -22,6 +22,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
+        $event->getConfiguration()->setLeftColor('#111111');
+        $event->getConfiguration()->setRightColor('#BBBBBB');
+        $event->getConfiguration()->setTextColor('#333333');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -39,9 +42,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->leftColor  = '#FFFFFF';
+        $update->rightColor = '#000000';
+        $update->textColor  = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event();
+        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
+        $expectedEvent->getConfiguration()->setRightColor('#000000');
+        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
         $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -59,6 +68,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
+        $event->getConfiguration()->setLeftColor('#111111');
+        $event->getConfiguration()->setRightColor('#BBBBBB');
+        $event->getConfiguration()->setTextColor('#333333');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -76,9 +88,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->leftColor  = '#FFFFFF';
+        $update->rightColor = '#000000';
+        $update->textColor  = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event();
+        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
+        $expectedEvent->getConfiguration()->setRightColor('#000000');
+        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
         $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -97,7 +115,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, Event::VAT_MODE_ATI, 20);
+        $event->getConfiguration()->setLeftColor('#111111');
+        $event->getConfiguration()->setRightColor('#BBBBBB');
+        $event->getConfiguration()->setTextColor('#333333');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -114,9 +135,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->leftColor  = '#FFFFFF';
+        $update->rightColor = '#000000';
+        $update->textColor  = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event();
+        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
+        $expectedEvent->getConfiguration()->setRightColor('#000000');
+        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
         $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 

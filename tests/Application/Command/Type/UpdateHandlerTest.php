@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Type;
+namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Command\Type\UpdateHandler;

@@ -15,9 +15,12 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
@@ -118,5 +121,67 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteAll(Event $event)
+    {
+        // Get event meetings
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->setParameter('event', $event);
+
+        $meetingsIds = array_keys($queryBuilder->getQuery()->getResult());
+
+        // Set event requests meeting relation to null
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->update(Request::class, 'request')
+            ->set('request.meeting', 'NULL')
+            ->where('request.meeting IN (:meetingsIds)')
+            ->setParameter('meetingsIds', $meetingsIds)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+
+        // Delete event meetings
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(Meeting::class, 'meeting')
+            ->where('meeting.id IN (:meetingsIds)')
+            ->setParameter('meetingsIds', $meetingsIds)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsFromSheet(Sheet $sheet)
+    {
+        $queryBuilder = new MeetingQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsToSheet(Sheet $sheet)
+    {
+        $queryBuilder = new MeetingQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
     }
 }

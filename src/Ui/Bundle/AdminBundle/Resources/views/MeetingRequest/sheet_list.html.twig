@@ -3,20 +3,67 @@
 {% block content %}
     <h1 class="page-header">Demandes de rendez-vous et rendez-vous par fiche de participation</h1>
 
+    <p>
+        <a href="{{ path('admin_transform_requests_to_meetings', { 'event': event.id }) }}" class="btn btn-success" data-loading-link="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Génération des RDV en cours...'|e }}">
+            Générer les rendez-vous
+        </a>
+    </p>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Demandes de RDV</div>
+                <div class="panel-body text-center">
+                    <h2>{{ meetings_metrics.requestsTotal }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">RDV</div>
+                <div class="panel-body text-center">
+                    <h2>{{ meetings_metrics.meetingsTotal }} <span class="label label-default">{{ meetings_metrics.transformationTotal|number_format }} %</span></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Moyenne part des RDV demandés</div>
+                <div class="panel-body text-center">
+                    <h2>{{ meetings_metrics.averageRequestsPropositionsTransformation|number_format }} %</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">Moyenne utilisation des slots</div>
+                <div class="panel-body text-center">
+                    <h2>{{ meetings_metrics.averageFilling|number_format }} %</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-hover sortable">
         <thead>
             <tr>
                 <th>{{ sheets|length }} fiches de participation</th>
                 <th>Type</th>
-                <th class="col-xs-1">Demandes de RDV acceptées</th>
-                <th class="col-xs-1">Demandes transformées en RDV</th>
-                <th>%</th>
-                <th class="col-xs-1">Propositions de RDV acceptées</th>
-                <th class="col-xs-1">Propositions transformées en RDV</th>
-                <th>%</th>
-                <th class="col-xs-1">Total demandes de RDV</th>
-                <th class="col-xs-1">Total RDV transformés</th>
-                <th>%</th>
+                <th class="text-right">Demandes acceptées</th>
+                <th class="text-right">Demandes transformées</th>
+                <th class="text-right">%</th>
+                <th class="text-right">Propositions acceptées</th>
+                <th class="text-right">Propositions transformées</th>
+                <th class="text-right">%</th>
+                <th class="text-right">Total demandes</th>
+                <th class="text-right">Total RDV</th>
+                <th class="text-right">%</th>
+                <th class="text-right">Part des RDV demandés / Total RDV</th>
+                <th class="text-right">Slots</th>
+                <th class="text-right">% utilisation slots</th>
             </tr>
         </thead>
 
@@ -31,32 +78,41 @@
                 <td>
                     {{ sheet.type }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsRequestsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsTransformation|number_format }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.propositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsPropositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.propositionsTransformation|number_format }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.requestsNumber + sheet.propositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.meetingsRequestsNumber + sheet.meetingsPropositionsNumber }}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ sheet.transformationTotal|number_format }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.requestsPropositionsTransformation|number_format }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.availableSlots }}
+                </td>
+                <td class="text-right">
+                    {{ sheet.filling|number_format }}
                 </td>
             </tr>
         {% endfor %}

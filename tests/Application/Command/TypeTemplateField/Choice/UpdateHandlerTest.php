@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\TypeTemplateField\Choice;
+namespace Proximum\Vimeet\Tests\Application\Command\TypeTemplateField\Choice;
 
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\Update;
 use Proximum\Vimeet\Application\Command\TypeTemplateField\Choice\UpdateHandler;

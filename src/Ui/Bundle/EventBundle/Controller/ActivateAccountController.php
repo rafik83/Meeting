@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\ActivateAccountPasswordType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -48,7 +48,7 @@ class ActivateAccountController extends Controller
         $form    = $this->createForm(ActivateAccountPasswordType::class, $command, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.user.activate_account_password_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
             $this->addFlash('success', 'flash.activate_account.success');
 

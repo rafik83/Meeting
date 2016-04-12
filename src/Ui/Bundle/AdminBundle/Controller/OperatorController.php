@@ -106,7 +106,7 @@ class OperatorController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.operator.create_handler')->handle($create);
+                $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.operator.create.success');
 
                 return $this->redirectToRoute('admin_list_operator');
@@ -157,7 +157,7 @@ class OperatorController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.operator.update_handler')->handle($update);
+                $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.operator.update.success');
 
                 return $this->redirectToRoute('admin_list_operator');

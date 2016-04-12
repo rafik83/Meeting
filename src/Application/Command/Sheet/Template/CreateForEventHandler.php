@@ -21,13 +21,20 @@ class CreateForEventHandler
     private $templateRepository;
 
     /**
-     * CreateHandler constructor.
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
+     * OrganizerCreateHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface          $dateTime
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {
         $this->templateRepository = $templateRepository;
+        $this->dateTime           = $dateTime;
     }
 
     /**
@@ -37,7 +44,7 @@ class CreateForEventHandler
      */
     public function handle(CreateForEvent $create)
     {
-        $template = new Template($create->title, '', $create->createdAt);
+        $template = new Template($create->title, [], $create->event->getLocales(), $this->dateTime);
         $template->setEvent($create->event);
 
         $this->templateRepository->add($template);

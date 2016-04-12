@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Spot;
+namespace Proximum\Vimeet\Tests\Application\Command\Spot;
 
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler;

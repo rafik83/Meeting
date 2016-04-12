@@ -89,7 +89,7 @@ class AdminController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.admin.create_handler')->handle($create);
+                $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.admin.create.success');
 
                 return $this->redirectToRoute('admin_list_admin');
@@ -125,7 +125,7 @@ class AdminController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.admin.update_handler')->handle($update);
+                $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.admin.update.success');
 
                 return $this->redirectToRoute('admin_list_admin');

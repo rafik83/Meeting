@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet\Template;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler;
@@ -19,6 +19,8 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $createdAt = new \DateTime();
+
         $template = new Template('My template', [
             'ec74be5e' => [
                 'component' => 'object',
@@ -49,7 +51,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr']);
+        ], ['fr'], $createdAt);
 
         $expected = new Template('My template', [
             'ec74be5e' => [
@@ -81,7 +83,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr', 'en']);
+        ], ['fr', 'en'], $createdAt);
 
         $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
         $templateRepository->set($expected)->shouldBeCalled();
@@ -125,7 +127,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr']);
+        ], ['fr'], new \DateTime());
 
         $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
         $templateRepository->set()->shouldNotBeCalled();

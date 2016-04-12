@@ -70,7 +70,7 @@ class EventController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.vimeet.application.command.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.event.update.success');
 
             return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);

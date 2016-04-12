@@ -18,8 +18,8 @@ use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\AddParticipantType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantUpdateType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddParticipantType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantUpdateType;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -57,7 +57,7 @@ class ParticipantController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($add);
+                $this->get('tactician.commandbus')->handle($add);
                 $this->addFlash('success', 'flash.sheet.add_participant.success');
 
                 // Go to the sheet
@@ -105,7 +105,7 @@ class ParticipantController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.update_handler')->handle($updateParticipant);
+                $this->get('tactician.commandbus')->handle($updateParticipant);
                 $this->addFlash('success', 'flash.sheet.update_participant.success');
 
                 // Go to the sheet
@@ -143,7 +143,7 @@ class ParticipantController extends Controller
         $delete = new Delete($sheet, $this->getUser(), $participant);
 
         try {
-            $this->get('vimeet_infrastructure.vimeet.application.command.participant.delete_handler')->handle($delete);
+            $this->get('tactician.commandbus')->handle($delete);
             $this->addFlash('success', 'flash.sheet.delete_participant.success');
         } catch (DeleteNotAllowedException $exception) {
             $this->addFlash('error', 'flash.sheet.delete_participant.access_denied');

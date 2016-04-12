@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Package;
+namespace Proximum\Vimeet\Tests\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Command\Package\UpdateProduct;
 use Proximum\Vimeet\Application\Command\Package\UpdateProductHandler;

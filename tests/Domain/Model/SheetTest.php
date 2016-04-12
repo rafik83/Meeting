@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Domain\Model;
+namespace Proximum\Vimeet\Tests\Domain\Model;
 
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Admin;

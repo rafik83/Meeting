@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use DateTimeInterface;
 
 class Template
 {
@@ -47,19 +47,19 @@ class Template
     private $types;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
      * Template constructor.
      *
-     * @param string            $title
-     * @param array             $value
-     * @param DateTimeInterface $createdAt
-     * @param array             $locales
+     * @param string             $title
+     * @param array              $value
+     * @param array              $locales
+     * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, array $value, DateTimeInterface $createdAt, array $locales)
+    public function __construct($title, array $value, array $locales, \DateTimeInterface $createdAt)
     {
         $this->title     = $title;
         $this->value     = $value;
@@ -171,14 +171,6 @@ class Template
      * @return string
      */
     public function getFallback()
-    {
-        return $this->getFirstLocale();
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstLocale()
     {
         return reset($this->locales);
     }

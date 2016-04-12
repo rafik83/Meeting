@@ -3,6 +3,7 @@ var $               = require('jquery'),
     tablesort       = require('tablesort'),
     Confirm         = require('./components/_Confirm'),
     CheckAll        = require('./components/_CheckAll'),
+    LoadingButton   = require('./components/_LoadingButton'),
     TemplateBuilder = require('./components/_TemplateBuilder'),
     Batch           = require('./components/_Batch'),
     Slots           = require('./components/_Slots'),
@@ -72,6 +73,11 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
+
+    [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
+        var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
+        element.addEventListener('click', function () { loadingButton.start(); });
+    });
 }
 
 // Call init function when element is added to DOM

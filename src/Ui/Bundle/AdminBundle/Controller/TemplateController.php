@@ -14,9 +14,9 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
@@ -61,11 +61,11 @@ class TemplateController extends Controller
 
         $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
 
-        $create = new Create(new \DateTime(), $request->getLocale());
+        $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.create_handler')->handle($create);
+            $result = $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('admin_template_builder', [
                 'template' => $result->template->getId(),
@@ -109,16 +109,19 @@ class TemplateController extends Controller
         $events    = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
         $templates = $this->get('repository.sheet.template_repository')->listOrganizerTemplate($events, $filters);
 
-        $create = new CreateForEvent(new \DateTime());
+        $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
             'submit' => true,
             'admin'  => $organizer,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.create_for_event_handler')->handle($create);
+            $result = $this->get('tactician.commandbus')->handle($create);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template/Sheet:organizerList.html.twig', [
@@ -144,9 +147,12 @@ class TemplateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+            $result = $this->get('tactician.commandbus')->handle($duplicate);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:duplicate.html.twig', [
@@ -172,9 +178,12 @@ class TemplateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('command.sheet.template.duplicate_handler')->handle($duplicate);
+            $result = $this->get('tactician.commandbus')->handle($duplicate);
 
-            return $this->redirectToRoute('admin_template_builder', ['template' => $result->template->getId()]);
+            return $this->redirectToRoute('admin_template_builder', [
+                'template' => $result->template->getId(),
+                'locale'   => $result->template->getFallback(),
+            ]);
         }
 
         return $this->render('AdminBundle:Template:duplicate.html.twig', [
@@ -215,10 +224,13 @@ class TemplateController extends Controller
             'template' => $template,
         ]);
 
+        $completeness = $this->get('sheet.template.completeness_calculator')->compute($template);
+
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
-            'add_locale_form' => $addLocaleForm->createView()
+            'add_locale_form' => $addLocaleForm->createView(),
+            'completeness'    => $completeness,
         ]);
     }
 
@@ -239,7 +251,7 @@ class TemplateController extends Controller
 
         if ($addLocaleForm->handleRequest($request)->isSubmitted()) {
             if ($addLocaleForm->isValid()) {
-                $this->get('command.sheet.template.add_locale_handler')->handle($addLocale);
+                $this->get('tactician.commandbus')->handle($addLocale);
 
                 return $this->redirectToRoute('admin_template_builder', [
                     'template' => $template->getId(),
@@ -252,7 +264,7 @@ class TemplateController extends Controller
 
         return $this->redirectToRoute('admin_template_builder', [
             'template' => $template->getId(),
-            'locale'   => $template->getFirstLocale(),
+            'locale'   => $template->getFallback(),
         ]);
     }
 
@@ -270,7 +282,7 @@ class TemplateController extends Controller
         }
 
         $config = json_decode($request->getContent(), true);
-        $this->get('command.sheet.template.save_handler')->handle(new Save($template, $config));
+        $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
         return new JsonResponse();
     }

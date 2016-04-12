@@ -65,7 +65,7 @@
                 <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_organizer_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
-                    <a href="{{ path('admin_template_builder', { 'template': template.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_template_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
                 </td>
             </tr>
         {% endfor %}

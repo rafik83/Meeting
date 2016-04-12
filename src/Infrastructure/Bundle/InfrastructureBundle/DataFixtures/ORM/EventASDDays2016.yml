@@ -7,6 +7,7 @@ Proximum\Vimeet\Domain\Model\Event:
         fallback: fr
         organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
+        configuration: '@configuration_rdv_carnot_2016'
         organiserEmail: "accounts@proximumgroup.com"
         bankInfo: |+
             HSBC Issy les Moulineaux

@@ -9,6 +9,9 @@
     {{ form_row(form.fallback, {widget_columns: 3}) }}
     {{ form_row(form.mode, {inline: true}) }}
     {{ form_row(form.vat, {widget_columns: 2}) }}
+    {{ form_row(form.leftColor, {widget_columns: 2}) }}
+    {{ form_row(form.rightColor, {widget_columns: 2}) }}
+    {{ form_row(form.textColor, {widget_columns: 2}) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

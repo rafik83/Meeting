@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\MeetingRequest;
+namespace Proximum\Vimeet\Tests\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;

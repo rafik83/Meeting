@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class CreateForEvent
@@ -24,17 +23,4 @@ class CreateForEvent
      * @var Event
      */
     public $event;
-
-    /**
-     * @var DateTimeInterface
-     */
-    public $createdAt;
-
-    /**
-     * @param DateTimeInterface $createdAt
-     */
-    public function __construct(DateTimeInterface $createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
 }

@@ -47,6 +47,9 @@ class EventUpdateType extends AbstractType
                 'expanded' => true,
             ])
             ->add('vat', NumberType::class)
+            ->add('leftColor', TextType::class)
+            ->add('rightColor', TextType::class)
+            ->add('textColor', TextType::class)
         ;
     }
 

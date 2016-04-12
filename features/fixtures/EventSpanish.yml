@@ -1,3 +1,10 @@
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_rdv_carnot_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#FFFFFF'
+
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
         title: Evento en español
@@ -5,6 +12,7 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [es]
         fallback: es
+        configuration: '@configuration_rdv_carnot_2016'
         organiserName: PROXIMUM
         paymentAddress: '@payment_address_event_spanish'
         organiserEmail: accounts@proximumgroup.com

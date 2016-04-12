@@ -99,11 +99,8 @@ class TypeTemplateFieldController extends Controller
             ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.create_factory')
             ->getCommand($field->getRawType());
 
-        $create = new $command($type, $templateName, $field);
-
-        $formClassType = $this
-            ->get('vimeet_app.form_type_admin.library.type_factory')
-            ->getForm($libType);
+        $create        = new $command($type, $templateName, $field);
+        $formClassType = $this->get('vimeet_app.form_type_admin.library.type_factory')->getForm($libType);
 
         $form = $this->createForm($formClassType, $create, [
             'method'  => 'POST',
@@ -112,11 +109,7 @@ class TypeTemplateFieldController extends Controller
         $form->add('submit', SubmitType::class, ['label' => 'form.admin_lib.children.submit.label']);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.create_handler_factory')
-                ->getHandler($field->getRawType())
-                ->handle($create);
-
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.type_template_field.create.success');
 
             return $this->redirectToRoute('admin_type_template_field_list', [
@@ -167,24 +160,16 @@ class TypeTemplateFieldController extends Controller
             ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_factory')
             ->getCommand($field->getRawType());
 
-        $update = new $command($type, $templateName, $field);
-
-        $formClassType = $this
-            ->get('vimeet_app.form_type_admin.library.type_factory')
-            ->getForm($field->getRawType());
-
-        $form = $this->createForm($formClassType, $update, [
+        $update        = new $command($type, $templateName, $field);
+        $formClassType = $this->get('vimeet_app.form_type_admin.library.type_factory')->getForm($field->getRawType());
+        $form          = $this->createForm($formClassType, $update, [
             'method'  => 'POST',
             'locales' => $event->getLocales(),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin_lib.children.submit.label']);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.update_handler_factory')
-                ->getHandler($field->getRawType())
-                ->handle($update);
-
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.type_template_field.update.success');
 
             return $this->redirectToRoute('admin_type_template_field_list', [
@@ -224,9 +209,7 @@ class TypeTemplateFieldController extends Controller
 
         $position = new Position($type, $templateName, $group, $fieldsOrder);
 
-        $this
-            ->get('vimeet_infrastructure.vimeet.application.command.type_template_field.position_handler')
-            ->handle($position);
+        $this->get('tactician.commandbus')->handle($position);
 
         $this->addFlash('success', 'flash.admin.type_template_field.order.success');
 

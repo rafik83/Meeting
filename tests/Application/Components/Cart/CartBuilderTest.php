@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Cart;
+namespace Proximum\Vimeet\Tests\Application\Components\Cart;
 
 use Proximum\Vimeet\Application\Components\Cart\Cart;
 use Proximum\Vimeet\Application\Components\Cart\CartBuilder;

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
+use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -140,9 +141,7 @@ class MeetingRequestController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this
-                ->get('vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler')
-                ->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
             return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
@@ -183,13 +182,34 @@ class MeetingRequestController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $sheets = $this
+        $sheetMeetingsListViews = $this
             ->get('sheet.sheet_meetings_list_view_factory')
             ->findAll($event, $locale);
 
+        $meetingsMetrics = $this
+            ->get('sheet.meetings_metrics_view_factory')
+            ->getFromSheets($sheetMeetingsListViews);
+
         return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
-            'event'  => $event,
-            'sheets' => $sheets,
+            'event'            => $event,
+            'sheets'           => $sheetMeetingsListViews,
+            'meetings_metrics' => $meetingsMetrics,
         ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return RedirectResponse
+     */
+    public function transformRequestsToMeetingsAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $requestsToMeetings = new RequestsToMeetings($event, new \DateTime());
+        $this->get('tactician.commandbus')->handle($requestsToMeetings);
+        $this->addFlash('success', 'flash.admin.meeting_request.position.success');
+
+        return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
     }
 }

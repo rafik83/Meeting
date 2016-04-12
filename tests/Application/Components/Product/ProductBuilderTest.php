@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Product;
+namespace Proximum\Vimeet\Tests\Application\Components\Product;
 
 use Proximum\Vimeet\Application\Components\Product\ProductBuilder;
 use Proximum\Vimeet\Application\Components\Product\Products\LibChoiceProduct;

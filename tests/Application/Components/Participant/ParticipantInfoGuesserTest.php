@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Participant;
+namespace Proximum\Vimeet\Tests\Application\Components\Participant;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Template\Exception\RowNotFoundException;

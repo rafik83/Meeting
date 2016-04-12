@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;

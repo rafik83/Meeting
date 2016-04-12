@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Sheet\Template;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler;
@@ -21,11 +21,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $create   = new Create($dateTime);
+        $create   = new Create('fr');
         $create->title = 'Toto';
 
         //expected
-        $expectedTemplate = new Template('Toto', '', $dateTime);
+        $expectedTemplate = new Template('Toto', [], ['fr'], $dateTime);
         $expectedResult   = new CreateResult($expectedTemplate);
 
         // Mock
@@ -33,7 +33,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
-        $handler = new CreateHandler($templateRepository->reveal());
+        $handler = new CreateHandler($templateRepository->reveal(), $dateTime);
         $result = $handler->handle($create);
 
         $this->assertEquals($expectedResult, $result);

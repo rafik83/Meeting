@@ -60,7 +60,22 @@ class SheetMeetingsListView
     /**
      * @var float
      */
+    public $requestsPropositionsTransformation;
+
+    /**
+     * @var float
+     */
     public $transformationTotal;
+
+    /**
+     * @var int
+     */
+    public $availableSlots;
+
+    /**
+     * @var float
+     */
+    public $filling;
 
     /**
      * @param int    $id
@@ -73,6 +88,9 @@ class SheetMeetingsListView
      * @param float  $requestsTransformation
      * @param float  $propositionsTransformation
      * @param float  $transformationTotal
+     * @param float  $requestsPropositionsTransformation
+     * @param int    $availableSlots
+     * @param float  $filling
      */
     public function __construct(
         $id,
@@ -84,17 +102,23 @@ class SheetMeetingsListView
         $propositionsNumber,
         $requestsTransformation,
         $propositionsTransformation,
-        $transformationTotal
+        $transformationTotal,
+        $requestsPropositionsTransformation,
+        $availableSlots,
+        $filling
     ) {
-        $this->id                         = $id;
-        $this->title                      = $title;
-        $this->type                       = $type;
-        $this->meetingsRequestsNumber     = $meetingsRequestsNumber;
-        $this->meetingsPropositionsNumber = $meetingsPropositionsNumber;
-        $this->requestsNumber             = $requestsNumber;
-        $this->propositionsNumber         = $propositionsNumber;
-        $this->requestsTransformation     = $requestsTransformation;
-        $this->propositionsTransformation = $propositionsTransformation;
-        $this->transformationTotal        = $transformationTotal;
+        $this->id                                 = $id;
+        $this->title                              = $title;
+        $this->type                               = $type;
+        $this->meetingsRequestsNumber             = $meetingsRequestsNumber;
+        $this->meetingsPropositionsNumber         = $meetingsPropositionsNumber;
+        $this->requestsNumber                     = $requestsNumber;
+        $this->propositionsNumber                 = $propositionsNumber;
+        $this->requestsTransformation             = $requestsTransformation;
+        $this->propositionsTransformation         = $propositionsTransformation;
+        $this->transformationTotal                = $transformationTotal;
+        $this->requestsPropositionsTransformation = $requestsPropositionsTransformation;
+        $this->availableSlots                     = $availableSlots;
+        $this->filling                            = $filling;
     }
 }

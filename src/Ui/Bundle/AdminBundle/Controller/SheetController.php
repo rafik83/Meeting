@@ -12,9 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
-use Proximum\Vimeet\Application\Query\Sheet\SheetListView;
+use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
@@ -54,9 +55,8 @@ class SheetController extends Controller
 
         // Pagination
         try {
-            $sheets = $this
-                ->get('query.sheet.sheet_list_view_factory')
-                ->paginate($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $query  = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
             throw $this->createNotFoundException($ex->getMessage());
         }
@@ -103,7 +103,7 @@ class SheetController extends Controller
                 $batch->assign   = $batchForm->get('assign')->isClicked();
                 $batch->accept   = $batchForm->get('accept')->isClicked();
 
-                $result = $this->get('command.sheet.batch_handler')->handle($batch);
+                $result = $this->get('tactician.commandbus')->handle($batch);
 
                 if ($batch->validate) {
                     $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count, ['%count%' => $result->count]));
@@ -161,7 +161,7 @@ class SheetController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.sheet.add_comment_handler')->handle($addComment);
+            $this->get('tactician.commandbus')->handle($addComment);
             $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
 
             return $this->redirectToRoute('admin_sheet_details', [

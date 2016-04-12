@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Domain\Model\Sheet;
+namespace Proximum\Vimeet\Tests\Domain\Model\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 
@@ -16,7 +16,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddLocale()
     {
-        $template = new Template('My template', [
+        $createdAt = new \DateTime();
+        $template  = new Template('My template', [
             'ec74be5e' => [
                 'component' => 'object',
                 'type'      => 'text',
@@ -46,7 +47,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr']);
+        ], ['fr'], $createdAt);
 
         $expected = new Template('My template', [
             'ec74be5e' => [
@@ -78,22 +79,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr', 'en']);
+        ], ['fr', 'en'], $createdAt);
 
         $this->assertEquals($expected, $template->addLocale('en'));
     }
 
-    public function testGetFirstLocale()
+    public function testGetFallback()
     {
-        $template = new Template('My template', [], ['fr', 'en']);
+        $template = new Template('My template', [], ['fr', 'en'], new \DateTime());
 
-        $this->assertEquals('fr', $template->getFirstLocale());
-        $this->assertEquals('fr', $template->addLocale('de')->getFirstLocale());
+        $this->assertEquals('fr', $template->getFallback());
+        $this->assertEquals('fr', $template->addLocale('de')->getFallback());
     }
 
     public function testHasLocale()
     {
-        $template = new Template('My template', [], ['fr', 'en']);
+        $template = new Template('My template', [], ['fr', 'en'], new \DateTime());
 
         $this->assertTrue($template->hasLocale('fr'));
         $this->assertTrue($template->hasLocale('en'));

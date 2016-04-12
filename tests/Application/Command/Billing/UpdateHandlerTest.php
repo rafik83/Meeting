@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Command\Billing;
+namespace Proximum\Vimeet\Tests\Application\Command\Billing;
 
 use Proximum\Vimeet\Application\Command\Billing\Update;
 use Proximum\Vimeet\Application\Command\Billing\UpdateHandler;

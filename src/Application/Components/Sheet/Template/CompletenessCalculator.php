@@ -1,0 +1,114 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Sheet\Template;
+
+use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
+
+/**
+ * Calculate the completeness of translations for each locales of a template.
+ */
+class CompletenessCalculator
+{
+    /**
+     * @param SheetTemplate $template
+     *
+     * @return array
+     */
+    public function compute(SheetTemplate $template)
+    {
+        $translatables = $this->getTranslatables($template->getValue());
+        $translated    = $this->getTranslated($translatables);
+        $countByLocale = $this->countByLocales($template->getLocales(), $translated);
+
+        return $this->convertToPercent($countByLocale, count($translated));
+    }
+
+    /**
+     * Get translatable values
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    private function getTranslatables(array $config)
+    {
+        if (!isset($config['component'])) {
+            return array_reduce($config, function (array $carry, array $component) {
+                return array_merge($carry, $this->getTranslatables($component));
+            }, []);
+        }
+
+        if ($config['component'] === 'block') {
+            return array_reduce($config['config'], function (array $carry, array $column) {
+                return array_merge($carry, $this->getTranslatables($column));
+            }, []);
+        }
+
+        if ($config['component'] === 'object') {
+            return array_values(array_filter($config['config'], function ($value, $key) use ($config) {
+                return in_array($key, ['label', 'help', 'placeholder'])
+                    || $config['type'] === 'text' && $key === 'content';
+            }, ARRAY_FILTER_USE_BOTH));
+        }
+
+        throw new \InvalidArgumentException();
+    }
+
+    /**
+     * Get values translated in at lead one locale
+     *
+     * @param $translatables
+     *
+     * @return array
+     */
+    private function getTranslated($translatables)
+    {
+        return array_filter($translatables, function (array $translatable) {
+            foreach ($translatable as $locale => $value) {
+                if (!empty($value)) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * Count translations by locales
+     *
+     * @param array $locales
+     * @param array $translated
+     *
+     * @return array
+     */
+    private function countByLocales(array $locales, array $translated)
+    {
+        return array_combine($locales, array_map(function ($locale) use ($translated) {
+            return count(array_filter($translated, function ($translations) use ($locale) {
+                return !empty($translations[$locale]);
+            }));
+        }, $locales));
+    }
+
+    /**
+     * @param array $counts
+     * @param int   $max
+     *
+     * @return array
+     */
+    private function convertToPercent(array $counts, $max)
+    {
+        return array_map(function ($count) use ($max) {
+            return $max === 0 ? 100 : ($count / $max * 100);
+        }, $counts);
+    }
+}

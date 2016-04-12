@@ -41,7 +41,7 @@ class TransactionController extends Controller
         $form   = $this->createForm(CreateTransactionType::class, $create);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.transaction.create_handler')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
@@ -79,7 +79,7 @@ class TransactionController extends Controller
         $form   = $this->createForm(UpdateTransactionType::class, $update);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.transaction.update_handler')->handle($update);
+            $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
             return $this->redirectToRoute('admin_sheet_billing', [
@@ -114,7 +114,7 @@ class TransactionController extends Controller
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 
-        $this->get('command.transaction.remove_handler')->handle(new Remove($transaction));
+        $this->get('tactician.commandbus')->handle(new Remove($transaction));
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
         return $this->redirectToRoute('admin_sheet_billing', [

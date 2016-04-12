@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Tests\Application\Components\Spot;
+namespace Proximum\Vimeet\Tests\Application\Components\Spot;
 
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;

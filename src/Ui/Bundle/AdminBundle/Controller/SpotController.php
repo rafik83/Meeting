@@ -93,15 +93,15 @@ class SpotController extends Controller
         if (!empty($spotsToDelete)) {
             if ($deleteButton) {
                 $deleteBatch = new DeleteBatch($spotsToDelete, $event);
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.delete_batch_handler')->handle($deleteBatch);
+                $this->get('tactician.commandbus')->handle($deleteBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
             } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($spotsToDelete, $event);
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.disable_batch_handler')->handle($disableBatch);
+                $this->get('tactician.commandbus')->handle($disableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
             } elseif ($enableButton) {
                 $enableBatch = new EnableBatch($spotsToDelete, $event);
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.enable_batch_handler')->handle($enableBatch);
+                $this->get('tactician.commandbus')->handle($enableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.enable.success');
             }
         }
@@ -128,7 +128,7 @@ class SpotController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.spot.create_handler')->handle($create);
+                $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.spot.create.success');
 
                 return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
@@ -158,7 +158,7 @@ class SpotController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.spot.batch_create_handler')->handle($batchCreate);
+                $this->get('tactician.commandbus')->handle($batchCreate);
                 $this->addFlash('success', 'flash.admin.spot.batch_create.success');
             } catch (MultipleUniqueReferenceViolationException $exception) {
                 $this->addFlash('warning', [
@@ -190,7 +190,7 @@ class SpotController extends Controller
 
         try {
             $command = new Update($event, $data['id'], $data['property'], $data['value']);
-            $this->get('command.spot.update_handler')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
         } catch (SpotNotFoundException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 404);
         } catch (UniqueReferenceViolationException $exception) {

@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ParticipantCreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\RegisterType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantCreateType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\RegisterType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -56,7 +56,7 @@ class RegisterController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 // Register and authenticate the user
-                $this->get('vimeet_infrastructure.application.command.user.register_handler')->handle($register);
+                $this->get('tactician.commandbus')->handle($register);
                 $this->get('adapter.authentication_manager')->authenticate($register->user, 'main');
                 $this->addFlash('success', 'flash.event.register.success');
 
@@ -107,7 +107,7 @@ class RegisterController extends Controller
             try {
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $create->data);
-                $this->get('vimeet_infrastructure.application.command.user.participate_handler')->handle($participate);
+                $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet

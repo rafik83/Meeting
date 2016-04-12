@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "06de0be5b5ce5aa7d601a36e2c4c3b12",
-    "content-hash": "eb5da70de981bdc822a2a66d7d3e8629",
+    "hash": "2e82bc19ad9becc6ec89acd01419b8e7",
+    "content-hash": "938fa2470508299e0f1c7c68cc2ee2d9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1119,7 +1119,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/62061993640d0894d512587a0cda10ca7eb13c28",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/695895729603bb09e3860b752bce78572ea2fda7",
                 "reference": "ec53cd0805d0ba53a98f70a91a760071d19f66dc",
                 "shasum": ""
             },
@@ -1344,6 +1344,177 @@
                 "sql"
             ],
             "time": "2014-01-12 16:20:24"
+        },
+        {
+            "name": "league/tactician",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/tactician.git",
+                "reference": "1f3aaad497f07a8bef147a37c7e3f2f7c23fcd21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/tactician/zipball/1f3aaad497f07a8bef147a37c7e3f2f7c23fcd21",
+                "reference": "1f3aaad497f07a8bef147a37c7e3f2f7c23fcd21",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.3",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Tactician\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ross Tuck",
+                    "homepage": "http://tactician.thephpleague.com"
+                }
+            ],
+            "description": "A small, flexible command bus. Handy for building service layers.",
+            "keywords": [
+                "command",
+                "command bus",
+                "service layer"
+            ],
+            "time": "2016-02-20 11:14:36"
+        },
+        {
+            "name": "league/tactician-bundle",
+            "version": "v0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/tactician-bundle.git",
+                "reference": "b2d3062ce02ad0b67f778136ff00e38d4f691d86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/tactician-bundle/zipball/b2d3062ce02ad0b67f778136ff00e38d4f691d86",
+                "reference": "b2d3062ce02ad0b67f778136ff00e38d4f691d86",
+                "shasum": ""
+            },
+            "require": {
+                "league/tactician": "^1.0",
+                "php": ">=5.5",
+                "symfony/framework-bundle": "^2.3|^3.0"
+            },
+            "require-dev": {
+                "league/tactician-doctrine": "^1.0",
+                "matthiasnoback/symfony-config-test": "~1.0",
+                "matthiasnoback/symfony-dependency-injection-test": "^0.7",
+                "mockery/mockery": "~0.9.4",
+                "phpunit/phpunit": "~4.5",
+                "symfony/validator": "^2.3|^3.0"
+            },
+            "suggest": {
+                "league/tactician-doctrine": "For doctrine transaction middleware"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Tactician\\Bundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Dohms",
+                    "homepage": "http://doh.ms"
+                },
+                {
+                    "name": "Xander Smalbil",
+                    "email": "xander@videofunk.nl"
+                },
+                {
+                    "name": "Richard Tuin",
+                    "homepage": "http://www.rtuin.nl/"
+                },
+                {
+                    "name": "Ross Tuck",
+                    "email": "me@rosstuck.com"
+                }
+            ],
+            "description": "Bundle to integrate Tactician with Symfony projects",
+            "keywords": [
+                "bundle",
+                "symfony",
+                "tactician"
+            ],
+            "time": "2015-12-31 13:43:56"
+        },
+        {
+            "name": "league/tactician-doctrine",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/tactician-doctrine.git",
+                "reference": "cb2a7b9dfeb9851386a9287421e7b07499ade132"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/tactician-doctrine/zipball/cb2a7b9dfeb9851386a9287421e7b07499ade132",
+                "reference": "cb2a7b9dfeb9851386a9287421e7b07499ade132",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.4",
+                "league/tactician": "^1.0",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.3",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Tactician\\Doctrine\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ross Tuck"
+                }
+            ],
+            "description": "Plugins for Tactician commands using Doctrine, like wrapping every command in a transaction",
+            "homepage": "https://github.com/thephpleague/tactician-doctrine",
+            "keywords": [
+                "command bus",
+                "doctrine",
+                "tactician",
+                "transactions"
+            ],
+            "time": "2016-02-28 15:33:05"
         },
         {
             "name": "monolog/monolog",

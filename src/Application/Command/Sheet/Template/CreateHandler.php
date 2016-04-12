@@ -21,13 +21,20 @@ class CreateHandler
     private $templateRepository;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
      * CreateHandler constructor.
      *
      * @param TemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface          $dateTime
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {
         $this->templateRepository = $templateRepository;
+        $this->dateTime           = $dateTime;
     }
 
     /**
@@ -37,7 +44,7 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $template = new Template($create->title, [], $create->createdAt, [$create->locale]);
+        $template = new Template($create->title, [], [$create->locale], $this->dateTime);
         $this->templateRepository->add($template);
 
         return new CreateResult($template);

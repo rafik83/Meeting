@@ -77,7 +77,7 @@ class OrderController extends Controller
         $form   = $this->createForm(AddRowType::class, $addRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.order.add_row_handler')->handle($addRow);
+            $this->get('tactician.commandbus')->handle($addRow);
             $this->addFlash('success', 'flash.admin.order.add_row.success');
 
             return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -119,7 +119,7 @@ class OrderController extends Controller
         $form      = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.order.update_row_handler')->handle($updateRow);
+            $this->get('tactician.commandbus')->handle($updateRow);
             $this->addFlash('success', 'flash.admin.order.update_row.success');
 
             return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -151,7 +151,7 @@ class OrderController extends Controller
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
-        $this->get('command.order.remove_row_handler')->handle(new RemoveRow($order, $group, $row));
+        $this->get('tactician.commandbus')->handle(new RemoveRow($order, $group, $row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', [

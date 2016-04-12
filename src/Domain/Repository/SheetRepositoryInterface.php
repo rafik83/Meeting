@@ -29,12 +29,19 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
      * @param Event  $event
      * @param string $locale
      *
-     * @return array
+     * @return Sheet[]
      */
-    public function getSheetsMeetingsStats(Event $event, $locale);
+    public function getSheets(Event $event, $locale);
 
     /**
      * @param int|User  $user

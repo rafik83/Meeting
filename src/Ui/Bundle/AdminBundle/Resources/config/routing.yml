@@ -304,6 +304,13 @@ admin_meeting_request_sheets_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
 
+admin_transform_requests_to_meetings:
+    path: /event/{event}/meeting-request/transform-requests-to-meetings
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
+
 admin_meeting_request_position:
     path: /event/{event}/meeting-request/{meetingRequest}/position
     requirements:
@@ -550,4 +557,3 @@ admin_organizer_template_duplicate:
     methods: [GET, POST]
     requirements:
         template: \d+
-        locale: '[a-z]{2}(_[A-Z]{2})?'
