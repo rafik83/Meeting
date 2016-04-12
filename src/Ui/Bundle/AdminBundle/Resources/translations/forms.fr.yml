@@ -1,4 +1,8 @@
 form:
+    type_template:
+        sheet:
+            base: Template de fiche de base
+            organizer: Mes templates de fiche
     field:
         private: Champ privé
     register:

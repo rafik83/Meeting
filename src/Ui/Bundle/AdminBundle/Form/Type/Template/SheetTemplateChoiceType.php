@@ -38,13 +38,19 @@ class SheetTemplateChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'events'           => [],
             'class'            => Template::class,
             'choices'          => function (Options $options) {
-                return $options['repositoryMethod']($this->templateRepository);
+                return $this->getResults($options);
             },
             'choice_label'     => 'title',
             'repositoryMethod' => function (TemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplate();
+            },
+            'repositoryMethodOrganizer' => function (Options $options) {
+                return function (TemplateRepositoryInterface $templateRepository) use ($options) {
+                    return $templateRepository->getTemplateForGivenEvents($options['events']);
+                };
             },
         ]);
     }
@@ -55,5 +61,27 @@ class SheetTemplateChoiceType extends AbstractType
     public function getParent()
     {
         return ChoiceType::class;
+    }
+
+    /**
+     * @param Options $options
+     * @return array
+     */
+    private function getResults(Options $options)
+    {
+        $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
+        $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);
+
+        $templates = [];
+
+        if (!empty($baseTemplates)) {
+            $templates['form.type_template.sheet.base'] = $baseTemplates;
+        }
+
+        if (!empty($organizerTemplates)) {
+            $templates['form.type_template.sheet.organizer'] = $organizerTemplates;
+        }
+
+        return $templates;
     }
 }
