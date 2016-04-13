@@ -466,6 +466,7 @@ EditableTextObject.prototype.fill = function ()
     this.form.set('length', this.config.length);
     this.form.set('type', this.config.type);
     this.form.set('required', this.config.required);
+    this.form.set('translatable', this.config.translatable);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -478,6 +479,7 @@ EditableTextObject.prototype.save = function ()
     this.config.length                   = this.form.get('length');
     this.config.type                     = this.form.get('type');
     this.config.required                 = this.form.get('required');
+    this.config.translatable             = this.form.get('translatable');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -508,9 +510,9 @@ ButtonLinkObject.prototype.fill = function ()
 
 ButtonLinkObject.prototype.save = function ()
 {
-    this.config.label[this.locale]    = this.form.get('label');
-    this.config.help[this.locale]     = this.form.get('help');
-    this.config.required              = this.form.get('required');
+    this.config.label[this.locale] = this.form.get('label');
+    this.config.help[this.locale]  = this.form.get('help');
+    this.config.required           = this.form.get('required');
 
     this.form.bind('link', this.config.label[this.locale]);
 };
@@ -634,7 +636,7 @@ ImageObject.prototype.fill = function ()
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
 
-    this.form.bind('label', this.config.label);
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 ImageObject.prototype.save = function ()
@@ -644,7 +646,7 @@ ImageObject.prototype.save = function ()
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
 
-    this.form.bind('label', this.config.label);
+    this.form.bind('label', this.config.label[this.locale]);
 };
 
 /**
@@ -733,6 +735,7 @@ CollectionObject.prototype.fill = function ()
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
     this.form.set('default', this.config.default);
+    this.form.set('translatable', this.config.translatable);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -744,6 +747,7 @@ CollectionObject.prototype.save = function ()
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
     this.config.default                  = this.form.get('default');
+    this.config.translatable             = this.form.get('translatable');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

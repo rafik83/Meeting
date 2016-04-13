@@ -358,18 +358,50 @@ admin:
         link: Conférences
         title: Conférences
         add: Ajouter
+        addTitle: Ajouter une conférence
         update: Modifier
+        updateTitle: Modifier une conférence
+        list:
+            title: Titre
+            speaker: Intervenants
+            begin: Début
+            end: Fin
     happening_category:
         link: Catégories de conférences
         title: Catégories de conférences
         add: Ajouter
+        addTitle: Ajouter une catégorie de conférences
         update: Modifier
+        updateTitle: Modifier une catégorie de conférences
+        table:
+            column:
+                position: Position
+                title: Titre
+                picto: Picto
     happening_speaker:
+        speakerName: 'Intervenant %name%'
         link: Intervenants
         title: Intervenants
         happenings: Conférences
         add: Ajouter
+        addTitle: Ajouter un intervenant
         update: Modifier
+        updateTitle: Modifier un intervenant
+        table:
+            column:
+                name: Nom
+                function: Fonction
+                company: Société
+                logoCompany: Logo de la société
+                photo: Photo de l'intervenant
+                subEvent: Sous-événements
+        no-result: Aucun intervenant.
+        action:
+            edit: Modifier
+            see: Voir
+            delete: Supprimer
+            confirmDelete: Confirmer la suppression
+
     spot:
         link: Lieux
         active:

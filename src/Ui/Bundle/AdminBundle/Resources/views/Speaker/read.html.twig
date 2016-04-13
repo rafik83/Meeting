@@ -1,35 +1,35 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}Intevenant {{ speaker.name }}{% endblock %}
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block title %}{{ 'admin.happening_speaker.speakerName'|trans({'%name%': speaker.name}) }}{% endblock %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>{{ block('title') }}</h2>
+    <h1 class="page-header">{{ block('title') }}</h1>
 
     <table class="table">
         <tr>
-            <th>Nom</th>
+            <th>{{ 'admin.happening_speaker.table.column.name'|trans }}</th>
             <td>{{ speaker.name }}</td>
         </tr>
         <tr>
-            <th>Fonction</th>
+            <th>{{ 'admin.happening_speaker.table.column.function'|trans }}</th>
             <td>{{ speaker.function }}</td>
         </tr>
         <tr>
-            <th>Société</th>
+            <th>{{ 'admin.happening_speaker.table.column.company'|trans }}</th>
             <td>{{ speaker.organization }}</td>
         </tr>
         <tr>
-            <th>Logo de la société</th>
+            <th>{{ 'admin.happening_speaker.table.column.logoCompany'|trans }}</th>
             <td>{% if speaker.logo %}<img src="{{ speaker.logo }}" class="img-responsive" />{% endif %}</td>
         </tr>
         <tr>
-            <th>Photo de l'intervant</th>
+            <th>{{ 'admin.happening_speaker.table.column.photo'|trans }}</th>
             <td>{% if speaker.photo %}<img src="{{ speaker.photo }}" class="img-responsive" />{% endif %}</td>
         </tr>
         <tr>
-            <th>Sous-événements</th>
+            <th>{{ 'admin.happening_speaker.table.column.subEvent'|trans }}</th>
             <td>
                 <ul>
                     {% for happening in happenings %}
@@ -46,8 +46,22 @@
         </tr>
     </table>
 
-    <div>
-        <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">← Retour à la liste</a>
+    <div class="form-horizontal">
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                    <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}" class="btn btn-link">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        {{ 'admin.goback.link'|trans }}
+                    </a>
+            </div>
+            <div class="col-sm-9 text-right">
+                <a href="{{ path('admin_happening_speaker_update', { 'event': event.id, 'speaker': speaker.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.happening_speaker.action.edit'|trans }}</a>
+                {{ macro.delete_button(
+                    path('admin_happening_speaker_delete', { 'event': event.id, 'speaker': speaker.id }),
+                    'admin.happening_speaker.action.delete'|trans,
+                    { 'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.happening_speaker.action.confirmDelete'|trans }
+                ) }}
+            </div>
+        </div>
     </div>
-
 {% endblock %}

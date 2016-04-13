@@ -19,7 +19,9 @@
 {% endmacro %}
 
 {% macro more(values, limit) %}
-    {% if values|length > limit %}
+    {% if values|length == 1 %}
+        {{ values|first }}
+    {% elseif values|length > limit %}
         {{ values|slice(0, limit)|join(', ') }} <a href="#" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-trigger="hover" data-content="{{ '<ul class="list-unstyled"><li>' ~ values|slice(limit, values|length - 1)|join('</li><li>') ~ '<li></ul>' }}">{{ 'and_more'|transchoice(values|length - limit, { '%count%': values|length - limit }) }}</a>
     {% else %}
         {{ values|slice(0, values|length - 1)|join(', ') }} {{ 'and'|trans }} {{ values|last }}
