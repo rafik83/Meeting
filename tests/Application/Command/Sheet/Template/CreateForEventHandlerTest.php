@@ -23,6 +23,7 @@ class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime = new \DateTime();
         $event    = new Event();
+        $event->setLocales(['fr']);
         $create   = new CreateForEvent();
         $create->title = 'Toto';
         $create->event = $event;
