@@ -63,10 +63,10 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="blocks">
                         <div id="block-list" class="block-list">
-                            {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}
+                            {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}
+                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}
+                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
