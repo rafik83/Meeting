@@ -5,6 +5,12 @@ body {
   margin: 70px 0 0;
 }
 
+.popover-content {
+    ul {
+        margin-bottom: 0;
+    }
+}
+
 .required:after {
   content: '*';
 }

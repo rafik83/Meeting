@@ -119,9 +119,14 @@ class Template
     /**
      * @param Event $event
      */
-    public function setEvent($event)
+    public function setEvent(Event $event)
     {
         $this->event = $event;
+
+        // Add event locales
+        foreach ($event->getLocales() as $locale) {
+            $this->addLocale($locale);
+        }
     }
 
     /**
@@ -135,11 +140,13 @@ class Template
     {
         $this->value = $value;
 
+        $this->fixValue($this->locales);
+
         return $this;
     }
 
     /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -168,15 +175,27 @@ class Template
     }
 
     /**
+     * @return array
+     */
+    public function getEnableLocales()
+    {
+        return $this->event ? array_filter($this->locales, function ($locale) {
+            return $this->event->hasLocale($locale);
+        }) : $this->locales;
+    }
+
+    /**
      * @return string
      */
     public function getFallback()
     {
-        return reset($this->locales);
+        $locales = $this->getEnableLocales();
+
+        return reset($locales);
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      *
      * @return Template
      */
@@ -184,11 +203,22 @@ class Template
     {
         if (!$this->hasLocale($locale)) {
             $this->locales[] = $locale;
+            $this->fixValue([$locale]);
         }
 
-        $this->value = self::createLocale($this->value, $locale);
-
         return $this;
+    }
+
+    /**
+     * Consolidate value for each locales
+     *
+     * @param array $locales
+     */
+    private function fixValue(array $locales)
+    {
+        foreach ($locales as $locale) {
+            $this->value = self::createLocale($this->value, $locale);
+        }
     }
 
     /**
