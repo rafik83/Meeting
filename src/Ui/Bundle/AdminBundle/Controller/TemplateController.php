@@ -15,15 +15,13 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
-use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
-use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -227,8 +225,9 @@ class TemplateController extends Controller
             'template' => $template,
         ]);
 
-        $completeness = $this->get('sheet.template.completeness_calculator')->compute($template);
-        $incompletes  = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
+        $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
+        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
+        $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
         if (!empty($incompletes)) {
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
@@ -239,6 +238,7 @@ class TemplateController extends Controller
             'locale'          => $locale,
             'add_locale_form' => $addLocaleForm->createView(),
             'completeness'    => $completeness,
+            'nomenclatures'   => $nomenclatures
         ]);
     }
 

@@ -150,6 +150,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\TemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.nomenclature_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
