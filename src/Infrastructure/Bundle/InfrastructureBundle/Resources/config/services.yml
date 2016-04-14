@@ -752,7 +752,7 @@ services:
     command.sheet.template.update_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\UpdateHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Update }
     command.admin.update_last_login_handler:
