@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
@@ -59,7 +59,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler

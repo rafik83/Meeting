@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class SaveHandler
 {
     /**
-     * @var TemplateRepositoryInterface
+     * @var SheetTemplateRepositoryInterface
      */
     private $templateRepository;
 
     /**
      * SaveHandler constructor.
      *
-     * @param TemplateRepositoryInterface $templateRepository
+     * @param SheetTemplateRepositoryInterface $templateRepository
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(SheetTemplateRepositoryInterface $templateRepository)
     {
         $this->templateRepository = $templateRepository;
     }

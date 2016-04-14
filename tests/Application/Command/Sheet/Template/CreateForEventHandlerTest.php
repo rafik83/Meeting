@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedResult   = new CreateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler

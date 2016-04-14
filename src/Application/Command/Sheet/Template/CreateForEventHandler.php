@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class CreateForEventHandler
 {
     /**
-     * @var TemplateRepositoryInterface
+     * @var SheetTemplateRepositoryInterface
      */
     private $templateRepository;
 
@@ -28,10 +28,10 @@ class CreateForEventHandler
     /**
      * OrganizerCreateHandler constructor.
      *
-     * @param TemplateRepositoryInterface $templateRepository
-     * @param \DateTimeInterface          $dateTime
+     * @param SheetTemplateRepositoryInterface $templateRepository
+     * @param \DateTimeInterface               $dateTime
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
+    public function __construct(SheetTemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {
         $this->templateRepository = $templateRepository;
         $this->dateTime           = $dateTime;

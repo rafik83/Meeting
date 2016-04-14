@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository\Sheet;
+namespace Proximum\Vimeet\Domain\Repository\Template;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-interface TemplateRepositoryInterface
+interface SheetTemplateRepositoryInterface
 {
     /**
      * @return SheetTemplate[]
