@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="block-inner">
-                {% for uid, item in config[0]|default([]) %}
+                {% for uid, item in children[0]|default([]) %}
                     {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures  }, false) }}
                 {% endfor %}
             </div>

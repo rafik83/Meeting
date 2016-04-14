@@ -225,9 +225,10 @@ TemplateBuilder.prototype.normalize = function (item)
         return {
             component: 'block',
             type: blockType,
-            config: [].map.call(this.inners(item), function (child) {
+            children: [].map.call(this.inners(item), function (child) {
                 return this.normalize(child);
-            }.bind(this))
+            }.bind(this)),
+            config: {}
         }
     }
 

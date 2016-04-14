@@ -276,8 +276,8 @@ class SheetTemplate
         }
 
         if ($config['component'] === 'block') {
-            foreach ($config['config'] as $key => $column) {
-                $config['config'][$key] = self::createLocale($column, $locale);
+            foreach ($config['children'] as $key => $column) {
+                $config['children'][$key] = self::createLocale($column, $locale);
             }
 
             return $config;
