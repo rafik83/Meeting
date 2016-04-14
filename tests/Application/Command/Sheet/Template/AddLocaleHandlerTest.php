@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\TemplateException;
 
 class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,6 +98,8 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleHasLocale()
     {
+        $this->expectException(TemplateException::class);
+
         $template = new Template('My template', [
             'ec74be5e' => [
                 'component' => 'object',
@@ -132,7 +135,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
         $templateRepository->set()->shouldNotBeCalled();
 
-        $command = new AddLocale($template);
+        $command         = new AddLocale($template);
         $command->locale = 'fr';
 
         $handler = new AddLocaleHandler($templateRepository->reveal());
