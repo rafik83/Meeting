@@ -20,6 +20,6 @@ class TemplateController extends Controller
      */
     public function listAction()
     {
-        return $this->render('AdminBundle:Template:list.html.twig', []);
+        return $this->render('AdminBundle:Template:list.html.twig');
     }
 }
