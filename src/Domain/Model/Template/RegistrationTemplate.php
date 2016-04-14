@@ -72,6 +72,32 @@ class RegistrationTemplate
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return \Proximum\Vimeet\Domain\Model\Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+
+
+    /**
      * @param Event $event
      */
     public function setEvent(Event $event)
@@ -165,39 +191,19 @@ class RegistrationTemplate
     }
 
     /**
-     * Consolidate value for each locales
-     *
-     * @param array $locales
-     */
-    private function fixValue(array $locales)
-    {
-        foreach ($locales as $locale) {
-            $this->value = self::createLocale($this->value, $locale);
-        }
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return bool
-     */
-    public function hasLocale($locale)
-    {
-        return in_array($locale, $this->locales);
-    }
-
-    /**
      * @param array  $config
      * @param string $locale
      *
      * @return array
      */
-    private static function createLocale($config, $locale) {
-
+    private static function createLocale($config, $locale)
+    {
         $keys = ['label', 'help', 'placeholder'];
 
         if (!isset($config['component'])) {
-            return array_map(function ($item) use ($locale) { return self::createLocale($item, $locale); }, $config);
+            return array_map(function ($item) use ($locale) {
+                return self::createLocale($item, $locale);
+            }, $config);
         }
 
         if ($config['component'] === 'block') {
@@ -231,6 +237,28 @@ class RegistrationTemplate
         list ($set, $total) = self::countLocale($this->value, $locale, $this->getFallback());
 
         return $set / $total * 100;
+    }
+
+    /**
+     * Consolidate value for each locales
+     *
+     * @param array $locales
+     */
+    private function fixValue(array $locales)
+    {
+        foreach ($locales as $locale) {
+            $this->value = self::createLocale($this->value, $locale);
+        }
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
     }
 
     /**
