@@ -22,7 +22,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = new Event();
-        $event->setLocales(['fr', 'en']);
+        $event->setLocales(['fr', 'en'], 'fr');
 
         $expectedCategory     = new Category($event, 'picto1', 3);
         $expectedTranslation1 = new CategoryTranslation($expectedCategory, 'fr', 'truc');

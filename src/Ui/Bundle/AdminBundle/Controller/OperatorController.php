@@ -45,39 +45,27 @@ class OperatorController extends Controller
     public function listAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
-        $organizer = $this->getUser();
-        if (!$organizer->isOrganizer()) {
-            throw $this->createAccessDeniedException(
-                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
-            );
-        }
 
-        $filters    = [];
-        $filtered   = false;
-        $filterForm = $this->createFilterForm(
-            FilterType::class,
-            ['event'  => $request->query->get('event')],
-            ['events' => $organizer->getEvents()]
-        );
+        $filters    = ['event' => $request->query->get('event')];
+        $filterForm = $this->createFilterForm(FilterType::class, $filters, [
+            'events' => $this->getUser()->getEvents()
+        ]);
 
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filters   = $filterForm->getData();
-            $filtered = true;
+            $filters = $filterForm->getData();
         }
 
-        $operators = $this->get('repository.admin_repository')
-            ->getOperatorForOrganizer(
-                $organizer,
-                $request->query->get('page', 1),
-                20,
-                $filters
-            )
-        ;
+        $operators = $this->get('repository.admin_repository')->getOperatorForOrganizer(
+            $this->getUser(),
+            $request->query->getInt('page', 1),
+            20,
+            $filters
+        );
 
         return $this->render('AdminBundle:Operator:list.html.twig', [
             'operators'   => $operators,
             'filter_form' => $filterForm->createView(),
-            'filtered'    => $filtered,
+            'filtered'    => $filterForm->isSubmitted() && $filterForm->isValid(),
         ]);
     }
 
@@ -89,16 +77,9 @@ class OperatorController extends Controller
     public function createAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
-        $organizer = $this->getUser();
-        if (!$organizer->isOrganizer()) {
-            throw $this->createAccessDeniedException(
-                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
-            );
-        }
 
         $create = new Create($this->getUser(), new \DateTime());
-
-        $form = $this->createForm(CreateType::class, $create, [
+        $form   = $this->createForm(CreateType::class, $create, [
             'action' => $this->generateUrl('admin_create_operator'),
             'method' => 'POST',
             'submit' => true,
@@ -132,27 +113,17 @@ class OperatorController extends Controller
     public function updateAction(Request $request, Admin $operator)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
-        $organizer = $this->getUser();
-
-        if (!$organizer->isOrganizer()) {
-            throw $this->createAccessDeniedException(
-                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
-            );
-        }
 
         if (!$operator->isOperator()) {
-            throw $this->createAccessDeniedException(
-                sprintf('The user with the role %s can not be updated with this page', $operator->getRole())
-            );
+            throw $this->createAccessDeniedException('Only operator can be updated with this page');
         }
 
         $update = new Update($operator);
-
-        $form = $this->createForm(UpdateType::class, $update, [
+        $form   = $this->createForm(UpdateType::class, $update, [
             'action' => $this->generateUrl('admin_update_operator', ['operator' => $operator->getId()]),
             'method' => 'POST',
             'submit' => true,
-            'events' => $organizer->getEvents(),
+            'events' => $this->getUser()->getEvents(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -162,9 +133,8 @@ class OperatorController extends Controller
 
                 return $this->redirectToRoute('admin_list_operator');
             } catch (EmailAlreadyExistsException $ex) {
-                $form->get('email')->addError(
-                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
-                );
+                $error = $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale());
+                $form->get('email')->addError($error);
             }
         }
 

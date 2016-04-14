@@ -22,7 +22,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = new Event();
-        $event->setLocales(['fr', 'en']);
+        $event->setLocales(['fr', 'en'], 'fr');
 
         $type = new Type($event);
         $type->setParticipantTemplate([

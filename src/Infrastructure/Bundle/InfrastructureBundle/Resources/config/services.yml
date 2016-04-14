@@ -749,6 +749,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate }
+    command.sheet.template.update_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\UpdateHandler
+        arguments:
+            - '@repository.template.sheet_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Update }
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:

@@ -37,6 +37,11 @@ class SheetTemplate
     private $locales = [];
 
     /**
+     * @var string
+     */
+    private $fallback;
+
+    /**
      * @var Event
      */
     private $event;
@@ -57,16 +62,23 @@ class SheetTemplate
      * @param string             $title
      * @param array              $value
      * @param array              $locales
+     * @param string             $fallback
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, array $value, array $locales, \DateTimeInterface $createdAt)
+    public function __construct($title, array $value, array $locales, $fallback, \DateTimeInterface $createdAt)
     {
         $this->title     = $title;
         $this->value     = $value;
+        $this->fallback  = $fallback;
         $this->createdAt = $createdAt;
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);
+        }
+
+
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
         }
     }
 
@@ -175,9 +187,11 @@ class SheetTemplate
     }
 
     /**
+     * Get locales available for the current event if set, else get all locales.
+     *
      * @return array
      */
-    public function getEnableLocales()
+    public function getEnabledLocales()
     {
         return $this->event ? array_filter($this->locales, function ($locale) {
             return $this->event->hasLocale($locale);
@@ -189,9 +203,7 @@ class SheetTemplate
      */
     public function getFallback()
     {
-        $locales = $this->getEnableLocales();
-
-        return reset($locales);
+        return $this->event ? $this->event->getFallback() : $this->fallback;
     }
 
     /**
@@ -201,7 +213,7 @@ class SheetTemplate
      */
     public function addLocale($locale)
     {
-        if (!$this->hasLocale($locale)) {
+        if (!$this->hasLocale($locale) && $locale !== null) {
             $this->locales[] = $locale;
             $this->fixValue([$locale]);
         }
@@ -229,6 +241,24 @@ class SheetTemplate
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @param string $title
+     * @param string $fallback
+     *
+     * @return Template
+     */
+    public function update($title, $fallback)
+    {
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
+        }
+
+        $this->title    = $title;
+        $this->fallback = $fallback;
+
+        return $this;
     }
 
     /**
@@ -264,70 +294,5 @@ class SheetTemplate
         }
 
         return $config;
-    }
-
-    /**
-     * @param $locale
-     *
-     * @return float
-     */
-    public function getRate($locale)
-    {
-        list ($set, $total) = self::countLocale($this->value, $locale, $this->getFallback());
-
-        return $set / $total * 100;
-    }
-
-    /**
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
-     *
-     * @return array
-     */
-    private static function countLocale($config, $locale, $fallback)
-    {
-        $set   = 0;
-        $total = 0;
-
-        $keys = ['label', 'help', 'placeholder'];
-
-        if (!isset($config['component'])) {
-            foreach ($config as $item) {
-                list($s, $t) = self::countLocale($item, $locale, $fallback);
-                $set   += $s;
-                $total += $t;
-            }
-
-            return [$set, $total];
-        }
-
-        if ($config['component'] === 'block') {
-            foreach ($config['config'] as $key => $column) {
-                list($s, $t) = self::countLocale($column, $locale, $fallback);
-                $set   += $s;
-                $total += $t;
-            }
-
-            return [$set, $total];
-        }
-
-        if ($config['component'] === 'object') {
-            foreach ($config['config'] as $key => $value) {
-                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
-                    if (!empty($value[$fallback])) {
-                        if (!empty($value[$locale])) {
-                            $set++;
-                        }
-
-                        $total++;
-                    }
-                }
-            }
-
-            return [$set, $total];
-        }
-
-        return [$set, $total];
     }
 }

@@ -48,6 +48,7 @@ class DuplicateHandler
             $duplicate->title,
             $duplicate->template->getValue(),
             $duplicate->template->getLocales(),
+            $duplicate->template->getFallback(),
             $this->dateTime
         );
 

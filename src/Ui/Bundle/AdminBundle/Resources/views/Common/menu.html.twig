@@ -42,7 +42,7 @@
                                 </a>
                             </li>
                         {% endif %}
-                        {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                        {% if is_granted('ROLE_ORGANIZER') %}
                             <li>
                                 <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
                             </li>
@@ -79,7 +79,7 @@
                                         </a>
                                     </li>
                                 {% endif %}
-                                {% if is_granted('ROLE_ORGANIZER') and app.user.isOrganizer %}
+                                {% if is_granted('ROLE_ORGANIZER') %}
                                     <li>
                                         <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
                                     </li>

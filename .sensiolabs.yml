@@ -1,4 +1,4 @@
 rules:
     twig.template_too_complex:
         enabled: true
-        max_depth: 15
+        max_depth: 20

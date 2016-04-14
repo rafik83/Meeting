@@ -26,13 +26,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event    = new Event();
         $dateTime = new \DateTime();
-        $event->setLocales(['fr']);
+        $event->setLocales(['fr'], 'fr');
         $template      = new Template('test', [], [], [], '', '');
-        $sheetTemplate = new SheetTemplate('base toto', [], [], $dateTime);
+        $sheetTemplate = new SheetTemplate('base toto', [], ['fr'], 'fr', $dateTime);
 
 
         //Expected
-        $expectedSheetTemplate = new SheetTemplate('toto', [], [], $dateTime);
+        $expectedSheetTemplate = new SheetTemplate('toto', [], ['fr'], 'fr', $dateTime);
         $expectedSheetTemplate->setEvent($event);
         $expectedType = new Type($event);
         $expectedType->setTemplate($template);

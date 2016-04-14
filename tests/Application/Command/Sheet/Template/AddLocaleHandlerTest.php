@@ -52,7 +52,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr'], $createdAt);
+        ], ['fr'], 'fr', $createdAt);
 
         $expected = new SheetTemplate('My template', [
             'ec74be5e' => [
@@ -84,7 +84,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr', 'en'], $createdAt);
+        ], ['fr', 'en'], 'fr', $createdAt);
 
         $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->set($expected)->shouldBeCalled();
@@ -130,7 +130,7 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-        ], ['fr'], new \DateTime());
+        ], ['fr'], 'fr', new \DateTime());
 
         $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->set()->shouldNotBeCalled();
