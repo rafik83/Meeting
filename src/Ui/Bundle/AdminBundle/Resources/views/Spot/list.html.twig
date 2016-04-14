@@ -87,7 +87,7 @@
             <tbody>
                 {% for spot in spots %}
                     <tr>
-                        <td><input id="{{ 'admin.spot.list.checkbox'|trans }}" type="checkbox" name="ids[]" value="{{ spot.id }}" title="{{ spot.reference }}" /></td>
+                        <td><input type="checkbox" id="batch_checkbox_{{ spot.id }}" name="ids[]" value="{{ spot.id }}" /></td>
                         <td class="updatable" data-type="string" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
                         <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
