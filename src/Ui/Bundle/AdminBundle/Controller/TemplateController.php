@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
@@ -86,15 +87,9 @@ class TemplateController extends Controller
     public function listOrganizerTemplateAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
-        $organizer = $this->getUser();
-        if (!$organizer->isOrganizer()) {
-            throw $this->createAccessDeniedException(
-                sprintf('%s is not a granted ROLE to access this page', $organizer->getRole())
-            );
-        }
 
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $organizer]);
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
@@ -140,6 +135,8 @@ class TemplateController extends Controller
      */
     public function duplicateAction(Request $request, SheetTemplate $template)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
             'action' => $this->generateUrl('admin_template_duplicate', ['template' => $template->getId()]),
@@ -169,6 +166,8 @@ class TemplateController extends Controller
      */
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
         $duplicate = new Duplicate($template, new \DateTime());
 
         $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
@@ -200,17 +199,10 @@ class TemplateController extends Controller
      */
     public function builderAction(SheetTemplate $template, $locale)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $admin = $this->getUser();
-        if (!$admin->isSuperAdmin()) {
-            $events = $this->get('vimeet_infrastructure.repository.event_repository')->getEventsByAdmin($admin);
-
-            if (!in_array($template->getEvent(), $events)) {
-                throw $this->createAccessDeniedException(
-                    sprintf('%s %s %s is not an authorized admin to edit this template', $admin->getRole(), $admin->getEmail(), $admin->getDisplayName())
-                );
-            }
+        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
+            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
         }
 
         if (!$template->hasLocale($locale)) {
@@ -263,6 +255,8 @@ class TemplateController extends Controller
      */
     public function addLocaleAction(Request $request, SheetTemplate $template)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
             'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
@@ -298,6 +292,12 @@ class TemplateController extends Controller
      */
     public function saveAction(Request $request, SheetTemplate $template, $locale)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
+            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
+        }
+
         if (!$template->hasLocale($locale)) {
             return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
         }
