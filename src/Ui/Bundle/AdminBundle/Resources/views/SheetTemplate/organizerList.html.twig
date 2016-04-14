@@ -39,7 +39,7 @@
 
     {{ include('AdminBundle:Common:filters_summary.html.twig', {
         filters:   filters_summary,
-        resetLink: path('admin_organizer_template_list')
+        resetLink: path('admin_organizer_template_sheet_list')
     }) }}
 
     <table class="table">
@@ -67,8 +67,8 @@
                 </td>
                 <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_organizer_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
-                    <a href="{{ path('admin_template_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
+                    <a href="{{ path('admin_template_sheet_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
                 </td>
             </tr>
         {% endfor %}
@@ -91,7 +91,7 @@
                 <td>{{ template.title }}</td>
                 <td>{{ macro.more(template.locales|locales, 3) }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_organizer_template_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
+                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
                 </td>
             </tr>
         {% endfor %}
