@@ -68,7 +68,7 @@ class TemplateController extends Controller
 
             return $this->redirectToRoute('admin_template_builder', [
                 'template' => $result->template->getId(),
-                'locale'   => $request->getLocale(),
+                'locale'   => $result->template->getFallback(),
             ]);
         }
 
