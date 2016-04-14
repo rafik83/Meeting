@@ -4,6 +4,7 @@
     help: { (locale): '' },
     default: 1,
     required: false,
+    translatable: false
 }|merge(config|default({})) %}
 
 <div class="object" data-object="collection"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
