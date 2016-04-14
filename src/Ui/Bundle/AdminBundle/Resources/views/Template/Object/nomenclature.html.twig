@@ -1,7 +1,8 @@
 {% set config = {
-label: { (locale): 'Nomenclature' },
-help: { (locale): '' },
-nomenclature: '',
+    'label': { (locale): 'Nomenclature' },
+    'help': { (locale): '' },
+    'nomenclature': '',
+    'multiple': false
 }|merge(config|default({})) %}
 
 <div class="object" data-object="nomenclature"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
@@ -52,6 +53,18 @@ nomenclature: '',
                                         {% endfor %}
                                     {% endif %}
                                 </select>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="multiple" value="false">
+                                    Choix unique
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="multiple" value="true">
+                                    Choix multiple
+                                </label>
                             </div>
                         </div>
                         <div class="modal-footer">
