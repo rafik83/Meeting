@@ -25,14 +25,15 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $locales = array_filter(array_flip(Intl::getLocaleBundle()->getLocaleNames()), function ($locale) use ($options) {
-            return in_array($locale, $options['template']->getEnabledLocales());
-        });
+        $builder->add('title', TextType::class);
 
-        $builder
-            ->add('title', TextType::class)
-            ->add('fallback', LocaleType::class, ['choices' => $locales])
-        ;
+        if (!$options['template']->getEvent()) {
+            $locales = array_filter(array_flip(Intl::getLocaleBundle()->getLocaleNames()), function ($locale) use ($options) {
+                return in_array($locale, $options['template']->getEnabledLocales());
+            });
+
+            $builder->add('fallback', LocaleType::class, ['choices' => $locales]);
+        }
     }
 
     /**
