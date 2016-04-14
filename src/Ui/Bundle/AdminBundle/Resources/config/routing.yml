@@ -516,6 +516,14 @@ admin_template_list:
     methods: [GET]
 
 #
+# RegistrationTemplate
+#
+admin_template_registration_list:
+    path: /template/registration
+    defaults: { _controller: AdminBundle:RegistrationTemplate:list }
+    methods: [GET]
+
+#
 # SheetTemplate
 #
 admin_template_sheet_list:
