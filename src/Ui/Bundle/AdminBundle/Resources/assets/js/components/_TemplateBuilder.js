@@ -363,6 +363,8 @@ function TemplateObject(element, locale)
         this.object = new CollectionObject(this.element, this.locale);
     } else if (this.type === 'nomenclature') {
         this.object = new NomenclatureObject(this.element, this.locale);
+    } else if (this.type === 'media') {
+        this.object = new MediaObject(this.element, this.locale);
     }
 
     this.object.fill();
@@ -748,6 +750,43 @@ CollectionObject.prototype.save = function ()
     this.config.required                 = this.form.get('required');
     this.config.default                  = this.form.get('default');
     this.config.translatable             = this.form.get('translatable');
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+/**
+ * MediaObject
+ *
+ * @param element
+ * @param locale
+ * @constructor
+ */
+function MediaObject(element, locale)
+{
+    this.element = element;
+    this.locale  = locale;
+    this.form    = new Form(element);
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+}
+
+MediaObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('titlePlaceholder', this.config.titlePlaceholder[this.locale]);
+    this.form.set('linkPlaceholder', this.config.linkPlaceholder[this.locale]);
+    this.form.set('translatable', this.config.translatable);
+    this.form.set('max', this.config.max);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+MediaObject.prototype.save = function ()
+{
+    this.config.label[this.locale]            = this.form.get('label');
+    this.config.titlePlaceholder[this.locale] = this.form.get('titlePlaceholder');
+    this.config.linkPlaceholder[this.locale]  = this.form.get('linkPlaceholder');
+    this.config.translatable                  = this.form.get('translatable');
+    this.config.max                           = this.form.get('max');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
