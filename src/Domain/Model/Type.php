@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
@@ -52,6 +53,11 @@ class Type implements WhoInterface
      * @var SheetTemplate
      */
     private $sheetTemplate;
+
+    /**
+     * @var RegistrationTemplate
+     */
+    private $registrationTemplate;
 
     /**
      * @var array
@@ -251,7 +257,7 @@ class Type implements WhoInterface
     /**
      * @param SheetTemplate $sheetTemplate
      *
-     * @return self
+     * @return Type
      */
     public function setSheetTemplate(SheetTemplate $sheetTemplate)
     {
@@ -261,9 +267,29 @@ class Type implements WhoInterface
     }
 
     /**
+     * @param RegistrationTemplate $registrationTemplate
+     *
+     * @return Type
+     */
+    public function setRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    {
+        $this->registrationTemplate = $registrationTemplate;
+
+        return $this;
+    }
+
+    /**
+     * @return RegistrationTemplate
+     */
+    public function getRegistrationTemplate()
+    {
+        return $this->registrationTemplate;
+    }
+
+    /**
      * @param array $sheetTemplate
      *
-     * @return self
+     * @return Type
      */
     public function setOldSheetTemplate(array $sheetTemplate)
     {
