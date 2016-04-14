@@ -228,7 +228,7 @@ TemplateBuilder.prototype.normalize = function (item)
             children: [].map.call(this.inners(item), function (child) {
                 return this.normalize(child);
             }.bind(this)),
-            config: {}
+            config: item.templateBlock.config
         }
     }
 
@@ -257,6 +257,7 @@ function TemplateBlock(element, builder)
 {
     this.element = element;
     this.builder = builder;
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
 
     // UID
     this.uid = element.getAttribute('data-uid');
