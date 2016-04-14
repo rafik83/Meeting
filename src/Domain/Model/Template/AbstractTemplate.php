@@ -10,8 +10,52 @@
 
 namespace Proximum\Vimeet\Domain\Model\Template;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+
 abstract class AbstractTemplate
 {
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $title;
+
+    /**
+     * @var array
+     */
+    protected $value = [];
+
+    /**
+     * @var array
+     */
+    protected $locales = [];
+
+    /**
+     * @var string
+     */
+    protected $fallback;
+
+    /**
+     * @var Event
+     */
+    protected $event;
+
+    /**
+     * @var Type[]
+     */
+    protected $types;
+
+    /**
+     * @var DateTimeInterface
+     */
+    protected $createdAt;
+
     /**
      * @param array  $config
      * @param string $locale

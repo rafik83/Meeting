@@ -17,46 +17,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 class RegistrationTemplate extends AbstractTemplate
 {
     /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $title;
-
-    /**
-     * @var array
-     */
-    private $value = [];
-
-    /**
-     * @var array
-     */
-    private $locales = [];
-
-    /**
-     * @var string
-     */
-    private $fallback;
-
-    /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var Type[]
-     */
-    private $types;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $createdAt;
-
-    /**
      * RegistrationTemplate constructor.
      *
      * @param string            $title
