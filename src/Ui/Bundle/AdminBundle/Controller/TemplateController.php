@@ -99,14 +99,14 @@ class TemplateController extends Controller
         $filterFormView = $filterForm->createView();
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
-        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
+        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
         $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
         $organizerTemplates = $this->get('repository.template.sheet_template_repository')->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
             'submit' => true,
-            'admin'  => $organizer,
+            'admin'  => $this->getUser(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -135,7 +135,7 @@ class TemplateController extends Controller
      */
     public function duplicateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
@@ -166,7 +166,7 @@ class TemplateController extends Controller
      */
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
 
         $duplicate = new Duplicate($template, new \DateTime());
 
