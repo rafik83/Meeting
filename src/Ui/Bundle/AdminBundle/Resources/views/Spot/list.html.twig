@@ -97,6 +97,10 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <div class="alert alert-danger text-center">
+                {{ 'admin.zero-result'|trans }}
+            </div>
         {% endif %}
     </form>
 
