@@ -76,7 +76,6 @@ class SheetTemplate
             $this->addLocale($locale);
         }
 
-
         if (!$this->hasLocale($fallback)) {
             throw new \InvalidArgumentException('Default locale should be in the template locales.');
         }
@@ -247,7 +246,7 @@ class SheetTemplate
      * @param string $title
      * @param string $fallback
      *
-     * @return Template
+     * @return SheetTemplate
      */
     public function update($title, $fallback)
     {
@@ -267,8 +266,8 @@ class SheetTemplate
      *
      * @return array
      */
-    private static function createLocale($config, $locale) {
-
+    private static function createLocale($config, $locale)
+    {
         $keys = ['label', 'help', 'placeholder'];
 
         if (!isset($config['component'])) {
