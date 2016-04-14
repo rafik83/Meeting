@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
@@ -20,14 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SheetTemplateChoiceType extends AbstractType
 {
     /**
-     * @var TemplateRepositoryInterface
+     * @var SheetTemplateRepositoryInterface
      */
     private $templateRepository;
 
     /**
-     * @param TemplateRepositoryInterface $templateRepository
+     * @param SheetTemplateRepositoryInterface $templateRepository
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(SheetTemplateRepositoryInterface $templateRepository)
     {
         $this->templateRepository = $templateRepository;
     }
@@ -44,11 +44,11 @@ class SheetTemplateChoiceType extends AbstractType
                 return $this->getResults($options);
             },
             'choice_label'     => 'title',
-            'repositoryMethod' => function (TemplateRepositoryInterface $templateRepository) {
+            'repositoryMethod' => function (SheetTemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplate();
             },
             'repositoryMethodOrganizer' => function (Options $options) {
-                return function (TemplateRepositoryInterface $templateRepository) use ($options) {
+                return function (SheetTemplateRepositoryInterface $templateRepository) use ($options) {
                     return $templateRepository->getTemplateForGivenEvents($options['events']);
                 };
             },

@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Repository\Sheet;
+namespace Proximum\Vimeet\Infrastructure\Repository\Template;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
-class TemplateRepository implements TemplateRepositoryInterface
+class SheetTemplateRepository implements SheetTemplateRepositoryInterface
 {
     /**
      * @var EntityManager
@@ -23,13 +23,13 @@ class TemplateRepository implements TemplateRepositoryInterface
     private $entityManager;
 
     /**
-     * SpotRepository constructor.
+     * SheetTemplateRepository constructor.
      *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
