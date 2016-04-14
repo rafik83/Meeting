@@ -255,9 +255,13 @@ TemplateBuilder.prototype.normalize = function (item)
  */
 function TemplateBlock(element, builder)
 {
-    this.element = element;
-    this.builder = builder;
-    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+    this.element         = element;
+    this.builder         = builder;
+    this.form            = new Form(element);
+    this.config          = JSON.parse(this.element.getAttribute('data-config'));
+    this.configureModal  = element.querySelector('.configure-modal');
+    this.configureButton = element.querySelector('.configure-button');
+    this.saveButton      = this.configureModal.querySelector('.save-configuration');
 
     // UID
     this.uid = element.getAttribute('data-uid');
@@ -267,17 +271,58 @@ function TemplateBlock(element, builder)
         this.element.setAttribute('data-uid', this.uid);
     }
 
+    // Init modal
+    $(this.configureModal).modal({show: false});
+
     // Init block inner as sortable target
     [].forEach.call(this.builder.inners(element), function (inner) {
         this.sortable(inner);
     }.bind(this));
 
     // Delete button behavior
-    element.querySelector('.delete-button').addEventListener('click', function (event) {
+    this.element.querySelector('.delete-button').addEventListener('click', function (event) {
         event.preventDefault();
-        element.remove();
-    });
+        this.element.remove();
+    }.bind(this));
+
+    // Modal behavior
+    this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
 }
+
+TemplateBlock.prototype.configureButtonClicked = function (event)
+{
+    event.preventDefault();
+    this.fill();
+    this.openConfigureModal();
+};
+
+TemplateBlock.prototype.saveButtonClicked = function (event)
+{
+    event.preventDefault();
+    this.save();
+    this.closeConfigureModal();
+};
+
+TemplateBlock.prototype.openConfigureModal = function ()
+{
+    $(this.configureModal).modal('show');
+};
+
+TemplateBlock.prototype.closeConfigureModal = function ()
+{
+    $(this.configureModal).modal('hide');
+};
+
+TemplateBlock.prototype.fill = function ()
+{
+    this.form.set('style', this.config.style);
+};
+
+TemplateBlock.prototype.save = function ()
+{
+    this.config.required = this.form.get('style');
+};
 
 TemplateBlock.prototype.sortable = function (element)
 {

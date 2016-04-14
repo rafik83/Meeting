@@ -156,56 +156,6 @@
 
         }
 
-
-    }
-
-}
-
-
-
-
-.template-builder-root {
-
-    .template-header {
-
-        padding-bottom: 10px;
-
-        border-bottom: 1px solid #eeeeee;
-
-        h1 {
-            margin: 0 30px 0 0;
-        }
-
-        .dropdown-menu {
-            .text-center {
-                text-align: center;
-            }
-        }
-    }
-
-    .template-builder {
-        overflow: hidden;
-        position: absolute;
-        top: 120px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-
-
-
-        .template-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            padding: 100px 10px;
-
-
-        }
-
     }
 
 }
