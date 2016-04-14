@@ -731,6 +731,16 @@ form:
                 label: Annuler
             submit:
                 label: Enregistrer
+    sheet_template_update:
+        children:
+            title:
+                label: Titre
+            fallback:
+                label: Langue par defaut
+            close:
+                label: Annuler
+            submit:
+                label: Enregistrer
     organizer_sheet_template_create:
         children:
             title:

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
+use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
 use Proximum\Vimeet\Domain\Model\Sheet\Template;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,9 +49,6 @@ class TemplateController extends Controller
         ]));
     }
 
-    /**
-     * @return Response
-     */
     /**
      * @param Request $request
      *
@@ -218,9 +217,16 @@ class TemplateController extends Controller
             throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
         }
 
+        // Update form
+        $updateForm = $this->createForm(UpdateType::class, new Update($template), [
+            'action'   => $this->generateUrl('admin_template_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        // Add locale form
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $addLocale     = new AddLocale($template);
-            $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
                 'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
                 'submit'   => true,
                 'template' => $template,
@@ -229,10 +235,12 @@ class TemplateController extends Controller
             $addLocaleForm = null;
         }
 
+        // Queries
         $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
         $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
+        // Add warning if some locales translations are incompletes
         if (!empty($incompletes)) {
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
         }
@@ -240,6 +248,7 @@ class TemplateController extends Controller
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
+            'update_form'     => $updateForm->createView(),
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures
@@ -297,5 +306,31 @@ class TemplateController extends Controller
         $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param Request  $request
+     * @param Template $template
+     * @param string   $locale
+     *
+     * @return RedirectResponse
+     */
+    public function updateAction(Request $request, Template $template, $locale)
+    {
+        $command = new Update($template);
+        $form = $this->createForm(UpdateType::class, $command, [
+            'action'   => $this->generateUrl('admin_template_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+        }
+
+        return $this->redirectToRoute('admin_template_builder', [
+            'template' => $template->getId(),
+            'locale'   => $locale,
+        ]);
     }
 }

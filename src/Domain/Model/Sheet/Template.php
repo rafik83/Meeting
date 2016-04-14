@@ -187,9 +187,11 @@ class Template
     }
 
     /**
+     * Get locales available for the current event if set, else get all locales.
+     *
      * @return array
      */
-    public function getEnableLocales()
+    public function getEnabledLocales()
     {
         return $this->event ? array_filter($this->locales, function ($locale) {
             return $this->event->hasLocale($locale);
