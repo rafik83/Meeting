@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Model\Template;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
-use DateTimeInterface;
 
-class SheetTemplate
+class SheetTemplate extends AbstractTemplate
 {
     /**
      * @var int
@@ -52,12 +52,12 @@ class SheetTemplate
     private $types;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * Template constructor.
+     * SheetTemplate constructor.
      *
      * @param string             $title
      * @param array              $value
@@ -258,40 +258,5 @@ class SheetTemplate
         $this->fallback = $fallback;
 
         return $this;
-    }
-
-    /**
-     * @param array  $config
-     * @param string $locale
-     *
-     * @return array
-     */
-    private static function createLocale($config, $locale)
-    {
-        $keys = ['label', 'help', 'placeholder'];
-
-        if (!isset($config['component'])) {
-            return array_map(function ($item) use ($locale) { return self::createLocale($item, $locale); }, $config);
-        }
-
-        if ($config['component'] === 'block') {
-            foreach ($config['config'] as $key => $column) {
-                $config['config'][$key] = self::createLocale($column, $locale);
-            }
-
-            return $config;
-        }
-
-        if ($config['component'] === 'object') {
-            foreach ($config['config'] as $key => $value) {
-                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
-                    $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
-                }
-            }
-
-            return $config;
-        }
-
-        return $config;
     }
 }
