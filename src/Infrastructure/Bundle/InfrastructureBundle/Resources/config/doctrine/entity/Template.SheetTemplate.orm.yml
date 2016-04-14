@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Sheet\Template:
+Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
     type:  entity
     table: sheet_template
     id:

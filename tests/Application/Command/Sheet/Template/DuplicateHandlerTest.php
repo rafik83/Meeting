@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
 class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -22,12 +22,12 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $template = new Template('Toto', [], ['fr'], 'fr', $dateTime);
+        $template = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $duplicate   = new Duplicate($template, $dateTime);
         $duplicate->title = 'Machin';
 
         //expected
-        $expectedTemplate = new Template('Machin', [], ['fr'], 'fr', $dateTime);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
@@ -46,7 +46,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $event  = new Event();
         $event->setLocales(['fr'], 'fr');
-        $template = new Template('Toto', [], ['fr'], 'fr', $dateTime);
+        $template = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $template->setEvent($event);
 
         $duplicate   = new Duplicate($template, $dateTime);
@@ -54,7 +54,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $duplicate->event = $event;
 
         //expected
-        $expectedTemplate = new Template('Machin', [], ['fr'], 'fr', $dateTime);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
         $expectedTemplate->setEvent($event);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 

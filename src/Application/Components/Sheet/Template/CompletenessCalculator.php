@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
  * Calculate the completeness of translations for each locales of a template.

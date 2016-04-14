@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
@@ -133,12 +133,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse|Response
      */
-    public function duplicateAction(Request $request, Template $template)
+    public function duplicateAction(Request $request, SheetTemplate $template)
     {
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
@@ -162,12 +162,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse|Response
      */
-    public function duplicateOrganizerTemplateAction(Request $request, Template $template)
+    public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
         $duplicate = new Duplicate($template, new \DateTime());
 
@@ -193,12 +193,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Template $template
-     * @param string   $locale
+     * @param SheetTemplate $template
+     * @param string        $locale
      *
      * @return Response
      */
-    public function builderAction(Template $template, $locale)
+    public function builderAction(SheetTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
 
@@ -256,12 +256,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse
      */
-    public function addLocaleAction(Request $request, Template $template)
+    public function addLocaleAction(Request $request, SheetTemplate $template)
     {
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
@@ -290,13 +290,13 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
-     * @param string   $locale
+     * @param Request       $request
+     * @param SheetTemplate $template
+     * @param string        $locale
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, Template $template, $locale)
+    public function saveAction(Request $request, SheetTemplate $template, $locale)
     {
         if (!$template->hasLocale($locale)) {
             return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
@@ -309,13 +309,13 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
-     * @param string   $locale
+     * @param Request       $request
+     * @param SheetTemplate $template
+     * @param string        $locale
      *
      * @return RedirectResponse
      */
-    public function updateAction(Request $request, Template $template, $locale)
+    public function updateAction(Request $request, SheetTemplate $template, $locale)
     {
         $command = new Update($template);
         $form = $this->createForm(UpdateType::class, $command, [

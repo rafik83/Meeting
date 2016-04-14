@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -58,7 +58,7 @@ class CreateHandler
         if ($create->sheetTemplate->getEvent() === $create->event) {
             $sheetTemplate = $create->sheetTemplate;
         } else {
-            $sheetTemplate = new Template(
+            $sheetTemplate = new SheetTemplate(
                 $type->getTitle($create->event->getAvailableLocale($create->locale)),
                 $create->sheetTemplate->getValue(),
                 $create->sheetTemplate->getLocales(),
