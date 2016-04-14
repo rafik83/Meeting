@@ -58,7 +58,7 @@ class TemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
+        $templates = $this->get('repository.template.sheet_template_repository')->getBaseTemplate();
 
         $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
@@ -105,8 +105,8 @@ class TemplateController extends Controller
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
         $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($organizer);
-        $baseTemplates      = $this->get('repository.sheet.template_repository')->getBaseTemplates();
-        $organizerTemplates = $this->get('repository.sheet.template_repository')->getOrganizerTemplates($events, $filters);
+        $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
+        $organizerTemplates = $this->get('repository.template.sheet_template_repository')->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
