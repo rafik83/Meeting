@@ -725,6 +725,8 @@ form:
         children:
             title:
                 label: Titre
+            locale:
+                label: Langue
             close:
                 label: Annuler
             submit:

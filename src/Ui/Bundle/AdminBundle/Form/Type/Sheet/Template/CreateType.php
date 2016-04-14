@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,6 +26,7 @@ class CreateType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
+            ->add('locale', LocaleType::class)
         ;
     }
 
