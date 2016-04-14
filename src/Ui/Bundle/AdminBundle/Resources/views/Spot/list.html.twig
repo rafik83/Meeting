@@ -11,7 +11,7 @@
                 <div class="row">
                     {{ form_start(filter_form) }}
                     <div class="col-md-2 text-right">
-                        <strong>Filtrer par</strong>
+                        <strong>{{ 'admin.filter_by'|trans }}</strong>
                     </div>
                     {{ form_row(filter_form.reference, { 'group_attr': { 'class': 'col-md-2' } }) }}
                     {{ form_row(filter_form.meetingCapacity, { 'group_attr': { 'class': 'col-md-2' } }) }}

@@ -255,6 +255,7 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    filter_by: Filtrer par
     filters:
         all: Tous
         reset: Réinitialiser les filtres
