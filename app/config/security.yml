@@ -63,10 +63,13 @@ security:
         - { path: ^/admin/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
-        - { path: ^/admin, role: ROLE_ADMIN, host: '%domain%' }
+        - { path: ^/admin, role: ROLE_ALLOWED_TO_ADMIN, host: '%domain%' }
 
     role_hierarchy:
-        ROLE_ADMIN: ['ROLE_ALLOWED_TO_SWITCH']
-        ROLE_OPERATOR: ['ROLE_ADMIN']
-        ROLE_ORGANIZER: ['ROLE_ADMIN', 'ROLE_OPERATOR']
-        ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_OPERATOR']
+        ROLE_ALLOWED_TO_ADMIN:    ['ROLE_ALLOWED_TO_SWITCH']
+        ROLE_ALLOWED_TO_ORGANIZE: ['ROLE_ALLOWED_TO_SWITCH']
+        ROLE_ALLOWED_TO_OPERATE:  ['ROLE_ALLOWED_TO_SWITCH']
+
+        ROLE_SUPER_ADMIN:         ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE', 'ROLE_ALLOWED_TO_OPERATE']
+        ROLE_ORGANIZER:           ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE', 'ROLE_ALLOWED_TO_OPERATE']
+        ROLE_OPERATOR:            ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_OPERATE']
