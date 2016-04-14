@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
 class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +29,7 @@ class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
         $create->event = $event;
 
         //expected
-        $expectedTemplate = new Template('Toto', [], ['fr'], $dateTime);
+        $expectedTemplate = new SheetTemplate('Toto', [], ['fr'], $dateTime);
         $expectedTemplate->setEvent($event);
         $expectedResult   = new CreateResult($expectedTemplate);
 

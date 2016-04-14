@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Model\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddLocale()
     {
         $createdAt = new \DateTime();
-        $template  = new Template('My template', [
+        $template  = new SheetTemplate('My template', [
             'ec74be5e' => [
                 'component' => 'object',
                 'type'      => 'text',
@@ -49,7 +49,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
         ], ['fr'], $createdAt);
 
-        $expected = new Template('My template', [
+        $expected = new SheetTemplate('My template', [
             'ec74be5e' => [
                 'component' => 'object',
                 'type'      => 'text',
@@ -86,7 +86,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFallback()
     {
-        $template = new Template('My template', [], ['fr', 'en'], new \DateTime());
+        $template = new SheetTemplate('My template', [], ['fr', 'en'], new \DateTime());
 
         $this->assertEquals('fr', $template->getFallback());
         $this->assertEquals('fr', $template->addLocale('de')->getFallback());
@@ -94,7 +94,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testHasLocale()
     {
-        $template = new Template('My template', [], ['fr', 'en'], new \DateTime());
+        $template = new SheetTemplate('My template', [], ['fr', 'en'], new \DateTime());
 
         $this->assertTrue($template->hasLocale('fr'));
         $this->assertTrue($template->hasLocale('en'));

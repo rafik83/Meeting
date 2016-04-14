@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Sheet;
+namespace Proximum\Vimeet\Domain\Model\Template;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use DateTimeInterface;
 
-class Template
+class SheetTemplate
 {
     /**
      * @var int
@@ -134,7 +134,7 @@ class Template
      *
      * @param string $value
      *
-     * @return Template
+     * @return SheetTemplate
      */
     public function setValue($value)
     {
@@ -157,7 +157,7 @@ class Template
      * @param string            $title
      * @param DateTimeInterface $createdAt
      *
-     * @return Template
+     * @return SheetTemplate
      */
     public function duplicate($title, DateTimeInterface $createdAt)
     {
@@ -197,7 +197,7 @@ class Template
     /**
      * @param string $locale
      *
-     * @return Template
+     * @return SheetTemplate
      */
     public function addLocale($locale)
     {

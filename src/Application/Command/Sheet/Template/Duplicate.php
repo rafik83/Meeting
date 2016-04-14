@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class Duplicate
 {
@@ -39,10 +39,10 @@ class Duplicate
     /**
      * Duplicate constructor.
      *
-     * @param Template          $template
+     * @param SheetTemplate     $template
      * @param DateTimeInterface $createdAt
      */
-    public function __construct(Template $template, DateTimeInterface $createdAt)
+    public function __construct(SheetTemplate $template, DateTimeInterface $createdAt)
     {
         $this->createdAt = $createdAt;
         $this->template  = $template;

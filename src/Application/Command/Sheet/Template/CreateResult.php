@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class CreateResult
 {
     /**
-     * @var Template
+     * @var SheetTemplate
      */
     public $template;
 
     /**
      * CreateResult constructor.
      *
-     * @param Template $template
+     * @param SheetTemplate $template
      */
-    public function __construct(Template $template)
+    public function __construct(SheetTemplate $template)
     {
         $this->template = $template;
     }

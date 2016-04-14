@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class Save
 {
     /**
-     * @var Template
+     * @var SheetTemplate
      */
     public $template;
 
@@ -27,10 +27,10 @@ class Save
     /**
      * Save constructor.
      *
-     * @param Template $template
-     * @param string   $value
+     * @param SheetTemplate $template
+     * @param string        $value
      */
-    public function __construct(Template $template, $value)
+    public function __construct(SheetTemplate $template, $value)
     {
         $this->template = $template;
         $this->value    = $value;

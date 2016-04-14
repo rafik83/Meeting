@@ -42,7 +42,7 @@ Proximum\Vimeet\Domain\Model\Type:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         sheetTemplate:
-            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Template
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\SheetTemplate
             inversedBy: types
             cascade:
                 - persist

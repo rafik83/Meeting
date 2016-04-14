@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
 class DuplicateHandler
@@ -44,7 +44,7 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
-        $template = new Template(
+        $template = new SheetTemplate(
             $duplicate->title,
             $duplicate->template->getValue(),
             $duplicate->template->getLocales(),

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
 
 class CreateHandler
@@ -44,7 +44,7 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $template = new Template($create->title, [], [$create->locale], $this->dateTime);
+        $template = new SheetTemplate($create->title, [], [$create->locale], $this->dateTime);
         $this->templateRepository->add($template);
 
         return new CreateResult($template);
