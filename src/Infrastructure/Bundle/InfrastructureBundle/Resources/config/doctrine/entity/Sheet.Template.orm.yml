@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
             type: string
         locales:
             type: json_array
+        fallback:
+            type: string
+            length: 5
         value:
             type: json_array
         createdAt:

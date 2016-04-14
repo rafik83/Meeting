@@ -25,7 +25,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->title = 'Toto';
 
         //expected
-        $expectedTemplate = new Template('Toto', [], ['fr'], $dateTime);
+        $expectedTemplate = new Template('Toto', [], ['fr'], 'fr', $dateTime);
         $expectedResult   = new CreateResult($expectedTemplate);
 
         // Mock

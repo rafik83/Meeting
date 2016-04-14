@@ -189,11 +189,17 @@ class Event implements EventInterface
     /**
      * Set locales.
      *
-     * @param array $locales
+     * @param array  $locales
+     * @param string $fallback
+     *
+     * @return Event
      */
-    public function setLocales(array $locales)
+    public function setLocales(array $locales, $fallback)
     {
-        $this->locales = $locales;
+        $this->locales  = $locales;
+        $this->fallback = $fallback;
+
+        return $this;
     }
 
     /**

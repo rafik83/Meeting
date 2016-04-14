@@ -50,7 +50,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
@@ -89,7 +89,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
@@ -135,7 +135,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 80,

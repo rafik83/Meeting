@@ -37,6 +37,11 @@ class Template
     private $locales = [];
 
     /**
+     * @var string
+     */
+    private $fallback;
+
+    /**
      * @var Event
      */
     private $event;
@@ -57,16 +62,23 @@ class Template
      * @param string             $title
      * @param array              $value
      * @param array              $locales
+     * @param string             $fallback
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, array $value, array $locales, \DateTimeInterface $createdAt)
+    public function __construct($title, array $value, array $locales, $fallback, \DateTimeInterface $createdAt)
     {
         $this->title     = $title;
         $this->value     = $value;
+        $this->fallback  = $fallback;
         $this->createdAt = $createdAt;
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);
+        }
+
+
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
         }
     }
 
@@ -189,9 +201,7 @@ class Template
      */
     public function getFallback()
     {
-        $locales = $this->getEnableLocales();
-
-        return reset($locales);
+        return $this->event ? $this->event->getFallback() : $this->fallback;
     }
 
     /**
@@ -201,7 +211,7 @@ class Template
      */
     public function addLocale($locale)
     {
-        if (!$this->hasLocale($locale)) {
+        if (!$this->hasLocale($locale) && $locale !== null) {
             $this->locales[] = $locale;
             $this->fixValue([$locale]);
         }
@@ -229,6 +239,24 @@ class Template
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @param string $title
+     * @param string $fallback
+     *
+     * @return Template
+     */
+    public function update($title, $fallback)
+    {
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
+        }
+
+        $this->title    = $title;
+        $this->fallback = $fallback;
+
+        return $this;
     }
 
     /**

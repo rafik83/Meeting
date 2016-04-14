@@ -62,6 +62,7 @@ class CreateHandler
                 $type->getTitle($create->event->getAvailableLocale($create->locale)),
                 $create->sheetTemplate->getValue(),
                 $create->sheetTemplate->getLocales(),
+                $create->sheetTemplate->getFallback(),
                 $this->dateTime
             );
             $sheetTemplate->setEvent($create->event);
