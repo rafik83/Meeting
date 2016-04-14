@@ -218,12 +218,16 @@ class TemplateController extends Controller
             throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
         }
 
-        $addLocale     = new AddLocale($template);
-        $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
-            'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
-            'submit'   => true,
-            'template' => $template,
-        ]);
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $addLocale     = new AddLocale($template);
+            $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+                'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
+                'submit'   => true,
+                'template' => $template,
+            ]);
+        } else {
+            $addLocaleForm = null;
+        }
 
         $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
         $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
@@ -236,7 +240,7 @@ class TemplateController extends Controller
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
-            'add_locale_form' => $addLocaleForm->createView(),
+            'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures
         ]);

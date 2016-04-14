@@ -21,11 +21,13 @@
                                     </a>
                                 </li>
                             {% endfor %}
-                            <li>
-                                <button class="text-center" data-toggle="modal" data-target="#add-locale-modal">
-                                    <i class="glyphicon glyphicon-plus"></i>
-                                </button>
-                            </li>
+                            {% if add_locale_form %}
+                                <li>
+                                    <button class="text-center" data-toggle="modal" data-target="#add-locale-modal">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                     <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button>
@@ -87,23 +89,25 @@
 
         </div>
 
-        {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_row(add_locale_form.locale) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        {{ form_row(add_locale_form.submit) }}
+        {% if add_locale_form %}
+            {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_row(add_locale_form.locale) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                            {{ form_row(add_locale_form.submit) }}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {{ form_end(add_locale_form) }}
+            {{ form_end(add_locale_form) }}
+        {% endif %}
 
     </div>
 {% endblock %}

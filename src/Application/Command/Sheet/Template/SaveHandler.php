@@ -36,10 +36,6 @@ class SaveHandler
     {
         $save->template->setValue($save->value);
 
-        foreach ($save->template->getLocales() as $locale) {
-            $save->template->addLocale($locale);
-        }
-
         $this->templateRepository->set($save->template);
     }
 }
