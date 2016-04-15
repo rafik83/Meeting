@@ -20,11 +20,6 @@ interface SheetTemplateRepositoryInterface
     public function all();
 
     /**
-     * @return SheetTemplate[]
-     */
-    public function getBaseTemplate();
-
-    /**
      * @param array $events
      *
      * @return SheetTemplate[]
