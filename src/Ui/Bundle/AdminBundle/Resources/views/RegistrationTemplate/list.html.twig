@@ -1,0 +1,61 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+<h1 class="page-header">Templates d'Inscription</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Titre</th>
+        <th>Créé le</th>
+        <th class="text-right">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for template in templates %}
+            <tr>
+                <td>{{ template.title }}</td>
+                <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h1 class="page-header">Templates d'Inscription des organisateurs</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Titre</th>
+        <th>Événement/Type(s)</th>
+        <th>Créé le</th>
+        <th class="text-right">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for template in templatesOrganizer %}
+        <tr>
+            <td>{{ template.title }}</td>
+            <td>
+                {{ template.event.title }}
+                {% if template.types is not null %}
+                    <ul>
+                        {% for type in template.types %}
+                            <li>{{ type.getTitle(type.event.getAvailableLocale(app.request.locale)) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+            <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
+            <td class="text-right">
+                <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

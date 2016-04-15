@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.template.registration.update'|trans %}
+
+{% block form_title 'admin.template.registration.update'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    {{ form_row(form.value, {'attr' : {'rows': 30}}) }}
+{% endblock %}
+
+{% block goback_link path('admin_template_registration_list') %}
