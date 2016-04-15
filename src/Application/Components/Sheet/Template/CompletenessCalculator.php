@@ -3,14 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
 
 /**
  * Calculate the completeness of translations for each locales of a template.
@@ -18,11 +18,11 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 class CompletenessCalculator
 {
     /**
-     * @param SheetTemplate $template
+     * @param AbstractTemplate $template
      *
      * @return array
      */
-    public function compute(SheetTemplate $template)
+    public function compute(AbstractTemplate $template)
     {
         $translatables = $this->getTranslatables($template->getValue());
         $translated    = $this->getTranslated($translatables);

@@ -33,7 +33,6 @@ interface RegistrationTemplateRepositoryInterface
 
     /**
      * @param RegistrationTemplate $registrationTemplate
-     * @return mixed
      */
     public function set(RegistrationTemplate $registrationTemplate);
 }

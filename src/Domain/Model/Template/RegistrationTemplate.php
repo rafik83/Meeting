@@ -118,7 +118,7 @@ class RegistrationTemplate extends AbstractTemplate
     /**
      * @param string $locale
      *
-     * @return SheetTemplate
+     * @return RegistrationTemplate
      */
     public function addLocale($locale)
     {
@@ -148,7 +148,7 @@ class RegistrationTemplate extends AbstractTemplate
      *
      * @param string $value
      *
-     * @return SheetTemplate
+     * @return RegistrationTemplate
      */
     public function setValue($value)
     {
@@ -171,7 +171,7 @@ class RegistrationTemplate extends AbstractTemplate
      * @param string            $title
      * @param DateTimeInterface $createdAt
      *
-     * @return SheetTemplate
+     * @return RegistrationTemplate
      */
     public function duplicate($title, DateTimeInterface $createdAt)
     {
@@ -192,7 +192,7 @@ class RegistrationTemplate extends AbstractTemplate
      * @param string $title
      * @param string $fallback
      *
-     * @return SheetTemplate
+     * @return RegistrationTemplate
      */
     public function update($title, $fallback)
     {

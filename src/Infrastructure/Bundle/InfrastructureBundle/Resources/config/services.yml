@@ -792,6 +792,12 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
+    command.template.registration.add_locale_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\AddLocaleHandler
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
 
     #
     # Security

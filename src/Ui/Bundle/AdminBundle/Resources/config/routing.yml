@@ -529,6 +529,12 @@ admin_template_registration_builder:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+admin_template_registration_add_locale:
+    path: /template/regitration/{template}/locale
+    defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
+    methods: [POST]
+    requirements:
+        template: \d+
 
 #
 # SheetTemplate
