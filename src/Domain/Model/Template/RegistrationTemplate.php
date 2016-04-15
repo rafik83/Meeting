@@ -88,6 +88,14 @@ class RegistrationTemplate extends AbstractTemplate
     }
 
     /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
      * Get locales available for the current event if set, else get all locales.
      *
      * @return array
