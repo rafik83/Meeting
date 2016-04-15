@@ -1,7 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-<h1 class="page-header">Templates d'Inscription</h1>
+<h1 class="page-header">{{ 'admin.template.registration.title'|trans }}</h1>
 
 <table class="table">
     <thead>
@@ -25,7 +25,7 @@
 </table>
 
 {% if templatesOrganizer|length %}
-<h1 class="page-header">Templates d'Inscription des organisateurs</h1>
+<h1 class="page-header">{{ 'admin.template.registration.titleOrganizer'|trans }}</h1>
 
 <table class="table">
     <thead>

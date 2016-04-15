@@ -495,6 +495,8 @@ admin:
             link: Template de Participation
         registration:
             link: Template d'Inscription
+            title: Templates d'Inscription
+            titleOrganizer: Templates d'Inscription des organisateurs
             update: Modifier le template d'Inscription
             table:
                 column:
