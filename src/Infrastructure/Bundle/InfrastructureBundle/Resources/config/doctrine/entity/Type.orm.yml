@@ -46,3 +46,8 @@ Proximum\Vimeet\Domain\Model\Type:
             inversedBy: types
             cascade:
                 - persist
+        registrationTemplate:
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate
+            inversedBy: types
+            cascade:
+                - persist
