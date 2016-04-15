@@ -1,0 +1,87 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template;
+
+use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class RegistrationTemplateChoiceType extends AbstractType
+{
+    /**
+     * @var RegistrationTemplateRepositoryInterface
+     */
+    private $templateRepository;
+
+    /**
+     * @param RegistrationTemplateRepositoryInterface $templateRepository
+     */
+    public function __construct(RegistrationTemplateRepositoryInterface $templateRepository)
+    {
+        $this->templateRepository = $templateRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'events'           => [],
+            'class'            => Template::class,
+            'choices'          => function (Options $options) {
+                return $this->getResults($options);
+            },
+            'choice_label'     => 'title',
+            'repositoryMethod' => function (RegistrationTemplateRepositoryInterface $templateRepository) {
+                return $templateRepository->getBaseTemplates();
+            },
+            'repositoryMethodOrganizer' => function (Options $options) {
+                return function (RegistrationTemplateRepositoryInterface $templateRepository) use ($options) {
+                    return $templateRepository->getTemplateForGivenEvents($options['events']);
+                };
+            },
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return ChoiceType::class;
+    }
+
+    /**
+     * @param Options $options
+     * @return array
+     */
+    private function getResults(Options $options)
+    {
+        $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
+        $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);
+
+        $templates = [];
+
+        if (!empty($baseTemplates)) {
+            $templates['form.type_template.registration.base'] = $baseTemplates;
+        }
+
+        if (!empty($organizerTemplates)) {
+            $templates['form.type_template.registration.organizer'] = $organizerTemplates;
+        }
+
+        return $templates;
+    }
+}
