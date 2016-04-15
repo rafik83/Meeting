@@ -20,8 +20,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         // context
-        $dateTime             = new \DateTime();
-        $array = [
+        $dateTime = new \DateTime();
+        $array    = [
             '811f6edf' => [
                 'component' => "block",
                 'type'      => "12",
