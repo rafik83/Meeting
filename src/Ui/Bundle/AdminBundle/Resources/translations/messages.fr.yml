@@ -490,4 +490,6 @@ admin:
                 locales: Langues
                 date: Date de création
                 action: Action
-
+    template:
+        registration:
+            update: Modifier le template d'Inscription
