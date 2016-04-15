@@ -21,6 +21,14 @@ class AddLocaleType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['template']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $locales = array_filter(array_flip(Intl::getLocaleBundle()->getLocaleNames()), function ($locale) use ($options) {
@@ -30,14 +38,6 @@ class AddLocaleType extends AbstractType
         $builder
             ->add('locale', LocaleType::class, ['choices' => $locales])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired(['template']);
     }
 
     /**
