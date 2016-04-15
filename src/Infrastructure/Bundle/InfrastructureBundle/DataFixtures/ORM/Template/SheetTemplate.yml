@@ -1,56 +1,23 @@
 Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
-  template_asd_days:
-      __construct: false
-      title: "Template ASD Days"
-      locales: ['fr']
-      fallback: 'fr'
-      createdAt: <dateTimeBetween('-10days', 'now')>
-      value:
-          69b3cde3:
-            component: "block"
-            type: "8-4"
-            config:
-              -
-                dcc42d3d:
-                  component: "object"
-                  type: "editable-text"
-                  config:
-                    label:
-                      fr: "Titre de votre fiche"
-                    placeholder:
-                      fr: "Société en une phrase"
-                    help:
-                      fr: ""
-                    length: "200"
-                    type: "title"
-                    required: true
-                291c7190:
-                  component: "block"
-                  type: "6-6"
-                  config:
+    template_asd_days:
+        __construct: false
+        title: "Template ASD Days"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        value:
+            69b3cde3:
+                component: "block"
+                type: "8-4"
+                config:
+                    style: "style-1"
+                children:
                     -
-                      1b9a00b3:
-                        component: "object"
-                        type: "image"
-                        config:
-                          label:
-                            fr: "Logo"
-                          placeholder:
-                            fr: ""
-                          help:
-                            fr: ""
-                          length: null
-                          type: null
-                          required: false
-                      6fe62a03:
-                        component: "block"
-                        type: "6-6"
-                        config:
-                          -
-                            fb030569:
-                              component: "object"
-                              type: "tag"
-                              config:
+                        dcc42d3d:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
                                 label:
                                     fr: "Titre de votre fiche"
                                 placeholder:
@@ -200,209 +167,134 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                  fr: "Site internet"
+                                    fr: "Equipements, technologies et process"
+                                placeholder:
+                                    fr: ""
                                 help:
-                                  fr: ""
+                                    fr: ""
                                 required: false
+                                default: "3"
                     -
-                      d691d21c:
-                        component: "object"
-                        type: "editable-text"
-                        config:
-                          label:
-                            fr: "Description d'activité"
-                          placeholder:
-                            fr: ""
-                          help:
-                            fr: ""
-                          length: "500"
-                          type: "text"
-                          required: false
-                e438c993:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Compétences Aéronautiques"
-                    placeholder:
-                      fr: ""
-                    help:
-                      fr: ""
-                    required: false
-                    default: "1"
-                2423e6ea:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Compétences Défenses"
-                    placeholder:
-                      fr: ""
-                    help:
-                      fr: ""
-                    required: false
-                    default: "1"
-                75adad94:
-                  component: "block"
-                  type: "6-6"
-                  config:
+                        79271999:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Groupe / Membre"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        696dc236:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Repères"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        a23a2f5d:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Certifications"
+                                placeholder:
+                                    fr: "vos certifications"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        bef61d39:
+                            component: "object"
+                            type: "participant"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Participants"
+                                numberOfParticipantShown: "3"
+                        211efd1f:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Médias"
+                                placeholder:
+                                    fr: "Vos médias"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+            69962d34:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
                     -
-                      848e283e:
-                        component: "object"
-                        type: "image"
-                        config:
-                          label:
-                            fr: "Slideshow"
-                          placeholder:
-                            fr: ""
-                          help:
-                            fr: ""
-                          required: false
-                    -
-                      1adc1873:
-                        component: "object"
-                        type: "collection"
-                        config:
-                          label:
-                            fr: "Clients de référence"
-                          placeholder:
-                            fr: "Vos clients de référence"
-                          help:
-                            fr: ""
-                          required: true
-                          default: "1"
-                      46663c1d:
-                        component: "object"
-                        type: "collection"
-                        config:
-                          label:
-                            fr: "Projets innovant"
-                          placeholder:
-                            fr: "Vos projets innovant"
-                          help:
-                            fr: ""
-                          required: false
-                          default: "3"
-                097ab5e8:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Equipements, technologies et process"
-                    placeholder:
-                      fr: ""
-                    help:
-                      fr: ""
-                    required: false
-                    default: "3"
-              -
-                79271999:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Groupe / Membre"
-                    placeholder:
-                      fr: ""
-                    help:
-                      fr: ""
-                    required: false
-                    default: "3"
-                696dc236:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Repères"
-                    placeholder:
-                      fr: ""
-                    help:
-                      fr: ""
-                    required: false
-                    default: "3"
-                a23a2f5d:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Certifications"
-                    placeholder:
-                      fr: "vos certifications"
-                    help:
-                      fr: ""
-                    required: false
-                    default: "3"
-                bef61d39:
-                  component: "object"
-                  type: "participant"
-                  config:
-                    label:
-                      fr: "Participants"
-                    numberOfParticipantShown: "3"
-                211efd1f:
-                  component: "object"
-                  type: "collection"
-                  config:
-                    label:
-                      fr: "Médias"
-                    placeholder:
-                      fr: "Vos médias"
-                    help:
-                      fr: ""
-                    required: false
-                    default: "3"
-          69962d34:
-            component: "block"
-            type: "12"
-            config:
-              -
-                27db4a35:
-                  component: "object"
-                  type: "text"
-                  config:
-                    content:
-                      fr: "Objectif de participation"
-                    type: "titre"
-                76a5e149:
-                  component: "block"
-                  type: "6-6"
-                  config:
-                    -
-                      03b394ac:
-                        component: "object"
-                        type: "collection"
-                        config:
-                          label:
-                            fr: "Offres"
-                          placeholder:
-                            fr: "Vos offres"
-                          help:
-                            fr: "Vos offres"
-                          required: true
-                          default: "3"
-                      63ccc105:
-                        component: "object"
-                        type: "collection"
-                        config:
-                          label:
-                            fr: "Besoins"
-                          placeholder:
-                            fr: "Vos besoins"
-                          help:
-                            fr: "Vos besoins"
-                          required: true
-                          default: "3"
-                    -
-                      d927a04b:
-                        component: "object"
-                        type: "editable-text"
-                        config:
-                          label:
-                            fr: "Description"
-                          placeholder:
-                            fr: "Description"
-                          help:
-                            fr: "Description"
-                          length: "500"
-                          type: "text"
-                          required: false
+                        27db4a35:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: "Objectif de participation"
+                                type: "titre"
+                        37db4a33:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    03b394ac:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Offres"
+                                            placeholder:
+                                                fr: "Vos offres"
+                                            help:
+                                                fr: "Vos offres"
+                                            required: true
+                                            default: "3"
+                                    63ccc105:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Besoins"
+                                            placeholder:
+                                                fr: "Vos besoins"
+                                            help:
+                                                fr: "Vos besoins"
+                                            required: true
+                                            default: "3"
+                                -
+                                    d927a04b:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description"
+                                            placeholder:
+                                                fr: "Description"
+                                            help:
+                                                fr: "Description"
+                                            length: "500"
+                                            type: "text"
+                                            required: false
