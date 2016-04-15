@@ -3,6 +3,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
       __construct: false
       title: "Inscription Template ASD Days"
       locales: ['fr']
+      fallback: 'fr'
       createdAt: <dateTimeBetween('-10days', 'now')>
       value:
           811f6edf:
