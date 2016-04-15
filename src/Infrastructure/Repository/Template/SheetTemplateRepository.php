@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Repository\Sheet;
+namespace Proximum\Vimeet\Infrastructure\Repository\Template;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\EventInterface;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
-class TemplateRepository implements TemplateRepositoryInterface
+class SheetTemplateRepository implements SheetTemplateRepositoryInterface
 {
     /**
      * @var EntityManager
@@ -23,13 +23,13 @@ class TemplateRepository implements TemplateRepositoryInterface
     private $entityManager;
 
     /**
-     * SpotRepository constructor.
+     * SheetTemplateRepository constructor.
      *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -41,7 +41,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('template')
-            ->from(Template::class, 'template');
+            ->from(SheetTemplate::class, 'template');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -55,7 +55,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('template')
-            ->from(Template::class, 'template')
+            ->from(SheetTemplate::class, 'template')
             ->where('template.event IS NULL');
 
         return $queryBuilder->getQuery()->getResult();
@@ -70,7 +70,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('template')
-            ->from(Template::class, 'template')
+            ->from(SheetTemplate::class, 'template')
             ->join('template.event', 'event', 'WITH', 'event.id IN (:events)')
             ->setParameter('events', array_map(function (EventInterface $event) { return $event->getId(); }, $events));
 
@@ -86,7 +86,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('template')
-            ->from(Template::class, 'template')
+            ->from(SheetTemplate::class, 'template')
             ->where('template.event IS NULL');
 
         return $queryBuilder->getQuery()->getResult();
@@ -101,7 +101,7 @@ class TemplateRepository implements TemplateRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('template')
-            ->from(Template::class, 'template');
+            ->from(SheetTemplate::class, 'template');
 
         if (isset($filters['event']) && $filters['event'] instanceof EventInterface) {
             $queryBuilder
@@ -119,7 +119,7 @@ class TemplateRepository implements TemplateRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Template $template)
+    public function add(SheetTemplate $template)
     {
         $this->entityManager->persist($template);
         $this->entityManager->flush($template);
@@ -128,7 +128,7 @@ class TemplateRepository implements TemplateRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function set(Template $template)
+    public function set(SheetTemplate $template)
     {
         $this->entityManager->flush($template);
     }

@@ -23,7 +23,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Context
         $event = new Event();
-        $event->setLocales(['fr', 'en']);
+        $event->setLocales(['fr', 'en'], 'fr');
 
         // Current
         $category     = new Category($event, 'picto1', 2);

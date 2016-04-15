@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
-use Proximum\Vimeet\Domain\Model\Sheet\Template as SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Create

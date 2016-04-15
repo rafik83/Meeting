@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Sheet\Template:
+Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
     type:  entity
-    table: sheet_template
+    table: template_registration
     id:
         id:
             type: integer
@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
             type: string
         locales:
             type: json_array
+        fallback:
+            type: string
+            length: 5
         value:
             type: json_array
         createdAt:
@@ -21,4 +24,4 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
     oneToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
-            mappedBy: sheetTemplate
+            mappedBy: registrationTemplate

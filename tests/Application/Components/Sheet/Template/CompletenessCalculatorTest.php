@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 // Template
-                new Template('test', [
+                new SheetTemplate('test', [
                     'ec74be5e' => [
                         'component' => 'object',
                         'type'      => 'text',
@@ -50,7 +50,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
@@ -59,7 +59,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 // Template
-                new Template('test', [
+                new SheetTemplate('test', [
                     'ec74be5e' => [
                         'component' => 'object',
                         'type'      => 'text',
@@ -89,7 +89,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
@@ -98,7 +98,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 // Template
-                new Template('test', [
+                new SheetTemplate('test', [
                     'ec74be5e' => [
                         'component' => 'object',
                         'type'      => 'text',
@@ -135,7 +135,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ]
-                ], ['fr', 'en'], new \DateTime()),
+                ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 80,
@@ -146,12 +146,12 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Template $template
-     * @param array    $expected
+     * @param SheetTemplate $template
+     * @param array         $expected
      *
      * @dataProvider provideLocales
      */
-    public function testCompute(Template $template, array $expected)
+    public function testCompute(SheetTemplate $template, array $expected)
     {
         $this->assertEquals($expected, (new CompletenessCalculator())->compute($template));
     }

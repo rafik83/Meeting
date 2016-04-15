@@ -13,13 +13,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class TemplateController extends Controller
+class RegistrationTemplateController extends Controller
 {
     /**
      * @return Response
      */
     public function listAction()
     {
-        return $this->render('AdminBundle:Template:list.html.twig');
+        return $this->render('AdminBundle:Template:list.html.twig', []);
     }
 }

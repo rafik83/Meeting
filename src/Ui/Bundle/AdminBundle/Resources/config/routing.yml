@@ -513,47 +513,57 @@ admin_happening_speaker_delete:
 admin_template_list:
     path: /template
     defaults: { _controller: AdminBundle:Template:list }
+    methods: [GET]
+
+#
+# SheetTemplate
+#
+admin_template_sheet_list:
+    path: /template/sheet
+    defaults: { _controller: AdminBundle:SheetTemplate:list }
+    methods: [GET, POST]
+admin_template_sheet_duplicate:
+    path: /template/sheet/{template}/duplicate
+    defaults: { _controller: AdminBundle:SheetTemplate:duplicate }
     methods: [GET, POST]
     requirements:
         template: \d+
-admin_template_duplicate:
-    path: /template/{template}/duplicate
-    defaults: { _controller: AdminBundle:Template:duplicate }
-    methods: [GET, POST]
-    requirements:
-        template: \d+
-admin_template_add_locale:
-    path: /template/{template}/locale
-    defaults: { _controller: AdminBundle:Template:addLocale }
+admin_template_sheet_add_locale:
+    path: /template/sheet/{template}/locale
+    defaults: { _controller: AdminBundle:SheetTemplate:addLocale }
     methods: [POST]
     requirements:
         template: \d+
-admin_template_builder:
-    path: /template/{template}/{locale}
-    defaults: { _controller: AdminBundle:Template:builder }
+admin_template_sheet_builder:
+    path: /template/sheet/{template}/{locale}
+    defaults: { _controller: AdminBundle:SheetTemplate:builder }
     methods: [GET]
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
-admin_template_save:
-    path: /template/{template}/{locale}
-    defaults: { _controller: AdminBundle:Template:save }
+admin_template_sheet_save:
+    path: /template/sheet/{template}/{locale}/save
+    defaults: { _controller: AdminBundle:SheetTemplate:save }
     methods: [POST]
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
-
-#
-# Organizer Template
-#
-admin_organizer_template_list:
-    path: /organizer/template
-    defaults: { _controller: AdminBundle:Template:listOrganizerTemplate }
+admin_template_sheet_update:
+    path: /template/sheet/{template}/{locale}/update
+    defaults: { _controller: AdminBundle:SheetTemplate:update }
+    methods: [POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+# Organizer #
+admin_organizer_template_sheet_list:
+    path: /organizer/template/sheet
+    defaults: { _controller: AdminBundle:SheetTemplate:listOrganizerTemplate }
     methods: [GET, POST]
-
-admin_organizer_template_duplicate:
-    path: /organizer/template/{template}/duplicate
-    defaults: { _controller: AdminBundle:Template:duplicateOrganizerTemplate }
+# Organizer #
+admin_organizer_template_sheet_duplicate:
+    path: /organizer/template/sheet/{template}/duplicate
+    defaults: { _controller: AdminBundle:SheetTemplate:duplicateOrganizerTemplate }
     methods: [GET, POST]
     requirements:
         template: \d+

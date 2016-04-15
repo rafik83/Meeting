@@ -23,7 +23,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         //Context
         $event = new Event();
-        $event->setLocales([]);
+        $event->setLocales(['fr'], 'fr');
 
         //Expected
         $category = new Category($event);

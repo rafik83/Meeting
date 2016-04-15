@@ -16,7 +16,7 @@
         {{ form_rest(filter_form) }}
         {{ form_end(filter_form) }}
     </div>
-    {% if  is_granted('ROLE_ORGANIZER') %}
+    {% if  is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
         <div class="col-xs-12">
             <a href="{{ path('admin_create_operator') }}" class="btn btn-primary">{{ 'admin.operator_list.action.create'|trans }}</a>
         </div>
