@@ -1,8 +1,9 @@
 {% set config = {
-    'label': { (locale): 'Nomenclature' },
-    'help': { (locale): '' },
-    'nomenclature': '',
-    'multiple': false
+    label: { (locale): 'Nomenclature' },
+    help: { (locale): '' },
+    nomenclature: '',
+    multiple: false,
+    style: ''
 }|merge(config|default({})) %}
 
 <div class="object" data-object="nomenclature"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
@@ -22,58 +23,71 @@
             <button class="btn btn-link configure-button">
                 <i class="glyphicon glyphicon-cog"></i>
             </button>
-            <form action="#" method="GET" class="modal fade configure-modal" tabindex="-1" role="dialog" aria-labelledby="configure-modal-label">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="configure-modal-label">Nomenclature</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="form-label">Label</label>
-                                <input class="form-control" type="text" name="label" />
-                                {% if fallback|default(false) and locale != fallback %}
-                                    <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
-                                {% endif %}
+            <div class="modal fade configure-modal" tabindex="-1" role="dialog">
+                <form action="#" method="GET">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Nomenclature</h4>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Aide</label>
-                                <textarea class="form-control" name="help"></textarea>
-                                {% if fallback|default(false) and locale != fallback %}
-                                    <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Nomenclature</label>
-                                <select class="form-control" name="nomenclature">
-                                    {% if nomenclatures is defined %}
-                                        {% for nomenclature in nomenclatures %}
-                                            <option value="{{ nomenclature.id }}">{{ nomenclature.label }}</option>
-                                        {% endfor %}
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="form-label">Style</label>
+                                    <select class="form-control" name="style" title="Style">
+                                        <option value="style-1">Style 1</option>
+                                        <option value="style-2">Style 2</option>
+                                        <option value="style-3">Style 3</option>
+                                    </select>
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    <label class="form-label">Label</label>
+                                    <input class="form-control" type="text" name="label" />
+                                    {% if fallback|default(false) and locale != fallback %}
+                                        <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
-                                </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Aide</label>
+                                    <textarea class="form-control" name="help"></textarea>
+                                    {% if fallback|default(false) and locale != fallback %}
+                                        <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nomenclature</label>
+                                    <select class="form-control" name="nomenclature">
+                                        {% if nomenclatures is defined %}
+                                            {% for nomenclature in nomenclatures %}
+                                                <option value="{{ nomenclature.id }}">{{ nomenclature.label }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="multiple" value="false">
+                                            Choix unique
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="multiple" value="true">
+                                            Choix multiple
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="multiple" value="false">
-                                    Choix unique
-                                </label>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
                             </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="multiple" value="true">
-                                    Choix multiple
-                                </label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                            <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </li>
     </ul>
     <div data-bind="label">{{ config.label[locale] }}</div>
