@@ -33,6 +33,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $type = $update->type;
+        $type->setPosition($update->position);
 
         foreach ($update->translations as $locale => $translation) {
             $type->getTranslations()->get($locale)->update($translation['title']);

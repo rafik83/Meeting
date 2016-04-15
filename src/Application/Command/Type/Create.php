@@ -53,10 +53,15 @@ class Create
     public $locale;
 
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * Create constructor.
      *
-     * @param Event             $event
-     * @param string            $locale
+     * @param Event  $event
+     * @param string $locale
      */
     public function __construct(Event $event, $locale)
     {

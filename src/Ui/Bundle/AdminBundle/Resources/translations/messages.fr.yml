@@ -327,6 +327,8 @@ admin:
         link: Qui voit qui
     type:
         link: Types de participation
+        title: Titre
+        position: Position
         create:
             link: Ajouter
             title: Ajouter un type de participation

@@ -46,6 +46,7 @@ class CreateHandler
     {
         $type = new Type($create->event);
         $type->setTemplate($create->template);
+        $type->setPosition($create->position);
 
         foreach ($create->translations as $locale => $translation) {
             $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
