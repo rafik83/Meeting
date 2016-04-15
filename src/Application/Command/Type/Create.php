@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Create
@@ -38,6 +39,11 @@ class Create
     public $sheetTemplate;
 
     /**
+     * @var RegistrationTemplate
+     */
+    public $registrationTemplate;
+
+    /**
      * @var array
      */
     public $validationCriteria = [];
@@ -55,8 +61,8 @@ class Create
     /**
      * Create constructor.
      *
-     * @param Event             $event
-     * @param string            $locale
+     * @param Event  $event
+     * @param string $locale
      */
     public function __construct(Event $event, $locale)
     {
