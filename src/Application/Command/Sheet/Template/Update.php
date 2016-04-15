@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-class Save
+class Update
 {
     /**
      * @var SheetTemplate
@@ -22,17 +22,22 @@ class Save
     /**
      * @var string
      */
-    public $value;
+    public $title;
 
     /**
-     * Save constructor.
+     * @var string
+     */
+    public $fallback;
+
+    /**
+     * Update constructor.
      *
      * @param SheetTemplate $template
-     * @param string        $value
      */
-    public function __construct(SheetTemplate $template, $value)
+    public function __construct(SheetTemplate $template)
     {
         $this->template = $template;
-        $this->value    = $value;
+        $this->title    = $template->getTitle();
+        $this->fallback = $template->getFallback();
     }
 }

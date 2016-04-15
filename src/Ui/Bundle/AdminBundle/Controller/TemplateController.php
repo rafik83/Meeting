@@ -15,14 +15,16 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
+use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,9 +51,6 @@ class TemplateController extends Controller
     }
 
     /**
-     * @return Response
-     */
-    /**
      * @param Request $request
      *
      * @return RedirectResponse|Response
@@ -60,7 +59,7 @@ class TemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates = $this->get('repository.sheet.template_repository')->getBaseTemplate();
+        $templates = $this->get('repository.template.sheet_template_repository')->getBaseTemplate();
 
         $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
@@ -70,7 +69,7 @@ class TemplateController extends Controller
 
             return $this->redirectToRoute('admin_template_builder', [
                 'template' => $result->template->getId(),
-                'locale'   => $request->getLocale(),
+                'locale'   => $result->template->getFallback(),
             ]);
         }
 
@@ -101,8 +100,8 @@ class TemplateController extends Controller
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
         $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
-        $baseTemplates      = $this->get('repository.sheet.template_repository')->getBaseTemplates();
-        $organizerTemplates = $this->get('repository.sheet.template_repository')->getOrganizerTemplates($events, $filters);
+        $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
+        $organizerTemplates = $this->get('repository.template.sheet_template_repository')->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
@@ -129,12 +128,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse|Response
      */
-    public function duplicateAction(Request $request, Template $template)
+    public function duplicateAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
@@ -160,12 +159,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse|Response
      */
-    public function duplicateOrganizerTemplateAction(Request $request, Template $template)
+    public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
 
@@ -193,12 +192,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Template $template
-     * @param string   $locale
+     * @param SheetTemplate $template
+     * @param string        $locale
      *
      * @return Response
      */
-    public function builderAction(Template $template, $locale)
+    public function builderAction(SheetTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
@@ -210,9 +209,16 @@ class TemplateController extends Controller
             throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
         }
 
+        // Update form
+        $updateForm = $this->createForm(UpdateType::class, new Update($template), [
+            'action'   => $this->generateUrl('admin_template_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        // Add locale form
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $addLocale     = new AddLocale($template);
-            $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
+            $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
                 'action'   => $this->generateUrl('admin_template_add_locale', ['template' => $template->getId()]),
                 'submit'   => true,
                 'template' => $template,
@@ -221,10 +227,12 @@ class TemplateController extends Controller
             $addLocaleForm = null;
         }
 
+        // Queries
         $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
         $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
+        // Add warning if some locales translations are incompletes
         if (!empty($incompletes)) {
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
         }
@@ -232,6 +240,7 @@ class TemplateController extends Controller
         return $this->render('AdminBundle:Template:builder.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
+            'update_form'     => $updateForm->createView(),
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures
@@ -239,12 +248,12 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
+     * @param Request       $request
+     * @param SheetTemplate $template
      *
      * @return RedirectResponse
      */
-    public function addLocaleAction(Request $request, Template $template)
+    public function addLocaleAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
@@ -275,13 +284,13 @@ class TemplateController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param Template $template
-     * @param string   $locale
+     * @param Request       $request
+     * @param SheetTemplate $template
+     * @param string        $locale
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, Template $template, $locale)
+    public function saveAction(Request $request, SheetTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
@@ -297,5 +306,31 @@ class TemplateController extends Controller
         $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param Request       $request
+     * @param SheetTemplate $template
+     * @param string        $locale
+     *
+     * @return RedirectResponse
+     */
+    public function updateAction(Request $request, SheetTemplate $template, $locale)
+    {
+        $command = new Update($template);
+        $form = $this->createForm(UpdateType::class, $command, [
+            'action'   => $this->generateUrl('admin_template_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'submit'   => true,
+            'template' => $template,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+        }
+
+        return $this->redirectToRoute('admin_template_builder', [
+            'template' => $template->getId(),
+            'locale'   => $locale,
+        ]);
     }
 }

@@ -725,6 +725,18 @@ form:
         children:
             title:
                 label: Titre
+            locale:
+                label: Langue
+            close:
+                label: Annuler
+            submit:
+                label: Enregistrer
+    sheet_template_update:
+        children:
+            title:
+                label: Titre
+            fallback:
+                label: Langue par defaut
             close:
                 label: Annuler
             submit:

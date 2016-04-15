@@ -14,24 +14,24 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $template = new Template('Toto', [], [], $dateTime);
+        $template = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $duplicate   = new Duplicate($template, $dateTime);
         $duplicate->title = 'Machin';
 
         //expected
-        $expectedTemplate = new Template('Machin', [], [], $dateTime);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
@@ -45,21 +45,21 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime = new \DateTime();
         $event  = new Event();
-        $event2 = new Event();
-        $template = new Template('Toto', [], [], $dateTime);
+        $event->setLocales(['fr'], 'fr');
+        $template = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $template->setEvent($event);
 
         $duplicate   = new Duplicate($template, $dateTime);
         $duplicate->title = 'Machin';
-        $duplicate->event = $event2;
+        $duplicate->event = $event;
 
         //expected
-        $expectedTemplate = new Template('Machin', [], [], $dateTime);
-        $expectedTemplate->setEvent($event2);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
+        $expectedTemplate->setEvent($event);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler

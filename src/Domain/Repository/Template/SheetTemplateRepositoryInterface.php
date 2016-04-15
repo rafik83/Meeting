@@ -8,31 +8,31 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository\Sheet;
+namespace Proximum\Vimeet\Domain\Repository\Template;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-interface TemplateRepositoryInterface
+interface SheetTemplateRepositoryInterface
 {
     /**
-     * @return Template[]
+     * @return SheetTemplate[]
      */
     public function all();
 
     /**
-     * @return Template[]
+     * @return SheetTemplate[]
      */
     public function getBaseTemplate();
 
     /**
      * @param array $events
      *
-     * @return Template[]
+     * @return SheetTemplate[]
      */
     public function getTemplateForGivenEvents(array $events);
 
     /**
-     * @return Template[]
+     * @return SheetTemplate[]
      */
     public function getBaseTemplates();
 
@@ -40,17 +40,17 @@ interface TemplateRepositoryInterface
      * @param array $events
      * @param array $filters
      *
-     * @return Template[]
+     * @return SheetTemplate[]
      */
     public function getOrganizerTemplates(array $events, array $filters);
 
     /**
-     * @param Template $template
+     * @param SheetTemplate $template
      */
-    public function add(Template $template);
+    public function add(SheetTemplate $template);
 
     /**
-     * @param Template $template
+     * @param SheetTemplate $template
      */
-    public function set(Template $template);
+    public function set(SheetTemplate $template);
 }

@@ -11,21 +11,21 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\TemplateException;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class AddLocaleHandler
 {
     /**
-     * @var TemplateRepositoryInterface
+     * @var SheetTemplateRepositoryInterface
      */
     private $templateRepository;
 
     /**
      * AddLocaleHandler constructor.
      *
-     * @param TemplateRepositoryInterface $templateRepository
+     * @param SheetTemplateRepositoryInterface $templateRepository
      */
-    public function __construct(TemplateRepositoryInterface $templateRepository)
+    public function __construct(SheetTemplateRepositoryInterface $templateRepository)
     {
         $this->templateRepository = $templateRepository;
     }

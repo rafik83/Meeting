@@ -283,7 +283,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
-     * Get type packageTemplate.
+     * Get type sheetTemplate.
      *
      * @return array
      */

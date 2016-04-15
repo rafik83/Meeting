@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
-class SaveHandler
+class UpdateHandler
 {
     /**
      * @var SheetTemplateRepositoryInterface
@@ -20,7 +20,7 @@ class SaveHandler
     private $templateRepository;
 
     /**
-     * SaveHandler constructor.
+     * UpdateHandler constructor.
      *
      * @param SheetTemplateRepositoryInterface $templateRepository
      */
@@ -30,12 +30,11 @@ class SaveHandler
     }
 
     /**
-     * @param Save $save
+     * @param Update $update
      */
-    public function handle(Save $save)
+    public function handle(Update $update)
     {
-        $save->template->setValue($save->value);
-
-        $this->templateRepository->set($save->template);
+        $update->template->update($update->title, $update->fallback);
+        $this->templateRepository->set($update->template);
     }
 }

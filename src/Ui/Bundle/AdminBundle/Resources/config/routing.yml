@@ -536,8 +536,15 @@ admin_template_builder:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_save:
-    path: /template/{template}/{locale}
+    path: /template/{template}/{locale}/save
     defaults: { _controller: AdminBundle:Template:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+admin_template_update:
+    path: /template/{template}/{locale}/update
+    defaults: { _controller: AdminBundle:Template:update }
     methods: [POST]
     requirements:
         template: \d+

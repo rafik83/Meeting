@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Sheet\Template:
+Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
     type:  entity
     table: sheet_template
     id:
@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Sheet\Template:
             type: string
         locales:
             type: json_array
+        fallback:
+            type: string
+            length: 5
         value:
             type: json_array
         createdAt:

@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
-use Proximum\Vimeet\Domain\Model\Sheet\Template;
-use Proximum\Vimeet\Domain\Repository\Sheet\TemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +25,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->title = 'Toto';
 
         //expected
-        $expectedTemplate = new Template('Toto', [], ['fr'], $dateTime);
+        $expectedTemplate = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $expectedResult   = new CreateResult($expectedTemplate);
 
         // Mock
-        $templateRepository = $this->prophesize(TemplateRepositoryInterface::class);
+        $templateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler

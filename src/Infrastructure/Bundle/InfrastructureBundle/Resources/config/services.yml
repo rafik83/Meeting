@@ -146,8 +146,8 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.sheet.template_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\TemplateRepository
+    repository.template.sheet_template_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Template\SheetTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.nomenclature_repository:
@@ -738,17 +738,23 @@ services:
     command.sheet.template.create_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Create }
     command.sheet.template.duplicate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate }
+    command.sheet.template.update_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\UpdateHandler
+        arguments:
+            - '@repository.template.sheet_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Update }
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
@@ -759,20 +765,20 @@ services:
     command.sheet.template.create_for_event_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent }
     command.sheet.template.add_locale_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale }
     command.sheet.template.save_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SaveHandler
         arguments:
-            - '@repository.sheet.template_repository'
+            - '@repository.template.sheet_template_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
