@@ -14,18 +14,18 @@ use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class SheetTemplate extends AbstractTemplate
+class RegistrationTemplate extends AbstractTemplate
 {
     /**
-     * SheetTemplate constructor.
+     * RegistrationTemplate constructor.
      *
-     * @param string             $title
-     * @param array              $value
-     * @param array              $locales
-     * @param string             $fallback
-     * @param \DateTimeInterface $createdAt
+     * @param string            $title
+     * @param array             $value
+     * @param array             $locales
+     * @param string            $fallback
+     * @param DateTimeInterface $createdAt
      */
-    public function __construct($title, array $value, array $locales, $fallback, \DateTimeInterface $createdAt)
+    public function __construct($title, array $value, array $locales, $fallback, DateTimeInterface $createdAt)
     {
         $this->title     = $title;
         $this->value     = $value;
@@ -52,16 +52,6 @@ class SheetTemplate extends AbstractTemplate
     }
 
     /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * Get value
      *
      * @return string
@@ -69,6 +59,16 @@ class SheetTemplate extends AbstractTemplate
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
@@ -85,6 +85,41 @@ class SheetTemplate extends AbstractTemplate
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * Get locales available for the current event if set, else get all locales.
+     *
+     * @return array
+     */
+    public function getEnabledLocales()
+    {
+        return $this->event ? array_filter($this->locales, function ($locale) {
+            return $this->event->hasLocale($locale);
+        }) : $this->locales;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->event ? $this->event->getFallback() : $this->fallback;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return SheetTemplate
+     */
+    public function addLocale($locale)
+    {
+        if (!$this->hasLocale($locale) && $locale !== null) {
+            $this->locales[] = $locale;
+            $this->fixValue([$locale]);
+        }
+
+        return $this;
     }
 
     /**
@@ -146,36 +181,19 @@ class SheetTemplate extends AbstractTemplate
     }
 
     /**
-     * Get locales available for the current event if set, else get all locales.
-     *
-     * @return array
-     */
-    public function getEnabledLocales()
-    {
-        return $this->event ? array_filter($this->locales, function ($locale) {
-            return $this->event->hasLocale($locale);
-        }) : $this->locales;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFallback()
-    {
-        return $this->event ? $this->event->getFallback() : $this->fallback;
-    }
-
-    /**
-     * @param string $locale
+     * @param string $title
+     * @param string $fallback
      *
      * @return SheetTemplate
      */
-    public function addLocale($locale)
+    public function update($title, $fallback)
     {
-        if (!$this->hasLocale($locale) && $locale !== null) {
-            $this->locales[] = $locale;
-            $this->fixValue([$locale]);
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
         }
+
+        $this->title    = $title;
+        $this->fallback = $fallback;
 
         return $this;
     }
@@ -200,23 +218,5 @@ class SheetTemplate extends AbstractTemplate
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
-    }
-
-    /**
-     * @param string $title
-     * @param string $fallback
-     *
-     * @return SheetTemplate
-     */
-    public function update($title, $fallback)
-    {
-        if (!$this->hasLocale($fallback)) {
-            throw new \InvalidArgumentException('Default locale should be in the template locales.');
-        }
-
-        $this->title    = $title;
-        $this->fallback = $fallback;
-
-        return $this;
     }
 }

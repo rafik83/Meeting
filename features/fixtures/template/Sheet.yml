@@ -2,6 +2,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
   template_asd_days:
       __construct: false
       title: "Template ASD Days"
+      locales: ['fr']
+      fallback: 'fr'
       createdAt: <dateTimeBetween('-10days', 'now')>
       value:
           69b3cde3:
@@ -14,11 +16,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "editable-text"
                   config:
                     label:
-                        fr: "Titre de votre fiche"
+                      fr: "Titre de votre fiche"
                     placeholder:
-                        fr: "Société en une phrase"
+                      fr: "Société en une phrase"
                     help:
-                        fr: ""
+                      fr: ""
                     length: "200"
                     type: "title"
                     required: true
@@ -50,7 +52,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                               type: "tag"
                               config:
                                 label:
-                                    fr: "Catégorie"
+                                  fr: "Catégorie"
                                 tag: "sheet_organization"
                           -
                             90713a3d:
@@ -58,10 +60,9 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                               type: "button-link"
                               config:
                                 label:
-                                    fr: "Site internet"
-                                url: null
+                                  fr: "Site internet"
                                 help:
-                                    fr: ""
+                                  fr: ""
                                 required: false
                     -
                       d691d21c:
@@ -82,11 +83,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Compétences Aéronautiques"
+                      fr: "Compétences Aéronautiques"
                     placeholder:
-                        fr: ""
+                      fr: ""
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "1"
                 2423e6ea:
@@ -94,11 +95,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Compétences Défenses"
+                      fr: "Compétences Défenses"
                     placeholder:
-                        fr: ""
+                      fr: ""
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "1"
                 75adad94:
@@ -116,8 +117,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             fr: ""
                           help:
                             fr: ""
-                          length: null
-                          type: null
                           required: false
                     -
                       1adc1873:
@@ -149,11 +148,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Equipements, technologies et process"
+                      fr: "Equipements, technologies et process"
                     placeholder:
-                        fr: ""
+                      fr: ""
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "3"
               -
@@ -162,11 +161,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Groupe / Membre"
+                      fr: "Groupe / Membre"
                     placeholder:
-                        fr: ""
+                      fr: ""
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "3"
                 696dc236:
@@ -174,11 +173,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Repères"
+                      fr: "Repères"
                     placeholder:
-                        fr: ""
+                      fr: ""
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "3"
                 a23a2f5d:
@@ -186,11 +185,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "collection"
                   config:
                     label:
-                        fr: "Certifications"
+                      fr: "Certifications"
                     placeholder:
-                        fr: "vos certifications"
+                      fr: "vos certifications"
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "3"
                 bef61d39:
@@ -198,18 +197,18 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                   type: "participant"
                   config:
                     label:
-                        fr: "Participants"
+                      fr: "Participants"
                     numberOfParticipantShown: "3"
                 211efd1f:
                   component: "object"
                   type: "collection"
                   config:
                     label:
-                        fr: "Médias"
+                      fr: "Médias"
                     placeholder:
-                        fr: "Vos médias"
+                      fr: "Vos médias"
                     help:
-                        fr: ""
+                      fr: ""
                     required: false
                     default: "3"
           69962d34:
