@@ -257,10 +257,10 @@ function TemplateBlock(element, builder)
 {
     this.element         = element;
     this.builder         = builder;
-    this.form            = new Form(element);
     this.config          = JSON.parse(this.element.getAttribute('data-config'));
     this.configureModal  = element.querySelector('.configure-modal');
     this.configureButton = element.querySelector('.configure-button');
+    this.form            = new Form(this.configureModal);
     this.saveButton      = this.configureModal.querySelector('.save-configuration');
 
     // UID
@@ -321,7 +321,7 @@ TemplateBlock.prototype.fill = function ()
 
 TemplateBlock.prototype.save = function ()
 {
-    this.config.required = this.form.get('style');
+    this.config.style = this.form.get('style');
 };
 
 TemplateBlock.prototype.sortable = function (element)
