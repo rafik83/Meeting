@@ -6,9 +6,9 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Titre</th>
-        <th>Créé le</th>
-        <th class="text-right">Action</th>
+        <th>{{ 'admin.template.registration.table.column.title'|trans }}</th>
+        <th>{{ 'admin.template.registration.table.column.createdAt'|trans }}</th>
+        <th class="text-right">{{ 'admin.template.registration.table.column.action'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -17,22 +17,23 @@
                 <td>{{ template.title }}</td>
                 <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">{{ 'admin.template.registration.table.content.edit'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
 
+{% if templatesOrganizer|length %}
 <h1 class="page-header">Templates d'Inscription des organisateurs</h1>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Titre</th>
-        <th>Événement/Type(s)</th>
-        <th>Créé le</th>
-        <th class="text-right">Action</th>
+        <th>{{ 'admin.template.registration.table.column.title'|trans }}</th>
+        <th>{{ 'admin.template.registration.table.column.eventType'|trans }}</th>
+        <th>{{ 'admin.template.registration.table.column.createdAt'|trans }}</th>
+        <th class="text-right">{{ 'admin.template.registration.table.column.action'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -51,11 +52,12 @@
             </td>
             <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
             <td class="text-right">
-                <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">{{ 'admin.template.registration.table.content.edit'|trans }}</a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+{% endif %}
 
 {% endblock %}

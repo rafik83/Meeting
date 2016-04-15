@@ -491,5 +491,16 @@ admin:
                 date: Date de création
                 action: Action
     template:
+        sheet:
+            link: Template de Participation
         registration:
+            link: Template d'Inscription
             update: Modifier le template d'Inscription
+            table:
+                column:
+                    title: Titre
+                    eventType: Événement/Type(s)
+                    createdAt: Créé le
+                    action: Action
+                content:
+                    edit: Modifier
