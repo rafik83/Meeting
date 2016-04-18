@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Guideline;
 
+use Behat\Transliterator\Transliterator;
 use Proximum\Vimeet\Domain\Model\Event;
-
-use Proximum\Vimeet\Application\Components\Slug\Generator as SlugGenerator;
 
 class Generator
 {
@@ -22,18 +21,28 @@ class Generator
     private $assetsPath;
 
     /**
-     * @var SlugGenerator
+     * @var \Twig_Environment
      */
-    private $slugGenerator;
+    private $twig;
 
     /**
-     * @param string        $assetsPath
-     * @param SlugGenerator $slugGenerator
+     * @var string
      */
-    public function __construct($assetsPath, SlugGenerator $slugGenerator)
-    {
-        $this->assetsPath    = $assetsPath;
-        $this->slugGenerator = $slugGenerator;
+    private $bundleGuidelinePath;
+
+    /**
+     * @param \Twig_Environment $twig
+     * @param string            $webAssetsPath
+     * @param string            $bundleGuidelinePath
+     */
+    public function __construct(
+        \Twig_Environment $twig,
+        $webAssetsPath,
+        $bundleGuidelinePath
+    ) {
+        $this->webAssetsPath       = $webAssetsPath;
+        $this->twig                = $twig;
+        $this->bundleGuidelinePath = $bundleGuidelinePath;
     }
 
     /**
@@ -47,22 +56,25 @@ class Generator
         $gradientRightColor = $event->getConfiguration()->getRightColor();
         $colorHighlighted   = $event->getConfiguration()->getTextColor();
 
-        $repo = $this->slugGenerator->slugify($event->getTitle());
+        $repoName = Transliterator::urlize($event->getTitle());
 
-        $this->createDirIfNotExist($this->assetsPath);
+        $this->createDirIfNotExist($this->webAssetsPath);
 
-        $fullPath = $this->assetsPath . '/' . $repo;
+        $fullPath = $this->webAssetsPath . '/' . $repoName;
 
         $this->createDirIfNotExist($fullPath);
 
-        $content  = implode($this->getBaseAssetVars(), "\n");
-        $content .= "\n";
-        $content .= sprintf('$gradient-left-color: %s;', $gradientLeftColor) . "\n";
-        $content .= sprintf('$gradient-right-color: %s;', $gradientRightColor) . "\n";
-        $content .= sprintf('$color-high-lighted: %s;', $colorHighlighted) . "\n";
-        $varsFileName = sha1(uniqid()) . '.scss';
+        $file = $this->twig->loadTemplate('AdminBundle:Asset:eventGuidelineVars.scss.twig')->render([
+            'gradientLeftColor'  => $gradientLeftColor,
+            'gradientRightColor' => $gradientRightColor,
+            'colorHighLighted'   => $colorHighlighted,
+            'guideline_path'     => $this->bundleGuidelinePath,
+        ]);
 
-        file_put_contents($fullPath . '/' . $varsFileName, $content);
+        $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';
+        $mainFileName = 'main-' . sha1(uniqid()) . '.css';
+
+        file_put_contents($fullPath . '/' . $varsFileName, $file);
 
         $this->removeOldFiles($fullPath, $varsFileName);
 
@@ -90,25 +102,5 @@ class Generator
                 unlink($filename);
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    private static function getBaseAssetVars()
-    {
-        return [
-            '$bg-body-color: #FFFFFF;',
-            '$bg-container-color: #E8E8E9;',
-            '$bg-container-darkened-color: #D8D8D8;',
-            '$bg-success-color: #67BB1F;',
-            '$bg-fail-color: #FF4902;',
-            '$gradient-text-color: #FFFFFF;',
-            '$color-primary: #2F2F2F;',
-            '$color-notification: #FF4902;',
-            '$button-text-color: #FFFFFF;',
-            '$button-bg-color-inactive: rgba(#FFFFFF, .15);',
-            '$button-bg-color-inactive-hover: rgba(#FFFFFF, .3);',
-        ];
     }
 }
