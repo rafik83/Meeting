@@ -33,7 +33,8 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
             '211b2168' => [
                 'component' => 'block',
                 'type'      => '8-4',
-                'config'    => [
+                'config'    => [],
+                'children'  => [
                     [
                         '0aea62b2' => [
                             'component' => 'object',
@@ -65,7 +66,8 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
             '211b2168' => [
                 'component' => 'block',
                 'type'      => '8-4',
-                'config'    => [
+                'config'    => [],
+                'children'  => [
                     [
                         '0aea62b2' => [
                             'component' => 'object',
@@ -111,7 +113,8 @@ class AddLocaleHandlerTest extends \PHPUnit_Framework_TestCase
             '211b2168' => [
                 'component' => 'block',
                 'type'      => '8-4',
-                'config'    => [
+                'config'    => [],
+                'children'  => [
                     [
                         '0aea62b2' => [
                             'component' => 'object',

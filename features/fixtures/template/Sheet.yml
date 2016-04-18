@@ -9,7 +9,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
           69b3cde3:
             component: "block"
             type: "8-4"
-            config:
+            config: []
+            children:
               -
                 dcc42d3d:
                   component: "object"
@@ -27,7 +28,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                 291c7190:
                   component: "block"
                   type: "6-6"
-                  config:
+                  config: []
+                  children:
                     -
                       1b9a00b3:
                         component: "object"
@@ -45,7 +47,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                       6fe62a03:
                         component: "block"
                         type: "6-6"
-                        config:
+                        config: []
+                        children:
                           -
                             fb030569:
                               component: "object"
@@ -105,7 +108,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                 75adad94:
                   component: "block"
                   type: "6-6"
-                  config:
+                  config: []
+                  children:
                     -
                       848e283e:
                         component: "object"
@@ -214,7 +218,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
           69962d34:
             component: "block"
             type: "12"
-            config:
+            config: []
+            children:
               -
                 27db4a35:
                   component: "object"
@@ -226,7 +231,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                 76a5e149:
                   component: "block"
                   type: "6-6"
-                  config:
+                  config: []
+                  children:
                     -
                       03b394ac:
                         component: "object"
