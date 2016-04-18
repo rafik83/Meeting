@@ -52,14 +52,14 @@
         <div class="col-md-4">
             <div class="block-inner">
                 {% for uid, item in children[1]|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures  }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures  }, false) }}
                 {% endfor %}
             </div>
         </div>
         <div class="col-md-8">
             <div class="block-inner">
                 {% for uid, item in children[0]|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures  }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures  }, false) }}
                 {% endfor %}
             </div>
         </div>
