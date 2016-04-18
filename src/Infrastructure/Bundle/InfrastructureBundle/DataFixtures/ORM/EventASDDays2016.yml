@@ -823,6 +823,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 3
         maxPlanning: 2
         freeParticipant: 1
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant'
         oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
@@ -834,6 +835,7 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
         participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
         oldSheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
@@ -845,33 +847,36 @@ Proximum\Vimeet\Domain\Model\Type:
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
         participantTemplate: '@event_asddays_2016_template_investisseur->participant' # same participant template as Fournisseur
         oldSheetTemplate: '@event_asddays_2016_template_investisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_investisseur->package'
         previewTemplate: '@event_asddays_2016_template_investisseur->preview'
-        
+
     event_asddays_2016_type_structure_de_recherche:
         __construct: ["@event_asddays_2016"]
         position: 2
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
         oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
-    
+
     event_asddays_2016_type_delegation:
         __construct: ["@event_asddays_2016"]
         position: 2
         maxParticipant: 4
         maxPlanning: 4
         freeParticipant: 1
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
         participantTemplate: '@event_asddays_2016_template_fournisseur->participant' # same participant template as Fournisseur
         oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
-        
+
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_fournisseur_fr:
         __construct: ['@event_asddays_2016_type_fournisseur', fr, "Fournisseur"]
@@ -893,3 +898,335 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         __construct: ['@event_asddays_2016_type_delegation', fr, "Délégation"]
     event_asddays_2016_type_delegation_en:
         __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]
+
+Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
+    #
+    # Sheet template "fournisseur"
+    #
+    sheet_template_fournisseur_asddays:
+        __construct: false
+        title: "Template ASD Days fournisseur"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        value:
+            69b3cde3:
+                component: "block"
+                type: "8-4"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        dcc42d3d:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Titre de votre fiche"
+                                placeholder:
+                                    fr: "Société en une phrase"
+                                help:
+                                    fr: ""
+                                length: "200"
+                                type: "title"
+                                required: true
+                        291c7190:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    1b9a00b3:
+                                        component: "object"
+                                        type: "image"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Logo"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            length: null
+                                            type: null
+                                            required: false
+                                    6fe62a03:
+                                        component: "block"
+                                        type: "6-6"
+                                        config:
+                                            style: "style-1"
+                                        children:
+                                            -
+                                                fb030569:
+                                                    component: "object"
+                                                    type: "tag"
+                                                    config:
+                                                        style: "style-1"
+                                                        label:
+                                                            fr: "Catégorie"
+                                                        tag: "sheet_organization"
+                                            -
+                                                90713a3d:
+                                                    component: "object"
+                                                    type: "button-link"
+                                                    config:
+                                                        style: "style-1"
+                                                        label:
+                                                            fr: "Site internet"
+                                                        help:
+                                                            fr: ""
+                                                        required: false
+                                -
+                                    d691d21c:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description d'activité"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            length: "500"
+                                            type: "text"
+                                            required: false
+                        e438c993:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Compétences Aéronautiques"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: 1
+                        2423e6ea:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Compétences Défenses"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "1"
+                        75adad94:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    848e283e:
+                                        component: "object"
+                                        type: "image"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Slideshow"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            required: false
+                                -
+                                    1adc1873:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Clients de référence"
+                                            placeholder:
+                                                fr: "Vos clients de référence"
+                                            help:
+                                                fr: ""
+                                            required: true
+                                            default: "1"
+                                    46663c1d:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Projets innovant"
+                                            placeholder:
+                                                fr: "Vos projets innovant"
+                                            help:
+                                                fr: ""
+                                            required: false
+                                            default: "3"
+                        097ab5e8:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Equipements, technologies et process"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                    -
+                        79271999:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Groupe / Membre"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        696dc236:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Repères"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        a23a2f5d:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Certifications"
+                                placeholder:
+                                    fr: "vos certifications"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                        bef61d39:
+                            component: "object"
+                            type: "participant"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Participants"
+                                numberOfParticipantShown: "3"
+                        211efd1f:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Médias"
+                                placeholder:
+                                    fr: "Vos médias"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+            69962d34:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        27db4a35:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: "Objectifs de participation"
+                                type: "titre"
+                        37db4a33:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    03b394ac:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Offres"
+                                            placeholder:
+                                                fr: "Vos offres"
+                                            help:
+                                                fr: "Vos offres"
+                                            required: true
+                                            default: "3"
+                                    63ccc105:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Besoins"
+                                            placeholder:
+                                                fr: "Vos besoins"
+                                            help:
+                                                fr: "Vos besoins"
+                                            required: true
+                                            default: "3"
+                                -
+                                    d927a04b:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description"
+                                            placeholder:
+                                                fr: "Description"
+                                            help:
+                                                fr: "Description"
+                                            length: "500"
+                                            type: "text"
+                                            required: false
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_asddays_1:
+        __construct: false
+        type: '@event_asddays_2016_type_fournisseur'
+        event: '@event_asddays_2016'
+        data:
+            dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
+            1b9a00b3: "onera.jpg"
+            fb030569: "Laboratoire public"
+            90713a3d: { label: { fr: Site internet }, url: "http://www.onera.fr/" }
+            d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
+            e438c993: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
+            2423e6ea: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
+            848e283e: "onera.jpg"
+            1adc1873: ["CNES", "CNRS", "Daher", "Dassault", "Dewe France", "DGAC", "DLR", "Durr", "Embraer", "Esa", "Honeywell", "Aircelle", "Messier Bugatti Dowty", "Snecma", "Turbomeca", "Zodiac Aerospace"]
+            46663c1d: ["Radar passif aéroporté", "Optique adaptative de SPHERE", "Initiative sur lanceurs réutilisables", "RAPID, un détecteur infrarouge révolutionnaire"]
+            097ab5e8: ["Fortes praepositis", "Agmina obluridi", "Atratum ioculatores", "Virgae coniunctis", "Velut incedit", "Post adegerit", "Ministerium", "Praepositis servitium"]
+            696dc236: ["2001 salariés", "207 M€ de CA en 2015", "Activitées en coopération : 25%", "Activités sur contrats : 47%", "1er parc de souffleries en Europe", "8 centres en France"]
+            79271999: ["Pôle de compétivité Astech", "Instituts Carnot", "Optitec"]
+            a23a2f5d: ["EN9100", "ISO14001", "OHSAS18001", "CAP26000", "ISO14001", "CAP26000"]
+            211efd1f: ["Brochure de présentation", "Projet Horizon 2020"]
+            03b394ac: ["Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure"]
+            63ccc105: ["Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure"]
+            d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
+        packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>

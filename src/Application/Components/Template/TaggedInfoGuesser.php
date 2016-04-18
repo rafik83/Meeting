@@ -37,12 +37,16 @@ class TaggedInfoGuesser
      */
     public function guess(array $template, array $data, $tag, $locale = null)
     {
-        $values = array_values($template);
-        $first  = reset($values);
+        try {
+            $values = array_values($template);
+            $first  = reset($values);
 
-        return isset($first['template'])
-            ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValues($tag, $locale, $data)
-            : $this->templateFactory->createTemplateFromArray($template)->getTaggedValues($tag, $locale, $data);
+            return isset($first['template'])
+                ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValues($tag, $locale, $data)
+                : $this->templateFactory->createTemplateFromArray($template)->getTaggedValues($tag, $locale, $data);
+        } catch (\Exception $exception) {
+            return null;
+        }
     }
 
     /**
@@ -56,12 +60,16 @@ class TaggedInfoGuesser
      */
     public function guessFirst(array $template, array $data, $tag, $locale = null, $default = null)
     {
-        $values = array_values($template);
-        $first  = reset($values);
+        try {
+            $values = array_values($template);
+            $first  = reset($values);
 
-        $value = isset($first['template'])
-            ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValue($tag, $locale, $data)
-            : $this->templateFactory->createTemplateFromArray($template)->getTaggedValue($tag, $locale, $data);
+            $value = isset($first['template'])
+                ? $this->templateFactory->createTemplatesFromArray($template)->getTaggedValue($tag, $locale, $data)
+                : $this->templateFactory->createTemplateFromArray($template)->getTaggedValue($tag, $locale, $data);
+        } catch (\Exception $exception) {
+            return null;
+        }
 
         return $value !== null ? $value : $default;
     }
