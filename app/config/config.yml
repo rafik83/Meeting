@@ -7,6 +7,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    event_guideline_path: "%kernel.root_dir%/../web/assets/css/event"
 
 framework:
     #esi:             ~
