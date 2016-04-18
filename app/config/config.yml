@@ -7,7 +7,6 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
-    event_guideline_path: "%kernel.root_dir%/../web/assets/css/event"
 
 framework:
     #esi:             ~
@@ -154,6 +153,8 @@ services:
 
 infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+    web_asset_event_guideline_path: "%kernel.root_dir%/../web/assets/css/event"
+    bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
 
 tactician:
     commandbus:
