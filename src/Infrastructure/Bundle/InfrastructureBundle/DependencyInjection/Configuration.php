@@ -24,6 +24,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('eu_countries')
                     ->prototype('scalar')->end()
                 ->end()
+                ->scalarNode('web_asset_event_guideline_path')->end()
+                ->scalarNode('bundle_guideline_path')->end()
             ->end()
         ;
         return $treeBuilder;
