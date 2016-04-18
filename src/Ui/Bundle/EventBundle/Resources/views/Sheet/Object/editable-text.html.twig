@@ -1,12 +1,14 @@
 
-{% if config.type == 'title' %}
+<section class="object--editable-text">
+    {% if config.type == 'title' %}
+        <header>
+            <h2>{{ data[uid]['text'][locale] }}</h2>
+        </header>
+    {% elseif config.type == 'text' %}
+        <p>{{ data[uid]['text'][locale]|nl2br }}</p>
+    {% endif %}
 
-    <header>
-        <h2>{{ data[uid]['text'][locale] }}</h2>
-    </header>
-
-{% elseif config.type == 'text' %}
-
-    <p>{{ data[uid]['text'][locale]|nl2br }}</p>
-
-{% endif %}
+    <footer>
+        <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+    </footer>
+</section>

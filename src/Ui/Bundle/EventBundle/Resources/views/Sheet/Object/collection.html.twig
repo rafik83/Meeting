@@ -1,0 +1,56 @@
+
+{% if config['style'] == 'style-1' %}
+
+    <section class="object--collection section section--list">
+        <header>
+            <h2>{{ config['label'][locale] }}{% if config['required']|default(false) %}*{% endif %}</h2>
+        </header>
+        <div class="section__content">
+            <ul class="list list--block">
+                {% for list_item in data[uid] %}
+                    <li>{{ list_item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <footer>
+            <i class="icon-Note_2"></i> <a href="">Editer"</a>
+        </footer>
+    </section>
+
+{% elseif config['style'] == 'style-2' %}
+
+    <section class="section section--full">
+        <header>
+            <h2>{{ config['label'][locale] }}{% if config['required']|default(false) %}*{% endif %}</h2>
+        </header>
+        <div class="section__content">
+            <ul class="list list--inline">
+                {% for list_item in data[uid] %}
+                    <li>{{ list_item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <footer>
+            <i class="icon-Note_2"></i> <a href="">Editer</a>
+        </footer>
+    </section>
+
+{% elseif config['style'] == 'style-3' %}
+
+    <section class="section section--white">
+        <header>
+            <h2>{{ config['label'][locale] }}{% if config['required']|default(false) %}*{% endif %}</h2>
+        </header>
+        <div class="section__content">
+            <ul class="list list--inline">
+                {% for list_item in data[uid] %}
+                    <li>{{ list_item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <footer>
+            <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+        </footer>
+    </section>
+
+{% endif %}
