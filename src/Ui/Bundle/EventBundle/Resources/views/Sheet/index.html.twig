@@ -1,0 +1,34 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+
+    <section class="main">
+        <header>
+            <h1><i class="icon-Document_1"></i> Fiche de présentation</h1>
+            <ul class="tabs">
+                <li class="active">
+                    <a href="">
+                        <img src="{{ asset('assets/images/icons/icon-FR.svg') }}">
+                        <span class="name">Français*</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img src="{{ asset('assets/images/icons/icon-UK.svg') }}">
+                        <span class="name">Anglais*</span>
+                    </a>
+                </li>
+            </ul>
+        </header>
+        <div class="main__container row">
+            {% for uid, item in template.value|default([]) %}
+                {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'children': item.children|default([]), 'config': item.config|default([]), 'locale': locale, 'fallback': template.fallback, 'data': data }, false) }}
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

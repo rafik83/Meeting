@@ -71,6 +71,13 @@ event_participate:
 # Sheet
 #
 
+event_sheet_integration:
+    path:     /sheet/{sheet}/integration
+    requirements:
+        sheet: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:index }
+
 event_sheet:
     path:     /sheet/{sheet}
     requirements:

@@ -24,6 +24,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
+    public function indexAction(Request $request, EventView $eventView, Sheet $sheet)
+    {
+        return $this->render('EventBundle:Sheet:index.html.twig', [
+            'eventView' => $eventView,
+            'sheet'     => $sheet,
+            'template'  => $sheet->getType()->getNewSheetTemplate(),
+            'data'      => $sheet->getData(),
+            'locale'    => $request->getLocale(),
+        ]);
+    }
+
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
