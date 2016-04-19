@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
@@ -41,6 +42,8 @@ class CreateHandler
 
     /**
      * @param Create $create
+     *
+     * @throws TypeAlreadyExistsException
      */
     public function handle(Create $create)
     {
@@ -48,8 +51,18 @@ class CreateHandler
         $type->setTemplate($create->template);
         $type->setPosition($create->position);
 
+        $localesTitleAlreadyExists = [];
+
         foreach ($create->translations as $locale => $translation) {
+            if ($this->typeRepository->typeExists($create->event, $locale, $translation['title'])) {
+                $localesTitleAlreadyExists[] = $locale;
+            }
+
             $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
+        }
+
+        if (!empty($localesTitleAlreadyExists)) {
+            throw new TypeAlreadyExistsException($localesTitleAlreadyExists);
         }
 
         if (isset($create->validationCriteria['sheetAccepted'])) {

@@ -322,4 +322,22 @@ class TypeRepository implements TypeRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeExists(Event $event, $locale, $title, $excludedType = null)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id')
+            ->from('Entity:Type', 'type')
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale AND type.event = :event AND translations.title = :title')
+            ->setParameter('event', $event)
+            ->setParameter('title', $title)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getOneOrNullResult() ? true : false;
+    }
 }

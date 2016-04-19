@@ -12,12 +12,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\Update;
+use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,10 +65,18 @@ class TypeController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
-            $this->addFlash('success', 'flash.admin.type.create.success');
+            try {
+                $this->get('tactician.commandbus')->handle($create);
+                $this->addFlash('success', 'flash.admin.type.create.success');
 
-            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+            } catch (TypeAlreadyExistsException $typeAlreadyExistsException) {
+                $error = new FormError($this->get('translator')->trans('admin.type.already_exists'));
+
+                foreach ($typeAlreadyExistsException->getLocales() as $locale) {
+                    $form->get('translations')->get($locale)->get('title')->addError($error);
+                }
+            }
         }
 
         return $this->render('AdminBundle:Type:create.html.twig', [

@@ -335,6 +335,7 @@ admin:
         update:
             link: Modifier
             title: Modifier le type de participation
+        already_exists: Un type de participation au titre identique existe déjà
     category:
         link: Catégories de participation
         add: Ajouter
