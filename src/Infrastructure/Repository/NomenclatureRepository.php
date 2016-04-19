@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class NomenclatureRepository implements NomenclatureRepositoryInterface
 {
@@ -39,6 +40,20 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->select('nomenclature')
             ->from('Entity:Nomenclature', 'nomenclature')
             ->orderBy('nomenclature.label');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent($event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id');
 
         return $queryBuilder->getQuery()->getResult();
     }

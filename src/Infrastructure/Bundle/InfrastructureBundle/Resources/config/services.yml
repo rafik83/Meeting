@@ -49,14 +49,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.nomenclature_item_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureItemRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.schedule_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\ScheduleRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.unavailability_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UnavailabilityRepository
         arguments:

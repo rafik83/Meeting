@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <section class="main section--main section__content">
+    <section class="main">
+
         <header>
             <h1><i class="icon-Document_1"></i> Fiche de présentation</h1>
             <ul class="tabs">
@@ -23,11 +24,21 @@
                 </li>
             </ul>
         </header>
-        <div class="main__container row">
+
+        <div class="main__container">
             {% for uid, item in template.value|default([]) %}
-                {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'children': item.children|default([]), 'config': item.config|default([]), 'locale': locale, 'fallback': template.fallback, 'data': data }, false) }}
+                {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                    'uid': uid,
+                    'children': item.children|default([]),
+                    'config': item.config|default([]),
+                    'locale': locale,
+                    'fallback': template.fallback,
+                    'data': data,
+                    'nomenclatures': nomenclatures
+                }, false) }}
             {% endfor %}
         </div>
+
     </section>
 
 {% endblock %}

@@ -26,12 +26,15 @@ class SheetController extends Controller
 {
     public function indexAction(Request $request, EventView $eventView, Sheet $sheet)
     {
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+
         return $this->render('EventBundle:Sheet:index.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'template'  => $sheet->getType()->getNewSheetTemplate(),
-            'data'      => $sheet->getData(),
-            'locale'    => $request->getLocale(),
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'template'      => $sheet->getType()->getNewSheetTemplate(),
+            'data'          => $sheet->getData(),
+            'locale'        => $request->getLocale(),
+            'nomenclatures' => $nomenclatures,
         ]);
     }
 

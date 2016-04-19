@@ -65,11 +65,14 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="container-fluid">
+                {% block content %}{% endblock %}
+            </div>
+
         </div>
 
-        <div class="container-fluid">
-            {% block content %}{% endblock %}
-        </div>
+
 
             {#
                 <div class="container">

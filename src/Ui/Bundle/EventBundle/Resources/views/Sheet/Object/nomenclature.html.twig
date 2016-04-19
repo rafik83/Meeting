@@ -1,4 +1,76 @@
 
-<div class="object--nomenclature">
-    {{ dump(uid) }}
-</div>
+{% set nomenclature = nomenclatures[config['nomenclature']]|default %}
+
+{% if nomenclature %}
+
+    {% if nomenclature.depth == 1 %}
+
+        <section class="object--nomenclature section">
+            <header>
+                <h2>{{ config['label'][locale] }}</h2>
+            </header>
+            <div class="section__content">
+                <ul class="list list--inline">
+                    {% for child in nomenclature.value %}
+                        <li>{{ child.label[locale] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <footer>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+            </footer>
+        </section>
+
+    {% elseif nomenclature.depth == 2 %}
+
+        <section class="object--nomenclature section section--skill">
+            <header>
+                <h2>{{ config['label'][locale] }}</h2>
+            </header>
+            <div class="section__content">
+                <ul class="list  list--inline">
+                    {% for child in nomenclature.value %}
+                        <li class="highlight">{{ grandchild.label[locale] }}</li>
+                        {% for grandchild in child.children %}
+                            <li>{{ grandchild.label[locale] }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <footer>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+            </footer>
+        </section>
+
+    {% elseif nomenclature.depth == 3 %}
+
+        {% for child in nomenclature.value %}
+
+            <section class="object--nomenclature section section--skill">
+                <header>
+                    <h2>{{ child.label[locale] }}</h2>
+                </header>
+                <div class="section__content">
+                    <ul class="list list--inline">
+                        {% for grandchild in child.children %}
+                            <li class="highlight">{{ grandchild.label[locale] }}</li>
+                            {% for grandgrandchild in grandchild.children %}
+                                <li>{{ grandgrandchild.label[locale] }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <footer>
+                    <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+                </footer>
+            </section>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% else %}
+
+    <section class="object--nomenclature">Missing nomenclature</section>
+
+{% endif %}

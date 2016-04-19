@@ -1,0 +1,62 @@
+
+Proximum\Vimeet\Domain\Model\Nomenclature:
+    nomenclature_asddays_competences:
+        __construct: false
+        title: "Compétences"
+        depth: 3
+        value:
+            ad987cae:
+                label: { fr: "Compétences Aéronautiques" }
+                children:
+                    ecc44d0d:
+                        label: { fr: "Ingénierie & bureau d'études" }
+                        children:
+                            c93def9a: { label: { fr: "Modélisation et calculs" } }
+                            34eab90c: { label: { fr: "Expérimentation & réalisation de prototypes" } }
+                    32ef03cc:
+                        label: { fr: "Informatique" }
+                        children:
+                            cab0332d: { label: { fr: "Modélisation & simulation" } }
+                    2ec033da:
+                        label: { fr: "Instrumentation" }
+                        children:
+                            aaa34eb9: { label: { fr: "Appareils de mesures scientifiques in-situ" } }
+                            bdec99a0: { label: { fr: "Prototypage" } }
+                            b35ae9c7: { label: { fr: "Technologie laser" } }
+            dea09e034:
+                label: { fr: "Compétences Défenses" }
+                children:
+                    acc44d0d:
+                        label: { fr: "Ingénierie & bureau d'études" }
+                        children:
+                            993def9a: { label: { fr: "Modélisation et calculs" } }
+                            e4eab90c: { label: { fr: "Expérimentation & réalisation de prototypes" } }
+                    42ef03cc:
+                        label: { fr: "Informatique" }
+                        children:
+                            dab0332d: { label: { fr: "Modélisation & simulation" } }
+                    5ec033da:
+                        label: { fr: "Instrumentation" }
+                        children:
+                            faa34eb9: { label: { fr: "Appareils de mesures scientifiques in-situ" } }
+                            adec99a0: { label: { fr: "Prototypage" } }
+                            a35ae9c7: { label: { fr: "Technologie laser" } }
+    nomenclature_asddays_offre_besoins:
+        __construct: false
+        title: "Offre et besoins"
+        depth: 1
+        value:
+            ab93de01:
+                label: { "fr": "Ingénierie & Bureau d'études" }
+            ab93de02:
+                label: { "fr": "Modélisation et calculs" }
+            ab93de03:
+                label: { "fr": "Expérimentation & réalisation de prototypes" }
+            ab93de04:
+                label: { "fr": "Informatique" }
+            ab93de05:
+                label: { "fr": "Modélisation & simulation" }
+            ab93de06:
+                label: { "fr": "Instrumentation Appareils de mesures scientifiques in-situ" }
+            ab93de07:
+                label: { "fr": "Prototypage" }

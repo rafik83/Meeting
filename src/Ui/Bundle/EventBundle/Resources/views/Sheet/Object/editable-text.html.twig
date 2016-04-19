@@ -5,6 +5,9 @@
             <h2>{{ data[uid]['text'][locale] }}</h2>
         </header>
     {% elseif config.type == 'text' %}
+        <header>
+            <h2>{{ config['label'][locale] }}</h2>
+        </header>
         <p>{{ data[uid]['text'][locale]|nl2br }}</p>
     {% endif %}
 
