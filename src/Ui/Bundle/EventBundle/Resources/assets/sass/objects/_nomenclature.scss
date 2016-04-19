@@ -1,4 +1,56 @@
 
 .object--nomenclature {
 
+    ul {
+        margin-bottom: 20px;
+
+        > li {
+            display: inline-block;
+            margin-right: 4px;
+
+            &:after {
+                content: '●';
+                color: $color-highlighted;
+                margin-left: 6px;
+            }
+            &:last-child:after { content: ' '; }
+
+            &:nth-child(even) { background: none; }
+            &.highlight {
+                color: $color-highlighted;
+                font-family: OpenSans;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+
+    &.style--style-1 {
+        // transparent background
+    }
+
+    &.style--style-2 {
+        // white background
+        padding: 15px 20px;
+        //margin-bottom: 2px !important;
+        background: #FFFFFF;
+        //&:last-child { margin-bottom: 0 !important; }
+    }
+
+    &.style--style-3 {
+        // white background with left border and bottom shadow
+        padding: 15px 30px;
+        border-left: 2px solid #2F2F2F;
+        background: #FFFFFF;
+        box-shadow: 0 10px 10px 0 rgba(0,0,0,.2);
+
+        &:before {
+            @extend .section-before;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 60px;
+        }
+    }
+
 }

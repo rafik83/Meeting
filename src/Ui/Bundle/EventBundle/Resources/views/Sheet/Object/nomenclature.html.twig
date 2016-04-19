@@ -10,7 +10,7 @@
                 <h2>{{ config['label'][locale] }}</h2>
             </header>
             <div class="section__content">
-                <ul class="list list--inline">
+                <ul>
                     {% for child in nomenclature.value %}
                         <li>{{ child.label[locale] }}</li>
                     {% endfor %}
@@ -23,12 +23,12 @@
 
     {% elseif nomenclature.depth == 2 %}
 
-        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section section--skill">
+        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
                 <h2>{{ config['label'][locale] }}</h2>
             </header>
             <div class="section__content">
-                <ul class="list  list--inline">
+                <ul>
                     {% for child in nomenclature.value %}
                         <li class="highlight">{{ grandchild.label[locale] }}</li>
                         {% for grandchild in child.children %}
@@ -46,12 +46,12 @@
 
         {% for child in nomenclature.value %}
 
-            <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section section--skill">
+            <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
                 <header>
                     <h2>{{ child.label[locale] }}</h2>
                 </header>
                 <div class="section__content">
-                    <ul class="list list--inline">
+                    <ul>
                         {% for grandchild in child.children %}
                             <li class="highlight">{{ grandchild.label[locale] }}</li>
                             {% for grandgrandchild in grandchild.children %}
@@ -71,6 +71,8 @@
 
 {% else %}
 
-    <section class="object object--nomenclature {{ 'style--' ~ config['style'] }}">Missing nomenclature</section>
+    <section class="object object--nomenclature {{ 'style--' ~ config['style'] }}">
+        Missing nomenclature
+    </section>
 
 {% endif %}

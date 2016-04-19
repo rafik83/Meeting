@@ -18,27 +18,6 @@ ul {
   }
 }
 
-.list--inline {
-  > li {
-    display: inline-block;
-    margin-right: 4px;
-
-    &:after {
-      content: '●';
-      color: $color-highlighted;
-      margin-left: 6px;
-    }
-    &:last-child:after { content: ' '; }
-
-    &:nth-child(even) { background: none; }
-    &.highlight {
-      color: $color-highlighted;
-      font-family: OpenSans;
-      text-transform: uppercase;
-    }
-  }
-}
-
 .list--buttons {
   > li {
     margin-bottom: 10px;

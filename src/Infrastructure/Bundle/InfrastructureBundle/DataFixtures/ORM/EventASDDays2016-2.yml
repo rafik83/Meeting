@@ -997,7 +997,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "nomenclature"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
                                     fr: "Compétences"
                                 placeholder:
