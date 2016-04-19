@@ -262,6 +262,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@guideline.generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
