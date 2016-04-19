@@ -11,14 +11,17 @@
 namespace Proximum\Vimeet\Application\Components\Guideline;
 
 use Behat\Transliterator\Transliterator;
+use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class Generator
 {
     /**
      * @var string
      */
-    private $assetsPath;
+    private $webAssetsPath;
 
     /**
      * @var \Twig_Environment
@@ -49,6 +52,7 @@ class Generator
      * @param Event $event
      *
      * @return string
+     * @throws GuidelineAssetBuildFailedException
      */
     public function generate(Event $event)
     {
@@ -76,9 +80,19 @@ class Generator
 
         file_put_contents($fullPath . '/' . $varsFileName, $file);
 
-        $this->removeOldFiles($fullPath, $varsFileName);
+        $process = new Process(sprintf('gulp event-sass --srcFile=%s --destination=%s --buildFile=%s', $varsFileName, $fullPath, $mainFileName));
 
-        return $varsFileName;
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            throw new GuidelineAssetBuildFailedException(
+                sprintf('Error during the gulp event-sass with the message: %s', $e->getMessage())
+            );
+        }
+
+        $this->removeOldFiles($fullPath, $mainFileName);
+
+        return $fullPath . '/' . $varsFileName;
     }
 
     /**
@@ -97,7 +111,13 @@ class Generator
      */
     private function removeOldFiles($path, $newFile)
     {
+        // Delete all scss files
         foreach (glob($path . "/*.scss") as $filename) {
+            unlink($filename);
+        }
+
+        // Delete old css files
+        foreach (glob($path . "/*.css") as $filename) {
             if ($filename !== ($path . "/" . $newFile)) {
                 unlink($filename);
             }
