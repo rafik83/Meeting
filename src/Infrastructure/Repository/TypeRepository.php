@@ -328,15 +328,29 @@ class TypeRepository implements TypeRepositoryInterface
      */
     public function typeExists(Event $event, $locale, $title, $excludedType = null)
     {
-        return $this
+        $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('type.id')
             ->from('Entity:Type', 'type')
-            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale AND type.event = :event AND translations.title = :title')
+            ->join(
+                'type.translations',
+                'translations',
+                'WITH',
+                sprintf(
+                    'type.event = :event AND translations.locale = :locale AND translations.title = :title %s',
+                    null !== $excludedType ? 'AND type.id != :type' : ''
+                )
+            )
             ->setParameter('event', $event)
             ->setParameter('title', $title)
-            ->setParameter('locale', $locale)
+            ->setParameter('locale', $locale);
+
+        if (null !== $excludedType) {
+            $queryBuilder->setParameter('type', $excludedType);
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getOneOrNullResult() ? true : false;
     }

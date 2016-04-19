@@ -108,10 +108,18 @@ class TypeController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.type.update.success');
+            try {
+                $this->get('tactician.commandbus')->handle($update);
+                $this->addFlash('success', 'flash.admin.type.update.success');
 
-            return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_type_list', ['event' => $event->getId()]);
+            } catch (TypeAlreadyExistsException $typeAlreadyExistsException) {
+                $error = new FormError($this->get('translator')->trans('admin.type.already_exists'));
+
+                foreach ($typeAlreadyExistsException->getLocales() as $locale) {
+                    $form->get('translations')->get($locale)->get('title')->addError($error);
+                }
+            }
         }
 
         return $this->render('AdminBundle:Type:update.html.twig', [
