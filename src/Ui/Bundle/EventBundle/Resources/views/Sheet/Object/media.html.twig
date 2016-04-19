@@ -1,0 +1,16 @@
+
+<section class="object--media section section--full">
+    <header>
+        <h2>{{ config['label'][locale] }}</h2>
+    </header>
+    <div class="section__content">
+        <ul class="list list--medias">
+            {% for media in data[uid] %}
+                <li><i class="icon-Document_1"></i> <a href="">{{ media }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <footer>
+        <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+    </footer>
+</section>

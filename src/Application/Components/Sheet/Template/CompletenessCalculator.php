@@ -47,7 +47,7 @@ class CompletenessCalculator
         }
 
         if ($config['component'] === 'block') {
-            return array_reduce($config['config'], function (array $carry, array $column) {
+            return array_reduce($config['children'], function (array $carry, array $column) {
                 return array_merge($carry, $this->getTranslatables($column));
             }, []);
         }

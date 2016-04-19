@@ -1028,7 +1028,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 -
                                     848e283e:
                                         component: "object"
-                                        type: "image"
+                                        type: "carousel"
                                         config:
                                             style: "style-1"
                                             label:
@@ -1043,7 +1043,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                         component: "object"
                                         type: "collection"
                                         config:
-                                            style: "style-1"
+                                            style: "style-3"
                                             label:
                                                 fr: "Clients de référence"
                                             placeholder:
@@ -1056,7 +1056,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                         component: "object"
                                         type: "collection"
                                         config:
-                                            style: "style-1"
+                                            style: "style-3"
                                             label:
                                                 fr: "Projets innovant"
                                             placeholder:
@@ -1079,6 +1079,19 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 required: false
                                 default: "3"
                     -
+                        696dc236:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Repères"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: true
+                                default: "3"
                         79271999:
                             component: "object"
                             type: "collection"
@@ -1092,24 +1105,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
-                        696dc236:
-                            component: "object"
-                            type: "collection"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Repères"
-                                placeholder:
-                                    fr: ""
-                                help:
-                                    fr: ""
-                                required: false
-                                default: "3"
                         a23a2f5d:
                             component: "object"
                             type: "collection"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 label:
                                     fr: "Certifications"
                                 placeholder:
@@ -1128,7 +1128,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 numberOfParticipantShown: "3"
                         211efd1f:
                             component: "object"
-                            type: "collection"
+                            type: "media"
                             config:
                                 style: "style-1"
                                 label:
@@ -1156,10 +1156,25 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 type: "titre"
                         37db4a33:
                             component: "block"
-                            type: "6-6"
+                            type: "4-8"
                             config:
                                 style: "style-1"
                             children:
+                                -
+                                    d927a04b:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description"
+                                            placeholder:
+                                                fr: "Description"
+                                            help:
+                                                fr: "Description"
+                                            length: "500"
+                                            type: "text"
+                                            required: false
                                 -
                                     03b394ac:
                                         component: "object"
@@ -1187,21 +1202,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos besoins"
                                             required: true
                                             default: "3"
-                                -
-                                    d927a04b:
-                                        component: "object"
-                                        type: "editable-text"
-                                        config:
-                                            style: "style-1"
-                                            label:
-                                                fr: "Description"
-                                            placeholder:
-                                                fr: "Description"
-                                            help:
-                                                fr: "Description"
-                                            length: "500"
-                                            type: "text"
-                                            required: false
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -1216,7 +1216,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
             e438c993: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
             2423e6ea: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
-            848e283e: "onera.jpg"
+            848e283e: []
             1adc1873: ["CNES", "CNRS", "Daher", "Dassault", "Dewe France", "DGAC", "DLR", "Durr", "Embraer", "Esa", "Honeywell", "Aircelle", "Messier Bugatti Dowty", "Snecma", "Turbomeca", "Zodiac Aerospace"]
             46663c1d: ["Radar passif aéroporté", "Optique adaptative de SPHERE", "Initiative sur lanceurs réutilisables", "RAPID, un détecteur infrarouge révolutionnaire"]
             097ab5e8: ["Fortes praepositis", "Agmina obluridi", "Atratum ioculatores", "Virgae coniunctis", "Velut incedit", "Post adegerit", "Ministerium", "Praepositis servitium"]
