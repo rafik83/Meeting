@@ -1,4 +1,42 @@
 
 .object--media {
 
+    // Blue background
+    color: $gradient-text-color;
+    padding: 20px;
+    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+    a {
+        font-family: openSans;
+        color: $gradient-text-color;
+    }
+
+    footer,
+    footer i[class^='icon-'],
+    footer a { color: rgba($gradient-text-color, .6); }
+
+    // Folded corner
+    li:after { color: $gradient-text-color; }
+    &:after,
+    &:before {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        content: ' ';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        transform: rotate(360deg);
+    }
+
+    &:after {
+        border-width: 0 0 37px 37px;
+        border-color: transparent transparent $bg-container-color transparent;
+    }
+
+    &:before {
+        border-width: 37px 37px 0 0;
+        border-color: rgba(#ffffff, .5) transparent transparent transparent;
+    }
+
 }
