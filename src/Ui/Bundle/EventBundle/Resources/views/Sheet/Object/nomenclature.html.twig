@@ -5,7 +5,7 @@
 
     {% if nomenclature.depth == 1 %}
 
-        <section class="object--nomenclature section">
+        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
                 <h2>{{ config['label'][locale] }}</h2>
             </header>
@@ -23,7 +23,7 @@
 
     {% elseif nomenclature.depth == 2 %}
 
-        <section class="object--nomenclature section section--skill">
+        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section section--skill">
             <header>
                 <h2>{{ config['label'][locale] }}</h2>
             </header>
@@ -46,7 +46,7 @@
 
         {% for child in nomenclature.value %}
 
-            <section class="object--nomenclature section section--skill">
+            <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section section--skill">
                 <header>
                     <h2>{{ child.label[locale] }}</h2>
                 </header>
@@ -71,6 +71,6 @@
 
 {% else %}
 
-    <section class="object--nomenclature">Missing nomenclature</section>
+    <section class="object object--nomenclature {{ 'style--' ~ config['style'] }}">Missing nomenclature</section>
 
 {% endif %}

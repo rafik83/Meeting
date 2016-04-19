@@ -1138,7 +1138,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "text"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
                                 type: "titre"
@@ -1146,7 +1146,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "block"
                             type: "4-8"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                             children:
                                 -
                                     d927a04b:

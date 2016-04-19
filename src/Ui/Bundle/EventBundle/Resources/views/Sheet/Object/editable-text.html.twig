@@ -1,5 +1,5 @@
 
-<section class="object--editable-text">
+<section class="object object--editable-text {{ 'style--' ~ config['style'] }}">
     {% if config.type == 'title' %}
         <header>
             <h2>{{ data[uid]['text'][locale] }}</h2>

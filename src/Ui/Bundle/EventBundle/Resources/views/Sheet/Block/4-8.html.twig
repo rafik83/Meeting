@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row block block--4-8 {{ 'style--' ~ config['style'] }}">
     <div class="col-md-4 sidebar">
         {% for uid, item in children[0]|default([]) %}
             {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row block block--8-4">
     <div class="col-md-8 content">
         {% for uid, item in children[0]|default([]) %}
             {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
