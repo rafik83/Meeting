@@ -36,6 +36,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('html', [$this, 'html'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('locales', [$this, 'locales']),
             new \Twig_SimpleFilter('localize', [$this, 'localize']),
+            new \Twig_SimpleFilter('intersect', 'array_intersect'),
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),

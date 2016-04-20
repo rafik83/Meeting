@@ -11,7 +11,7 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for child in nomenclature.value %}
+                    {% for key, child in nomenclature.value if key in data[uid] %}
                         <li>{{ child.label|localize(locale, fallback) }}</li>
                     {% endfor %}
                 </ul>
@@ -29,9 +29,9 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for child in nomenclature.value %}
+                    {% for child in nomenclature.value if child.children|keys|intersect(data[uid])|length > 0 %}
                         <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                        {% for grandchild in child.children %}
+                        {% for key, grandchild in child.children if key in data[uid] %}
                             <li>{{ grandchild.label|localize(locale, fallback) }}</li>
                         {% endfor %}
                     {% endfor %}
@@ -52,9 +52,9 @@
                 </header>
                 <div class="section__content">
                     <ul>
-                        {% for grandchild in child.children %}
+                        {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid])|length > 0 %}
                             <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                            {% for grandgrandchild in grandchild.children %}
+                            {% for key, grandgrandchild in grandchild.children if key in data[uid] %}
                                 <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
                             {% endfor %}
                         {% endfor %}
