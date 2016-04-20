@@ -1,5 +1,3 @@
-@import "bootstrap-sass/assets/stylesheets/bootstrap";
-
 $bg-body-color: #FFFFFF;
 $bg-container-color: #E8E8E9;
 $bg-container-darkened-color: #D8D8D8;
@@ -12,34 +10,35 @@ $button-text-color: #FFFFFF;
 $button-bg-color-inactive: rgba(#FFFFFF, .15);
 $button-bg-color-inactive-hover: rgba(#FFFFFF, .3);
 
+$font-path: '{{ fontPath }}';
 $gradient-left-color: {{ gradientLeftColor }};
 $gradient-right-color: {{ gradientRightColor }};
 $color-highlighted: {{ colorHighLighted }};
 
-@import "{{ guideline_path }}/base/mixins";
-@import "{{ guideline_path }}/base/fonts";
-@import "{{ guideline_path }}/base/layout";
-@import "{{ guideline_path }}/base/responsive";
+@import "{{ bundleGuidelinePath }}/base/mixins";
+@import "{{ bundleGuidelinePath }}/base/fonts";
+@import "{{ bundleGuidelinePath }}/base/layout";
+@import "{{ bundleGuidelinePath }}/base/responsive";
 
-@import "{{ guideline_path }}/generic/links";
-@import "{{ guideline_path }}/generic/titles";
-@import "{{ guideline_path }}/generic/lists";
-@import "{{ guideline_path }}/generic/buttons";
-@import "{{ guideline_path }}/generic/form";
+@import "{{ bundleGuidelinePath }}/generic/links";
+@import "{{ bundleGuidelinePath }}/generic/titles";
+@import "{{ bundleGuidelinePath }}/generic/lists";
+@import "{{ bundleGuidelinePath }}/generic/buttons";
+@import "{{ bundleGuidelinePath }}/generic/form";
 
-@import "{{ guideline_path }}/objects/header";
-@import "{{ guideline_path }}/objects/section";
-@import "{{ guideline_path }}/objects/tabs";
-@import "{{ guideline_path }}/objects/profile";
+@import "{{ bundleGuidelinePath }}/objects/header";
+@import "{{ bundleGuidelinePath }}/objects/section";
+@import "{{ bundleGuidelinePath }}/objects/tabs";
+@import "{{ bundleGuidelinePath }}/objects/profile";
 
 .required:after {
-content: '*';
+  content: '*';
 }
 
 .btn-np {
-padding: 0px;
+  padding: 0px;
 }
 
 .notification-not-read {
-font-weight: bold;
+  font-weight: bold;
 }
