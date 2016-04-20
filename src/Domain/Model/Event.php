@@ -114,6 +114,11 @@ class Event implements EventInterface
     private $configuration;
 
     /**
+     * @var string
+     */
+    private $assetPath;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -224,6 +229,26 @@ class Event implements EventInterface
         }
 
         return $this->getFallback();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssetPath()
+    {
+        return $this->assetPath;
+    }
+
+    /**
+     * @param string $assetPath
+     *
+     * @return Event
+     */
+    public function setAssetPath($assetPath)
+    {
+        $this->assetPath = $assetPath;
+
+        return $this;
     }
 
     /**

@@ -1,0 +1,44 @@
+$bg-body-color: #FFFFFF;
+$bg-container-color: #E8E8E9;
+$bg-container-darkened-color: #D8D8D8;
+$bg-success-color: #67BB1F;
+$bg-fail-color: #FF4902;
+$gradient-text-color: #FFFFFF;
+$color-primary: #2F2F2F;
+$color-notification: #FF4902;
+$button-text-color: #FFFFFF;
+$button-bg-color-inactive: rgba(#FFFFFF, .15);
+$button-bg-color-inactive-hover: rgba(#FFFFFF, .3);
+
+$font-path: '{{ fontPath }}';
+$gradient-left-color: {{ gradientLeftColor }};
+$gradient-right-color: {{ gradientRightColor }};
+$color-highlighted: {{ colorHighLighted }};
+
+@import "{{ bundleGuidelinePath }}/base/mixins";
+@import "{{ bundleGuidelinePath }}/base/fonts";
+@import "{{ bundleGuidelinePath }}/base/layout";
+@import "{{ bundleGuidelinePath }}/base/responsive";
+
+@import "{{ bundleGuidelinePath }}/generic/links";
+@import "{{ bundleGuidelinePath }}/generic/titles";
+@import "{{ bundleGuidelinePath }}/generic/lists";
+@import "{{ bundleGuidelinePath }}/generic/buttons";
+@import "{{ bundleGuidelinePath }}/generic/form";
+
+@import "{{ bundleGuidelinePath }}/objects/header";
+@import "{{ bundleGuidelinePath }}/objects/section";
+@import "{{ bundleGuidelinePath }}/objects/tabs";
+@import "{{ bundleGuidelinePath }}/objects/profile";
+
+.required:after {
+  content: '*';
+}
+
+.btn-np {
+  padding: 0px;
+}
+
+.notification-not-read {
+  font-weight: bold;
+}

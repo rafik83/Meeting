@@ -254,6 +254,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@guideline.generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
@@ -986,6 +987,23 @@ services:
     #
     components.security.admin_event_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+
+    #
+    # Slug Component
+    #
+    slug.generator:
+        class: Proximum\Vimeet\Application\Components\Slug\Generator
+
+    #
+    # Guideline Component
+    #
+    guideline.generator:
+        class: Proximum\Vimeet\Application\Components\Guideline\Generator
+        arguments:
+            - '@twig'
+            - '%infrastructure.web_asset_event_guideline_path%'
+            - '%infrastructure.bundle_guideline_path%'
+            - '%infrastructure.font_path%'
 
     #
     # DateTime

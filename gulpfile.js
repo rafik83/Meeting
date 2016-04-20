@@ -1,6 +1,7 @@
 var
     gulp   = require('gulp'),
     del    = require('del'),
+    sass   = require('gulp-sass'),
     assets = require('elao-assets-gulp');
 
 /************************/

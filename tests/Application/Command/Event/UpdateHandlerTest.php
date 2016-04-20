@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
+use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -58,9 +59,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $guidelineGenerator->generate($event)->shouldBeCalled();
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
         $handler->handle($update);
     }
 
@@ -105,9 +108,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $guidelineGenerator->generate($event)->shouldBeCalled();
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
         $handler->handle($update);
     }
 
@@ -115,9 +120,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->getConfiguration()->setLeftColor('#111111');
-        $event->getConfiguration()->setRightColor('#BBBBBB');
-        $event->getConfiguration()->setTextColor('#333333');
+        $event->getConfiguration()->setLeftColor('#FFFFFF');
+        $event->getConfiguration()->setRightColor('#000000');
+        $event->getConfiguration()->setTextColor('#CCCCCC');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -150,9 +155,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $guidelineGenerator->generate($event)->shouldNotBeCalled();
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
         $handler->handle($update);
     }
 }
