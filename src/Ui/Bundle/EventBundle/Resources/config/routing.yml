@@ -4,7 +4,7 @@
 
 event:
     path: /
-    methods:  [GET]
+    methods:  [GET, POST]
     defaults: { _controller: EventBundle:Home:index }
 
 #

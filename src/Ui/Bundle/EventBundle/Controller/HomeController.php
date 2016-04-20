@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,26 +25,39 @@ class HomeController extends Controller
      * @param Request   $request
      * @param EventView $eventView
      *
-     * @return Response
+     * @return Response|RedirectResponse
      */
     public function indexAction(Request $request, EventView $eventView)
     {
+        $locale = $request->getLocale();
+
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventView->id, $request->getLocale());
+                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventView->id, $locale);
         } else {
             $sheets = [];
         }
 
-        $typeViews = $this
-            ->get('vimeet_infrastructure.repository.type_repository')
-            ->getTypeViewsByEvent($eventView->id, $eventView->locale);
+        $form = $this->createForm(TypeChoiceType::class, null, [
+            'locale'  => $locale,
+            'eventId' => $eventView->id,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $typeView = $form->getData()['type'];
+
+            if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            }
+
+            return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
+        }
 
         return $this->render('EventBundle:Home:index.html.twig', [
             'eventView' => $eventView,
-            'types'     => $typeViews,
             'sheets'    => $sheets,
+            'form'      => $form->createView(),
         ]);
     }
 }

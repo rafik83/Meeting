@@ -11,36 +11,41 @@
 </head>
 <body>
     {% block body %}
-
         <div class="wrapper">
             <div class="header">
-                <a href="">
+                <a href="{{ path('event') }}">
                     <img src="{{ asset('assets/images/asddays-logo.png') }}" class="logo">
                 </a>
                 <div class="header__info">
-                    <p>Du 12/10/2016 au 13/10/2016</p>
-                    <p>Aéroport de Paris-Orly &bull; <span>France</span></p>
+                    {% if eventView is defined %}
+                        <p>{{ eventView.title }}</p>
+                        <p>{{ eventView.description }}</p>
+                    {% endif %}
                 </div>
                 <ul class="header__navigation">
                     <li>
                         {% if eventView is defined %}
-                            {% for locale in eventView.locales %}
+                            {% for locale in eventView.locales if locale != app.request.locale %}
                                 <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
                             {% endfor %}
                         {% endif %}
                     </li>
-                    <li>
-                        <a href="">
-                            <i class="icon-Retard"></i>
-                            <span class="name">Notifications</span> <span class="notif">1</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href=""><img src="{{ asset('assets/images/icons/icon-settings.png') }}"></a>
-                    </li>
-                    <li>
-                        <a href=""><img src="{{ asset('assets/images/icons/icon-login.png') }}"></a>
-                    </li>
+
+                    {% if is_granted('ROLE_USER') %}
+                        <li>
+                            <a href="">
+                                <i class="icon-Retard"></i>
+                                <span class="name">Notifications</span> <span class="notif">1</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href=""><img src="{{ asset('assets/images/icons/icon-settings.png') }}"></a>
+                        </li>
+                        <li>
+                            <a href=""><img src="{{ asset('assets/images/icons/icon-login.png') }}"></a>
+                        </li>
+                    {% endif %}
+
                     <li>
                         <a href="">
                             <i class="icon-Appeler"></i>
@@ -49,48 +54,39 @@
                 </ul>
             </div>
 
-            <div class="sub-header">
-                <ul>
-                    <li>
-                        <a href="" class="btn btn-lg">
-                            <i class="icon-Document_1"></i>
-                            <span class="name">Fiche de présentation</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="" class="btn btn-lg btn-inactive">
-                            <i class="icon-Panier_2"></i>
-                            <span class="name">Forfait de participation</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_USER') %}
+                <div class="sub-header">
+                    <ul>
+                        <li>
+                            <a href="" class="btn btn-lg">
+                                <i class="icon-Document_1"></i>
+                                <span class="name">Fiche de présentation</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="btn btn-lg btn-inactive">
+                                <i class="icon-Panier_2"></i>
+                                <span class="name">Forfait de participation</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
+
+        {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
+            {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+        {% endif %}
+
+        {{ include('EventBundle::flashes.html.twig') }}
 
         <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
+    {% endblock body %}
 
-            {#
-                <div class="container">
-                {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
-                    {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
-                {% endif %}
-
-                <h1>
-                    <a href="{{ path('event') }}">{{ eventView.title }}</a>
-                </h1>
-
-                {{ include('EventBundle::flashes.html.twig') }}
-
-                {% block content %}{% endblock %}
-                </div>
-            #}
-
-
-        {% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset('assets/js/main.js') }}"></script>
-        {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+    {% endblock %}
     </body>
 </html>
