@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type;
 
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,11 +26,18 @@ class TypeChoiceType extends AbstractType
     private $typeRepository;
 
     /**
-     * @param TypeRepositoryInterface $typeRepository
+     * @var Markdown
      */
-    public function __construct(TypeRepositoryInterface $typeRepository)
+    private $markdown;
+
+    /**
+     * @param TypeRepositoryInterface $typeRepository
+     * @param Markdown                $markdown
+     */
+    public function __construct(TypeRepositoryInterface $typeRepository, Markdown $markdown)
     {
         $this->typeRepository = $typeRepository;
+        $this->markdown       = $markdown;
     }
 
     /**
@@ -49,7 +57,7 @@ class TypeChoiceType extends AbstractType
                 'choice_label'      => 'title',
                 'choice_value'      => 'id',
                 'choice_attr' => function(TypeView $typeView) {
-                    return ['data-description' => $typeView->title];
+                    return ['data-description' => $this->markdown->toHtml($typeView->description)];
                 },
             ]);
     }
