@@ -68,13 +68,45 @@ Proximum\Vimeet\Domain\Model\Type:
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type_exposant_fr:
-        __construct: ['@type_exposant', fr, "Exposant"]
+        __construct: false
+        type: '@type_exposant'
+        locale: 'fr'
+        title: 'Exposant'
+        description: |+
+            # EXPOSANT, VOTRE INSCRIPTION COMPREND :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Dissidentes quo fulgorem surgeret Fortuna primis homines in quo augeretur.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
     type_exposant_en:
-        __construct: ['@type_exposant', en, "Exhibitor"]
+        __construct: false
+        type: '@type_exposant'
+        locale: 'en'
+        title: 'Exhibitor'
+        description: |+
+            # Exhibitor, your registration contains :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
     type_investisseur_fr:
-        __construct: ['@type_investisseur', fr, "Investisseur"]
+        __construct: false
+        type: '@type_investisseur'
+        locale: 'fr'
+        title: 'Investisseur'
+        description: |+
+            # INVESTISSEUR, VOTRE INSCRIPTION COMPREND :
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
     type_investisseur_en:
-        __construct: ['@type_investisseur', en, "Investor"]
+        __construct: false
+        type: '@type_investisseur'
+        locale: 'en'
+        title: 'Investor'
+        description: |+
+            # Investor, your registration contains :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius dominantur fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
     type_visiteur_fr:
         __construct: ['@type_visiteur', fr, "Visiteur"]
     type_visiteur_en:

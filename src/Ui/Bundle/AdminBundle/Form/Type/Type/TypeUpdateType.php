@@ -53,7 +53,7 @@ class TypeUpdateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
         }
     }
 }

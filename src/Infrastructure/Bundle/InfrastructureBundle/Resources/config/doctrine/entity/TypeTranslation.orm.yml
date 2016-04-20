@@ -9,6 +9,9 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
     fields:
         title:
             type: string
+        description:
+            type: text
+            nullable: true
         locale:
             type: string
     manyToOne:

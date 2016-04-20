@@ -48,7 +48,10 @@ class CreateHandler
         $type->setTemplate($create->template);
 
         foreach ($create->translations as $locale => $translation) {
-            $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
+            $type->getTranslations()->set(
+                $locale,
+                new TypeTranslation($type, $locale, $translation['title'], $translation['description'])
+            );
         }
 
         if (isset($create->validationCriteria['sheetAccepted'])) {

@@ -35,7 +35,7 @@ class UpdateHandler
         $type = $update->type;
 
         foreach ($update->translations as $locale => $translation) {
-            $type->getTranslations()->get($locale)->update($translation['title']);
+            $type->getTranslations()->get($locale)->update($translation['title'], $translation['description']);
         }
 
         if (isset($update->validationCriteria['sheetAccepted'])) {
