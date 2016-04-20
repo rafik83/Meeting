@@ -311,3 +311,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
         arguments:
             - '@translator'
+
+    markdown:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
