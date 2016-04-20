@@ -22,11 +22,6 @@ class Generator
     /**
      * @var string
      */
-    private $rootPath;
-
-    /**
-     * @var string
-     */
     private $webAssetsPath;
 
     /**
@@ -46,21 +41,18 @@ class Generator
 
     /**
      * @param \Twig_Environment $twig
-     * @param string            $rootPath
      * @param string            $webAssetsPath
      * @param string            $bundleGuidelinePath
      * @param string            $fontPath
      */
     public function __construct(
         \Twig_Environment $twig,
-        $rootPath,
         $webAssetsPath,
         $bundleGuidelinePath,
         $fontPath
     ) {
-        $this->rootPath            = $rootPath;
-        $this->webAssetsPath       = $webAssetsPath;
         $this->twig                = $twig;
+        $this->webAssetsPath       = $webAssetsPath;
         $this->bundleGuidelinePath = $bundleGuidelinePath;
         $this->fontPath            = $fontPath;
     }
