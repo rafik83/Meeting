@@ -11,13 +11,19 @@
 namespace Proximum\Vimeet\Application\Components\Guideline;
 
 use Behat\Transliterator\Transliterator;
+use Leafo\ScssPhp\Compiler;
+use Leafo\ScssPhp\Exception\ParserException;
+use Leafo\ScssPhp\Formatter\Compressed;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class Generator
 {
+    /**
+     * @var string
+     */
+    private $rootPath;
+
     /**
      * @var string
      */
@@ -34,18 +40,29 @@ class Generator
     private $bundleGuidelinePath;
 
     /**
+     * @var string
+     */
+    private $fontPath;
+
+    /**
      * @param \Twig_Environment $twig
+     * @param string            $rootPath
      * @param string            $webAssetsPath
      * @param string            $bundleGuidelinePath
+     * @param string            $fontPath
      */
     public function __construct(
         \Twig_Environment $twig,
+        $rootPath,
         $webAssetsPath,
-        $bundleGuidelinePath
+        $bundleGuidelinePath,
+        $fontPath
     ) {
+        $this->rootPath            = $rootPath;
         $this->webAssetsPath       = $webAssetsPath;
         $this->twig                = $twig;
         $this->bundleGuidelinePath = $bundleGuidelinePath;
+        $this->fontPath            = $fontPath;
     }
 
     /**
@@ -69,10 +86,11 @@ class Generator
         $this->createDirIfNotExist($fullPath);
 
         $file = $this->twig->loadTemplate('AdminBundle:Asset:eventGuidelineVars.scss.twig')->render([
-            'gradientLeftColor'  => $gradientLeftColor,
-            'gradientRightColor' => $gradientRightColor,
-            'colorHighLighted'   => $colorHighlighted,
-            'guideline_path'     => $this->bundleGuidelinePath,
+            'gradientLeftColor'   => $gradientLeftColor,
+            'gradientRightColor'  => $gradientRightColor,
+            'colorHighLighted'    => $colorHighlighted,
+            'bundleGuidelinePath' => $this->bundleGuidelinePath,
+            'fontPath'            => $this->fontPath,
         ]);
 
         $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';
@@ -80,14 +98,15 @@ class Generator
 
         file_put_contents($fullPath . '/' . $varsFileName, $file);
 
-        $process = new Process(sprintf('gulp event-sass --srcFile=%s --destination=%s --buildFile=%s', $varsFileName, $fullPath, $mainFileName));
+        $scss = new Compiler();
+
+        $scss->setFormatter(Compressed::class);
 
         try {
-            $process->mustRun();
-        } catch (ProcessFailedException $e) {
-            throw new GuidelineAssetBuildFailedException(
-                sprintf('Error during the gulp event-sass with the message: %s', $e->getMessage())
-            );
+            $cssOut = $scss->compile(file_get_contents($fullPath . '/' . $varsFileName));
+            file_put_contents($fullPath . '/' . $mainFileName, $cssOut);
+        } catch (ParserException $ex) {
+            throw new GuidelineAssetBuildFailedException($ex->getMessage());
         }
 
         $this->removeOldFiles($fullPath, $mainFileName);
@@ -107,9 +126,9 @@ class Generator
 
     /**
      * @param string $path
-     * @param string $newFile
+     * @param string $file
      */
-    private function removeOldFiles($path, $newFile)
+    public function removeOldFiles($path, $file)
     {
         // Delete all scss files
         foreach (glob($path . "/*.scss") as $filename) {
@@ -118,7 +137,7 @@ class Generator
 
         // Delete old css files
         foreach (glob($path . "/*.css") as $filename) {
-            if ($filename !== ($path . "/" . $newFile)) {
+            if ($filename !== ($path . '/' . $file)) {
                 unlink($filename);
             }
         }
