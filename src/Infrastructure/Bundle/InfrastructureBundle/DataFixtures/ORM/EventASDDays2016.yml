@@ -5,6 +5,7 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [fr, en]
         fallback: fr
+        assetPath: ''
         organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_rdv_carnot_2016'
@@ -995,30 +996,18 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             required: false
                         e438c993:
                             component: "object"
-                            type: "collection"
+                            type: "nomenclature"
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Compétences Aéronautiques"
+                                    fr: "Compétences"
                                 placeholder:
                                     fr: ""
                                 help:
                                     fr: ""
                                 required: false
                                 default: 1
-                        2423e6ea:
-                            component: "object"
-                            type: "collection"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Compétences Défenses"
-                                placeholder:
-                                    fr: ""
-                                help:
-                                    fr: ""
-                                required: false
-                                default: "1"
+                                nomenclature: 1
                         75adad94:
                             component: "block"
                             type: "6-6"
@@ -1069,7 +1058,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "collection"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
                                     fr: "Equipements, technologies et process"
                                 placeholder:
@@ -1150,7 +1139,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "text"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
                                 type: "titre"
@@ -1158,7 +1147,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "block"
                             type: "4-8"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                             children:
                                 -
                                     d927a04b:
@@ -1178,7 +1167,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 -
                                     03b394ac:
                                         component: "object"
-                                        type: "collection"
+                                        type: "nomenclature"
                                         config:
                                             style: "style-1"
                                             label:
@@ -1188,10 +1177,10 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos offres"
                                             required: true
-                                            default: "3"
+                                            nomenclature: 1
                                     63ccc105:
                                         component: "object"
-                                        type: "collection"
+                                        type: "nomenclature"
                                         config:
                                             style: "style-1"
                                             label:
@@ -1201,7 +1190,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos besoins"
                                             required: true
-                                            default: "3"
+                                            nomenclature: 1
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -1214,8 +1203,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             fb030569: "Laboratoire public"
             90713a3d: { label: { fr: Site internet }, url: "http://www.onera.fr/" }
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
-            e438c993: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
-            2423e6ea: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
+            e438c993: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"]
             848e283e: []
             1adc1873: ["CNES", "CNRS", "Daher", "Dassault", "Dewe France", "DGAC", "DLR", "Durr", "Embraer", "Esa", "Honeywell", "Aircelle", "Messier Bugatti Dowty", "Snecma", "Turbomeca", "Zodiac Aerospace"]
             46663c1d: ["Radar passif aéroporté", "Optique adaptative de SPHERE", "Initiative sur lanceurs réutilisables", "RAPID, un détecteur infrarouge révolutionnaire"]

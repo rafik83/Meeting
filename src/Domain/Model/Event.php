@@ -234,7 +234,7 @@ class Event implements EventInterface
     /**
      * @return string
      */
-    public function getAssetPath($assetPath)
+    public function getAssetPath()
     {
         return $this->assetPath;
     }
