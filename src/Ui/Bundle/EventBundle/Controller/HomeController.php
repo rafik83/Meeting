@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,11 +48,17 @@ class HomeController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $typeView = $form->getData()['type'];
 
-            if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-                return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
-            }
+            if (null === $typeView) {
+                $form->get('type')->addError(
+                    new FormError($this->get('translator')->trans('validators.type.required', [], 'validators'))
+                );
+            } else {
+                if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                    return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+                }
 
-            return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
+                return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
+            }
         }
 
         return $this->render('EventBundle:Home:index.html.twig', [
