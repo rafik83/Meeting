@@ -38,7 +38,7 @@
     {% else %}
         <section class="main">
             <header>
-                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> S'inscrire en tant que :</h1>
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register_as'|trans }}</h1>
             </header>
 
             <div class="main__content">
@@ -46,16 +46,16 @@
                 {{ form_row(form.type) }}
 
                 <div class="validation">
-                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> Suivant</button>
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
                 </div>
 
                 {{ form_end(form) }}
 
                 <div class="sub-form">
-                    <a href="" class="help"><i class="icon-Appeler"></i> <span>Besoin d'aide</span></a>
+                    <a href="" class="help"><i class="icon-Appeler"></i> <span>{{ 'common.need_help'|trans }}</span></a>
 
                     <a href="{{ path('event_login') }}" class="btn key">
-                        Déjà inscrit ?
+                        {{ 'register.already_registered'|trans }}
                     </a>
                 </div>
             </div>

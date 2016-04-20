@@ -1,0 +1,7 @@
+common:
+    need_help: Besoin d'aide
+    next: Suivant
+
+register:
+    register_as: S'inscrire en tant que :
+    already_registered: Déjà inscrit ?
