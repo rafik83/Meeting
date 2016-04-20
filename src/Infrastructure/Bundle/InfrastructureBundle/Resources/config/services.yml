@@ -997,12 +997,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
 
     #
-    # Slug Component
-    #
-    slug.generator:
-        class: Proximum\Vimeet\Application\Components\Slug\Generator
-
-    #
     # Guideline Component
     #
     guideline.generator:

@@ -79,7 +79,7 @@ class Generator
 
         $repoName = Transliterator::urlize($event->getTitle());
 
-        $this->createDirIfNotExist($this->webAssetsPath);
+        $this->createDirIfNotExist($this->rootPath . '/' . $this->webAssetsPath);
 
         $fullPath = $this->rootPath . '/' . $this->webAssetsPath . '/' . $repoName;
 
