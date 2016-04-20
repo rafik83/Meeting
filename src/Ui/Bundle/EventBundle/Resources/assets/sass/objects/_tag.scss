@@ -1,4 +1,13 @@
 
 .object--tag {
+    h2 {
+        font-size: 24px;
+        margin: 0;
+    }
 
+    p {
+        color: $color-highlighted;
+        font-family: openSans;
+        margin: 0;
+    }
 }
