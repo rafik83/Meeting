@@ -78,6 +78,14 @@ event_sheet_integration:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:index }
 
+event_sheet_integration_locale:
+    path:     /sheet/{sheet}/integration/{locale}
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:index }
+
 event_sheet:
     path:     /sheet/{sheet}
     requirements:

@@ -7,17 +7,17 @@
 
         <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
-                <h2>{{ config['label'][locale] }}</h2>
+                <h2>{{ config['label']|localize(locale, fallback) }}</h2>
             </header>
             <div class="section__content">
                 <ul>
                     {% for child in nomenclature.value %}
-                        <li>{{ child.label[locale] }}</li>
+                        <li>{{ child.label|localize(locale, fallback) }}</li>
                     {% endfor %}
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -25,20 +25,20 @@
 
         <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
-                <h2>{{ config['label'][locale] }}</h2>
+                <h2>{{ config['label']|localize(locale, fallback) }}</h2>
             </header>
             <div class="section__content">
                 <ul>
                     {% for child in nomenclature.value %}
-                        <li class="highlight">{{ grandchild.label[locale] }}</li>
+                        <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
                         {% for grandchild in child.children %}
-                            <li>{{ grandchild.label[locale] }}</li>
+                            <li>{{ grandchild.label|localize(locale, fallback) }}</li>
                         {% endfor %}
                     {% endfor %}
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -48,20 +48,20 @@
 
             <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
                 <header>
-                    <h2>{{ child.label[locale] }}</h2>
+                    <h2>{{ child.label|localize(locale, fallback) }}</h2>
                 </header>
                 <div class="section__content">
                     <ul>
                         {% for grandchild in child.children %}
-                            <li class="highlight">{{ grandchild.label[locale] }}</li>
+                            <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
                             {% for grandgrandchild in grandchild.children %}
-                                <li>{{ grandgrandchild.label[locale] }}</li>
+                                <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
                             {% endfor %}
                         {% endfor %}
                     </ul>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label'][locale] }}"</a>
+                    <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
                 </footer>
             </section>
 

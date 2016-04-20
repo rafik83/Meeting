@@ -35,6 +35,7 @@ class AppExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFilter('html', [$this, 'html'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('locales', [$this, 'locales']),
+            new \Twig_SimpleFilter('localize', [$this, 'localize']),
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
@@ -145,6 +146,19 @@ class AppExtension extends \Twig_Extension
         return array_map(function ($code) use ($locale) {
             return $this->localeHelper->locale($code, $locale);
         }, $locales);
+    }
+
+    /**
+     * @param array  $locales
+     * @param string $locale
+     * @param string $fallback
+     * @param string $default
+     *
+     * @return string
+     */
+    public function localize(array $locales, $locale, $fallback, $default = '')
+    {
+        return isset($locales[$locale]) ? $locales[$locale] : (isset($locales[$fallback]) ? $locales[$fallback] : $default);
     }
 
     /**
