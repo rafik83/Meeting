@@ -40,18 +40,26 @@ class Generator
     private $fontPath;
 
     /**
+     * @var string
+     */
+    private $rootPath;
+
+    /**
      * @param \Twig_Environment $twig
+     * @param string            $rootPath
      * @param string            $webAssetsPath
      * @param string            $bundleGuidelinePath
      * @param string            $fontPath
      */
     public function __construct(
         \Twig_Environment $twig,
+        $rootPath,
         $webAssetsPath,
         $bundleGuidelinePath,
         $fontPath
     ) {
         $this->twig                = $twig;
+        $this->rootPath            = $rootPath;
         $this->webAssetsPath       = $webAssetsPath;
         $this->bundleGuidelinePath = $bundleGuidelinePath;
         $this->fontPath            = $fontPath;
@@ -73,7 +81,7 @@ class Generator
 
         $this->createDirIfNotExist($this->webAssetsPath);
 
-        $fullPath = $this->webAssetsPath . '/' . $repoName;
+        $fullPath = $this->rootPath . '/' . $this->webAssetsPath . '/' . $repoName;
 
         $this->createDirIfNotExist($fullPath);
 
@@ -103,7 +111,7 @@ class Generator
 
         $this->removeOldFiles($fullPath, $mainFileName);
 
-        return $fullPath . '/' . $varsFileName;
+        return $this->webAssetsPath . '/' . $mainFileName;
     }
 
     /**

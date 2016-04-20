@@ -1009,6 +1009,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Guideline\Generator
         arguments:
             - '@twig'
+            - '%kernel.root_dir%/../web/'
             - '%infrastructure.web_asset_event_guideline_path%'
             - '%infrastructure.bundle_guideline_path%'
             - '%infrastructure.font_path%'
