@@ -36,26 +36,8 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $locale = $locale ? : $request->getLocale();
-
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($this->getUser(), $eventView);
-
-        if (empty($sheets)) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        $sheet = $sheets[array_keys($sheets)[0]];
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
-        }
-
-        if (!$eventView->hasLocale($locale)) {
-            throw $this->createNotFoundException('Locale not available for this event.');
-        }
-
+        $locale        = $locale ? : $request->getLocale();
+        $sheet         = $this->getUserSheet($eventView, $locale);
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
@@ -126,5 +108,38 @@ class SheetController extends Controller
             'sheet'     => $sheet,
             'form'      => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     * @param string    $locale
+     *
+     * @return Sheet
+     */
+    private function getUserSheet(EventView $eventView, $locale)
+    {
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetByUserAndEvent($this->getUser(), $eventView);
+
+        if (empty($sheets)) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        $sheet = $sheets[array_keys($sheets)[0]];
+
+        if (!$sheet instanceof Sheet) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
+        }
+
+        if (!$eventView->hasLocale($locale)) {
+            throw $this->createNotFoundException('Locale not available for this event.');
+        }
+
+        return $sheet;
     }
 }
