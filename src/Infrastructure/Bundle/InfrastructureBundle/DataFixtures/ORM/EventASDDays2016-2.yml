@@ -1240,3 +1240,23 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_asddays_1:
+        __construct: false
+        user: "@user_asddays_1"
+        sheet: "@sheet_asddays_1"
+        owner: true
+        active: true
+        data:
+            563caf2746398: "John"
+            563caf1d9b1cb: "Doe"
+            563caf2f0ddbd: "0909090909"
+
+Proximum\Vimeet\Domain\Model\User:
+    user_asddays_1:
+        __construct: false
+        email: "user_asddays_1@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
