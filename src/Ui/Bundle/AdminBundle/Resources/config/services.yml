@@ -70,7 +70,14 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType
         tags:
             - { name: form.type }
-#
+    vimeet_app.form_type_meeting_request.meeting_request:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+
+    #
     # Admin library form type
     #
     vimeet_app.form_type_admin.library.type_factory:
