@@ -39,7 +39,7 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->createQueryBuilder()
             ->select('nomenclature')
             ->from('Entity:Nomenclature', 'nomenclature')
-            ->orderBy('nomenclature.label');
+            ->orderBy('nomenclature.title');
 
         return $queryBuilder->getQuery()->getResult();
     }
