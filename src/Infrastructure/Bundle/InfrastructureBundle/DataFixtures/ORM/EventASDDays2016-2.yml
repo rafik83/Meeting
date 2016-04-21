@@ -8,7 +8,7 @@ Proximum\Vimeet\Domain\Model\Event:
         assetPath: ''
         organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
-        configuration: '@configuration_rdv_carnot_2016'
+        configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
         bankInfo: |+
             HSBC Issy les Moulineaux
@@ -73,6 +73,13 @@ Proximum\Vimeet\Domain\Model\Event:
                 required: false
                 label: { fr: "N° de TVA intracommunautaire", en: "N° VAT" }
                 tags: ["billing_vat_number"]
+
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_asddays_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:
