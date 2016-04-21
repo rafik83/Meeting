@@ -6,6 +6,9 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+        {% if eventView is defined %}
+            <link rel="stylesheet" href="{{ asset(eventView.asset) }}">
+        {% endif %}
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>

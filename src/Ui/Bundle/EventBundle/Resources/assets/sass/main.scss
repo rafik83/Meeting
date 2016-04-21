@@ -1,37 +1,5 @@
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "base/vars";
-@import "base/mixins";
-@import "base/fonts";
-@import "base/layout";
-
-@import "generic/links";
-@import "generic/titles";
-@import "generic/lists";
-@import "generic/buttons";
-@import "generic/form";
-
-@import "objects/header";
-@import "objects/section";
-@import "objects/tabs";
-@import "objects/profile";
-
-@import "blocks/style";
-
-@import "objects/button-link";
-@import "objects/carousel";
-@import "objects/choice";
-@import "objects/collection";
-@import "objects/editable-text";
-@import "objects/image";
-@import "objects/media";
-@import "objects/nomenclature";
-@import "objects/participant";
-@import "objects/tag";
-@import "objects/text";
-
-@import "base/responsive";
-
 .required:after {
     content: '*';
 }
