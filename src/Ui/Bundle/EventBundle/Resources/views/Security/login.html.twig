@@ -1,27 +1,55 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% form_theme form 'form_div_layout.html.twig' %}
 
 {% block title 'login.title'|trans %}
 
 {% block content %}
-    <h2>{{ 'login.title'|trans }}</h2>
+    <section class="main">
+        <header>
+            <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Connexion <span>"Espace membre"</span></h1>
+        </header>
 
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+        <div class="main__content">
+            {{ form_start(form) }}
+            <ul class="inputs">
+                <li>
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
+                    </div>
+                </li>
 
-            {{ form(form) }}
-            <a href="{{ path('event_forgotten_password') }}">{{ 'login.forgotPassword'|trans }}</a>
+                <li>
+                    {{ form_widget(form.username) }}
+                </li>
 
-            {% if users is not empty %}
-                <h3>1-click login</h3>
-                <ul>
-                    {% for user in users %}
-                        <li><a href="{{ path('event_login_user', { 'user': user.id }) }}">{{ user.username }}</a></li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+                <li>
+                    {{ form_widget(form.password) }}
+                </li>
+
+                <li class="validation">
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> Suivant</button>
+                </li>
+            </ul>
+            {{ form_end(form) }}
         </div>
-    </div>
+    </section>
+
+    {% if error %}
+        <section class="important fail">
+            <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        </section>
+    {% endif %}
+
+
+    <a href="{{ path('event_forgotten_password') }}">{{ 'login.forgotPassword'|trans }}</a>
+
+    {% if users is not empty %}
+        <h3>1-click login</h3>
+        <ul>
+            {% for user in users %}
+                <li><a href="{{ path('event_login_user', { 'user': user.id }) }}">{{ user.username }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
