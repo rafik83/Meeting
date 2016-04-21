@@ -93,14 +93,15 @@ init-db:
 	bin/console doctrine:schema:drop --force
 	bin/console doctrine:schema:create
 	bin/console doctrine:fixtures:load -n
-	sleep 1
 	bin/console fos:elastica:populate
+	bin/console vimeet:event:build-guideline-asset
 
 init-db@test:
 	bin/console doctrine:schema:drop --force --env=test
 	bin/console doctrine:schema:create --env=test
 	bin/console doctrine:fixtures:load -n --env=test
 	bin/console cache:clear --env=test
+	bin/console fos:elastica:populate --env=test
 
 #########
 # Build #
