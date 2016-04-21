@@ -10,7 +10,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
         __construct:
             - '#59a4eb'
             - '#00398c'
-            - '#FFFFFF'
+            - '#00398C'
 
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
