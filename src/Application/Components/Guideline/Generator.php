@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Guideline;
 
-use Behat\Transliterator\Transliterator;
 use Leafo\ScssPhp\Compiler;
 use Leafo\ScssPhp\Exception\ParserException;
 use Leafo\ScssPhp\Formatter\Compressed;
@@ -77,7 +76,7 @@ class Generator
         $gradientRightColor = $event->getConfiguration()->getRightColor();
         $colorHighlighted   = $event->getConfiguration()->getTextColor();
 
-        $repoName = Transliterator::urlize($event->getTitle());
+        $repoName = $event->getId();
 
         $this->createDirIfNotExist($this->rootPath . '/' . $this->webAssetsPath);
 
@@ -111,7 +110,7 @@ class Generator
 
         $this->removeOldFiles($fullPath, $mainFileName);
 
-        return $this->webAssetsPath . '/' . $mainFileName;
+        return $this->webAssetsPath . '/' . $repoName . '/' . $mainFileName;
     }
 
     /**
