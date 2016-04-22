@@ -8,5 +8,8 @@ form:
             repeatedPassword:
                 placeholder: Confirmer votre mot de passe
     login:
-        password:
-            placeholder: Mot de passe
+        children:
+            password:
+                placeholder: Mot de passe
+            rememberMe:
+                label: Rester connecté

@@ -127,8 +127,13 @@ class RegisterController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($registerNewUser);
+                $this->get('adapter.authentication_manager')->authenticate($registerNewUser->user, 'main');
+
+                return $this->redirectToRoute('event_participate', ['typeView'  => $typeView->id]);
             } catch (EmailAlreadyExistsException $exception) {
                 $this->container->get('session')->getFlashBag()->get('register_email');
+
+                return $this->redirectToRoute('event_login');
             }
         }
 

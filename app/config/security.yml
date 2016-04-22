@@ -52,6 +52,12 @@ security:
                 password_parameter: "login[password]"
                 default_target_path: event
                 use_referer: true
+            remember_me:
+                name: user_remembered
+                remember_me_parameter: login[rememberMe]
+                secret:   '%secret%'
+                lifetime: 604800
+                path:     /
             logout:
                 path: event_logout
                 target: event

@@ -3,12 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Register;
+
+use Proximum\Vimeet\Domain\Model\User;
 
 class RegisterNewUser
 {
@@ -26,6 +28,11 @@ class RegisterNewUser
      * @var string
      */
     public $locale;
+
+    /**
+     * @var User
+     */
+    public $user;
 
     /**
      * @param string $locale

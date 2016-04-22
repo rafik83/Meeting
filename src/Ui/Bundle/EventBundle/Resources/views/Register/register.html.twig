@@ -27,7 +27,7 @@
                     <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
                 </li>
             </ul>
-            {{ form_rest(form) }}
+            {{ form_end(form) }}
         </div>
     </section>
     {% if form_errors(form.email) %}
@@ -36,6 +36,5 @@
         </section>
     {% endif %}
 
-    {{ form_end(form) }}
 </div>
 {% endblock %}

@@ -28,8 +28,13 @@
                         <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
                     </div>
                 </ul>
-                {{ form_end(form) }}
+            {{ form_end(form) }}
             </div>
         </section>
+        {% if form_errors(form.password.first) %}
+            <section class="important fail">
+                <p>{{ form_errors(form.password.first) }}</p>
+            </section>
+        {% endif %}
     </div>
 {% endblock %}

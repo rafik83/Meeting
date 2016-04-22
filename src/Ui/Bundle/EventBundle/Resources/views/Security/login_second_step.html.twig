@@ -27,6 +27,9 @@
                 <li class="validation">
                     <button type="submit" class="btn"><i class="icon-Suivant_3"></i> Suivant</button>
                 </li>
+
+                {{ form_widget(form.rememberMe) }}
+                {{ form_label(form.rememberMe) }}
             </ul>
             {{ form_end(form) }}
         </div>

@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Application\Command\User\Register;
-use Proximum\Vimeet\Application\Command\User\RegisterHandler;
+use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
+use Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -23,10 +23,9 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $command           = new Register();
+        $command           = new RegisterNewUser('fr');
         $command->email    = 'test@test.com';
         $command->password = 'password';
-        $command->locale   = 'fr';
 
         $user         = new User('test@test.com', '__salt__', null, 'fr');
         $expectedUser = new User('test@test.com', '__salt__', 'encoded_password', 'fr');
@@ -43,7 +42,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
-        $handler = new RegisterHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
         $handler->handle($command);
     }
 
@@ -51,7 +50,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
-        $command           = new Register();
+        $command           = new RegisterNewUser('fr');
         $command->email    = 'test@test.com';
         $command->password = 'password';
 
@@ -65,7 +64,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
         $userRepository->add()->shouldNotBeCalled();
 
-        $handler = new RegisterHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
         $handler->handle($command);
     }
 }
