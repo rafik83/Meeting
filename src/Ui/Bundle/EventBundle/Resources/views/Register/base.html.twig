@@ -21,6 +21,20 @@
                     {% endif %}
                 </li>
 
+                {% if is_granted('ROLE_USER') %}
+                    <li>
+                        <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
+                            <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('event_logout_confirmation') }}" title="{{ 'login.link'|trans }}">
+                            <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                        </a>
+                    </li>
+                {% endif %}
+
                 <li>
                     <a href="">
                         <i class="icon-Appeler"></i>
