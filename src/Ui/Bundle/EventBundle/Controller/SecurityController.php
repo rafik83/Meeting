@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginFirstStepType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -35,22 +36,16 @@ class SecurityController extends Controller
             return $this->redirectToRoute('event');
         }
 
-        $authenticationUtils = $this->get('security.authentication_utils');
-        $error               = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername        = $authenticationUtils->getLastUsername();
-
-        $form = $this->createForm(LoginFirstStepType::class, ['email' => $lastUsername]);
+        $email = new Email();
+        $form = $this->createForm(EmailType::class, $email);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-
-            if (null !== $data['email']
-                && $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($data['email'])
+            if (null !== $email->email
+                && $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)
             ) {
-                // clear potential previous username
-                $this->get('session')->getFlashBag()->get('username');
-                // set username
-                $this->addFlash('username', $data['email']);
+                // clear potential previous email before setting new one
+                $this->get('session')->getFlashBag()->get('login_email');
+                $this->addFlash('login_email', $email->email);
 
                 return $this->redirectToRoute('event_login_second_step');
             }
@@ -72,7 +67,6 @@ class SecurityController extends Controller
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
-            'error'     => $error,
             'users'     => $users,
         ]);
     }
@@ -91,19 +85,20 @@ class SecurityController extends Controller
 
         $authenticationUtils = $this->get('security.authentication_utils');
         $error               = $authenticationUtils->getLastAuthenticationError();
-        $username            = $authenticationUtils->getLastUsername();
 
-        if (null === $username) {
-            $username = $this->get('session')->getFlashBag()->get('username');
+        $email = $this->get('session')->getFlashBag()->get('login_email');
 
-            if (empty($username) || null === ($username = array_shift($username))
-                || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($username)
-            ) {
+        if (empty($email) || null === ($email = array_shift($email))
+            || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email)
+        ) {
+            $email = $authenticationUtils->getLastUsername();
+
+            if (null === $email) {
                 return $this->redirectToRoute('event_login');
             }
         }
 
-        $form = $this->createForm(LoginType::class, ['username' => $username], [
+        $form = $this->createForm(LoginType::class, ['username' => $email], [
             'action' => $this->generateUrl('event_login_check'),
         ]);
 
@@ -114,7 +109,7 @@ class SecurityController extends Controller
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
-            'username'  => $username,
+            'username'  => $email,
             'error'     => $error,
         ]);
     }

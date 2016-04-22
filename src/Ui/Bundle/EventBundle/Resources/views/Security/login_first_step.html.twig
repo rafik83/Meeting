@@ -35,9 +35,9 @@
         </div>
     </section>
 
-    {% if error %}
+    {% if form_errors(form.email) %}
         <section class="important fail">
-            <p>{{ error.message|trans }}</p>
+            {{ form_errors(form.email) }}
         </section>
     {% endif %}
 
