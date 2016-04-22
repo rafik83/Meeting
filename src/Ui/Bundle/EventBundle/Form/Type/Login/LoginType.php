@@ -25,7 +25,7 @@ class LoginType extends AbstractType
         $builder
             ->add('username', HiddenType::class)
             ->add('password', PasswordType::class, [
-                'placeholder' => 'forms.login.password.placeholder'
+                'placeholder' => 'form.login.password.placeholder'
             ])
         ;
     }
