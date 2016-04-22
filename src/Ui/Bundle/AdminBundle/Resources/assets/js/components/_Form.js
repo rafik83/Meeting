@@ -167,7 +167,7 @@ Form.prototype.getCheckedRadioValue = function (inputs)
 Form.prototype.checkRadio = function (inputs, value)
 {
     for (var i = 0; i < inputs.length; i++) {
-        inputs[0].checked = (value === inputs[0].value);
+        inputs[i].checked = (value === inputs[i].value);
     }
 };
 

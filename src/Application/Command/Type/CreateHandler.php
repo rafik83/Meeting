@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
@@ -82,7 +83,21 @@ class CreateHandler
             $sheetTemplate->setEvent($create->event);
         }
 
+        if ($create->registrationTemplate->getEvent() === $create->event) {
+            $registrationTemplate = $create->registrationTemplate;
+        } else {
+            $registrationTemplate = new RegistrationTemplate(
+                $type->getTitle($create->event->getAvailableLocale($create->locale)),
+                $create->sheetTemplate->getValue(),
+                $create->sheetTemplate->getLocales(),
+                $create->sheetTemplate->getFallback(),
+                $this->dateTime
+            );
+            $registrationTemplate->setEvent($create->event);
+        }
+
         $type->setSheetTemplate($sheetTemplate);
+        $type->setRegistrationTemplate($registrationTemplate);
 
         $this->typeRepository->add($type);
 

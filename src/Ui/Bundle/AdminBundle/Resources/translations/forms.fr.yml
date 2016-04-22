@@ -1,8 +1,11 @@
 form:
     type_template:
         sheet:
-            base: Template de fiche de base
-            organizer: Mes templates de fiche
+            base: Template de Participation de base
+            organizer: Mes templates de Participation
+        registration:
+            base: Template d'Inscription de base
+            organizer: Mes templates d'Inscription
     field:
         private: Champ privé
     register:
@@ -186,7 +189,9 @@ form:
             template:
                 label: Template
             sheetTemplate:
-                label: Template de fiche
+                label: Template de Participation
+            registrationTemplate:
+                label: Template d'Inscription
             translations:
                 prototype:
                     children:
@@ -781,3 +786,11 @@ form:
                 label: Langue
             submit:
                 label: Ajouter
+    template_registration_update:
+        children:
+            title:
+                label: Titre du template
+            value:
+                label: Contenu du template
+            submit:
+                label: Enregistrer

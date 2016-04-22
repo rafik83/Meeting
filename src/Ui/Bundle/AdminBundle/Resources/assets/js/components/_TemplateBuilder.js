@@ -225,9 +225,10 @@ TemplateBuilder.prototype.normalize = function (item)
         return {
             component: 'block',
             type: blockType,
-            config: [].map.call(this.inners(item), function (child) {
+            children: [].map.call(this.inners(item), function (child) {
                 return this.normalize(child);
-            }.bind(this))
+            }.bind(this)),
+            config: item.templateBlock.config
         }
     }
 
@@ -254,8 +255,13 @@ TemplateBuilder.prototype.normalize = function (item)
  */
 function TemplateBlock(element, builder)
 {
-    this.element = element;
-    this.builder = builder;
+    this.element         = element;
+    this.builder         = builder;
+    this.config          = JSON.parse(this.element.getAttribute('data-config'));
+    this.configureModal  = element.querySelector('.configure-modal');
+    this.configureButton = element.querySelector('.configure-button');
+    this.form            = new Form(this.configureModal);
+    this.saveButton      = this.configureModal.querySelector('.save-configuration');
 
     // UID
     this.uid = element.getAttribute('data-uid');
@@ -265,17 +271,58 @@ function TemplateBlock(element, builder)
         this.element.setAttribute('data-uid', this.uid);
     }
 
+    // Init modal
+    $(this.configureModal).modal({show: false});
+
     // Init block inner as sortable target
     [].forEach.call(this.builder.inners(element), function (inner) {
         this.sortable(inner);
     }.bind(this));
 
     // Delete button behavior
-    element.querySelector('.delete-button').addEventListener('click', function (event) {
+    this.element.querySelector('.delete-button').addEventListener('click', function (event) {
         event.preventDefault();
-        element.remove();
-    });
+        this.element.remove();
+    }.bind(this));
+
+    // Modal behavior
+    this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
 }
+
+TemplateBlock.prototype.configureButtonClicked = function (event)
+{
+    event.preventDefault();
+    this.fill();
+    this.openConfigureModal();
+};
+
+TemplateBlock.prototype.saveButtonClicked = function (event)
+{
+    event.preventDefault();
+    this.save();
+    this.closeConfigureModal();
+};
+
+TemplateBlock.prototype.openConfigureModal = function ()
+{
+    $(this.configureModal).modal('show');
+};
+
+TemplateBlock.prototype.closeConfigureModal = function ()
+{
+    $(this.configureModal).modal('hide');
+};
+
+TemplateBlock.prototype.fill = function ()
+{
+    this.form.set('style', this.config.style);
+};
+
+TemplateBlock.prototype.save = function ()
+{
+    this.config.style = this.form.get('style');
+};
 
 TemplateBlock.prototype.sortable = function (element)
 {
@@ -363,6 +410,8 @@ function TemplateObject(element, locale)
         this.object = new CollectionObject(this.element, this.locale);
     } else if (this.type === 'nomenclature') {
         this.object = new NomenclatureObject(this.element, this.locale);
+    } else if (this.type === 'media') {
+        this.object = new MediaObject(this.element, this.locale);
     }
 
     this.object.fill();
@@ -429,6 +478,7 @@ function TextObject(element, locale)
 
 TextObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('content', this.config.content[this.locale]);
     this.form.set('type', this.config.type);
 
@@ -437,6 +487,7 @@ TextObject.prototype.fill = function ()
 
 TextObject.prototype.save = function ()
 {
+    this.config.style                = this.form.get('style');
     this.config.content[this.locale] = this.form.get('content');
     this.config.type                 = this.form.get('type');
 
@@ -460,6 +511,7 @@ function EditableTextObject(element, locale)
 
 EditableTextObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
@@ -473,6 +525,7 @@ EditableTextObject.prototype.fill = function ()
 
 EditableTextObject.prototype.save = function ()
 {
+    this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
@@ -501,6 +554,7 @@ function ButtonLinkObject(element, locale)
 
 ButtonLinkObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
@@ -510,6 +564,7 @@ ButtonLinkObject.prototype.fill = function ()
 
 ButtonLinkObject.prototype.save = function ()
 {
+    this.config.style              = this.form.get('style');
     this.config.label[this.locale] = this.form.get('label');
     this.config.help[this.locale]  = this.form.get('help');
     this.config.required           = this.form.get('required');
@@ -534,6 +589,7 @@ function ParticipantObject(element, locale)
 
 ParticipantObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('numberOfParticipantShown', this.config.numberOfParticipantShown);
 
@@ -542,6 +598,7 @@ ParticipantObject.prototype.fill = function ()
 
 ParticipantObject.prototype.save = function ()
 {
+    this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
     this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
@@ -583,6 +640,7 @@ ChoiceObject.prototype.getContent = function ()
 
 ChoiceObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('type', this.config.type);
@@ -594,6 +652,7 @@ ChoiceObject.prototype.fill = function ()
 
 ChoiceObject.prototype.save = function ()
 {
+    this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.type                     = this.form.get('type');
@@ -631,6 +690,7 @@ function ImageObject(element, locale)
 
 ImageObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
@@ -641,6 +701,7 @@ ImageObject.prototype.fill = function ()
 
 ImageObject.prototype.save = function ()
 {
+    this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
@@ -666,6 +727,7 @@ function TagObject(element, locale)
 
 TagObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('tag', this.config.tag);
 
@@ -674,6 +736,7 @@ TagObject.prototype.fill = function ()
 
 TagObject.prototype.save = function ()
 {
+    this.config.style              = this.form.get('style');
     this.config.label[this.locale] = this.form.get('label');
     this.config.tag                = this.form.get('tag');
 
@@ -697,18 +760,22 @@ function NomenclatureObject(element, locale)
 
 NomenclatureObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('nomenclature', this.config.nomenclature);
+    this.form.set('multiple', this.config.multiple ? 'true' : 'false');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
 
 NomenclatureObject.prototype.save = function ()
 {
+    this.config.style              = this.form.get('style');
     this.config.label[this.locale] = this.form.get('label');
     this.config.help[this.locale]  = this.form.get('help');
     this.config.nomenclature       = this.form.get('nomenclature');
+    this.config.multiple           = 'true' === this.form.get('multiple');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -730,6 +797,7 @@ function CollectionObject(element, locale)
 
 CollectionObject.prototype.fill = function ()
 {
+    this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
@@ -742,12 +810,50 @@ CollectionObject.prototype.fill = function ()
 
 CollectionObject.prototype.save = function ()
 {
+    this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
     this.config.default                  = this.form.get('default');
     this.config.translatable             = this.form.get('translatable');
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+/**
+ * MediaObject
+ *
+ * @param element
+ * @param locale
+ * @constructor
+ */
+function MediaObject(element, locale)
+{
+    this.element = element;
+    this.locale  = locale;
+    this.form    = new Form(element);
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+}
+
+MediaObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('titlePlaceholder', this.config.titlePlaceholder[this.locale]);
+    this.form.set('linkPlaceholder', this.config.linkPlaceholder[this.locale]);
+    this.form.set('translatable', this.config.translatable);
+    this.form.set('max', this.config.max);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+MediaObject.prototype.save = function ()
+{
+    this.config.label[this.locale]            = this.form.get('label');
+    this.config.titlePlaceholder[this.locale] = this.form.get('titlePlaceholder');
+    this.config.linkPlaceholder[this.locale]  = this.form.get('linkPlaceholder');
+    this.config.translatable                  = this.form.get('translatable');
+    this.config.max                           = this.form.get('max');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
