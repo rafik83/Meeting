@@ -92,9 +92,8 @@ class RegisterController extends Controller
     {
         $registerEmailFlash = $this->container->get('session')->getFlashBag()->get('register_email');
 
-        $email                   = array_shift($registerEmailFlash);
-        $registerNewUser         = new RegisterNewUser($request->getLocale());
-        $registerNewUser->locale = $request->getLocale();
+        $email           = array_shift($registerEmailFlash);
+        $registerNewUser = new RegisterNewUser($request->getLocale());
 
         if (null !== $email) {
             $exist = $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email);

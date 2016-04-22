@@ -40,9 +40,7 @@ class SecurityController extends Controller
         $form = $this->createForm(EmailType::class, $email);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if (null !== $email->email
-                && $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)
-            ) {
+            if ($this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)) {
                 // clear potential previous email before setting new one
                 $this->get('session')->getFlashBag()->get('login_email');
                 $this->addFlash('login_email', $email->email);
