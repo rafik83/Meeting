@@ -1,0 +1,9 @@
+form:
+    register:
+        email:
+            placeholder: Saisissez votre adresse e-mail
+        newUser:
+            password:
+                placeholder: Choisissez votre mot de passe
+            repeatedPassword:
+                placeholder: Confirmer votre mot de passe

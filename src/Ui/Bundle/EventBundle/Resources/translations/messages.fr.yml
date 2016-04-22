@@ -5,3 +5,4 @@ common:
 register:
     register_as: S'inscrire en tant que :
     already_registered: Déjà inscrit ?
+    register: Inscription
