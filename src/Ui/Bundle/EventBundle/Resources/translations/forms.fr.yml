@@ -7,3 +7,6 @@ form:
                 placeholder: Choisissez votre mot de passe
             repeatedPassword:
                 placeholder: Confirmer votre mot de passe
+    login:
+        password:
+            placeholder: Mot de passe

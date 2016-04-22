@@ -1,0 +1,6 @@
+forms:
+    login:
+        email:
+            placeholder: Email
+        password:
+            placeholder: Password
