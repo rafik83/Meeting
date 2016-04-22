@@ -10,16 +10,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ButtonLinkDataType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
 
 class SheetController extends Controller
 {
@@ -38,75 +37,17 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
+        $template      = $sheet->getType()->getNewSheetTemplate();
+        $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
-            'template'      => $sheet->getType()->getNewSheetTemplate(),
-            'data'          => $sheet->getData(),
+            'template'      => $template,
+            'data'          => $data,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
-        ]);
-    }
-
-    /**
-     * Update sheet part in the choosen locale (independently from the interface locale)
-     *
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     * @param string    $locale
-     * @param int       $block
-     *
-     * @return Response
-     */
-    public function blockAction(Request $request, EventView $eventView, Sheet $sheet, $locale, $block)
-    {
-        // We must refresh sheet to make behat feature working ...
-        $this->getDoctrine()->getManager()->refresh($sheet);
-
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if (!$eventView->hasLocale($locale)) {
-            throw $this->createNotFoundException('This locale is not available.');
-        }
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
-        }
-
-        $sheetTemplate = $sheet->getType()->getSheetTemplate();
-
-        if (!isset($sheetTemplate[$block])) {
-            throw $this->createNotFoundException('Block not found.');
-        }
-
-        $updateBlock = new UpdateBlock($sheet, $block, $locale);
-        $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
-            'template' => $sheetTemplate[$block]['template'],
-            'locale'   => $locale,
-            'submit'   => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($updateBlock);
-                $this->addFlash('success', 'flash.sheet.update_block.success');
-
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
-            } catch (RequiredDataEmptyException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            }
-        }
-
-        return $this->render('EventBundle:Sheet:block.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
         ]);
     }
 
@@ -132,6 +73,10 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Sheet not found.');
         }
 
+        if ($sheet->getEvent()->getId() !== $eventView->getId()) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
+
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
         }
@@ -141,5 +86,33 @@ class SheetController extends Controller
         }
 
         return $sheet;
+    }
+
+    public function updateAction(Request $request, EventView $eventView, $locale, $key)
+    {
+        $sheet = $this->getUserSheet($eventView, $locale);
+
+        $factory      = new TemplateDataFactory();
+        $templateData = $factory->createFromSheet($sheet, $locale);
+        $object       = $templateData->getObject($key);
+
+        $types        = [
+            'editable-text' => EditableTextDataType::class,
+            'button-link'   => ButtonLinkDataType::class,
+        ];
+
+        $form = $this->createForm($types[$object->getType()], $object, [
+            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+        }
+
+        return $this->render('EventBundle:Sheet:update.html.twig', [
+            'form'  => $form->createView(),
+            'label' => $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback()),
+        ]);
     }
 }

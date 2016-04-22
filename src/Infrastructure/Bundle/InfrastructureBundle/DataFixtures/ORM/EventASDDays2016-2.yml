@@ -1088,7 +1088,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: true
                                 default: "3"
-                        79271999:
+                        a9271999:
                             component: "object"
                             type: "collection"
                             config:
@@ -1210,7 +1210,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Image
             1b9a00b3: "onera.jpg"
             # Lien
-            90713a3d: { label: { fr: Site internet }, url: "http://www.onera.fr/" }
+            90713a3d: { url: "http://www.onera.fr/" }
             # Description d'activité
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
             # Compétence
@@ -1226,7 +1226,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Repères
             696dc236: ["2001 salariés", "207 M€ de CA en 2015", "Activitées en coopération : 25%", "Activités sur contrats : 47%", "1er parc de souffleries en Europe", "8 centres en France"]
             # Groupe / Membre
-            79271999: ["Pôle de compétivité Astech", "Instituts Carnot", "Optitec"]
+            a9271999: ["Pôle de compétivité Astech", "Instituts Carnot", "Optitec"]
             # Certification
             a23a2f5d: ["EN9100", "ISO14001", "OHSAS18001", "CAP26000", "ISO14001", "CAP26000"]
             # Media
