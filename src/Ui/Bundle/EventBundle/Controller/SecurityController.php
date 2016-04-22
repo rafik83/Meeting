@@ -89,12 +89,10 @@ class SecurityController extends Controller
         if (empty($email) || null === ($email = array_shift($email))
             || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email)
         ) {
-            $email = $authenticationUtils->getLastUsername();
-
-            if (null === $email) {
-                return $this->redirectToRoute('event_login');
-            }
+            return $this->redirectToRoute('event_login');
         }
+
+        $this->addFlash('login_email', $email);
 
         $form = $this->createForm(LoginType::class, ['username' => $email], [
             'action' => $this->generateUrl('event_login_check'),
