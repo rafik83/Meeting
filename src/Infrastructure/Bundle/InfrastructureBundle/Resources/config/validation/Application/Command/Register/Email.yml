@@ -1,0 +1,7 @@
+Proximum\Vimeet\Application\Command\Register\Email:
+    properties:
+        email:
+            - NotBlank:
+                message: validators.required.email
+            - Email:
+                message: validators.email
