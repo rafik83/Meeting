@@ -516,6 +516,27 @@ admin_template_list:
     methods: [GET]
 
 #
+# RegistrationTemplate
+#
+admin_template_registration_list:
+    path: /template/registration
+    defaults: { _controller: AdminBundle:RegistrationTemplate:list }
+    methods: [GET]
+admin_template_registration_builder:
+    path: /template/registration/{template}/{locale}
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:RegistrationTemplate:builder }
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+admin_template_registration_add_locale:
+    path: /template/regitration/{template}/locale
+    defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
+    methods: [POST]
+    requirements:
+        template: \d+
+
+#
 # SheetTemplate
 #
 admin_template_sheet_list:

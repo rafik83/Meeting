@@ -154,6 +154,10 @@ flash:
             success: Votre compte a été activé avec succès
         change_password:
             success: Votre mot de passe a été changé
+        template:
+            registration:
+                update:
+                    success: Template d'Inscription modifié avec succès
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:
