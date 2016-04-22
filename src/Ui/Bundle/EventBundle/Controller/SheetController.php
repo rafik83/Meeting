@@ -99,6 +99,8 @@ class SheetController extends Controller
      */
     public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $sheet = $this->getUserSheet($eventView, $locale);
 
         $factory      = new TemplateDataFactory();
