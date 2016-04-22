@@ -88,6 +88,15 @@ class SheetController extends Controller
         return $sheet;
     }
 
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
     public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
         $sheet = $this->getUserSheet($eventView, $locale);
