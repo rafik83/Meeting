@@ -16,7 +16,7 @@
             {% if type %}
                 <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
             {% else %}
-                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Connexion <span>"Espace membre"</span></h1>
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
             {% endif %}
         </header>
 
@@ -40,7 +40,7 @@
                 {{ form_row(form.password, {label: false}) }}
 
                 <li class="validation">
-                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
+                    <button type="submit" class="btn"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
                 </li>
                 {% if typeId %}
                     <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />

@@ -7,7 +7,7 @@
 {% block content %}
     <section class="main">
         <header>
-            <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Connexion <span>"Espace membre"</span></h1>
+            <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
         </header>
 
         <div class="main__content">
@@ -22,16 +22,10 @@
                 {{ form_row(form.email, {label: false}) }}
 
                 <li class="validation">
-                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> Suivant</button>
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
                 </li>
             </ul>
             {{ form_end(form) }}
-        </div>
-
-        <div class="sub-form">
-            <a href="{{ path('event_forgotten_password') }}" class="btn key">
-                Mot de passe oublié ?
-            </a>
         </div>
     </section>
 
