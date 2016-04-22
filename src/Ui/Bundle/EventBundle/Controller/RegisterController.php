@@ -53,19 +53,24 @@ class RegisterController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email->email);
 
-            // Remove content of register_email bag before setting it
-            $this->container->get('session')->getFlashBag()->get('register_email');
-            $this->addFlash('register_email', $email->email);
-
             if (null !== $user) {
                 $sheets = $this->get('vimeet_infrastructure.repository.sheet_repository')->getSheetByUserAndEvent($user, $eventView);
 
-                if (empty($sheets)) {
+                if (!empty($sheets)) {
                     return $this->redirectToRoute('event');
                 } else {
-                    return $this->redirectToRoute('event_login');
+                    $this->container->get('session')->getFlashBag()->get('login_email');
+                    $this->container->get('session')->getFlashBag()->get('register_type');
+                    $this->addFlash('login_email', $email->email);
+                    $this->addFlash('register_type', $typeView->id);
+
+                    return $this->redirectToRoute('event_login_second_step');
                 }
             } else {
+                // Remove content of register_email bag before setting it
+                $this->container->get('session')->getFlashBag()->get('register_email');
+                $this->addFlash('register_email', $email->email);
+
                 return $this->redirectToRoute('event_register_new_user', [
                     'typeView' => $typeView->id,
                 ]);
