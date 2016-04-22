@@ -25,6 +25,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $datetime = new \DateTime();
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
         $type  = new Type($event);
@@ -39,16 +40,16 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository       = $this->prophesize(SheetRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
-        $expectedSheet = new Sheet($event, $type, [], [], new \DateTime());
+        $expectedSheet = new Sheet($event, $type, [], [], $datetime);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
 
-        $expectedSheetWithParticipant = new Sheet($event, $type, [], [], new \DateTime());
+        $expectedSheetWithParticipant = new Sheet($event, $type, [], [], $datetime);
         $expectedParticipant          = new Participant($expectedSheetWithParticipant, $user, ['foobar' => 'barfoo'], $owner, true);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
         $validator = $this->prophesize(Validator::class);
 
-        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal(), $validator->reveal(), new \DateTimeImmutable());
+        $handler = new ParticipateHandler($sheetRepository->reveal(), $participantRepository->reveal(), $validator->reveal(), $datetime);
         $handler->handle(new Participate($user, $event, $type, ['foobar' => 'barfoo']));
     }
 }

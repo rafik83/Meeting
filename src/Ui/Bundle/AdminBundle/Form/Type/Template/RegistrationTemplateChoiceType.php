@@ -11,23 +11,23 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Template;
-use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SheetTemplateChoiceType extends AbstractType
+class RegistrationTemplateChoiceType extends AbstractType
 {
     /**
-     * @var SheetTemplateRepositoryInterface
+     * @var RegistrationTemplateRepositoryInterface
      */
     private $templateRepository;
 
     /**
-     * @param SheetTemplateRepositoryInterface $templateRepository
+     * @param RegistrationTemplateRepositoryInterface $templateRepository
      */
-    public function __construct(SheetTemplateRepositoryInterface $templateRepository)
+    public function __construct(RegistrationTemplateRepositoryInterface $templateRepository)
     {
         $this->templateRepository = $templateRepository;
     }
@@ -44,11 +44,11 @@ class SheetTemplateChoiceType extends AbstractType
                 return $this->getResults($options);
             },
             'choice_label'     => 'title',
-            'repositoryMethod' => function (SheetTemplateRepositoryInterface $templateRepository) {
+            'repositoryMethod' => function (RegistrationTemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplates();
             },
             'repositoryMethodOrganizer' => function (Options $options) {
-                return function (SheetTemplateRepositoryInterface $templateRepository) use ($options) {
+                return function (RegistrationTemplateRepositoryInterface $templateRepository) use ($options) {
                     return $templateRepository->getTemplateForGivenEvents($options['events']);
                 };
             },
@@ -75,11 +75,11 @@ class SheetTemplateChoiceType extends AbstractType
         $templates = [];
 
         if (!empty($baseTemplates)) {
-            $templates['form.type_template.sheet.base'] = $baseTemplates;
+            $templates['form.type_template.registration.base'] = $baseTemplates;
         }
 
         if (!empty($organizerTemplates)) {
-            $templates['form.type_template.sheet.organizer'] = $organizerTemplates;
+            $templates['form.type_template.registration.organizer'] = $organizerTemplates;
         }
 
         return $templates;

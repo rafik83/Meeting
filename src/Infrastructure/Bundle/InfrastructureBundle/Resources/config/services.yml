@@ -154,6 +154,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.template.registration_template_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -782,6 +786,18 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
+    command.template.registration.update_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
+    command.template.registration.add_locale_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\AddLocaleHandler
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
 
     #
     # Security
