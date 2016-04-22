@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
-use Proximum\Vimeet\Domain\Model\User;
-
 class RegisterNewUser
 {
     /**

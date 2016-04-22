@@ -11,13 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Create;
-use Proximum\Vimeet\Application\Command\Register\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantCreateType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterEmailType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
@@ -45,7 +45,7 @@ class RegisterController extends Controller
         }
 
         $email = new Email();
-        $form  = $this->createForm(RegisterEmailType::class, $email, [
+        $form  = $this->createForm(EmailType::class, $email, [
             'action' => $this->generateUrl('event_register', ['typeView'  => $typeView->id]),
             'method' => 'POST',
         ]);

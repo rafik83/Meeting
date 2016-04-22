@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Register\Email:
+Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email:
     properties:
         email:
             - NotBlank:

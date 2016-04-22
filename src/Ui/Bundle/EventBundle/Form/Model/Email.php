@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Register;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model;
 
 class Email
 {

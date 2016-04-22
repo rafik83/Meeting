@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common;
 
-use Proximum\Vimeet\Application\Command\Register\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType as CoreEmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegisterEmailType extends AbstractType
+class EmailType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,8 +24,8 @@ class RegisterEmailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class, [
-                'placeholder' => 'form.register.email.placeholder',
+            ->add('email', CoreEmailType::class, [
+                'placeholder' => 'form.email.placeholder',
                 'required'    => true,
                 'label'       => false,
             ])
@@ -40,13 +40,5 @@ class RegisterEmailType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Email::class,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'register_email';
     }
 }

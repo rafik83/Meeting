@@ -1,7 +1,7 @@
 form:
+    email:
+        placeholder: Saisissez votre adresse e-mail
     register:
-        email:
-            placeholder: Saisissez votre adresse e-mail
         newUser:
             password:
                 placeholder: Choisissez votre mot de passe
