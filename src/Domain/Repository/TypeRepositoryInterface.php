@@ -120,4 +120,14 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getAllTypesByUser(User $user);
+
+    /**
+     * @param Event     $event
+     * @param string    $locale
+     * @param string    $title
+     * @param null|Type $excludedType
+     *
+     * @return bool
+     */
+    public function typeExists(Event $event, $locale, $title, $excludedType = null);
 }

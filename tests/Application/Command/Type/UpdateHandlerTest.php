@@ -45,6 +45,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
         $typeRepository->set($expectedType)->shouldBeCalled();
+        $typeRepository->typeExists($event, 'fr', 'truc', $type)->willReturn(false);
 
         //Handler
         $handler = new UpdateHandler($typeRepository->reveal());

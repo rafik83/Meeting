@@ -1,0 +1,38 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Exception\Type;
+
+class TypeAlreadyExistsException extends \Exception
+{
+    /**
+     * @var array
+     */
+    private $locales;
+
+    /**
+     * TypeAlreadyExistsException constructor.
+     *
+     * @param array $locales
+     */
+    public function __construct(array $locales)
+    {
+        $this->message = sprintf('Type title for "%s" already exists.', implode(', ', $locales));
+        $this->locales = $locales;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+}

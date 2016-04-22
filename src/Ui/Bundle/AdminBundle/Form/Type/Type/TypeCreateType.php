@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
+use Proximum\Vimeet\Application\Command\Type\Create;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -38,10 +41,18 @@ class TypeCreateType extends AbstractType
                 'multiple'    => false,
                 'placeholder' => '',
             ])
+            ->add('registrationTemplate', RegistrationTemplateChoiceType::class, [
+                'events'      => $options['events'],
+                'required'    => true,
+                'expanded'    => false,
+                'multiple'    => false,
+                'placeholder' => '',
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
+            ->add('position', NumberType::class)
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
@@ -55,7 +66,7 @@ class TypeCreateType extends AbstractType
     {
         $resolver->setRequired(['events']);
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Type\Create',
+            'data_class'    => Create::class,
             'csrf_token_id' => 'type_create',
         ]);
     }

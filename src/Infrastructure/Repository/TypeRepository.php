@@ -48,12 +48,12 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, translation.title)')
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeListView(type.id, type.position, translation.title)')
             ->from(Type::class, 'type', 'type.id')
             ->join('type.translations', 'translation', 'WITH', 'type.event = :eventId AND translation.locale = :locale')
             ->setParameter('locale', $locale)
             ->setParameter('eventId', $eventId)
-            ->orderBy('type.id', 'ASC');
+            ->orderBy('type.position', 'ASC');
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'type', 'id');
     }
@@ -321,5 +321,37 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeExists(Event $event, $locale, $title, $excludedType = null)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id')
+            ->from('Entity:Type', 'type')
+            ->join(
+                'type.translations',
+                'translations',
+                'WITH',
+                sprintf(
+                    'type.event = :event AND translations.locale = :locale AND translations.title = :title %s',
+                    null !== $excludedType ? 'AND type.id != :type' : ''
+                )
+            )
+            ->setParameter('event', $event)
+            ->setParameter('title', $title)
+            ->setParameter('locale', $locale);
+
+        if (null !== $excludedType) {
+            $queryBuilder->setParameter('type', $excludedType);
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getOneOrNullResult() ? true : false;
     }
 }
