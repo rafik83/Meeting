@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class LoginSecondStepType extends AbstractType
+class LoginType extends AbstractType
 {
     /**
      * {@inheritdoc}
