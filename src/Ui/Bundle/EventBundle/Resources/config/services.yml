@@ -259,6 +259,10 @@ services:
                 lib_organisation: 'Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\OrganisationType'
         tags:
             - { name: form.type }
+    form_type_register.register_email_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterEmailType
+        tags:
+            - { name: form.type }
 
     #
     # Twig extension
