@@ -48,6 +48,9 @@ class SecurityController extends Controller
             if (null !== $data['email']
                 && $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($data['email'])
             ) {
+                // clear potential previous username
+                $this->get('session')->getFlashBag()->get('username');
+                // set username
                 $this->addFlash('username', $data['email']);
 
                 return $this->redirectToRoute('event_login_second_step');
