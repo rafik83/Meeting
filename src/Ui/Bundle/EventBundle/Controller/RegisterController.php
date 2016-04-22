@@ -63,6 +63,7 @@ class RegisterController extends Controller
                     $this->container->get('session')->getFlashBag()->get('register_type');
                     $this->addFlash('login_email', $email->email);
                     $this->addFlash('register_type', $typeView->id);
+                    $this->addFlash('success', 'flash.event.register.already_known.message');
 
                     return $this->redirectToRoute('event_login_second_step');
                 }

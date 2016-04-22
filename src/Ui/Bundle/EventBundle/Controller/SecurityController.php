@@ -36,6 +36,9 @@ class SecurityController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        // Clean register type for potential next step
+        $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
+
         $email = new Email();
         $form = $this->createForm(EmailType::class, $email);
 
@@ -81,6 +84,18 @@ class SecurityController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
+        $typeId       = array_shift($typeFlashBag);
+        $type         = null;
+
+        if (null !== $typeId) {
+            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')->getTypeViewById($typeId, $request->getLocale())) {
+                $this->addFlash('register_type', $typeId);
+            } else {
+                $typeId = null;
+            }
+        }
+
         $authenticationUtils = $this->get('security.authentication_utils');
         $error               = $authenticationUtils->getLastAuthenticationError();
 
@@ -107,6 +122,8 @@ class SecurityController extends Controller
             'form'      => $form->createView(),
             'username'  => $email,
             'error'     => $error,
+            'typeId'    => $typeId,
+            'type'      => $type,
         ]);
     }
 
