@@ -1,0 +1,35 @@
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>
+                    <img src="{{ asset('assets/images/icons/icon-key.svg') }}">{{ 'register.register'|trans }} <span>"{{ typeView.title }}"</span>
+                </h1>
+            </header>
+
+            <div class="main__content">
+                {{ form_start(form) }}
+                <a href="{{ path('event_register', {'typeView': typeView.id}) }}" class="back"><i class="icon-Retour"></i></a>
+                <ul class="inputs">
+                    <li class="identity">
+                        <div class="avatar">
+                            <img src="{{ asset('assets/images/dummy/default-user.svg')}}">
+                        </div>
+                        <p>{{ email }}</p>
+                    </li>
+                    {{ form_row(form.password) }}
+                    <div class="validation">
+                        <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                    </div>
+                </ul>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </div>
+{% endblock %}
