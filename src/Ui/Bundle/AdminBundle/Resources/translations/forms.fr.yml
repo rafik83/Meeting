@@ -163,6 +163,8 @@ form:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
     type_update:
         children:
+            position:
+                label: Position
             validationCriteria:
                 label: Critère de validation automatique des fiches de présentation
                 children:
@@ -177,6 +179,8 @@ form:
                 label: Enregistrer
     type_create:
         children:
+            position:
+                label: Position
             validationCriteria:
                 label: Critère de validation automatique des fiches de présentation
                 children:

@@ -327,12 +327,15 @@ admin:
         link: Qui voit qui
     type:
         link: Types de participation
+        title: Titre
+        position: Position
         create:
             link: Ajouter
             title: Ajouter un type de participation
         update:
             link: Modifier
             title: Modifier le type de participation
+        already_exists: Un type de participation au titre identique existe déjà
     category:
         link: Catégories de participation
         add: Ajouter

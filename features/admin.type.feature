@@ -22,6 +22,7 @@ Feature: add type
     And I fill in the following:
       | type_create_template              | 1    |
       | type_create_sheetTemplate         | 0    |
+      | type_create_position              | 1    |
       | type_create_registrationTemplate  | 0    |
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |

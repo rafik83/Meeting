@@ -28,6 +28,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $dateTime = new \DateTime();
         $event->setLocales(['fr'], 'fr');
+
         $template             = new Template('test', [], [], [], '', '');
         $sheetTemplate        = new SheetTemplate('base toto', [], ['fr'], 'fr', $dateTime);
         $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
@@ -57,6 +58,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
         $typeRepository->add($expectedType)->shouldBeCalled();
+        $typeRepository->typeExists($event, 'fr', 'toto')->willReturn(false);
 
         //Handler
         $handler = new CreateHandler($typeRepository->reveal(), $dateTime);

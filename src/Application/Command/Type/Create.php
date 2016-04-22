@@ -59,6 +59,11 @@ class Create
     public $locale;
 
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * Create constructor.
      *
      * @param Event  $event

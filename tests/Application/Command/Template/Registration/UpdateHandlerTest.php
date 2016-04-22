@@ -26,6 +26,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'component' => "block",
                 'type'      => "12",
                 'config'    => [
+                    'style' => 'style-1',
+                ],
+                'children'  => [
                     'dded0597' => [
                         'component' => "object",
                         'type'      => "text",

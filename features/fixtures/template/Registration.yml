@@ -10,6 +10,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
             component: "block"
             type: "12"
             config:
+              style: 'style-1'
+            children:
               -
                 dded0597:
                   component: "object"
@@ -96,6 +98,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
             component: "block"
             type: "12"
             config:
+              style: 'style-1'
+            children:
               -
                 0d86b25e:
                   component: "object"
@@ -119,6 +123,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
             component: "block"
             type: "12"
             config:
+              style: 'style-1'
+            children:
               -
                 0fe9cb97:
                   component: "object"
