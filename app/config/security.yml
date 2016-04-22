@@ -46,7 +46,7 @@ security:
             anonymous: ~
             provider: user_provider
             form_login:
-                login_path: event_login
+                login_path: event_login_second_step
                 check_path: event_login_check
                 username_parameter: "login[username]"
                 password_parameter: "login[password]"

@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginFirstStepType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginSecondStepType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,31 +30,90 @@ class SecurityController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function loginAction(Request $request, EventView $eventView)
+    public function loginFirstStepAction(Request $request, EventView $eventView)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
         }
 
         $authenticationUtils = $this->get('security.authentication_utils');
+        $error               = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername        = $authenticationUtils->getLastUsername();
 
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $form = $this->createForm(LoginFirstStepType::class, ['email' => $lastUsername]);
 
-        $user = ['username' => $authenticationUtils->getLastUsername()];
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
 
-        $form = $this->createForm(LoginType::class, $user, [
-            'action' => $this->generateUrl('event_login_check'),
-        ]);
+            if (null !== $data['email']
+                && $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($data['email'])
+            ) {
+                $this->addFlash('username', $data['email']);
+
+                return $this->redirectToRoute('event_login_second_step');
+            }
+
+            $error = new FormError($this->get('translator')->trans(
+                'validators.login.email_not_exists',
+                [],
+                'validators',
+                $request->getLocale()
+            ));
+
+            $form->get('email')->addError($error);
+        }
 
         $users = $this->get('kernel')->getEnvironment() === 'dev' ?
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
-        return $this->render('EventBundle:Security:login.html.twig', [
+        return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'eventView' => $eventView,
-            'error'     => $error,
             'form'      => $form->createView(),
+            'error'     => $error,
             'users'     => $users,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     *
+     * @return Response|RedirectResponse
+     */
+    public function loginSecondStepAction(Request $request, EventView $eventView)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('event');
+        }
+
+        $authenticationUtils = $this->get('security.authentication_utils');
+        $error               = $authenticationUtils->getLastAuthenticationError();
+        $username            = $authenticationUtils->getLastUsername();
+
+        if (null === $username) {
+            $username = $this->get('session')->getFlashBag()->get('username');
+
+            if (empty($username) || null === ($username = array_shift($username))
+                || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($username)
+            ) {
+                return $this->redirectToRoute('event_login');
+            }
+        }
+
+        $form = $this->createForm(LoginSecondStepType::class, ['username' => $username], [
+            'action' => $this->generateUrl('event_login_check'),
+        ]);
+
+        if (null !== $error) {
+            $form->get('password')->addError(new FormError($error->getMessage()));
+        }
+
+        return $this->render('EventBundle:Security:login_second_step.html.twig', [
+            'eventView' => $eventView,
+            'form'      => $form->createView(),
+            'username'  => $username,
+            'error'     => $error,
         ]);
     }
 
