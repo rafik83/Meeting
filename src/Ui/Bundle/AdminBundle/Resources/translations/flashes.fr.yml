@@ -1,6 +1,10 @@
 flash:
     event:
         register:
+            already_known:
+                message: |+
+                    VOTRE EMAIL EST DÉJÀ ENREGISTRÉ !
+                    Parce-que vous avez participé à un de nos événements, vous pouvez récuperer vos données… et gagnez un temps précieux !
             success: Votre compte a bien été créé
         participation:
             success: Votre fiche de participation a été sauvegardée
