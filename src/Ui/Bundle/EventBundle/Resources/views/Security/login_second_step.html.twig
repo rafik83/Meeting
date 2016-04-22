@@ -2,16 +2,31 @@
 
 {% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
 
-{% block title 'login.title'|trans %}
+{% block title %}
+    {% if type %}
+        {{ 'register.register'|trans }} "{{ type.title }}"
+    {% else %}
+        {{ 'login.title'|trans }}
+    {% endif %}
+{% endblock %}
 
 {% block content %}
     <section class="main">
         <header>
-            <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Connexion <span>"Espace membre"</span></h1>
+            {% if type %}
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
+            {% else %}
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Connexion <span>"Espace membre"</span></h1>
+            {% endif %}
         </header>
 
         <div class="main__content">
             {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+            {% if typeId %}
+                <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
+            {% else %}
+                <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
+            {% endif %}
             <ul class="inputs">
                 <li class="identity">
                     <div class="avatar">
@@ -25,8 +40,11 @@
                 {{ form_row(form.password, {label: false}) }}
 
                 <li class="validation">
-                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> Suivant</button>
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
                 </li>
+                {% if typeId %}
+                    <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />
+                {% endif %}
 
                 {{ form_widget(form.rememberMe) }}
                 {{ form_label(form.rememberMe) }}

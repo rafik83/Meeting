@@ -47,10 +47,11 @@
             {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
         {% endif %}
 
-        {{ include('EventBundle::flashes.html.twig') }}
-
         <div class="profile__content">
             {% block content %}{% endblock %}
+            {{ include('EventBundle::flashes.html.twig') }}
         </div>
+
+
     </div>
 {% endblock body %}
