@@ -25,9 +25,9 @@ class EmailType extends AbstractType
     {
         $builder
             ->add('email', CoreEmailType::class, [
+                'label'       => false,
                 'placeholder' => 'form.email.placeholder',
                 'required'    => true,
-                'label'       => false,
             ])
         ;
     }
