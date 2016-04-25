@@ -14,6 +14,10 @@
 </head>
 <body>
     {% block body %}
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') and eventView is defined %}
+            {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+        {% endif %}
+
         <div class="wrapper">
             <div class="header">
                 <a href="{{ path('event') }}">
@@ -86,9 +90,7 @@
                 </div>
             {% endif %}
 
-        {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
-            {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
-        {% endif %}
+
 
         {{ include('EventBundle::flashes.html.twig') }}
 
@@ -98,24 +100,8 @@
     </div>
     {% endblock body %}
 
-            {#
-                <div class="container">
-                {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
-                    {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
-                {% endif %}
-
-                <h1>
-                    <a href="{{ path('event') }}">{{ eventView.title }}</a>
-                </h1>
-
-                {{ include('EventBundle::flashes.html.twig') }}
-
-                {% block content %}{% endblock %}
-                </div>
-            #}
-
-        {% block javascripts %}
-            <script src="{{ asset('assets/js/main.js') }}"></script>
-        {% endblock %}
-    </body>
+    {% block javascripts %}
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+    {% endblock %}
+</body>
 </html>
