@@ -1,0 +1,67 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{% block title %}
+    {% if type %}
+        {{ 'register.register'|trans }} "{{ type.title }}"
+    {% else %}
+        {{ 'login.title'|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            {% if type %}
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
+            {% else %}
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
+            {% endif %}
+        </header>
+
+        <div class="main__content">
+            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+            {% if typeId %}
+                <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
+            {% else %}
+                <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
+            {% endif %}
+            <ul class="inputs">
+                <li class="identity">
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
+                    </div>
+                    <p>{{ username }}</p>
+                </li>
+
+                {{ form_row(form.username) }}
+
+                {{ form_row(form.password, {label: false}) }}
+
+                <li class="validation">
+                    <button type="submit" class="btn"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
+                </li>
+                {% if typeId %}
+                    <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />
+                {% endif %}
+
+                {{ form_widget(form.rememberMe) }}
+                {{ form_label(form.rememberMe) }}
+            </ul>
+            {{ form_end(form) }}
+        </div>
+
+        <div class="sub-form">
+            <a href="{{ path('event_forgotten_password') }}" class="btn key">
+                Mot de passe oublié ?
+            </a>
+        </div>
+    </section>
+
+    {% if error %}
+        <section class="important fail">
+            <p>{{ error.message|trans }}</p>
+        </section>
+    {% endif %}
+{% endblock %}

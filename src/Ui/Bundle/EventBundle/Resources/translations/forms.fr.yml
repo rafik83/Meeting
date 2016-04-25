@@ -1,0 +1,15 @@
+form:
+    email:
+        placeholder: Saisissez votre adresse e-mail
+    register:
+        newUser:
+            password:
+                placeholder: Choisissez votre mot de passe
+            repeatedPassword:
+                placeholder: Confirmer votre mot de passe
+    login:
+        children:
+            password:
+                placeholder: Mot de passe
+            rememberMe:
+                label: Rester connecté

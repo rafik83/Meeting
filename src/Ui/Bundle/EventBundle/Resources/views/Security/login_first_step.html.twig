@@ -1,0 +1,46 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{% block title 'login.title'|trans %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
+        </header>
+
+        <div class="main__content">
+            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+            <ul class="inputs">
+                <li>
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
+                    </div>
+                </li>
+
+                {{ form_row(form.email, {label: false}) }}
+
+                <li class="validation">
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                </li>
+            </ul>
+            {{ form_end(form) }}
+        </div>
+    </section>
+
+    {% if form_errors(form.email) %}
+        <section class="important fail">
+            {{ form_errors(form.email) }}
+        </section>
+    {% endif %}
+
+    {% if users is not empty %}
+        <h3>1-click login</h3>
+        <ul>
+            {% for user in users %}
+                <li><a href="{{ path('event_login_user', { 'user': user.id }) }}">{{ user.username }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

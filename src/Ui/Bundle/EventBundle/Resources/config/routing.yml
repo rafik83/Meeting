@@ -4,7 +4,7 @@
 
 event:
     path: /
-    methods:  [GET]
+    methods:  [GET, POST]
     defaults: { _controller: EventBundle:Home:index }
 
 #
@@ -14,7 +14,16 @@ event:
 event_register:
     path: /register/{typeView}
     methods:  [GET, POST]
+    requirements:
+        typeView: \d+
     defaults: { _controller: EventBundle:Register:register }
+
+event_register_new_user:
+    path: /register/{typeView}/new
+    methods:  [GET, POST]
+    requirements:
+        typeView: \d+
+    defaults: { _controller: EventBundle:Register:registerNewUser }
 
 #
 # Change mail
@@ -202,8 +211,13 @@ event_sheet_order_pro_forma:
 
 event_login:
     path:     /login
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Security:loginFirstStep }
+
+event_login_second_step:
+    path:     /login-second-step
     methods:  [GET]
-    defaults: { _controller: EventBundle:Security:login }
+    defaults: { _controller: EventBundle:Security:loginSecondStep }
 
 event_login_check:
     path:     /login_check

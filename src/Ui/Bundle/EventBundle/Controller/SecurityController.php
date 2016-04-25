@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\LoginType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,31 +30,100 @@ class SecurityController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function loginAction(Request $request, EventView $eventView)
+    public function loginFirstStepAction(Request $request, EventView $eventView)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
         }
 
-        $authenticationUtils = $this->get('security.authentication_utils');
+        // Clean register type for potential next step
+        $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
 
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $email = new Email();
+        $form = $this->createForm(EmailType::class, $email);
 
-        $user = ['username' => $authenticationUtils->getLastUsername()];
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if ($this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)) {
+                // clear potential previous email before setting new one
+                $this->get('session')->getFlashBag()->get('login_email');
+                $this->addFlash('login_email', $email->email);
 
-        $form = $this->createForm(LoginType::class, $user, [
-            'action' => $this->generateUrl('event_login_check'),
-        ]);
+                return $this->redirectToRoute('event_login_second_step');
+            }
+
+            $error = new FormError($this->get('translator')->trans(
+                'validators.login.email_not_exists',
+                [],
+                'validators',
+                $request->getLocale()
+            ));
+
+            $form->get('email')->addError($error);
+        }
 
         $users = $this->get('kernel')->getEnvironment() === 'dev' ?
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
-        return $this->render('EventBundle:Security:login.html.twig', [
+        return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'eventView' => $eventView,
-            'error'     => $error,
             'form'      => $form->createView(),
             'users'     => $users,
+        ]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param EventView $eventView
+     *
+     * @return Response|RedirectResponse
+     */
+    public function loginSecondStepAction(Request $request, EventView $eventView)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('event');
+        }
+
+        $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
+        $typeId       = array_shift($typeFlashBag);
+        $type         = null;
+
+        if (null !== $typeId) {
+            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')->getTypeViewById($typeId, $request->getLocale())) {
+                $this->addFlash('register_type', $typeId);
+            } else {
+                $typeId = null;
+            }
+        }
+
+        $authenticationUtils = $this->get('security.authentication_utils');
+        $error               = $authenticationUtils->getLastAuthenticationError();
+
+        $email = $this->get('session')->getFlashBag()->get('login_email');
+
+        if (empty($email) || null === ($email = array_shift($email))
+            || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email)
+        ) {
+            return $this->redirectToRoute('event_login');
+        }
+
+        $this->addFlash('login_email', $email);
+
+        $form = $this->createForm(LoginType::class, ['username' => $email], [
+            'action' => $this->generateUrl('event_login_check'),
+        ]);
+
+        if (null !== $error) {
+            $form->get('password')->addError(new FormError($error->getMessage()));
+        }
+
+        return $this->render('EventBundle:Security:login_second_step.html.twig', [
+            'eventView' => $eventView,
+            'form'      => $form->createView(),
+            'username'  => $email,
+            'error'     => $error,
+            'typeId'    => $typeId,
+            'type'      => $type,
         ]);
     }
 

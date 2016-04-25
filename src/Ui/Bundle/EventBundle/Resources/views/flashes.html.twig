@@ -1,6 +1,7 @@
-{% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'danger' } %}
+{% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'fail' } %}
     {% for message in app.session.flashbag.get(type) %}
-        <div class="alert alert-{{ mappedType }}">
+        <section class="important {{ mappedType }}">
+            <p>
             {% if message.count is defined %}
                 {{ message|transchoice(message.count, message.arguments, message.domain, message.locale) }}
             {% elseif message.message is defined %}
@@ -8,6 +9,7 @@
             {% else %}
                 {{ message|trans({}, 'flashes') }}
             {% endif %}
-        </div>
+            </p>
+        </section>
     {% endfor %}
 {% endfor %}

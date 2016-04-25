@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest;
 
 use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;

@@ -1,0 +1,57 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="wrapper profile">
+        <div class="header">
+            <a href="{{ path('event') }}">
+                <img src="{{ asset('assets/images/asddays-logo.png') }}" class="logo">
+            </a>
+            <div class="header__info">
+                {% if eventView is defined %}
+                    <p>{{ eventView.title }}</p>
+                    <p>{{ eventView.description }}</p>
+                {% endif %}
+            </div>
+            <ul class="header__navigation">
+                <li>
+                    {% if eventView is defined %}
+                        {% for locale in eventView.locales if locale != app.request.locale %}
+                            <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
+                        {% endfor %}
+                    {% endif %}
+                </li>
+
+                {% if is_granted('ROLE_USER') %}
+                    <li>
+                        <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
+                            <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
+                            <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li>
+                    <a href="">
+                        <i class="icon-Appeler"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
+            {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+        {% endif %}
+
+        <div class="profile__content">
+            {% block content %}{% endblock %}
+            {{ include('EventBundle::flashes.html.twig') }}
+        </div>
+
+
+    </div>
+{% endblock body %}

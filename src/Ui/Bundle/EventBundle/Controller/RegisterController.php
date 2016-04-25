@@ -11,14 +11,16 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Create;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
-use Proximum\Vimeet\Application\Command\User\Register;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantCreateType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\RegisterType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,37 +40,106 @@ class RegisterController extends Controller
      */
     public function registerAction(Request $request, EventView $eventView, TypeView $typeView)
     {
-        // Redirect to participate form if the user is already authenticated
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            return $this->redirectToRoute('event');
         }
 
-        // Else, create the register form
-        $register         = new Register();
-        $register->locale = $request->getLocale();
-
-        $form = $this->createForm(RegisterType::class, $register, [
+        $email = new Email();
+        $form  = $this->createForm(EmailType::class, $email, [
             'action' => $this->generateUrl('event_register', ['typeView'  => $typeView->id]),
             'method' => 'POST',
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                // Register and authenticate the user
-                $this->get('tactician.commandbus')->handle($register);
-                $this->get('adapter.authentication_manager')->authenticate($register->user, 'main');
-                $this->addFlash('success', 'flash.event.register.success');
+            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email->email);
 
-                // Go to participate form
-                return $this->redirectToRoute('event_participate', ['typeView'  => $typeView->id]);
-            } catch (EmailAlreadyExistsException $exception) {
-                $error = new FormError($this->get('translator')->trans('register.email_already_exists'));
-                $form->get('email')->addError($error);
+            if (null !== $user) {
+                $sheets = $this->get('vimeet_infrastructure.repository.sheet_repository')->getSheetByUserAndEvent($user, $eventView);
+
+                if (!empty($sheets)) {
+                    return $this->redirectToRoute('event');
+                } else {
+                    $this->container->get('session')->getFlashBag()->get('login_email');
+                    $this->container->get('session')->getFlashBag()->get('register_type');
+                    $this->addFlash('login_email', $email->email);
+                    $this->addFlash('register_type', $typeView->id);
+                    $this->addFlash('success', 'flash.event.register.already_known.message');
+
+                    return $this->redirectToRoute('event_login_second_step');
+                }
+            } else {
+                // Remove content of register_email bag before setting it
+                $this->container->get('session')->getFlashBag()->get('register_email');
+                $this->addFlash('register_email', $email->email);
+
+                return $this->redirectToRoute('event_register_new_user', [
+                    'typeView' => $typeView->id,
+                ]);
             }
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
+            'form'      => $form->createView(),
+            'eventView' => $eventView,
+            'typeView'  => $typeView,
+        ]);
+    }
+
+    /**
+     * Register an account.
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param TypeView  $typeView
+     *
+     * @return RedirectResponse|Response
+     */
+    public function registerNewUserAction(Request $request, EventView $eventView, TypeView $typeView)
+    {
+        $registerEmailFlash = $this->container->get('session')->getFlashBag()->get('register_email');
+
+        $email           = array_shift($registerEmailFlash);
+        $registerNewUser = new RegisterNewUser($request->getLocale());
+
+        if (null !== $email) {
+            $exist = $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email);
+
+            if ($exist) {
+                return $this->redirectToRoute('event_register', [
+                    'typeView' => $typeView->id,
+                ]);
+            }
+
+            $registerNewUser->email = $email;
+            $this->addFlash('register_email', $email);
+        }
+
+        $form = $this->createForm(RegisterNewUserType::class, $registerNewUser, [
+            'action' => $this->generateUrl('event_register_new_user', ['typeView'  => $typeView->id]),
+            'method' => 'POST',
+        ]);
+
+        if (null === $registerNewUser->email) {
+            return $this->redirectToRoute('event_register', [
+                'typeView' => $typeView->id,
+            ]);
+        }
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($registerNewUser);
+                $this->get('adapter.authentication_manager')->authenticate($registerNewUser->user, 'main');
+
+                return $this->redirectToRoute('event_participate', ['typeView'  => $typeView->id]);
+            } catch (EmailAlreadyExistsException $exception) {
+                $this->container->get('session')->getFlashBag()->get('register_email');
+
+                return $this->redirectToRoute('event_login');
+            }
+        }
+
+        return $this->render('EventBundle:Register:registerNewUser.html.twig', [
+            'email'     => $email,
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,

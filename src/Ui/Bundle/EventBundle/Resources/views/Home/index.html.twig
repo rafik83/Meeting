@@ -1,10 +1,8 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% extends 'EventBundle:Register:base.html.twig' %}
 
 {% block title eventView.title %}
 
 {% block content %}
-    <p>{{ eventView.description }}</p>
-
     {% if is_granted('IS_AUTHENTICATED_FULLY') and sheets is not empty %}
         <ul>
             <li>
@@ -38,16 +36,24 @@
             {% endfor %}
         </ul>
     {% else %}
-        <ul>
-            {% for type in types %}
-                <li>
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('event_participate', { 'typeView': type.id }) }}">{{ type.title }}</a>
-                    {% else %}
-                        <a href="{{ path('event_register', { 'typeView': type.id }) }}">{{ type.title }}</a>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+        <section class="main">
+            <header>
+                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register_as'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+                {{ form_row(form.type) }}
+
+                <div class="validation">
+                    <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </section>
+
+        <section id="type-description" class="important hide">
+        </section>
     {% endif %}
 {% endblock %}

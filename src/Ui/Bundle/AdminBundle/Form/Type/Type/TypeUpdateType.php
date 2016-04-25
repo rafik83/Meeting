@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -30,6 +31,7 @@ class TypeUpdateType extends AbstractType
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
+            ->add('position', NumberType::class)
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
@@ -53,7 +55,7 @@ class TypeUpdateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
         }
     }
 }

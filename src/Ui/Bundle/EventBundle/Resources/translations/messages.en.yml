@@ -1,0 +1,8 @@
+common:
+    need_help: Need help
+    next: Next
+
+register:
+    register_as: Register as:
+    already_registered: Already registered?
+    register: Register

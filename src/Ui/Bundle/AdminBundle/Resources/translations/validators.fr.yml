@@ -1,8 +1,13 @@
 validators:
-    hexadecimal: Cette valeur doit être au format héxadécimal
+    json:
+        invalid: Le JSON n'est pas valide
+    hexadecimal: Cette valeur doit être au format hexadécimal
     field:
         required: Ce champ est requis
-    email: L'adresse mail saisie n'est pas valide
+    email: L'adresse e-mail saisie n'est pas valide
+    required:
+        email: L'adresse e-mail ne peut pas être vide
+        password:
     emailDoesNotExist: L'email saisi n'existe pas
     emailAlreadyExist: Cet email est déjà utilisé, vous ne pouvez pas l'utiliser
     sameEmail: Vous utilisez déjà cet email

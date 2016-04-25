@@ -8,7 +8,8 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Title</th>
+                <th>{{ 'admin.type.title'|trans }}</th>
+                <th>{{ 'admin.type.position'|trans }}</th>
                 <th></th>
             </tr>
         </thead>
@@ -16,6 +17,7 @@
         {% for type in types.results %}
             <tr>
                 <td>{{ type.title }}</td>
+                <td>{{ type.position }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">{{ 'admin.type.update.link'|trans }}</a>
                     <a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>

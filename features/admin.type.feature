@@ -4,12 +4,13 @@ Feature: add type
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml    |
-      | app/Event.yml       |
-      | app/Type.yml        |
-      | app/Category.yml    |
-      | Admin.yml           |
-      | template/Sheet.yml  |
+      | app/Template.yml          |
+      | app/Event.yml             |
+      | app/Type.yml              |
+      | app/Category.yml          |
+      | Admin.yml                 |
+      | template/Sheet.yml        |
+      | template/Registration.yml |
     And I am logged with "test@test.com" on admin
 
   Scenario: add a type
@@ -21,6 +22,8 @@ Feature: add type
     And I fill in the following:
       | type_create_template              | 1    |
       | type_create_sheetTemplate         | 0    |
+      | type_create_position              | 1    |
+      | type_create_registrationTemplate  | 0    |
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |
     And I press "form.type_create.children.submit.label"
