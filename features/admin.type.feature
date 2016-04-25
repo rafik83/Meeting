@@ -11,6 +11,7 @@ Feature: add type
       | Admin.yml                 |
       | template/Sheet.yml        |
       | template/Registration.yml |
+      | Nomenclatures.yml         |
     And I am logged with "test@test.com" on admin
 
   Scenario: add a type
