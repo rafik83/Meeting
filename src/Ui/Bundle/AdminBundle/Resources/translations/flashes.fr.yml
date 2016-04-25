@@ -2,7 +2,7 @@ flash:
     event:
         register:
             already_known:
-                login: Vous êtes déjà enregistré à cet événement, connetez vous
+                login: Vous êtes déjà enregistré à cet événement, connectez-vous
                 message: |+
                     VOTRE EMAIL EST DÉJÀ ENREGISTRÉ !
                     Parce-que vous avez participé à un de nos événements, vous pouvez récuperer vos données… et gagnez un temps précieux !
