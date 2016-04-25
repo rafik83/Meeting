@@ -1,14 +1,13 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% form_theme form 'AdminBundle:Spot:theme.html.twig' %}
+{% block form_title 'admin.spot.batch_create.title'|trans %}
 
-{% block content %}
+{% block form_content %}
+    {{ form_row(form.recipes) }}
+    {{ form_row(form.size, {widget_columns: 2}) }}
+    {{ form_row(form.meetingCapacity, {widget_columns: 2}) }}
+    {{ form_row(form.seatCapacity, {widget_columns: 2}) }}
+    {{ form_row(form.active) }}
+{% endblock form_content %}
 
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>{{ 'admin.spot.batch_create.title'|trans }}</h2>
-
-    {{ form(form) }}
-
-{% endblock %}
-
+{% block goback_link path('admin_spot_list', {'event': event.id}) %}

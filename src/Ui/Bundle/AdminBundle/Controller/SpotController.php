@@ -27,8 +27,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,21 +57,25 @@ class SpotController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $filter     = [];
-        $filterForm = $this->createFilterForm(FilterSpotType::class, $filter);
+        $locale     = $event->getAvailableLocale($request->getLocale());
+        $filters    = [];
+        $filterForm = $this->createFilterForm(FilterSpotType::class, $filters);
 
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filter = $filterForm->getData();
+            $filters = $filterForm->getData();
         }
 
-        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filter);
+        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filters);
+
+        $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:Spot:list.html.twig', [
-            'spots'               => $spots,
-            'event'               => $event,
-            'filter_form'         => $filterForm->createView(),
-            'filtered'            => $filterForm->isSubmitted() && $filterForm->isValid(),
-            'update_url'          => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
+            'spots'           => $spots,
+            'event'           => $event,
+            'filter_form'     => $filterForm->createView(),
+            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filtered'        => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'update_url'      => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);
     }
 
