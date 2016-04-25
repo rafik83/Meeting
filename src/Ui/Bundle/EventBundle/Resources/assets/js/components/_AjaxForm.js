@@ -1,11 +1,10 @@
 
 var PubSub = require('pubsub-js');
 
-function AjaxForm(element, callback)
+function AjaxForm(element)
 {
-    this.element  = element;
-    this.target   = document.querySelector(element.getAttribute('data-ajax-form'));
-    this.callback = callback;
+    this.element = element;
+    this.target  = document.querySelector(element.getAttribute('data-ajax-form'));
     this.element.addEventListener('submit', this.onSubmit.bind(this));
 }
 
