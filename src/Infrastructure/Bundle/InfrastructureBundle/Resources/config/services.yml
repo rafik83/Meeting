@@ -49,14 +49,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.nomenclature_item_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureItemRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.schedule_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\ScheduleRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.unavailability_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UnavailabilityRepository
         arguments:
@@ -152,6 +144,10 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.nomenclature_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.template.registration_template_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -254,6 +250,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@guideline.generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
@@ -782,6 +779,18 @@ services:
             - '@vimeet_infrastructure.adapter.salt_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
+    command.template.registration.update_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
+    command.template.registration.add_locale_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\AddLocaleHandler
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
 
     #
     # Security
@@ -994,6 +1003,18 @@ services:
     #
     components.security.admin_event_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+
+    #
+    # Guideline Component
+    #
+    guideline.generator:
+        class: Proximum\Vimeet\Application\Components\Guideline\Generator
+        arguments:
+            - '@twig'
+            - '%kernel.root_dir%/../web/'
+            - '%infrastructure.web_asset_event_guideline_path%'
+            - '%infrastructure.bundle_guideline_path%'
+            - '%infrastructure.font_path%'
 
     #
     # DateTime

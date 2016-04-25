@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
@@ -41,17 +43,27 @@ class CreateHandler
 
     /**
      * @param Create $create
+     *
+     * @throws TypeAlreadyExistsException
      */
     public function handle(Create $create)
     {
         $type = new Type($create->event);
         $type->setTemplate($create->template);
+        $type->setPosition($create->position);
+
+        $localesTitleAlreadyExists = [];
 
         foreach ($create->translations as $locale => $translation) {
-            $type->getTranslations()->set(
-                $locale,
-                new TypeTranslation($type, $locale, $translation['title'], $translation['description'])
-            );
+            if ($this->typeRepository->typeExists($create->event, $locale, $translation['title'])) {
+                $localesTitleAlreadyExists[] = $locale;
+            } else {
+                $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
+            }
+        }
+
+        if (!empty($localesTitleAlreadyExists)) {
+            throw new TypeAlreadyExistsException($localesTitleAlreadyExists);
         }
 
         if (isset($create->validationCriteria['sheetAccepted'])) {
@@ -71,7 +83,21 @@ class CreateHandler
             $sheetTemplate->setEvent($create->event);
         }
 
+        if ($create->registrationTemplate->getEvent() === $create->event) {
+            $registrationTemplate = $create->registrationTemplate;
+        } else {
+            $registrationTemplate = new RegistrationTemplate(
+                $type->getTitle($create->event->getAvailableLocale($create->locale)),
+                $create->sheetTemplate->getValue(),
+                $create->sheetTemplate->getLocales(),
+                $create->sheetTemplate->getFallback(),
+                $this->dateTime
+            );
+            $registrationTemplate->setEvent($create->event);
+        }
+
         $type->setSheetTemplate($sheetTemplate);
+        $type->setRegistrationTemplate($registrationTemplate);
 
         $this->typeRepository->add($type);
 

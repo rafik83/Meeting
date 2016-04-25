@@ -544,4 +544,16 @@ class Type implements WhoInterface
 
         return $this->setTemplateByName($templateName, $template);
     }
+
+    /**
+     * @param int $position
+     *
+     * @return Type
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
 }

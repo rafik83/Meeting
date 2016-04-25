@@ -1,4 +1,78 @@
 
-<div class="object--nomenclature">
-    {{ dump(uid) }}
-</div>
+{% set nomenclature = nomenclatures[config['nomenclature']]|default %}
+
+{% if nomenclature %}
+
+    {% if nomenclature.depth == 1 %}
+
+        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+            <header>
+                <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+            </header>
+            <div class="section__content">
+                <ul>
+                    {% for key, child in nomenclature.value if key in data[uid] %}
+                        <li>{{ child.label|localize(locale, fallback) }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <footer>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+            </footer>
+        </section>
+
+    {% elseif nomenclature.depth == 2 %}
+
+        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+            <header>
+                <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+            </header>
+            <div class="section__content">
+                <ul>
+                    {% for child in nomenclature.value if child.children|keys|intersect(data[uid])|length > 0 %}
+                        <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
+                        {% for key, grandchild in child.children if key in data[uid] %}
+                            <li>{{ grandchild.label|localize(locale, fallback) }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <footer>
+                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+            </footer>
+        </section>
+
+    {% elseif nomenclature.depth == 3 %}
+
+        {% for child in nomenclature.value %}
+
+            <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+                <header>
+                    <h2>{{ child.label|localize(locale, fallback) }}</h2>
+                </header>
+                <div class="section__content">
+                    <ul>
+                        {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid])|length > 0 %}
+                            <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
+                            {% for key, grandgrandchild in grandchild.children if key in data[uid] %}
+                                <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <footer>
+                    <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                </footer>
+            </section>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% else %}
+
+    <section class="object object--nomenclature {{ 'style--' ~ config['style'] }}">
+        Missing nomenclature
+    </section>
+
+{% endif %}

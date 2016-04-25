@@ -58,7 +58,7 @@ class SheetTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates = $this->get('repository.template.sheet_template_repository')->getBaseTemplate();
+        $templates = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
 
         $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);

@@ -18,6 +18,11 @@ class TypeListView
     public $id;
 
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * @var string
      */
     public $title;
@@ -26,11 +31,13 @@ class TypeListView
      * TypeListView constructor.
      *
      * @param int    $id
+     * @param int    $position
      * @param string $title
      */
-    public function __construct($id, $title)
+    public function __construct($id, $position, $title)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        $this->id       = $id;
+        $this->position = $position;
+        $this->title    = $title;
     }
 }

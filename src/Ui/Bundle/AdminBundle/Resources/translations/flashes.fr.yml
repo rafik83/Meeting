@@ -71,6 +71,8 @@ flash:
         event:
             update:
                 success: L'événement a bien été mis à jour
+                asset:
+                    failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
         type:
@@ -150,6 +152,10 @@ flash:
             success: Votre compte a été activé avec succès
         change_password:
             success: Votre mot de passe a été changé
+        template:
+            registration:
+                update:
+                    success: Template d'Inscription modifié avec succès
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

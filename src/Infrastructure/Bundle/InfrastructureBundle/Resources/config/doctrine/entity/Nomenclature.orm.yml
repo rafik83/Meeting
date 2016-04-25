@@ -7,9 +7,9 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             generator:
                 strategy: AUTO
     fields:
-        label:
-            type: text
-    oneToMany:
-        translations:
-            targetEntity: Proximum\Vimeet\Domain\Model\NomenclatureTranslation
-            mappedBy: nomenclature
+        title:
+            type: string
+        depth:
+            type: integer
+        value:
+            type: json_array

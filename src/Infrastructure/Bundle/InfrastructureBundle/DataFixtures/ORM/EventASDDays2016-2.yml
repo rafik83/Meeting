@@ -5,9 +5,10 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [fr, en]
         fallback: fr
+        assetPath: ''
         organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
-        configuration: '@configuration_rdv_carnot_2016'
+        configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
         bankInfo: |+
             HSBC Issy les Moulineaux
@@ -72,6 +73,13 @@ Proximum\Vimeet\Domain\Model\Event:
                 required: false
                 label: { fr: "N° de TVA intracommunautaire", en: "N° VAT" }
                 tags: ["billing_vat_number"]
+
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_asddays_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:
@@ -995,30 +1003,18 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             required: false
                         e438c993:
                             component: "object"
-                            type: "collection"
+                            type: "nomenclature"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
-                                    fr: "Compétences Aéronautiques"
+                                    fr: "Compétences"
                                 placeholder:
                                     fr: ""
                                 help:
                                     fr: ""
                                 required: false
                                 default: 1
-                        2423e6ea:
-                            component: "object"
-                            type: "collection"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Compétences Défenses"
-                                placeholder:
-                                    fr: ""
-                                help:
-                                    fr: ""
-                                required: false
-                                default: "1"
+                                nomenclature: "@nomenclature_asddays_competences->id"
                         75adad94:
                             component: "block"
                             type: "6-6"
@@ -1069,7 +1065,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "collection"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
                                     fr: "Equipements, technologies et process"
                                 placeholder:
@@ -1150,7 +1146,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "text"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
                                 type: "titre"
@@ -1158,7 +1154,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "block"
                             type: "4-8"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                             children:
                                 -
                                     d927a04b:
@@ -1178,7 +1174,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 -
                                     03b394ac:
                                         component: "object"
-                                        type: "collection"
+                                        type: "nomenclature"
                                         config:
                                             style: "style-1"
                                             label:
@@ -1188,10 +1184,10 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos offres"
                                             required: true
-                                            default: "3"
+                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
                                     63ccc105:
                                         component: "object"
-                                        type: "collection"
+                                        type: "nomenclature"
                                         config:
                                             style: "style-1"
                                             label:
@@ -1201,7 +1197,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos besoins"
                                             required: true
-                                            default: "3"
+                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -1209,24 +1205,58 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@event_asddays_2016_type_fournisseur'
         event: '@event_asddays_2016'
         data:
+            # Titre de la fiche
             dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
+            # Image
             1b9a00b3: "onera.jpg"
-            fb030569: "Laboratoire public"
+            # Lien
             90713a3d: { label: { fr: Site internet }, url: "http://www.onera.fr/" }
+            # Description d'activité
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
-            e438c993: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
-            2423e6ea: ["Modélisation et calculs", "Expérimentation & réalisation de prototypes", "Modélisation & simulation", "Appareils de mesure scientifiques in-situ"]
+            # Compétence
+            e438c993: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"]
+            # Carousel
             848e283e: []
+            # Client de référence
             1adc1873: ["CNES", "CNRS", "Daher", "Dassault", "Dewe France", "DGAC", "DLR", "Durr", "Embraer", "Esa", "Honeywell", "Aircelle", "Messier Bugatti Dowty", "Snecma", "Turbomeca", "Zodiac Aerospace"]
+            # Projets innovant
             46663c1d: ["Radar passif aéroporté", "Optique adaptative de SPHERE", "Initiative sur lanceurs réutilisables", "RAPID, un détecteur infrarouge révolutionnaire"]
+            # Equipements, technologies et progrès
             097ab5e8: ["Fortes praepositis", "Agmina obluridi", "Atratum ioculatores", "Virgae coniunctis", "Velut incedit", "Post adegerit", "Ministerium", "Praepositis servitium"]
+            # Repères
             696dc236: ["2001 salariés", "207 M€ de CA en 2015", "Activitées en coopération : 25%", "Activités sur contrats : 47%", "1er parc de souffleries en Europe", "8 centres en France"]
+            # Groupe / Membre
             79271999: ["Pôle de compétivité Astech", "Instituts Carnot", "Optitec"]
+            # Certification
             a23a2f5d: ["EN9100", "ISO14001", "OHSAS18001", "CAP26000", "ISO14001", "CAP26000"]
+            # Media
             211efd1f: ["Brochure de présentation", "Projet Horizon 2020"]
-            03b394ac: ["Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure"]
-            63ccc105: ["Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure", "Modélisation et caculs", "Expérimentation & réalisation de prototypes", "Appareils de mesure scientifiques in-situ", "Système scientifiques de mesure"]
+            # Offre
+            03b394ac: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            # Besoins
+            63ccc105: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            # Description
             d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_asddays_1:
+        __construct: false
+        user: "@user_asddays_1"
+        sheet: "@sheet_asddays_1"
+        owner: true
+        active: true
+        data:
+            563caf2746398: "John"
+            563caf1d9b1cb: "Doe"
+            563caf2f0ddbd: "0909090909"
+
+Proximum\Vimeet\Domain\Model\User:
+    user_asddays_1:
+        __construct: false
+        email: "user_asddays_1@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"

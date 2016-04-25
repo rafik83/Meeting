@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
+use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -70,10 +71,14 @@ class EventController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.event.update.success');
+            try {
+                $this->get('tactician.commandbus')->handle($update);
+                $this->addFlash('success', 'flash.admin.event.update.success');
 
-            return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
+            } catch (GuidelineAssetBuildFailedException $ex) {
+                $this->addFlash('error', 'flash.admin.event.update.asset.failed');
+            }
         }
 
         return $this->render('AdminBundle:Event:update.html.twig', [

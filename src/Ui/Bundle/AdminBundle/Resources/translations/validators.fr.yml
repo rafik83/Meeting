@@ -1,5 +1,7 @@
 validators:
-    hexadecimal: Cette valeur doit être au format héxadécimal
+    json:
+        invalid: Le JSON n'est pas valide
+    hexadecimal: Cette valeur doit être au format hexadécimal
     field:
         required: Ce champ est requis
     email: L'adresse e-mail saisie n'est pas valide

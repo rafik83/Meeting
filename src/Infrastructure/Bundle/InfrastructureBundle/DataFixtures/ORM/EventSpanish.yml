@@ -5,6 +5,7 @@ Proximum\Vimeet\Domain\Model\Event:
         timeZone: 'Europe/Paris'
         locales: [es]
         fallback: es
+        assetPath: ''
         organiserName: PROXIMUM
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_rdv_carnot_2016'
