@@ -37,7 +37,7 @@ class SecurityController extends Controller
         }
 
         // Clean register type for potential next step
-        $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
+        $this->get('session')->getFlashBag()->get('register_type');
 
         $email = new Email();
         $form = $this->createForm(EmailType::class, $email);
