@@ -25,7 +25,7 @@ AjaxForm.prototype.onLoaded = function (event)
     this.parent.innerHTML = event.target.response;
     this.element          = this.parent.querySelector('form');
 
-    PubSub.publish('dom.added', this.element);
+    PubSub.publish('dom.added', this.parent);
 };
 
 module.exports = AjaxForm;
