@@ -57,7 +57,11 @@ class RegisterController extends Controller
                 $sheets = $this->get('vimeet_infrastructure.repository.sheet_repository')->getSheetByUserAndEvent($user, $eventView);
 
                 if (!empty($sheets)) {
-                    return $this->redirectToRoute('event');
+                    $this->container->get('session')->getFlashBag()->get('login_email');
+                    $this->addFlash('login_email', $email->email);
+                    $this->addFlash('success', 'flash.event.register.already_known.login');
+
+                    return $this->redirectToRoute('event_login_second_step');
                 } else {
                     $this->container->get('session')->getFlashBag()->get('login_email');
                     $this->container->get('session')->getFlashBag()->get('register_type');
