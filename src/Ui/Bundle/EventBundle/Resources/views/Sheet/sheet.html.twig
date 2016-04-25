@@ -23,6 +23,7 @@
         <div class="main__container">
             {% for uid, item in template.value|default([]) %}
                 {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                    'sheet': sheet,
                     'uid': uid,
                     'children': item.children|default([]),
                     'config': item.config|default([]),
@@ -35,12 +36,5 @@
         </div>
 
     </section>
-
-    <div class="modal fade clear-on-hidden-modal" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            </div>
-        </div>
-    </div>
 
 {% endblock %}

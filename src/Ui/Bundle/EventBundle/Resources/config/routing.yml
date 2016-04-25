@@ -93,12 +93,19 @@ event_sheet_locale:
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_update:
-    path:     /fiche-de-presentation/{locale}/{key}
+    path:     /fiche-de-presentation/{locale}/update/{key}
     requirements:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
+event_sheet_object:
+    path:     /fiche-de-presentation/{sheet}/{locale}/object/{key}
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:object }
 
 #
 # Sheet - Participant

@@ -1,5 +1,5 @@
 
-<div class="object object--tag {{ 'style--' ~ config['style'] }}">
+<div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ config['style'] }}" data-refresh="{{ path('event_sheet_object', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
     <header>
         <h2>{{ config['label']|localize(locale, fallback) }}</h2>
     </header>

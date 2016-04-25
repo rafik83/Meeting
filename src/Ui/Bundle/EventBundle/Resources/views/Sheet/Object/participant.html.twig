@@ -1,5 +1,5 @@
 
-<section class="object object--participant {{ 'style--' ~ config['style'] }} section section--list">
+<section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ config['style'] }} section section--list" data-refresh="{{ path('event_sheet_object', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
     <header>
         <h2>Participant(s)</h2>
     </header>

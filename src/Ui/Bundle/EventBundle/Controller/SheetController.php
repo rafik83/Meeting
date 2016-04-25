@@ -113,6 +113,7 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:update.html.twig', [
+            'uid'   => $key,
             'form'  => $form->createView(),
             'label' => $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback()),
         ]);
@@ -135,6 +136,34 @@ class SheetController extends Controller
         return $this->createForm($types[$object->getType()], $object, [
             'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
             'submit' => true,
+        ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function objectAction(EventView $eventView, Sheet $sheet, $locale, $key)
+    {
+        $factory      = new TemplateDataFactory();
+        $templateData = $factory->createFromSheet($sheet, $locale);
+        $object       = $templateData->getObject($key);
+
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+
+        return $this->render('EventBundle:Sheet/Object:' . $object->getType() . '.html.twig', [
+            'uid'           => $key,
+            'config'        => $object->getConfig(),
+            'children'      => [],
+            'locale'        => $locale,
+            'fallback'      => $sheet->getEvent()->getFallback(),
+            'data'          => $templateData->getData(),
+            'nomenclatures' => $nomenclatures,
         ]);
     }
 }
