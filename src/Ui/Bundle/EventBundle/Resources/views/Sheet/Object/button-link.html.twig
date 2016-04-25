@@ -1,0 +1,9 @@
+
+<div class="object object--button-link {{ 'style--' ~ config['style'] }}">
+    <p>
+        <a href="{{ data[uid]['url'] }}" class="btn"><i class="icon-Desktop"></i> {{ data[uid]['label'][locale]|default(config['label']|localize(locale, fallback)) }}</a>
+    </p>
+    <footer>
+        <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+    </footer>
+</div>

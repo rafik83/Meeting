@@ -1,0 +1,51 @@
+
+<section class="object object--participant {{ 'style--' ~ config['style'] }} section section--list">
+    <header>
+        <h2>Participant(s)</h2>
+    </header>
+    <div class="section__content">
+        <ul class="list list--users">
+            <li class="user clearfix">
+                <div class="user__avatar">
+                    <span class="bullet"></span>
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/LaurenceCARON.jpg') }}">
+                    </div>
+                </div>
+                <div class="user__infos">
+                    <p class="name">Emmanuelle ANDROMACAS</p>
+                    <p class="job">Responsable Innovation</p>
+                </div>
+            </li>
+            <li class="user user--notif clearfix">
+                <div class="user__avatar">
+                    <span class="bullet"></span>
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/PatrickWOOD.jpg') }}">
+                    </div>
+                </div>
+                <div class="user__infos">
+                    <p class="name">Vincent BARNAGUL</p>
+                    <p class="job">Directeur Général</p>
+                    <p class="notif">Message non lu</p>
+                </div>
+            </li>
+            <li class="user user--notif clearfix">
+                <div class="user__avatar">
+                    <span class="bullet"></span>
+                    <div class="avatar">
+                        <p>JR</p>
+                    </div>
+                </div>
+                <div class="user__infos">
+                    <p class="name">Emmanuelle ANDROMACAS</p>
+                    <p class="job">Responsable Innovation</p>
+                    <p class="notif">Invitation en cours...</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <footer>
+        <button class="btn"><img src="{{ asset('assets/images/icons/icon-user.png') }}"> Ajouter des participants</button>
+    </footer>
+</section>

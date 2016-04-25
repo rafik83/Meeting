@@ -1,0 +1,13 @@
+
+.block {
+    &.style--style-1 {
+        // transparent block
+    }
+
+    &.style--style-2 {
+        // white background block
+        background-color: #fff;
+        margin: 0;
+        padding: 20px 5px;
+    }
+}

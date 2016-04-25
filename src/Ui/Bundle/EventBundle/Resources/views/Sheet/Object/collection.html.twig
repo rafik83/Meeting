@@ -1,0 +1,16 @@
+
+<section class="object object--collection {{ 'style--' ~ config['style'] }} section">
+    <header>
+        <h2>{{ config['label']|localize(locale, fallback) }}{% if config['required']|default(false) %}*{% endif %}</h2>
+    </header>
+    <div class="section__content">
+        <ul>
+            {% for list_item in data[uid] %}
+                <li>{{ list_item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <footer>
+        <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+    </footer>
+</section>

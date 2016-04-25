@@ -1,0 +1,28 @@
+<div class="row block block--8-4">
+    <div class="col-md-8 content">
+        {% for uid, item in children[0]|default([]) %}
+            {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                'uid': uid,
+                'config': item.config,
+                'children': item.children|default([]),
+                'locale': locale,
+                'fallback': fallback|default,
+                'data': data,
+                'nomenclatures': nomenclatures
+            }, false) }}
+        {% endfor %}
+    </div>
+    <div class="col-md-4 sidebar">
+        {% for uid, item in children[1]|default([]) %}
+            {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                'uid': uid,
+                'config': item.config,
+                'children': item.children|default([]),
+                'locale': locale,
+                'fallback': fallback|default,
+                'data': data,
+                'nomenclatures': nomenclatures
+            }, false) }}
+        {% endfor %}
+    </div>
+</div>

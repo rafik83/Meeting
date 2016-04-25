@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Application\Query\Sheet\SheetPreviewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\UpdateBlockType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -29,19 +28,25 @@ class SheetController extends Controller
      *
      * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet     $sheet
      * @param string    $locale
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventView $eventView, Sheet $sheet, $locale = null)
+    public function sheetAction(Request $request, EventView $eventView, $locale = null)
     {
-        // We must refresh sheet to make behat feature working ...
-        $this->getDoctrine()->getManager()->refresh($sheet);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $locale = $locale ? : $request->getLocale();
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetByUserAndEvent($this->getUser(), $eventView);
+
+        if (empty($sheets)) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        $sheet = $sheets[array_keys($sheets)[0]];
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
@@ -51,12 +56,15 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
-        $preview = $this->get('tactician.commandbus.query')->handle(new SheetPreviewQuery($sheet, $this->getUser(), $locale));
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'sheet'         => $sheet,
             'eventView'     => $eventView,
-            'preview'       => $preview,
+            'sheet'         => $sheet,
+            'template'      => $sheet->getType()->getNewSheetTemplate(),
+            'data'          => $sheet->getData(),
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
         ]);
     }
 

@@ -60,7 +60,7 @@
                                     <select class="form-control" name="nomenclature">
                                         {% if nomenclatures is defined %}
                                             {% for nomenclature in nomenclatures %}
-                                                <option value="{{ nomenclature.id }}">{{ nomenclature.label }}</option>
+                                                <option value="{{ nomenclature.id }}">{{ nomenclature.title }}</option>
                                             {% endfor %}
                                         {% endif %}
                                     </select>

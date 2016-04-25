@@ -1,0 +1,47 @@
+.btn {
+  position: relative;
+  color: $button-text-color !important;
+  font-size: 15px;
+  line-height: 22px;
+  font-family: OpenSans;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 18px;
+  transition: background .2s ease-in-out;
+  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+  > i[class^='icon-'],
+  > img {
+    float: left;
+    margin-right: 5px;
+    font-size: 20px;
+    max-width: 20px;
+    max-height: 20px;
+  }
+
+  &:hover,
+  &:active {
+    color: $button-text-color;
+    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+  }
+}
+
+.btn-inactive {
+  background: $button-bg-color-inactive !important;
+
+  &:hover { background: $button-bg-color-inactive-hover !important; }
+}
+
+.btn-lg {
+  padding-left: 46px;
+  height: 45px;
+  line-height: 27px;
+
+  > i[class^='icon-'],
+  > img {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 25px;
+  }
+}

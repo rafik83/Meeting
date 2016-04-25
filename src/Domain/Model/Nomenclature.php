@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * "Nomenclature".
  */
@@ -25,19 +23,30 @@ class Nomenclature
     /**
      * @var string
      */
-    private $label;
+    private $title;
 
     /**
-     * @var ArrayCollection
+     * @var int
      */
-    private $translations;
+    private $depth = 1;
 
     /**
-     * Constructor.
+     * @var array
      */
-    public function __construct()
+    private $value = [];
+
+    /**
+     * Nomenclature constructor.
+     *
+     * @param string $title
+     * @param int    $depth
+     * @param array  $value
+     */
+    public function __construct($title, $depth, array $value)
     {
-        $this->translations = new ArrayCollection();
+        $this->title = $title;
+        $this->depth = $depth;
+        $this->value = $value;
     }
 
     /**
@@ -51,18 +60,32 @@ class Nomenclature
     }
 
     /**
-     * @return ArrayCollection
+     * Get title
+     *
+     * @return string
      */
-    public function getTranslations()
+    public function getTitle()
     {
-        return $this->translations;
+        return $this->title;
     }
 
     /**
-     * @return string
+     * Get depth
+     *
+     * @return int
      */
-    public function getLabel()
+    public function getDepth()
     {
-        return $this->label;
+        return $this->depth;
+    }
+
+    /**
+     * Get value
+     *
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }

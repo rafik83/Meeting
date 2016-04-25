@@ -33,6 +33,8 @@ Proximum\Vimeet\Domain\Model\Event:
             type: float
         elementToJoinWithInvoice:
             type: string
+        assetPath:
+            type: string
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

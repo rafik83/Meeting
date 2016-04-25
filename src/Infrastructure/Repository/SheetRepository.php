@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -122,17 +123,17 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetByUserAndEvent(User $user, Event $event)
+    public function getSheetByUserAndEvent(User $user, EventInterface $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->where('sheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
     }
