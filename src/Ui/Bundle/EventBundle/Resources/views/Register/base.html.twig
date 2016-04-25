@@ -1,6 +1,10 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block body %}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') and eventView is defined %}
+        {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+    {% endif %}
+
     <div class="wrapper profile">
         <div class="header">
             <a href="{{ path('event') }}">
@@ -43,15 +47,9 @@
             </ul>
         </div>
 
-        {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
-            {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
-        {% endif %}
-
         <div class="profile__content">
             {% block content %}{% endblock %}
             {{ include('EventBundle::flashes.html.twig') }}
         </div>
-
-
     </div>
 {% endblock body %}
