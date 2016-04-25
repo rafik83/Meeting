@@ -92,4 +92,14 @@ abstract class AbstractTemplate
 
         return $config;
     }
+
+    /**
+     * Get value
+     *
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

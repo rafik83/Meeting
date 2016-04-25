@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 interface NomenclatureRepositoryInterface
@@ -18,4 +19,11 @@ interface NomenclatureRepositoryInterface
      * @return Nomenclature[]
      */
     public function getAll();
+
+    /**
+     * @param Event|int $event
+     *
+     * @return Nomenclature
+     */
+    public function findByEvent($event);
 }

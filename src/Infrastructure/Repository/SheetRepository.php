@@ -129,7 +129,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->where('sheet.event = :event')

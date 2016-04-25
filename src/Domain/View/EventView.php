@@ -45,14 +45,22 @@ class EventView implements EventInterface
     public $timeZone;
 
     /**
+     * @var string
+     */
+    public $asset;
+
+    /**
+     * EventView constructor.
+     *
      * @param int    $id
      * @param string $title
      * @param string $description
      * @param string $locale
      * @param array  $locales
      * @param string $timeZone
+     * @param string $asset
      */
-    public function __construct($id, $title, $description, $locale, array $locales, $timeZone)
+    public function __construct($id, $title, $description, $locale, array $locales, $timeZone, $asset)
     {
         $this->id          = $id;
         $this->title       = $title;
@@ -60,6 +68,7 @@ class EventView implements EventInterface
         $this->locale      = $locale;
         $this->locales     = $locales;
         $this->timeZone    = $timeZone;
+        $this->asset       = $asset;
     }
 
     /**

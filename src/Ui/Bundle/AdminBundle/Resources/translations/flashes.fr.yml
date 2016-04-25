@@ -75,6 +75,8 @@ flash:
         event:
             update:
                 success: L'événement a bien été mis à jour
+                asset:
+                    failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
         type:
