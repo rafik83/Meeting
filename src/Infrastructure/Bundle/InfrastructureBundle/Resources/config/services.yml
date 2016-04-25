@@ -1173,3 +1173,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
              - '@fos_elastica.finder.app.sheet'
+
+    #
+    # Command
+    #
+    command.build_event_guideline_asset_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\BuildEventGuidelineAssetCommand
+        tags:
+            - { name: console.command }
