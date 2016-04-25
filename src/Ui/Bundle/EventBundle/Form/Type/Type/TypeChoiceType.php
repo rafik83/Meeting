@@ -47,20 +47,18 @@ class TypeChoiceType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label'             => false,
-                'choices'           => $this->typeRepository->getTypeViewsByEvent(
+                'label'        => false,
+                'choices'      => $this->typeRepository->getTypeViewsByEvent(
                     $options['eventId'],
                     $options['locale']
                 ),
-                'expanded'          => true,
-                'required'          => true,
-                'choice_label'      => 'title',
-                'choice_value'      => 'id',
-                'choice_attr' => function (TypeView $typeView) {
-                    return [
-                        'data-description' => $this->markdown->toHtml($typeView->description),
-                        'data-target'      => '#type-description'
-                    ];
+                'expanded'     => true,
+                'required'     => true,
+                'choice_label' => 'title',
+                'choice_value' => 'id',
+                'attr'         => ['data-choice-description' => '#type-description'],
+                'choice_attr'  => function (TypeView $typeView) {
+                    return ['data-description' => $this->markdown->toHtml($typeView->description)];
                 },
             ]);
     }
