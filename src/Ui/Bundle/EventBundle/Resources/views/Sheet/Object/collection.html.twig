@@ -5,7 +5,7 @@
     </header>
     <div class="section__content">
         <ul>
-            {% for list_item in data[uid] %}
+            {% for list_item in data[uid]|default([]) %}
                 <li>{{ list_item }}</li>
             {% endfor %}
         </ul>

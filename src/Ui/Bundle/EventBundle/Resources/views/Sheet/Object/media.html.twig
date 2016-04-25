@@ -5,7 +5,7 @@
     </header>
     <div class="section__content">
         <ul class="list list--medias">
-            {% for media in data[uid] %}
+            {% for media in data[uid]|default([]) %}
                 <li><i class="icon-Document_1"></i> <a href="">{{ media }}</a></li>
             {% endfor %}
         </ul>
