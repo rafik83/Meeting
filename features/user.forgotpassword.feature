@@ -12,19 +12,14 @@ Feature: Forgot Password
       | OneSheetSeveralParticipants.yml |
 
   Scenario: I can not request a token for a non-existent account
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And I follow "login.forgotPassword"
-    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "test-impossible@test.com"
     And I press "form.forgotten_password.children.submit.label"
     Then the response status code should be 200
     And I should see "validators.emailDoesNotExist"
 
   Scenario: I can request a token for an existent account and change the password
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/login"
-    And the response status code should be 200
-    And I follow "login.forgotPassword"
-    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
+    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "test@test.com"
     And I press "form.forgotten_password.children.submit.label"
     And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"

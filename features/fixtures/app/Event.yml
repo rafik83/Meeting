@@ -32,6 +32,7 @@ Proximum\Vimeet\Domain\Model\Event:
             Pas d'escompte pour paiement anticipé
         mode: 'et'
         vat: 20
+        assetPath: ''
         elementToJoinWithInvoice: |+
             - Numéro de la Facture
             - Nom de l'événement

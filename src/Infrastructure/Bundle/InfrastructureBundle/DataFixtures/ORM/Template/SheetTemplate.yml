@@ -91,30 +91,18 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             required: false
                         e438c993:
                             component: "object"
-                            type: "collection"
+                            type: "nomenclature"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
-                                    fr: "Compétences Aéronautiques"
+                                    fr: "Compétences"
                                 placeholder:
                                     fr: ""
                                 help:
                                     fr: ""
                                 required: false
                                 default: 1
-                        2423e6ea:
-                            component: "object"
-                            type: "collection"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Compétences Défenses"
-                                placeholder:
-                                    fr: ""
-                                help:
-                                    fr: ""
-                                required: false
-                                default: "1"
+                                nomenclature: "@nomenclature_asddays_competences->id"
                         75adad94:
                             component: "block"
                             type: "6-6"
@@ -124,7 +112,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 -
                                     848e283e:
                                         component: "object"
-                                        type: "image"
+                                        type: "carousel"
                                         config:
                                             style: "style-1"
                                             label:
@@ -139,7 +127,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                         component: "object"
                                         type: "collection"
                                         config:
-                                            style: "style-1"
+                                            style: "style-3"
                                             label:
                                                 fr: "Clients de référence"
                                             placeholder:
@@ -152,7 +140,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                         component: "object"
                                         type: "collection"
                                         config:
-                                            style: "style-1"
+                                            style: "style-3"
                                             label:
                                                 fr: "Projets innovant"
                                             placeholder:
@@ -165,7 +153,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "collection"
                             config:
-                                style: "style-1"
+                                style: "style-3"
                                 label:
                                     fr: "Equipements, technologies et process"
                                 placeholder:
@@ -175,6 +163,19 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 required: false
                                 default: "3"
                     -
+                        696dc236:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Repères"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: true
+                                default: "3"
                         79271999:
                             component: "object"
                             type: "collection"
@@ -188,24 +189,11 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
-                        696dc236:
-                            component: "object"
-                            type: "collection"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Repères"
-                                placeholder:
-                                    fr: ""
-                                help:
-                                    fr: ""
-                                required: false
-                                default: "3"
                         a23a2f5d:
                             component: "object"
                             type: "collection"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 label:
                                     fr: "Certifications"
                                 placeholder:
@@ -224,7 +212,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 numberOfParticipantShown: "3"
                         211efd1f:
                             component: "object"
-                            type: "collection"
+                            type: "media"
                             config:
                                 style: "style-1"
                                 label:
@@ -246,43 +234,16 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                             component: "object"
                             type: "text"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                                 content:
-                                    fr: "Objectif de participation"
+                                    fr: "Objectifs de participation"
                                 type: "titre"
                         37db4a33:
                             component: "block"
-                            type: "6-6"
+                            type: "4-8"
                             config:
-                                style: "style-1"
+                                style: "style-2"
                             children:
-                                -
-                                    03b394ac:
-                                        component: "object"
-                                        type: "collection"
-                                        config:
-                                            style: "style-1"
-                                            label:
-                                                fr: "Offres"
-                                            placeholder:
-                                                fr: "Vos offres"
-                                            help:
-                                                fr: "Vos offres"
-                                            required: true
-                                            default: "3"
-                                    63ccc105:
-                                        component: "object"
-                                        type: "collection"
-                                        config:
-                                            style: "style-1"
-                                            label:
-                                                fr: "Besoins"
-                                            placeholder:
-                                                fr: "Vos besoins"
-                                            help:
-                                                fr: "Vos besoins"
-                                            required: true
-                                            default: "3"
                                 -
                                     d927a04b:
                                         component: "object"
@@ -298,3 +259,30 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             length: "500"
                                             type: "text"
                                             required: false
+                                -
+                                    03b394ac:
+                                        component: "object"
+                                        type: "nomenclature"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Offres"
+                                            placeholder:
+                                                fr: "Vos offres"
+                                            help:
+                                                fr: "Vos offres"
+                                            required: true
+                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
+                                    63ccc105:
+                                        component: "object"
+                                        type: "nomenclature"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Besoins"
+                                            placeholder:
+                                                fr: "Vos besoins"
+                                            help:
+                                                fr: "Vos besoins"
+                                            required: true
+                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"

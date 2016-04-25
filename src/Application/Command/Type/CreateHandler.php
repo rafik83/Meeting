@@ -58,7 +58,10 @@ class CreateHandler
             if ($this->typeRepository->typeExists($create->event, $locale, $translation['title'])) {
                 $localesTitleAlreadyExists[] = $locale;
             } else {
-                $type->getTranslations()->set($locale, new TypeTranslation($type, $locale, $translation['title']));
+                $type->getTranslations()->set(
+                    $locale,
+                    new TypeTranslation($type, $locale, $translation['title'], $translation['description'])
+                );
             }
         }
 

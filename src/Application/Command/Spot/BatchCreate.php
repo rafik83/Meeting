@@ -52,6 +52,7 @@ class BatchCreate
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event     = $event;
+        $this->recipes[] = new Recipe('');
     }
 }

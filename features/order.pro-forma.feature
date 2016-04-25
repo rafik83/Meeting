@@ -6,7 +6,7 @@ Feature: Pro-forma
     And the following fixtures files are loaded:
       | Template.yml                                         |
       | app/Event.yml                                        |
-      | app/Nomenclature.yml                                 |
+      | Nomenclatures.yml                                    |
       | app/Type.yml                                         |
       | User.yml                                             |
       | OneSheetOneParticipantWithBillingDataForProForma.yml |

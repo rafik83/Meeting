@@ -1,8 +1,8 @@
-var $               = require('jquery'),
-    bootstrap       = require('bootstrap'),
-    Confirm         = require('./components/_Confirm'),
-    TypeDescription = require('./components/_TypeDescription'),
-    AjaxForm        = require('./components/_AjaxForm');
+var $                 = require('jquery'),
+    bootstrap         = require('bootstrap'),
+    Confirm           = require('./components/_Confirm'),
+    ChoiceDescription = require('./components/_ChoiceDescription'),
+    AjaxForm          = require('./components/_AjaxForm');
 
 require('elao-form.js');
 
@@ -11,6 +11,7 @@ function init(target)
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
+    $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {
@@ -25,7 +26,6 @@ function init(target)
     ;
 
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
-    [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new TypeDescription(element); });
 }
 
 init(document);
