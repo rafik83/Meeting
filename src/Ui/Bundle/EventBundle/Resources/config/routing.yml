@@ -14,7 +14,16 @@ event:
 event_register:
     path: /register/{typeView}
     methods:  [GET, POST]
+    requirements:
+        typeView: \d+
     defaults: { _controller: EventBundle:Register:register }
+
+event_register_new_user:
+    path: /register/{typeView}/new
+    methods:  [GET, POST]
+    requirements:
+        typeView: \d+
+    defaults: { _controller: EventBundle:Register:registerNewUser }
 
 #
 # Change mail

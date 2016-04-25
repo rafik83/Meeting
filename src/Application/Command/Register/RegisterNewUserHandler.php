@@ -3,12 +3,12 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\User;
+namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class RegisterHandler
+class RegisterNewUserHandler
 {
     /**
      * @var UserRepositoryInterface
@@ -49,11 +49,11 @@ class RegisterHandler
     }
 
     /**
-     * @param Register $register
+     * @param RegisterNewUser $register
      *
      * @throws EmailAlreadyExistsException
      */
-    public function handle(Register $register)
+    public function handle(RegisterNewUser $register)
     {
         if ($this->userRepository->emailExists($register->email)) {
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $register->email));

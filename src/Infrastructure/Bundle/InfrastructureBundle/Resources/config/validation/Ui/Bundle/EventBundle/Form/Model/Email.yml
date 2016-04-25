@@ -1,0 +1,7 @@
+Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email:
+    properties:
+        email:
+            - NotBlank:
+                message: validators.required.email
+            - Email:
+                message: validators.email

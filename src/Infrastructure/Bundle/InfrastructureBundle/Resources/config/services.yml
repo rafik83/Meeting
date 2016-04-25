@@ -164,14 +164,6 @@ services:
     #
     # Handlers
     #
-    vimeet_infrastructure.application.command.user.register_handler:
-        class: Proximum\Vimeet\Application\Command\User\RegisterHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.adapter.encoder_adapter'
-            - '@vimeet_infrastructure.adapter.salt_generator'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Register }
     vimeet_infrastructure.application.command.user.change_password:
         class: Proximum\Vimeet\Application\Command\User\ChangePasswordHandler
         arguments:
@@ -779,6 +771,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
+    command.register.register_new_user_handler:
+        class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
         class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
         arguments:

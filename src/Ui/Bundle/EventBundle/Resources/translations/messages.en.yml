@@ -5,3 +5,4 @@ common:
 register:
     register_as: Register as:
     already_registered: Already registered?
+    register: Register
