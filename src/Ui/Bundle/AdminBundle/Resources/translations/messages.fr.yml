@@ -30,6 +30,9 @@ new_password:
 account:
     update:
         title: Modifier mon compte
+        action:
+            email:
+                title: Changer mon email
 
 event:
     link:
