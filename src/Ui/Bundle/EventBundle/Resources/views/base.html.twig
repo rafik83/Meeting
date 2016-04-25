@@ -6,6 +6,9 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+        {% if eventView is defined %}
+            <link rel="stylesheet" href="{{ asset(eventView.asset) }}">
+        {% endif %}
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
@@ -54,11 +57,19 @@
                 </ul>
             </div>
 
+<<<<<<< HEAD
             {% if is_granted('ROLE_USER') %}
                 <div class="sub-header">
                     <ul>
                         <li>
                             <a href="" class="btn btn-lg">
+=======
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="sub-header">
+                    <ul>
+                        <li>
+                            <a href="{{ path('event_sheet') }}" class="btn btn-lg">
+>>>>>>> origin
                                 <i class="icon-Document_1"></i>
                                 <span class="name">Fiche de présentation</span>
                             </a>
@@ -72,6 +83,7 @@
                     </ul>
                 </div>
             {% endif %}
+<<<<<<< HEAD
         </div>
 
         {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
@@ -82,11 +94,44 @@
 
         <div class="container-fluid">
             {% block content %}{% endblock %}
+=======
+
+            <div class="container-fluid">
+                {% block content %}{% endblock %}
+            </div>
+
+>>>>>>> origin
         </div>
     {% endblock body %}
 
+<<<<<<< HEAD
     {% block javascripts %}
         <script src="{{ asset('assets/js/main.js') }}"></script>
     {% endblock %}
+=======
+
+
+            {#
+                <div class="container">
+                {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
+                    {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+                {% endif %}
+
+                <h1>
+                    <a href="{{ path('event') }}">{{ eventView.title }}</a>
+                </h1>
+
+                {{ include('EventBundle::flashes.html.twig') }}
+
+                {% block content %}{% endblock %}
+                </div>
+            #}
+
+
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('assets/js/main.js') }}"></script>
+        {% endblock %}
+>>>>>>> origin
     </body>
 </html>

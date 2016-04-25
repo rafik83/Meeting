@@ -45,7 +45,7 @@ class SheetTemplateChoiceType extends AbstractType
             },
             'choice_label'     => 'title',
             'repositoryMethod' => function (SheetTemplateRepositoryInterface $templateRepository) {
-                return $templateRepository->getBaseTemplate();
+                return $templateRepository->getBaseTemplates();
             },
             'repositoryMethodOrganizer' => function (Options $options) {
                 return function (SheetTemplateRepositoryInterface $templateRepository) use ($options) {

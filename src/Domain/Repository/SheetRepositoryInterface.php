@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
@@ -53,12 +54,12 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
-     * @param User   $user
-     * @param Event  $event
+     * @param User           $user
+     * @param EventInterface $event
      *
      * @return Sheet[]
      */
-    public function getSheetByUserAndEvent(User $user, Event $event);
+    public function getSheetByUserAndEvent(User $user, EventInterface $event);
 
     /**
      * @param int $sheetId

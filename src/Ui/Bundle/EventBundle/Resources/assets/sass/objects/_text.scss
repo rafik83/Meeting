@@ -1,0 +1,44 @@
+
+.object--text {
+
+    &.style--style-1 {
+        // normal text
+    }
+
+    &.style--style-2 {
+        // big blue title
+        margin: 0;
+
+        > header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $gradient-text-color;
+            height: 70px;
+            @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+            h2 {
+                position: relative;
+                margin-bottom: 0;
+
+                &:before,
+                &:after {
+                    position: absolute;
+                    top: 6px;
+                    width: 20px;
+                    height: 20px;
+                    content: ' ';
+                    background-image: url('../images/icons/icon-quote.png');
+                    background-size: cover;
+                }
+
+                &:before { left: -40px; }
+                &:after {
+                    right: -40px;
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+}

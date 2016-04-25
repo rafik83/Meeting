@@ -71,22 +71,15 @@ event_participate:
 # Sheet
 #
 
-event_sheet_integration:
-    path:     /sheet/{sheet}/integration
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:index }
-
 event_sheet:
-    path:     /sheet/{sheet}
+    path:     /fiche-de-presentation
     requirements:
         sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
-    path:     /sheet/{sheet}/{locale}
+    path:     /fiche-de-presentation/{locale}
     requirements:
         sheet: \d+
         locale: '[a-z]{2}'

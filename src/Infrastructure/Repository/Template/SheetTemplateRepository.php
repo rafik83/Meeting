@@ -49,21 +49,6 @@ class SheetTemplateRepository implements SheetTemplateRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseTemplate()
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('template')
-            ->from(SheetTemplate::class, 'template')
-            ->where('template.event IS NULL');
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTemplateForGivenEvents(array $events)
     {
         $queryBuilder = $this

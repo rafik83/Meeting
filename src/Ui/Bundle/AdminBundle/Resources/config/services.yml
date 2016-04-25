@@ -70,7 +70,28 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType
         tags:
             - { name: form.type }
-#
+    form_type_template_registration.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\UpdateType
+        tags:
+            - { name: form.type }
+    form_type_library_admin.json_array_textarea_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\JsonArrayTextareaType
+        tags:
+            - { name: form.type }
+    form_type_template.registration_template_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType
+        arguments:
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: form.type }
+    vimeet_app.form_type_meeting_request.meeting_request:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+        tags:
+            - { name: form.type }
+
+    #
     # Admin library form type
     #
     vimeet_app.form_type_admin.library.type_factory:

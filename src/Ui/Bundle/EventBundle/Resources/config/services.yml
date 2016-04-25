@@ -106,12 +106,6 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_meeting_request.meeting_request:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\PositionMeetingType
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
-        tags:
-            - { name: form.type }
 
     #
     # Event Listener
