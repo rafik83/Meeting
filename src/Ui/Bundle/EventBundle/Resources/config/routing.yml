@@ -215,8 +215,13 @@ event_sheet_order_pro_forma:
 
 event_login:
     path:     /login
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Security:loginFirstStep }
+
+event_login_second_step:
+    path:     /login-second-step
     methods:  [GET]
-    defaults: { _controller: EventBundle:Security:login }
+    defaults: { _controller: EventBundle:Security:loginSecondStep }
 
 event_login_check:
     path:     /login_check

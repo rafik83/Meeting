@@ -1,3 +1,11 @@
+"Bad credentials.": Identifiants incorrects
+
+login:
+    connection: Connexion
+    memberArea: Espace membre
+    connect: Se connecter
+    forgotPassword: Mot de passe oublié ?
+
 common:
     need_help: Besoin d'aide
     next: Suivant
@@ -6,3 +14,4 @@ register:
     register_as: S'inscrire en tant que :
     already_registered: Déjà inscrit ?
     register: Inscription
+    connect: Valider
