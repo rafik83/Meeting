@@ -101,29 +101,40 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet = $this->getUserSheet($eventView, $locale);
-
+        $sheet        = $this->getUserSheet($eventView, $locale);
         $factory      = new TemplateDataFactory();
         $templateData = $factory->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
-
-        $types        = [
-            'editable-text' => EditableTextDataType::class,
-            'button-link'   => ButtonLinkDataType::class,
-        ];
-
-        $form = $this->createForm($types[$object->getType()], $object, [
-            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
-            'submit' => true,
-        ]);
+        $form         = $this->createObjectForm($object, $locale, $key);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
+            $this->get('vimeet_infrastructure.repository.sheet_repository')->set($sheet->setData($templateData->getData()));
+            $form = $this->createObjectForm($object, $locale, $key);
         }
 
         return $this->render('EventBundle:Sheet:update.html.twig', [
             'form'  => $form->createView(),
             'label' => $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback()),
+        ]);
+    }
+
+    /**
+     * @param Object $object
+     * @param string $locale
+     * @param string $key
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    private function createObjectForm($object, $locale, $key)
+    {
+        $types = [
+            'editable-text' => EditableTextDataType::class,
+            'button-link'   => ButtonLinkDataType::class,
+        ];
+
+        return $this->createForm($types[$object->getType()], $object, [
+            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'submit' => true,
         ]);
     }
 }
