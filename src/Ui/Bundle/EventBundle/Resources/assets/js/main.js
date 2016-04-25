@@ -24,7 +24,7 @@ function init (target) {
         }.bind(this))
     ;
 
-    [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
+    [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new TypeDescription(element); });
 }
 

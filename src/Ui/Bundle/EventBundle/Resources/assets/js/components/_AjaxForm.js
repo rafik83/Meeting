@@ -4,7 +4,7 @@ var PubSub = require('pubsub-js');
 function AjaxForm(element, callback)
 {
     this.element  = element;
-    this.parent   = element.parentNode;
+    this.target   = document.querySelector(element.getAttribute('data-ajax-form'));
     this.callback = callback;
     this.element.addEventListener('submit', this.onSubmit.bind(this));
 }
@@ -22,10 +22,10 @@ AjaxForm.prototype.onSubmit = function (event)
 
 AjaxForm.prototype.onLoaded = function (event)
 {
-    this.parent.innerHTML = event.target.response;
-    this.element          = this.parent.querySelector('form');
+    this.target.innerHTML = event.target.response;
+    this.element          = this.target.querySelector('form');
 
-    PubSub.publish('dom.added', this.parent);
+    PubSub.publish('dom.added', this.target);
 };
 
 module.exports = AjaxForm;
