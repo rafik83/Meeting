@@ -10,7 +10,7 @@ Feature: Change password
     And I go to this page "/fr/"
 
   Scenario: Change the password successfully
-    When I follow "change_password.link"
+    When I go to this page "/fr/change-password"
     And I fill in the following:
       |form.change_password_user.children.currentPassword.label               |p@ssw0rd     |
       |form.change_password_user.children.plainPassword.children.first.label  |new-p@ssw0rd |
@@ -19,7 +19,7 @@ Feature: Change password
     And I should see "flash.change_password.success"
 
   Scenario: Change the password failed
-    When I follow "change_password.link"
+    When I go to this page "/fr/change-password"
     And I fill in the following:
       |form.change_password_user.children.currentPassword.label               |whatever-wrong-password     |
       |form.change_password_user.children.plainPassword.children.first.label  |new-p@ssw0rd                |
