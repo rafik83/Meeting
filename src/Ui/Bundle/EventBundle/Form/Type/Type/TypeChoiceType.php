@@ -56,8 +56,11 @@ class TypeChoiceType extends AbstractType
                 'required'          => true,
                 'choice_label'      => 'title',
                 'choice_value'      => 'id',
-                'choice_attr' => function(TypeView $typeView) {
-                    return ['data-description' => $this->markdown->toHtml($typeView->description)];
+                'choice_attr' => function (TypeView $typeView) {
+                    return [
+                        'data-description' => $this->markdown->toHtml($typeView->description),
+                        'data-target'      => '#type-description'
+                    ];
                 },
             ]);
     }

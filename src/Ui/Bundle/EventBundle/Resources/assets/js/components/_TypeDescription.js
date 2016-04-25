@@ -1,8 +1,10 @@
 function TypeDescription(element)
 {
-    this.element            = element;
-    this.description        = element.getAttribute('data-description');
-    this.descriptionElement = document.getElementById('type-description');
+    this.element     = element;
+    this.description = element.getAttribute('data-description');
+
+    var target              = this.element.getAttribute('data-target');
+    this.descriptionElement = document.getElementById(target.replace('#', ''));
 
     this.element.addEventListener('change', this.onChange.bind(this));
 }
