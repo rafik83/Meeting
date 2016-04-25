@@ -15,7 +15,5 @@ Feature: Test to go to the participant sheet
 
   Scenario: I can go to the participant sheet of the user
     When I follow "event.link.see_my_sheet"
-    Then I should be on "/fr/sheet/1"
+    Then I should be on "/fr/fiche-de-presentation"
     And the response status code should be 200
-    And I should see "Exposant"
-    And I should see "Dutest"
