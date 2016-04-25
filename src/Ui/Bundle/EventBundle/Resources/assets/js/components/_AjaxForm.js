@@ -24,3 +24,5 @@ AjaxForm.prototype.onLoaded = function (event)
 
     init(this.element);
 };
+
+module.exports = AjaxForm;
