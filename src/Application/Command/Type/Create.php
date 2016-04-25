@@ -76,7 +76,8 @@ class Create
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
-                'title' => '',
+                'title'       => '',
+                'description' => '',
             ];
         }
     }

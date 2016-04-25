@@ -6,3 +6,4 @@ Proximum\Vimeet\Application\Command\Type\Update:
                     fields:
                         title:
                             - NotBlank: ~
+                        description: ~

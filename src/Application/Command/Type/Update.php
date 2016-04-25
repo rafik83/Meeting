@@ -47,7 +47,8 @@ class Update
 
         foreach ($type->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
-                'title' => $translation->getTitle(),
+                'title'       => $translation->getTitle(),
+                'description' => $translation->getDescription(),
             ];
         }
     }

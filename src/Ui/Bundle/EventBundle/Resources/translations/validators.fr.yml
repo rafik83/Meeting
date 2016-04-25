@@ -1,0 +1,3 @@
+validators:
+    type:
+        required: Un type de participation est requis

@@ -175,6 +175,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
             submit:
                 label: Enregistrer
     type_create:
@@ -197,6 +199,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
             submit:
                 label: Enregistrer
     category_create:
