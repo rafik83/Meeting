@@ -28,6 +28,7 @@ Proximum\Vimeet\Domain\Model\Event:
         # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
         mode: 'et'
         vat: 20
+        assetPath: ''
         elementToJoinWithInvoice: |+
             - Número de la factura
             - Nombre del evento
