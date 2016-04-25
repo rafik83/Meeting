@@ -1,13 +1,13 @@
 var $               = require('jquery'),
     bootstrap       = require('bootstrap'),
+    PubSub          = require('pubsub-js'),
     Confirm         = require('./components/_Confirm'),
     TypeDescription = require('./components/_TypeDescription'),
     AjaxForm        = require('./components/_AjaxForm');
 
 require('elao-form.js');
 
-function init(target)
-{
+function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
@@ -20,12 +20,14 @@ function init(target)
             $(event.target).removeData('bs.modal').find('.modal-content').empty();
         })
         .on('loaded.bs.modal', function (event) {
-            init(event.target);
-        })
+            PubSub.publish('dom.added', event.target);
+        }.bind(this))
     ;
 
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new TypeDescription(element); });
 }
+
+PubSub.subscribe('dom.added', function (name, element) { init(element); });
 
 init(document);
