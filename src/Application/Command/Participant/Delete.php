@@ -27,7 +27,7 @@ class Delete
     public $requester;
 
     /**
-     * @var Participant
+     * @var int
      */
     public $participant;
 

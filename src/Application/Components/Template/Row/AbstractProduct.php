@@ -35,7 +35,7 @@ abstract class AbstractProduct extends Row
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
     public function getUpdatableUntil()
     {

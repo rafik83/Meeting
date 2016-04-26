@@ -169,7 +169,7 @@ class GroupFactory
 
                     if (count($parts) === 2 && $value === true || count($parts) === 3 && $value === $parts[2]) {
                         $row            = $this->createRowViewFromArray($templates, $groupName, $typeName, ['value' => $value, 'quantity' => $quantity], $locale);
-                        $row->unitPrice = 0.0;
+                        $row->unitPrice = 0;
                         $groups[$parts[0]]->getRow($parts[1])->addIncluded($row);
                     }
                 }

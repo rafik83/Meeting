@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Category;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening\Category;
 
 class Create
 {
@@ -34,11 +33,6 @@ class Create
      * @var array
      */
     public $translations = [];
-
-    /**
-     * @var Category
-     */
-    public $category;
 
     /**
      * Create constructor.

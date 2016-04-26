@@ -47,17 +47,17 @@ class PositionMeeting
     public $slot;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      */
     public $createdAt;
 
     /**
      * PositionMeeting constructor.
      *
-     * @param Request            $request
-     * @param \DateTimeInterface $createdAt
+     * @param Request   $request
+     * @param \DateTime $createdAt
      */
-    public function __construct(Request $request, \DateTimeInterface $createdAt)
+    public function __construct(Request $request, \DateTime $createdAt)
     {
         $this->meetingRequest   = $request;
         $this->fromSheet        = $request->getFromSheet();

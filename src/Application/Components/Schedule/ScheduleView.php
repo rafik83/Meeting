@@ -18,7 +18,7 @@ class ScheduleView
     public $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      */
     public $date;
 

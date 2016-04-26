@@ -33,7 +33,7 @@ interface SpeakerRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return Speaker[]
+     * @return Speaker[];
      */
     public function allByEvent(Event $event);
 }

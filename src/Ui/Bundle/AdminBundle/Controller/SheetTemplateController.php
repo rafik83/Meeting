@@ -35,7 +35,7 @@ class SheetTemplateController extends Controller
 {
     /**
      * @param string $type
-     * @param array  $data
+     * @param string $data
      * @param array  $options
      *
      * @return FormInterface
