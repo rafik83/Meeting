@@ -136,11 +136,11 @@ class RegistrationTemplate extends AbstractTemplate
     /**
      * Set value
      *
-     * @param string $value
+     * @param array $value
      *
      * @return RegistrationTemplate
      */
-    public function setValue($value)
+    public function setValue(array $value)
     {
         $this->value = $value;
 
