@@ -159,7 +159,7 @@ class SheetController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('vimeet_infrastructure.repository.sheet_repository')->set($sheet->setData($templateData->getData()));
 
-            //return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_sheet');
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
