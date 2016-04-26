@@ -38,7 +38,7 @@ class Validator
      */
     public function validateDataAgainstTemplates(array $data, Templates $templates)
     {
-        foreach ($templates as $key => $template) {
+        foreach ($templates->getTemplates() as $key => $template) {
             $this->validateDataAgainstTemplate(isset($data[$key]) ? $data[$key] : [], $template);
         }
     }
