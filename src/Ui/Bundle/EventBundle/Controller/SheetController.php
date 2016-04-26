@@ -160,7 +160,7 @@ class SheetController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
-            return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
