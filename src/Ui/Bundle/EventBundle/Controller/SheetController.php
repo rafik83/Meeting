@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -157,7 +158,7 @@ class SheetController extends Controller
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.repository.sheet_repository')->set($sheet->setData($templateData->getData()));
+            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
             return $this->redirectToRoute('event_sheet');
         }
