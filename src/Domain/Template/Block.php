@@ -131,4 +131,14 @@ class Block extends AbstractChild
 
         return $this->type === 'root' ? $array['children'][0] : $array;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return array_map(function (Object $object) {
+            return $object->getData();
+        }, $this->getObjects());
+    }
 }
