@@ -20,12 +20,12 @@ class Update
     public $unavailability;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $from;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $to;
 
