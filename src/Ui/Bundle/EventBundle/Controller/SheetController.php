@@ -89,7 +89,8 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request   $request
+     * Render the form of an object. Loaded by ajax from the sheet.
+     *
      * @param EventView $eventView
      * @param string    $locale
      * @param string    $key
@@ -97,7 +98,7 @@ class SheetController extends Controller
      * @return Response
      * @throws \Exception
      */
-    public function updateAction(Request $request, EventView $eventView, $locale, $key)
+    public function formAction(EventView $eventView, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -106,16 +107,12 @@ class SheetController extends Controller
         $templateData = $factory->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('vimeet_infrastructure.repository.sheet_repository')->set($sheet->setData($templateData->getData()));
-            $form = $this->createObjectForm($object, $locale, $key);
-        }
-
-        return $this->render('EventBundle:Sheet:update.html.twig', [
+        return $this->render('EventBundle:Sheet:form.html.twig', [
             'uid'   => $key,
             'form'  => $form->createView(),
-            'label' => $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback()),
+            'label' => $label,
         ]);
     }
 
@@ -140,30 +137,47 @@ class SheetController extends Controller
     }
 
     /**
+     * Update an object and display the sheet with the modal in case of form error.
+     *
+     * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet     $sheet
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function objectAction(EventView $eventView, Sheet $sheet, $locale, $key)
+    public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
+        $sheet        = $this->getUserSheet($eventView, $locale);
         $factory      = new TemplateDataFactory();
         $templateData = $factory->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
+        $form         = $this->createObjectForm($object, $locale, $key);
 
+        // Handle the form, update the object and redirect to the sheet if valid
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('vimeet_infrastructure.repository.sheet_repository')->set($sheet->setData($templateData->getData()));
+
+            //return $this->redirectToRoute('event_sheet');
+        }
+
+        // If the form is not valid, render the sheet and force the popin with the object form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $template      = $sheet->getType()->getNewSheetTemplate();
+        $data          = $sheet->getData();
+        $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        return $this->render('EventBundle:Sheet/Object:' . $object->getType() . '.html.twig', [
-            'uid'           => $key,
-            'config'        => $object->getConfig(),
-            'children'      => [],
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'template'      => $template,
+            'data'          => $data,
             'locale'        => $locale,
-            'fallback'      => $sheet->getEvent()->getFallback(),
-            'data'          => $templateData->getData(),
             'nomenclatures' => $nomenclatures,
+            'form'          => $form->createView(),
+            'label'         => $label,
+            'uid'           => $key,
         ]);
     }
 }

@@ -1,16 +1,9 @@
 
-<div id="object-{{ uid }}" class="object object--button-link {{ 'style--' ~ config['style'] }}" data-refresh="{{ path('event_sheet_object', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
+<div id="object-{{ uid }}" class="object object--button-link {{ 'style--' ~ config['style'] }}">
     <p>
         <a href="{{ data[uid]['url']|default('#') }}" class="btn"><i class="icon-Desktop"></i> {{ data[uid]['label'][locale]|default(config['label']|localize(locale, fallback)) }}</a>
     </p>
     <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal-{{ uid }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
     </footer>
-</div>
-
-<div class="modal fade clear-on-hidden-modal" id="edit-modal-{{ uid }}" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        </div>
-    </div>
 </div>

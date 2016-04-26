@@ -1,5 +1,5 @@
 
-<section id="object-{{ uid }}" class="object object--text {{ 'style--' ~ config['style'] }} section" data-refresh="{{ path('event_sheet_object', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
+<section id="object-{{ uid }}" class="object object--text {{ 'style--' ~ config['style'] }} section">
     <header>
         <h2>{{ config['content']|localize(locale, fallback) }}</h2>
     </header>

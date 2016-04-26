@@ -1,11 +1,4 @@
 
-<div id="object-{{ uid }}" class="object object--image {{ 'style--' ~ config['style'] }}" data-refresh="{{ path('event_sheet_object', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
+<div id="object-{{ uid }}" class="object object--image {{ 'style--' ~ config['style'] }}">
     <img src="{{ asset('assets/images/dummy/logo.jpg') }}" alt="{{ config['label']|localize(locale, fallback) }}" >
-</div>
-
-<div class="modal fade clear-on-hidden-modal" id="edit-modal-{{ uid }}" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        </div>
-    </div>
 </div>

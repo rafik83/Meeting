@@ -14,7 +14,9 @@ function init (target) {
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {
-            $(event.target).removeData('bs.modal').find('.modal-content').html($(event.target).data('placeholder'));
+            if (event.relatedTarget !== undefined && (event.relatedTarget.href !== '' || event.relatedTarget.href !== '#')) {
+                $(event.target).removeData('bs.modal').find('.modal-content').html($(event.target).data('placeholder'));
+            }
         })
         .on('hidden.bs.modal', function (event) {
             $(event.target).removeData('bs.modal').find('.modal-content').empty();
@@ -23,6 +25,8 @@ function init (target) {
             PubSub.publish('dom.added', event.target);
         }.bind(this))
     ;
+
+    $('.show-modal').modal('show');
 
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new TypeDescription(element); });
