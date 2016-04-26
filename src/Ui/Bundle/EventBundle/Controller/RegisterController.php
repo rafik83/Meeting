@@ -10,23 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Participant\Create;
 use Proximum\Vimeet\Domain\Template\Object;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -173,12 +168,14 @@ class RegisterController extends Controller
 
         $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-        $factory      = new TemplateDataFactory();
-        $templateData = $factory->createRegistrationFromType($type, $request->getLocale());
-        $block        = $templateData->getFirstBlock();
+        $locale = $eventView->locale;
+
+        $templateDataFactory = $this->get('template.template_data_factory');
+        $templateData        = $templateDataFactory->createRegistrationFromType($type, $request->getLocale());
+        $block               = $templateData->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $block, [
-            'locale' => $eventView->locale,
+            'locale' => $locale,
             'block'  => $block,
         ]);
 
@@ -191,7 +188,7 @@ class RegisterController extends Controller
 
             try {
                 // Create the participant
-                $participate = new Participate($this->getUser(), $event, $type, $data);
+                $participate = new Participate($this->getUser(), $event, $type, $locale, $data);
                 $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 

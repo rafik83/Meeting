@@ -177,7 +177,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.validator'
+            - '@template.template_data_validator'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -1121,6 +1121,16 @@ services:
         class: Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser
         arguments:
             - '@template.template_factory'
+
+    #
+    # Template
+    #
+    template.template_data_factory:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
+    template.template_data_validator:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Spot component
