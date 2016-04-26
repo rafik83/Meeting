@@ -19,11 +19,24 @@ class Block extends AbstractChild
      */
     private $children = [];
 
+    /**
+     * @param string $key
+     *
+     * @return Object
+     * @throws \Exception
+     */
     public function __get($key)
     {
         return $this->getObject($key);
     }
 
+    /**
+     * @param string $key
+     * @param string $value
+     *
+     * @return EditableText
+     * @throws \Exception
+     */
     public function __set($key, $value)
     {
         $object = $this->getObject($key);
