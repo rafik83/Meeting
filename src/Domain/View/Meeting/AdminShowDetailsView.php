@@ -45,7 +45,7 @@ class AdminShowDetailsView
     /**
      * @var array
      */
-    public $toParticipantsNames  = [];
+    public $toParticipantNames = [];
 
     /**
      * @var array
