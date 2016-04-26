@@ -10,12 +10,30 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Template\Object\EditableText;
+
 class Block extends AbstractChild
 {
     /**
      * @var array
      */
     private $children = [];
+
+    public function __get($key)
+    {
+        return $this->getObject($key);
+    }
+
+    public function __set($key, $value)
+    {
+        $object = $this->getObject($key);
+
+        if ($object instanceof EditableText) {
+            return $object->setContent($value);
+        }
+
+        return $object->setData($value);
+    }
 
     /**
      * @param int           $column
@@ -30,14 +48,18 @@ class Block extends AbstractChild
     /**
      * @return Object[]
      */
-    public function getObjects()
+    public function getObjects($key = null)
     {
-        return array_reduce($this->children, function (array $carry, array $column) {
-            foreach ($column as $key => $child) {
+        return array_reduce($this->children, function (array $carry, array $column) use ($key) {
+            foreach ($column as $childKey => $child) {
+                if (null !== $key && $childKey !== $key) {
+                    continue;
+                }
+
                 if ($child instanceof Block) {
                     $carry = array_merge($carry, $child->getObjects());
                 } elseif ($child instanceof Object) {
-                    $carry = array_merge($carry, [$key => $child]);
+                    $carry = array_merge($carry, [$childKey => $child]);
                 }
             }
 
@@ -60,6 +82,22 @@ class Block extends AbstractChild
         }
 
         throw new \Exception('Object not found.');
+    }
+
+    /**
+     * @return null|Block
+     */
+    public function getFirstBlock()
+    {
+        foreach ($this->children as $children) {
+            foreach ($children as $child) {
+                if ($child instanceof Block) {
+                    return $child;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

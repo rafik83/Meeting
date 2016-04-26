@@ -17,6 +17,14 @@ class EditableText extends Object
     /**
      * @return string
      */
+    public function __toString()
+    {
+        return $this->getContent() ?: '';
+    }
+
+    /**
+     * @return string
+     */
     public function getContent()
     {
         return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;

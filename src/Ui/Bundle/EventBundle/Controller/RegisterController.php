@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Create;
+use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -21,7 +23,10 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -166,38 +171,25 @@ class RegisterController extends Controller
         // Check if the user has already created a participate
         $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
 
-        // Create participate form
-        $create   = new Create();
-        $template = $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($typeView->id);
-        $form     = $this->createForm(ParticipantCreateType::class, $create, [
-            'locale'   => $eventView->locale,
-            'template' => $template,
-            'submit'   => true,
+        $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
+
+        $factory      = new TemplateDataFactory();
+        $templateData = $factory->createRegistrationFromType($type, $request->getLocale());
+        $block        = $templateData->getFirstBlock();
+
+        $form = $this->createForm(BlockType::class, $block, [
+            'locale' => $eventView->locale,
+            'block'  => $block,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-            $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-            try {
-                // Create the participant
-                $participate = new Participate($this->getUser(), $event, $type, $create->data);
-                $this->get('tactician.commandbus')->handle($participate);
-                $this->addFlash('success', 'flash.event.participation.success');
-
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
-            } catch (RequiredDataEmptyException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            }
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
-            'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
+            'form'      => $form->createView(),
         ]);
     }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class TemplateDataFactory
 {
@@ -40,6 +41,17 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Type   $type
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromType(Type $type, $locale)
+    {
+        return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
+    }
+
+    /**
      * @param array  $template
      * @param array  $data
      * @param string $locale
@@ -56,7 +68,11 @@ class TemplateDataFactory
         }
 
         foreach ($data as $key => $value) {
-            $templateData->getObject($key)->setData($value)->setLocale($locale);
+            $templateData->getObject($key)->setData($value);
+        }
+
+        foreach ($templateData->getObjects() as $object) {
+            $object->setLocale($locale);
         }
 
         return $templateData;
