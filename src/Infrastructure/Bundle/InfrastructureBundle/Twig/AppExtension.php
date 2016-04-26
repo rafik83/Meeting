@@ -58,7 +58,7 @@ class AppExtension extends \Twig_Extension
      * @param string $fieldTemplate
      * @param string $locale
      *
-     * @return string
+     * @return mixed
      */
     public function formatData($value, $fieldTemplate, $locale)
     {
@@ -70,13 +70,15 @@ class AppExtension extends \Twig_Extension
             if ('lib_choice' === $fieldTemplate['type']) {
                 $choices = $fieldTemplate['choices'];
 
-                foreach ($choices as $key => $choice) {
-                    if (isset($choices[$value]['label'][$locale])) {
-                        return $choices[$value]['label'][$locale];
-                    } elseif (isset($choices[$key]['choices'])
-                        && isset($choices[$key]['choices'][$value]['label'][$locale])
-                    ) {
-                        return $choices[$key]['choices'][$value]['label'][$locale];
+                if (is_array($choices)) {
+                    foreach ($choices as $key => $choice) {
+                        if (isset($choices[$value]['label'][$locale])) {
+                            return $choices[$value]['label'][$locale];
+                        } elseif (isset($choices[$key]['choices'])
+                            && isset($choices[$key]['choices'][$value]['label'][$locale])
+                        ) {
+                            return $choices[$key]['choices'][$value]['label'][$locale];
+                        }
                     }
                 }
             }
@@ -111,13 +113,15 @@ class AppExtension extends \Twig_Extension
      * @param array  $choices
      * @param string $locale
      *
-     * @return string
+     * @return array|string
      */
     public function choicesList($choices, $locale)
     {
         if (!count($choices)) {
             return [];
         }
+
+        $items = [];
 
         foreach ($choices as $choice) {
             if (isset($choice['choices']) && isset($choice['label'][$locale])) {
