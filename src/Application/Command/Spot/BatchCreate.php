@@ -31,12 +31,12 @@ class BatchCreate
     public $size;
 
     /**
-     * @var float
+     * @var int
      */
     public $meetingCapacity = 1;
 
     /**
-     * @var float
+     * @var int
      */
     public $seatCapacity = 3;
 

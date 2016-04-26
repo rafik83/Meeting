@@ -20,12 +20,12 @@ class Add
     public $participants = [];
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $from;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $to;
 
