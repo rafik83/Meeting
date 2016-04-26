@@ -20,7 +20,8 @@ class LibChoiceWithDescriptionCart extends LibAbstractCart
      */
     public function prepare(ProductInterface $product, array $dataValue, $locale)
     {
-        $cartRow = null;
+        $cartRow  = null;
+        $template = $product->getOptions();
 
         if (null !== $product
             && !empty($product->getOptions())

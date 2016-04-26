@@ -67,7 +67,7 @@ interface AdminRepositoryInterface
      * @param int   $limit
      * @param array $filters
      *
-     * @return Admin[]
+     * @return PaginatedResult
      */
     public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters);
 }

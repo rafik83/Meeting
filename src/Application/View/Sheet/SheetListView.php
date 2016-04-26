@@ -96,6 +96,11 @@ class SheetListView
     public $traceBy = null;
 
     /**
+     * @var bool
+     */
+    public $completed;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
