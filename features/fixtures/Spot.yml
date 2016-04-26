@@ -38,4 +38,4 @@ Proximum\Vimeet\Domain\Model\Spot:
         size: 6
         meetingCapacity: 5
         seatCapacity: 4
-        active: true
+        active: false

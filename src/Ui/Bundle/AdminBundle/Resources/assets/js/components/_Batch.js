@@ -75,6 +75,10 @@ Batch.prototype.toggle = function ()
             item.classList.toggle('hide');
         });
 
+        [].forEach.call(this.element.querySelectorAll('.new-actions'), function (item) {
+            item.classList.toggle('hide');
+        });
+
         this.batch = !this.batch;
     }
 
