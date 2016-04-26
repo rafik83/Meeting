@@ -120,7 +120,7 @@ class SheetController extends Controller
 
     /**
      * @param string $type
-     * @param string $data
+     * @param array  $data
      * @param array  $options
      *
      * @return FormInterface

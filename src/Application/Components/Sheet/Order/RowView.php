@@ -38,7 +38,7 @@ class RowView
     public $editable = false;
 
     /**
-     * @var bool
+     * @var \DateTimeInterface
      */
     public $updatableUntil = null;
 

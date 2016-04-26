@@ -29,7 +29,7 @@ class MeetingRequestController extends Controller
 {
     /**
      * @param string $type
-     * @param string $data
+     * @param array  $data
      * @param array  $options
      *
      * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface

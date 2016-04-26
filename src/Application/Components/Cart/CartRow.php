@@ -23,12 +23,12 @@ class CartRow
     private $quantity;
 
     /**
-     * @var int
+     * @var float
      */
     private $unitPrice;
 
     /**
-     * @var int
+     * @var float
      */
     private $subTotal;
 
@@ -37,6 +37,13 @@ class CartRow
      */
     private $include;
 
+    /**
+     * CartRow constructor.
+     *
+     * @param string $label
+     * @param int    $quantity
+     * @param float  $unitPrice
+     */
     public function __construct($label, $quantity, $unitPrice)
     {
         $this->label     = $label;
@@ -63,7 +70,7 @@ class CartRow
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getUnitPrice()
     {
@@ -71,7 +78,7 @@ class CartRow
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getSubTotal()
     {
