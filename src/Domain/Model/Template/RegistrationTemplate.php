@@ -52,16 +52,6 @@ class RegistrationTemplate extends AbstractTemplate
     }
 
     /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Get title
      *
      * @return string
