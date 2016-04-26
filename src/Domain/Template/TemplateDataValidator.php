@@ -40,8 +40,15 @@ class TemplateDataValidator
     public function validateParticipantData(Type $type, $locale, array $data)
     {
         $participantTemplate = $this->templateDataFactory->createRegistrationFromType($type, $locale)->getFirstBlock();
+        $objects             = $participantTemplate->getObjects();
 
         $missingRequiredKeys = [];
+
+        foreach ($objects as $key => $object) {
+            if (true === $object->getOption('required') && empty($data[$key]['text'])) {
+                $missingRequiredKeys[] = $key;
+            }
+        }
 
         if (!empty($missingRequiredKeys)) {
             throw new MissingRequiredDataException($missingRequiredKeys);

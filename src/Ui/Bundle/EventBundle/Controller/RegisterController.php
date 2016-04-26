@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -194,7 +194,7 @@ class RegisterController extends Controller
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
-            } catch (RequiredDataEmptyException $exception) {
+            } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
                 }

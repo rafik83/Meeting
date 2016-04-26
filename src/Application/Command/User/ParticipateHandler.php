@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
+use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -60,7 +60,7 @@ class ParticipateHandler
     /**
      * @param Participate $participate
      *
-     * @throws RequiredDataEmptyException
+     * @throws MissingRequiredDataException
      */
     public function handle(Participate $participate)
     {
