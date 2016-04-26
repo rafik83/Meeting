@@ -23,11 +23,6 @@ class CreateHandler
     private $categoryRepository;
 
     /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param TypeRepositoryInterface     $typeRepository
      */

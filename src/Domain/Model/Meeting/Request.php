@@ -36,7 +36,7 @@ class Request implements MessageSubjectInterface
     private $from;
 
     /**
-     * @var ArrayCollection
+     * @var Participant[]
      */
     private $fromParticipants;
 
@@ -46,7 +46,7 @@ class Request implements MessageSubjectInterface
     private $to;
 
     /**
-     * @var ArrayCollection
+     * @var Participant[]
      */
     private $toParticipants;
 

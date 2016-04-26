@@ -45,7 +45,7 @@ class AdminShowDetailsView
     /**
      * @var array
      */
-    public $toParticipantNames = [];
+    public $toParticipantsNames  = [];
 
     /**
      * @var array
@@ -70,7 +70,7 @@ class AdminShowDetailsView
     /**
      * AdminShowDetailsView constructor.
      *
-     * @param int                $meetingRequestId
+     * @param string             $meetingRequestId
      * @param int                $fromSheetId
      * @param string             $fromSheetName
      * @param int                $toSheetId

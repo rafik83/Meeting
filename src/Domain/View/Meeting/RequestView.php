@@ -46,12 +46,12 @@ class RequestView
     public $state;
 
     /**
-     * @var ArrayCollection
+     * @var ParticipantNameView[]
      */
     public $fromParticipants;
 
     /**
-     * @var ArrayCollection
+     * @var ParticipantNameView[]
      */
     public $toParticipants;
 

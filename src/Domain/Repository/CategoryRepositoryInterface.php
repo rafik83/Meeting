@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\CategoryListView;
 use Proximum\Vimeet\Domain\View\CategoryView;
 
 interface CategoryRepositoryInterface
@@ -24,7 +24,7 @@ interface CategoryRepositoryInterface
      * @param int    $eventId
      * @param string $locale
      *
-     * @return PaginatedResult
+     * @return CategoryListView[]
      */
     public function paginate($page, $limit, $eventId, $locale);
 

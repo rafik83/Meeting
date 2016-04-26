@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ForgottenPasswordHandler
 {
     /**
-     * @var AdminForgottenPasswordTokenGenerator
+     * @var ForgottenPasswordTokenGenerator
      */
     private $forgottenPasswordTokenGenerator;
 

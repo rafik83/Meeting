@@ -22,7 +22,7 @@ class Duplicate
     public $title;
 
     /**
-     * @var SheetTemplate
+     * @var Template
      */
     public $template;
 
