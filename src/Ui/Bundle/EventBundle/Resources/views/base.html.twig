@@ -87,7 +87,7 @@
                 {% endif %}
             </div>
 
-            {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') and eventView is defined %}
                 {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
             {% endif %}
 
