@@ -889,7 +889,7 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
         registrationTemplate: '@registration_template_asd_days'
-        
+
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_fournisseur_fr:
         __construct: ['@event_asddays_2016_type_fournisseur', fr, "Fournisseur"]
