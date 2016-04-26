@@ -183,7 +183,25 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $data = array_filter($block->getData(), function ($value) {
+                return null !== $value;
+            });
 
+            $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+
+            try {
+                // Create the participant
+                $participate = new Participate($this->getUser(), $event, $type, $data);
+                $this->get('tactician.commandbus')->handle($participate);
+                $this->addFlash('success', 'flash.event.participation.success');
+
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
+            } catch (RequiredDataEmptyException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            }
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
