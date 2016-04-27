@@ -168,17 +168,18 @@ class RegisterController extends Controller
 
         $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-
         $locale = $eventView->locale;
 
         $templateDataFactory = $this->get('template.template_data_factory');
         $templateData        = $templateDataFactory->createRegistrationFromType($type, $request->getLocale());
         $block               = $templateData->getFirstBlock();
 
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+
         $form = $this->createForm(BlockType::class, $block, [
-            'locale' => $locale,
-            'block'  => $block,
+            'locale'        => $locale,
+            'block'         => $block,
+            'nomenclatures' => $nomenclatures,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
