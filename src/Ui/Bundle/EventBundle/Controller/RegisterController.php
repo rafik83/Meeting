@@ -170,26 +170,26 @@ class RegisterController extends Controller
 
         $locale = $eventView->locale;
 
-        $templateDataFactory = $this->get('template.template_data_factory');
-        $templateData        = $templateDataFactory->createRegistrationFromType($type, $request->getLocale());
-        $block               = $templateData->getFirstBlock();
+        $participantBlock = $this->get('template.template_data_factory')
+            ->createRegistrationFromType($type, $request->getLocale())
+            ->getFirstBlock();
 
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
-        $form = $this->createForm(BlockType::class, $block, [
+        $form = $this->createForm(BlockType::class, $participantBlock, [
             'locale'        => $locale,
-            'block'         => $block,
+            'block'         => $participantBlock,
             'nomenclatures' => $nomenclatures,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = array_filter($block->getData(), function ($value) {
-                return null !== $value;
-            });
-
-            $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-
             try {
+                $data = array_filter($participantBlock->getData(), function ($value) {
+                    return null !== $value;
+                });
+
+                $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $locale, $data);
                 $this->get('tactician.commandbus')->handle($participate);
