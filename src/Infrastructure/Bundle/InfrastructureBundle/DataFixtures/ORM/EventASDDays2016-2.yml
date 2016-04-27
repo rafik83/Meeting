@@ -1309,7 +1309,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
-                                nomenclature: "1"
+                                nomenclature: "@nomenclature_asddays_service->id"
                         6c4a3a4f:
                             component: "object"
                             type: "nomenclature"
@@ -1319,7 +1319,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Fonction"
                                 help:
                                     fr: ""
-                                nomenclature: "4"
+                                nomenclature: "@nomenclature_asddays_position->id"
                         1efb9cbb:
                             component: "object"
                             type: "editable-text"
