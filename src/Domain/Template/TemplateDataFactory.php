@@ -22,7 +22,7 @@ class TemplateDataFactory
         'editable-text' => Object\EditableText::class,
         'image'         => Object::class,
         'media'         => Object::class,
-        'nomenclature'  => Object::class,
+        'nomenclature'  => Object\Nomenclature::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
         'text'          => Object::class,

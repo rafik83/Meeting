@@ -29,7 +29,13 @@ class BlockType extends AbstractType
 
         /** @var Object $object */
         foreach ($block->getObjects() as $key => $object) {
-            if ('editable-text' === $object->getType()) {
+            if ($object instanceof Object\EditableText) {
+                $builder->add($key, TextType::class, [
+                    'label'       => false,
+                    'placeholder' => $object->getOption('placeholder')[$options['locale']],
+                    'required'    => $object->getOption('required'),
+                ]);
+            } elseif ($object instanceof Object\Nomenclature) {
                 $builder->add($key, TextType::class, [
                     'label'       => false,
                     'placeholder' => $object->getOption('placeholder')[$options['locale']],

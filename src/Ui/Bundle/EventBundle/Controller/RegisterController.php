@@ -168,6 +168,8 @@ class RegisterController extends Controller
 
         $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+
         $locale = $eventView->locale;
 
         $templateDataFactory = $this->get('template.template_data_factory');
