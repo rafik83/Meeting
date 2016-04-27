@@ -98,14 +98,12 @@ class BlockType extends AbstractType
                     continue;
                 }
 
-                $choices[$item['label'][$locale]] = array_flip(
-                    array_map(
-                        function ($value) use ($locale) {
-                            return $value['label'][$locale];
-                        },
-                        $item['children']
-                    )
-                );
+                $choices[$item['label'][$locale]] = array_flip(array_map(
+                    function ($value) use ($locale) {
+                        return $value['label'][$locale];
+                    },
+                    $item['children']
+                ));
             }
 
             return $choices;
