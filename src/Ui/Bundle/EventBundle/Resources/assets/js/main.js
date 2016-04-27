@@ -2,7 +2,8 @@ var $                 = require('jquery'),
     bootstrap         = require('bootstrap'),
     Confirm           = require('./components/_Confirm'),
     ChoiceDescription = require('./components/_ChoiceDescription'),
-    AjaxForm          = require('./components/_AjaxForm');
+    AjaxForm          = require('./components/_AjaxForm'),
+    select2           = require('select2');
 
 require('elao-form.js');
 
@@ -12,6 +13,7 @@ function init(target)
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
+    $('.select2', target).select2();
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {

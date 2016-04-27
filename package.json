@@ -9,7 +9,8 @@
     "jquery": "2.1.1",
     "bootstrap-sass": "3.3.6",
     "elao-form.js": "0.1.*",
-    "tablesort": "4.0.1"
+    "tablesort": "4.0.1",
+    "select2": "3.5.2-browserify"
   },
   "napa": {},
   "scripts": {
