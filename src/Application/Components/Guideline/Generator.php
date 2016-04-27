@@ -38,6 +38,9 @@ class Generator
      */
     private $fontPath;
 
+    /**
+     * @var string
+     */
     private $imagePath;
 
     /**
