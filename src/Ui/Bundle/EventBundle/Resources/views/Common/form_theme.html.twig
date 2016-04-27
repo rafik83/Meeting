@@ -3,6 +3,7 @@
 {%- block form_row -%}
     <li>
         {{- form_label(form) -}}
-        {{- form_widget(form, {attr: {class: errors|length ? 'error' : ''}}) -}}
+        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
+        {{- form_widget(form, {attr: attr}) -}}
     </li>
 {%- endblock form_row -%}
