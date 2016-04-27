@@ -18,6 +18,7 @@
                     {% for field in form %}
                         <li>
                             {{ form_row(field) }}
+                            {{ form_errors(field) }}
                         </li>
                     {% endfor %}
 
