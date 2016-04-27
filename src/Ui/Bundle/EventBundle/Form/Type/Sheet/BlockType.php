@@ -48,6 +48,11 @@ class BlockType extends AbstractType
                     continue;
                 }
 
+                if (true === $object->getOption('required')) {
+                    // Add an empty option in order to show the placeholder in select2
+                    $choices = array_merge(['' => ''], $choices);
+                }
+
                 $builder->add($key, ChoiceType::class, [
                     'label'    => false,
                     'required' => $object->getOption('required'),
