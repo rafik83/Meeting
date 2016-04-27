@@ -230,7 +230,9 @@ class SwitchUserListener implements ListenerInterface
      */
     private function attemptExitUser()
     {
-        if (false === $this->getOriginalToken($this->tokenStorage->getToken())) {
+        $token = $this->tokenStorage->getToken();
+
+        if (!$token || !$this->getOriginalToken($token)) {
             throw new AuthenticationCredentialsNotFoundException('Could not find original Token object.');
         }
 
