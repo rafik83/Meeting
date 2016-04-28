@@ -875,7 +875,7 @@ Proximum\Vimeet\Domain\Model\Type:
         oldSheetTemplate: '@event_asddays_2016_template_fournisseur->sheet'
         packageTemplate: '@event_asddays_2016_template_fournisseur->package'
         previewTemplate: '@event_asddays_2016_template_fournisseur->preview'
-        registrationTemplate: '@registration_template_asd_days'
+        registrationTemplate: '@registration_template_asd_days_in_one_step'
 
     event_asddays_2016_type_delegation:
         __construct: ["@event_asddays_2016"]
@@ -1154,7 +1154,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
-                                type: "titre"
+                                type: "title"
                         37db4a33:
                             component: "block"
                             type: "4-8"
@@ -1269,7 +1269,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                   fr: "Profil"
-                                type: "titre"
+                                  en: "Profile"
+                                type: "title"
                         541f84d4:
                             component: "object"
                             type: "editable-text"
@@ -1364,7 +1365,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                     fr: "Photo"
-                                type: "titre"
+                                    en: "Photo"
+                                type: "title"
                         cb66008e:
                             component: "object"
                             type: "image"
@@ -1391,7 +1393,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                     fr: "Organisme"
-                                type: "titre"
+                                    en: "Company"
+                                type: "title"
                         3ad4b72f:
                             component: "object"
                             type: "editable-text"
@@ -1492,6 +1495,97 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
+    registration_template_asd_days_in_one_step:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Inscription Template ASD Days en une étape"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: <dateTimeBetween('-10days', 'now')>
+        value:
+            811f6edf:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        dded0597:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                  fr: "Mon profil"
+                                  en: "My profile"
+                                type: "title"
+                        541f84d4:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Prénom"
+                                placeholder:
+                                    fr: "Prénom"
+                                help:
+                                    fr: ""
+                                length: "250"
+                                required: true
+                                type: "text"
+                                translatable: false
+                        838197c7:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Nom"
+                                placeholder:
+                                    fr: "Nom"
+                                help:
+                                    fr: ""
+                                length: "250"
+                                required: true
+                                type: "text"
+                                translatable: false
+                        dd321a4f:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Service (Juridique, Informatique, ...)"
+                                help:
+                                    fr: ""
+                                nomenclature: "@nomenclature_asddays_service->id"
+                        1efb9cbb:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Téléphone portable"
+                                placeholder:
+                                    fr: "Téléphone portable"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+            4bb4db28:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children: []
+            67019e4a:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children: []
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_asddays_1:

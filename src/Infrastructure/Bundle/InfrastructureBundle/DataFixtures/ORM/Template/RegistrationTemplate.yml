@@ -20,7 +20,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                   fr: "Profil"
-                                type: "titre"
+                                type: "title"
                         541f84d4:
                             component: "object"
                             type: "editable-text"
@@ -115,7 +115,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                     fr: "Photo"
-                                type: "titre"
+                                type: "title"
                         cb66008e:
                             component: "object"
                             type: "image"
@@ -142,7 +142,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                     fr: "Organisme"
-                                type: "titre"
+                                type: "title"
                         3ad4b72f:
                             component: "object"
                             type: "editable-text"
