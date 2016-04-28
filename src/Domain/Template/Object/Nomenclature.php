@@ -19,26 +19,6 @@ class Nomenclature extends Object
      */
     public function __toString()
     {
-        return $this->getContent() ?: '';
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getContent()
-    {
-        return isset($this->data['value']) ? $this->data['value'] : null;
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return EditableText
-     */
-    public function setContent($content)
-    {
-        $this->data['value'] = $content;
-
-        return $this;
+        return $this->getData() ?: '';
     }
 }
