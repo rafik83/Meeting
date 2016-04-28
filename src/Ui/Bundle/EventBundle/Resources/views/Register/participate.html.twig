@@ -28,7 +28,13 @@
                     {% endfor %}
 
                     <li class="validation">
-                        <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                        <button type="submit" class="btn">
+                            {% if stepsCount > 1 %}
+                                <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
+                            {% else %}
+                                <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
+                            {% endif %}
+                        </button>
                     </li>
                 </ul>
 

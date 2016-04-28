@@ -18,4 +18,5 @@ register:
     already_registered: Déjà inscrit ?
     register: Inscription
     connect: Valider
+    finalize: Finaliser
     privacy_policies: "Protection de la vie privée : conformement à la loi Informatique et Libertes du 6 janvier 1978 modifiee en 2004, vous disposez d’un droit d’acces et de rectification aux données personnelles/informations vous concernant en nous adressant un e-mail à (à déterminer)"
