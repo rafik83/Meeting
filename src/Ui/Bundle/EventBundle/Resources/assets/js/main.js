@@ -13,7 +13,14 @@ function init(target)
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
-    $('.select2', target).select2();
+
+    [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        $(element).select2({'language': {
+            'noResults': function () {
+                return $(element).data('no-results-label');
+            }
+        }});
+    });
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {

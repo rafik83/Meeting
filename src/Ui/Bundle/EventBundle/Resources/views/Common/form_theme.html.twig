@@ -4,6 +4,11 @@
     <li>
         {{- form_label(form) -}}
         {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
+
+        {% if 'select2' in attr.class %}
+            {% set attr = attr|merge({'data-no-results-label': 'select2.no_results'|trans}) %}
+        {% endif %}
+
         {{- form_widget(form, {attr: attr}) -}}
     </li>
 {%- endblock form_row -%}

@@ -1,5 +1,8 @@
 "Bad credentials.": Identifiants incorrects
 
+select2:
+    no_results: Aucun résultat
+
 login:
     connection: Connexion
     memberArea: Espace membre
