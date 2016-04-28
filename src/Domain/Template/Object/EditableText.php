@@ -49,4 +49,18 @@ class EditableText extends Object
 
         return $this;
     }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function missingRequiredData(array $data)
+    {
+        if (true === $this->getOption('required')) {
+            return !empty($data[$this->getKey()]['text']);
+        }
+
+        return true;
+    }
 }

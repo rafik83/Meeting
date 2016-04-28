@@ -39,13 +39,26 @@ class TemplateDataValidator
      */
     public function validateParticipantData(Type $type, $locale, array $data)
     {
-        $participantTemplate = $this->templateDataFactory->createRegistrationFromType($type, $locale)->getFirstBlock();
-        $objects             = $participantTemplate->getObjects();
+        $objects = $this->templateDataFactory
+            ->createRegistrationFromType($type, $locale)
+            ->getFirstBlock()
+            ->getObjects();
 
+        $this->validateData($objects, $data);
+    }
+
+    /**
+     * @param Object[] $objects
+     * @param array    $data
+     *
+     * @throws MissingRequiredDataException
+     */
+    private function validateData(array $objects, array $data)
+    {
         $missingRequiredKeys = [];
 
         foreach ($objects as $key => $object) {
-            if (true === $object->getOption('required') && empty($data[$key]['text'])) {
+            if (!$object->missingRequiredData($data)) {
                 $missingRequiredKeys[] = $key;
             }
         }
