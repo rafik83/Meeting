@@ -23,7 +23,7 @@ interface NomenclatureRepositoryInterface
     /**
      * @param Event|int $event
      *
-     * @return Nomenclature
+     * @return Nomenclature[]
      */
     public function findByEvent($event);
 }
