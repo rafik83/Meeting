@@ -15,6 +15,11 @@ abstract class AbstractChild
     /**
      * @var string
      */
+    protected $key;
+
+    /**
+     * @var string
+     */
     protected $type;
 
     /**
@@ -25,11 +30,13 @@ abstract class AbstractChild
     /**
      * AbstractChild constructor.
      *
+     * @param string $key
      * @param string $type
      * @param array  $config
      */
-    public function __construct($type, array $config)
+    public function __construct($key, $type, array $config)
     {
+        $this->key    = $key;
         $this->type   = $type;
         $this->config = $config;
     }
@@ -52,6 +59,14 @@ abstract class AbstractChild
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**

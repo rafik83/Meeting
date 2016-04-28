@@ -61,7 +61,7 @@ class TemplateDataFactory
      */
     public function create(array $template, array $data, $locale)
     {
-        $templateData = new TemplateData('root', []);
+        $templateData = new TemplateData('root', 'root', []);
 
         foreach ($this->doCreate($template) as $name => $child) {
             $templateData->addChild(0, $name, $child);
@@ -79,12 +79,13 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array $config
+     * @param array  $config
+     * @param string $objectKey
      *
      * @return array|Block
      * @throws \Exception
      */
-    private function doCreate(array $config)
+    private function doCreate(array $config, $objectKey = null)
     {
         if (!isset($config['component'])) {
             return array_map(function (array $child) {
@@ -93,11 +94,11 @@ class TemplateDataFactory
         }
 
         if ($config['component'] === 'block') {
-
-            $block = new Block($config['type'], $config['config']);
+            $block = new Block($objectKey, $config['type'], $config['config']);
 
             foreach ($config['children'] as $column => $children) {
-                foreach ($this->doCreate($children) as $key => $child) {
+                foreach ($children as $key => $child) {
+                    $child = $this->doCreate($child, $key);
                     $block->addChild($column, $key, $child);
                 }
             }
@@ -105,10 +106,9 @@ class TemplateDataFactory
             return $block;
         }
 
-        if ($config['component'] === 'object') {
-
+        if ('object' === $config['component']) {
             $class  = $this->objects[$config['type']];
-            $object = new $class($config['type'], $config['config']);
+            $object = new $class($objectKey, $config['type'], $config['config']);
 
             return $object;
         }
