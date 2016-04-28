@@ -34,7 +34,7 @@ class Block extends AbstractChild
      * @param string $key
      * @param string $value
      *
-     * @return EditableText
+     * @return Object
      * @throws \Exception
      */
     public function __set($key, $value)
