@@ -166,7 +166,8 @@ class RegisterController extends Controller
         // Check if the user has already created a participate
         $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
 
-        $type = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
+        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+        $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
         $locale = $eventView->locale;
 
@@ -174,12 +175,10 @@ class RegisterController extends Controller
             ->createRegistrationFromType($type, $request->getLocale())
             ->getFirstBlock();
 
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-
         $form = $this->createForm(BlockType::class, $participantBlock, [
-            'locale'        => $locale,
-            'block'         => $participantBlock,
-            'nomenclatures' => $nomenclatures,
+            'event'  => $event,
+            'locale' => $locale,
+            'block'  => $participantBlock,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -187,8 +186,6 @@ class RegisterController extends Controller
                 $data = array_filter($participantBlock->getData(), function ($value) {
                     return null !== $value;
                 });
-
-                $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
 
                 // Create the participant
                 $participate = new Participate($this->getUser(), $event, $type, $locale, $data);

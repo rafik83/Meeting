@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
-use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,46 +23,35 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BlockType extends AbstractType
 {
     /**
+     * @var NomenclatureRepositoryInterface
+     */
+    private $nomenclatureRepository;
+
+    /**
+     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     */
+    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    {
+        $this->nomenclatureRepository = $nomenclatureRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Block $block */
+        $nomenclatures = $this->nomenclatureRepository->findByEvent($options['event']);
+
+        /** @var Template\Block $block */
         $block = $options['block'];
 
-        /** @var Object $object */
-        foreach ($block->getObjects() as $key => $object) {
-            if ($object instanceof Object\EditableText) {
-                $builder->add($key, TextType::class, [
-                    'label'       => false,
-                    'placeholder' => $object->getOption('placeholder')[$options['locale']],
-                    'required'    => $object->getOption('required'),
-                ]);
-            } elseif ($object instanceof Object\Nomenclature) {
-                $choices = $this->getChoicesFromNomenclature(
-                    $options['nomenclatures'],
-                    $object->getOption('nomenclature'),
-                    $options['locale']
-                );
+        /** @var Template\Object $object */
+        foreach ($block->getObjects() as $object) {
+            if ($object instanceof Template\Object\EditableText) {
+                $this->addText($builder, $object, $options['locale']);
 
-                if (null === $choices) {
-                    continue;
-                }
-
-                if (true === $object->getOption('required')) {
-                    // Add an empty option in order to show the placeholder in select2
-                    $choices = array_merge(['' => ''], $choices);
-                }
-
-                $builder->add($key, ChoiceType::class, [
-                    'label'    => false,
-                    'required' => $object->getOption('required'),
-                    'attr'     => [
-                        'class'            => 'form-control select2',
-                        'data-placeholder' => $object->getOption('label')[$options['locale']],
-                    ],
-                    'choices'  => $choices,
-                ]);
+            } elseif ($object instanceof Template\Object\Nomenclature) {
+                $this->addNomenclature($builder, $object, $nomenclatures, $options['locale']);
             }
         }
     }
@@ -71,11 +61,66 @@ class BlockType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Block::class,
+        $resolver->setDefaults(['data_class' => Template\Block::class]);
+        $resolver->setRequired(['event', 'block', 'locale']);
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('block', Template\Block::class);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addText(FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $attr = $object->getOption('length') ? ['maxlength' => $object->getOption('length')] : [];
+
+        $builder->add($object->getKey(), TextType::class, [
+            'label'       => false,
+            'placeholder' => $object->getOption('placeholder')[$locale],
+            'required'    => $object->getOption('required'),
+            'attr'        => $attr,
         ]);
-        $resolver->setRequired(['block', 'locale', 'nomenclatures']);
-        $resolver->setAllowedTypes('block', Block::class);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param Nomenclature[]       $nomenclatures
+     * @param string               $locale
+     */
+    private function addNomenclature(
+        FormBuilderInterface $builder,
+        Template\Object $object,
+        array $nomenclatures,
+        $locale
+    ) {
+        $choices = $this->getChoicesFromNomenclature(
+            $nomenclatures,
+            $object->getOption('nomenclature'),
+            $locale
+        );
+
+        if (null === $choices) {
+            return;
+        }
+
+        if (true === $object->getOption('required')) {
+            // Add an empty option in order to show the placeholder in select2
+            $choices = array_merge(['' => ''], $choices);
+        }
+
+        $builder->add($object->getKey(), ChoiceType::class, [
+            'label'    => false,
+            'required' => $object->getOption('required'),
+            'choices'  => $choices,
+            'attr'     => [
+                'class'            => 'form-control select2',
+                'data-placeholder' => $object->getOption('label')[$locale],
+            ],
+        ]);
     }
 
     /**
@@ -89,16 +134,24 @@ class BlockType extends AbstractType
     {
         if (!isset($nomenclatures[$nomenclatureId])
             || !$nomenclatures[$nomenclatureId] instanceof Nomenclature
-            || !$nomenclature = $nomenclatures[$nomenclatureId]->getValue()
         ) {
             return null;
         }
 
+        /** @var Nomenclature $nomenclature */
+        $nomenclature = $nomenclatures[$nomenclatureId];
+
+        $items = $nomenclature->getValue();
+
+        if (null === $items) {
+            return null;
+        }
+
         $choices = [];
-        $depth = $nomenclatures[$nomenclatureId]->getDepth();
+        $depth = $nomenclature->getDepth();
 
         if (2 === $depth) {
-            foreach ($nomenclature as $item) {
+            foreach ($items as $item) {
                 if (!isset($item['children'])) {
                     continue;
                 }
@@ -116,7 +169,7 @@ class BlockType extends AbstractType
         } elseif (1 === $depth) {
             $choices = array_flip(array_map(function ($value) use ($locale) {
                 return $value['label'][$locale];
-            }, $nomenclature));
+            }, $items));
 
             return $choices;
         }
