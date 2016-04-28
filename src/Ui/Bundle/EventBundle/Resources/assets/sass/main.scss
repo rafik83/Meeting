@@ -1,6 +1,5 @@
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
-@import "select2/select2";
-@import "select2/select2-bootstrap";
+@import "components/_select2";
 
 .required:after {
     content: '*';
