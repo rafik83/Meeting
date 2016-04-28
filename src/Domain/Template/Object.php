@@ -51,7 +51,7 @@ class Object extends AbstractChild
     /**
      * {@inheritdoc}
      */
-    function normalize()
+    public function normalize()
     {
         return [
             'component' => 'object',
