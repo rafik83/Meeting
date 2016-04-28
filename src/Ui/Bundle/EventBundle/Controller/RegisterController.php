@@ -171,9 +171,10 @@ class RegisterController extends Controller
 
         $locale = $eventView->locale;
 
-        $participantBlock = $this->get('template.template_data_factory')
-            ->createRegistrationFromType($type, $request->getLocale())
-            ->getFirstBlock();
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromType($type, $request->getLocale());
+
+        $participantBlock = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
             'event'  => $event,
@@ -202,9 +203,11 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
-            'eventView' => $eventView,
-            'typeView'  => $typeView,
-            'form'      => $form->createView(),
+            'eventView'  => $eventView,
+            'typeView'   => $typeView,
+            'form'       => $form->createView(),
+            'stepTitle'  => $participantBlock->getTitle($locale),
+            'stepsCount' => $registrationTemplate->getBlocksCount(),
         ]);
     }
 

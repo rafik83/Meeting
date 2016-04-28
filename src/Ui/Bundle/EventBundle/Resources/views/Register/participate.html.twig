@@ -1,4 +1,4 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% extends 'EventBundle:Register:base.html.twig' %}
 
 {% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
 
@@ -8,7 +8,12 @@
     <div class="profile__content">
         <section class="main">
             <header>
-                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> Inscription <span>"{{ typeView.title }}"</span></h1>
+                <h1>
+                    {{ stepTitle }}
+                    {% if stepsCount > 1 %}
+                        <span class="steps">- Etape 1/{{ stepsCount }}</span>
+                    {% endif %}
+                </h1>
             </header>
 
             <div class="main__content">

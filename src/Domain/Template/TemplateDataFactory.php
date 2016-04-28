@@ -25,7 +25,7 @@ class TemplateDataFactory
         'nomenclature'  => Object\Nomenclature::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
-        'text'          => Object::class,
+        'text'          => Object\Text::class,
         'carousel'      => Object::class,
     ];
 

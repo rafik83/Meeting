@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\Object;
 
 class Block extends AbstractChild
 {
@@ -41,7 +41,7 @@ class Block extends AbstractChild
     {
         $object = $this->getObject($key);
 
-        if ($object instanceof EditableText) {
+        if ($object instanceof Object\EditableText) {
             return $object->setContent($value);
         }
 
@@ -103,10 +103,44 @@ class Block extends AbstractChild
     public function getFirstBlock()
     {
         foreach ($this->children as $children) {
-            foreach ($children as $child) {
-                if ($child instanceof Block) {
-                    return $child;
+            foreach ($children as $block) {
+                if ($block instanceof Block) {
+                    return $block;
                 }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return null|Block
+     */
+    public function getBlocksCount()
+    {
+        $blocksCount =  0;
+
+        foreach ($this->children as $children) {
+            foreach ($children as $block) {
+                if ($block instanceof Block && count($block->getObjects()) > 0) {
+                    $blocksCount++;
+                }
+            }
+        }
+
+        return $blocksCount;
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return null|string
+     */
+    public function getTitle($locale)
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object instanceof Object\Text && $object->isTitle()) {
+                return $object->getContent($locale);
             }
         }
 
