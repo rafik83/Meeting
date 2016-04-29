@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetDetailsViewFactory
 {
@@ -58,6 +59,11 @@ class SheetDetailsViewFactory
     private $traceRepository;
 
     /**
+     * @var TemplateDataFactory
+     */
+    private $templateDataFactory;
+
+    /**
      * SheetDetailsViewFactory constructor.
      *
      * @param SheetInfoGuesser           $sheetInfoGuesser
@@ -65,6 +71,7 @@ class SheetDetailsViewFactory
      * @param RequestRepositoryInterface $requestRepository
      * @param BillingViewFactory         $billingViewFactory
      * @param BlockDataViewFactory       $blockDataViewFactory
+     * @param TemplateDataFactory        $templateDataFactory
      * @param CommentRepositoryInterface $commentRepository
      * @param TraceRepositoryInterface   $traceRepository
      */
@@ -74,6 +81,7 @@ class SheetDetailsViewFactory
         RequestRepositoryInterface $requestRepository,
         BillingViewFactory $billingViewFactory,
         BlockDataViewFactory $blockDataViewFactory,
+        TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
         TraceRepositoryInterface $traceRepository
     ) {
@@ -82,6 +90,7 @@ class SheetDetailsViewFactory
         $this->requestRepository      = $requestRepository;
         $this->billingViewFactory     = $billingViewFactory;
         $this->blockDataViewFactory   = $blockDataViewFactory;
+        $this->templateDataFactory    = $templateDataFactory;
         $this->commentRepository      = $commentRepository;
         $this->traceRepository        = $traceRepository;
     }
@@ -94,14 +103,24 @@ class SheetDetailsViewFactory
      */
     public function create(Sheet $sheet, $locale)
     {
+        $templateDataFactory = $this->templateDataFactory;
+
         return new SheetDetailsView(
             // Title
             $this->sheetInfoGuesser->guessSheetInfo($sheet),
             // State
             $sheet->getState(),
             // Participant names
-            array_map(function (Participant $participant) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
+            array_map(function (Participant $participant) use ($templateDataFactory, $locale) {
+                $objects = $templateDataFactory->createRegistrationFromParticipant($participant, $locale)->getObjects();
+
+                foreach ($objects as $object) {
+                    if (null !== $object->getData()) {
+                        $infos[$object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback())] = (string) $object;
+                    }
+                }
+
+                return $infos;
             }, $sheet->getParticipants()->toArray()),
             // Owner email
             $sheet->getOwner()->getUser()->getEmail(),

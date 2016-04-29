@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -49,6 +50,21 @@ class TemplateDataFactory
     public function createRegistrationFromType(Type $type, $locale)
     {
         return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromParticipant(Participant $participant, $locale)
+    {
+        return $this->create(
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+            $participant->getData(),
+            $locale
+        );
     }
 
     /**

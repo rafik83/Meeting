@@ -897,6 +897,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
+            - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
     sheet.sheet_meetings_list_view_factory:
