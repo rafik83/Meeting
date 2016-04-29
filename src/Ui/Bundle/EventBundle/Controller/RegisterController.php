@@ -169,10 +169,10 @@ class RegisterController extends Controller
         $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
         $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-        $locale = $eventView->locale;
+        $locale = $request->getLocale();
 
         $registrationTemplate = $this->get('template.template_data_factory')
-            ->createRegistrationFromType($type, $request->getLocale());
+            ->createRegistrationFromType($type, $locale);
 
         $participantBlock = $registrationTemplate->getFirstBlock();
 
