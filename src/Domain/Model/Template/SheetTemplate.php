@@ -103,11 +103,11 @@ class SheetTemplate extends AbstractTemplate
     /**
      * Set value
      *
-     * @param string $value
+     * @param array $value
      *
      * @return SheetTemplate
      */
-    public function setValue($value)
+    public function setValue(array $value)
     {
         $this->value = $value;
 

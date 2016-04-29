@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\View\Meeting;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
 class RequestView
 {
@@ -46,12 +45,12 @@ class RequestView
     public $state;
 
     /**
-     * @var ParticipantNameView[]
+     * @var ArrayCollection
      */
     public $fromParticipants;
 
     /**
-     * @var ParticipantNameView[]
+     * @var ArrayCollection
      */
     public $toParticipants;
 

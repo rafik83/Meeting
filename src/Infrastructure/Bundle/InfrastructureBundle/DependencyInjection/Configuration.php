@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('web_asset_event_guideline_path')->end()
                 ->scalarNode('bundle_guideline_path')->end()
                 ->scalarNode('font_path')->end()
+                ->scalarNode('image_path')->end()
             ->end()
         ;
         return $treeBuilder;

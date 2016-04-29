@@ -46,6 +46,11 @@ interface ProductInterface
     public function getType();
 
     /**
+     * @return array
+     */
+    public function getOptions();
+
+    /**
      * @return string
      */
     public function getRequired();

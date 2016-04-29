@@ -217,7 +217,6 @@ abstract class AbstractType implements TypeInterface
      *
      * @throws UnknownOptionException
      * @return mixed
-     *
      */
     protected function getOption($option)
     {

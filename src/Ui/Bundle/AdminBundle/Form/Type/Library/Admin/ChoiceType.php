@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin;
 
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType as CoreCollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType as CoreTextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -28,13 +28,13 @@ class ChoiceType extends AbstractLocalizedType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('placeholder', CollectionType::class, [
-                'entry_type' => TextType::class,
+            ->add('placeholder', CoreCollectionType::class, [
+                'entry_type' => CoreTextType::class,
                 'help' => 'form.admin_lib_choice.children.placeholder.help',
             ])
             ->add(
                 'choices',
-                CollectionType::class,
+                CoreCollectionType::class,
                 [
                     'entry_type'    => ChoiceItemType::class,
                     'entry_options' => ['locales' => $options['locales']],

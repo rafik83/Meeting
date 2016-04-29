@@ -31,6 +31,11 @@ class BatchValidate
     public $date;
 
     /**
+     * @var string
+     */
+    public $comment;
+
+    /**
      * BatchValidate constructor.
      *
      * @param array             $ids

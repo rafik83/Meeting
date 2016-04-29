@@ -20,7 +20,7 @@ class RequestsToMeetings
     public $event;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $createdAt;
 

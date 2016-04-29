@@ -38,7 +38,7 @@ class Provider
      * @param string $inputTimezone
      * @param string $outputTimezone
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function date($datetime, $inputTimezone, $outputTimezone)
     {
