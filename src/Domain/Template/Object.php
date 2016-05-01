@@ -49,6 +49,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function normalize()
@@ -63,7 +71,7 @@ class Object extends AbstractChild
     /**
      * Get data
      *
-     * @return array
+     * @return mixed
      */
     public function getData()
     {

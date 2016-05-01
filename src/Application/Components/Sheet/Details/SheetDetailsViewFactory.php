@@ -114,9 +114,12 @@ class SheetDetailsViewFactory
             array_map(function (Participant $participant) use ($templateDataFactory, $locale) {
                 $objects = $templateDataFactory->createRegistrationFromParticipant($participant, $locale)->getObjects();
 
+                $infos = [];
+
                 foreach ($objects as $object) {
                     if (null !== $object->getData()) {
-                        $infos[$object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback())] = (string) $object;
+                        $label = $object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback());
+                        $infos[$label] = (string)$object;
                     }
                 }
 

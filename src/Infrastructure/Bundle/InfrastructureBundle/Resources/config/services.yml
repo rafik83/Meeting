@@ -1129,6 +1129,8 @@ services:
     #
     template.template_data_factory:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
+        arguments:
+            - '@repository.nomenclature_repository'
     template.template_data_validator:
         class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
         arguments:
