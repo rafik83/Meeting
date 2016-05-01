@@ -108,8 +108,6 @@ services:
             - { name: 'form.type' }
     vimeet_app.form_type_sheet.block_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType
-        arguments:
-            - '@repository.nomenclature_repository'
         tags:
             - { name: 'form.type' }
     #

@@ -44,6 +44,14 @@ class Nomenclature extends Object
     }
 
     /**
+     * @return array|null
+     */
+    public function getNomenclatureLabels()
+    {
+        return $this->nomenclatureLabels;
+    }
+
+    /**
      * @return nulL|string
      */
     public function getNomenclatureLabel()
