@@ -791,6 +791,15 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.register.participant_step_handler:
+        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_validator'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
 
     #
     # Security
