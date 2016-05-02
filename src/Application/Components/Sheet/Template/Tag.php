@@ -14,7 +14,9 @@ final class Tag
 {
     const PARTICIPANT_FIRSTNAME = 'participant_firstname';
     const PARTICIPANT_LASTNAME  = 'participant_lastname';
+    const PARTICIPANT_POSITION  = 'participant_position';
     const PARTICIPANT_PHONE     = 'participant_phone';
+    const PARTICIPANT_MOBILE    = 'participant_mobile';
     const BILLING_NAME          = 'billing_name';
     const BILLING_ADDRESS       = 'billing_address';
     const BILLING_CITY          = 'billing_city';
@@ -33,9 +35,33 @@ final class Tag
      */
     public static function getAll()
     {
+        return array_merge(
+            Tag::getParticipantTags(),
+            Tag::getBillingTags(),
+            Tag::getSheetTags()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getParticipantTags()
+    {
         return [
             self::PARTICIPANT_FIRSTNAME,
             self::PARTICIPANT_LASTNAME,
+            self::PARTICIPANT_PHONE,
+            self::PARTICIPANT_MOBILE,
+            self::PARTICIPANT_POSITION,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBillingTags()
+    {
+        return [
             self::BILLING_NAME,
             self::BILLING_ADDRESS,
             self::BILLING_CITY,
@@ -46,6 +72,15 @@ final class Tag
             self::BILLING_ORGANIZATION,
             self::BILLING_VAT_NUMBER,
             self::BILLING_EXTRA,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSheetTags()
+    {
+        return [
             self::SHEET_ORGANIZATION,
         ];
     }
