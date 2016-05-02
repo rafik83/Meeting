@@ -45,6 +45,11 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     /**
      * @var array
      */
+    private $registrationData;
+
+    /**
+     * @var array
+     */
     private $data;
 
     /**
@@ -206,6 +211,30 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     public function setData(array $data)
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get Registration Data for the sheet
+     *
+     * @return array
+     */
+    public function getRegistrationData()
+    {
+        return $this->registrationData;
+    }
+
+    /**
+     * Set Registration Data for the sheet
+     *
+     * @param array $registrationData
+     *
+     * @return Sheet
+     */
+    public function setRegistrationData($registrationData)
+    {
+        $this->registrationData = $registrationData;
 
         return $this;
     }
