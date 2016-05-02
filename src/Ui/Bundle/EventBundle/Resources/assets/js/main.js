@@ -1,9 +1,8 @@
-var $               = require('jquery'),
-    bootstrap       = require('bootstrap'),
-    PubSub          = require('pubsub-js'),
-    Confirm         = require('./components/_Confirm'),
-    TypeDescription = require('./components/_TypeDescription'),
-    AjaxForm        = require('./components/_AjaxForm'),
+var $                 = require('jquery'),
+    bootstrap         = require('bootstrap'),
+    PubSub            = require('pubsub-js'),
+    Confirm           = require('./components/_Confirm'),
+    AjaxForm          = require('./components/_AjaxForm'),
     ChoiceDescription = require('./components/_ChoiceDescription');
 
 require('elao-form.js');
@@ -31,7 +30,7 @@ function init (target) {
     $('.show-modal').modal('show');
 
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element) });
-    [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new TypeDescription(element); });
+    [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new ChoiceDescription(element); });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
