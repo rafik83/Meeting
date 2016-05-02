@@ -5,24 +5,37 @@
 {% block title eventView.title %}
 
 {% block content %}
+    {% set photo_explanation = false %}
     <div class="profile__content">
         <section class="main">
+            <header>
+                <h1>
+                    {{ stepTitle }}
+                    {% if stepsCount > 1 %}
+                        <span class="steps">- {{ 'register.step'|trans }} {{ stepNumber }}/{{ stepsCount }}</span>
+                    {% endif %}
+                </h1>
+            </header>
             <div class="main__content">
-                {{ dump(participantInfos) }}
-                {{ include('EventBundle:Participant:preview.html.twig', {participantInfos: participantInfos}) }}
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
 
                 <ul class="inputs">
-                    {% for field in form %}
+                    {% for child in form %}
                         <li>
-                            {{ form_row(field) }}
-                            {{ form_errors(field) }}
+                            {% if child.vars.type|default == 'file' %}
+                                {% set photo_explanation = true %}
+                                {{ include('EventBundle:Participant:preview.html.twig', { 'participantInfos': participantInfos, 'participantAvatarId': child.vars.id ~ '_preview' }) }}
+                                {{ form_widget(child, { 'attr': { 'data-registration-object-type-image-upload': '#' ~ child.vars.id ~ '_preview' } }) }}
+                            {% else %}
+                                {{ form_widget(child) }}
+                            {% endif %}
+                            {{ form_errors(child) }}
                         </li>
                     {% endfor %}
 
                     <li class="validation">
                         <button type="submit" class="btn">
-                            {% if stepsCount > 1 %}
+                            {% if stepsCount != stepNumber %}
                                 <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
                             {% else %}
                                 <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
@@ -34,5 +47,10 @@
                 {{ form_end(form) }}
             </div>
         </section>
+        {% if photo_explanation %}
+            <section class="important">
+                {{ 'register.photo'|trans|nl2br }}
+            </section>
+        {% endif %}
     </div>
 {% endblock %}
