@@ -1,0 +1,38 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <div class="main__content">
+                {{ dump(participantInfos) }}
+                {{ include('EventBundle:Participant:preview.html.twig', {participantInfos: participantInfos}) }}
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+
+                <ul class="inputs">
+                    {% for field in form %}
+                        <li>
+                            {{ form_row(field) }}
+                            {{ form_errors(field) }}
+                        </li>
+                    {% endfor %}
+
+                    <li class="validation">
+                        <button type="submit" class="btn">
+                            {% if stepsCount > 1 %}
+                                <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
+                            {% else %}
+                                <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
+                            {% endif %}
+                        </button>
+                    </li>
+                </ul>
+
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </div>
+{% endblock %}

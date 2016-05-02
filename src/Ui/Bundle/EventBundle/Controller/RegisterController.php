@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
@@ -169,10 +171,10 @@ class RegisterController extends Controller
         $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
         $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
 
-        $locale = $eventView->locale;
+        $locale = $request->getLocale();
 
         $registrationTemplate = $this->get('template.template_data_factory')
-            ->createRegistrationFromType($type, $request->getLocale());
+            ->createRegistrationFromType($type, $locale);
 
         $participantBlock = $registrationTemplate->getFirstBlock();
 
@@ -208,6 +210,66 @@ class RegisterController extends Controller
             'form'       => $form->createView(),
             'stepTitle'  => $participantBlock->getTitle($locale),
             'stepsCount' => $registrationTemplate->getBlocksCount(),
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventView   $eventView
+     * @param Participant $participant
+     * @param int         $step
+     *
+     * @return RedirectResponse|Response
+     */
+    public function participateStepAction(Request $request, EventView $eventView, Participant $participant, $step)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Check if the user has already created a participate
+        $participants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantsByUserForEvent($this->getUser()->getId(), $eventView);
+
+        if (0 === count($participants)) {
+            throw $this->createAccessDeniedException('Participation does not exist');
+        }
+
+        if (!in_array($participant, $participants)) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The current user %s is not the owner of this participant %s',
+                    $this->getUser()->getId(),
+                    $participant->getId()
+                )
+            );
+        }
+
+        $locale = $request->getLocale();
+
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromParticipant($participant, $locale);
+
+        $participantBlock = $registrationTemplate->getBlock(intval($step));
+
+        if (null === $participantBlock) {
+            throw $this->createNotFoundException('Unknown step');
+        }
+
+        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+
+        $form = $this->createForm(BlockType::class, $participantBlock, [
+            'event'  => $event,
+            'locale' => $locale,
+            'block'  => $participantBlock,
+        ]);
+
+        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfos($participant, $locale);
+
+        return $this->render('EventBundle:Register:participateStep.html.twig', [
+            'eventView'        => $eventView,
+            'form'             => $form->createView(),
+            'stepsCount'       => $registrationTemplate->getBlocksCount(),
+            'participantInfos' => $participantInfos,
         ]);
     }
 

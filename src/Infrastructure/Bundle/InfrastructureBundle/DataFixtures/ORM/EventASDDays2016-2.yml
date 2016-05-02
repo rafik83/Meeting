@@ -1286,6 +1286,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_firstname"]
                         838197c7:
                             component: "object"
                             type: "editable-text"
@@ -1301,6 +1302,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_lastname"]
                         dd321a4f:
                             component: "object"
                             type: "nomenclature"
@@ -1321,6 +1323,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "@nomenclature_asddays_position->id"
+                                tags: ["participant_position"]
                         1efb9cbb:
                             component: "object"
                             type: "editable-text"
@@ -1336,6 +1339,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_mobile"]
                         3b759fbb:
                             component: "object"
                             type: "editable-text"
@@ -1351,6 +1355,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_phone"]
             4bb4db28:
                 component: "block"
                 type: "12"
