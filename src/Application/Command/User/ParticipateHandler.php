@@ -70,7 +70,7 @@ class ParticipateHandler
         // Check the constraint on the data (required)
         $this
             ->templateDataValidator
-            ->validateParticipantData($participate->type, $participate->locale, $participate->data);
+            ->validateFirstParticipantDataFromType($participate->type, $participate->locale, $participate->data);
 
         $this->sheetRepository->add($sheet);
 
@@ -78,6 +78,7 @@ class ParticipateHandler
         $participant = new Participant($sheet, $participate->user, $participate->data, $participate->owner, true);
         $this->participantRepository->add($participant);
 
-        $participate->sheet = $sheet;
+        $participate->sheet       = $sheet;
+        $participate->participant = $participant;
     }
 }
