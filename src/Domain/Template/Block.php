@@ -17,7 +17,7 @@ class Block extends AbstractChild
     /**
      * @var array
      */
-    private $children = [];
+    protected $children = [];
 
     /**
      * @param string $key
@@ -59,6 +59,8 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $key
+     *
      * @return Object[]
      */
     public function getObjects($key = null)
@@ -102,10 +104,30 @@ class Block extends AbstractChild
      */
     public function getFirstBlock()
     {
+        return $this->getBlock(1);
+    }
+
+    /**
+     * @param int $index
+     *
+     * @return null|Block
+     */
+    public function getBlock($index)
+    {
+        $count = 0;
+
+        if ($index <= 0) {
+            return null;
+        }
+
         foreach ($this->children as $children) {
             foreach ($children as $block) {
                 if ($block instanceof Block) {
-                    return $block;
+                    $count++;
+
+                    if ($index === $count) {
+                        return $block;
+                    }
                 }
             }
         }
@@ -129,6 +151,34 @@ class Block extends AbstractChild
         }
 
         return $blocksCount;
+    }
+
+
+    /**
+     * @param string $tag
+     * @param string $locale
+     *
+     * @return array;
+     */
+    public function getTaggedDatas($tag, $locale)
+    {
+        $tagged = [];
+
+        foreach ($this->children as $children) {
+            foreach ($children as $block) {
+                if ($block instanceof Block) {
+                    $tagged = array_merge($tagged, $block->getTaggedDatas($tag, $locale));
+                }
+
+                if ($block instanceof Object) {
+                    if ($block->hasTag($tag)) {
+                        $tagged[] = (string) $block;
+                    }
+                }
+            }
+        }
+
+        return $tagged;
     }
 
     /**
