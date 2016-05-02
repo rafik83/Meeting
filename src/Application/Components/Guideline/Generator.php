@@ -41,6 +41,11 @@ class Generator
     /**
      * @var string
      */
+    private $imagePath;
+
+    /**
+     * @var string
+     */
     private $rootPath;
 
     /**
@@ -49,19 +54,22 @@ class Generator
      * @param string            $webAssetsPath
      * @param string            $bundleGuidelinePath
      * @param string            $fontPath
+     * @param string            $imagePath
      */
     public function __construct(
         \Twig_Environment $twig,
         $rootPath,
         $webAssetsPath,
         $bundleGuidelinePath,
-        $fontPath
+        $fontPath,
+        $imagePath
     ) {
         $this->twig                = $twig;
         $this->rootPath            = $rootPath;
         $this->webAssetsPath       = $webAssetsPath;
         $this->bundleGuidelinePath = $bundleGuidelinePath;
         $this->fontPath            = $fontPath;
+        $this->imagePath           = $imagePath;
     }
 
     /**
@@ -90,6 +98,7 @@ class Generator
             'colorHighLighted'    => $colorHighlighted,
             'bundleGuidelinePath' => $this->bundleGuidelinePath,
             'fontPath'            => $this->fontPath,
+            'imagePath'           => $this->imagePath
         ]);
 
         $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';

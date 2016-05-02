@@ -52,16 +52,6 @@ class RegistrationTemplate extends AbstractTemplate
     }
 
     /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Get title
      *
      * @return string
@@ -146,11 +136,11 @@ class RegistrationTemplate extends AbstractTemplate
     /**
      * Set value
      *
-     * @param string $value
+     * @param array $value
      *
      * @return RegistrationTemplate
      */
-    public function setValue($value)
+    public function setValue(array $value)
     {
         $this->value = $value;
 

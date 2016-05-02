@@ -42,6 +42,7 @@ class MailerAdapter implements MailerInterface
      */
     public function send(Mail $mail)
     {
+        /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
 
         $message = \Swift_Message::newInstance()

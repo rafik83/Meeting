@@ -124,7 +124,7 @@ class Template
      * @param string $locale
      * @param array  $data
      *
-     * @return array;
+     * @return array
      */
     public function getTaggedValues($tag, $locale, array $data)
     {

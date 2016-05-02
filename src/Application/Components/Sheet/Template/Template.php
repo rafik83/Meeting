@@ -67,7 +67,7 @@ class Template
      */
     public function validateData(array $data)
     {
-        if (false) {
+        if (!is_array($data)) {
             throw new InvalidDataException();
         }
     }

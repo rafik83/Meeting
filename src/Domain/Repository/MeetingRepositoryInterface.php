@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -32,7 +33,7 @@ interface MeetingRepositoryInterface
      * @param int   $page
      * @param int   $limit
      *
-     * @return Meeting[]
+     * @return PaginatedResult
      */
     public function getByEvent(Event $event, $page, $limit);
 

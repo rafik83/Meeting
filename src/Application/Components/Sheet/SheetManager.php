@@ -45,6 +45,11 @@ class SheetManager
     private $requestRepository;
 
     /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
      * SheetManager constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository

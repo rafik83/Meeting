@@ -897,6 +897,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
+            - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
     sheet.sheet_meetings_list_view_factory:
@@ -1015,6 +1016,7 @@ services:
             - '%infrastructure.web_asset_event_guideline_path%'
             - '%infrastructure.bundle_guideline_path%'
             - '%infrastructure.font_path%'
+            - '%infrastructure.image_path%'
 
     #
     # DateTime
@@ -1127,6 +1129,8 @@ services:
     #
     template.template_data_factory:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
+        arguments:
+            - '@repository.nomenclature_repository'
     template.template_data_validator:
         class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
         arguments:

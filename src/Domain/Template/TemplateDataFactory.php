@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class TemplateDataFactory
 {
@@ -31,6 +33,24 @@ class TemplateDataFactory
     ];
 
     /**
+     * @var NomenclatureRepositoryInterface
+     */
+    private $nomenclatureRepository;
+
+    /**
+     * @var Nomenclature[]
+     */
+    private $nomenclatures;
+
+    /**
+     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     */
+    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    {
+        $this->nomenclatureRepository = $nomenclatureRepository;
+    }
+
+    /**
      * @param Sheet  $sheet
      * @param string $locale
      *
@@ -38,6 +58,8 @@ class TemplateDataFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+
         return $this->create($sheet->getType()->getNewSheetTemplate()->getValue(), $sheet->getData(), $locale);
     }
 
@@ -49,6 +71,8 @@ class TemplateDataFactory
      */
     public function createRegistrationFromType(Type $type, $locale)
     {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
+
         return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
     }
 
@@ -60,6 +84,8 @@ class TemplateDataFactory
      */
     public function createRegistrationFromParticipant(Participant $participant, $locale)
     {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+
         return $this->create(
             $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
             $participant->getData(),
@@ -89,6 +115,14 @@ class TemplateDataFactory
 
         foreach ($templateData->getObjects() as $object) {
             $object->setLocale($locale);
+
+            if ($object instanceof Object\Nomenclature
+                && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])
+            ) {
+                $object->setNomenclatureLabels(
+                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale())
+                );
+            }
         }
 
         return $templateData;

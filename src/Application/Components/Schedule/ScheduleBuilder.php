@@ -170,7 +170,7 @@ class ScheduleBuilder
 
         foreach ($meetings as $meeting) {
             $sheet     = $meeting->getFromSheet() === $participant->getSheet() ? $meeting->getToSheet() : $meeting->getFromSheet();
-            $beginDate = clone $meetingSlot->getBegin();
+            $beginDate = clone $meeting->getSlot()->getBegin();
             $beginDate->setTimeZone(new \DateTimeZone($participant->getSheet()->getEvent()->getTimeZone()));
 
             $scheduleViews[$beginDate->format('Y-m-d')]->addMeeting(
@@ -201,7 +201,7 @@ class ScheduleBuilder
      */
     private function buildHappeningsForScheduleViews(array $scheduleViews, Participant $participant, $locale)
     {
-        $happenings     = $this->happeningRepository->findByEvent($participant->getSheet()->getEvent(), $locale);
+        $happenings = $this->happeningRepository->findByEvent($participant->getSheet()->getEvent());
 
         foreach ($happenings as $happening) {
             $beginDate = clone $happening->getBegin();

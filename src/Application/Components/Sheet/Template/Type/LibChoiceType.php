@@ -28,7 +28,7 @@ class LibChoiceType extends AbstractType
     }
 
     /**
-     * return []
+     * @return array
      */
     public function getChoices()
     {
@@ -36,7 +36,7 @@ class LibChoiceType extends AbstractType
     }
 
     /**
-     * return []
+     * @return array
      */
     public function getPlaceholder()
     {

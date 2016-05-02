@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType as CoreCheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType as CoreChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType as CoreCollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType as CoreTextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -29,11 +29,11 @@ class AbstractLocalizedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', CollectionType::class, [
-                'entry_type' => TextType::class,
+            ->add('label', CoreCollectionType::class, [
+                'entry_type' => CoreTextType::class,
                 'label'      => 'form.admin_lib.children.label.label',
             ])
-            ->add('tags', ChoiceType::class, [
+            ->add('tags', CoreChoiceType::class, [
                 'required'     => false,
                 'label'        => 'form.admin_lib.children.tags.label',
                 'multiple'     => true,
@@ -42,11 +42,11 @@ class AbstractLocalizedType extends AbstractType
                     return $value;
                 },
             ])
-            ->add('required', CheckboxType::class, [
+            ->add('required', CoreCheckboxType::class, [
                 'required' => false,
                 'label'    => 'form.admin_lib.children.required.label',
             ])
-            ->add('private', CheckboxType::class, [
+            ->add('private', CoreCheckboxType::class, [
                 'required' => false,
                 'label'    => 'form.admin_lib.children.private.label',
             ])
