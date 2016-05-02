@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
 final class Tag
 {
+    // Getter
     const PARTICIPANT_FIRSTNAME = 'participant_firstname';
     const PARTICIPANT_LASTNAME  = 'participant_lastname';
+    const PARTICIPANT_AVATAR    = 'participant_avatar';
     const PARTICIPANT_POSITION  = 'participant_position';
     const PARTICIPANT_PHONE     = 'participant_phone';
     const PARTICIPANT_MOBILE    = 'participant_mobile';
@@ -27,8 +29,13 @@ final class Tag
     const BILLING_ORGANIZATION  = 'billing_organization';
     const BILLING_VAT_NUMBER    = 'billing_vat_number';
     const BILLING_EXTRA         = 'billing_extra';
+    const SHEET_TITLE           = 'sheet_title';
     const SHEET_ORGANIZATION    = 'sheet_organization';
     const SHEET_PACKAGE         = 'sheet_package';
+
+    // Setter
+    const PARTICIPANT_DATA = 'participant_data';
+    const SHEET_DATA       = 'sheet_data';
 
     /**
      * @return array
@@ -53,6 +60,7 @@ final class Tag
             self::PARTICIPANT_PHONE,
             self::PARTICIPANT_MOBILE,
             self::PARTICIPANT_POSITION,
+            self::PARTICIPANT_AVATAR,
         ];
     }
 
@@ -82,6 +90,7 @@ final class Tag
     {
         return [
             self::SHEET_ORGANIZATION,
+            self::SHEET_TITLE,
         ];
     }
 }
