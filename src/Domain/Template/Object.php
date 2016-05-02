@@ -89,6 +89,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @return array
+     */
+    public function getTags()
+    {
+        return isset($this->config['tags']) && is_array($this->config['tags']) ? $this->config['tags'] : [];
+    }
+
+    /**
      * @param string $locale
      * @param string $fallback
      *

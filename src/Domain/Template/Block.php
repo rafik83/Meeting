@@ -125,7 +125,7 @@ class Block extends AbstractChild
                 if ($block instanceof Block) {
                     $count++;
 
-                    if ($index === $count) {
+                    if (intval($index) === $count) {
                         return $block;
                     }
                 }
@@ -151,6 +151,34 @@ class Block extends AbstractChild
         }
 
         return $blocksCount;
+    }
+
+    /**
+     * @param int $currentBlock
+     *
+     * @return int|null
+     */
+    public function getNextBlockPosition($currentBlock)
+    {
+        $count = 0;
+
+        if ($currentBlock <= 0) {
+            return null;
+        }
+
+        foreach ($this->children as $children) {
+            foreach ($children as $block) {
+                if ($block instanceof Block) {
+                    $count++;
+
+                    if (intval($currentBlock) < $count && count($block->getObjects()) > 0) {
+                        return $count;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
 
@@ -179,6 +207,22 @@ class Block extends AbstractChild
         }
 
         return $tagged;
+    }
+
+    /**
+     * @return Object[]
+     */
+    public function getImageObjects()
+    {
+        $objects = [];
+
+        foreach ($this->getObjects() as $object) {
+            if ($object instanceof Object\Image) {
+                $objects[] = $object;
+            }
+        }
+
+        return $objects;
     }
 
     /**
