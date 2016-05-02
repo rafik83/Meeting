@@ -63,11 +63,21 @@ class Object extends AbstractChild
     /**
      * Get data
      *
-     * @return array
+     * @return array|string
      */
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function hasTag($tag)
+    {
+        return isset($this->config['tags']) && is_array($this->config['tags']) && in_array($tag, $this->config['tags']);
     }
 
     /**
