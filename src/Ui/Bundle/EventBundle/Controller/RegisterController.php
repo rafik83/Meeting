@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -24,6 +26,7 @@ use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -195,8 +198,21 @@ class RegisterController extends Controller
                 $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
+                if ($registrationTemplate->getBlocksCount() === 1) {
+                    // Go to the sheet
+                    return $this->redirectToRoute('event_sheet');
+                } else {
+                    $nextStep = $registrationTemplate->getNextBlockPosition(1);
+
+                    if ($nextStep) {
+                        return $this->redirectToRoute('event_participate_step', [
+                            'step'        => $nextStep,
+                            'participant' => $participate->participant->getId(),
+                        ]);
+                    } else {
+                        return $this->redirectToRoute('event_sheet');
+                    }
+                }
             } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
@@ -263,12 +279,47 @@ class RegisterController extends Controller
             'block'  => $participantBlock,
         ]);
 
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $data = array_filter($participantBlock->getData(), function ($value) {
+                    return null !== $value;
+                });
+
+                $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
+
+                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                $this->get('tactician.commandbus')->handle($participantStep);
+
+                if ($registrationTemplate->getBlocksCount() === $step) {
+                    // Go to the sheet
+                    return $this->redirectToRoute('event_sheet');
+                } else {
+                    $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                    if ($nextStep) {
+                        return $this->redirectToRoute('event_participate_step', [
+                            'step'        => $nextStep,
+                            'participant' => $participant->getId(),
+                        ]);
+                    } else {
+                        return $this->redirectToRoute('event_sheet');
+                    }
+                }
+            } catch (MissingRequiredDataException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            }
+        }
+
         $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfos($participant, $locale);
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'eventView'        => $eventView,
             'form'             => $form->createView(),
             'stepsCount'       => $registrationTemplate->getBlocksCount(),
+            'stepNumber'       => $step,
+            'stepTitle'        => $participantBlock->getTitle($locale),
             'participantInfos' => $participantInfos,
         ]);
     }
@@ -285,5 +336,29 @@ class RegisterController extends Controller
         if (1 <= count($participants)) {
             throw $this->createAccessDeniedException('Participation already created');
         }
+    }
+
+    /**
+     * @param TemplateData $registrationTemplate
+     * @param Form         $form
+     * @param array        $data
+     * @return array
+     */
+    private function handleUploadedFiles($registrationTemplate, $form, $data)
+    {
+        $imageObjects = $registrationTemplate->getImageObjects();
+
+        $fileStorage = $this->get('adapter.local_file_storage');
+        foreach ($imageObjects as $object) {
+            if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
+                $fileStorage->remove($object->getData());
+            }
+
+            if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
+                $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+            }
+        }
+
+        return $data;
     }
 }
