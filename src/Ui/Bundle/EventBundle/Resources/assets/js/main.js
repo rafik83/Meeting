@@ -3,6 +3,7 @@ var $                 = require('jquery'),
     Confirm           = require('./components/_Confirm'),
     ChoiceDescription = require('./components/_ChoiceDescription'),
     AjaxForm          = require('./components/_AjaxForm'),
+    UploadPreview     = require('./components/_UploadPreview'),
     select2           = require('select2');
 
 require('elao-form.js');
@@ -34,7 +35,9 @@ function init(target)
         })
     ;
 
-    [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
+    [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
+
+    [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
 }
 
 init(document);
