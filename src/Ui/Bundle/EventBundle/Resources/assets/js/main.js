@@ -10,8 +10,6 @@ require('elao-form.js');
 function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
-    $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
-    $('[data-choice-description]').each(function (key, element) { new ChoiceDescription(element); });
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {
@@ -29,8 +27,9 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
-    [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element) });
-    [].forEach.call(target.querySelectorAll('input[type=radio][data-description]'), function (element) { new ChoiceDescription(element); });
+    [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
+    [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
+    [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
