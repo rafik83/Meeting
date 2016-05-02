@@ -20,7 +20,7 @@ class Update
     public $title;
 
     /**
-     * @var string
+     * @var array
      */
     public $value;
 

@@ -20,6 +20,10 @@ class CartBuilder
      */
     private $cartLibs = [];
 
+    /**
+     * @param string           $name
+     * @param LibCartInterface $cart
+     */
     public function registerCart($name, LibCartInterface $cart)
     {
         $this->cartLibs[$name] = $cart;

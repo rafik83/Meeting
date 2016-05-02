@@ -64,7 +64,7 @@
       float: right;
       color: $color-highlighted !important;
       padding: 6px 15px 6px 40px;
-      background: $bg-container-color url('../images/icons/icon-key.svg') 12px center no-repeat;
+      background: $bg-container-color url($image-path + '/icons/icon-key.svg') 12px center no-repeat;
       background-size: 22px;
     }
 

@@ -1,6 +1,6 @@
 # Proximum - Vimeet
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f/small.png)](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f/mini.png)](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/proximum/vimeet/badges/quality-score.png?b=master&s=0e5fdaf722de66e218a5900f4197ab71bf6bd001)](https://scrutinizer-ci.com/g/proximum/vimeet/?branch=master)
 
 ## Development
 

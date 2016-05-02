@@ -57,7 +57,7 @@ interface TypeInterface
     public function getDescription($locale);
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getUpdatableUntil();
 
