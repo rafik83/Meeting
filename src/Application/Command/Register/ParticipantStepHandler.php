@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -34,26 +33,18 @@ class ParticipantStepHandler
     private $templateDataValidator;
 
     /**
-     * @var FileStorageInterface
-     */
-    private $fileStorage;
-
-    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param TemplateDataValidator          $templateDataValidator
-     * @param FileStorageInterface           $fileStorage
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        TemplateDataValidator $templateDataValidator,
-        FileStorageInterface $fileStorage
+        TemplateDataValidator $templateDataValidator
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
         $this->templateDataValidator = $templateDataValidator;
-        $this->fileStorage           = $fileStorage;
     }
 
     /**
