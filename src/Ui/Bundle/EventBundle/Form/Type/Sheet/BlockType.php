@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +35,8 @@ class BlockType extends AbstractType
 
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Image) {
+                $this->addImage($builder, $object, $options['locale']);
             }
         }
     }
@@ -64,6 +67,20 @@ class BlockType extends AbstractType
             'placeholder' => $object->getOption('placeholder')[$locale],
             'required'    => $object->getOption('required'),
             'attr'        => $attr,
+        ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addImage(FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($object->getKey(), FileType::class, [
+            'label'    => false,
+            'required' => $object->getOption('required'),
+            'mapped'   => false,
         ]);
     }
 
