@@ -1133,6 +1133,19 @@ services:
             - '@template.template_data_factory'
 
     #
+    # Guesser
+    #
+    tagged_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\TaggedInfoGuesser
+        arguments:
+            - '@template.template_data_factory'
+    template.participant_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
+            - '@template.template_data_factory'
+
+    #
     # Spot component
     #
     spot.reference_factory:
