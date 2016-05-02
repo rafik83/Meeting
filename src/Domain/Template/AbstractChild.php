@@ -41,7 +41,7 @@ abstract class AbstractChild
      */
     public function getOption($name)
     {
-        return $this->config[$name];
+        return isset($this->config[$name]) ? $this->config[$name] : null;
     }
 
     /**
