@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
+use Proximum\Vimeet\Application\Components\Template\Exception\TelephoneNotValidException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Template\Object\Telephone;
 
 class TemplateDataValidator
 {
@@ -71,19 +73,31 @@ class TemplateDataValidator
      * @param array    $data
      *
      * @throws MissingRequiredDataException
+     * @throws TelephoneNotValidException
      */
     private function validateData(array $objects, array $data)
     {
-        $missingRequiredKeys = [];
+        $missingRequiredKeys  = [];
+        $telephoneUnvalidKeys = [];
 
         foreach ($objects as $key => $object) {
             if (!$object->missingRequiredData($data)) {
                 $missingRequiredKeys[] = $key;
             }
+
+            if ($object instanceof Telephone) {
+                if (!$object->validateData($data)) {
+                    $telephoneUnvalidKeys[] = $key;
+                }
+            }
         }
 
         if (!empty($missingRequiredKeys)) {
             throw new MissingRequiredDataException($missingRequiredKeys);
+        }
+
+        if (!empty($telephoneUnvalidKeys)) {
+            throw new TelephoneNotValidException($telephoneUnvalidKeys);
         }
     }
 }

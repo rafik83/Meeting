@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
+use Proximum\Vimeet\Application\Components\Template\Exception\TelephoneNotValidException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
@@ -203,7 +204,7 @@ class RegisterController extends Controller
                     $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
                     if ($nextStep) {
-                        return $this->redirectToRoute('event_participate_step', [
+                        return $this->redirectToRoute('event_participant_step', [
                             'step'        => $nextStep,
                             'participant' => $participate->participant->getId(),
                         ]);
@@ -214,6 +215,10 @@ class RegisterController extends Controller
             } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            } catch (TelephoneNotValidException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
                 }
             }
         }
@@ -235,7 +240,7 @@ class RegisterController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function participateStepAction(Request $request, EventView $eventView, Participant $participant, $step)
+    public function participantStepAction(Request $request, EventView $eventView, Participant $participant, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -295,7 +300,7 @@ class RegisterController extends Controller
                     $nextStep = $registrationTemplate->getNextBlockPosition($step);
 
                     if ($nextStep) {
-                        return $this->redirectToRoute('event_participate_step', [
+                        return $this->redirectToRoute('event_participant_step', [
                             'step'        => $nextStep,
                             'participant' => $participant->getId(),
                         ]);
@@ -306,6 +311,10 @@ class RegisterController extends Controller
             } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            } catch (TelephoneNotValidException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
                 }
             }
         }

@@ -21,4 +21,20 @@ class Telephone extends Object
     {
         return $this->getData() ? $this->getData() : '';
     }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function validateData(array $data)
+    {
+        $pattern = '/^((\+|00)\d{1,3})?\d+$/';
+
+        if (isset($data[$this->getKey()]) && !preg_match($pattern, $data[$this->getKey()])) {
+            return false;
+        }
+
+        return true;
+    }
 }
