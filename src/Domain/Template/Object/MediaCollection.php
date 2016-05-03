@@ -15,11 +15,34 @@ use Proximum\Vimeet\Domain\Template\Object;
 class MediaCollection extends Object
 {
     /**
+     * @var Media[]
+     */
+    private $medias = [];
+
+    /**
      * {@inheritdoc}
      */
     public function setData($data)
     {
-        return parent::setData(array_merge(['medias' => []], $data));
+        $data = array_merge(['medias' => []], $data);
+
+        $this->medias = array_map(function (array $media) {
+            return new Media($media['title'], $media['url'], $media['type']);
+        }, array_values($data['medias']));
+
+        return parent::setData($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData()
+    {
+        $this->data['medias'] = array_values(array_map(function (Media $media) {
+            return ['title' => $media->title, 'url' => $media->url, 'type' => $media->type];
+        }, $this->medias));
+
+        return parent::getData();
     }
 
     /**
@@ -27,7 +50,7 @@ class MediaCollection extends Object
      */
     public function getMedias()
     {
-        return array_values($this->data['medias']);
+        return $this->medias;
     }
 
     /**
@@ -37,7 +60,7 @@ class MediaCollection extends Object
      */
     public function addMedia(array $media)
     {
-        $this->data['medias'][] = $media;
+        $this->medias[] = $media;
 
         return $this;
     }
@@ -47,7 +70,7 @@ class MediaCollection extends Object
      */
     public function removeMedia(array $media)
     {
-        foreach ($this->data['medias'] as $key => $value) {
+        foreach ($this->medias as $key => $value) {
             if ($media === $value) {
                 unset($this->data['medias'][$key]);
             }
