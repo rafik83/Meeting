@@ -25,3 +25,18 @@ form:
                 label: URL
             submit:
                 label: Enregistrer
+    sheet_media_collection_data:
+        children:
+            medias:
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        type:
+                            label: Type
+                        url:
+                            label: Lien
+            submit:
+                label: Enregistrer

@@ -5,12 +5,12 @@
     </header>
     <div class="section__content">
         <ul class="list list--medias">
-            {% for media in data[uid]|default([]) %}
-                <li><i class="icon-Document_1"></i> <a href="">{{ media }}</a></li>
+            {% for media in data[uid]['medias']|default([]) %}
+                <li><i class="icon-Document_1"></i> <a href="{{ media['url'] }}">{{ media['title'] }}</a></li>
             {% endfor %}
         </ul>
     </div>
     <footer>
-        <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
     </footer>
 </section>

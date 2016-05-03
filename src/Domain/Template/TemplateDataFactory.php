@@ -20,7 +20,7 @@ class TemplateDataFactory
         'collection'    => Object::class,
         'editable-text' => Object\EditableText::class,
         'image'         => Object::class,
-        'media'         => Object::class,
+        'media'         => Object\MediaCollection::class,
         'nomenclature'  => Object::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
