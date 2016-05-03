@@ -2,3 +2,7 @@ rules:
     twig.template_too_complex:
         enabled: true
         max_depth: 20
+    symfony.controller.action_method_too_long:
+        enabled: true
+        max_length: 20
+        threshold: 12
