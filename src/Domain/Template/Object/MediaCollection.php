@@ -54,11 +54,11 @@ class MediaCollection extends Object
     }
 
     /**
-     * @param array $media
+     * @param Media $media
      *
      * @return MediaCollection
      */
-    public function addMedia(array $media)
+    public function addMedia(Media $media)
     {
         $this->medias[] = $media;
 
@@ -66,14 +66,18 @@ class MediaCollection extends Object
     }
 
     /**
-     * @param array $media
+     * @param Media $media
+     *
+     * @return MediaCollection
      */
-    public function removeMedia(array $media)
+    public function removeMedia(Media $media)
     {
         foreach ($this->medias as $key => $value) {
             if ($media === $value) {
-                unset($this->data['medias'][$key]);
+                unset($this->medias[$key]);
             }
         }
+
+        return $this;
     }
 }
