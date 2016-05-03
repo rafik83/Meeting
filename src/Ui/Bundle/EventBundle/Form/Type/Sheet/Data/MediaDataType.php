@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MediaDataType extends AbstractType
@@ -45,6 +46,13 @@ class MediaDataType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Media::class,
+            'empty_data' => function (FormInterface $form) {
+                return new Media(
+                    $form->get('title')->getData(),
+                    $form->get('url')->getData(),
+                    $form->get('type')->getData()
+                );
+            },
         ]);
     }
 
