@@ -15,6 +15,7 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        registrationTemplate: '@registration_template_carnot'
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -27,6 +28,8 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -40,6 +43,8 @@ Proximum\Vimeet\Domain\Model\Type:
         previewTemplate: '@template_visitor->preview'
         viewTemplate: '@template_visitor->view'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -53,6 +58,8 @@ Proximum\Vimeet\Domain\Model\Type:
         previewTemplate: '@template_visitor->preview'
         viewTemplate: '@template_visitor->view'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
 
     type_institute_carnot:
         __construct: ["@event_rdv_carnot_2016"]
@@ -65,6 +72,8 @@ Proximum\Vimeet\Domain\Model\Type:
         packageTemplate: '@template_exhibitor->package'
         previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type_exposant_fr:
