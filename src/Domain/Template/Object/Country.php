@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Telephone extends Object
+class Country extends Object
 {
     /**
      * @return string

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,6 +41,8 @@ class BlockType extends AbstractType
                 $this->addImage($builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
                 $this->addTelephone($builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Country) {
+                $this->addCountry($builder, $object, $options['locale']);
             }
         }
     }
@@ -101,6 +104,20 @@ class BlockType extends AbstractType
             'attr'        => [
                 'class' => 'telephone-intl-input',
             ]
+        ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addCountry(FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($object->getKey(), CountryType::class, [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'placeholder' => $object->getOption('placeholder')[$locale],
         ]);
     }
 

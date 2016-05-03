@@ -1495,7 +1495,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 tags: ["sheet_data"]
                         e801edd4:
                             component: "object"
-                            type: "editable-text"
+                            type: "country"
                             config:
                                 style: "style-1"
                                 label:
