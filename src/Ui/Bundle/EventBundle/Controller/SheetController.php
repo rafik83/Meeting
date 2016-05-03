@@ -114,6 +114,7 @@ class SheetController extends Controller
             'uid'   => $key,
             'form'  => $form->createView(),
             'label' => $label,
+            'type'  => $object->getType(),
         ]);
     }
 
