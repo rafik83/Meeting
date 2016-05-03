@@ -117,7 +117,10 @@ class BlockType extends AbstractType
         $builder->add($object->getKey(), CountryType::class, [
             'label'       => false,
             'required'    => $object->getOption('required'),
-            'placeholder' => $object->getOption('placeholder')[$locale],
+            'attr'     => [
+                'class'            => 'form-control select2',
+                'data-placeholder' => $object->getOption('label')[$locale],
+            ],
         ]);
     }
 
