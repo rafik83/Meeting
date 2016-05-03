@@ -1230,7 +1230,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Certification
             a23a2f5d: ["EN9100", "ISO14001", "OHSAS18001", "CAP26000", "ISO14001", "CAP26000"]
             # Media
-            211efd1f: ["Brochure de présentation", "Projet Horizon 2020"]
+            211efd1f: { medias: [{ title: "Brochure de présentation", url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: "Projet Horizon 2020", url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
             # Offre
             03b394ac: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
             # Besoins
