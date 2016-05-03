@@ -11,7 +11,18 @@ UploadPreview.prototype.readFile = function () {
     var reader = new FileReader();
 
     reader.onload = function (event) {
-      this.target.setAttribute('src', event.target.result);
+      if (this.target.tagName !== 'IMG') {
+        var img = document.createElement('img');
+
+        this.target.parentNode.insertBefore(img, this.target);
+        this.target.parentNode.removeChild(this.target);
+
+        img.id = this.target.id;
+        img.setAttribute('src', event.target.result);
+        this.target = img;
+      } else {
+        this.target.setAttribute('src', event.target.result);
+      }
     }.bind(this);
 
     reader.readAsDataURL(this.element.files[0]);

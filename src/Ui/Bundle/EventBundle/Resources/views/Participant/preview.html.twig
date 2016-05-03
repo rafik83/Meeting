@@ -3,10 +3,10 @@
         <div class="user clearfix">
             <div class="user__avatar">
                 <div class="avatar">
-                    {% if participantInfos['participant_avatar'] is defined %}
+                    {% if participantInfos['participant_avatar'] is defined and participantInfos['participant_avatar'] != null %}
                         <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participantInfos['participant_avatar']) }}">
                     {% else %}
-                        <p>{{ participantInfos['participant_firstname']|first }}{{ participantInfos['participant_lastname']|first }}</p>
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participantInfos['participant_firstname']|first }}{{ participantInfos['participant_lastname']|first }}</p>
                     {% endif %}
                 </div>
             </div>
