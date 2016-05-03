@@ -30,6 +30,7 @@ class TemplateDataFactory
         'tag'           => Object::class,
         'text'          => Object\Text::class,
         'carousel'      => Object::class,
+        'telephone'     => Object\Telephone::class,
     ];
 
     /**

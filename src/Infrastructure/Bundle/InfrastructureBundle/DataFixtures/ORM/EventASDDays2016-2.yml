@@ -1327,7 +1327,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"
-                            type: "editable-text"
+                            type: "telephone"
                             config:
                                 style: "style-1"
                                 label:
@@ -1343,7 +1343,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 tags: ["participant_mobile", "participant_data"]
                         3b759fbb:
                             component: "object"
-                            type: "editable-text"
+                            type: "telephone"
                             config:
                                 style: "style-1"
                                 label:

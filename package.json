@@ -10,7 +10,8 @@
     "bootstrap-sass": "3.3.6",
     "elao-form.js": "0.1.*",
     "tablesort": "4.0.1",
-    "select2": "4.0.2"
+    "select2": "4.0.2",
+    "intl-tel-input": "8.5.2"
   },
   "napa": {},
   "scripts": {

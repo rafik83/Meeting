@@ -4,7 +4,8 @@ var $                 = require('jquery'),
     ChoiceDescription = require('./components/_ChoiceDescription'),
     AjaxForm          = require('./components/_AjaxForm'),
     UploadPreview     = require('./components/_UploadPreview'),
-    select2           = require('select2');
+    select2           = require('select2'),
+    intlTelInput      = require('intl-tel-input');
 
 require('elao-form.js');
 
@@ -21,6 +22,14 @@ function init(target)
                 return $(element).data('no-results-label');
             }
         }});
+    });
+
+    [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
+        $(element).intlTelInput({
+            initialCountry: 'auto',
+            preferredCountries: [],
+            nationalMode: false,
+        });
     });
 
     $('.clear-on-hidden-modal', target)

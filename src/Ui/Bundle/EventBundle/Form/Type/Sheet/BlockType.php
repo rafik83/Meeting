@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -37,6 +38,8 @@ class BlockType extends AbstractType
                 $this->addNomenclature($builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Image) {
                 $this->addImage($builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Telephone) {
+                $this->addTelephone($builder, $object, $options['locale']);
             }
         }
     }
@@ -81,6 +84,23 @@ class BlockType extends AbstractType
             'label'    => false,
             'required' => $object->getOption('required'),
             'mapped'   => false,
+        ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addTelephone(FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($object->getKey(), TelephoneType::class, [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'placeholder' => $object->getOption('placeholder')[$locale],
+            'attr'        => [
+                'class' => 'telephone-intl-input',
+            ]
         ]);
     }
 

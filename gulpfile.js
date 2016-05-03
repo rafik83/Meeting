@@ -26,6 +26,11 @@ assets.config({
             groups: {
                 'bootstrap-sass': {src: 'bootstrap-sass/assets/fonts/bootstrap/**', dest: 'bootstrap'}
             }
+        },
+        files: {
+            groups: {
+                'intl-input-tel': {src: 'intl-tel-input/build/img/*.png', dest: 'img'}
+            }
         }
     }
 });
