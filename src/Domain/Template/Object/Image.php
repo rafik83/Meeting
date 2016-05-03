@@ -21,4 +21,18 @@ class Image extends Object
     {
         return $this->getData() ? $this->getData() : '';
     }
+
+    /**
+     * @return array
+     */
+    public static function supportedMimeType()
+    {
+        return [
+            "image/gif",
+            "image/jpeg",
+            "image/pjpeg",
+            "image/png",
+            "image/x-png",
+        ];
+    }
 }

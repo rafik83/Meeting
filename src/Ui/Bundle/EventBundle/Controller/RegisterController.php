@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Application\Components\Template\Exception\TelephoneNotValidException;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\Object\Image;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
@@ -27,6 +28,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -290,22 +292,24 @@ class RegisterController extends Controller
 
                 $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
 
-                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
-                $this->get('tactician.commandbus')->handle($participantStep);
+                if ($form->isValid()) {
+                    $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                    $this->get('tactician.commandbus')->handle($participantStep);
 
-                if ($registrationTemplate->getBlocksCount() === $step) {
-                    // Go to the sheet
-                    return $this->redirectToRoute('event_sheet');
-                } else {
-                    $nextStep = $registrationTemplate->getNextBlockPosition($step);
-
-                    if ($nextStep) {
-                        return $this->redirectToRoute('event_participant_step', [
-                            'step'        => $nextStep,
-                            'participant' => $participant->getId(),
-                        ]);
-                    } else {
+                    if ($registrationTemplate->getBlocksCount() === $step) {
+                        // Go to the sheet
                         return $this->redirectToRoute('event_sheet');
+                    } else {
+                        $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                        if ($nextStep) {
+                            return $this->redirectToRoute('event_participant_step', [
+                                'step'        => $nextStep,
+                                'participant' => $participant->getId(),
+                            ]);
+                        } else {
+                            return $this->redirectToRoute('event_sheet');
+                        }
                     }
                 }
             } catch (MissingRequiredDataException $exception) {
@@ -358,12 +362,21 @@ class RegisterController extends Controller
         $fileStorage = $this->get('adapter.local_file_storage');
         foreach ($imageObjects as $object) {
             if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
-                $fileStorage->remove($object->getData());
+                $file = $form->get($object->getKey())->getData();
+
+                if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
+                    if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
+                        $fileStorage->remove($object->getData());
+                    }
+
+                    if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
+                        $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+                    }
+                } else {
+                    $form->get($object->getKey())->addError(new FormError('validators.field.notValid.image'));
+                }
             }
 
-            if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
-                $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
-            }
         }
 
         return $data;
