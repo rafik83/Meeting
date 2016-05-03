@@ -11,7 +11,8 @@
     "elao-form.js": "0.1.*",
     "tablesort": "4.0.1",
     "select2": "4.0.2",
-    "intl-tel-input": "8.5.2"
+    "intl-tel-input": "8.5.2",
+    "pubsub-js": "1.5.3"
   },
   "napa": {},
   "scripts": {

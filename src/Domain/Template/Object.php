@@ -27,7 +27,7 @@ class Object extends AbstractChild
      *
      * @param array $data
      *
-     * @return $this
+     * @return Object
      */
     public function setData($data)
     {
@@ -39,7 +39,7 @@ class Object extends AbstractChild
     /**
      * @param string $locale
      *
-     * @return $this
+     * @return Object
      */
     public function setLocale($locale)
     {

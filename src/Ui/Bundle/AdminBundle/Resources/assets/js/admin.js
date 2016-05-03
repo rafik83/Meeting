@@ -19,16 +19,6 @@ function init(target) {
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
-    $('.button-based-modal').on('show.bs.modal', function (event) {
-        var modal  = $(this);
-        var button = $(event.relatedTarget);
-        var title  = button.data('modal-title');
-        var body   = button.data('modal-body');
-
-        modal.find('.modal-title').html(title);
-        modal.find('.modal-body').html(body );
-    });
-
     $('.clear-on-hidden-modal')
         .on('show.bs.modal', function (e) {
             $(e.target).removeData('bs.modal').find('.modal-content').html($(e.target).data('placeholder'));

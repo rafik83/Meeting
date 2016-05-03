@@ -100,6 +100,13 @@ event_sheet_locale:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
+event_sheet_form:
+    path:     /fiche-de-presentation/{locale}/{key}/form
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:form }
 event_sheet_update:
     path:     /fiche-de-presentation/{locale}/{key}
     requirements:

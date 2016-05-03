@@ -27,7 +27,7 @@ class ButtonLink extends Object
      */
     public function getUrl()
     {
-        return $this->data['url'];
+        return isset($this->data['url']) ? $this->data['url'] : null;
     }
 
     /**

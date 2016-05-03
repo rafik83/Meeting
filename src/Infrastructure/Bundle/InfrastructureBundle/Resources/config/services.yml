@@ -799,6 +799,12 @@ services:
             - '@template.template_data_validator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.sheet.update_data_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
 
     #
     # Security
