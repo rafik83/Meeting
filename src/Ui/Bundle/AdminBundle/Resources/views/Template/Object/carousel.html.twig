@@ -1,9 +1,7 @@
 {% set config = {
-label: { (locale): 'Carousel' },
-placeholder: { (locale): '' },
-help: { (locale): '' },
-required: false,
-style: ''
+    content: { (locale): 'Carousel' },
+    label: 'Carousel',
+    style: ''
 }|merge(config|default({})) %}
 
 <div class="object" data-object="carousel"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
@@ -35,34 +33,17 @@ style: ''
                                 <div class="form-group">
                                     <label class="form-label">Style</label>
                                     <select class="form-control" name="style" title="Style">
-                                        <option value="default" selected="selected">Par défaut</option>
+                                        <option value="style-1">Style 1</option>
+                                        <option value="style-2">Style 2</option>
                                     </select>
                                 </div>
                                 <hr />
                                 <div class="form-group">
-                                    <label class="form-label">Label</label>
-                                    <input class="form-control" type="text" name="label" />
+                                    <label class="form-label">Contenu</label>
+                                    <textarea class="form-control" name="content"></textarea>
                                     {% if fallback|default(false) and locale != fallback %}
-                                        <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                        <div class="help-block">{{ fallback|locale }} : {{ config.content[fallback] }}</div>
                                     {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Placeholder</label>
-                                    <textarea class="form-control" name="placeholder"></textarea>
-                                    {% if fallback|default(false) and locale != fallback %}
-                                        <div class="help-block">{{ fallback|locale }} : {{ config.placeholder[fallback] }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Aide</label>
-                                    <textarea class="form-control" name="help"></textarea>
-                                    {% if fallback|default(false) and locale != fallback %}
-                                        <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Requis</label>
-                                    <input type="checkbox" name="required" />
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -75,5 +56,5 @@ style: ''
             </div>
         </li>
     </ul>
-    <div data-bind="label">{{ config.label[locale] }}</div>
+    <div data-bind="content">{{ config.content[locale] }}</div>
 </div>
