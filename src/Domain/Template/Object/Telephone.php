@@ -29,7 +29,7 @@ class Telephone extends Object
      */
     public function validateData(array $data)
     {
-        $pattern = '/^((\+|00)\d{1,3})?\d+$/';
+        $pattern = '#^(?!(?:\d*-){5,})(?!(?:\d* ){5,})\+?[\d- /.]+$#';
 
         if (isset($data[$this->getKey()]) && !preg_match($pattern, $data[$this->getKey()])) {
             return false;
