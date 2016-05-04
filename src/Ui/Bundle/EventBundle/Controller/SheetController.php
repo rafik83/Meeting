@@ -131,6 +131,7 @@ class SheetController extends Controller
             'editable-text' => Data\EditableTextDataType::class,
             'button-link'   => Data\ButtonLinkDataType::class,
             'media'         => Data\MediaCollectionDataType::class,
+            'collection'    => Data\ItemCollectionDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {

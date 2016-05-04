@@ -40,3 +40,14 @@ form:
                             label: Lien
             submit:
                 label: Enregistrer
+    sheet_item_collection_data:
+        children:
+            items:
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+            submit:
+                label: Enregistrer

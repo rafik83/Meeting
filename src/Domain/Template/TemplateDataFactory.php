@@ -17,7 +17,7 @@ class TemplateDataFactory
     private $objects = [
         'button-link'   => Object\ButtonLink::class,
         'choice'        => Object::class,
-        'collection'    => Object::class,
+        'collection'    => Object\ItemCollection::class,
         'editable-text' => Object\EditableText::class,
         'image'         => Object::class,
         'media'         => Object\MediaCollection::class,
