@@ -3,4 +3,4 @@ Proximum\Vimeet\Domain\Template\Object\EditableText:
         content:
             - NotBlank: ~
             - Type: { type: string }
-            - Length: { min: 100 }
+            - Length: { min: 10 }
