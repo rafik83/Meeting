@@ -10,8 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Application\Components\Template\Exception\TelephoneNotValidException;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\Object\Image;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -22,7 +26,9 @@ use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -193,11 +199,28 @@ class RegisterController extends Controller
                 $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
+                if ($registrationTemplate->getBlocksCount() === 1) {
+                    // Go to the sheet
+                    return $this->redirectToRoute('event_sheet');
+                } else {
+                    $nextStep = $registrationTemplate->getNextBlockPosition(1);
+
+                    if ($nextStep) {
+                        return $this->redirectToRoute('event_participant_step', [
+                            'step'        => $nextStep,
+                            'participant' => $participate->participant->getId(),
+                        ]);
+                    } else {
+                        return $this->redirectToRoute('event_sheet');
+                    }
+                }
             } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            } catch (TelephoneNotValidException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
                 }
             }
         }
@@ -208,6 +231,107 @@ class RegisterController extends Controller
             'form'       => $form->createView(),
             'stepTitle'  => $participantBlock->getTitle($locale),
             'stepsCount' => $registrationTemplate->getBlocksCount(),
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventView   $eventView
+     * @param Participant $participant
+     * @param int         $step
+     *
+     * @return RedirectResponse|Response
+     */
+    public function participantStepAction(Request $request, EventView $eventView, Participant $participant, $step)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Check if the user has already created a participate
+        $participants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantsByUserForEvent($this->getUser()->getId(), $eventView);
+
+        if (0 === count($participants)) {
+            throw $this->createAccessDeniedException('Participation does not exist');
+        }
+
+        if (!in_array($participant, $participants)) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The current user %s is not the owner of this participant %s',
+                    $this->getUser()->getId(),
+                    $participant->getId()
+                )
+            );
+        }
+
+        $locale = $request->getLocale();
+
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromParticipant($participant, $locale);
+
+        $participantBlock = $registrationTemplate->getBlock(intval($step));
+
+        if (null === $participantBlock) {
+            throw $this->createNotFoundException('Unknown step');
+        }
+
+        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+
+        $form = $this->createForm(BlockType::class, $participantBlock, [
+            'event'  => $event,
+            'locale' => $locale,
+            'block'  => $participantBlock,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $data = array_filter($participantBlock->getData(), function ($value) {
+                    return null !== $value;
+                });
+
+                $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
+
+                if ($form->isValid()) {
+                    $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                    $this->get('tactician.commandbus')->handle($participantStep);
+
+                    if ($registrationTemplate->getBlocksCount() === $step) {
+                        // Go to the sheet
+                        return $this->redirectToRoute('event_sheet');
+                    } else {
+                        $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                        if ($nextStep) {
+                            return $this->redirectToRoute('event_participant_step', [
+                                'step'        => $nextStep,
+                                'participant' => $participant->getId(),
+                            ]);
+                        } else {
+                            return $this->redirectToRoute('event_sheet');
+                        }
+                    }
+                }
+            } catch (MissingRequiredDataException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.required'));
+                }
+            } catch (TelephoneNotValidException $exception) {
+                foreach ($exception->getKeys() as $key) {
+                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
+                }
+            }
+        }
+
+        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfos($participant, $locale);
+
+        return $this->render('EventBundle:Register:participateStep.html.twig', [
+            'eventView'        => $eventView,
+            'form'             => $form->createView(),
+            'stepsCount'       => $registrationTemplate->getBlocksCount(),
+            'stepNumber'       => $step,
+            'stepTitle'        => $participantBlock->getTitle($locale),
+            'participantInfos' => $participantInfos,
         ]);
     }
 
@@ -223,5 +347,38 @@ class RegisterController extends Controller
         if (1 <= count($participants)) {
             throw $this->createAccessDeniedException('Participation already created');
         }
+    }
+
+    /**
+     * @param TemplateData $registrationTemplate
+     * @param Form         $form
+     * @param array        $data
+     * @return array
+     */
+    private function handleUploadedFiles($registrationTemplate, $form, $data)
+    {
+        $imageObjects = $registrationTemplate->getImageObjects();
+
+        $fileStorage = $this->get('adapter.local_file_storage');
+        foreach ($imageObjects as $object) {
+            if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
+                $file = $form->get($object->getKey())->getData();
+
+                if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
+                    if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
+                        $fileStorage->remove($object->getData());
+                    }
+
+                    if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
+                        $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+                    }
+                } else {
+                    $form->get($object->getKey())->addError(new FormError('validators.field.notValid.image'));
+                }
+            }
+
+        }
+
+        return $data;
     }
 }

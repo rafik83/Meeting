@@ -1,0 +1,19 @@
+<div class="object--participant">
+    <div class="list list--users">
+        <div class="user clearfix">
+            <div class="user__avatar">
+                <div class="avatar">
+                    {% if participantInfos['participant_avatar'] is defined and participantInfos['participant_avatar'] != null %}
+                        <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participantInfos['participant_avatar']) }}">
+                    {% else %}
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participantInfos['participant_firstname']|first }}{{ participantInfos['participant_lastname']|first }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="user__infos">
+                <p class="name">{{ participantInfos['participant_firstname'] }} {{ participantInfos['participant_lastname'] }}</p>
+                <p class="job">{{ participantInfos['participant_position'] }}</p>
+            </div>
+        </div>
+    </div>
+</div>

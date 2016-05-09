@@ -23,13 +23,15 @@ class TemplateDataFactory
         'choice'        => Object::class,
         'collection'    => Object::class,
         'editable-text' => Object\EditableText::class,
-        'image'         => Object::class,
+        'image'         => Object\Image::class,
         'media'         => Object::class,
         'nomenclature'  => Object\Nomenclature::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
         'text'          => Object\Text::class,
         'carousel'      => Object::class,
+        'telephone'     => Object\Telephone::class,
+        'country'       => Object\Country::class,
     ];
 
     /**
@@ -86,9 +88,11 @@ class TemplateDataFactory
     {
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
 
+        $datas = array_merge($participant->getData(), $participant->getSheet()->getRegistrationData());
+
         return $this->create(
             $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
-            $participant->getData(),
+            $datas,
             $locale
         );
     }

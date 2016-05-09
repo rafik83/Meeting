@@ -791,6 +791,14 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.register.participant_step_handler:
+        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_validator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
@@ -1140,6 +1148,19 @@ services:
     template.template_data_validator:
         class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
         arguments:
+            - '@template.template_data_factory'
+
+    #
+    # Guesser
+    #
+    tagged_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\TaggedInfoGuesser
+        arguments:
+            - '@template.template_data_factory'
+    template.participant_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
             - '@template.template_data_factory'
 
     #

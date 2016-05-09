@@ -176,7 +176,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: true
                                 default: "3"
-                        79271999:
+                        a9271999:
                             component: "object"
                             type: "collection"
                             config:

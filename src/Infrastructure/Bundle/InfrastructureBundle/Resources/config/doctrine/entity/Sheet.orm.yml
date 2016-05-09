@@ -10,6 +10,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data:
             type: json_array
             nullable: true
+        registrationData:
+            type: json_array
+            nullable: true
         packageData:
             type: json_array
             nullable: true

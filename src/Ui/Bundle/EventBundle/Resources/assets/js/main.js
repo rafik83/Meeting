@@ -1,12 +1,14 @@
 var $                 = require('jquery'),
-    bootstrap         = require('bootstrap'),
-    select2           = require('select2'),
     PubSub            = require('pubsub-js'),
     Confirm           = require('./components/_Confirm'),
+    ChoiceDescription = require('./components/_ChoiceDescription'),
     AjaxForm          = require('./components/_AjaxForm'),
-    ChoiceDescription = require('./components/_ChoiceDescription');
+    UploadPreview     = require('./components/_UploadPreview');
 
+require('bootstrap');
 require('elao-form.js');
+require('intl-tel-input');
+require('select2');
 
 function init (target) {
     $('[data-collection]', target).collection();
@@ -20,6 +22,14 @@ function init (target) {
                 return $(element).data('no-results-label');
             }
         }});
+    });
+
+    [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
+        $(element).intlTelInput({
+            initialCountry: 'auto',
+            preferredCountries: [],
+            nationalMode: false,
+        });
     });
 
     $('.clear-on-hidden-modal', target)
@@ -38,6 +48,7 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
+    [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });

@@ -1286,6 +1286,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_firstname", "participant_data"]
                         838197c7:
                             component: "object"
                             type: "editable-text"
@@ -1301,6 +1302,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_lastname", "participant_data"]
                         dd321a4f:
                             component: "object"
                             type: "nomenclature"
@@ -1311,6 +1313,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "@nomenclature_asddays_service->id"
+                                tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
                             type: "nomenclature"
@@ -1321,9 +1324,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "@nomenclature_asddays_position->id"
+                                tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"
-                            type: "editable-text"
+                            type: "telephone"
                             config:
                                 style: "style-1"
                                 label:
@@ -1336,9 +1340,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_mobile", "participant_data"]
                         3b759fbb:
                             component: "object"
-                            type: "editable-text"
+                            type: "telephone"
                             config:
                                 style: "style-1"
                                 label:
@@ -1351,6 +1356,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["participant_phone", "participant_data"]
             4bb4db28:
                 component: "block"
                 type: "12"
@@ -1379,6 +1385,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 required: false
+                                tags: ["participant_avatar", "participant_data"]
             67019e4a:
                 component: "block"
                 type: "12"
@@ -1410,6 +1417,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_organization", "sheet_title", "sheet_data"]
                         0225feca:
                             component: "object"
                             type: "nomenclature"
@@ -1420,6 +1428,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "4"
+                                tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
                             type: "editable-text"
@@ -1435,6 +1444,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_data"]
                         93de093f:
                             component: "object"
                             type: "editable-text"
@@ -1447,9 +1457,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 length: ""
-                                required: false
+                                required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_data"]
                         de66af5d:
                             component: "object"
                             type: "editable-text"
@@ -1462,9 +1473,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 length: ""
-                                required: false
+                                required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_data"]
                         d224f0e7:
                             component: "object"
                             type: "editable-text"
@@ -1477,12 +1489,13 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 length: ""
-                                required: false
+                                required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_data"]
                         e801edd4:
                             component: "object"
-                            type: "editable-text"
+                            type: "country"
                             config:
                                 style: "style-1"
                                 label:
@@ -1492,9 +1505,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 length: ""
-                                required: false
+                                required: true
                                 type: "text"
                                 translatable: false
+                                tags: ["sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false
         event: '@event_asddays_2016'

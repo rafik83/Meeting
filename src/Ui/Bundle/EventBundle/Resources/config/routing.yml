@@ -76,6 +76,14 @@ event_participate:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Register:participate }
 
+event_participant_step:
+    path: /participant/{participant}/step/{step}
+    methods: [GET, POST]
+    requirements:
+        participant: \d+
+        step: \d+
+    defaults: { _controller: EventBundle:Register:participantStep }
+
 #
 # Sheet
 #
