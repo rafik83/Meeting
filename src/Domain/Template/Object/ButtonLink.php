@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Template\Object;
+
+use Proximum\Vimeet\Domain\Template\Object;
+
+class ButtonLink extends Object
+{
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return isset($this->data['url']) ? $this->data['url'] : null;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return ButtonLink
+     */
+    public function setUrl($url)
+    {
+        $this->data['url'] = $url;
+
+        return $this;
+    }
+}

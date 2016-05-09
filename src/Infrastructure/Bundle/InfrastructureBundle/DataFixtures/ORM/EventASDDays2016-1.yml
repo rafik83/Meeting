@@ -1,4 +1,3 @@
-
 Proximum\Vimeet\Domain\Model\Nomenclature:
     nomenclature_asddays_competences:
         __construct: false
@@ -60,3 +59,85 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
                 label: { fr: "Instrumentation Appareils de mesures scientifiques in-situ", en: "Instrumentation in situ scientific Measuring devices" }
             ab93de07:
                 label: { fr: "Prototypage", en: "Prototypage" }
+    nomenclature_asddays_position:
+        __construct: false
+        title: "Fonction"
+        depth: 2
+        value:
+            domainPositionCommerciale:
+                label: { fr: "Commerciale/Vente", en: "Commerciale/Vente" }
+                children:
+                    position4: { label: { fr: "Assistant commercial", en: "Assistant commercial" } }
+                    position5: { label: { fr: "Assistant export", en: "Assistant export" } }
+                    position6: { label: { fr: "Télévendeur / Téléprospecteur", en: "Télévendeur / Téléprospecteur" } }
+                    position7: { label: { fr: "Commercial sédentaire", en: "Commercial sédentaire" } }
+                    position8: { label: { fr: "Vendeur non-cadre / Conseiller de vente", en: "Vendeur non-cadre / Conseiller de vente" } }
+                    position9: { label: { fr: "Technico-commercial non-cadre", en: "Technico-commercial non-cadre" } }
+                    position10: { label: { fr: "Ingénieur technico-commercial", en: "Ingénieur technico-commercial" } }
+                    position11: { label: { fr: "Ingénieur commercial ou d'affaires", en: "Ingénieur commercial ou d'affaires" } }
+                    position12: { label: { fr: "Responsable d'une agence commerciale", en: "Responsable d'une agence commerciale" } }
+                    position13: { label: { fr: "Responsable d'une équipe de vente", en: "Responsable d'une équipe de vente" } }
+                    position14: { label: { fr: "Responsable régional des ventes", en: "Responsable régional des ventes" } }
+                    position15: { label: { fr: "Responsable export", en: "Responsable export" } }
+                    position16: { label: { fr: "Directeur des ventes export", en: "Directeur des ventes export" } }
+                    position17: { label: { fr: "Directeur des ventes", en: "Directeur des ventes" } }
+                    position18: { label: { fr: "Directeur commercial", en: "Directeur commercial" } }
+            domainPositionCommunication:
+                label: { fr: "Communication", en: "Communication" }
+                children:
+                    position19: { label: { fr: "Chargé de communication", en: "Chargé de communication" } }
+                    position20: { label: { fr: "Directeur de la communication", en: "Directeur de la communication" } }
+            domainPositionDirection:
+                label: { fr: "Direction", en: "Direction" }
+                children:
+                    position21: { label: { fr: "Directeur général adjoint", en: "Directeur général adjoint" } }
+                    position22: { label: { fr: "Directeur d'une division", en: "Directeur d'une division" } }
+                    position23: { label: { fr: "Directeur général", en: "Directeur général" } }
+                    position24: { label: { fr: "Président-directeur général / Chef d'entreprise", en: "Président-directeur général / Chef d'entreprise" } }
+            domainPositionInformatique:
+                label: { fr: "Informatique", en: "Informatique" }
+                children:
+                    position25: { label: { fr: "Technicien support clients", en: "Technicien support clients" } }
+                    position26: { label: { fr: "Technicien micro-informatique", en: "Technicien micro-informatique" } }
+                    position27: { label: { fr: "Administrateur de base de données", en: "Administrateur de base de données" } }
+                    position28: { label: { fr: "Ingénieur réseau", en: "Ingénieur réseau" } }
+                    position29: { label: { fr: "Ingénieur système", en: "Ingénieur système" } }
+                    position30: { label: { fr: "Gestionnaire de parc informatique", en: "Gestionnaire de parc informatique" } }
+                    position31: { label: { fr: "Responsable d'application", en: "Responsable d'application" } }
+                    position32: { label: { fr: "Responsable d'exploitation / Responsable de production", en: "Responsable d'exploitation / Responsable de production" } }
+                    position33: { label: { fr: "Analyste programmeur / Développeur", en: "Analyste programmeur / Développeur" } }
+                    position34: { label: { fr: "Analyste fonctionnel", en: "Analyste fonctionnel" } }
+                    position35: { label: { fr: "Ingénieur d'études / Ingénieur de développement informatique", en: "Ingénieur d'études / Ingénieur de développement informatique" } }
+                    position36: { label: { fr: "Chef de projet informatique", en: "Chef de projet informatique" } }
+                    position37: { label: { fr: "Responsable des systèmes d'information", en: "Responsable des systèmes d'information" } }
+                    position38: { label: { fr: "Directeur des systèmes d'information / directeur informatique", en: "Directeur des systèmes d'information / directeur informatique" } }
+            domainPositionMarketing:
+                label: { fr: "Marketing", en: "Marketing" }
+                children:
+                    position39: { label: { fr: "Assistant marketing / Assistant chef de produits", en: "Assistant marketing / Assistant chef de produits" } }
+                    position40: { label: { fr: "Chef de produits", en: "Chef de produits" } }
+                    position41: { label: { fr: "Directeur marketing / Responsable marketing", en: "Directeur marketing / Responsable marketing" } }
+            domainPositionRecherche:
+                label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire" }
+                children:
+                    position66: { label: { fr: "Agent de laboratoire", en: "Agent de laboratoire" } }
+                    position67: { label: { fr: "Technicien de laboratoire", en: "Technicien de laboratoire" } }
+                    position68: { label: { fr: "Responsable de laboratoire", en: "Responsable de laboratoire" } }
+                    position69: { label: { fr: "Dessinateur", en: "Dessinateur" } }
+                    position70: { label: { fr: "Dessinateur d'études", en: "Dessinateur d'études" } }
+                    position71: { label: { fr: "Dessinateur-projeteur", en: "Dessinateur-projeteur" } }
+                    position72: { label: { fr: "Ingénieur chef de projet", en: "Ingénieur chef de projet" } }
+                    position73: { label: { fr: "Responsable bureau d'études", en: "Responsable bureau d'études" } }
+                    position74: { label: { fr: "Responsable recherche / Responsable développement", en: "Responsable recherche / Responsable développement" } }
+                    position75: { label: { fr: "Directeur recherche et développement", en: "Directeur recherche et développement" } }
+    nomenclature_asddays_service:
+        __construct: false
+        title: "Service"
+        depth: 1
+        value:
+            serviceCommerciale: { label: { fr: "Commerciale/Vente", en: "Commerciale/Vente" }}
+            serviceCommunication: { label: { fr: "Communication", en: "Communication" }}
+            serviceDirection: { label: { fr: "Direction", en: "Direction" }}
+            serviceInformatique: { label: { fr: "Informatique", en: "Informatique" }}
+            serviceMarketing: { label: { fr: "Marketing", en: "Marketing" }}
+            serviceRecherche: { label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire" }}

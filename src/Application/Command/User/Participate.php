@@ -43,22 +43,29 @@ class Participate
     public $sheet;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @var bool
      */
     public $owner;
 
     /**
-     * @param User  $user
-     * @param Event $event
-     * @param Type  $type
-     * @param array $data
+     * @param User   $user
+     * @param Event  $event
+     * @param Type   $type
+     * @param string $locale
+     * @param array  $data
      */
-    public function __construct(User $user, Event $event, Type $type, array $data)
+    public function __construct(User $user, Event $event, Type $type, $locale, array $data)
     {
-        $this->user  = $user;
-        $this->event = $event;
-        $this->type  = $type;
-        $this->data  = $data;
-        $this->owner = true;
+        $this->user   = $user;
+        $this->event  = $event;
+        $this->type   = $type;
+        $this->locale = $locale;
+        $this->data   = $data;
+        $this->owner  = true;
     }
 }
