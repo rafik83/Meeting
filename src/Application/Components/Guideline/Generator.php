@@ -86,9 +86,9 @@ class Generator
 
         $repoName = $event->getId();
 
-        $this->createDirIfNotExist($this->rootPath . '/' . $this->webAssetsPath);
+        $this->createDirIfNotExist($this->rootPath . DIRECTORY_SEPARATOR . $this->webAssetsPath);
 
-        $fullPath = $this->rootPath . '/' . $this->webAssetsPath . '/' . $repoName;
+        $fullPath = $this->rootPath . DIRECTORY_SEPARATOR . $this->webAssetsPath . DIRECTORY_SEPARATOR . $repoName;
 
         $this->createDirIfNotExist($fullPath);
 
@@ -104,22 +104,22 @@ class Generator
         $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';
         $mainFileName = 'main-' . sha1(uniqid()) . '.css';
 
-        file_put_contents($fullPath . '/' . $varsFileName, $file);
+        $this->put($fullPath . DIRECTORY_SEPARATOR . $varsFileName, $file);
 
         $scss = new Compiler();
 
         $scss->setFormatter(Compressed::class);
 
         try {
-            $cssOut = $scss->compile(file_get_contents($fullPath . '/' . $varsFileName));
-            file_put_contents($fullPath . '/' . $mainFileName, $cssOut);
+            $cssOut = $scss->compile(file_get_contents($fullPath . DIRECTORY_SEPARATOR . $varsFileName));
+            $this->put($fullPath . DIRECTORY_SEPARATOR . $mainFileName, $cssOut);
         } catch (ParserException $ex) {
             throw new GuidelineAssetBuildFailedException($ex->getMessage());
         }
 
         $this->removeOldFiles($fullPath, $mainFileName);
 
-        return $this->webAssetsPath . '/' . $repoName . '/' . $mainFileName;
+        return $this->webAssetsPath . DIRECTORY_SEPARATOR . $repoName . DIRECTORY_SEPARATOR . $mainFileName;
     }
 
     /**
@@ -128,7 +128,7 @@ class Generator
     private function createDirIfNotExist($path)
     {
         if (!file_exists($path) && !is_dir($path)) {
-            mkdir($path);
+            $this->mkdir($path);
         }
     }
 
@@ -139,15 +139,60 @@ class Generator
     public function removeOldFiles($path, $file)
     {
         // Delete all scss files
-        foreach (glob($path . "/*.scss") as $filename) {
-            unlink($filename);
+        foreach (glob($path . DIRECTORY_SEPARATOR . '*.scss') as $filename) {
+            $this->unlink($filename);
         }
 
         // Delete old css files
-        foreach (glob($path . "/*.css") as $filename) {
-            if ($filename !== ($path . '/' . $file)) {
-                unlink($filename);
+        foreach (glob($path . DIRECTORY_SEPARATOR . '*.css') as $filename) {
+            if ($filename !== ($path . DIRECTORY_SEPARATOR . $file)) {
+                $this->unlink($filename);
             }
         }
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @throws \Exception
+     */
+    private function unlink($filename)
+    {
+        if (false === @unlink($filename)) {
+            throw new \Exception(sprintf('Unable to unlink "%s"', $filename), $this->createLastErrorException());
+        }
+    }
+
+    /**
+     * @param string $path
+     *
+     * @throws \Exception
+     */
+    private function mkdir($path)
+    {
+        if (false === @mkdir($path)) {
+            throw new \Exception(sprintf('Unable to mkdir "%s"', $path), $this->createLastErrorException());
+        }
+    }
+
+    /**
+     * @param string $filename
+     * @param string $contents
+     *
+     * @throws \Exception
+     */
+    private function put($filename, $contents)
+    {
+        if (false === @file_put_contents($filename, $contents)) {
+            throw new \Exception(sprintf('Unable to put contents in "%s"', $filename), $this->createLastErrorException());
+        }
+    }
+
+    /**
+     * @return \Exception
+     */
+    private function createLastErrorException()
+    {
+        return new \Exception(print_r(error_get_last(), true));
     }
 }
