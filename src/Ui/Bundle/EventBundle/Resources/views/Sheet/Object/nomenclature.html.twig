@@ -1,11 +1,13 @@
 
 {% set nomenclature = nomenclatures[config['nomenclature']]|default %}
 
+<div class="object" id="object-{{ uid }}">
+
 {% if nomenclature %}
 
     {% if nomenclature.depth == 1 %}
 
-        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+        <section class="object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
                 <h2>{{ config['label']|localize(locale, fallback) }}</h2>
             </header>
@@ -17,13 +19,13 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
     {% elseif nomenclature.depth == 2 %}
 
-        <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+        <section class="object--nomenclature {{ 'style--' ~ config['style'] }} section">
             <header>
                 <h2>{{ config['label']|localize(locale, fallback) }}</h2>
             </header>
@@ -38,7 +40,7 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -46,7 +48,7 @@
 
         {% for child in nomenclature.value %}
 
-            <section class="object object--nomenclature {{ 'style--' ~ config['style'] }} section">
+            <section class="object--nomenclature {{ 'style--' ~ config['style'] }} section">
                 <header>
                     <h2>{{ child.label|localize(locale, fallback) }}</h2>
                 </header>
@@ -61,7 +63,7 @@
                     </ul>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                    <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
                 </footer>
             </section>
 
@@ -71,8 +73,10 @@
 
 {% else %}
 
-    <section class="object object--nomenclature {{ 'style--' ~ config['style'] }}">
+    <section class="object--nomenclature {{ 'style--' ~ config['style'] }}">
         Missing nomenclature
     </section>
 
 {% endif %}
+
+</div>

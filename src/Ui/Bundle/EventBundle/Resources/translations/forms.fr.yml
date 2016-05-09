@@ -13,3 +13,15 @@ form:
                 placeholder: Mot de passe
             rememberMe:
                 label: Rester connecté
+    sheet_editable_text_data:
+        children:
+            content:
+                label: Texte
+            submit:
+                label: Enregistrer
+    sheet_button_link_data:
+        children:
+            url:
+                label: URL
+            submit:
+                label: Enregistrer

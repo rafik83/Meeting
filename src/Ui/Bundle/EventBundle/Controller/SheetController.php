@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Sheet\UpdateBlock;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\UpdateBlockType;
+use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ButtonLinkDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,8 +37,30 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $locale = $locale ? : $request->getLocale();
+        $locale        = $locale ? : $request->getLocale();
+        $sheet         = $this->getUserSheet($eventView, $locale);
+        $template      = $sheet->getType()->getNewSheetTemplate();
+        $data          = $sheet->getData();
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'template'      => $template,
+            'data'          => $data,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+        ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     * @param string    $locale
+     *
+     * @return Sheet
+     */
+    private function getUserSheet(EventView $eventView, $locale)
+    {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetByUserAndEvent($this->getUser(), $eventView);
@@ -48,83 +71,115 @@ class SheetController extends Controller
 
         $sheet = $sheets[array_keys($sheets)[0]];
 
+        if (!$sheet instanceof Sheet) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        if ($sheet->getEvent()->getId() !== $eventView->getId()) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
+
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
+            throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
         }
 
         if (!$eventView->hasLocale($locale)) {
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        return $sheet;
+    }
 
-        return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'eventView'     => $eventView,
-            'sheet'         => $sheet,
-            'template'      => $sheet->getType()->getNewSheetTemplate(),
-            'data'          => $sheet->getData(),
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
+    /**
+     * Render the form of an object. Loaded by ajax from the sheet.
+     *
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function formAction(EventView $eventView, $locale, $key)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $sheet        = $this->getUserSheet($eventView, $locale);
+        $factory      = new TemplateDataFactory();
+        $templateData = $factory->createFromSheet($sheet, $locale);
+        $object       = $templateData->getObject($key);
+        $form         = $this->createObjectForm($object, $locale, $key);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        return $this->render('EventBundle:Sheet:form.html.twig', [
+            'uid'   => $key,
+            'form'  => $form->createView(),
+            'label' => $label,
         ]);
     }
 
     /**
-     * Update sheet part in the choosen locale (independently from the interface locale)
+     * @param Object $object
+     * @param string $locale
+     * @param string $key
+     *
+     * @return Form
+     */
+    private function createObjectForm($object, $locale, $key)
+    {
+        $types = [
+            'editable-text' => EditableTextDataType::class,
+            'button-link'   => ButtonLinkDataType::class,
+        ];
+
+        return $this->createForm($types[$object->getType()], $object, [
+            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'submit' => true,
+        ]);
+    }
+
+    /**
+     * Update an object and display the sheet with the modal in case of form error.
      *
      * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet     $sheet
      * @param string    $locale
-     * @param int       $block
+     * @param string    $key
      *
      * @return Response
+     * @throws \Exception
      */
-    public function blockAction(Request $request, EventView $eventView, Sheet $sheet, $locale, $block)
+    public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
-        // We must refresh sheet to make behat feature working ...
-        $this->getDoctrine()->getManager()->refresh($sheet);
+        $sheet        = $this->getUserSheet($eventView, $locale);
+        $factory      = new TemplateDataFactory();
+        $templateData = $factory->createFromSheet($sheet, $locale);
+        $object       = $templateData->getObject($key);
+        $form         = $this->createObjectForm($object, $locale, $key);
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if (!$eventView->hasLocale($locale)) {
-            throw $this->createNotFoundException('This locale is not available.');
-        }
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user attached on this sheet');
-        }
-
-        $sheetTemplate = $sheet->getType()->getSheetTemplate();
-
-        if (!isset($sheetTemplate[$block])) {
-            throw $this->createNotFoundException('Block not found.');
-        }
-
-        $updateBlock = new UpdateBlock($sheet, $block, $locale);
-        $form        = $this->createForm(UpdateBlockType::class, $updateBlock, [
-            'template' => $sheetTemplate[$block]['template'],
-            'locale'   => $locale,
-            'submit'   => true,
-        ]);
-
+        // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($updateBlock);
-                $this->addFlash('success', 'flash.sheet.update_block.success');
+            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
-            } catch (RequiredDataEmptyException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            }
+            return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
         }
 
-        return $this->render('EventBundle:Sheet:block.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
+        // If the form is not valid, render the sheet and force the popin with the object form
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $template      = $sheet->getType()->getNewSheetTemplate();
+        $data          = $sheet->getData();
+        $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'template'      => $template,
+            'data'          => $data,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'form'          => $form->createView(),
+            'label'         => $label,
+            'uid'           => $key,
         ]);
     }
 }

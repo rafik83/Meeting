@@ -791,6 +791,12 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.sheet.update_data_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
 
     #
     # Security
