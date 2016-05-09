@@ -1,0 +1,6 @@
+Proximum\Vimeet\Domain\Template\Object\EditableText:
+    getters:
+        content:
+            - NotBlank: ~
+            - Type: { type: string }
+            - Length: { min: 100 }

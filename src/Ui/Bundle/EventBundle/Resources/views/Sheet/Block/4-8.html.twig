@@ -2,6 +2,7 @@
     <div class="col-md-4 sidebar">
         {% for uid, item in children[0]|default([]) %}
             {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                'sheet': sheet,
                 'uid': uid,
                 'config': item.config,
                 'children': item.children|default([]),
@@ -15,6 +16,7 @@
     <div class="col-md-8 content">
         {% for uid, item in children[1]|default([]) %}
             {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                'sheet': sheet,
                 'uid': uid,
                 'config': item.config,
                 'children': item.children|default([]),

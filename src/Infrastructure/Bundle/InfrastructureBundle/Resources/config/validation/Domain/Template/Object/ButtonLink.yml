@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Template\Object\ButtonLink:
+    getters:
+        url:
+            - NotBlank: ~
+            - Url: ~

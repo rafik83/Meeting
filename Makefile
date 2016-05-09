@@ -155,7 +155,9 @@ test-behat:
 	bin/behat
 
 test-behat@test:
-	bin/behat --format=progress --no-interaction
+	rm -rf var/cache/test/*
+	rm -rf var/tests/behat
+	bin/behat --format=junit --out=var/tests/behat --no-interaction
 
 ##########
 # Deploy #
