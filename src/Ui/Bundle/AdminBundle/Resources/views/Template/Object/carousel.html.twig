@@ -1,12 +1,12 @@
 {% set config = {
     content: { (locale): 'Carousel' },
-    type: 'titre',
+    label: 'Carousel',
     style: ''
 }|merge(config|default({})) %}
 
 <div class="object" data-object="carousel"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
-        <li class="object-title">Texte non modifiable</li>
+        <li class="object-title">Carousel</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -27,7 +27,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Texte non modifiable</h4>
+                                <h4 class="modal-title">Carousel</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
@@ -44,14 +44,6 @@
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.content[fallback] }}</div>
                                     {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Type</label>
-                                    <select class="form-control" name="type">
-                                        {% for label, value in { 'Titre': 'titre', 'Texte': 'texte' } %}
-                                            <option value="{{ value }}">{{ label }}</option>
-                                        {% endfor %}
-                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
