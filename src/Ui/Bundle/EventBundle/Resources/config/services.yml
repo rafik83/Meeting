@@ -106,7 +106,10 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType
         tags:
             - { name: 'form.type' }
-
+    vimeet_app.form_type_sheet.block_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType
+        tags:
+            - { name: 'form.type' }
     #
     # Event Listener
     #

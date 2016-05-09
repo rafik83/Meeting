@@ -17,9 +17,21 @@ class EditableText extends Object
     /**
      * @return string
      */
+    public function __toString()
+    {
+        return $this->getContent() ?: '';
+    }
+
+    /**
+     * @return null|string
+     */
     public function getContent()
     {
-        return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;
+        if (true === $this->getOption('translatable')) {
+            return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;
+        }
+
+        return isset($this->data['text']) ? $this->data['text'] : null;
     }
 
     /**
@@ -29,8 +41,26 @@ class EditableText extends Object
      */
     public function setContent($content)
     {
-        $this->data['text'][$this->locale] = $content;
+        if (true === $this->getOption('translatable')) {
+            $this->data['text'][$this->locale] = $content;
+        } else {
+            $this->data['text'] = $content;
+        }
 
         return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function missingRequiredData(array $data)
+    {
+        if (true === $this->getOption('required')) {
+            return !empty($data[$this->getKey()]['text']);
+        }
+
+        return true;
     }
 }

@@ -10,6 +10,7 @@
     "bootstrap-sass": "3.3.6",
     "elao-form.js": "0.1.*",
     "tablesort": "4.0.1",
+    "select2": "4.0.2",
     "pubsub-js": "1.5.3"
   },
   "napa": {},
@@ -40,8 +41,7 @@
     "bootstrap.tab": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js",
     "bootstrap.tooltip": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js",
     "bootstrap.popover": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover.js",
-    "bootstrap.dropdown": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js",
-    "select2.fr": "./node_modules/select2/select2_locale_fr.js"
+    "bootstrap.dropdown": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js"
   },
   "browserify-shim": {
     "bootstrap": {

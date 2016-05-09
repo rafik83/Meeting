@@ -177,7 +177,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.validator'
+            - '@template.template_data_validator'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -903,6 +903,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
+            - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
     sheet.sheet_meetings_list_view_factory:
@@ -1128,6 +1129,18 @@ services:
         class: Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser
         arguments:
             - '@template.template_factory'
+
+    #
+    # Template
+    #
+    template.template_data_factory:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
+        arguments:
+            - '@repository.nomenclature_repository'
+    template.template_data_validator:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Spot component

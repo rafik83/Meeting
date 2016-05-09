@@ -1,5 +1,6 @@
 var $                 = require('jquery'),
     bootstrap         = require('bootstrap'),
+    select2           = require('select2'),
     PubSub            = require('pubsub-js'),
     Confirm           = require('./components/_Confirm'),
     AjaxForm          = require('./components/_AjaxForm'),
@@ -10,6 +11,16 @@ require('elao-form.js');
 function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
+    $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
+    $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
+
+    [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        $(element).select2({'language': {
+            'noResults': function () {
+                return $(element).data('no-results-label');
+            }
+        }});
+    });
 
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {
@@ -27,6 +38,7 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
+    [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });

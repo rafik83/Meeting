@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Participant\Create;
+use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
+use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantCreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -166,28 +166,36 @@ class RegisterController extends Controller
         // Check if the user has already created a participate
         $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
 
-        // Create participate form
-        $create   = new Create();
-        $template = $this->get('vimeet_infrastructure.repository.type_repository')->getParticipantTemplate($typeView->id);
-        $form     = $this->createForm(ParticipantCreateType::class, $create, [
-            'locale'   => $eventView->locale,
-            'template' => $template,
-            'submit'   => true,
+        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+        $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
+
+        $locale = $request->getLocale();
+
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromType($type, $locale);
+
+        $participantBlock = $registrationTemplate->getFirstBlock();
+
+        $form = $this->createForm(BlockType::class, $participantBlock, [
+            'event'  => $event,
+            'locale' => $locale,
+            'block'  => $participantBlock,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-            $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
-
             try {
+                $data = array_filter($participantBlock->getData(), function ($value) {
+                    return null !== $value;
+                });
+
                 // Create the participant
-                $participate = new Participate($this->getUser(), $event, $type, $create->data);
+                $participate = new Participate($this->getUser(), $event, $type, $locale, $data);
                 $this->get('tactician.commandbus')->handle($participate);
                 $this->addFlash('success', 'flash.event.participation.success');
 
                 // Go to the sheet
                 return $this->redirectToRoute('event_sheet', ['sheet' => $participate->sheet->getId()]);
-            } catch (RequiredDataEmptyException $exception) {
+            } catch (MissingRequiredDataException $exception) {
                 foreach ($exception->getKeys() as $key) {
                     $form->get($key)->addError(new FormError('validators.field.required'));
                 }
@@ -195,9 +203,11 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
-            'form'      => $form->createView(),
-            'eventView' => $eventView,
-            'typeView'  => $typeView,
+            'eventView'  => $eventView,
+            'typeView'   => $typeView,
+            'form'       => $form->createView(),
+            'stepTitle'  => $participantBlock->getTitle($locale),
+            'stepsCount' => $registrationTemplate->getBlocksCount(),
         ]);
     }
 

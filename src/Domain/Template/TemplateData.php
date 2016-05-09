@@ -19,14 +19,4 @@ class TemplateData extends Block
     {
         return $this->normalize();
     }
-
-    /**
-     * @return array
-     */
-    public function getData()
-    {
-        return array_map(function (Object $object) {
-            return $object->getData();
-        }, $this->getObjects());
-    }
 }

@@ -49,9 +49,17 @@ class Object extends AbstractChild
     }
 
     /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    function normalize()
+    public function normalize()
     {
         return [
             'component' => 'object',
@@ -63,7 +71,7 @@ class Object extends AbstractChild
     /**
      * Get data
      *
-     * @return array
+     * @return mixed
      */
     public function getData()
     {
@@ -81,5 +89,19 @@ class Object extends AbstractChild
         $label = $this->getOption('label');
 
         return $locale ? isset($label[$locale]) ? $label[$locale] : $this->getLabel($fallback, null) : null;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function missingRequiredData(array $data)
+    {
+        if (true === $this->getOption('required')) {
+            return !empty($data[$this->getKey()]);
+        }
+
+        return true;
     }
 }

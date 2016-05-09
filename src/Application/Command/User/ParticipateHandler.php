@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Components\Template\Validator;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
+use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataValidator;
 
 class ParticipateHandler
 {
@@ -30,9 +30,9 @@ class ParticipateHandler
     private $participantRepository;
 
     /**
-     * @var Validator
+     * @var TemplateDataValidator
      */
-    private $validator;
+    private $templateDataValidator;
 
     /**
      * @var \DateTimeInterface
@@ -42,25 +42,25 @@ class ParticipateHandler
     /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param Validator                      $validator
+     * @param TemplateDataValidator          $templateDataValidator
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        Validator $validator,
+        TemplateDataValidator $templateDataValidator,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
-        $this->validator             = $validator;
+        $this->templateDataValidator = $templateDataValidator;
         $this->dateTime              = $dateTime;
     }
 
     /**
      * @param Participate $participate
      *
-     * @throws RequiredDataEmptyException
+     * @throws MissingRequiredDataException
      */
     public function handle(Participate $participate)
     {
@@ -68,7 +68,9 @@ class ParticipateHandler
         $sheet = new Sheet($participate->event, $participate->type, [], [], $this->dateTime);
 
         // Check the constraint on the data (required)
-        $this->validator->validateParticipantData($sheet, $participate->data);
+        $this
+            ->templateDataValidator
+            ->validateParticipantData($participate->type, $participate->locale, $participate->data);
 
         $this->sheetRepository->add($sheet);
 
