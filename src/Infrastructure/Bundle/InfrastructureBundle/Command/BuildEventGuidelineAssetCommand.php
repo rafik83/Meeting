@@ -58,17 +58,15 @@ class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
             $events = $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->getAll();
         }
 
-        if (!empty($events)) {
+        if (null !== $event) {
+            $this->buildAsset($output, $event);
+        } elseif (!empty($events)) {
             foreach ($events as $event) {
                 $this->buildAsset($output, $event);
             }
         }
 
-        if (null !== $event) {
-            $this->buildAsset($output, $event);
-        }
-
-        $output->writeln('Guideline assets built');
+        $output->writeln('End building guideline assets');
     }
 
     /**
@@ -80,9 +78,11 @@ class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
         try {
             $assetPath = $this->getContainer()->get('guideline.generator')->generate($event);
             $event->setAssetPath($assetPath);
-            $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->set($event) ;
+            $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->set($event);
+
+            $output->writeln(sprintf('Guideline assets built for the event %s with the id %s', $event->getTitle(), $event->getId()));
         } catch (GuidelineAssetBuildFailedException $ex) {
-            $output->writeln('Could not build the asset for the event %s with the id %s', $event->getTitle(), $event->getId());
+            $output->writeln(sprintf('Could not build the asset for the event %s with the id %s', $event->getTitle(), $event->getId()));
         }
     }
 }
