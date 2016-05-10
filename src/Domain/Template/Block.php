@@ -83,6 +83,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return Object[]
+     */
+    public function getEditableObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable();
+        });
+    }
+
+    /**
      * @param string $key
      *
      * @return Object
@@ -200,7 +210,7 @@ class Block extends AbstractChild
 
                 if ($block instanceof Object) {
                     if ($block->hasTag($tag)) {
-                        $tagged[] = (string) $block;
+                        $tagged[] = (string) $block->getValue();
                     }
                 }
             }

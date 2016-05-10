@@ -122,4 +122,20 @@ class Object extends AbstractChild
 
         return true;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->getData();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEditable()
+    {
+        return false;
+    }
 }

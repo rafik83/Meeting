@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class EditableText extends Object
+class EditableText extends EditableObject
 {
     /**
      * @return string
@@ -51,16 +51,10 @@ class EditableText extends Object
     }
 
     /**
-     * @param array $data
-     *
-     * @return bool
+     * @return null|string
      */
-    public function missingRequiredData(array $data)
+    public function getValue()
     {
-        if (true === $this->getOption('required')) {
-            return !empty($data[$this->getKey()]['text']);
-        }
-
-        return true;
+        return $this->getContent();
     }
 }
