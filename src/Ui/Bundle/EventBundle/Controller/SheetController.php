@@ -104,8 +104,7 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $sheet        = $this->getUserSheet($eventView, $locale);
-        $factory      = new TemplateDataFactory();
-        $templateData = $factory->createFromSheet($sheet, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -158,8 +157,7 @@ class SheetController extends Controller
     public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
         $sheet        = $this->getUserSheet($eventView, $locale);
-        $factory      = new TemplateDataFactory();
-        $templateData = $factory->createFromSheet($sheet, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
 
