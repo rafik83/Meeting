@@ -17,6 +17,14 @@ class ButtonLink extends Object
     /**
      * @return string
      */
+    public function __toString()
+    {
+        return $this->getUrl() ?: '';
+    }
+
+    /**
+     * @return string
+     */
     public function getUrl()
     {
         return isset($this->data['url']) ? $this->data['url'] : null;

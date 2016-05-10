@@ -25,14 +25,13 @@
                             <p>{{ eventView.description }}</p>
                         {% endif %}
                     </div>
+
                     <ul class="header__navigation">
-                        <li>
-                            {% if eventView is defined %}
-                                {% for locale in eventView.locales if locale != app.request.locale %}
-                                    <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
-                                {% endfor %}
-                            {% endif %}
-                        </li>
+                        {% if eventView is defined %}
+                            {% for locale in eventView.locales if locale != app.request.locale %}
+                                <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
+                            {% endfor %}
+                        {% endif %}
 
                         {% if is_granted('ROLE_USER') %}
                             <li>
@@ -67,6 +66,7 @@
                         </li>
                     </ul>
                 </div>
+
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <div class="sub-header">
                         <ul>
@@ -97,22 +97,6 @@
                 {% block content %}{% endblock %}
             </div>
         {% endblock body %}
-
-            {#
-                <div class="container">
-                {% if is_granted('ROLE_PREVIOUS_USER') and eventView is defined %}
-                    {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
-                {% endif %}
-
-                <h1>
-                    <a href="{{ path('event') }}">{{ eventView.title }}</a>
-                </h1>
-
-                {{ include('EventBundle::flashes.html.twig') }}
-
-                {% block content %}{% endblock %}
-                </div>
-            #}
 
         {% block javascripts %}
             <script src="{{ asset('assets/js/main.js') }}"></script>

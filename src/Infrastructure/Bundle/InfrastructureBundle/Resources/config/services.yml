@@ -177,7 +177,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.validator'
+            - '@template.template_data_validator'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -791,6 +791,14 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.register.participant_step_handler:
+        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_validator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
@@ -903,6 +911,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@components.sheet.billing_view_factory'
             - '@sheet.block.block_data_view_factory'
+            - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
     sheet.sheet_meetings_list_view_factory:
@@ -1128,6 +1137,31 @@ services:
         class: Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser
         arguments:
             - '@template.template_factory'
+
+    #
+    # Template
+    #
+    template.template_data_factory:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
+        arguments:
+            - '@repository.nomenclature_repository'
+    template.template_data_validator:
+        class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
+        arguments:
+            - '@template.template_data_factory'
+
+    #
+    # Guesser
+    #
+    tagged_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\TaggedInfoGuesser
+        arguments:
+            - '@template.template_data_factory'
+    template.participant_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
+            - '@template.template_data_factory'
 
     #
     # Spot component

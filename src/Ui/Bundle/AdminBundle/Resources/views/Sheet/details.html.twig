@@ -5,42 +5,52 @@
 
     <h2>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h2>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Participants</h3>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Participants</th>
-                    <td>
-                        <ul>
-                            {% for participant in details.participants %}
-                                <li>{{ participant }}</li>
+    <h3>Participants</h3>
+    <table class="table table-bordered">
+        <tr>
+            <th>Participants</th>
+            <td>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% for label, value in details.participants|first %}
+                            <th>{{ label }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for participant in details.participants %}
+                        <tr>
+                            {% for label, value in participant %}
+                                <td>{{ value }}</td>
                             {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Email du propriétaire</th>
-                    <td>{{ details.ownerEmail }}</td>
-                </tr>
-                <tr>
-                    <th>Téléphone du propriétaire</th>
-                    <td>{{ details.ownerPhone }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <h3>Informations de facturation</h3>
-            <p>{{ details.billing.organization }}</p>
-            <p>{{ details.billing.name }}</p>
-            <p>
-                {{ details.billing.address }}<br>
-                {{ details.billing.zipcode }} {{ details.billing.city }}<br>
-                {% if details.billing.country %}{{ details.billing.country|country }}{% endif %}
-            </p>
-            <p>N° de TVA intracommunautaire : {{ details.billing.vat_number }}</p>
-        </div>
-    </div>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Email du propriétaire</th>
+            <td>{{ details.ownerEmail }}</td>
+        </tr>
+        <tr>
+            <th>Téléphone du propriétaire</th>
+            <td>{{ details.ownerPhone }}</td>
+        </tr>
+    </table>
+
+
+    <h3>Informations de facturation</h3>
+    <p>Organisation: {{ details.billing.organization|default('-') }}</p>
+    <p>Contact: {{ details.billing.name|default('-') }}</p>
+    <p>Adresse:
+        {{ details.billing.address|default('-') }}<br>
+        {{ details.billing.zipcode }} {{ details.billing.city }}<br>
+        {% if details.billing.country %}{{ details.billing.country|country }}{% endif %}
+    </p>
+    <p>N° de TVA intracommunautaire : {{ details.billing.vat_number|default('-') }}</p>
+
 
     <div class="row">
         <div class="col-md-6">

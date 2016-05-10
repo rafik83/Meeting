@@ -1,5 +1,8 @@
 "Bad credentials.": Identifiants incorrects
 
+select2:
+    no_results: Aucun résultat
+
 login:
     connection: Connexion
     memberArea: Espace membre
@@ -15,3 +18,14 @@ register:
     already_registered: Déjà inscrit ?
     register: Inscription
     connect: Valider
+    finalize: Finaliser
+    step: Etape
+    privacy_policies: "Protection de la vie privée : conformement à la loi Informatique et Libertes du 6 janvier 1978 modifiee en 2004, vous disposez d’un droit d’acces et de rectification aux données personnelles/informations vous concernant en nous adressant un e-mail à (à déterminer)"
+    photo: |+
+        Pourquoi la photo du participant est utile ?
+        - Ne restez pas un anonyme pour vos futurs partenaire,
+        - Renforcez votre réseau professionel
+        - Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,
+        - Des cartes de visites complètes pour tous,
+        - Identifiez facilement les agendas de chacuns...
+

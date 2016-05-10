@@ -15,6 +15,11 @@ abstract class AbstractChild
     /**
      * @var string
      */
+    protected $key;
+
+    /**
+     * @var string
+     */
     protected $type;
 
     /**
@@ -25,23 +30,30 @@ abstract class AbstractChild
     /**
      * AbstractChild constructor.
      *
+     * @param string $key
      * @param string $type
      * @param array  $config
      */
-    public function __construct($type, array $config)
+    public function __construct($key, $type, array $config)
     {
+        $this->key    = $key;
         $this->type   = $type;
         $this->config = $config;
     }
 
     /**
-     * @param string $name
+     * @param string      $name
+     * @param null|string $locale
      *
      * @return mixed
      */
-    public function getOption($name)
+    public function getOption($name, $locale = null)
     {
-        return isset($this->config[$name]) ? $this->config[$name] : null;
+        if (null === $locale) {
+            return isset($this->config[$name]) ? $this->config[$name] : null;
+        }
+
+        return isset($this->config[$name][$locale]) ? $this->config[$name][$locale] : null;
     }
 
     /**
@@ -55,7 +67,15 @@ abstract class AbstractChild
     }
 
     /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
      * @return array
      */
-    abstract function normalize();
+    abstract public function normalize();
 }
