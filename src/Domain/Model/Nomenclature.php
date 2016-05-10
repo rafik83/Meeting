@@ -90,6 +90,57 @@ class Nomenclature
     }
 
     /**
+     * Get label from $key
+     *
+     * @param string $key
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return string
+     */
+    public function getLabel($key, $locale, $fallback = null)
+    {
+        return ($found = self::find($this->value, $key)) ? self::label($found, $locale, $fallback) : null;
+    }
+
+    /**
+     * Get item from $key
+     *
+     * @param array  $array
+     * @param string $key
+     *
+     * @return array
+     */
+    private static function find(&$array, $key)
+    {
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
+
+        foreach ($array as $child) {
+            if (isset($child['children']) && $found = self::find($child['children'], $key)) {
+                return $found;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array  $value
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return string
+     */
+    private static function label(&$value, $locale, $fallback = null)
+    {
+        return isset($value['label'][$locale]) ?
+            $value['label'][$locale] :
+            ($fallback ? self::label($value, $fallback) : null);
+    }
+
+    /**
      * @param string $locale
      *
      * @return array
@@ -118,5 +169,7 @@ class Nomenclature
 
             return $labels;
         }
+
+        return [];
     }
 }
