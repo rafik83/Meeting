@@ -82,7 +82,7 @@ class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
             $event->setAssetPath($assetPath);
             $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->set($event) ;
         } catch (GuidelineAssetBuildFailedException $ex) {
-            $output->writeln('Could not build the asset for the event %s with the id %s', $event->getTitle(), $event->getId());
+            $output->writeln(sprintf('Could not build the asset for the event %s with the id %s', $event->getTitle(), $event->getId()));
         }
     }
 }
