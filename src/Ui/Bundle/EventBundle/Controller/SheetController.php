@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,6 +19,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Domain\Template\Object;
 
 class SheetController extends Controller
 {
@@ -124,7 +124,7 @@ class SheetController extends Controller
      *
      * @return Form
      */
-    private function createObjectForm($object, $locale, $key)
+    private function createObjectForm(Object $object, $locale, $key)
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -140,6 +140,7 @@ class SheetController extends Controller
         return $this->createForm($types[$object->getType()], $object, [
             'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
             'submit' => true,
+            'locale' => $locale,
         ]);
     }
 

@@ -6,7 +6,7 @@
     <div class="section__content">
         <ul>
             {% for list_item in data[uid]['items']|default([]) %}
-                <li>{{ list_item['title'] }}</li>
+                <li>{{ list_item['title']|localize(locale, fallback) }}</li>
             {% endfor %}
         </ul>
     </div>

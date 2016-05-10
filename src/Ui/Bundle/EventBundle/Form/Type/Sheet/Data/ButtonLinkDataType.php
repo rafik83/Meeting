@@ -30,6 +30,7 @@ class ButtonLinkDataType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['locale']);
         $resolver->setDefaults([
             'data_class' => ButtonLink::class,
         ]);

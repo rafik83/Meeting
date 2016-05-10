@@ -26,7 +26,9 @@ class ItemDataType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => false,
+                'label'         => false,
+                'property_path' => sprintf('title[%s]', $options['locale']),
+                'required'      => false,
             ])
         ;
     }
@@ -36,6 +38,7 @@ class ItemDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['locale']);
         $resolver->setDefaults([
             'data_class' => Item::class,
             'empty_data' => function (FormInterface $form) {

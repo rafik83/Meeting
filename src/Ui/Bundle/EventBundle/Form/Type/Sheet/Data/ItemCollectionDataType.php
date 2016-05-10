@@ -27,7 +27,8 @@ class ItemCollectionDataType extends AbstractType
             ->add('items', CollectionType::class, [
                 'entry_type'    => ItemDataType::class,
                 'entry_options' => [
-                    'label' => false,
+                    'label'  => false,
+                    'locale' => $options['locale'],
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -41,6 +42,7 @@ class ItemCollectionDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['locale']);
         $resolver->setDefaults([
             'data_class' => ItemCollection::class,
         ]);
