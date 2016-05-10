@@ -88,4 +88,35 @@ class Nomenclature
     {
         return $this->value;
     }
+
+    /**
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getLabels($locale)
+    {
+        $labels = [];
+
+        if (2 === $this->depth) {
+            foreach ($this->getValue() as $item) {
+                if (!isset($item['children'])) {
+                    continue;
+                }
+
+                $labels[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
+                    return $value['label'][$locale];
+                }, $item['children']);
+            }
+
+            return $labels;
+
+        } elseif (1 === $this->depth) {
+            $labels = array_map(function ($value) use ($locale) {
+                return $value['label'][$locale];
+            }, $this->getValue());
+
+            return $labels;
+        }
+    }
 }

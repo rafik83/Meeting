@@ -176,7 +176,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: true
                                 default: "3"
-                        79271999:
+                        a9271999:
                             component: "object"
                             type: "collection"
                             config:
@@ -237,7 +237,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
-                                type: "titre"
+                                type: "title"
                         37db4a33:
                             component: "block"
                             type: "4-8"

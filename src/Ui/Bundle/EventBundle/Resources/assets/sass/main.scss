@@ -1,4 +1,6 @@
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
+@import "components/_select2";
+@import "intl-tel-input/build/css/intlTelInput";
 
 .required:after {
     content: '*';
@@ -10,6 +12,10 @@
 
 .notification-not-read {
     font-weight: bold;
+}
+
+.intl-tel-input {
+    width: 100%;
 }
 
 .spin {

@@ -412,6 +412,8 @@ function TemplateObject(element, locale)
         this.object = new NomenclatureObject(this.element, this.locale);
     } else if (this.type === 'media') {
         this.object = new MediaObject(this.element, this.locale);
+    } else if (this.type === 'carousel') {
+        this.object = new CarouselObject(this.element, this.locale)
     }
 
     this.object.fill();
@@ -706,6 +708,39 @@ ImageObject.prototype.save = function ()
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+
+/**
+ * CarouselObject
+ *
+ * @param element
+ * @param locale
+ * @constructor
+ */
+function CarouselObject(element, locale)
+{
+    this.element = element;
+    this.locale  = locale;
+    this.form    = new Form(element);
+    this.config  = JSON.parse(this.element.getAttribute('data-config'));
+}
+
+CarouselObject.prototype.fill = function ()
+{
+    this.form.set('style', this.config.style);
+    this.form.set('label', this.config.label[this.locale]);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+CarouselObject.prototype.save = function ()
+{
+    this.config.style              = this.form.get('style');
+    this.config.label[this.locale] = this.form.get('label');
+    this.config.required           = this.form.get('required');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

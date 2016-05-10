@@ -10,7 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class TemplateDataFactory
 {
@@ -19,14 +23,34 @@ class TemplateDataFactory
         'choice'        => Object::class,
         'collection'    => Object\ItemCollection::class,
         'editable-text' => Object\EditableText::class,
-        'image'         => Object::class,
+        'image'         => Object\Image::class,
         'media'         => Object\MediaCollection::class,
-        'nomenclature'  => Object::class,
+        'nomenclature'  => Object\Nomenclature::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
-        'text'          => Object::class,
+        'text'          => Object\Text::class,
         'carousel'      => Object::class,
+        'telephone'     => Object\Telephone::class,
+        'country'       => Object\Country::class,
     ];
+
+    /**
+     * @var NomenclatureRepositoryInterface
+     */
+    private $nomenclatureRepository;
+
+    /**
+     * @var Nomenclature[]
+     */
+    private $nomenclatures;
+
+    /**
+     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     */
+    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    {
+        $this->nomenclatureRepository = $nomenclatureRepository;
+    }
 
     /**
      * @param Sheet  $sheet
@@ -36,7 +60,41 @@ class TemplateDataFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+
         return $this->create($sheet->getType()->getNewSheetTemplate()->getValue(), $sheet->getData(), $locale);
+    }
+
+    /**
+     * @param Type   $type
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromType(Type $type, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
+
+        return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromParticipant(Participant $participant, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+
+        $datas = array_merge($participant->getData(), $participant->getSheet()->getRegistrationData());
+
+        return $this->create(
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+            $datas,
+            $locale
+        );
     }
 
     /**
@@ -49,26 +107,39 @@ class TemplateDataFactory
      */
     public function create(array $template, array $data, $locale)
     {
-        $templateData = new TemplateData('root', []);
+        $templateData = new TemplateData('root', 'root', []);
 
         foreach ($this->doCreate($template) as $name => $child) {
             $templateData->addChild(0, $name, $child);
         }
 
         foreach ($data as $key => $value) {
-            $templateData->getObject($key)->setData($value)->setLocale($locale);
+            $templateData->getObject($key)->setData($value);
+        }
+
+        foreach ($templateData->getObjects() as $object) {
+            $object->setLocale($locale);
+
+            if ($object instanceof Object\Nomenclature
+                && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])
+            ) {
+                $object->setNomenclatureLabels(
+                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale())
+                );
+            }
         }
 
         return $templateData;
     }
 
     /**
-     * @param array $config
+     * @param array  $config
+     * @param string $objectKey
      *
      * @return array|Block
      * @throws \Exception
      */
-    private function doCreate(array $config)
+    private function doCreate(array $config, $objectKey = null)
     {
         if (!isset($config['component'])) {
             return array_map(function (array $child) {
@@ -77,11 +148,11 @@ class TemplateDataFactory
         }
 
         if ($config['component'] === 'block') {
-
-            $block = new Block($config['type'], $config['config']);
+            $block = new Block($objectKey, $config['type'], $config['config']);
 
             foreach ($config['children'] as $column => $children) {
-                foreach ($this->doCreate($children) as $key => $child) {
+                foreach ($children as $key => $child) {
+                    $child = $this->doCreate($child, $key);
                     $block->addChild($column, $key, $child);
                 }
             }
@@ -89,10 +160,9 @@ class TemplateDataFactory
             return $block;
         }
 
-        if ($config['component'] === 'object') {
-
+        if ('object' === $config['component']) {
             $class  = $this->objects[$config['type']];
-            $object = new $class($config['type'], $config['config']);
+            $object = new $class($objectKey, $config['type'], $config['config']);
 
             return $object;
         }

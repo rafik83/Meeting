@@ -14,7 +14,7 @@
             </header>
 
             <div class="main__content">
-                {{ form_start(form) }}
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
                 <a href="{{ path('event_register', {'typeView': typeView.id}) }}" class="back"><i class="icon-Retour"></i></a>
                 <ul class="inputs">
                     <li class="identity">

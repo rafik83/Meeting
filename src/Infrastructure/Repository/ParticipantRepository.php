@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
+use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -150,6 +151,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('userId', $userId)
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
             ->setParameter('eventId', $eventId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsByUserForEvent($userId, EventInterface $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from('Entity:Participant', 'participant')
+            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->setParameter('userId', $userId)
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->setParameter('eventId', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
     }
