@@ -159,7 +159,7 @@ class Generator
     private function unlink($filename)
     {
         if (false === @unlink($filename)) {
-            throw new \Exception(sprintf('Unable to unlink "%s"', $filename), $this->createLastErrorException());
+            throw new \Exception(sprintf('Unable to unlink "%s"', $filename), 0, $this->createLastErrorException());
         }
     }
 
@@ -171,7 +171,7 @@ class Generator
     private function mkdir($path)
     {
         if (false === @mkdir($path)) {
-            throw new \Exception(sprintf('Unable to mkdir "%s"', $path), $this->createLastErrorException());
+            throw new \Exception(sprintf('Unable to mkdir "%s"', $path), 0, $this->createLastErrorException());
         }
     }
 
@@ -184,7 +184,7 @@ class Generator
     private function put($filename, $contents)
     {
         if (false === @file_put_contents($filename, $contents)) {
-            throw new \Exception(sprintf('Unable to put contents in "%s"', $filename), $this->createLastErrorException());
+            throw new \Exception(sprintf('Unable to put contents in "%s"', $filename), 0, $this->createLastErrorException());
         }
     }
 
