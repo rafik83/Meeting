@@ -26,31 +26,40 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingController extends Controller
 {
     /**
+     * @param Request    $request
      * @param EventView $eventView
      * @param Sheet     $sheet
      * @param Meeting   $meeting
      *
      * @return Response
      */
-    public function displayAction(EventView $eventView, Sheet $sheet, Meeting $meeting)
+    public function displayAction(Request $request, EventView $eventView, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $participantInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser');
+        $locale = $request->getLocale();
+
+        $participantInfoGuesser = $this->get('template.participant_info_guesser');
         $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:Meeting:display.html.twig', [
             'eventView'        => $eventView,
             'sheet'            => $sheet,
             'meeting'          => $meeting,
-            'from'             => $sheetInfoGuesser->guessSheetInfo($meeting->getFromSheet()),
-            'to'               => $sheetInfoGuesser->guessSheetInfo($meeting->getToSheet()),
-            'fromParticipants' => array_map(function (Participant $participant) use ($participantInfoGuesser) {
-                return $participantInfoGuesser->guessParticipantInfo($participant);
-            }, $meeting->getFromParticipants()->toArray()),
-            'toParticipants'   => array_map(function (Participant $participant) use ($participantInfoGuesser) {
-                return $participantInfoGuesser->guessParticipantInfo($participant);
-            }, $meeting->getToParticipants()->toArray()),
+            'from'             => $sheetInfoGuesser->guessSheetName($meeting->getFromSheet(), $locale),
+            'to'               => $sheetInfoGuesser->guessSheetName($meeting->getToSheet(), $locale),
+            'fromParticipants' => array_map(
+                function (Participant $participant) use ($participantInfoGuesser, $locale) {
+                    return $participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+                },
+                $meeting->getFromParticipants()->toArray()
+            ),
+            'toParticipants' => array_map(
+                function (Participant $participant) use ($participantInfoGuesser, $locale) {
+                    return $participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+                },
+                $meeting->getToParticipants()->toArray()
+            ),
         ]);
     }
 

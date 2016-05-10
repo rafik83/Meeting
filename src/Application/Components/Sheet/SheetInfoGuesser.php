@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
 
 class SheetInfoGuesser
 {
@@ -28,47 +28,54 @@ class SheetInfoGuesser
     private $participantInfoGuesser;
 
     /**
-     * SheetInfoGuesser constructor.
-     *
      * @param TaggedInfoGuesser      $taggedInfoGuesser
      * @param ParticipantInfoGuesser $participantInfoGuesser
      */
-    public function __construct(TaggedInfoGuesser $taggedInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        TaggedInfoGuesser $taggedInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser
+    ) {
         $this->taggedInfoGuesser      = $taggedInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet  $sheet
+     * @param string $locale
      *
      * @return string
      */
-    public function guessOwnerInfo(Sheet $sheet)
+    public function guessOwnerInfo(Sheet $sheet, $locale)
     {
         try {
-            return $this->participantInfoGuesser->guessParticipantInfo($sheet->getOwner());
+            return $this->participantInfoGuesser->guessParticipantCompleteName($sheet->getOwner(), $locale);
         } catch (\RuntimeException $exception) {
             return '';
         }
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet  $sheet
+     * @param string $locale
      *
      * @return string
      */
-    public function guessSheetInfo(Sheet $sheet)
+    public function guessSheetName(Sheet $sheet, $locale)
     {
-        $template = $sheet->getTypeSheetTemplate();
+        $template = $sheet->getType()->getSheetTemplate();
+
+        if (null === $template) {
+            return sprintf('#%s', $sheet->getId());
+        }
+
         $data     = $sheet->getData();
-        $info     = $this->taggedInfoGuesser->guess($template, $data, Tag::SHEET_ORGANIZATION);
+        $info     = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_ORGANIZATION, $locale);
 
         if (!empty($info)) {
             return reset($info);
         }
 
-        $owner = $this->guessOwnerInfo($sheet);
+        $owner = $this->guessOwnerInfo($sheet, $locale);
 
         if (!empty($owner)) {
             return $owner;
@@ -85,9 +92,7 @@ class SheetInfoGuesser
      */
     public function guessSheetPackage(Sheet $sheet, $locale)
     {
-        $template = $sheet->getTypePackageTemplate();
-        $data     = $sheet->getPackageData();
-
-        return $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_PACKAGE, $locale);
+        // @todo : get Sheet productsSelectionTemplate and corresponding data
+        return '';
     }
 }

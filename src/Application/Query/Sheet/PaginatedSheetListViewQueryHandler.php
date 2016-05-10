@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Application\View\Sheet\SheetParticipantView;
@@ -20,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class PaginatedSheetListViewQueryHandler
@@ -108,14 +108,19 @@ class PaginatedSheetListViewQueryHandler
 
         return new SheetListView(
             $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getState(),
             $sheet->isCompleted(),
-            array_map(function (Category $category) use ($locale) { return $category->getTitle($locale); }, $sheet->getType()->getCategories()->toArray()),
+            array_map(
+                function (Category $category) use ($locale) {
+                    return $category->getTitle($locale);
+                },
+                $sheet->getType()->getCategories()->toArray()
+            ),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
-                $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner()),
-                $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner()),
+                $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner(), $locale),
+                $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner(), $locale),
                 $sheet->getOwner()->getUser()->getEmail()
             ),
             $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',

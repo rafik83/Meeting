@@ -87,16 +87,6 @@ services:
     vimeet_app.form_type_meeting_request.meeting_request:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType
         arguments:
-            - '@vimeet_infrastructure.application.components.sheet.participant_info_guesser'
+            - '@template.participant_info_guesser'
         tags:
             - { name: form.type }
-
-    #
-    # Admin library form type
-    #
-    vimeet_app.form_type_admin.library.type_factory:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\TypeFactory
-        arguments:
-            -
-                lib_text:   'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\TextType'
-                lib_choice: 'Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\ChoiceType'

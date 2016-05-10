@@ -34,15 +34,7 @@ class AddRowHandler
      */
     public function handle(AddRow $addRow)
     {
-        $addRow->order->addRow(
-            $addRow->group,
-            uniqid(),
-            'added_row',
-            $addRow->label,
-            $addRow->description,
-            $addRow->price,
-            $addRow->quantity
-        );
+        // @todo : insert a row in db
 
         $this->orderRepository->set($addRow->order);
     }

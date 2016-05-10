@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ButtonLinkDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
@@ -39,7 +38,7 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
@@ -164,7 +163,7 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the object form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 

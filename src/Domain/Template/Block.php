@@ -96,7 +96,7 @@ class Block extends AbstractChild
             return $objects[$key];
         }
 
-        throw new \Exception('Object not found.');
+        throw new \Exception("Object $key not found.");
     }
 
     /**

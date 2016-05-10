@@ -7,9 +7,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: "Dupond"
-            563caf2746398: "Jean"
-            563caf2f0ddbd: "0909090909"
+            838197c7: "Dupond"
+            541f84d4: "Jean"
 
     # Proximum participants
     proximum_participant_visiteur:
@@ -19,8 +18,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563cb0568a3bb: MARTIN
-            563cb05cb81ec: Jean
+            838197c7: MARTIN
+            541f84d4: Jean
     proximum_participant_exposant:
         __construct: false
         user: '@proximum_user_exposant'
@@ -28,8 +27,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: BOUCHON
-            563caf2746398: François
+            838197c7: BOUCHON
+            541f84d4: François
     proximum_participant_carnot:
         __construct: false
         user: '@proximum_user_carnot'
@@ -37,8 +36,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: MIGNOT
-            563caf2746398: Isabelle
+            838197c7: MIGNOT
+            541f84d4: Isabelle
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
@@ -46,8 +45,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: GOI
-            563caf2746398: Layla
+            838197c7: GOI
+            541f84d4: Layla
     proximum_participant_test:
         __construct: false
         user: '@proximum_user_test'
@@ -55,8 +54,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf1d9b1cb: LAROSE
-            563caf2746398: Vincent
+            838197c7: LAROSE
+            541f84d4: Vincent
     proximum_participant_ui:
         __construct: false
         user: '@proximum_user_ui'
@@ -64,8 +63,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563cb0568a3bb: GAGNARD
-            563cb05cb81ec: Julien
+            838197c7: GAGNARD
+            541f84d4: Julien
 
     # Random
     participant_random_1:
@@ -75,8 +74,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            838197c7: <firstName()>
+            541f84d4: <lastName()>
     participant_random_2:
         __construct: false
         user: '@user_random_1'
@@ -84,8 +83,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            838197c7: <firstName()>
+            541f84d4: <lastName()>
     participant_random_3:
         __construct: false
         user: '@user_random_1'
@@ -93,8 +92,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            838197c7: <firstName()>
+            541f84d4: <lastName()>
     participant_random_4:
         __construct: false
         user: '@user_random_1'
@@ -102,8 +101,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
+            838197c7: <firstName()>
+            541f84d4: <lastName()>
     participant_random_1{10..30}:
         __construct: false
         user: '@user_random_1'
@@ -111,6 +110,5 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: false
         active: true
         data:
-            563caf1d9b1cb: <firstName()>
-            563caf2746398: <lastName()>
-            563caf2f0ddbd: "0809090909"
+            838197c7: <firstName()>
+            541f84d4: <lastName()>

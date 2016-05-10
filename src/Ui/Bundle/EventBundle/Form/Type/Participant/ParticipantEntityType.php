@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
 use Doctrine\ORM\EntityRepository;
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
@@ -50,12 +50,15 @@ class ParticipantEntityType extends AbstractType
                         ->setParameter('sheet', $options['sheet']);
                 };
             },
-            'choice_label' => function (Participant $participant) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
+            'choice_label' => function (Options $options) {
+                return function (Participant $participant) use ($options) {
+                    return $this->participantInfoGuesser
+                        ->guessParticipantCompleteName($participant, $options['locale']);
+                };
             },
         ]);
 
-        $resolver->setRequired(['sheet']);
+        $resolver->setRequired(['sheet', 'locale']);
     }
 
     /**

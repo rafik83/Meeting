@@ -36,13 +36,14 @@ class RequestViewsBuilder
      * @param Request[] $requests
      * @param User      $user
      * @param Sheet     $sheet
+     * @param string    $locale
      *
      * @return RequestView[]
      */
-    public function generate(array $requests, User $user, Sheet $sheet)
+    public function generate(array $requests, User $user, Sheet $sheet, $locale)
     {
-        return array_map(function (Request $request) use ($user, $sheet) {
-            return $this->requestViewBuilder->generate($request, $user, $sheet);
+        return array_map(function (Request $request) use ($user, $sheet, $locale) {
+            return $this->requestViewBuilder->generate($request, $user, $sheet, $locale);
         }, $requests);
     }
 }

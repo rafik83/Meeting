@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -19,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetDetailsViewFactory
@@ -107,7 +107,7 @@ class SheetDetailsViewFactory
 
         return new SheetDetailsView(
             // Title
-            $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             // State
             $sheet->getState(),
             // Participant names
@@ -128,7 +128,7 @@ class SheetDetailsViewFactory
             // Owner email
             $sheet->getOwner()->getUser()->getEmail(),
             // Owner phone
-            $this->participantInfoGuesser->guessParticipantPhone($sheet->getOwner()),
+            $this->participantInfoGuesser->guessParticipantPhone($sheet->getOwner(), $locale),
             // Package
             $this->sheetInfoGuesser->guessSheetPackage($sheet, $locale),
             // Billing

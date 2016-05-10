@@ -49,7 +49,6 @@ class CreateHandler
     public function handle(Create $create)
     {
         $type = new Type($create->event);
-        $type->setTemplate($create->template);
         $type->setPosition($create->position);
 
         $localesTitleAlreadyExists = [];

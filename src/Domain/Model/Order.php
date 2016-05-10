@@ -11,9 +11,6 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Exception\Order\NotAddedRowException;
-use Proximum\Vimeet\Domain\Exception\Order\RowAlreadyExistsException;
-use Proximum\Vimeet\Domain\Exception\Order\RowNotFoundException;
 
 /**
  * "Commande"
@@ -212,118 +209,5 @@ class Order implements BillingInfoInterface
     public function getVatRate()
     {
         return $this->vatRate;
-    }
-
-    /**
-     * Add row to the order
-     *
-     * @param string $group
-     * @param string $row
-     * @param string $type
-     * @param string $label
-     * @param string $description
-     * @param float  $unitPrice
-     * @param int    $quantity
-     */
-    public function addRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
-    {
-        if ($this->issetRow($group, $row)) {
-            throw new RowAlreadyExistsException($group, $row);
-        }
-
-        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
-    }
-
-    /**
-     * Remove a row
-     *
-     * @param string $group
-     * @param string $row
-     */
-    public function removeRow($group, $row)
-    {
-        if (!$this->issetRow($group, $row)) {
-            throw new RowNotFoundException($group, $row);
-        }
-
-        if (!$this->isAddedRow($group, $row)) {
-            throw new NotAddedRowException($group, $row);
-        }
-
-        unset($this->packageTemplate[$group]['template'][$row]);
-        unset($this->packageData[$group][$row]);
-    }
-
-    /**
-     * Update row
-     *
-     * @param string $group
-     * @param string $row
-     * @param string $type
-     * @param string $label
-     * @param string $description
-     * @param float  $unitPrice
-     * @param int    $quantity
-     *
-     * @throws NotAddedRowException
-     * @throws RowNotFoundException
-     */
-    public function updateRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
-    {
-        if (!$this->issetRow($group, $row)) {
-            throw new RowNotFoundException($group, $row);
-        }
-
-        if (!$this->isAddedRow($group, $row)) {
-            throw new NotAddedRowException($group, $row);
-        }
-
-        $this->setRow($group, $row, $type, $label, $description, $unitPrice, $quantity);
-    }
-
-    /**
-     * @param string $group
-     * @param string $row
-     *
-     * @return bool
-     */
-    private function issetRow($group, $row)
-    {
-        return isset($this->packageTemplate[$group]['template'][$row]) && isset($this->packageData[$group][$row]);
-    }
-
-    /**
-     * @param $group
-     * @param $row
-     *
-     * @return bool
-     */
-    private function isAddedRow($group, $row)
-    {
-        return $this->packageTemplate[$group]['template'][$row]['type'] === 'added_row';
-    }
-
-    /**
-     * @param string $group
-     * @param string $row
-     * @param string $type
-     * @param string $label
-     * @param string $description
-     * @param float  $unitPrice
-     * @param int    $quantity
-     */
-    private function setRow($group, $row, $type, $label, $description, $unitPrice, $quantity)
-    {
-        $this->packageTemplate[$group]['template'][$row] = [
-            'label'       => $label,
-            'description' => $description,
-            'type'        => $type,
-            'unitPrice'   => $unitPrice,
-        ];
-
-        $this->packageData[$group][$row] = [
-            'value'    => true,
-            'quantity' => $quantity,
-        ];
     }
 }

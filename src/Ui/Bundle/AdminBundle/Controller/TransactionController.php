@@ -52,7 +52,7 @@ class TransactionController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
+            ->guessSheetName($sheet);
 
         return $this->render('AdminBundle:Transaction:create.html.twig', [
             'form'       => $form->createView(),
@@ -90,7 +90,7 @@ class TransactionController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
+            ->guessSheetName($sheet);
 
         return $this->render('AdminBundle:Transaction:update.html.twig', [
             'form'       => $form->createView(),

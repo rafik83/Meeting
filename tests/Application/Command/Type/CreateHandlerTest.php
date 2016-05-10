@@ -29,10 +29,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $event->setLocales(['fr'], 'fr');
 
-        $template             = new Template('test', [], [], [], '', '');
         $sheetTemplate        = new SheetTemplate('base toto', [], ['fr'], 'fr', $dateTime);
         $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
-
 
         //Expected
         $expectedSheetTemplate         = new SheetTemplate('toto', [], ['fr'], 'fr', $dateTime);
@@ -41,7 +39,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRegistrationTemplate->setEvent($event);
 
         $expectedType = new Type($event);
-        $expectedType->setTemplate($template);
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
         $expectedType->setSheetTemplate($expectedSheetTemplate);
@@ -49,7 +46,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Command
         $create = new Create($event, 'fr');
-        $create->template = $template;
         $create->translations['fr']['title'] = 'toto';
         $create->validationCriteria['sheetAccepted'] = true;
         $create->sheetTemplate        = $sheetTemplate;

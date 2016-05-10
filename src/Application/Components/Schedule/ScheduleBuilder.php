@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Schedule;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,6 +18,7 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ScheduleBuilder
 {
@@ -114,7 +114,7 @@ class ScheduleBuilder
 
         return [
             'participant' => $participant,
-            'name'        => $this->participantInfoGuesser->guessParticipantInfo($participant),
+            'name'        => $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale),
             'schedules'   => $scheduleViews,
         ];
     }
@@ -177,7 +177,7 @@ class ScheduleBuilder
                 $meeting->getSlot()->getId(),
                 new ScheduleSlotView(
                     $meeting->getId(),
-                    $this->sheetInfoGuesser->guessSheetInfo($sheet),
+                    $this->sheetInfoGuesser->guessSheetName($sheet),
                     $meeting->getSlot()->getBegin(),
                     $meeting->getSlot()->getEnd(),
                     true

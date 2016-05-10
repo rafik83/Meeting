@@ -47,10 +47,12 @@ class TemplateDataFactory
     /**
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
      */
+    /*
     public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
     {
         $this->nomenclatureRepository = $nomenclatureRepository;
     }
+    */
 
     /**
      * @param Sheet  $sheet
@@ -60,9 +62,9 @@ class TemplateDataFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+        //$this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
 
-        return $this->create($sheet->getType()->getNewSheetTemplate()->getValue(), $sheet->getData(), $locale);
+        return $this->create($sheet->getType()->getSheetTemplate()->getValue(), $sheet->getData(), $locale);
     }
 
     /**
@@ -73,7 +75,7 @@ class TemplateDataFactory
      */
     public function createRegistrationFromType(Type $type, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
+        //$this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
 
         return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
     }
@@ -86,7 +88,7 @@ class TemplateDataFactory
      */
     public function createRegistrationFromParticipant(Participant $participant, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+        //$this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
 
         $datas = array_merge($participant->getData(), $participant->getSheet()->getRegistrationData());
 

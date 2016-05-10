@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Application\Components\Order\OrderManager;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\CartRepositoryInterface;
@@ -36,11 +35,6 @@ class CreateHandler
     private $cartRepository;
 
     /**
-     * @var OrderManager
-     */
-    private $orderManager;
-
-    /**
      * @var ParticipantManager
      */
     private $participantManager;
@@ -54,7 +48,6 @@ class CreateHandler
      * @param OrderRepositoryInterface $orderRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param CartRepositoryInterface  $cartRepository
-     * @param OrderManager             $orderManager
      * @param ParticipantManager       $participantManager
      * @param StateSetter              $stateSetter
      */
@@ -62,14 +55,12 @@ class CreateHandler
         OrderRepositoryInterface $orderRepository,
         SheetRepositoryInterface $sheetRepository,
         CartRepositoryInterface $cartRepository,
-        OrderManager $orderManager,
         ParticipantManager $participantManager,
         StateSetter $stateSetter
     ) {
         $this->orderRepository    = $orderRepository;
         $this->sheetRepository    = $sheetRepository;
         $this->cartRepository     = $cartRepository;
-        $this->orderManager       = $orderManager;
         $this->participantManager = $participantManager;
         $this->stateSetter        = $stateSetter;
     }
@@ -79,8 +70,6 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $create->packageData = $this->orderManager->cleanFalseOption($create->packageData);
-
         $order = new Order(
             $create->sheet,
             $create->state,
@@ -94,12 +83,10 @@ class CreateHandler
 
         $this->orderRepository->add($order);
 
-        $this->participantManager->convertInactiveParticipantAfterOrderCreation($create->sheet, $order);
-
-        $sheetData = $this->orderManager->mergeTwoPackageData($create->sheet->getPackageData(), $create->packageData);
-
         $this->cartRepository->delete($create->cart);
 
+        // @todo: fix this
+        $sheetData = [];
         $create->sheet->setPackageData($sheetData);
 
         $this->stateSetter->setState($create->sheet);

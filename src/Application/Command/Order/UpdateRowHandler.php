@@ -34,15 +34,7 @@ class UpdateRowHandler
      */
     public function handle(UpdateRow $updateRow)
     {
-        $updateRow->order->updateRow(
-            $updateRow->group,
-            $updateRow->row,
-            'added_row',
-            $updateRow->label,
-            $updateRow->description,
-            $updateRow->price,
-            $updateRow->quantity
-        );
+        // @todo: update this row in db
 
         $this->orderRepository->set($updateRow->order);
     }

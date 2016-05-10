@@ -37,7 +37,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
+            ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
         $orderView = $this->get('components.sheet.order_view_factory')->createFromOrder(
@@ -70,7 +70,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
+            ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
         $addRow = new AddRow($order, $group);
@@ -112,8 +112,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
-        ;
+            ->guessSheetName($order->getSheet(), $request->getLocale());
 
         $updateRow = new UpdateRow($order, $group, $row);
         $form      = $this->createForm(UpdateRowType::class, $updateRow);

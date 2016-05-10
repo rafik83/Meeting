@@ -36,7 +36,7 @@ class BillingController extends Controller
         // Sheet
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
+            ->guessSheetName($sheet, $request->getLocale());
 
         // Orders
         $orders = $this

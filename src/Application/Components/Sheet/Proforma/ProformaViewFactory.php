@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Proforma;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Order\OrderViewFactory;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ProformaViewFactory
 {
@@ -77,8 +77,8 @@ class ProformaViewFactory
         $billingView = $this->billingViewFactory->createFromOrder($order);
 
         // Participant
-        $participants = array_map(function (Participant $participant) {
-            return $this->participantInfoGuesser->guessParticipantInfo($participant);
+        $participants = array_map(function (Participant $participant) use ($locale) {
+            return $this->participantInfoGuesser->guessParticipantInfo($participant, $locale);
         }, $sheet->getParticipants()->toArray());
 
         return new ProformaView(

@@ -125,15 +125,6 @@ class AddHandler
 
         $participant = new Participant($add->sheet, $user, $add->data, $add->owner, false);
 
-        // Find an order to attach the participant
-        $orderToAttach = $this->participantManager->findOrdertoAttach($add->sheet);
-
-        // If there is an order, attach it and active the participant
-        if ($orderToAttach) {
-            $participant->setOrder($orderToAttach);
-            $participant->setActive(true);
-        }
-
         // Add the new participant
         $this->participantRepository->add($participant);
 

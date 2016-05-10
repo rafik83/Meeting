@@ -29,11 +29,6 @@ class Create
     public $event;
 
     /**
-     * @var Template
-     */
-    public $template;
-
-    /**
      * @var SheetTemplate
      */
     public $sheetTemplate;

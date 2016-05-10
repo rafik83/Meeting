@@ -94,7 +94,7 @@ class NotificationViewFactory
      *
      * @return NotificationView[]
      */
-    public function getNotificationsByEventAndUser($event, User $user)
+    public function getNotificationsByEventAndUser($event, User $user, $locale)
     {
         $notifications   = $this->notificationRepository->getNotificationsByEventAndUser($event, $user);
         $receivedRequest = $this->requestRepository->getRequestsByEventAndUser($event, $user);
@@ -115,7 +115,7 @@ class NotificationViewFactory
         $notifications = array_merge($notifications, array_map(function (Request $request) use ($user) {
             $message = $this->translator->trans(
                 'notification.meeting_request.receive.message',
-                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet())],
+                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($request->getFromSheet())],
                 'notifications',
                 $user->getLocale()
             );

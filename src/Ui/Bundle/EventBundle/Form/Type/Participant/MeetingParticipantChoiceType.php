@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,9 +28,12 @@ class MeetingParticipantChoiceType extends ParticipantChoiceType
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param ParticipantRepositoryInterface $participantRepository
      */
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser, ParticipantRepositoryInterface $participantRepository)
-    {
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        ParticipantRepositoryInterface $participantRepository
+    ) {
         parent::__construct($participantInfoGuesser);
+
         $this->participantRepository = $participantRepository;
     }
 

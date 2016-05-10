@@ -139,7 +139,7 @@ class SheetMeetingsListViewFactory
 
         return new SheetMeetingsListView(
             $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $this->sheetInfoGuesser->guessSheetName($sheet),
             $sheet->getType()->getTitle($locale),
             $meetingsRequestsNumber,
             $meetingsPropositionsNumber,

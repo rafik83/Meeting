@@ -9,11 +9,6 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         maxParticipant: 4
         maxPlanning: 4
-        freeParticipant: 1
-        participantTemplate: '@template_exhibitor->participant'
-        oldSheetTemplate: '@template_exhibitor->sheet'
-        packageTemplate: '@template_exhibitor->package'
-        previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         registrationTemplate: '@registration_template_carnot'
 
@@ -22,11 +17,6 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 1
         maxParticipant: 4
         maxPlanning: 4
-        freeParticipant: 1
-        participantTemplate: '@template_exhibitor->participant'
-        oldSheetTemplate: '@template_exhibitor->sheet'
-        packageTemplate: '@template_exhibitor->package'
-        previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
@@ -36,12 +26,6 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 2
         maxParticipant: 4
         maxPlanning: 4
-        freeParticipant: 1
-        participantTemplate: '@template_visitor->participant'
-        oldSheetTemplate: '@template_visitor->sheet'
-        packageTemplate: '@template_visitor->package'
-        previewTemplate: '@template_visitor->preview'
-        viewTemplate: '@template_visitor->view'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
@@ -51,12 +35,6 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 3
         maxParticipant: 4
         maxPlanning: 4
-        freeParticipant: 1
-        participantTemplate: '@template_visitor->participant'
-        oldSheetTemplate: '@template_visitor->sheet'
-        packageTemplate: '@template_visitor->package'
-        previewTemplate: '@template_visitor->preview'
-        viewTemplate: '@template_visitor->view'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
@@ -66,11 +44,6 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 4
         maxParticipant: 4
         maxPlanning: 4
-        freeParticipant: 1
-        participantTemplate: '@template_exhibitor->participant'
-        oldSheetTemplate: '@template_exhibitor->sheet'
-        packageTemplate: '@template_exhibitor->package'
-        previewTemplate: '@template_exhibitor->preview'
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'

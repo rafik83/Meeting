@@ -52,7 +52,7 @@ class AddRow
      */
     public function __construct(Order $order, $group)
     {
-        $this->order    = $order;
-        $this->group    = $group;
+        $this->order = $order;
+        $this->group = $group;
     }
 }

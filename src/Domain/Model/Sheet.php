@@ -322,16 +322,6 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
-     * Get type packageTemplate.
-     *
-     * @return array
-     */
-    public function getTypePackageTemplate()
-    {
-        return $this->getType()->getPackageTemplate();
-    }
-
-    /**
      * @param Order $order
      *
      * @return Sheet

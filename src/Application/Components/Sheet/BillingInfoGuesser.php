@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\BillingInfoInterface;
-use Proximum\Vimeet\Application\Components\Template\TaggedInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
 
 class BillingInfoGuesser
 {
@@ -22,8 +22,6 @@ class BillingInfoGuesser
     private $taggedInfoGuesser;
 
     /**
-     * BillingInfoGuesser constructor.
-     *
      * @param TaggedInfoGuesser $taggedInfoGuesser
      */
     public function __construct(TaggedInfoGuesser $taggedInfoGuesser)
@@ -33,141 +31,128 @@ class BillingInfoGuesser
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getName(BillingInfoInterface $object)
+    public function getName(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_NAME
-        );
+        return $this->get($object, Tag::BILLING_NAME, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getAddress(BillingInfoInterface $object)
+    public function getAddress(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_ADDRESS
-        );
+        return $this->get($object, Tag::BILLING_ADDRESS, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getCity(BillingInfoInterface $object)
+    public function getCity(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_CITY
-        );
+        return $this->get($object, Tag::BILLING_CITY, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getZipcode(BillingInfoInterface $object)
+    public function getZipcode(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_ZIPCODE
-        );
+        return $this->get($object, Tag::BILLING_ZIPCODE, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getCountry(BillingInfoInterface $object)
+    public function getCountry(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_COUNTRY
-        );
+        return $this->get($object, Tag::BILLING_COUNTRY, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getPhone(BillingInfoInterface $object)
+    public function getPhone(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_PHONE
-        );
+        return $this->get($object, Tag::BILLING_PHONE, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getEmail(BillingInfoInterface $object)
+    public function getEmail(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_EMAIL
-        );
+        return $this->get($object, Tag::BILLING_EMAIL, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getOrganization(BillingInfoInterface $object)
+    public function getOrganization(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_ORGANIZATION
-        );
+        return $this->get($object, Tag::BILLING_ORGANIZATION, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getVatNumber(BillingInfoInterface $object)
+    public function getVatNumber(BillingInfoInterface $object, $locale)
     {
-        return $this->taggedInfoGuesser->guessFirst(
-            $object->getBillingTemplate(),
-            $object->getBillingData(),
-            Tag::BILLING_VAT_NUMBER
-        );
+        return $this->get($object, Tag::BILLING_VAT_NUMBER, $locale);
     }
 
     /**
      * @param BillingInfoInterface $object
+     * @param string               $locale
      *
      * @return string
      */
-    public function getExtra(BillingInfoInterface $object)
+    public function getExtra(BillingInfoInterface $object, $locale)
+    {
+        return $this->get($object, Tag::BILLING_EXTRA, $locale);
+    }
+
+    /**
+     * @param BillingInfoInterface $object
+     * @param string               $tag
+     * @param string               $locale
+     *
+     * @return string
+     */
+    private function get(BillingInfoInterface $object, $tag, $locale)
     {
         return $this->taggedInfoGuesser->guessFirst(
             $object->getBillingTemplate(),
             $object->getBillingData(),
-            Tag::BILLING_EXTRA
+            $tag,
+            $locale
         );
     }
 }

@@ -84,28 +84,41 @@ class MeetingRequestController extends Controller
     }
 
     /**
+     * @param Request        $request
      * @param Event          $event
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showDetailAction(Event $event, MeetingRequest $meetingRequest)
+    public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
+        $locale = $request->getLocale();
+
         $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest);
 
         $meetingRequestView = new AdminShowDetailsView(
             $meetingRequest->getId(),
             $meetingRequest->getFromSheet()->getId(),
-            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($meetingRequest->getFromSheet()),
+            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+                ->guessSheetName($meetingRequest->getFromSheet(), $locale),
             $meetingRequest->getToSheet()->getId(),
-            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')->guessSheetInfo($meetingRequest->getToSheet()),
-            array_map(function (Participant $participant) {
-                return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
-            }, $meetingRequest->getFromParticipants()->toArray()),
-            array_map(function (Participant $participant) {
-                return $this->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')->guessParticipantInfo($participant);
-            }, $meetingRequest->getToParticipants()->toArray()),
+            $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+                ->guessSheetName($meetingRequest->getToSheet(), $locale),
+            array_map(
+                function (Participant $participant) use ($locale) {
+                    return $this->get('template.participant_info_guesser')
+                        ->guessParticipantCompleteName($participant, $locale);
+                },
+                $meetingRequest->getFromParticipants()->toArray()
+            ),
+            array_map(
+                function (Participant $participant) use ($locale) {
+                    return $this->get('template.participant_info_guesser')
+                        ->guessParticipantCompleteName($participant, $locale);
+                },
+                $meetingRequest->getToParticipants()->toArray()
+            ),
             $messages,
             $meetingRequest->getState(),
             $meetingRequest->getCreatedAt(),

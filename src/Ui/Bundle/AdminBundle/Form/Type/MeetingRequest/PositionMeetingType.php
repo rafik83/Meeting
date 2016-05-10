@@ -12,9 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest;
 
 use Doctrine\ORM\EntityRepository;
 use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -49,7 +49,10 @@ class PositionMeetingType extends AbstractType
                 'expanded'          => true,
                 'choices'           => $options['meeting_request']->getFromSheet()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
-                    return $this->participantInfoGuesser->guessParticipantInfo($participant);
+                    return $this->participantInfoGuesser->guessParticipantCompleteName(
+                        $participant,
+                        $participant->getSheet()->getEvent()->getFallback()
+                    );
                 },
                 'choice_value'      => function (Participant $participant) {
                     return $participant->getId();
@@ -61,7 +64,10 @@ class PositionMeetingType extends AbstractType
                 'expanded'          => true,
                 'choices'           => $options['meeting_request']->getToSheet()->getParticipants()->toArray(),
                 'choice_label'      => function (Participant $participant) {
-                    return $this->participantInfoGuesser->guessParticipantInfo($participant);
+                    return $this->participantInfoGuesser->guessParticipantCompleteName(
+                        $participant,
+                        $participant->getSheet()->getEvent()->getFallback()
+                    );
                 },
                 'choice_value'      => function (Participant $participant) {
                     return $participant->getId();

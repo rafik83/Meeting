@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 use Proximum\Vimeet\Domain\View\ParticipantNameView;
 
@@ -65,13 +65,14 @@ class RequestViewBuilder
      * @param Request $request
      * @param User    $user
      * @param Sheet   $sheet
+     * @param string  $locale
      *
      * @return RequestView
      */
-    public function generate(Request $request, User $user, Sheet $sheet)
+    public function generate(Request $request, User $user, Sheet $sheet, $locale)
     {
-        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet());
-        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet());
+        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale);
+        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale);
 
         $requestView = new RequestView(
             $request->getId(),
@@ -91,12 +92,20 @@ class RequestViewBuilder
         $requestView->canApprove = $this->requestPermissionManager->isAllowedToApprove($user, $request, $sheet);
 
         foreach ($request->getFromParticipants() as $participant) {
-            $participantInfo                 = $this->participantInfoGuesser->guessParticipantInfo($participant);
+            $participantInfo = $this->participantInfoGuesser->guessParticipantCompleteName(
+                $participant,
+                $locale
+            );
+
             $requestView->fromParticipants[] = new ParticipantNameView($participantInfo);
         }
 
         foreach ($request->getToParticipants() as $participant) {
-            $participantInfo               = $this->participantInfoGuesser->guessParticipantInfo($participant);
+            $participantInfo = $this->participantInfoGuesser->guessParticipantCompleteName(
+                $participant,
+                $locale
+            );
+
             $requestView->toParticipants[] = new ParticipantNameView($participantInfo);
         }
 

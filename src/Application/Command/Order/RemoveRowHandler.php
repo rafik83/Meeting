@@ -34,7 +34,8 @@ class RemoveRowHandler
      */
     public function handle(RemoveRow $removeRow)
     {
-        $removeRow->order->removeRow($removeRow->group, $removeRow->row);
+        // @todo: remove this row from db
+
         $this->orderRepository->set($removeRow->order);
     }
 }

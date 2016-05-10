@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -42,8 +42,9 @@ abstract class AbstractMeetingRequestType extends AbstractType
             ->add('participants', ChoiceType::class, [
                 'choices'           => $options['sheet']->getParticipants(),
                 'choices_as_values' => true,
-                'choice_label'      => function (Participant $participant) {
-                    return $this->participantInfoGuesser->guessParticipantInfo($participant);
+                'choice_label'      => function (Participant $participant) use ($options) {
+                    return $this->participantInfoGuesser
+                        ->guessParticipantCompleteName($participant, $options['locale']);
                 },
                 'expanded' => true,
                 'multiple' => true,
@@ -60,6 +61,6 @@ abstract class AbstractMeetingRequestType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheet']);
+        $resolver->setRequired(['sheet', 'locale']);
     }
 }
