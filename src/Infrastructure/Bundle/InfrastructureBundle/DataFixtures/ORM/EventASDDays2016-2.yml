@@ -944,6 +944,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 length: "200"
                                 type: "title"
                                 required: true
+                                translatable: true
                         291c7190:
                             component: "block"
                             type: "6-6"
@@ -1006,6 +1007,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             length: "500"
                                             type: "text"
                                             required: false
+                                            translatable: true
                         e438c993:
                             component: "object"
                             type: "nomenclature"
@@ -1176,6 +1178,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             length: "500"
                                             type: "text"
                                             required: false
+                                            translatable: true
                                 -
                                     03b394ac:
                                         component: "object"
