@@ -124,7 +124,7 @@ class TemplateDataFactory
                 && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])
             ) {
                 $object->setNomenclatureLabels(
-                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale())
+                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale()) ? : []
                 );
             }
         }

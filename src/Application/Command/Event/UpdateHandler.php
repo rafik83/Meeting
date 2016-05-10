@@ -88,8 +88,8 @@ class UpdateHandler
                 $assetPath = $this->guidelinesGenerator->generate($event);
 
                 $event->setAssetPath($assetPath);
-            } catch(GuidelineAssetBuildFailedException $ex) {
-                throw new GuidelineAssetBuildFailedException($ex->getMessage());
+            } catch(GuidelineAssetBuildFailedException $exception) {
+                throw new GuidelineAssetBuildFailedException($exception->getMessage());
             }
         }
 
