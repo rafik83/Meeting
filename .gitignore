@@ -38,3 +38,4 @@ ansible.cfg
 # App
 .openl10n.yml
 /web/uploads/*
+/web/css/*
