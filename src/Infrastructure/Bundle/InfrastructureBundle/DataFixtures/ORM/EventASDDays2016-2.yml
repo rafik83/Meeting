@@ -1245,6 +1245,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        registrationData: []
 
 Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
     registration_template_asd_days:
@@ -1609,9 +1610,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            563caf2746398: "John"
-            563caf1d9b1cb: "Doe"
-            563caf2f0ddbd: "0909090909"
+            541f84d4: "John"
+            838197c7: "Doe"
+            1efb9cbb: "+33909090909"
 
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_1:
