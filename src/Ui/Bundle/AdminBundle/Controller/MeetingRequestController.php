@@ -65,7 +65,7 @@ class MeetingRequestController extends Controller
 
         $meetingRequests = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $filters);
+            ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $locale, $filters);
 
         $meetingRequestsAll = $this
             ->get('vimeet_infrastructure.repository.meeting.request_repository')

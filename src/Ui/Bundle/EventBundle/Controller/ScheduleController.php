@@ -43,7 +43,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $participantSchedules = $this
-            ->get('proximum.vimeet.application.components.schedule.schedule_builder')
+            ->get('vimeet.application.components.schedule.schedule_builder')
             ->buildForSheet($sheet, $request->getLocale());
 
         return $this->render('EventBundle:Schedule:display.html.twig', [

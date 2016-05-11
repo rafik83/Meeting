@@ -112,10 +112,10 @@ class NotificationViewFactory
         }, $notifications);
 
         // Add notification views for request, force read to false is request is not accepted, refused or canceled
-        $notifications = array_merge($notifications, array_map(function (Request $request) use ($user) {
+        $notifications = array_merge($notifications, array_map(function (Request $request) use ($user, $locale) {
             $message = $this->translator->trans(
                 'notification.meeting_request.receive.message',
-                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($request->getFromSheet())],
+                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale)],
                 'notifications',
                 $user->getLocale()
             );

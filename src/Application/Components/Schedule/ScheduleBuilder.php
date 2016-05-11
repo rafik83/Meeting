@@ -106,7 +106,7 @@ class ScheduleBuilder
     private function builScheduleViewForMeetingHappeningsAndUnavailabilities(Participant $participant, $locale)
     {
         $scheduleViews = [];
-        $scheduleViews = $this->buildMeetingsForScheduleViews($scheduleViews, $participant);
+        $scheduleViews = $this->buildMeetingsForScheduleViews($scheduleViews, $participant, $locale);
         $scheduleViews = $this->buildHappeningsForScheduleViews($scheduleViews, $participant, $locale);
         $scheduleViews = $this->buildUnavailabilitiesForScheduleViews($scheduleViews, $participant);
 
@@ -122,10 +122,11 @@ class ScheduleBuilder
     /**
      * @param array       $scheduleViews
      * @param Participant $participant
+     * @param string      $locale
      *
      * @return ScheduleView[]
      */
-    private function buildMeetingsForScheduleViews(array $scheduleViews, Participant $participant)
+    private function buildMeetingsForScheduleViews(array $scheduleViews, Participant $participant, $locale)
     {
         $meetingSlots = $this->meetingSlotRepository->findByEvent($participant->getSheet()->getEvent());
 
@@ -138,7 +139,7 @@ class ScheduleBuilder
                     $meetingSlot->getId(),
                     new ScheduleSlotView(
                         $meetingSlot->getId(),
-                        'Vide',
+                        '...',
                         $meetingSlot->getBegin(),
                         $meetingSlot->getEnd(),
                         false
@@ -157,7 +158,7 @@ class ScheduleBuilder
                     $meetingSlot->getId(),
                     new ScheduleSlotView(
                         $meetingSlot->getId(),
-                        'Vide',
+                        '...',
                         $meetingSlot->getBegin(),
                         $meetingSlot->getEnd(),
                         false
@@ -177,7 +178,7 @@ class ScheduleBuilder
                 $meeting->getSlot()->getId(),
                 new ScheduleSlotView(
                     $meeting->getId(),
-                    $this->sheetInfoGuesser->guessSheetName($sheet),
+                    $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
                     $meeting->getSlot()->getBegin(),
                     $meeting->getSlot()->getEnd(),
                     true
