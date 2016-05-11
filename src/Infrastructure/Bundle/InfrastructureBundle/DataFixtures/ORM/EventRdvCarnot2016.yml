@@ -1,12 +1,13 @@
 Proximum\Vimeet\Domain\Model\Address (local):
-    payment_address_event_rdv_carnot_2016:
+    event_rdv_carnot_2016_payment_address_event:
         __construct:
             - 855 Avenue Roger Salengro
             - 92370
             - CHAVILLE
             - fr
+
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
-    configuration_rdv_carnot_2016:
+    event_rdv_carnot_2016_configuration:
         __construct:
             - '#59a4eb'
             - '#00398c'
@@ -20,8 +21,8 @@ Proximum\Vimeet\Domain\Model\Event:
         locales: [fr, en]
         fallback: fr
         organiserName: PROXIMUM
-        configuration: '@configuration_rdv_carnot_2016'
-        paymentAddress: '@payment_address_event_rdv_carnot_2016'
+        configuration: '@event_rdv_carnot_2016_configuration'
+        paymentAddress: '@event_rdv_carnot_2016_payment_address_event'
         organiserEmail: accounts@proximumgroup.com
         bankInfo: |+
             'HSBC Issy les Moulineaux
