@@ -49,6 +49,14 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param int $column
+     */
+    public function addColumn($column)
+    {
+        $this->children[$column] = [];
+    }
+
+    /**
      * @param int           $column
      * @param string        $name
      * @param AbstractChild $child
@@ -61,7 +69,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object[]
      */
     public function getObjects($key = null)
     {
@@ -83,7 +91,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object[]
      */
     public function getEditableObjects()
     {
@@ -95,7 +103,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object
+     * @return \Proximum\Vimeet\Domain\Template\Object
      * @throws \Exception
      */
     public function getObject($key)
@@ -220,7 +228,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object[]
      */
     public function getImageObjects()
     {

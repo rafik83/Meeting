@@ -159,6 +159,7 @@ class TemplateDataFactory
             $block = new Block($config['type'], $config['config']);
 
             foreach ($config['children'] as $column => $children) {
+                $block->addColumn($column);
                 foreach ($children as $key => $child) {
                     $child = $this->doCreate($child, $locale, $fallback);
                     $block->addChild($column, $key, $child);
