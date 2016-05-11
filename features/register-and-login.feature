@@ -80,4 +80,3 @@ Feature: Register and login user
     And I select "Ingénieur chef de projet" from "block[6c4a3a4f]"
     And I press "common.next"
     Then the response status code should be 200
-    And I should see "flash.event.participation.success"

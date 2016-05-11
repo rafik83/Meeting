@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Image extends EditableObject
+class Url extends EditableObject
 {
     /**
      * @return string
@@ -20,19 +20,5 @@ class Image extends EditableObject
     public function __toString()
     {
         return $this->getData() ? $this->getData() : '';
-    }
-
-    /**
-     * @return array
-     */
-    public static function supportedMimeType()
-    {
-        return [
-            "image/gif",
-            "image/jpeg",
-            "image/pjpeg",
-            "image/png",
-            "image/x-png",
-        ];
     }
 }
