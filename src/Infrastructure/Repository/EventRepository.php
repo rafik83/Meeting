@@ -139,6 +139,7 @@ class EventRepository implements EventRepositoryInterface
                 event.title,
                 translations.description,
                 translations.locale,
+                event.fallback,
                 event.locales,
                 event.timeZone,
                 event.assetPath

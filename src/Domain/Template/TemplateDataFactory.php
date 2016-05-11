@@ -63,7 +63,12 @@ class TemplateDataFactory
     {
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
 
-        return $this->create($sheet->getType()->getNewSheetTemplate()->getValue(), $sheet->getData(), $locale);
+        return $this->create(
+            $sheet->getType()->getNewSheetTemplate()->getValue(),
+            $sheet->getData(),
+            $locale,
+            $sheet->getType()->getNewSheetTemplate()->getFallback()
+        );
     }
 
     /**
@@ -76,7 +81,12 @@ class TemplateDataFactory
     {
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
 
-        return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
+        return $this->create(
+            $type->getRegistrationTemplate()->getValue(),
+            [],
+            $locale,
+            $type->getRegistrationTemplate()->getFallback()
+        );
     }
 
     /**
@@ -94,7 +104,8 @@ class TemplateDataFactory
         return $this->create(
             $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
             $datas,
-            $locale
+            $locale,
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
         );
     }
 
@@ -102,15 +113,16 @@ class TemplateDataFactory
      * @param array  $template
      * @param array  $data
      * @param string $locale
+     * @param string $fallback
      *
      * @return TemplateData
      * @throws \Exception
      */
-    public function create(array $template, array $data, $locale)
+    public function create(array $template, array $data, $locale, $fallback)
     {
         $templateData = new TemplateData('root', []);
 
-        foreach ($this->doCreate($template, $locale) as $name => $child) {
+        foreach ($this->doCreate($template, $locale, $fallback) as $name => $child) {
             $templateData->addChild(0, $name, $child);
         }
 
@@ -130,15 +142,16 @@ class TemplateDataFactory
     /**
      * @param array  $config
      * @param string $locale
+     * @param string $fallback
      *
      * @return array|Block
      * @throws \Exception
      */
-    private function doCreate(array $config, $locale)
+    private function doCreate(array $config, $locale, $fallback)
     {
         if (!isset($config['component'])) {
-            return array_map(function (array $child) use ($locale) {
-                return $this->doCreate($child, $locale);
+            return array_map(function (array $child) use ($locale, $fallback) {
+                return $this->doCreate($child, $locale, $fallback);
             }, $config);
         }
 
@@ -147,7 +160,7 @@ class TemplateDataFactory
 
             foreach ($config['children'] as $column => $children) {
                 foreach ($children as $key => $child) {
-                    $child = $this->doCreate($child, $locale);
+                    $child = $this->doCreate($child, $locale, $fallback);
                     $block->addChild($column, $key, $child);
                 }
             }
@@ -157,7 +170,7 @@ class TemplateDataFactory
 
         if ('object' === $config['component']) {
             $class  = $this->objects[$config['type']];
-            $object = new $class($config['type'], $config['config'], $locale);
+            $object = new $class($config['type'], $config['config'], $locale, $fallback);
 
             return $object;
         }

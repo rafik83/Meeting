@@ -53,6 +53,34 @@ class Media
     }
 
     /**
+     * Get collection
+     *
+     * @return MediaCollection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    /**
+     * Get fallback title if object is translatable.
+     *
+     * @return string|null
+     */
+    public function getFallbackTitle()
+    {
+        if ($this->collection->isTranslatable() && is_array($this->title) || is_array($this->title)) {
+            return isset($this->title[$this->collection->getFallback()])
+                ? $this->title[$this->collection->getFallback()]
+                : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get title in the current locale
+     *
      * @return string
      */
     public function getTitle()
@@ -67,6 +95,8 @@ class Media
     }
 
     /**
+     * Set title in the current locale
+     *
      * @param string $title
      *
      * @return Item

@@ -23,17 +23,24 @@ class Object extends AbstractChild
     protected $locale;
 
     /**
+     * @var string
+     */
+    protected $fallback;
+
+    /**
      * Object constructor.
      *
      * @param string $type
      * @param array  $config
      * @param string $locale
+     * @param string $fallback
      */
-    public function __construct($type, array $config, $locale)
+    public function __construct($type, array $config, $locale, $fallback)
     {
         parent::__construct($type, $config);
 
-        $this->locale = $locale;
+        $this->locale   = $locale;
+        $this->fallback = $fallback;
     }
 
     /**
@@ -58,6 +65,14 @@ class Object extends AbstractChild
         return $this->locale;
     }
 
+    /**
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->fallback;
+    }
+    
     /**
      * {@inheritdoc}
      */

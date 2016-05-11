@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -59,6 +60,18 @@ class MediaDataType extends AbstractType
                 };
             },
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $data = $view->vars['data'];
+
+        if ($data instanceof Media && $data->getCollection()->getLocale() !== $data->getCollection()->getFallback()) {
+            $view->vars['form']->children['title']->vars['help'] = $data->getFallbackTitle();
+        }
     }
 
     /**
