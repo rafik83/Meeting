@@ -34,7 +34,6 @@ class BlockType extends AbstractType
         foreach ($block->getObjects() as $object) {
             if ($object instanceof Template\Object\EditableText) {
                 $this->addText($builder, $object, $options['locale']);
-
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Image) {
@@ -140,7 +139,7 @@ class BlockType extends AbstractType
             return;
         }
 
-        if (!is_array(array_shift($choices))) {
+        if (!is_array(reset($choices))) {
             $choices = array_flip($choices);
         } else {
             $choices = array_map(function ($values) {
@@ -148,16 +147,12 @@ class BlockType extends AbstractType
             }, $choices);
         }
 
-        if (true === $object->getOption('required')) {
-            // Add an empty option in order to show the placeholder in select2
-            $choices = array_merge(['' => ''], $choices);
-        }
-
         $builder->add($object->getKey(), ChoiceType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'choices'  => $choices,
-            'attr'     => [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'choices'     => $choices,
+            'placeholder' => $object->getOption('label')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],
