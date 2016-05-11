@@ -10,9 +10,23 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Model\User\Account;
+
 /**
  * "Compte utilisateur".
  */
 class User extends AbstractUser
 {
+    /**
+     * @var Account
+     */
+    private $account;
+
+    /**
+     * @return Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
 }
