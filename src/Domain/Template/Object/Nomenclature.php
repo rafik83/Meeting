@@ -24,7 +24,7 @@ class Nomenclature extends EditableObject
      */
     public function __toString()
     {
-        return $this->getData();
+        return $this->getData() !== null ? $this->getData() : '';
     }
 
     /**
