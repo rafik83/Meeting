@@ -1,5 +1,8 @@
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
+@import "base/_vars";
+@import "base/_responsive";
 @import "components/_select2";
+@import "objects/_modals";
 @import "intl-tel-input/build/css/intlTelInput";
 
 .required:after {
