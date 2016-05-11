@@ -42,6 +42,7 @@ Enable/Disable php xdebug
 * *OPcache Dashboard*: http://vimeet.proximum.dev:2013
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
 * *openl10n*: http://openl10n-app.elao.ninja/ or http://openl10n.elao.ninja/
+* *ElasticSearch HEAD*: http://vimeet.proximum.dev:9200/_plugin/head/
 
 ### Mailtrap
 
