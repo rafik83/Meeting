@@ -148,6 +148,10 @@ class BillingInfoGuesser
      */
     private function get(BillingInfoInterface $object, $tag, $locale)
     {
+        if (is_array($object->getBillingTemplate())) {
+            return '';
+        }
+
         return $this->taggedInfoGuesser->guessFirst(
             $object->getBillingTemplate(),
             $object->getBillingData(),

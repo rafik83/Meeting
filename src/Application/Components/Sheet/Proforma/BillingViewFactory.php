@@ -32,44 +32,46 @@ class BillingViewFactory
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet  $sheet
+     * @param string $locale
      *
      * @return BillingView
      */
-    public function createFromSheet(Sheet $sheet)
+    public function createFromSheet(Sheet $sheet, $locale)
     {
         return new BillingView(
-            $this->billingInfoGuesser->getName($sheet),
-            $this->billingInfoGuesser->getAddress($sheet),
-            $this->billingInfoGuesser->getCity($sheet),
-            $this->billingInfoGuesser->getZipcode($sheet),
-            $this->billingInfoGuesser->getCountry($sheet),
-            $this->billingInfoGuesser->getPhone($sheet),
-            $this->billingInfoGuesser->getEmail($sheet),
-            $this->billingInfoGuesser->getOrganization($sheet),
-            $this->billingInfoGuesser->getVatNumber($sheet),
-            $this->billingInfoGuesser->getExtra($sheet)
+            $this->billingInfoGuesser->getName($sheet, $locale),
+            $this->billingInfoGuesser->getAddress($sheet, $locale),
+            $this->billingInfoGuesser->getCity($sheet, $locale),
+            $this->billingInfoGuesser->getZipcode($sheet, $locale),
+            $this->billingInfoGuesser->getCountry($sheet, $locale),
+            $this->billingInfoGuesser->getPhone($sheet, $locale),
+            $this->billingInfoGuesser->getEmail($sheet, $locale),
+            $this->billingInfoGuesser->getOrganization($sheet, $locale),
+            $this->billingInfoGuesser->getVatNumber($sheet, $locale),
+            $this->billingInfoGuesser->getExtra($sheet, $locale)
         );
     }
 
     /**
-     * @param Order $sheet
+     * @param Order  $order
+     * @param string $locale
      *
      * @return BillingView
      */
-    public function createFromOrder(Order $sheet)
+    public function createFromOrder(Order $order, $locale)
     {
         return new BillingView(
-            $this->billingInfoGuesser->getName($sheet),
-            $this->billingInfoGuesser->getAddress($sheet),
-            $this->billingInfoGuesser->getCity($sheet),
-            $this->billingInfoGuesser->getZipcode($sheet),
-            $this->billingInfoGuesser->getCountry($sheet),
-            $this->billingInfoGuesser->getPhone($sheet),
-            $this->billingInfoGuesser->getEmail($sheet),
-            $this->billingInfoGuesser->getOrganization($sheet),
-            $this->billingInfoGuesser->getVatNumber($sheet),
-            $this->billingInfoGuesser->getExtra($sheet)
+            $this->billingInfoGuesser->getName($order, $locale),
+            $this->billingInfoGuesser->getAddress($order, $locale),
+            $this->billingInfoGuesser->getCity($order, $locale),
+            $this->billingInfoGuesser->getZipcode($order, $locale),
+            $this->billingInfoGuesser->getCountry($order, $locale),
+            $this->billingInfoGuesser->getPhone($order, $locale),
+            $this->billingInfoGuesser->getEmail($order, $locale),
+            $this->billingInfoGuesser->getOrganization($order, $locale),
+            $this->billingInfoGuesser->getVatNumber($order, $locale),
+            $this->billingInfoGuesser->getExtra($order, $locale)
         );
     }
 }

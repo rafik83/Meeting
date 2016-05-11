@@ -267,4 +267,13 @@ class Type implements WhoInterface
 
         return $this;
     }
+
+    /**
+     * @deprecated Use getRegistrationTemplate()
+     * @return array
+     */
+    public function getParticipantTemplate()
+    {
+        return [];
+    }
 }

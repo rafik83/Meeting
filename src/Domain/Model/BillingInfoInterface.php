@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
-
 interface BillingInfoInterface
 {
     /**
@@ -20,7 +18,8 @@ interface BillingInfoInterface
     public function getBillingData();
 
     /**
-     * @return AbstractTemplate
+     * @deprecated Must return a Proximum\Vimeet\Domain\Model\Template\AbstractTemplate object
+     * @return array
      */
     public function getBillingTemplate();
 }

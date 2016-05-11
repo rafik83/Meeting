@@ -10,31 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
-use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class StateSetter
 {
     /**
-     * @var Validator
-     */
-    private $validator;
-
-    /**
-     * StateSetter constructor.
-     *
-     * @param Validator $validator
-     */
-    public function __construct(Validator $validator)
-    {
-        $this->validator = $validator;
-    }
-
-    /**
      * Set state
      *
      * @param Sheet $sheet
+     *
+     * @deprecated to be rewrited
      */
     public function setState(Sheet $sheet)
     {
@@ -55,16 +40,12 @@ class StateSetter
      * @param Sheet $sheet
      *
      * @return bool
+     *
+     * @deprecated to be rewrited
      */
     private function isComplete(Sheet $sheet)
     {
-        try {
-            $this->validator->validateSheetData($sheet, $sheet->getData());
-
-            return true;
-        } catch (MissingRequiredDataException $exception) {
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -73,6 +54,8 @@ class StateSetter
      * @param Sheet $sheet
      *
      * @return bool
+     *
+     * @deprecated to be rewrited
      */
     private function hasPackage(Sheet $sheet)
     {

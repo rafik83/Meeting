@@ -68,8 +68,8 @@ class SheetInfoGuesser
             return sprintf('#%s', $sheet->getId());
         }
 
-        $data     = $sheet->getData();
-        $info     = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_ORGANIZATION, $locale);
+        $data = $sheet->getData();
+        $info = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_ORGANIZATION, $locale);
 
         if (!empty($info)) {
             return reset($info);

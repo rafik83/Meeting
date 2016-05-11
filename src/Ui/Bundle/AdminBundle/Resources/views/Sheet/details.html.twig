@@ -63,18 +63,6 @@
         </div>
     </div>
 
-    {% for key, block in details.blocks %}
-        <h3>{{ block.title }}</h3>
-        <table class="table table-condensed">
-            {% for row in block.rows %}
-                <tr>
-                    <th class="col-md-3">{{ row.label }}</th>
-                    <td class="col-md-9">{{ row.value }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endfor %}
-
     <h3>Demandes de Rendez-vous</h3>
 
     <div class="row">

@@ -8,7 +8,7 @@ Proximum\Vimeet\Domain\Model\Event:
         assetPath: ''
         organiserName: PROXIMUM
         paymentAddress: '@payment_address_event_spanish'
-        configuration: '@configuration_rdv_carnot_2016'
+        configuration: '@configuration_event_spanish'
         organiserEmail: accounts@proximumgroup.com
         bankInfo: |+
             HSBC Issy les Moulineaux
@@ -81,6 +81,13 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         locale: es
         event: '@event_spanish'
 
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_event_spanish:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
+
 Proximum\Vimeet\Domain\Model\Address (local):
     payment_address_event_spanish:
         __construct:
@@ -95,14 +102,14 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         maxParticipant: 4
         maxPlanning: 4
-        registrationTemplate: '@registration_template_espagnol'
+        registrationTemplate: '@registration_template_event_spanish'
 
     event_spanish_type_exposant:
         __construct: ["@event_spanish"]
         position: 1
         maxParticipant: 4
         maxPlanning: 4
-        registrationTemplate: '@registration_template_espagnol'
+        registrationTemplate: '@registration_template_event_spanish'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_spanish_type_fournisseur_es:
@@ -111,7 +118,7 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         __construct: ['@event_spanish_type_exposant', 'es', "Inversor"]
 
 Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
-    registration_template_espagnol:
+    registration_template_event_spanish:
         __construct: false
         event: '@event_spanish'
         title: "Inscription Template Espagnol"
@@ -373,3 +380,4 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_data"]
+

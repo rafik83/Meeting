@@ -28,26 +28,20 @@ Proximum\Vimeet\Domain\Model\Participant:
         sheet: "@sheet_1"
         owner: true
         active: true
-        data:
-            563caf1d9b1cb: "Dutest"
-            563caf2746398: "Jean"
-            563caf2f0ddbd: "0909090909"
+        data: []
     participant_2:
         __construct: false
         user: "@user_2"
         sheet: "@sheet_1"
         owner: false
         active: true
-        data:
-            563caf1d9b1cb: "Voltaire"
-            563caf2746398: "Michel"
-            563caf2f0ddbd: "0101010101"
+        data: []
 
 Proximum\Vimeet\Domain\Model\User\ActivateAccountToken:
     activate_account_token_1:
         __construct:
              - "@user_2"
-             - azertyuiopqsdfghjklmwxcvbn
+             - 'azertyuiopqsdfghjklmwxcvbn'
              - "@sheet_1"
              - <dateTimeBetween('+1 days', '+2 days')>
 

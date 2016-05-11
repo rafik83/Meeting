@@ -88,7 +88,6 @@ class PaginatedSheetListViewQueryHandler
         return $sheets;
     }
 
-
     /**
      * @param Sheet  $sheet
      * @param string $locale

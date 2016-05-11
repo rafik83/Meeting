@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
-use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -44,11 +43,6 @@ class SheetDetailsViewFactory
     private $billingViewFactory;
 
     /**
-     * @var BlockDataViewFactory
-     */
-    private $blockDataViewFactory;
-
-    /**
      * @var CommentRepositoryInterface
      */
     private $commentRepository;
@@ -70,7 +64,6 @@ class SheetDetailsViewFactory
      * @param ParticipantInfoGuesser     $participantInfoGuesser
      * @param RequestRepositoryInterface $requestRepository
      * @param BillingViewFactory         $billingViewFactory
-     * @param BlockDataViewFactory       $blockDataViewFactory
      * @param TemplateDataFactory        $templateDataFactory
      * @param CommentRepositoryInterface $commentRepository
      * @param TraceRepositoryInterface   $traceRepository
@@ -80,7 +73,6 @@ class SheetDetailsViewFactory
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestRepositoryInterface $requestRepository,
         BillingViewFactory $billingViewFactory,
-        BlockDataViewFactory $blockDataViewFactory,
         TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
         TraceRepositoryInterface $traceRepository
@@ -89,7 +81,6 @@ class SheetDetailsViewFactory
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestRepository      = $requestRepository;
         $this->billingViewFactory     = $billingViewFactory;
-        $this->blockDataViewFactory   = $blockDataViewFactory;
         $this->templateDataFactory    = $templateDataFactory;
         $this->commentRepository      = $commentRepository;
         $this->traceRepository        = $traceRepository;
@@ -132,9 +123,7 @@ class SheetDetailsViewFactory
             // Package
             $this->sheetInfoGuesser->guessSheetPackage($sheet, $locale),
             // Billing
-            $this->billingViewFactory->createFromSheet($sheet),
-            // Blocks
-            $this->blockDataViewFactory->createBlockViews($sheet, $locale),
+            $this->billingViewFactory->createFromSheet($sheet, $locale),
             // Approved requests
             $this->requestRepository->countApprovedRequestSentBySheet($sheet),
             // Pending requests

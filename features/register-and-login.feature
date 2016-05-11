@@ -4,8 +4,8 @@ Feature: Register and login user
   Scenario: Register an user in 3 steps
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/EventASDDays2016-1.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventASDDays2016-2.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/EventASDDays2016.yml |
     When I go to this page "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"

@@ -14,11 +14,9 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
-use Proximum\Vimeet\Application\Components\Template\Validator;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template;
@@ -34,12 +32,13 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandleWhenUserNotExists()
     {
+        $now   = new \DateTime();
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $sheet = new Sheet($event, $type, [], [], $now);
         $owner = false;
 
-        $expectedSheet       = new Sheet($event, $type, [], [], new \DateTime());
+        $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
         $expectedParticipant = new Participant($expectedSheet, $expectedUser, ['foobar' => 'barfoo'], $owner, false);
 
@@ -59,7 +58,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $expectedUser,
             'STRING',
             $sheet,
-            new \DateTime()
+            $now
         );
 
         $activateAccountEvent = new ActivateAccountEvent(
@@ -78,15 +77,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $add->email = 'test@test.com';
         $add->data  = ['foobar' => 'barfoo'];
 
-        $validator = $this->prophesize(Validator::class);
-
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
             $participantRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
-            $validator->reveal(),
             $eventDispatcher->reveal()
         );
         $handler->handle($add);
@@ -94,13 +90,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWhenUserExists()
     {
+        $now   = new \DateTime();
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $sheet = new Sheet($event, $type, [], [], $now);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
 
-        $expectedSheet       = new Sheet($event, $type, [], [], new \DateTime());
+        $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo'], $owner, false);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
@@ -109,7 +106,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $participantManager = $this->prophesize(ParticipantManager::class);
+        $participantManager             = $this->prophesize(ParticipantManager::class);
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
@@ -118,15 +115,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $add->email = 'test@test.com';
         $add->data  = ['foobar' => 'barfoo'];
 
-        $validator = $this->prophesize(Validator::class);
-
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantManager->reveal(),
             $participantRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
-            $validator->reveal(),
             $eventDispatcher->reveal()
         );
         $handler->handle($add);

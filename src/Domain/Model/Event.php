@@ -264,14 +264,16 @@ class Event implements EventInterface
     }
 
     /**
+     * @deprecated billing template has to be rewrited
      * @param array $billingTemplate
      */
-    public function setBillingTemplate(array $billingTemplate)
+    public function setBillingTemplate($billingTemplate)
     {
         $this->billingTemplate = $billingTemplate;
     }
 
     /**
+     * @deprecated billing template has to be rewrited
      * @return array
      */
     public function getBillingTemplate()
