@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ItemDataType extends AbstractType
@@ -26,9 +27,8 @@ class ItemDataType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'         => false,
-                'property_path' => sprintf('title[%s]', $options['locale']),
-                'required'      => false,
+                'label'    => false,
+                'required' => false,
             ])
         ;
     }
@@ -38,11 +38,13 @@ class ItemDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'collection']);
         $resolver->setDefaults([
             'data_class' => Item::class,
-            'empty_data' => function (FormInterface $form) {
-                return new Item($form->get('title')->getData());
+            'empty_data' => function (Options $options) {
+                return function (FormInterface $form) use ($options) {
+                    return new Item($options['collection'], $form->get('title')->getData());
+                };
             },
         ]);
     }

@@ -27,7 +27,7 @@ class ItemCollection extends Object
         $data = array_merge(['items' => []], $data);
 
         $this->items = array_map(function (array $item) {
-            return new Item($item['title']);
+            return new Item($this, $item['title']);
         }, array_values($data['items']));
 
         return parent::setData($data);
@@ -39,7 +39,7 @@ class ItemCollection extends Object
     public function getData()
     {
         $this->data['items'] = array_values(array_map(function (Item $item) {
-            return ['title' => $item->title];
+            return $item->getData();
         }, $this->items));
 
         return parent::getData();

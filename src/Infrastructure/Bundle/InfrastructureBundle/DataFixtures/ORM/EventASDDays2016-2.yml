@@ -1055,6 +1055,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             required: true
                                             default: "1"
+                                            translatable: true
                                     46663c1d:
                                         component: "object"
                                         type: "collection"
@@ -1068,6 +1069,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             required: false
                                             default: "3"
+                                            translatable: true
                         097ab5e8:
                             component: "object"
                             type: "collection"
@@ -1081,6 +1083,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
                     -
                         696dc236:
                             component: "object"
@@ -1095,6 +1098,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: true
                                 default: "3"
+                                translatable: true
                         a9271999:
                             component: "object"
                             type: "collection"
@@ -1108,6 +1112,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
                         a23a2f5d:
                             component: "object"
                             type: "collection"
@@ -1121,6 +1126,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
                         bef61d39:
                             component: "object"
                             type: "participant"

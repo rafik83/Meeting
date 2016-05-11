@@ -27,8 +27,9 @@ class ItemCollectionDataType extends AbstractType
             ->add('items', CollectionType::class, [
                 'entry_type'    => ItemDataType::class,
                 'entry_options' => [
-                    'label'  => false,
-                    'locale' => $options['locale'],
+                    'label'      => false,
+                    'locale'     => $options['locale'],
+                    'collection' => $options['data'],
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
