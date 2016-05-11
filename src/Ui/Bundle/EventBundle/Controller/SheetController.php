@@ -180,4 +180,11 @@ class SheetController extends Controller
             'uid'           => $key,
         ]);
     }
+
+    public function nomenclaturesAction(EventView $eventView)
+    {
+        return $this->render('EventBundle:Sheet:nomenclatures.html.twig', [
+            'eventView' => $eventView,
+        ]);
+    }
 }
