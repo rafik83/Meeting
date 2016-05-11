@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Register;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateDataValidator;
 
 class ParticipantStepHandler
 {
@@ -28,23 +27,15 @@ class ParticipantStepHandler
     private $participantRepository;
 
     /**
-     * @var TemplateDataValidator
-     */
-    private $templateDataValidator;
-
-    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param TemplateDataValidator          $templateDataValidator
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ParticipantRepositoryInterface $participantRepository,
-        TemplateDataValidator $templateDataValidator
+        ParticipantRepositoryInterface $participantRepository
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
-        $this->templateDataValidator = $templateDataValidator;
     }
 
     /**
@@ -52,13 +43,6 @@ class ParticipantStepHandler
      */
     public function handle(ParticipantStep $participantStep)
     {
-        $this->templateDataValidator->validateParticipantData(
-            $participantStep->participant,
-            $participantStep->step,
-            $participantStep->locale,
-            $participantStep->data
-        );
-
         $sheetData       = $participantStep->sheet->getRegistrationData();
         $participantData = $participantStep->participant->getData();
         $templateData    = $participantStep->templateData;

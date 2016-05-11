@@ -13,7 +13,7 @@
     },
     "require": {
         "php": ">=5.3.9",
-        "symfony/symfony": "~3.0.5",
+        "symfony/symfony": "~3.0.6",
         "doctrine/orm": "^2.5.0",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "~2.3",

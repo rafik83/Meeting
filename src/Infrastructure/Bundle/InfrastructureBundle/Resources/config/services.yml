@@ -177,7 +177,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.template_data_validator'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -796,7 +795,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.template_data_validator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.sheet.update_data_handler:
@@ -1145,10 +1143,6 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
-    template.template_data_validator:
-        class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
-        arguments:
-            - '@template.template_data_factory'
 
     #
     # Guesser

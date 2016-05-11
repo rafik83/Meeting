@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Country extends EditableObject
+class EditableObject extends Object
 {
     /**
-     * @return string
+     * @return bool
      */
-    public function __toString()
+    public function isEditable()
     {
-        return $this->getData() ? $this->getData() : '';
+        return true;
     }
 }

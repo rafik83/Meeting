@@ -32,6 +32,7 @@ class TemplateDataFactory
         'carousel'      => Object::class,
         'telephone'     => Object\Telephone::class,
         'country'       => Object\Country::class,
+        'url'           => Object\Url::class,
     ];
 
     /**

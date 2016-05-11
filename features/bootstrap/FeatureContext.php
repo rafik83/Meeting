@@ -390,6 +390,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $user = $this->kernel->getContainer()->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
         $providerKey = 'main';
 
+        if (null === $user) {
+            throw new \Exception('Unknown user');
+        }
+
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $session->set('_security_'.$providerKey, serialize($token));
         $session->save();
