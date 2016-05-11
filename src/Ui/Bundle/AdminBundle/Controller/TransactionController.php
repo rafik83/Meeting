@@ -44,7 +44,7 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
-            return $this->redirectToRoute('admin_sheet_billing', [
+            return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
@@ -84,7 +84,7 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
-            return $this->redirectToRoute('admin_sheet_billing', [
+            return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
@@ -119,7 +119,7 @@ class TransactionController extends Controller
         $this->get('tactician.commandbus')->handle(new Remove($transaction));
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
-        return $this->redirectToRoute('admin_sheet_billing', [
+        return $this->redirectToRoute('admin_sheet_details', [
             'event' => $event->getId(),
             'sheet' => $sheet->getId(),
         ]);
