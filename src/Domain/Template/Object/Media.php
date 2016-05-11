@@ -47,8 +47,15 @@ class Media
         $this->url        = $url;
         $this->type       = $type;
 
-        if ($this->collection->isTranslatable() && !is_array($this->title)) {
-            $this->title = [$this->collection->getLocale() => $this->title];
+        $translatable     = $this->collection->isTranslatable();
+        $fallback         = $this->collection->getFallback();
+
+        // If the object is translatable but data is not translated, make an array for the fallback locale
+        // If the object isn't translatable but data is translated, get the fallback data if exist, the first data else
+        if ($translatable && !is_array($this->title)) {
+            $this->title = [$fallback => $this->title];
+        } elseif (!$translatable && is_array($this->title)) {
+            $this->title = isset($this->title[$fallback]) ? $this->title[$fallback] : reset($this->title);
         }
     }
 
