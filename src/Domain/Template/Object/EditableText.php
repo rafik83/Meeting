@@ -27,7 +27,7 @@ class EditableText extends Object
      */
     public function getContent()
     {
-        if (true === $this->getOption('translatable')) {
+        if ($this->isTranslatable()) {
             return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;
         }
 
@@ -41,7 +41,7 @@ class EditableText extends Object
      */
     public function setContent($content)
     {
-        if (true === $this->getOption('translatable')) {
+        if ($this->isTranslatable()) {
             $this->data['text'][$this->locale] = $content;
         } else {
             $this->data['text'] = $content;

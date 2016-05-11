@@ -110,6 +110,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function isTranslatable()
+    {
+        return $this->getOption('translatable') === true;
+    }
+
+    /**
      * @param array $data
      *
      * @return bool
