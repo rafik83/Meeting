@@ -131,9 +131,10 @@ class BlockType extends AbstractType
     private function addCountry(FormBuilderInterface $builder, Template\Object $object, $locale)
     {
         $builder->add($object->getKey(), CountryType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'attr'     => [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'placeholder' => $object->getOption('placeholder')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],
@@ -164,16 +165,12 @@ class BlockType extends AbstractType
             }, $choices);
         }
 
-        if (true === $object->getOption('required')) {
-            // Add an empty option in order to show the placeholder in select2
-            $choices = array_merge(['' => ''], $choices);
-        }
-
         $builder->add($object->getKey(), ChoiceType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'choices'  => $choices,
-            'attr'     => [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'choices'     => $choices,
+            'placeholder' => $object->getOption('label')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],
