@@ -12,11 +12,44 @@
             {% for key, child in form if key != 'submit' %}
                 {{ form_row(child) }}
             {% endfor %}
+
+            {# liens dans le form
+
+                <div class="form-group">
+                    <a href="#" class="">
+                        <i class="icon-Info_1"></i>
+                        Option payante
+                    </a>
+                </div>
+
+                <div class="form-group">
+                    <a href="#" class="">
+                        <i class="icon-Inserer_1"></i>
+                        Ajouter un autre champs
+                    </a>
+                </div>
+            #}
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-back left" data-dismiss="modal">
                 <i class="icon-Retour"></i>Retour à la fiche
             </button>
+
+            {# liens à la place du btn-back
+                le btn-back passe à droite
+
+                <a href="#" class="left">
+                    <i class="icon-Effacer"></i>
+                    Supprimer le participant
+                </a>
+
+                <a href="#" class="left">
+                    <i class="icon-Appeler"></i>
+                    Besoin d'aide ?
+                </a>
+            #}
+
             {{ form_widget(form.submit) }}
         </div>
 {{ form_end(form) }}

@@ -10,10 +10,9 @@
         background: $bg-container-color;
         border-radius: 4px;
         margin: 20px 40px;
-        padding: 0;
+        padding: 20px;
 
         .form-group {
-            padding: 20px;
             .control-label { color: #00398c; }
             .form-control { border-radius: 0; }
             input { height: 45px; }
