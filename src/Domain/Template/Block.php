@@ -224,15 +224,9 @@ class Block extends AbstractChild
      */
     public function getImageObjects()
     {
-        $objects = [];
-
-        foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Image) {
-                $objects[] = $object;
-            }
-        }
-
-        return $objects;
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object instanceof Object\Image;
+        });
     }
 
     /**

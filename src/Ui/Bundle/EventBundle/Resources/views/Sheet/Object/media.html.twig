@@ -6,7 +6,10 @@
     <div class="section__content">
         <ul class="list list--medias">
             {% for media in data[uid]['medias']|default([]) %}
-                <li><i class="icon-Document_1"></i> <a href="{{ media['url'] }}">{{ media['title'] }}</a></li>
+                <li>
+                    <i class="icon-Document_1"></i>
+                    <a href="{{ media['url'] }}">{{ media['title']|localize(locale, fallback) }}</a>
+                </li>
             {% endfor %}
         </ul>
     </div>

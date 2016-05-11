@@ -108,9 +108,9 @@ class TemplateDataFactory
      */
     public function create(array $template, array $data, $locale)
     {
-        $templateData = new TemplateData('root', 'root', []);
+        $templateData = new TemplateData('root', []);
 
-        foreach ($this->doCreate($template) as $name => $child) {
+        foreach ($this->doCreate($template, $locale) as $name => $child) {
             $templateData->addChild(0, $name, $child);
         }
 
@@ -119,14 +119,8 @@ class TemplateDataFactory
         }
 
         foreach ($templateData->getObjects() as $object) {
-            $object->setLocale($locale);
-
-            if ($object instanceof Object\Nomenclature
-                && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])
-            ) {
-                $object->setNomenclatureLabels(
-                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale()) ? : []
-                );
+            if ($object instanceof Object\Nomenclature && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])) {
+                $object->setNomenclatureLabels($this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale()) ? : []);
             }
         }
 
@@ -135,25 +129,25 @@ class TemplateDataFactory
 
     /**
      * @param array  $config
-     * @param string $objectKey
+     * @param string $locale
      *
      * @return array|Block
      * @throws \Exception
      */
-    private function doCreate(array $config, $objectKey = null)
+    private function doCreate(array $config, $locale)
     {
         if (!isset($config['component'])) {
-            return array_map(function (array $child) {
-                return $this->doCreate($child);
+            return array_map(function (array $child) use ($locale) {
+                return $this->doCreate($child, $locale);
             }, $config);
         }
 
         if ($config['component'] === 'block') {
-            $block = new Block($objectKey, $config['type'], $config['config']);
+            $block = new Block($config['type'], $config['config']);
 
             foreach ($config['children'] as $column => $children) {
                 foreach ($children as $key => $child) {
-                    $child = $this->doCreate($child, $key);
+                    $child = $this->doCreate($child, $locale);
                     $block->addChild($column, $key, $child);
                 }
             }
@@ -163,7 +157,7 @@ class TemplateDataFactory
 
         if ('object' === $config['component']) {
             $class  = $this->objects[$config['type']];
-            $object = new $class($objectKey, $config['type'], $config['config']);
+            $object = new $class($config['type'], $config['config'], $locale);
 
             return $object;
         }

@@ -335,25 +335,24 @@ class RegisterController extends Controller
     private function handleUploadedFiles($registrationTemplate, $form, $data)
     {
         $imageObjects = $registrationTemplate->getImageObjects();
+        $fileStorage  = $this->get('adapter.local_file_storage');
 
-        $fileStorage = $this->get('adapter.local_file_storage');
-        foreach ($imageObjects as $object) {
-            if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
-                $file = $form->get($object->getKey())->getData();
+        foreach ($imageObjects as $key => $object) {
+            if ($form->has($key) && $form->get($key)->getData() !== null) {
+                $file = $form->get($key)->getData();
 
                 if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
-                    if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
+                    if ($form->offsetExists($key) && $object->getData() !== null && $form->get($key)->getData() !== null) {
                         $fileStorage->remove($object->getData());
                     }
 
-                    if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
-                        $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+                    if ($form->offsetExists($key) && $form->get($key)->getData() !== null) {
+                        $data[$key] = $fileStorage->upload($form->get($key)->getData());
                     }
                 } else {
-                    $form->get($object->getKey())->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->addError(new FormError('validators.field.notValid.image'));
                 }
             }
-
         }
 
         return $data;

@@ -27,7 +27,8 @@ class MediaCollectionDataType extends AbstractType
             ->add('medias', CollectionType::class, [
                 'entry_type'    => MediaDataType::class,
                 'entry_options' => [
-                    'label' => false,
+                    'label'      => false,
+                    'collection' => $options['data'],
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,

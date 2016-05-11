@@ -13,9 +13,14 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 class Media
 {
     /**
+     * @var MediaCollection
+     */
+    private $collection;
+
+    /**
      * @var string
      */
-    public $title;
+    private $title;
 
     /**
      * @var string
@@ -30,14 +35,66 @@ class Media
     /**
      * Media constructor.
      *
-     * @param string $title
-     * @param string $url
-     * @param string $type
+     * @param MediaCollection $collection
+     * @param string          $title
+     * @param string          $url
+     * @param string          $type
      */
-    public function __construct($title, $url, $type)
+    public function __construct(MediaCollection $collection, $title, $url, $type)
     {
-        $this->title = $title;
-        $this->url   = $url;
-        $this->type  = $type;
+        $this->collection = $collection;
+        $this->title      = $title;
+        $this->url        = $url;
+        $this->type       = $type;
+
+        if ($this->collection->isTranslatable() && !is_array($this->title)) {
+            $this->title = [$this->collection->getLocale() => $this->title];
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        if ($this->collection->isTranslatable() && is_array($this->title) || is_array($this->title)) {
+            return isset($this->title[$this->collection->getLocale()])
+                ? $this->title[$this->collection->getLocale()]
+                : null;
+        }
+
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return Item
+     */
+    public function setTitle($title)
+    {
+        if ($this->collection->isTranslatable()) {
+            if (!is_array($this->title)) {
+                $this->title = [];
+            }
+
+            $this->title[$this->collection->getLocale()] = $title;
+        } else {
+            $this->title = $title;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'title' => $this->title,
+            'url'   => $this->url,
+            'type'  => $this->type,
+        ];
     }
 }

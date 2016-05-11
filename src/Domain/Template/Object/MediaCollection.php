@@ -27,7 +27,7 @@ class MediaCollection extends Object
         $data = array_merge(['medias' => []], $data);
 
         $this->medias = array_map(function (array $media) {
-            return new Media($media['title'], $media['url'], $media['type']);
+            return new Media($this, $media['title'], $media['url'], $media['type']);
         }, array_values($data['medias']));
 
         return parent::setData($data);
@@ -39,7 +39,7 @@ class MediaCollection extends Object
     public function getData()
     {
         $this->data['medias'] = array_values(array_map(function (Media $media) {
-            return ['title' => $media->title, 'url' => $media->url, 'type' => $media->type];
+            return $media->getData();
         }, $this->medias));
 
         return parent::getData();

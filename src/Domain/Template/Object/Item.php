@@ -32,6 +32,10 @@ class Item
     {
         $this->collection = $collection;
         $this->title      = $title;
+
+        if ($this->collection->isTranslatable() && !is_array($this->title)) {
+            $this->title = [$this->collection->getLocale() => $this->title];
+        }
     }
 
     /**

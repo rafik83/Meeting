@@ -23,6 +23,20 @@ class Object extends AbstractChild
     protected $locale;
 
     /**
+     * Object constructor.
+     *
+     * @param string $type
+     * @param array  $config
+     * @param string $locale
+     */
+    public function __construct($type, array $config, $locale)
+    {
+        parent::__construct($type, $config);
+
+        $this->locale = $locale;
+    }
+
+    /**
      * Set data
      *
      * @param array $data
@@ -32,18 +46,6 @@ class Object extends AbstractChild
     public function setData($data)
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return Object
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
 
         return $this;
     }
@@ -115,20 +117,6 @@ class Object extends AbstractChild
     public function isTranslatable()
     {
         return $this->getOption('translatable') === true;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function missingRequiredData(array $data)
-    {
-        if (true === $this->getOption('required')) {
-            return !empty($data[$this->getKey()]);
-        }
-
-        return true;
     }
 
     /**

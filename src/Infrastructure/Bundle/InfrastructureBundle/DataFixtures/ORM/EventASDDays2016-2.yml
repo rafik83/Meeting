@@ -1148,6 +1148,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
             69962d34:
                 component: "block"
                 type: "12"
