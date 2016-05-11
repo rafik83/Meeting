@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\ObjectValidator;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Url as CoreUrl;
+use Symfony\Component\Validator\Constraints;
 
 class UrlValidator extends ObjectValidator
 {
@@ -26,7 +26,7 @@ class UrlValidator extends ObjectValidator
 
         if ($value instanceof Object\Url) {
             if (null !== $value->getData()) {
-                $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($value, new CoreUrl());
+                $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($value, new Constraints\Url());
             }
         } else {
             $this->context->buildViolation('validators.field.notValid.url')->atPath($constraint->key)->addViolation();
