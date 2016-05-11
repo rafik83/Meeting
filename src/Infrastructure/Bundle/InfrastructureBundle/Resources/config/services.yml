@@ -144,6 +144,7 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.nomenclature_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NomenclatureRepository
+        lazy:  true
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.template.registration_template_repository:
@@ -1000,8 +1001,8 @@ services:
     #
     template.template_data_factory:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
-        #arguments:
-        #    - '@repository.nomenclature_repository'
+        arguments:
+            - '@repository.nomenclature_repository'
     template.template_data_validator:
         class: Proximum\Vimeet\Domain\Template\TemplateDataValidator
         arguments:
@@ -1025,7 +1026,6 @@ services:
     #
     spot.reference_factory:
         class: Proximum\Vimeet\Application\Components\Spot\ReferenceFactory
-
 
     #
     # Sheet Validator

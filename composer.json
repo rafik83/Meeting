@@ -35,7 +35,8 @@
         "nelmio/alice": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "~2.3",
         "erusev/parsedown": "^1.6",
-        "leafo/scssphp": "^0.6.3"
+        "leafo/scssphp": "^0.6.3",
+        "ocramius/proxy-manager": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
