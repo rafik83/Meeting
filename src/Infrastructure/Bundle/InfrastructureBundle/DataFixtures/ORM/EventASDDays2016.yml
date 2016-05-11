@@ -273,7 +273,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: 1
-                                nomenclature: "@nomenclature_asddays_competences->id"
+                                nomenclature: "@nomenclature_competences->id"
                         75adad94:
                             component: "block"
                             type: "6-6"
@@ -444,7 +444,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos offres"
                                             required: true
-                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
+                                            nomenclature: "@nomenclature_offre_besoins->id"
                                     63ccc105:
                                         component: "object"
                                         type: "nomenclature"
@@ -457,7 +457,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos besoins"
                                             required: true
-                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
+                                            nomenclature: "@nomenclature_offre_besoins->id"
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -533,8 +533,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Prénom"
+                                    en: "First name"
                                 placeholder:
                                     fr: "Prénom"
+                                    en: "First name"
                                 help:
                                     fr: ""
                                 length: "250"
@@ -549,8 +551,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Nom"
+                                    fr: "Last name"
                                 placeholder:
                                     fr: "Nom"
+                                    fr: "Last name"
                                 help:
                                     fr: ""
                                 length: "250"
@@ -567,7 +571,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_asddays_service->id"
+                                nomenclature: "@nomenclature_service->id"
                                 tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
@@ -576,9 +580,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Fonction"
+                                    en: "Position"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_asddays_position->id"
+                                nomenclature: "@nomenclature_position->id"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"
@@ -587,8 +592,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Téléphone portable"
+                                    en: "Mobile phone"
                                 placeholder:
                                     fr: "Téléphone portable"
+                                    en: "Mobile phone"
                                 help:
                                     fr: ""
                                 length: ""
@@ -679,10 +686,12 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Catégorie (Pme / Eti / Startup / ... )"
+                                    fr: "Activité"
+                                    en: "Activity"
                                 help:
                                     fr: ""
-                                nomenclature: "4"
+                                    en: ""
+                                nomenclature: "@nomenclature_activite->id"
                                 tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
@@ -827,7 +836,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_asddays_service->id"
+                                nomenclature: "@nomenclature_service->id"
                         1efb9cbb:
                             component: "object"
                             type: "editable-text"

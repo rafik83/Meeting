@@ -218,7 +218,6 @@
 #        nomenclatureItem: '@nomenclature_40'
 #        locale: fr
 
-
 Proximum\Vimeet\Domain\Model\Nomenclature:
     nomenclature_competences:
         __construct: false
@@ -362,3 +361,11 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             serviceInformatique: { label: { fr: "Informatique", en: "Informatique" }}
             serviceMarketing: { label: { fr: "Marketing", en: "Marketing" }}
             serviceRecherche: { label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire" }}
+    nomenclature_activite:
+        __construct: false
+        title: "Activité"
+        depth: 1
+        value:
+            activite1: { label: { fr: "AGRICULTURE, SYLVICULTURE ET PÊCHE", en: "AGRICULTURE, SYLVICULTURE ET PÊCHE" }}
+            activite2: { label: { fr: "COMMERCE", en: "COMMERCE" }}
+            activite3: { label: { fr: "INFORMATION ET COMMUNICATION", en: "INFORMATION ET COMMUNICATION" }}
