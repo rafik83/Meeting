@@ -29,6 +29,7 @@ class MediaCollectionDataType extends AbstractType
                 'entry_options' => [
                     'label'      => false,
                     'collection' => $options['data'],
+                    'required'   => false,
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
