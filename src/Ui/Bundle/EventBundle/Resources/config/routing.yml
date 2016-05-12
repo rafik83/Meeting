@@ -142,39 +142,6 @@ event_sheet_delete_participant:
     methods:  [DELETE]
     defaults: { _controller: EventBundle:Participant:delete }
 
-#
-# Sheet - Package
-#
-
-event_sheet_package_update_step:
-    path:     /sheet/{sheet}/update_step/{step}
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:updateStep }
-
-event_sheet_package_products:
-    path: /sheet/{sheet}/products/add
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:addProducts }
-
-event_sheet_product_update:
-    path: /sheet/{sheet}/products/update/{groupId}/{rowId}
-    requirements:
-        sheet: \w+
-        groupId: \w+
-        rowId: \w+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:updateProduct }
-
-event_sheet_package_cart:
-    path:     /sheet/{sheet}/cart
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Package:cart }
 
 #
 # Sheet Billing

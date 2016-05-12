@@ -89,10 +89,6 @@ class BillingController extends Controller
 
         $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
 
-        if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {
-            throw $this->createNotFoundException('No cart available to complete payment');
-        }
-
         $createOrder = new Create(
             $cart,
             $sheet,
@@ -115,13 +111,10 @@ class BillingController extends Controller
             ]);
         }
 
-        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
-
         return $this->render('EventBundle:Billing:paymentMode.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView(),
-            'sheet'     => $sheet,
-            'cart_view' => $cartView,
+            'sheet'     => $sheet
         ]);
     }
 }
