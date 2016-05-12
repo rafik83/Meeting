@@ -24,6 +24,60 @@
         }
     }
 
+    .title-table {
+        font-size: 15px;
+        color: #FFF;
+        padding: 10px;
+        margin: 15px 0 0 0;
+        display: inline-block;
+        position: relative;
+        @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+        &:before {
+            border-color: $color-primary transparent transparent transparent;
+            position: absolute;
+            left: 0;
+            border-width: 15px 0 0 40px;
+            display: block;
+            border-style: solid;
+            bottom: -15px;
+            content: '';
+        }
+    }
+
+    .border-table {
+        border: solid 1px #CCC;
+        margin: 0 0 10px 40px;
+        padding: 10px;
+
+        .table {
+            margin-bottom: 0;
+
+            tbody td {
+                border: 0;
+                padding: 0;
+
+                .checkbox { margin: 8px 0 8px 10px; }
+
+                .link-add-skill {
+                    display: inline-block;
+                    padding: 8px 0 8px 10px;
+                }
+            }
+        }
+
+        .table-striped {
+            > tbody > tr:nth-of-type(odd) {
+                background-color: $bg-container-color;
+            }
+        }
+    }
+
+    .link-table {
+        color: #999;
+        a { color: #999; }
+    }
+
 
     &.style--style-1 {
         // transparent background
