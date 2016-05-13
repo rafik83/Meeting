@@ -525,7 +525,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_asddays_service->id"
+                                nomenclature: "@nomenclature_service->id"
                                 tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
@@ -536,7 +536,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Fonction"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_asddays_position->id"
+                                nomenclature: "@nomenclature_position->id"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"

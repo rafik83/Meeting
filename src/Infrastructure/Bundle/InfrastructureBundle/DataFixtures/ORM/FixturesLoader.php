@@ -32,9 +32,9 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $files = [
+            __DIR__ . '/Nomenclature.yml',
             __DIR__ . '/Template/SheetTemplate.yml',
             __DIR__ . '/Template/RegistrationTemplate.yml',
-            __DIR__ . '/Nomenclature.yml',
             __DIR__ . '/EventRdvCarnot2016.yml',
             __DIR__ . '/TypeRdvCarnot2016.yml',
             __DIR__ . '/Category.yml',
