@@ -264,8 +264,9 @@ class Event implements EventInterface
     }
 
     /**
-     * @deprecated billing template has to be rewrited
      * @param array $billingTemplate
+     *
+     * @deprecated billing template has to be rewrited
      */
     public function setBillingTemplate($billingTemplate)
     {
@@ -273,8 +274,9 @@ class Event implements EventInterface
     }
 
     /**
-     * @deprecated billing template has to be rewrited
      * @return array
+     *
+     * @deprecated billing template has to be rewrited
      */
     public function getBillingTemplate()
     {

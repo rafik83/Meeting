@@ -180,11 +180,11 @@ class Order implements BillingInfoInterface
     }
 
     /**
-     * @deprecated Use getVatRate instead
-     *
      * Get vat
      *
      * @return float
+     *
+     * @deprecated Use getVatRate instead
      */
     public function getVat()
     {

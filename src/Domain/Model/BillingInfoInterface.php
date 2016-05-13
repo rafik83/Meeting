@@ -18,8 +18,9 @@ interface BillingInfoInterface
     public function getBillingData();
 
     /**
-     * @deprecated Must return a Proximum\Vimeet\Domain\Model\Template\AbstractTemplate object
      * @return array
+     *
+     * @deprecated To be rewrited to return a Proximum\Vimeet\Domain\Model\Template\AbstractTemplate object
      */
     public function getBillingTemplate();
 }

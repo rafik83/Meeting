@@ -112,9 +112,9 @@ class Notification
     }
 
     /**
-     * @deprecated Use is read instead
-     *
      * @return bool
+     *
+     * @deprecated Use is read instead
      */
     public function isView()
     {
