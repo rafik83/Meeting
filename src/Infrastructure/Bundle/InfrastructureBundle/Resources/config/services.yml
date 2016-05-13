@@ -193,7 +193,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.application.components.participant.participant_manager'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@components.token.user.activate_account_token_generator'
             - '@repository.user_activate_account_token_repository'

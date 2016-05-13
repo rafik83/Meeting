@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
@@ -29,11 +28,6 @@ class AddHandler
      * @var UserRepositoryInterface
      */
     private $userRepository;
-
-    /**
-     * @var ParticipantManager
-     */
-    private $participantManager;
 
     /**
      * @var ParticipantRepositoryInterface
@@ -59,7 +53,6 @@ class AddHandler
      * AddHandler constructor.
      *
      * @param UserRepositoryInterface                 $userRepository
-     * @param ParticipantManager                      $participantManager
      * @param ParticipantRepositoryInterface          $participantRepository
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
      * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
@@ -67,14 +60,12 @@ class AddHandler
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
-        ParticipantManager $participantManager,
         ParticipantRepositoryInterface $participantRepository,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository                 = $userRepository;
-        $this->participantManager             = $participantManager;
         $this->participantRepository          = $participantRepository;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
         $this->activateAccountTokenRepository = $activateAccountTokenRepository;
