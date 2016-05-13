@@ -62,17 +62,17 @@ class SheetInfoGuesser
      */
     public function guessSheetName(Sheet $sheet, $locale)
     {
-        $template = $sheet->getType()->getSheetTemplate();
+        $template = $sheet->getType()->getRegistrationTemplate();
 
         if (null === $template) {
             return sprintf('#%s', $sheet->getId());
         }
 
-        $data = $sheet->getData();
+        $data = $sheet->getRegistrationData();
         $info = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_ORGANIZATION, $locale);
 
-        if (!empty($info)) {
-            return reset($info);
+        if (null !== $info) {
+            return $info;
         }
 
         $owner = $this->guessOwnerInfo($sheet, $locale);
