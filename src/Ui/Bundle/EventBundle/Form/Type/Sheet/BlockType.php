@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -31,7 +32,7 @@ class BlockType extends AbstractType
         /** @var Template\Block $block */
         $block = $options['block'];
 
-        foreach ($block->getObjects() as $object) {
+        foreach ($block->getEditableObjects() as $object) {
             if ($object instanceof Template\Object\EditableText) {
                 $this->addText($builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Nomenclature) {
@@ -42,6 +43,8 @@ class BlockType extends AbstractType
                 $this->addTelephone($builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Country) {
                 $this->addCountry($builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Url) {
+                $this->addUrl($builder, $object, $options['locale']);
             }
         }
     }
@@ -108,6 +111,20 @@ class BlockType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
+     * @param Template\Object\Url  $url
+     * @param string               $locale
+     */
+    private function addUrl(FormBuilderInterface $builder, Template\Object\Url $url, $locale)
+    {
+        $builder->add($url->getKey(), UrlType::class, [
+            'label'       => false,
+            'required'    => $url->getOption('required'),
+            'placeholder' => $url->getOption('placeholder')[$locale],
+        ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
@@ -116,7 +133,8 @@ class BlockType extends AbstractType
         $builder->add($object->getKey(), CountryType::class, [
             'label'       => false,
             'required'    => $object->getOption('required'),
-            'attr'     => [
+            'placeholder' => $object->getOption('placeholder')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],

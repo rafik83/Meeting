@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class ButtonLink extends Object
+class ButtonLink extends EditableObject
 {
     /**
      * @return string
