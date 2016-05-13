@@ -36,8 +36,8 @@ class ObjectValidator extends ConstraintValidator
      */
     protected function checkRequired(Object $object, Constraint $constraint)
     {
-        if (true === $object->getOption('required')) {
-            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getData(), new NotBlank());
+        if (true === $object->getOption('required') && $object instanceof Object\ContentObjectInterface) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new NotBlank());
         }
     }
 
@@ -47,8 +47,8 @@ class ObjectValidator extends ConstraintValidator
      */
     protected function checkMinLength(Object $object, Constraint $constraint)
     {
-        if (null !== $object->getOption('minLength')) {
-            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getData(), new Length(['min' => $object->getOption('minLength')]));
+        if (null !== $object->getOption('minLength') && $object instanceof Object\ContentObjectInterface) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new Length(['min' => $object->getOption('minLength')]));
         }
     }
 
@@ -58,8 +58,8 @@ class ObjectValidator extends ConstraintValidator
      */
     protected function checkMaxLength(Object $object, Constraint $constraint)
     {
-        if (null !== $object->getOption('maxLength')) {
-            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getData(), new Length(['max' => $object->getOption('maxLength')]));
+        if (null !== $object->getOption('maxLength') && $object instanceof Object\ContentObjectInterface) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new Length(['max' => $object->getOption('maxLength')]));
         }
     }
 }

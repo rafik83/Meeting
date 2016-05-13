@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Nomenclature extends EditableObject
+class Nomenclature extends EditableObject implements ContentObjectInterface
 {
     /**
      * @var null|array
@@ -20,19 +20,39 @@ class Nomenclature extends EditableObject
     private $nomenclatureLabels;
 
     /**
-     * @return string
+     * @param string $nomenclature
+     *
+     * @return Nomenclature
      */
-    public function __toString()
+    public function setNomenclature($nomenclature)
     {
-        return $this->getData() !== null ? $this->getData() : '';
+        $this->data['items'] = $nomenclature;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getValue()
+    public function getNomenclature()
     {
-        return $this->getNomenclatureLabel();
+        return isset($this->data['items']) ? $this->data['items'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getNomenclature() ? $this->getNomenclature() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setNomenclature($value);
     }
 
     /**
@@ -64,13 +84,13 @@ class Nomenclature extends EditableObject
      */
     public function getNomenclatureLabel()
     {
-        if (isset($this->nomenclatureLabels[$this->getData()])) {
-            return $this->nomenclatureLabels[$this->getData()];
+        if (isset($this->nomenclatureLabels[$this->getNomenclature()])) {
+            return $this->nomenclatureLabels[$this->getNomenclature()];
         }
 
         foreach ($this->nomenclatureLabels as $values) {
-            if (isset($values[$this->getData()])) {
-                return $values[$this->getData()];
+            if (isset($values[$this->getNomenclature()])) {
+                return $values[$this->getNomenclature()];
             }
         }
 

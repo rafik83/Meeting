@@ -110,28 +110,6 @@ class Object extends AbstractChild
     }
 
     /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function missingRequiredData(array $data)
-    {
-        if (true === $this->getOption('required')) {
-            return !empty($data[$this->getKey()]);
-        }
-
-        return true;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->getData();
-    }
-
-    /**
      * @return bool
      */
     public function isEditable()

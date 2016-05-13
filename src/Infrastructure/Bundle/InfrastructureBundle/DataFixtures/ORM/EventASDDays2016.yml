@@ -491,10 +491,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Prénom"
-                                    en: "First name"
                                 placeholder:
                                     fr: "Prénom"
-                                    en: "First name"
                                 help:
                                     fr: ""
                                 length: "250"
@@ -509,10 +507,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Nom"
-                                    fr: "Last name"
                                 placeholder:
                                     fr: "Nom"
-                                    fr: "Last name"
                                 help:
                                     fr: ""
                                 length: "250"
@@ -529,7 +525,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_service->id"
+                                nomenclature: "@nomenclature_asddays_service->id"
                                 tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
@@ -538,10 +534,9 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Fonction"
-                                    en: "Position"
                                 help:
                                     fr: ""
-                                nomenclature: "@nomenclature_position->id"
+                                nomenclature: "@nomenclature_asddays_position->id"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"
@@ -550,10 +545,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Téléphone portable"
-                                    en: "Mobile phone"
                                 placeholder:
                                     fr: "Téléphone portable"
-                                    en: "Mobile phone"
                                 help:
                                     fr: ""
                                 length: ""
@@ -644,12 +637,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Activité"
-                                    en: "Activity"
+                                    fr: "Catégorie (Pme / Eti / Startup / ... )"
                                 help:
                                     fr: ""
-                                    en: ""
-                                nomenclature: "@nomenclature_activite->id"
+                                nomenclature: "4"
                                 tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
@@ -666,7 +657,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_website", "sheet_data"]
                         93de093f:
                             component: "object"
                             type: "editable-text"
@@ -682,7 +673,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_address", "sheet_data"]
                         de66af5d:
                             component: "object"
                             type: "editable-text"
@@ -698,7 +689,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_zipcode", "sheet_data"]
                         d224f0e7:
                             component: "object"
                             type: "editable-text"
@@ -714,7 +705,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_city", "sheet_data"]
                         e801edd4:
                             component: "object"
                             type: "country"
@@ -730,7 +721,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_country", "sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false
         event: '@event_asddays_2016'

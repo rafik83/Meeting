@@ -178,6 +178,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -691,6 +692,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.sheet.update_data_handler:
@@ -971,6 +973,14 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+    #
+    # Account
+    #
+    account.synchronizer:
+        class: Proximum\Vimeet\Domain\Account\Synchronizer
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
 
     #
     # Queries

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -184,8 +185,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
+        // Mock
         $sheetRepository       = $this->prophesize(SheetRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $accountSynchronizer   = $this->prophesize(Synchronizer::class);
 
         $expectedSheet = new Sheet($event, $type, [], [], $now);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
@@ -197,8 +200,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 '541f84d4' => ['text' => 'foo'],
                 '838197c7' => ['text' => 'bar'],
-                '1efb9cbb' => ['text' => 'mobile'],
-                '3b759fbb' => ['text' => 'phone'],
+                '1efb9cbb' => ['telephone' => 'phone'],
+                '3b759fbb' => ['telephone' => 'mobile'],
             ],
             $owner = true,
             true
@@ -209,23 +212,25 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new ParticipateHandler(
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
+            $accountSynchronizer->reveal(),
             $now
         );
 
+        //  Template Data
         $templateData = new TemplateData('root', 'root', []);
         $block = new Block(null, '12', []);
         $text  = new Object\Text('dded0597', 'text', []);
         $editableText1 = new Object\EditableText('541f84d4', 'editable-text', [
-            'tags' => ['participant_data'],
+            'tags' => ['participant_firstname', 'participant_data'],
         ]);
         $editableText2 = new Object\EditableText('838197c7', 'editable-text', [
-            'tags' => ['participant_data'],
+            'tags' => ['participant_lastname', 'participant_data'],
         ]);
         $telephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
-            'tags' => ['participant_data'],
+            'tags' => ['participant_phone', 'participant_data'],
         ]);
         $telephone2    = new Object\Telephone('3b759fbb', 'telephone', [
-            'tags' => ['participant_data'],
+            'tags' => ['participant_mobile', 'participant_data'],
         ]);
 
         $block->addChild(1, 'dded0597', $text);
@@ -234,6 +239,36 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $block->addChild(1, '1efb9cbb', $telephone1);
         $block->addChild(1, '3b759fbb', $telephone2);
         $templateData->addChild(0, '811f6edf', $block);
+
+        // Expected
+        $expectedTemplateData = new TemplateData('root', 'root', []);
+        $expectedBlock = new Block(null, '12', []);
+        $expectedText  = new Object\Text('dded0597', 'text', []);
+        $exEditableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+            'tags' => ['participant_firstname', 'participant_data'],
+        ]);
+        $exEditableText1->setContentValue('foo');
+        $exEditableText2 = new Object\EditableText('838197c7', 'editable-text', [
+            'tags' => ['participant_lastname', 'participant_data'],
+        ]);
+        $exEditableText2->setContentValue('bar');
+        $exTelephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+            'tags' => ['participant_phone', 'participant_data'],
+        ]);
+        $exTelephone1->setContentValue('phone');
+        $exTelephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+            'tags' => ['participant_mobile', 'participant_data'],
+        ]);
+        $exTelephone2->setContentValue('mobile');
+
+        $expectedBlock->addChild(1, 'dded0597', $expectedText);
+        $expectedBlock->addChild(1, '541f84d4', $exEditableText1);
+        $expectedBlock->addChild(1, '838197c7', $exEditableText2);
+        $expectedBlock->addChild(1, '1efb9cbb', $exTelephone1);
+        $expectedBlock->addChild(1, '3b759fbb', $exTelephone2);
+        $expectedTemplateData->addChild(0, '811f6edf', $expectedBlock);
+
+        $accountSynchronizer->set($expectedTemplateData, $user)->shouldBeCalled();
 
         $handler->handle(
             new Participate(
@@ -244,8 +279,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                 [
                     '541f84d4' => ['text' => 'foo'],
                     '838197c7' => ['text' => 'bar'],
-                    '1efb9cbb' => ['text' => 'mobile'],
-                    '3b759fbb' => ['text' => 'phone'],
+                    '1efb9cbb' => ['telephone' => 'phone'],
+                    '3b759fbb' => ['telephone' => 'mobile'],
                 ],
                 $templateData
             )

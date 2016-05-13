@@ -16,3 +16,6 @@ Proximum\Vimeet\Domain\Model\User:
             type: string
         locale:
             type: string
+    embedded:
+        account:
+            class: Proximum\Vimeet\Domain\Model\User\Account
