@@ -4,8 +4,7 @@ Feature: Login admin
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Event.yml |
-      | Admins.yml     |
+      | Admin.yml |
 
   Scenario: Login successful
     When I go to this page "/admin/fr/login"
