@@ -39,6 +39,7 @@ class AddUnavailabilityType extends AbstractType
             ])
             ->add('participants', ParticipantEntityType::class, [
                 'sheet'    => $options['sheet'],
+                'locale'   => $options['locale'],
                 'multiple' => true,
                 'expanded' => true,
             ])
@@ -52,6 +53,7 @@ class AddUnavailabilityType extends AbstractType
     {
         $resolver->setRequired([
             'sheet',
+            'locale',
         ]);
 
         $resolver->setDefaults([

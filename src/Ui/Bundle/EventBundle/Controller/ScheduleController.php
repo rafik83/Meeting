@@ -69,6 +69,7 @@ class ScheduleController extends Controller
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['sheet' => $sheet->getId()]),
             'method' => 'POST',
             'sheet'  => $sheet,
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -160,6 +161,7 @@ class ScheduleController extends Controller
         $form    = $this->createForm(ParticipateHappeningType::class, $command, [
             'sheet'     => $sheet,
             'happening' => $happening,
+            'locale'    => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
