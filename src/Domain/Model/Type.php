@@ -143,6 +143,16 @@ class Type implements WhoInterface
     }
 
     /**
+     * @return SheetTemplate
+     *
+     * @deprecated Use getSheetTemplate()
+     */
+    public function getNewSheetTemplate()
+    {
+        return $this->getSheetTemplate();
+    }
+
+    /**
      * @return array
      */
     public function getSheetData()
@@ -269,8 +279,9 @@ class Type implements WhoInterface
     }
 
     /**
-     * @deprecated Use getRegistrationTemplate()
      * @return array
+     *
+     * @deprecated Use getRegistrationTemplate()
      */
     public function getParticipantTemplate()
     {
