@@ -110,9 +110,9 @@ class SheetDetailsViewFactory
 
                 /** @var Object $object */
                 foreach ($objects as $object) {
-                    if (null !== $object->getData()) {
+                    if ($object instanceof Object\ContentObjectInterface && '' !== $object->getContentValue()) {
                         $label = $object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback());
-                        $infos[$label] = (string)$object;
+                        $infos[$label] = $object->getContentValue();
                     }
                 }
 
