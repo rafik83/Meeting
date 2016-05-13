@@ -170,6 +170,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
     #
     sheet_template_fournisseur_asddays:
         __construct: false
+        event: '@event_asddays_2016'
         title: "Template ASD Days fournisseur"
         locales: ['fr']
         fallback: 'fr'
