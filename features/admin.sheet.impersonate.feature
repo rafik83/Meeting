@@ -18,7 +18,7 @@ Feature: Impersonation
     And I follow "admin.sheet.link"
     And I should be on this page "/admin/fr/event/1/sheet"
     When I follow "admin.sheet.impersonate"
-    Then I should be on this url "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/fiche-de-presentation"
+    Then I should be on this url "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/sheet"
     And I should see "admin.sheet.exit_impersonation"
     And I should see "FICHE DE PRÉSENTATION"
     When I follow "admin.sheet.exit_impersonation"

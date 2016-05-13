@@ -89,26 +89,26 @@ event_participant_step:
 #
 
 event_sheet:
-    path:     /fiche-de-presentation
+    path:     /sheet
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
-    path:     /fiche-de-presentation/{locale}
+    path:     /sheet/{locale}
     requirements:
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_form:
-    path:     /fiche-de-presentation/{locale}/{key}/form
+    path:     /sheet/{locale}/{key}/form
     requirements:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:form }
 event_sheet_update:
-    path:     /fiche-de-presentation/{locale}/{key}
+    path:     /sheet/{locale}/{key}
     requirements:
         locale: '[a-z]{2}'
         key: \w+

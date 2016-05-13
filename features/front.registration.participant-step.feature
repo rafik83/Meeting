@@ -17,5 +17,5 @@ Feature: Register with participant step
       | Ville                     | Paris                 |
       | block_e801edd4            | FR                    |
     And I press "register.finalize"
-    Then I should be on this page "/fr/fiche-de-presentation"
+    Then I should be on this page "/fr/sheet"
 
