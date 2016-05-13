@@ -87,6 +87,14 @@ class Participant
     }
 
     /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->getUser()->getLocale();
+    }
+
+    /**
      * Get sheet.
      *
      * @return Sheet
