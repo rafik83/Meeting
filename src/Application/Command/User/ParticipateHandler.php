@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -30,6 +31,11 @@ class ParticipateHandler
     private $participantRepository;
 
     /**
+     * @var Synchronizer
+     */
+    private $accountSynchronizer;
+
+    /**
      * @var \DateTimeInterface
      */
     private $dateTime;
@@ -37,15 +43,18 @@ class ParticipateHandler
     /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param Synchronizer                   $accountSynchronizer
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
+        Synchronizer $accountSynchronizer,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
+        $this->accountSynchronizer   = $accountSynchronizer;
         $this->dateTime              = $dateTime;
     }
 
@@ -71,6 +80,8 @@ class ParticipateHandler
             if ($templateData->getBlock(intval(1))->getObject($key)->hasTag(Tag::SHEET_DATA)) {
                 $sheetData = array_merge($sheetData, [$key => $value]);
             }
+
+            $templateData->getBlock(intval(1))->getObject($key)->setData($value);
         }
 
         $sheet->setRegistrationData($sheetData);
@@ -82,5 +93,7 @@ class ParticipateHandler
 
         $participate->sheet       = $sheet;
         $participate->participant = $participant;
+
+        $this->accountSynchronizer->set($templateData, $participant->getUser());
     }
 }
