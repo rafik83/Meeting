@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration;
 
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\DataTransformer\JsonArrayTransformer;
 use Symfony\Component\Form\AbstractType;
