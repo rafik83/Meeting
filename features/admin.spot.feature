@@ -4,10 +4,12 @@ Feature: Spot feature
   Scenario: I can list spot
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | Spot.yml         |
-      | Admin.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/Spot.yml                          |
+      | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/spot"
     Then I should see "G0345"
