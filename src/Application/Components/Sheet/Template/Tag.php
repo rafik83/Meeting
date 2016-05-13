@@ -19,6 +19,11 @@ final class Tag
     const PARTICIPANT_POSITION  = 'participant_position';
     const PARTICIPANT_PHONE     = 'participant_phone';
     const PARTICIPANT_MOBILE    = 'participant_mobile';
+    const PARTICIPANT_ADDRESS   = 'participant_address';
+    const PARTICIPANT_ZIPCODE   = 'participant_zipcode';
+    const PARTICIPANT_CITY      = 'participant_city';
+    const PARTICIPANT_COUNTRY   = 'participant_country';
+    const PARTICIPANT_WEBSITE   = 'participant_website';
     const BILLING_NAME          = 'billing_name';
     const BILLING_ADDRESS       = 'billing_address';
     const BILLING_CITY          = 'billing_city';
@@ -61,6 +66,11 @@ final class Tag
             self::PARTICIPANT_MOBILE,
             self::PARTICIPANT_POSITION,
             self::PARTICIPANT_AVATAR,
+            self::PARTICIPANT_ADDRESS,
+            self::PARTICIPANT_ZIPCODE,
+            self::PARTICIPANT_CITY,
+            self::PARTICIPANT_COUNTRY,
+            self::PARTICIPANT_WEBSITE,
         ];
     }
 
