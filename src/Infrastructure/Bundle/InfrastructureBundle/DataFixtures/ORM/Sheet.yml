@@ -5,7 +5,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_exposant'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: 'Paul' }
+            838197c7: { text: 'GASCOIGNE' }
+            3ad4b72f: { text: 'WorldCompanyInc' }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -16,7 +19,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_visiteur'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -25,7 +31,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_exposant'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -34,7 +43,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_institute_carnot'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -43,7 +55,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_exposant'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -52,7 +67,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_exposant'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         billingData:
             5645e4242d3df: LAROSE
@@ -71,7 +89,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_visiteur'
         event: '@event_rdv_carnot_2016'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -82,7 +103,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_rdv_carnot_2016'
         type: '@type_exposant'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -91,7 +115,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_rdv_carnot_2016'
         type: '@type_investisseur'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -100,7 +127,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_rdv_carnot_2016'
         type: '@type_visiteur'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -109,7 +139,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_rdv_carnot_2016'
         type: '@type_visiteur_visio'
         data: []
-        registrationData: []
+        registrationData:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+            3ad4b72f: { text: <company()> }
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
