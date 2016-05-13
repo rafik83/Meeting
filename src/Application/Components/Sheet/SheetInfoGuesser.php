@@ -89,10 +89,11 @@ class SheetInfoGuesser
      * @param string $locale
      *
      * @return string
+     *
+     * @deprecated Must be rewrited in order to get Sheet productsSelectionTemplate and corresponding data
      */
     public function guessSheetPackage(Sheet $sheet, $locale)
     {
-        // @todo : get Sheet productsSelectionTemplate and corresponding data
         return '';
     }
 }

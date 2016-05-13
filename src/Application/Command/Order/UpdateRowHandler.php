@@ -31,11 +31,11 @@ class UpdateRowHandler
 
     /**
      * @param UpdateRow $updateRow
+     *
+     * @deprecated must be rewrited in order to update a row in db
      */
     public function handle(UpdateRow $updateRow)
     {
-        // @todo: update this row in db
-
         $this->orderRepository->set($updateRow->order);
     }
 }

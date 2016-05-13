@@ -31,11 +31,11 @@ class AddRowHandler
 
     /**
      * @param AddRow $addRow
+     *
+     * @deprecated must be rewrited in order to insert a row in db
      */
     public function handle(AddRow $addRow)
     {
-        // @todo : insert a row in db
-
         $this->orderRepository->set($addRow->order);
     }
 }

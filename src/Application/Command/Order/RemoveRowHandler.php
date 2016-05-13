@@ -31,11 +31,11 @@ class RemoveRowHandler
 
     /**
      * @param RemoveRow $removeRow
+     *
+     * @deprecated must be rewrited in order to remove a row from db
      */
     public function handle(RemoveRow $removeRow)
     {
-        // @todo: remove this row from db
-
         $this->orderRepository->set($removeRow->order);
     }
 }
