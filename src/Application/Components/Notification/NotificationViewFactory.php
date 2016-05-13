@@ -79,7 +79,7 @@ class NotificationViewFactory
      */
     public function countUnreadNotificationByEventAndUser($event, User $user)
     {
-        $notifications = $this->getNotificationsByEventAndUser($event, $user);
+        $notifications = $this->getNotificationsByEventAndUser($event, $user, $user->getLocale());
 
         return array_reduce($notifications, function ($carry, NotificationView $notificationView) {
             return $notificationView->read ? $carry : ++$carry;
@@ -89,8 +89,9 @@ class NotificationViewFactory
     /**
      * Get unread notification for this event and user
      *
-     * @param int  $event
-     * @param User $user
+     * @param int    $event
+     * @param User   $user
+     * @param string $locale
      *
      * @return NotificationView[]
      */

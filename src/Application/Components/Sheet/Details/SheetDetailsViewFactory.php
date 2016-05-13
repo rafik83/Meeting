@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -107,6 +108,7 @@ class SheetDetailsViewFactory
 
                 $infos = [];
 
+                /** @var Object $object */
                 foreach ($objects as $object) {
                     if (null !== $object->getData()) {
                         $label = $object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback());

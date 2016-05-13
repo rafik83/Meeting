@@ -45,7 +45,7 @@ class StateSetter
      */
     private function isComplete(Sheet $sheet)
     {
-        return true;
+        return false;
     }
 
     /**
