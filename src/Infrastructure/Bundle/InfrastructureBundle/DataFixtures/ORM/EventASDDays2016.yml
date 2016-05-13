@@ -497,6 +497,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             63ccc105: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
             # Description
             d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
+        registrationData: []
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
@@ -886,6 +887,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
+            1efb9cbb: { telephone: "+33909090909" }
 
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_1:

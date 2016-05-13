@@ -31,7 +31,8 @@ class ObjectValidator extends ConstraintValidator
     }
 
     /**
-     * @param Object             $object
+     * @param Object     $object
+     * @param Constraint $constraint
      */
     protected function checkRequired(Object $object, Constraint $constraint)
     {
@@ -41,7 +42,8 @@ class ObjectValidator extends ConstraintValidator
     }
 
     /**
-     * @param Object             $object
+     * @param Object     $object
+     * @param Constraint $constraint
      */
     protected function checkMinLength(Object $object, Constraint $constraint)
     {
@@ -51,7 +53,8 @@ class ObjectValidator extends ConstraintValidator
     }
 
     /**
-     * @param Object             $object
+     * @param Object     $object
+     * @param Constraint $constraint
      */
     protected function checkMaxLength(Object $object, Constraint $constraint)
     {

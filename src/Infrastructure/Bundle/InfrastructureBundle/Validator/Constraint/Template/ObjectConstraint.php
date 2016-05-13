@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraint;
 
 class ObjectConstraint extends Constraint
 {
+    /**
+     * @var string
+     */
     public $key;
 
     /**
@@ -24,6 +27,9 @@ class ObjectConstraint extends Constraint
         return ObjectValidator::class;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRequiredOptions()
     {
         return ['key'];
