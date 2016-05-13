@@ -4,8 +4,11 @@ Feature: Forgot Password Admin
   Background: Re-init the database and load the fixtures
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Event.yml                   |
-      | Admin.yml                       |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | Admin.yml                                                                |
 
   Scenario: I can not request a token for a non-existent account
     When I go to this page "/admin/fr/login"

@@ -1,15 +1,11 @@
 Feature: Admin Account
   I need to be able to manage the Admin account
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can change my password
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
       | Admin.yml        |
-    Given I am logged with "test@test.com" on admin
-
-  Scenario: I can change my password
+    And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event"
     And I follow "admin.account.link"
     Then I should be on this page "/admin/fr/account"

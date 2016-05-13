@@ -4,11 +4,11 @@ Feature: See and update event
   Scenario: See event
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | Admin.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
