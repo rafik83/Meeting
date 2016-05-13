@@ -154,12 +154,6 @@ event_sheet_billing:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Billing:billing }
 
-event_sheet_package_payment_mode:
-    path:     /sheet/{sheet}/payment_mode
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Billing:paymentMode }
 
 #
 # Authentication
