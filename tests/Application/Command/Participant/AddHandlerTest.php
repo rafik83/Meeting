@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
-use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -49,7 +48,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $participantManager = $this->prophesize(ParticipantManager::class);
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
@@ -79,7 +77,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new AddHandler(
             $userRepository->reveal(),
-            $participantManager->reveal(),
             $participantRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
@@ -106,7 +103,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $participantManager             = $this->prophesize(ParticipantManager::class);
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
@@ -117,7 +113,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new AddHandler(
             $userRepository->reveal(),
-            $participantManager->reveal(),
             $participantRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
