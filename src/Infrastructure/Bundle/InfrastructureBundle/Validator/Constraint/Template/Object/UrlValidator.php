@@ -26,7 +26,7 @@ class UrlValidator extends ObjectValidator
 
         if ($value instanceof Object\Url) {
             if (null !== $value->getData()) {
-                $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($value, new Constraints\Url());
+                $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($value->getContentValue(), new Constraints\Url());
             }
         } else {
             $this->context->buildViolation('validators.field.notValid.url')->atPath($constraint->key)->addViolation();
