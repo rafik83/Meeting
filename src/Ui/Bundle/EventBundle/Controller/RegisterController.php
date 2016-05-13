@@ -178,6 +178,9 @@ class RegisterController extends Controller
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromType($type, $locale);
 
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
+        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
+
         $participantBlock = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
@@ -256,6 +259,9 @@ class RegisterController extends Controller
 
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromParticipant($participant, $locale);
+
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
+        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
 
         $participantBlock = $registrationTemplate->getBlock(intval($step));
 
@@ -342,12 +348,12 @@ class RegisterController extends Controller
                 $file = $form->get($object->getKey())->getData();
 
                 if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
-                    if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
-                        $fileStorage->remove($object->getData());
+                    if ($form->offsetExists($object->getKey()) && '' !== $object->getContentValue() && $form->get($object->getKey())->getData() !== null) {
+                        $fileStorage->remove($object->getContentValue());
                     }
 
                     if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
-                        $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+                        $data[$object->getKey()]['image'] = $fileStorage->upload($form->get($object->getKey())->getData());
                     }
                 } else {
                     $form->get($object->getKey())->addError(new FormError('validators.field.notValid.image'));
