@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as Me
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -91,14 +92,16 @@ class NotificationEventListener implements EventSubscriberInterface
             throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
+        $locale = $event->getParticipant()->getLocale();
+
         // Translate message
         $message = $this->translator->trans(
             'notification.request.participant.added.message',
             [
-                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             ],
             'notifications',
-            $event->getParticipant()->getUser()->getLocale()
+            $locale
         );
 
         // Send notification
@@ -134,14 +137,16 @@ class NotificationEventListener implements EventSubscriberInterface
             throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
+        $locale = $event->getParticipant()->getLocale();
+
         // Translate message
         $message = $this->translator->trans(
             'notification.meeting.participant.removed.message',
             [
-                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             ],
             'notifications',
-            $event->getParticipant()->getUser()->getLocale()
+            $locale
         );
 
         // Send notification
@@ -177,14 +182,16 @@ class NotificationEventListener implements EventSubscriberInterface
             throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
+        $locale = $event->getParticipant()->getLocale();
+
         // Translate message
         $message = $this->translator->trans(
             'notification.meeting_request.participant.added.message',
             [
-                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             ],
             'notifications',
-            $event->getParticipant()->getUser()->getLocale()
+            $locale
         );
 
         // Send notification
@@ -220,14 +227,16 @@ class NotificationEventListener implements EventSubscriberInterface
             throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
         }
 
+        $locale = $event->getParticipant()->getLocale();
+
         // Translate message
         $message = $this->translator->trans(
             'notification.meeting_request.participant.removed.message',
             [
-                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet),
+                '%sheet%' => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             ],
             'notifications',
-            $event->getParticipant()->getUser()->getLocale()
+            $locale
         );
 
         // Send notification
@@ -257,15 +266,21 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($fromParticipants, $fromSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($fromParticipants as $participant) {
+            $locale = $participant->getLocale();
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.refused.message',
                 [
-                    '%to_sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getToSheet()),
+                    '%to_sheet%' => $this->sheetInfoGuesser->guessSheetName(
+                        $event->getRequest()->getToSheet(),
+                        $locale
+                    ),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -296,15 +311,21 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($fromParticipants, $fromSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($fromParticipants as $participant) {
+            $locale = $participant->getLocale();
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.accepted.message',
                 [
-                    '%to_sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getToSheet()),
+                    '%to_sheet%' => $this->sheetInfoGuesser->guessSheetName(
+                        $event->getRequest()->getToSheet(),
+                        $locale
+                    ),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -336,21 +357,23 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($fromParticipants, $fromSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($fromParticipants as $participant) {
-
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 continue;
             }
 
+            $locale = $participant->getLocale();
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.from_message',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getToSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getToSheet(), $locale),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -373,21 +396,23 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($toParticipants, $toSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($toParticipants as $participant) {
-
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 return;
             }
 
+            $locale = $participant->getLocale();
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting_request.canceled.to_message',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getFromSheet(), $locale),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -418,7 +443,9 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($fromParticipants, $fromSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($fromParticipants as $participant) {
+            $locale = $participant->getLocale();
 
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
@@ -429,10 +456,10 @@ class NotificationEventListener implements EventSubscriberInterface
             $message = $this->translator->trans(
                 'notification.meeting.canceled.message',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMeeting()->getToSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMeeting()->getToSheet(), $locale),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -455,21 +482,23 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($toParticipants, $toSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($toParticipants as $participant) {
-
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 return;
             }
 
+            $locale = $participant->getLocale();
+
             // Translate message
             $message = $this->translator->trans(
                 'notification.meeting.canceled',
                 [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMeeting()->getFromSheet()),
+                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMeeting()->getFromSheet(), $locale),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
 
             // Send notification
@@ -495,14 +524,19 @@ class NotificationEventListener implements EventSubscriberInterface
         // Get sheet owner
         $recipient = $event->getRequest()->getToSheet()->getOwner()->getUser();
 
+        $locale = $recipient->getLocale();
+
         // Translate message
         $message = $this->translator->trans(
             'notification.meeting_request.receive.message',
             [
-                '%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getFromSheet()),
+                '%from_sheet%' => $this->sheetInfoGuesser->guessSheetName(
+                    $event->getRequest()->getFromSheet(),
+                    $locale
+                ),
             ],
             'notifications',
-            $recipient->getLocale()
+            $locale
         );
 
         // Send notification
@@ -530,18 +564,19 @@ class NotificationEventListener implements EventSubscriberInterface
             array_push($toParticipants, $toSheetOwner);
         }
 
+        /** @var Participant $participant */
         foreach ($toParticipants as $participant) {
+            $locale = $participant->getLocale();
 
             // Translate message
             $message = $this->translator->trans(
                 'notification.message.received.message',
                 [
-                    '%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMessage()->getFrom()),
+                    '%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getMessage()->getFrom(), $locale),
                 ],
                 'notifications',
-                $participant->getUser()->getLocale()
+                $locale
             );
-
 
             // Send notification
             $this->notificationRepository->add(new Notification(
@@ -571,7 +606,7 @@ class NotificationEventListener implements EventSubscriberInterface
             'notification.sheet.validated.message',
             [],
             'notifications',
-            $owner->getUser()->getLocale()
+            $owner->getLocale()
         );
 
         // Send notification
