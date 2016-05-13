@@ -19,9 +19,6 @@ Proximum\Vimeet\Domain\Model\User\Account:
         position:
             type: string
             nullable: true
-        service:
-            type: string
-            nullable: true
         company:
             type: string
             nullable: true
