@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -31,9 +30,6 @@ class TypeCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('template', TemplateChoiceType::class, [
-                'placeholder' => '',
-            ])
             ->add('sheetTemplate', SheetTemplateChoiceType::class, [
                 'events'      => $options['events'],
                 'required'    => true,

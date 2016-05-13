@@ -30,6 +30,8 @@ class OrderController extends Controller
      * @param Order   $order
      *
      * @return Response
+     *
+     * @deprecated need to be rewrited
      */
     public function editAction(Request $request, Event $event, Order $order)
     {
@@ -40,10 +42,7 @@ class OrderController extends Controller
             ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
-        $orderView = $this->get('components.sheet.order_view_factory')->createFromOrder(
-            $order,
-            $event->getAvailableLocale($request->getLocale())
-        );
+        $orderView = null;
 
         return $this->render(
             'AdminBundle:Order:edit.html.twig',
