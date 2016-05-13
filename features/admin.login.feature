@@ -1,12 +1,14 @@
 Feature: Login admin
   I need to be able to login to my admin account
 
-  Background: Re-init the database and load the fixtures
+  Scenario: Login successful
     Given the database is empty
     And the following fixtures files are loaded:
-      | Admin.yml |
-
-  Scenario: Login successful
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | Admins.yml |
     When I go to this page "/admin/fr/login"
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "vimeet_admin"
