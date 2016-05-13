@@ -1,7 +1,6 @@
 {% extends "form_div_layout.html.twig" %}
 
 {%- block form_row -%}
-    <li>
         {{- form_label(form) -}}
         {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
 
@@ -10,7 +9,6 @@
         {% endif %}
 
         {{- form_widget(form, {attr: attr}) -}}
-    </li>
 {%- endblock form_row -%}
 
 {%- block telephone_widget -%}

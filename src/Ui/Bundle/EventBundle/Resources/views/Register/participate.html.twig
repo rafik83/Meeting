@@ -21,15 +21,13 @@
 
                     {{ form_errors(form) }}
 
-                    <ul class="inputs">
+                    <div class="inputs">
                         {% for field in form %}
-                            <li>
                                 {{ form_row(field) }}
                                 {{ form_errors(field) }}
-                            </li>
                         {% endfor %}
 
-                        <li class="validation">
+                        <div class="validation">
                             <button type="submit" class="btn">
                                 {% if stepsCount > 1 %}
                                     <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
@@ -37,8 +35,8 @@
                                     <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
                                 {% endif %}
                             </button>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
 
                 {{ form_end(form) }}
 
