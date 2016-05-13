@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation:
+    type:  entity
+    table: speaker_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        position:
+            type: string
+        locale:
+            type: string
+    manyToOne:
+        speaker:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Speaker
+            inversedBy: translations

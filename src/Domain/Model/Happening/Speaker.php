@@ -38,9 +38,9 @@ class Speaker
     private $lastname;
 
     /**
-     * @var string
+     * @var SpeakerTranslation
      */
-    private $function;
+    private $translations;
 
     /**
      * @var string
@@ -68,21 +68,20 @@ class Speaker
      * @param Event  $event
      * @param string $firstname
      * @param string $lastname
-     * @param string $function
      * @param string $organization
      * @param string $logo
      * @param string $photo
      */
-    public function __construct(Event $event, $firstname, $lastname, $function, $organization, $logo, $photo)
+    public function __construct(Event $event, $firstname, $lastname, $organization, $logo, $photo)
     {
         $this->event        = $event;
         $this->firstname    = $firstname;
         $this->lastname     = $lastname;
-        $this->function     = $function;
         $this->organization = $organization;
         $this->logo         = $logo;
         $this->photo        = $photo;
         $this->talkings     = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -126,16 +125,6 @@ class Speaker
     }
 
     /**
-     * Get function
-     *
-     * @return string
-     */
-    public function getFunction()
-    {
-        return $this->function;
-    }
-
-    /**
      * Get organization
      *
      * @return string
@@ -166,22 +155,28 @@ class Speaker
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
      * Update speaker.
      *
      * @param string $firstname
      * @param string $lastname
-     * @param string $function
      * @param string $organization
      * @param string $logo
      * @param string $photo
      *
      * @return Speaker
      */
-    public function update($firstname, $lastname, $function, $organization, $logo, $photo)
+    public function update($firstname, $lastname, $organization, $logo, $photo)
     {
         $this->firstname    = $firstname;
         $this->lastname     = $lastname;
-        $this->function     = $function;
         $this->organization = $organization;
         $this->logo         = $logo;
         $this->photo        = $photo;

@@ -27,7 +27,13 @@
             {% for speaker in speakers %}
                 <tr>
                     <td>{{ speaker.name }}</td>
-                    <td>{{ speaker.function }}</td>
+                    <td>
+                        <ul>
+                            {% for translation in speaker.translations%}
+                                <li>{{ translation.locale|locale(app.request.locale)|capitalize  }}: {{ translation.position }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
                     <td>{{ speaker.organization }}</td>
                     <td>
                         <ul>
