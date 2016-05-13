@@ -32,6 +32,8 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $files = [
+            __DIR__ . '/Template/SheetTemplate.yml',
+            __DIR__ . '/Template/RegistrationTemplate.yml',
             __DIR__ . '/Nomenclature.yml',
             __DIR__ . '/EventRdvCarnot2016.yml',
             __DIR__ . '/TypeRdvCarnot2016.yml',
@@ -41,15 +43,13 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/EventASDDays2016.yml',
             __DIR__ . '/EventSpanish.yml',
             __DIR__ . '/User.yml',
-            __DIR__ . '/Admin.yml',
             __DIR__ . '/Participant.yml',
             __DIR__ . '/Happening/Category.yml',
             __DIR__ . '/Schedule.yml',
             __DIR__ . '/Meeting/Request.yml',
             __DIR__ . '/Meeting/Message.yml',
             __DIR__ . '/CanceledRequestNotification.yml',
-            __DIR__ . '/Template/SheetTemplate.yml',
-            __DIR__ . '/Template/RegistrationTemplate.yml',
+            __DIR__ . '/Admin.yml',
         ];
 
         $options = [
