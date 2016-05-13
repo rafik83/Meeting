@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -68,13 +68,9 @@ class BlockType extends AbstractType
      */
     private function addText(FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $attr = $object->getOption('length') ? ['maxlength' => $object->getOption('length')] : [];
-
-        $builder->add($object->getKey(), TextType::class, [
-            'label'       => false,
-            'placeholder' => $object->getOption('placeholder')[$locale],
-            'required'    => $object->getOption('required'),
-            'attr'        => $attr,
+        $builder->add($object->getKey(), EditableTextInputDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
         ]);
     }
 
@@ -99,13 +95,9 @@ class BlockType extends AbstractType
      */
     private function addTelephone(FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), TelephoneType::class, [
-            'label'       => false,
-            'required'    => $object->getOption('required'),
-            'placeholder' => $object->getOption('placeholder')[$locale],
-            'attr'        => [
-                'class' => 'telephone-intl-input',
-            ]
+        $builder->add($object->getKey(), TelephoneDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
         ]);
     }
 
@@ -116,10 +108,9 @@ class BlockType extends AbstractType
      */
     private function addUrl(FormBuilderInterface $builder, Template\Object\Url $url, $locale)
     {
-        $builder->add($url->getKey(), UrlType::class, [
-            'label'       => false,
-            'required'    => $url->getOption('required'),
-            'placeholder' => $url->getOption('placeholder')[$locale],
+        $builder->add($url->getKey(), UrlDataType::class, [
+            'object' => $url,
+            'locale' => $locale,
         ]);
     }
 
@@ -130,14 +121,9 @@ class BlockType extends AbstractType
      */
     private function addCountry(FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), CountryType::class, [
-            'label'       => false,
-            'required'    => $object->getOption('required'),
-            'placeholder' => $object->getOption('placeholder')[$locale],
-            'attr'        => [
-                'class'            => 'form-control select2',
-                'data-placeholder' => $object->getOption('label')[$locale],
-            ],
+        $builder->add($object->getKey(), CountryDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
         ]);
     }
 
@@ -157,23 +143,9 @@ class BlockType extends AbstractType
             return;
         }
 
-        if (!is_array(array_shift($choices))) {
-            $choices = array_flip($choices);
-        } else {
-            $choices = array_map(function ($values) {
-                return array_flip($values);
-            }, $choices);
-        }
-
-        $builder->add($object->getKey(), ChoiceType::class, [
-            'label'       => false,
-            'required'    => $object->getOption('required'),
-            'choices'     => $choices,
-            'placeholder' => $object->getOption('label')[$locale],
-            'attr'        => [
-                'class'            => 'form-control select2',
-                'data-placeholder' => $object->getOption('label')[$locale],
-            ],
+        $builder->add($object->getKey(), NomenclatureDataType::class, [
+            'object' => $object,
+            'locale' => $locale
         ]);
     }
 }
