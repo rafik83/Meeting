@@ -26,12 +26,12 @@ class TelephoneValidator extends ObjectValidator
 
         if ($value instanceof Telephone) {
             $validator = $this->context->getValidator()->inContext($this->context);
-            $validator->atPath($constraint->key)->validate($value->getContentValue(), new Regex([
+            $validator->atPath($constraint->key . '.telephone')->validate($value->getContentValue(), new Regex([
                 'pattern' => '#^(?!(?:\d*-){5,})(?!(?:\d* ){5,})\+?[\d- /.]+$#',
                 'message' => 'validators.field.notValid.telephone',
             ]));
         } else {
-            $this->context->buildViolation('validators.field.notValid.telephone')->atPath($constraint->key)->addViolation();
+            $this->context->buildViolation('validators.field.notValid.telephone')->atPath($constraint->key . '.telephone')->addViolation();
         }
     }
 }

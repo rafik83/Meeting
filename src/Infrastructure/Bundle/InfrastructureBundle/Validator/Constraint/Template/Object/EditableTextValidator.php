@@ -23,7 +23,7 @@ class EditableTextValidator extends ObjectValidator
     protected function checkRequired(Object $object, Constraint $constraint)
     {
         if (true === $object->getOption('required') && $object instanceof Object\EditableText) {
-            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new NotBlank());
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.content')->validate($object->getContentValue(), new NotBlank());
         }
     }
 }
