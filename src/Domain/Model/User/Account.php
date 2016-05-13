@@ -45,11 +45,6 @@ class Account
     /**
      * @var string
      */
-    private $service;
-
-    /**
-     * @var string
-     */
     private $company;
 
     /**
@@ -171,22 +166,6 @@ class Account
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    /**
-     * @return string
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * @param string $service
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
     }
 
     /**

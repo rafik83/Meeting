@@ -29,4 +29,16 @@ class User extends AbstractUser
     {
         return $this->account;
     }
+
+    /**
+     * @param Account $account
+     *
+     * @return User
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
 }
