@@ -4,10 +4,12 @@ Feature: Handle Operator
   Scenario: I can create an Operator with the events of the organizer
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | Admins.yml       |
-    Given I am logged with "test2@test.com" on admin
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | Admins.yml                                                               |
+    And I am logged with "test2@test.com" on admin
     When I go to this page "/admin/fr/event"
     And I follow "admin.operator_list.link"
     Then I should be on this page "/admin/fr/operator"
