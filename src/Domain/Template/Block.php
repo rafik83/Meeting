@@ -31,24 +31,6 @@ class Block extends AbstractChild
     }
 
     /**
-     * @param string $key
-     * @param string $value
-     *
-     * @return Object
-     * @throws \Exception
-     */
-    public function __set($key, $value)
-    {
-        $object = $this->getObject($key);
-
-        if ($object instanceof Object\EditableText) {
-            return $object->setContent($value);
-        }
-
-        return $object->setData($value);
-    }
-
-    /**
      * @param int           $column
      * @param string        $name
      * @param AbstractChild $child
@@ -83,7 +65,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object[]
      */
     public function getEditableObjects()
     {
@@ -209,8 +191,12 @@ class Block extends AbstractChild
                 }
 
                 if ($block instanceof Object) {
-                    if ($block->hasTag($tag)) {
-                        $tagged[] = (string) $block->getValue();
+                    if ($block->hasTag($tag) && $block instanceof Object\ContentObjectInterface) {
+                        if ($block instanceof Object\Nomenclature) {
+                            $tagged[] = $block->getNomenclatureLabel();
+                        } else {
+                            $tagged[] = $block->getContentValue();
+                        }
                     }
                 }
             }

@@ -12,13 +12,41 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Telephone extends EditableObject
+class Telephone extends EditableObject implements ContentObjectInterface
 {
+    /**
+     * @param string $telephone
+     *
+     * @return Telephone
+     */
+    public function setTelephone($telephone)
+    {
+        $this->data['telephone'] = $telephone;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
-    public function __toString()
+    public function getTelephone()
     {
-        return $this->getData() ? $this->getData() : '';
+        return isset($this->data['telephone']) ? $this->data['telephone'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getTelephone() ? $this->getTelephone() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setTelephone($value);
     }
 }

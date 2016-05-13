@@ -12,16 +12,8 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class EditableText extends EditableObject
+class EditableText extends EditableObject implements ContentObjectInterface
 {
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getContent() ?: '';
-    }
-
     /**
      * @return null|string
      */
@@ -51,10 +43,18 @@ class EditableText extends EditableObject
     }
 
     /**
-     * @return null|string
+     * {@inheritdoc}
      */
-    public function getValue()
+    public function getContentValue()
     {
-        return $this->getContent();
+        return $this->getContent() ? $this->getContent() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setContent($value);
     }
 }
