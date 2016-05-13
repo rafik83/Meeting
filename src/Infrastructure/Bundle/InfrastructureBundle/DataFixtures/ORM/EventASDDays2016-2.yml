@@ -1448,7 +1448,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_website", "sheet_data"]
                         93de093f:
                             component: "object"
                             type: "editable-text"
@@ -1464,7 +1464,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_address", "sheet_data"]
                         de66af5d:
                             component: "object"
                             type: "editable-text"
@@ -1480,7 +1480,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_zipcode", "sheet_data"]
                         d224f0e7:
                             component: "object"
                             type: "editable-text"
@@ -1496,7 +1496,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_city", "sheet_data"]
                         e801edd4:
                             component: "object"
                             type: "country"
@@ -1512,7 +1512,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["participant_country", "sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false
         event: '@event_asddays_2016'
