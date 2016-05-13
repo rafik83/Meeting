@@ -1,0 +1,109 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Account;
+
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\Object\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+
+class Synchronizer
+{
+    /**
+     * @var array
+     */
+    private $tagMapping = [
+        Tag::PARTICIPANT_FIRSTNAME => 'FirstName',
+        Tag::PARTICIPANT_LASTNAME  => 'LastName',
+        Tag::PARTICIPANT_AVATAR    => 'Avatar',
+        Tag::PARTICIPANT_POSITION  => 'Position',
+        Tag::PARTICIPANT_PHONE     => 'Phone',
+        Tag::PARTICIPANT_MOBILE    => 'Mobile',
+        Tag::PARTICIPANT_ADDRESS   => 'Address',
+        Tag::PARTICIPANT_ZIPCODE   => 'ZipCode',
+        Tag::PARTICIPANT_CITY      => 'City',
+        Tag::PARTICIPANT_COUNTRY   => 'Country',
+        Tag::PARTICIPANT_WEBSITE   => 'Website',
+        Tag::SHEET_ORGANIZATION    => 'Company',
+    ];
+
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
+     * @param UserRepositoryInterface $userRepository
+     */
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * Get information from account
+     *
+     * @param TemplateData $templateData
+     * @param User         $user
+     *
+     * @return TemplateData
+     */
+    public function get(TemplateData $templateData, User $user)
+    {
+        $account = $user->getAccount();
+
+        /** @var Object $object */
+        foreach ($templateData->getEditableObjects() as $object) {
+            if ($object instanceof ContentObjectInterface && '' === $object->getContentValue()) {
+                $tags = $object->getTags();
+
+                foreach ($tags as $tag) {
+                    if (isset($this->tagMapping[$tag])) {
+                        $method = 'get' . $this->tagMapping[$tag];
+                        $object->setContentValue($account->$method());
+                    }
+                }
+            }
+        }
+
+        return $templateData;
+    }
+
+    /**
+     * Set information to account
+     *
+     * @param TemplateData $templateData
+     * @param User         $user
+     */
+    public function set(TemplateData $templateData, User $user)
+    {
+        $account = $user->getAccount();
+
+        /** @var Object $object */
+        foreach ($templateData->getEditableObjects() as $object) {
+            if ($object instanceof ContentObjectInterface && '' !== $object->getContentValue()) {
+                $tags = $object->getTags();
+
+                foreach ($tags as $tag) {
+                    if (isset($this->tagMapping[$tag])) {
+                        $method = 'set' . $this->tagMapping[$tag];
+
+                        $account->$method($object->getContentValue());
+                    }
+                }
+            }
+        }
+
+        $this->userRepository->set($user);
+    }
+}
