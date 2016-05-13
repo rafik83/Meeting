@@ -20,7 +20,7 @@ interface BillingInfoInterface
     /**
      * @return array
      *
-     * @deprecated To be rewrited to return a Proximum\Vimeet\Domain\Model\Template\AbstractTemplate object
+     * @deprecated to be rewritten to return a Proximum\Vimeet\Domain\Model\Template\AbstractTemplate object
      */
     public function getBillingTemplate();
 }

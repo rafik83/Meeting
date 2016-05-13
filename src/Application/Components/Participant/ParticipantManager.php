@@ -21,7 +21,7 @@ class ParticipantManager
      *
      * @return bool
      *
-     * @deprecated To be rewrited
+     * @deprecated to be rewritten
      */
     public function canAddParticipant(Sheet $sheet)
     {

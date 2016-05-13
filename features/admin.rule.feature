@@ -4,12 +4,14 @@ Feature: add rule who see who
   Scenario: add rule
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | app/Rule.yml     |
-      | Admin.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/TypeRdvCarnot2016.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/Category.yml                      |
+      | @InfrastructureBundle/DataFixtures/ORM/Rule.yml                          |
+      | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/who-see-who"
     When I fill in the following:

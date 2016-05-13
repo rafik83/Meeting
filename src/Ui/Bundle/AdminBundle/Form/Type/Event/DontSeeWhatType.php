@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @deprecated need to be rewrited
+ * @deprecated need to be rewritten
  */
 class DontSeeWhatType extends AbstractType
 {
@@ -59,6 +59,8 @@ class DontSeeWhatType extends AbstractType
      * @param WhoInterface $who
      *
      * @return array
+     *
+     * @deprecated need to be rewritten
      */
     private function getParticipantTemplate(WhoInterface $who)
     {
@@ -79,15 +81,21 @@ class DontSeeWhatType extends AbstractType
      * @param WhoInterface $who
      *
      * @return array
+     *
+     * @deprecated need to be rewritten
      */
     private function getSheetTemplate(WhoInterface $who)
     {
         if ($who instanceof Type) {
-            return $who->getSheetTemplate();
+            // need to be rewritten
+            // return $who->getSheetTemplate();
+            return [];
         }
 
         if ($who instanceof Category) {
             return $this->templatesIntersectRecursive(array_map(function (Type $type) {
+                // need to be rewritten
+                // return $type->getSheetTemplate();
                 return $type->getSheetTemplate();
             }, $who->getTypes()->toArray()));
         }

@@ -33,7 +33,7 @@ class UpdateHandler
      *
      * @throws RequiredDataEmptyException
      *
-     * @deprecated to be rewrited
+     * @deprecated to be rewritten
      */
     public function handle(Update $update)
     {

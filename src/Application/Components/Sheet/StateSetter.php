@@ -19,7 +19,7 @@ class StateSetter
      *
      * @param Sheet $sheet
      *
-     * @deprecated to be rewrited
+     * @deprecated to be rewritten
      */
     public function setState(Sheet $sheet)
     {
@@ -41,7 +41,7 @@ class StateSetter
      *
      * @return bool
      *
-     * @deprecated to be rewrited
+     * @deprecated to be rewritten
      */
     private function isComplete(Sheet $sheet)
     {
@@ -55,7 +55,7 @@ class StateSetter
      *
      * @return bool
      *
-     * @deprecated to be rewrited
+     * @deprecated to be rewritten
      */
     private function hasPackage(Sheet $sheet)
     {
