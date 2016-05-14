@@ -261,8 +261,7 @@ class RegisterController extends Controller
             ->createRegistrationFromParticipant($participant, $locale);
 
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $participant->getUser());
-
-        $participantBlock = $registrationTemplate->getBlock(intval($step));
+        $participantBlock     = $registrationTemplate->getBlock(intval($step));
 
         if (null === $participantBlock) {
             throw $this->createNotFoundException('Unknown step');
