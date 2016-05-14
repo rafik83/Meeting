@@ -12,7 +12,6 @@ Feature: See sheet details
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
-      | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin
