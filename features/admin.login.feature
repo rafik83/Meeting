@@ -7,8 +7,8 @@ Feature: Login admin
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
-      | Admins.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | Admins.yml                                                               |
     When I go to this page "/admin/fr/login"
     And I fill in "form.login.children.username.label" with "test@test.com"
     And I fill in "form.login.children.password.label" with "vimeet_admin"

@@ -7,12 +7,12 @@ Feature: See sheet details
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
-      | @InfrastructureBundle/DataFixtures/ORM/TypeRdvCarnot2016.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/Sheet.yml                         |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/Participant.yml                   |
-      | @InfrastructureBundle/DataFixtures/ORM/Meeting/Request.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin
@@ -35,7 +35,7 @@ Feature: See sheet details
     Then I go to this page "/admin/fr/event/1/sheet/1"
     And I should see "WorldCompanyInc"
     Then I fill in the following:
-    | sheet_comment_text | This is a test |
+      | sheet_comment_text | This is a test |
     And I press "form.sheet_comment.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.add_comment.success"

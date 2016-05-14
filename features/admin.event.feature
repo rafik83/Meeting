@@ -7,7 +7,7 @@ Feature: See and update event
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"

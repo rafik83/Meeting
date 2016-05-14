@@ -7,7 +7,11 @@ Feature: Impersonation
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventASDDays2016.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin

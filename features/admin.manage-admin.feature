@@ -7,7 +7,7 @@ Feature: Manage Admin
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/EventRdvCarnot2016.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event"
