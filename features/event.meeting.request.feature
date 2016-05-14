@@ -1,30 +1,33 @@
 Feature: Meeting Request / Proposition
   I need to be able to see the meeting request and proposition
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can see my meeting request
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml                       |
-      | app/Event.yml                          |
-      | app/Type.yml                           |
-      | app/Category.yml                       |
-      | app/Rule.yml                           |
-      | User.yml                               |
-      | TwoSheetSeveralParticipantWithData.yml |
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
+    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr/"
-
-  Scenario: I can see my meeting request
     When I follow "event.link.see_meeting_request"
     Then the response status code should be 200
     And I should be on "/fr/sheet/1/meeting/request"
 
   Scenario: I can see my meeting proposition
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
     When I follow "event.link.see_meeting_proposition"
     Then the response status code should be 200
     And I should be on "/fr/sheet/1/meeting/proposition"
 
   Scenario: I can request someone for a rendez-vous
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/"
     When I follow "event.link.see_catalog"
     Then the response status code should be 200
     And I follow "Exposant"
@@ -38,7 +41,7 @@ Feature: Meeting Request / Proposition
     And I should be on "/fr/catalog/1/sheet/2/meeting/request/from/1"
     And I check "Jean Dutest"
     And I fill in the following:
-    | form.meeting_request_create.children.description.label | This is a test |
+      | form.meeting_request_create.children.description.label | This is a test |
     And I press "form.meeting_request_create.children.submit.label"
     And the response status code should be 200
     And I should see "flash.meeting_request.create.success"
@@ -49,6 +52,7 @@ Feature: Meeting Request / Proposition
     And I should see "Jean Dutest"
 
   Scenario: I can accept a rendez-vous
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     When I follow "event.link.see_catalog"
     Then the response status code should be 200
     And I follow "Exposant"
@@ -86,7 +90,7 @@ Feature: Meeting Request / Proposition
     And I should see "flash.meeting_request.approved.success"
     And I should see "event.meeting.request.state.to.approved"
     Then I go to "/fr/logout"
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     Then I go to "/fr/sheet/1/meeting/request"
     And I should see "event.meeting.request.state.from.approved"
     Then I follow "event.meeting.listRequest.cancel"
@@ -101,7 +105,7 @@ Feature: Meeting Request / Proposition
     And I should see "event.meeting.request.state.from.cancelled"
 
   Scenario: I can refuse a rendez-vous
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr/"
     And I follow "event.link.see_catalog"
     Then the response status code should be 200
@@ -141,7 +145,7 @@ Feature: Meeting Request / Proposition
     And I should see "flash.meeting_request.refused.success"
     And I should see "event.meeting.request.state.to.refused"
     Then I go to "/fr/logout"
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     Then I go to "/fr/sheet/1/meeting/request"
     And I should see "event.meeting.request.state.from.refused"
     And I should see "Sorry I can't"
