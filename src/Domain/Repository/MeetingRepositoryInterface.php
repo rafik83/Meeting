@@ -29,13 +29,14 @@ interface MeetingRepositoryInterface
     public function set(Meeting $meeting);
 
     /**
-     * @param Event $event
-     * @param int   $page
-     * @param int   $limit
+     * @param Event  $event
+     * @param int    $page
+     * @param int    $limit
+     * @param string $locale
      *
      * @return PaginatedResult
      */
-    public function getByEvent(Event $event, $page, $limit);
+    public function getByEvent(Event $event, $page, $limit, $locale);
 
     /**
      * @param Participant $participant

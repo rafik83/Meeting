@@ -22,6 +22,16 @@ class ItemCollection extends Object
     /**
      * {@inheritdoc}
      */
+    public function __construct($type, array $config, $locale, $fallback)
+    {
+        parent::__construct($type, $config, $locale, $fallback);
+
+        $this->padItems();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setData(array $data)
     {
         $data = array_merge(['items' => []], $data);

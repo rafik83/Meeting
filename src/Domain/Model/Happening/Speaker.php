@@ -38,7 +38,7 @@ class Speaker
     private $lastname;
 
     /**
-     * @var SpeakerTranslation
+     * @var ArrayCollection
      */
     private $translations;
 
