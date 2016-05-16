@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\User;
 
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
