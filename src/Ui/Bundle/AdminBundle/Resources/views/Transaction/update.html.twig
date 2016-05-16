@@ -10,10 +10,5 @@
     <h3>Modifier une transaction</h3>
 
     {{ form(form) }}
-
-    <div class="text-left">
-        <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-link">&larr; Retour aux commandes</a>
-    </div>
-
 {% endblock %}
 

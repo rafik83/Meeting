@@ -1,0 +1,104 @@
+Proximum\Vimeet\Domain\Model\ValidationCriteria (local):
+    validation_criteria_event_rdv_carnot_2016:
+        __construct:
+            - false
+
+Proximum\Vimeet\Domain\Model\Type:
+    type_exposant:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 0
+        maxParticipant: 4
+        maxPlanning: 4
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
+
+    type_investisseur:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 1
+        maxParticipant: 4
+        maxPlanning: 4
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
+
+    type_visiteur:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
+
+    type_visiteur_visio:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 3
+        maxParticipant: 4
+        maxPlanning: 4
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
+
+    type_institute_carnot:
+        __construct: ["@event_rdv_carnot_2016"]
+        position: 4
+        maxParticipant: 4
+        maxPlanning: 4
+        validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
+        sheetTemplate: '@template_sheet_carnot'
+        registrationTemplate: '@registration_template_carnot'
+
+Proximum\Vimeet\Domain\Model\TypeTranslation:
+    type_exposant_fr:
+        __construct: false
+        type: '@type_exposant'
+        locale: 'fr'
+        title: 'Exposant'
+        description: |+
+            # EXPOSANT, VOTRE INSCRIPTION COMPREND :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Dissidentes quo fulgorem surgeret Fortuna primis homines in quo augeretur.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
+    type_exposant_en:
+        __construct: false
+        type: '@type_exposant'
+        locale: 'en'
+        title: 'Exhibitor'
+        description: |+
+            # Exhibitor, your registration contains :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+    type_investisseur_fr:
+        __construct: false
+        type: '@type_investisseur'
+        locale: 'fr'
+        title: 'Investisseur'
+        description: |+
+            # INVESTISSEUR, VOTRE INSCRIPTION COMPREND :
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
+    type_investisseur_en:
+        __construct: false
+        type: '@type_investisseur'
+        locale: 'en'
+        title: 'Investor'
+        description: |+
+            # Investor, your registration contains :
+            - Nive et telis prope prope ventum attonitus id multitudine telis undique telis callibus nive ad.
+            - Levius dominantur fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Levius fortunas pater levius disiungitur pervenissent cum scilicet cum in ut exilium fortunas vicensimo filius.
+            - Etiam dominantur hac modum satis metuitur nequi professio professio torpescit.
+    type_visiteur_fr:
+        __construct: ['@type_visiteur', fr, "Visiteur"]
+    type_visiteur_en:
+        __construct: ['@type_visiteur', en, "Visitor"]
+    type_visiteur_visio_fr:
+        __construct: ['@type_visiteur_visio', fr, "Visio"]
+    type_visiteur_visio_en:
+        __construct: ['@type_visiteur_visio', en, "Visio"]
+    type_institute_carnot_fr:
+        __construct: ['@type_institute_carnot', fr, "Institut Carnot"]
+    type_institute_carnot_en:
+        __construct: ['@type_institute_carnot', en, "Carnot Institute"]

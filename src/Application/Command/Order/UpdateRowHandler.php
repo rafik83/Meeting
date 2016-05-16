@@ -31,19 +31,11 @@ class UpdateRowHandler
 
     /**
      * @param UpdateRow $updateRow
+     *
+     * @deprecated must be rewrited in order to update a row in db
      */
     public function handle(UpdateRow $updateRow)
     {
-        $updateRow->order->updateRow(
-            $updateRow->group,
-            $updateRow->row,
-            'added_row',
-            $updateRow->label,
-            $updateRow->description,
-            $updateRow->price,
-            $updateRow->quantity
-        );
-
         $this->orderRepository->set($updateRow->order);
     }
 }

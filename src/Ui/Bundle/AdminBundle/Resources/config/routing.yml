@@ -341,33 +341,22 @@ admin_meeting_request_slots:
 admin_sheet:
     path: /event/{event}/sheet
     requirements:
-        id: \d+
+        event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Sheet:list }
 admin_sheet_details:
     path: /event/{event}/sheet/{sheet}
     requirements:
-        id: \d+
+        event: \d+
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Sheet:details }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
-        id: \d+
+        event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
-
-#
-# Billing
-#
-admin_sheet_billing:
-    path: /event/{event}/sheet/{sheet}/billing
-    requirements:
-        event: \d+
-        sheet: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Billing:list }
 
 #
 # Order
@@ -375,12 +364,14 @@ admin_sheet_billing:
 admin_sheet_order_edit:
     path: /event/{event}/order/{order}/edit
     requirements:
+        event: \d+
         order: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:edit }
 admin_sheet_order_add_row:
     path: /event/{event}/order/{order}/group/{group}/row/add
     requirements:
+        event: \d+
         order: \d+
         group: '[a-zA-Z0-9\-]+'
     methods: [GET, POST]
@@ -388,6 +379,7 @@ admin_sheet_order_add_row:
 admin_sheet_order_remove_row:
     path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
     requirements:
+        event: \d+
         order: \d+
         group: '[a-zA-Z0-9\-]+'
         row: '[a-zA-Z0-9\-]+'
@@ -396,6 +388,7 @@ admin_sheet_order_remove_row:
 admin_sheet_order_update_row:
     path: /event/{event}/order/{order}/group/{group}/row/{row}/update
     requirements:
+        event: \d+
         order: \d+
         group: '[a-zA-Z0-9\-]+'
         row: '[a-zA-Z0-9\-]+'
@@ -408,19 +401,24 @@ admin_sheet_order_update_row:
 admin_sheet_transaction_create:
     path: /event/{event}/sheet/{sheet}/transaction/create
     requirements:
+        event: \d+
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Transaction:create }
 admin_sheet_transaction_update:
     path: /event/{event}/sheet/{sheet}/transaction/{transaction}/update
     requirements:
+        event: \d+
         sheet: \d+
+        transaction: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Transaction:update }
 admin_sheet_transaction_remove:
     path: /event/{event}/sheet/{sheet}/transaction/{transaction}/remove
     requirements:
+        event: \d+
         sheet: \d+
+        transaction: \d+
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Transaction:remove }
 

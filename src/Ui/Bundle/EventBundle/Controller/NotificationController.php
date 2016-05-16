@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NotificationController extends Controller
@@ -21,17 +22,18 @@ class NotificationController extends Controller
     /**
      * List user notifications
      *
+     * @param Request   $request
      * @param EventView $eventView
      *
      * @return Response
      */
-    public function listAction(EventView $eventView)
+    public function listAction(Request $request, EventView $eventView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $notifications = $this
             ->get('notification.notification_view_factory')
-            ->getNotificationsByEventAndUser($eventView->id, $this->getUser());
+            ->getNotificationsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
 
         return $this->render('EventBundle:Notification:list.html.twig', [
             'eventView'     => $eventView,

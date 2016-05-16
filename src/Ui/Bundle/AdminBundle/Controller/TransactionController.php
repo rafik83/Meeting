@@ -44,7 +44,7 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
-            return $this->redirectToRoute('admin_sheet_billing', [
+            return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
@@ -52,7 +52,7 @@ class TransactionController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
+            ->guessSheetName($sheet, $request->getLocale());
 
         return $this->render('AdminBundle:Transaction:create.html.twig', [
             'form'       => $form->createView(),
@@ -75,6 +75,8 @@ class TransactionController extends Controller
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $update = new Update($transaction);
         $form   = $this->createForm(UpdateTransactionType::class, $update);
 
@@ -82,7 +84,7 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
-            return $this->redirectToRoute('admin_sheet_billing', [
+            return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
             ]);
@@ -90,7 +92,7 @@ class TransactionController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($sheet);
+            ->guessSheetName($sheet, $locale);
 
         return $this->render('AdminBundle:Transaction:update.html.twig', [
             'form'       => $form->createView(),
@@ -117,7 +119,7 @@ class TransactionController extends Controller
         $this->get('tactician.commandbus')->handle(new Remove($transaction));
         $this->addFlash('success', 'flash.admin.transaction.remove.success');
 
-        return $this->redirectToRoute('admin_sheet_billing', [
+        return $this->redirectToRoute('admin_sheet_details', [
             'event' => $event->getId(),
             'sheet' => $sheet->getId(),
         ]);

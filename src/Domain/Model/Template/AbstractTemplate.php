@@ -57,6 +57,11 @@ abstract class AbstractTemplate
     protected $createdAt;
 
     /**
+     * @return string
+     */
+    abstract public function getFallback();
+
+    /**
      * @param array  $config
      * @param string $locale
      *

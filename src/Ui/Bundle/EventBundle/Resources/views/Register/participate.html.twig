@@ -19,24 +19,24 @@
             <div class="main__content">
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
 
-                <ul class="inputs">
-                    {% for field in form %}
-                        <li>
-                            {{ form_row(field) }}
-                            {{ form_errors(field) }}
-                        </li>
-                    {% endfor %}
+                    {{ form_errors(form) }}
 
-                    <li class="validation">
-                        <button type="submit" class="btn">
-                            {% if stepsCount > 1 %}
-                                <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
-                            {% else %}
-                                <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
-                            {% endif %}
-                        </button>
-                    </li>
-                </ul>
+                    <div class="inputs">
+                        {% for field in form %}
+                            {{ form_row(field) }}
+
+                        {% endfor %}
+
+                        <div class="validation">
+                            <button type="submit" class="btn">
+                                {% if stepsCount > 1 %}
+                                    <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
+                                {% else %}
+                                    <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
 
                 {{ form_end(form) }}
 

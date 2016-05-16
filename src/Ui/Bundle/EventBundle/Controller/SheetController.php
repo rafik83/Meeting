@@ -12,15 +12,14 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\EventView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ButtonLinkDataType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Domain\Template\Object;
 
 class SheetController extends Controller
 {
@@ -39,7 +38,7 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
@@ -114,6 +113,7 @@ class SheetController extends Controller
             'uid'   => $key,
             'form'  => $form->createView(),
             'label' => $label,
+            'type'  => $object->getType(),
         ]);
     }
 
@@ -124,16 +124,25 @@ class SheetController extends Controller
      *
      * @return Form
      */
-    private function createObjectForm($object, $locale, $key)
+    private function createObjectForm(Object $object, $locale, $key)
     {
         $types = [
-            'editable-text' => EditableTextDataType::class,
-            'button-link'   => ButtonLinkDataType::class,
+            'editable-text' => Data\EditableTextDataType::class,
+            'button-link'   => Data\ButtonLinkDataType::class,
+            'media'         => Data\MediaCollectionDataType::class,
+            'collection'    => Data\ItemCollectionDataType::class,
         ];
 
+        if (!isset($types[$object->getType()])) {
+            throw $this->createNotFoundException('No form found for this object');
+        }
+
         return $this->createForm($types[$object->getType()], $object, [
-            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
-            'submit' => true,
+            'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'submit'      => true,
+            'locale'      => $locale,
+            'help'        => $object->getHelp(),
+            'placeholder' => $object->getPlaceholder(),
         ]);
     }
 
@@ -164,7 +173,7 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the object form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
@@ -178,6 +187,18 @@ class SheetController extends Controller
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
+        ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     *
+     * @return Response
+     */
+    public function nomenclaturesAction(EventView $eventView)
+    {
+        return $this->render('EventBundle:Sheet:nomenclatures.html.twig', [
+            'eventView' => $eventView,
         ]);
     }
 }

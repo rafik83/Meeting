@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
-use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
-use Proximum\Vimeet\Application\Components\Template\Exception\TelephoneNotValidException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Object\Image;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -180,6 +178,9 @@ class RegisterController extends Controller
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromType($type, $locale);
 
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
+        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
+
         $participantBlock = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
@@ -189,38 +190,27 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $data = array_filter($participantBlock->getData(), function ($value) {
-                    return null !== $value;
-                });
+            $data = array_filter($participantBlock->getData(), function ($value) {
+                return null !== $value;
+            });
 
-                // Create the participant
-                $participate = new Participate($this->getUser(), $event, $type, $locale, $data);
-                $this->get('tactician.commandbus')->handle($participate);
-                $this->addFlash('success', 'flash.event.participation.success');
+            // Create the participant
+            $participate = new Participate($this->getUser(), $event, $type, $locale, $data, $registrationTemplate);
+            $this->get('tactician.commandbus')->handle($participate);
 
-                if ($registrationTemplate->getBlocksCount() === 1) {
-                    // Go to the sheet
-                    return $this->redirectToRoute('event_sheet');
+            if ($registrationTemplate->getBlocksCount() === 1) {
+                // Go to the sheet
+                return $this->redirectToRoute('event_sheet');
+            } else {
+                $nextStep = $registrationTemplate->getNextBlockPosition(1);
+
+                if ($nextStep) {
+                    return $this->redirectToRoute('event_participant_step', [
+                        'step'        => $nextStep,
+                        'participant' => $participate->participant->getId(),
+                    ]);
                 } else {
-                    $nextStep = $registrationTemplate->getNextBlockPosition(1);
-
-                    if ($nextStep) {
-                        return $this->redirectToRoute('event_participant_step', [
-                            'step'        => $nextStep,
-                            'participant' => $participate->participant->getId(),
-                        ]);
-                    } else {
-                        return $this->redirectToRoute('event_sheet');
-                    }
-                }
-            } catch (MissingRequiredDataException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            } catch (TelephoneNotValidException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
+                    return $this->redirectToRoute('event_sheet');
                 }
             }
         }
@@ -270,7 +260,8 @@ class RegisterController extends Controller
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromParticipant($participant, $locale);
 
-        $participantBlock = $registrationTemplate->getBlock(intval($step));
+        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $participant->getUser());
+        $participantBlock     = $registrationTemplate->getBlock(intval($step));
 
         if (null === $participantBlock) {
             throw $this->createNotFoundException('Unknown step');
@@ -285,40 +276,30 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $data = array_filter($participantBlock->getData(), function ($value) {
-                    return null !== $value;
-                });
+            $data = array_filter($participantBlock->getData(), function ($value) {
+                return null !== $value;
+            });
 
-                $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
+            $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
 
-                if ($form->isValid()) {
-                    $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
-                    $this->get('tactician.commandbus')->handle($participantStep);
+            if ($form->isValid()) {
+                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                $this->get('tactician.commandbus')->handle($participantStep);
 
-                    if ($registrationTemplate->getBlocksCount() === $step) {
-                        // Go to the sheet
-                        return $this->redirectToRoute('event_sheet');
+                if ($registrationTemplate->getBlocksCount() === $step) {
+                    // Go to the sheet
+                    return $this->redirectToRoute('event_sheet');
+                } else {
+                    $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                    if ($nextStep) {
+                        return $this->redirectToRoute('event_participant_step', [
+                            'step'        => $nextStep,
+                            'participant' => $participant->getId(),
+                        ]);
                     } else {
-                        $nextStep = $registrationTemplate->getNextBlockPosition($step);
-
-                        if ($nextStep) {
-                            return $this->redirectToRoute('event_participant_step', [
-                                'step'        => $nextStep,
-                                'participant' => $participant->getId(),
-                            ]);
-                        } else {
-                            return $this->redirectToRoute('event_sheet');
-                        }
+                        return $this->redirectToRoute('event_sheet');
                     }
-                }
-            } catch (MissingRequiredDataException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            } catch (TelephoneNotValidException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.notValid.telephone'));
                 }
             }
         }
@@ -358,25 +339,24 @@ class RegisterController extends Controller
     private function handleUploadedFiles($registrationTemplate, $form, $data)
     {
         $imageObjects = $registrationTemplate->getImageObjects();
+        $fileStorage  = $this->get('adapter.local_file_storage');
 
-        $fileStorage = $this->get('adapter.local_file_storage');
-        foreach ($imageObjects as $object) {
-            if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
-                $file = $form->get($object->getKey())->getData();
+        foreach ($imageObjects as $key => $object) {
+            if ($form->has($key) && $form->get($key)->getData() !== null) {
+                $file = $form->get($key)->getData();
 
                 if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
-                    if ($form->offsetExists($object->getKey()) && $object->getData() !== null && $form->get($object->getKey())->getData() !== null) {
-                        $fileStorage->remove($object->getData());
+                    if ($form->has($key) && '' !== $object->getContentValue() && $form->get($key)->getData() !== null) {
+                        $fileStorage->remove($object->getContentValue());
                     }
 
-                    if ($form->offsetExists($object->getKey()) && $form->get($object->getKey())->getData() !== null) {
-                        $data[$object->getKey()] = $fileStorage->upload($form->get($object->getKey())->getData());
+                    if ($form->has($key) && $form->get($key)->getData() !== null) {
+                        $data[$key]['image'] = $fileStorage->upload($form->get($key)->getData());
                     }
                 } else {
-                    $form->get($object->getKey())->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->addError(new FormError('validators.field.notValid.image'));
                 }
             }
-
         }
 
         return $data;

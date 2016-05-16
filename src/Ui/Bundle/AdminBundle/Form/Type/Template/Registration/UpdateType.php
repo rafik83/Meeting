@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration;
 
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Library\Admin\JsonArrayTextareaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

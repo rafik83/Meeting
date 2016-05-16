@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -22,7 +22,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object
+     * @return TemplateObject
      * @throws \Exception
      */
     public function __get($key)
@@ -31,21 +31,11 @@ class Block extends AbstractChild
     }
 
     /**
-     * @param string $key
-     * @param string $value
-     *
-     * @return Object
-     * @throws \Exception
+     * @param int $column
      */
-    public function __set($key, $value)
+    public function addColumn($column)
     {
-        $object = $this->getObject($key);
-
-        if ($object instanceof Object\EditableText) {
-            return $object->setContent($value);
-        }
-
-        return $object->setData($value);
+        $this->children[$column] = [];
     }
 
     /**
@@ -61,7 +51,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object[]
+     * @return TemplateObject[]
      */
     public function getObjects($key = null)
     {
@@ -83,9 +73,19 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getEditableObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable();
+        });
+    }
+
+    /**
      * @param string $key
      *
-     * @return Object
+     * @return TemplateObject
      * @throws \Exception
      */
     public function getObject($key)
@@ -96,7 +96,7 @@ class Block extends AbstractChild
             return $objects[$key];
         }
 
-        throw new \Exception('Object not found.');
+        throw new \Exception("Object $key not found.");
     }
 
     /**
@@ -199,8 +199,12 @@ class Block extends AbstractChild
                 }
 
                 if ($block instanceof Object) {
-                    if ($block->hasTag($tag)) {
-                        $tagged[] = (string) $block;
+                    if ($block->hasTag($tag) && $block instanceof Object\ContentObjectInterface) {
+                        if ($block instanceof Object\Nomenclature) {
+                            $tagged[] = $block->getNomenclatureLabel();
+                        } else {
+                            $tagged[] = $block->getContentValue();
+                        }
                     }
                 }
             }
@@ -210,19 +214,13 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return TemplateObject\Image[]
      */
     public function getImageObjects()
     {
-        $objects = [];
-
-        foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Image) {
-                $objects[] = $object;
-            }
-        }
-
-        return $objects;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\Image;
+        });
     }
 
     /**
@@ -233,7 +231,7 @@ class Block extends AbstractChild
     public function getTitle($locale)
     {
         foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Text && $object->isTitle()) {
+            if ($object instanceof TemplateObject\Text && $object->isTitle()) {
                 return $object->getContent($locale);
             }
         }
@@ -265,7 +263,7 @@ class Block extends AbstractChild
      */
     public function getData()
     {
-        return array_map(function (Object $object) {
+        return array_map(function (TemplateObject $object) {
             return $object->getData();
         }, $this->getObjects());
     }

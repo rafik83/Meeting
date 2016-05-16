@@ -19,21 +19,20 @@
             <div class="main__content">
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
 
-                <ul class="inputs">
+                {{ form_errors(form) }}
+
+                <div class="inputs">
                     {% for child in form %}
-                        <li>
-                            {% if child.vars.type|default == 'file' %}
-                                {% set photo_explanation = true %}
-                                {{ include('EventBundle:Participant:preview.html.twig', { 'participantInfos': participantInfos, 'participantAvatarId': child.vars.id ~ '_preview' }) }}
-                                {{ form_widget(child, { 'attr': { 'data-registration-object-type-image-upload': '#' ~ child.vars.id ~ '_preview' } }) }}
-                            {% else %}
-                                {{ form_widget(child) }}
-                            {% endif %}
-                            {{ form_errors(child) }}
-                        </li>
+                        {% if child.vars.type|default == 'file' %}
+                            {% set photo_explanation = true %}
+                            {{ include('EventBundle:Participant:preview.html.twig', { 'participantInfos': participantInfos, 'participantAvatarId': child.vars.id ~ '_preview' }) }}
+                            {{ form_row(child, { 'attr': { 'data-registration-object-type-image-upload': '#' ~ child.vars.id ~ '_preview' } }) }}
+                        {% else %}
+                            {{ form_row(child) }}
+                        {% endif %}
                     {% endfor %}
 
-                    <li class="validation">
+                    <div class="validation">
                         <button type="submit" class="btn">
                             {% if stepsCount != stepNumber %}
                                 <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
@@ -41,8 +40,8 @@
                                 <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
                             {% endif %}
                         </button>
-                    </li>
-                </ul>
+                    </div>
+                </div>
 
                 {{ form_end(form) }}
             </div>

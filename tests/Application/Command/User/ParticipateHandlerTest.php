@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,7 +21,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateDataValidator;
+use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,6 +87,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
+                                                'tags'         => ["participant_firstname", "participant_data"],
                                             ],
                                     ],
                                 '838197c7' =>
@@ -112,46 +116,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                            ],
-                                    ],
-                                'dd321a4f' =>
-                                    [
-                                        'component' => 'object',
-                                        'type'      => 'nomenclature',
-                                        'config'    =>
-                                            [
-                                                'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
-                                                        'en' => null,
-                                                        'fr' => 'Service (Juridique, Informatique, ...)',
-                                                    ],
-                                                'help'         =>
-                                                    [
-                                                        'en' => null,
-                                                        'fr' => '',
-                                                    ],
-                                                'nomenclature' => '1',
-                                            ],
-                                    ],
-                                '6c4a3a4f' =>
-                                    [
-                                        'component' => 'object',
-                                        'type'      => 'nomenclature',
-                                        'config'    =>
-                                            [
-                                                'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
-                                                        'en' => null,
-                                                        'fr' => 'Fonction',
-                                                    ],
-                                                'help'         =>
-                                                    [
-                                                        'en' => null,
-                                                        'fr' => '',
-                                                    ],
-                                                'nomenclature' => '4',
+                                                'tags'         => ["participant_lastname", "participant_data"],
                                             ],
                                     ],
                                 '1efb9cbb' =>
@@ -180,6 +145,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
+                                                'tags'         => ["participant_mobile", "participant_data"],
                                             ],
                                     ],
                                 '3b759fbb' =>
@@ -208,20 +174,21 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
+                                                'tags'         => ["participant_phone", "participant_data"],
                                             ],
                                     ],
                             ],
                         ],
                 ],
-            '4bb4db28' => [],
-            '67019e4a' => [],
         ];
 
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
+        // Mock
         $sheetRepository       = $this->prophesize(SheetRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $accountSynchronizer   = $this->prophesize(Synchronizer::class);
 
         $expectedSheet = new Sheet($event, $type, [], [], $now);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
@@ -233,8 +200,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 '541f84d4' => ['text' => 'foo'],
                 '838197c7' => ['text' => 'bar'],
-                '1efb9cbb' => ['text' => 'mobile'],
-                '3b759fbb' => ['text' => 'phone'],
+                '1efb9cbb' => ['telephone' => 'phone'],
+                '3b759fbb' => ['telephone' => 'mobile'],
             ],
             $owner = true,
             true
@@ -242,14 +209,65 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
-        $templateDataValidator = $this->prophesize(TemplateDataValidator::class);
-
         $handler = new ParticipateHandler(
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
-            $templateDataValidator->reveal(),
+            $accountSynchronizer->reveal(),
             $now
         );
+
+        $templateData = new TemplateData('root', []);
+        $block = new Block('12', []);
+        $text  = new Object\Text('text', [], 'fr', 'fr');
+        $editableText1 = new Object\EditableText('editable-text', [
+            'tags' => ['participant_firstname', 'participant_data'],
+        ], 'fr', 'fr');
+        $editableText2 = new Object\EditableText('editable-text', [
+            'tags' => ['participant_lastname', 'participant_data'],
+        ], 'fr', 'fr');
+        $telephone1    = new Object\Telephone('telephone', [
+            'tags' => ['participant_phone', 'participant_data'],
+        ], 'fr', 'fr');
+        $telephone2    = new Object\Telephone('telephone', [
+            'tags' => ['participant_mobile', 'participant_data'],
+        ], 'fr', 'fr');
+
+        $block->addChild(1, 'dded0597', $text);
+        $block->addChild(1, '541f84d4', $editableText1);
+        $block->addChild(1, '838197c7', $editableText2);
+        $block->addChild(1, '1efb9cbb', $telephone1);
+        $block->addChild(1, '3b759fbb', $telephone2);
+        $templateData->addChild(0, '811f6edf', $block);
+
+        // Expected
+        $expectedTemplateData = new TemplateData('root', []);
+        $expectedBlock = new Block('12', []);
+        $expectedText  = new Object\Text('text', [], 'fr', 'fr');
+        $exEditableText1 = new Object\EditableText('editable-text', [
+            'tags' => ['participant_firstname', 'participant_data'],
+        ], 'fr', 'fr');
+        $exEditableText1->setContentValue('foo');
+        $exEditableText2 = new Object\EditableText('editable-text', [
+            'tags' => ['participant_lastname', 'participant_data'],
+        ], 'fr', 'fr');
+        $exEditableText2->setContentValue('bar');
+        $exTelephone1    = new Object\Telephone('telephone', [
+            'tags' => ['participant_phone', 'participant_data'],
+        ], 'fr', 'fr');
+        $exTelephone1->setContentValue('phone');
+        $exTelephone2    = new Object\Telephone('telephone', [
+            'tags' => ['participant_mobile', 'participant_data'],
+        ], 'fr', 'fr');
+        $exTelephone2->setContentValue('mobile');
+
+        $expectedBlock->addChild(1, 'dded0597', $expectedText);
+        $expectedBlock->addChild(1, '541f84d4', $exEditableText1);
+        $expectedBlock->addChild(1, '838197c7', $exEditableText2);
+        $expectedBlock->addChild(1, '1efb9cbb', $exTelephone1);
+        $expectedBlock->addChild(1, '3b759fbb', $exTelephone2);
+        $expectedTemplateData->addChild(0, '811f6edf', $expectedBlock);
+
+        $accountSynchronizer->set($expectedTemplateData, $user)->shouldBeCalled();
 
         $handler->handle(
             new Participate(
@@ -260,9 +278,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                 [
                     '541f84d4' => ['text' => 'foo'],
                     '838197c7' => ['text' => 'bar'],
-                    '1efb9cbb' => ['text' => 'mobile'],
-                    '3b759fbb' => ['text' => 'phone'],
-                ]
+                    '1efb9cbb' => ['telephone' => 'phone'],
+                    '3b759fbb' => ['telephone' => 'mobile'],
+                ],
+                $templateData
             )
         );
     }

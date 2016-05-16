@@ -45,10 +45,13 @@ class UpdateHandler
         $logo  = $update->speaker->getLogo();
         $photo = $update->speaker->getPhoto();
 
+        foreach ($update->translations as $locale => $translation) {
+            $update->speaker->getTranslations()->get($locale)->update($translation['position']);
+        }
+
         $this->speakerRepository->set($update->speaker->update(
             $update->firstname,
             $update->lastname,
-            $update->function,
             $update->organization,
             $update->logo ? $this->fileStorageInterface->upload($update->logo) : $logo,
             $update->photo ? $this->fileStorageInterface->upload($update->photo) : $photo

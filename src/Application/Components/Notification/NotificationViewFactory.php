@@ -79,7 +79,7 @@ class NotificationViewFactory
      */
     public function countUnreadNotificationByEventAndUser($event, User $user)
     {
-        $notifications = $this->getNotificationsByEventAndUser($event, $user);
+        $notifications = $this->getNotificationsByEventAndUser($event, $user, $user->getLocale());
 
         return array_reduce($notifications, function ($carry, NotificationView $notificationView) {
             return $notificationView->read ? $carry : ++$carry;
@@ -89,12 +89,13 @@ class NotificationViewFactory
     /**
      * Get unread notification for this event and user
      *
-     * @param int  $event
-     * @param User $user
+     * @param int    $event
+     * @param User   $user
+     * @param string $locale
      *
      * @return NotificationView[]
      */
-    public function getNotificationsByEventAndUser($event, User $user)
+    public function getNotificationsByEventAndUser($event, User $user, $locale)
     {
         $notifications   = $this->notificationRepository->getNotificationsByEventAndUser($event, $user);
         $receivedRequest = $this->requestRepository->getRequestsByEventAndUser($event, $user);
@@ -112,10 +113,10 @@ class NotificationViewFactory
         }, $notifications);
 
         // Add notification views for request, force read to false is request is not accepted, refused or canceled
-        $notifications = array_merge($notifications, array_map(function (Request $request) use ($user) {
+        $notifications = array_merge($notifications, array_map(function (Request $request) use ($user, $locale) {
             $message = $this->translator->trans(
                 'notification.meeting_request.receive.message',
-                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet())],
+                ['%from_sheet%' => $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale)],
                 'notifications',
                 $user->getLocale()
             );

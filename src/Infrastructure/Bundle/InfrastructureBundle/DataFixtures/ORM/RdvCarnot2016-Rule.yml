@@ -1,0 +1,11 @@
+Proximum\Vimeet\Domain\Model\Rule:
+    rule_1:
+        __construct: ['@event_rdv_carnot_2016', '@category_visiteur', '@category_visiteur', []]
+    rule_2:
+        __construct: ['@event_rdv_carnot_2016', '@category_visiteur', '@category_exposant', []]
+    rule_3:
+        __construct: ['@event_rdv_carnot_2016', '@category_exposant', '@category_visiteur', []]
+    rule_4:
+        __construct: ['@event_rdv_carnot_2016', '@type_investisseur', '@category_visiteur', []]
+    rule_5:
+        __construct: ['@event_rdv_carnot_2016', '@category_exposant', '@category_exposant', []]

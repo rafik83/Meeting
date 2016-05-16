@@ -14,7 +14,13 @@
         </tr>
         <tr>
             <th>{{ 'admin.happening_speaker.table.column.function'|trans }}</th>
-            <td>{{ speaker.function }}</td>
+            <td>
+                <ul>
+                    {% for translation in speaker.translations%}
+                        <li>{{ translation.locale|locale(app.request.locale)|capitalize  }}: {{ translation.position }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
         </tr>
         <tr>
             <th>{{ 'admin.happening_speaker.table.column.company'|trans }}</th>

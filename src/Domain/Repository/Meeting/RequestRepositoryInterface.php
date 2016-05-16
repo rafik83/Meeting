@@ -71,14 +71,15 @@ interface RequestRepositoryInterface
     public function countAllByEvent(Event $event);
 
     /**
-     * @param Event $event
-     * @param $page
-     * @param $limit
-     * @param array $filter
+     * @param Event  $event
+     * @param int    $page
+     * @param int    $limit
+     * @param string $locale
+     * @param array  $filter
      *
      * @return PaginatedResult
      */
-    public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = []);
+    public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = []);
 
     /**
      * @param Sheet $one

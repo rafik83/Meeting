@@ -43,6 +43,21 @@ class ParticipantInfoGuesser
      *
      * @return string
      */
+    public function guessParticipantCompleteName(Participant $participant, $locale)
+    {
+        $infos = $this->guessParticipantInfos($participant, $locale);
+
+        return (isset($infos[Tag::PARTICIPANT_FIRSTNAME]) ? $infos[Tag::PARTICIPANT_FIRSTNAME] : '')
+            . ' '
+            . (isset($infos[Tag::PARTICIPANT_LASTNAME]) ? $infos[Tag::PARTICIPANT_LASTNAME] : '');
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return string
+     */
     public function guessParticipantLastName(Participant $participant, $locale)
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();

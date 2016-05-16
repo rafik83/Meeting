@@ -12,16 +12,8 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class ButtonLink extends Object
+class ButtonLink extends EditableObject implements ContentObjectInterface
 {
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getUrl() ?: '';
-    }
-
     /**
      * @return string
      */
@@ -40,5 +32,21 @@ class ButtonLink extends Object
         $this->data['url'] = $url;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getUrl() ? $this->getUrl() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setUrl($value);
     }
 }

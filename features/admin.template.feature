@@ -1,21 +1,15 @@
 Feature: Template
   I need to be able to add, update, duplicate, see template
 
-  Background: Re-init the database and load the fixtures
+  Scenario: see list of template
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml          |
-      | app/Event.yml             |
-      | app/Type.yml              |
-      | app/Category.yml          |
-      | Admin.yml                 |
-      | template/Sheet.yml        |
-      | template/Registration.yml |
-      | Nomenclatures.yml         |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-
-  Scenario: see list of template
-    Given I am on this page "/admin/fr/event"
+    And I am on this page "/admin/fr/event"
     And I follow "admin.template_list.link"
     Then I should be on this page "/admin/fr/template"
     And I should see "admin.template.sheet.link"
@@ -26,15 +20,16 @@ Feature: Template
     Then I go to this page "/admin/fr/template"
     And I follow "admin.template.registration.link"
     Then I should be on this page "/admin/fr/template/registration"
-    And I should see "Inscription Template ASD Days"
+    And I should see "Inscription Template de base"
 
   Scenario: edit Registration Template
-    Given I am on this page "/admin/fr/template/registration"
-    And I should see "Inscription Template ASD Days"
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/template/registration"
+    And I should see "Inscription Template de base"
     Then I follow "admin.template.registration.table.content.edit"
     And I should be on this page "/admin/fr/template/registration/1/fr"
-    Then I fill in "template_registration_update_title" with "Inscription Base Template ASD DAYS"
+    Then I fill in "template_registration_update_title" with "Template updated"
     And I press "template_registration_update_submit"
     Then I should be on this page "/admin/fr/template/registration"
-    And I should see "Inscription Base Template ASD DAYS"
-    And I should not see "Inscription Template ASD Days"
+    And I should see "Template updated"
+    And I should not see "Inscription Template de base"

@@ -114,7 +114,6 @@
                     <td class="text-right">
                         {{ macro.btnGroupAndRightMenuDropdown({
                             ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
-                            ('admin.order.link'|trans): path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }),
                             ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
                         }) }}
                     </td>

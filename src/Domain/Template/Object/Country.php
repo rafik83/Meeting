@@ -12,13 +12,41 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Country extends Object
+class Country extends EditableObject implements ContentObjectInterface
 {
+    /**
+     * @param string $country
+     *
+     * @return Country
+     */
+    public function setCountry($country)
+    {
+        $this->data['country'] = $country;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
-    public function __toString()
+    public function getCountry()
     {
-        return $this->getData() ? $this->getData() : '';
+        return isset($this->data['country']) ? $this->data['country'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getCountry() ? $this->getCountry() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setCountry($value);
     }
 }

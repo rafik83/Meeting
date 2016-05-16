@@ -12,29 +12,41 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Telephone extends Object
+class Telephone extends EditableObject implements ContentObjectInterface
 {
     /**
-     * @return string
+     * @param string $telephone
+     *
+     * @return Telephone
      */
-    public function __toString()
+    public function setTelephone($telephone)
     {
-        return $this->getData() ? $this->getData() : '';
+        $this->data['telephone'] = $telephone;
+
+        return $this;
     }
 
     /**
-     * @param array $data
-     *
-     * @return bool
+     * @return string
      */
-    public function validateData(array $data)
+    public function getTelephone()
     {
-        $pattern = '#^(?!(?:\d*-){5,})(?!(?:\d* ){5,})\+?[\d- /.]+$#';
+        return isset($this->data['telephone']) ? $this->data['telephone'] : null;
+    }
 
-        if (isset($data[$this->getKey()]) && !preg_match($pattern, $data[$this->getKey()])) {
-            return false;
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getTelephone() ? $this->getTelephone() : '';
+    }
 
-        return true;
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setTelephone($value);
     }
 }

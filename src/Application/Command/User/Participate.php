@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class Participate
 {
@@ -59,19 +60,26 @@ class Participate
     public $owner;
 
     /**
-     * @param User   $user
-     * @param Event  $event
-     * @param Type   $type
-     * @param string $locale
-     * @param array  $data
+     * @var TemplateData
      */
-    public function __construct(User $user, Event $event, Type $type, $locale, array $data)
+    public $templateData;
+
+    /**
+     * @param User         $user
+     * @param Event        $event
+     * @param Type         $type
+     * @param string       $locale
+     * @param array        $data
+     * @param TemplateData $templateData
+     */
+    public function __construct(User $user, Event $event, Type $type, $locale, array $data, TemplateData $templateData)
     {
-        $this->user   = $user;
-        $this->event  = $event;
-        $this->type   = $type;
-        $this->locale = $locale;
-        $this->data   = $data;
-        $this->owner  = true;
+        $this->user         = $user;
+        $this->event        = $event;
+        $this->type         = $type;
+        $this->locale       = $locale;
+        $this->data         = $data;
+        $this->owner        = true;
+        $this->templateData = $templateData;
     }
 }

@@ -41,10 +41,15 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $id = $sheet->getId();
 
         if ($sheet instanceof Sheet) {
-            $sheetName         = $this->sheetInfoGuesser->guessSheetInfo($sheet);
+            $sheetName         = $this->sheetInfoGuesser->guessSheetName($sheet, $sheet->getEvent()->getFallback());
             $state             = $sheet->getState();
             $type              = $sheet->getType()->getId();
-            $categories        = array_map(function (Category $category) { return ['id' => $category->getId()]; }, $sheet->getType()->getCategories()->toArray());
+            $categories = array_map(
+                function (Category $category) {
+                    return ['id' => $category->getId()];
+                },
+                $sheet->getType()->getCategories()->toArray()
+            );
             $followUp          = $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : 0;
             $participantNumber = count($sheet->getParticipants());
             $event             = $sheet->getEvent()->getId();

@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\DeleteHandler;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
 use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 
 class DeleteHandlerTest extends \PHPUnit_Framework_TestCase

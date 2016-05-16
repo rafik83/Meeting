@@ -40,32 +40,34 @@ class VatApplicable
     }
 
     /**
-     * @param Order $order
+     * @param Order  $order
+     * @param string $locale
      *
      * @return bool
      */
-    public function onOrder(Order $order)
+    public function onOrder(Order $order, $locale)
     {
         return $this->isApplicable(
             $order->getVatMode(),
             $order->getSheet()->getEvent()->getPaymentAddress()->getCountry(),
-            $this->billingInfoGuesser->getCountry($order),
-            $this->billingInfoGuesser->getVatNumber($order)
+            $this->billingInfoGuesser->getCountry($order, $locale),
+            $this->billingInfoGuesser->getVatNumber($order, $locale)
         );
     }
 
     /**
-     * @param Cart $cart
+     * @param Cart   $cart
+     * @param string $locale
      *
      * @return bool
      */
-    public function onCart(Cart $cart)
+    public function onCart(Cart $cart, $locale)
     {
         return $this->isApplicable(
             $cart->getSheet()->getEvent()->getMode(),
             $cart->getSheet()->getEvent()->getPaymentAddress()->getCountry(),
-            $this->billingInfoGuesser->getCountry($cart),
-            $this->billingInfoGuesser->getVatNumber($cart)
+            $this->billingInfoGuesser->getCountry($cart, $locale),
+            $this->billingInfoGuesser->getVatNumber($cart, $locale)
         );
     }
 

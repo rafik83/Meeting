@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class Image extends Object
+class Image extends EditableObject implements ContentObjectInterface
 {
     /**
      * @return string
@@ -20,6 +20,39 @@ class Image extends Object
     public function __toString()
     {
         return $this->getData() ? $this->getData() : '';
+    }
+
+    /**
+     * @param string $image
+     *
+     * @return Image
+     */
+    public function setImage($image)
+    {
+        $this->data['image'] = $image;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return isset($this->data['image']) ? $this->data['image'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getImage() ? $this->getImage() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setImage($value);
     }
 
     /**

@@ -1,0 +1,4 @@
+Proximum\Vimeet\Domain\Template\Block:
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\BlockConstraint: ~
+

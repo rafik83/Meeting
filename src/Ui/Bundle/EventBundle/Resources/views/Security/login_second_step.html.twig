@@ -27,28 +27,28 @@
             {% else %}
                 <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
             {% endif %}
-            <ul class="inputs">
-                <li class="identity">
+            <div class="inputs">
+                <div class="identity">
                     <div class="avatar">
                         <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
                     </div>
                     <p>{{ username }}</p>
-                </li>
+                </div>
 
                 {{ form_row(form.username) }}
 
                 {{ form_row(form.password, {label: false}) }}
 
-                <li class="validation">
+                <div class="validation">
                     <button type="submit" class="btn"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
-                </li>
+                </div>
                 {% if typeId %}
                     <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />
                 {% endif %}
 
                 {{ form_widget(form.rememberMe) }}
                 {{ form_label(form.rememberMe) }}
-            </ul>
+            </div>
             {{ form_end(form) }}
         </div>
 

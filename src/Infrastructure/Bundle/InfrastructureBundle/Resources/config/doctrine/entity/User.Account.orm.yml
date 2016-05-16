@@ -1,0 +1,39 @@
+Proximum\Vimeet\Domain\Model\User\Account:
+    type:  embeddable
+    fields:
+        firstName:
+            type: string
+            nullable: true
+        lastName:
+            type: string
+            nullable: true
+        phone:
+            type: string
+            nullable: true
+        mobile:
+            type: string
+            nullable: true
+        avatar:
+            type: string
+            nullable: true
+        position:
+            type: string
+            nullable: true
+        company:
+            type: string
+            nullable: true
+        website:
+            type: string
+            nullable: true
+        address:
+            type: string
+            nullable: true
+        zipCode:
+            type: string
+            nullable: true
+        city:
+            type: string
+            nullable: true
+        country:
+            type: string
+            nullable: true

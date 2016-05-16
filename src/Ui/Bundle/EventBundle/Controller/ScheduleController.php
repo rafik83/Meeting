@@ -43,7 +43,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $participantSchedules = $this
-            ->get('proximum.vimeet.application.components.schedule.schedule_builder')
+            ->get('vimeet.application.components.schedule.schedule_builder')
             ->buildForSheet($sheet, $request->getLocale());
 
         return $this->render('EventBundle:Schedule:display.html.twig', [
@@ -69,6 +69,7 @@ class ScheduleController extends Controller
             'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['sheet' => $sheet->getId()]),
             'method' => 'POST',
             'sheet'  => $sheet,
+            'locale' => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 
@@ -160,6 +161,7 @@ class ScheduleController extends Controller
         $form    = $this->createForm(ParticipateHappeningType::class, $command, [
             'sheet'     => $sheet,
             'happening' => $happening,
+            'locale'    => $request->getLocale(),
         ]);
         $form->add('submit', SubmitType::class);
 

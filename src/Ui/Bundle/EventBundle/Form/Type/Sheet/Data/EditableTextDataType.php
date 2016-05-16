@@ -24,7 +24,7 @@ class EditableTextDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', TextareaType::class, ['attr' => ['rows' => 7]])
+            ->add('content', TextareaType::class, ['placeholder' => $options['placeholder'], 'attr' => ['rows' => 7]])
         ;
     }
 
@@ -33,8 +33,11 @@ class EditableTextDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['locale']);
         $resolver->setDefaults([
-            'data_class' => EditableText::class,
+            'data_class'  => EditableText::class,
+            'placeholder' => null,
+            'help'        => null,
         ]);
     }
 

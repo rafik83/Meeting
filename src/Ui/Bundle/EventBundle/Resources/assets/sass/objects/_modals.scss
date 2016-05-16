@@ -1,0 +1,26 @@
+.modal {
+    .modal-header {
+        padding: 25px 40px 0 40px;
+        border-bottom: 0;
+
+        h4 { font-size: 18px; }
+    }
+
+    .modal-body {
+        background: $bg-container-color;
+        border-radius: 4px;
+        margin: 20px 40px;
+        padding: 20px;
+
+        .form-group {
+            .control-label { color: #00398c; }
+            .form-control { border-radius: 0; }
+            input { height: 45px; }
+        }
+    }
+
+    .modal-footer {
+        padding: 0 40px 25px 40px;
+        border-top: 0;
+    }
+}

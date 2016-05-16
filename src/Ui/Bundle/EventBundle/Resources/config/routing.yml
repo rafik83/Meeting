@@ -89,31 +89,35 @@ event_participant_step:
 #
 
 event_sheet:
-    path:     /fiche-de-presentation
+    path:     /sheet
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
-    path:     /fiche-de-presentation/{locale}
+    path:     /sheet/{locale}
     requirements:
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_form:
-    path:     /fiche-de-presentation/{locale}/{key}/form
+    path:     /sheet/{locale}/{key}/form
     requirements:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:form }
 event_sheet_update:
-    path:     /fiche-de-presentation/{locale}/{key}
+    path:     /sheet/{locale}/{key}
     requirements:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
+event_sheet_update_nomenclatures:
+    path:     /sheet/nomenclatures
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:nomenclatures }
 
 #
 # Sheet - Participant
@@ -142,39 +146,6 @@ event_sheet_delete_participant:
     methods:  [DELETE]
     defaults: { _controller: EventBundle:Participant:delete }
 
-#
-# Sheet - Package
-#
-
-event_sheet_package_update_step:
-    path:     /sheet/{sheet}/update_step/{step}
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:updateStep }
-
-event_sheet_package_products:
-    path: /sheet/{sheet}/products/add
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:addProducts }
-
-event_sheet_product_update:
-    path: /sheet/{sheet}/products/update/{groupId}/{rowId}
-    requirements:
-        sheet: \w+
-        groupId: \w+
-        rowId: \w+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Package:updateProduct }
-
-event_sheet_package_cart:
-    path:     /sheet/{sheet}/cart
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Package:cart }
 
 #
 # Sheet Billing
@@ -187,38 +158,6 @@ event_sheet_billing:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Billing:billing }
 
-event_sheet_package_payment_mode:
-    path:     /sheet/{sheet}/payment_mode
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Billing:paymentMode }
-
-#
-# Sheet - Order
-#
-
-event_sheet_list_orders:
-    path:     /sheet/{sheet}/orders
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Order:listOrder }
-
-event_sheet_summary:
-    path:      /sheet/{sheet}/summary
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Order:summary }
-
-event_sheet_order_pro_forma:
-    path:     /sheet/{sheet}/pro_forma/{order}
-    requirements:
-        sheet: \d+
-        order: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Order:proforma }
 
 #
 # Authentication

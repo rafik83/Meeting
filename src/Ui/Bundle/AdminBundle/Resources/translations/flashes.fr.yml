@@ -101,6 +101,11 @@ flash:
                 success: La catégorie a bien été créée
             update:
                 success: La catégorie a bien été mise à jour
+        speaker:
+            create:
+                success: L'intervenant a bien été créé
+            update:
+                success: L'intervenant a bien été mis à jour
         type_template_field:
             create:
                 success: Le champ a bien été créé

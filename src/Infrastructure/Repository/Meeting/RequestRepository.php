@@ -213,7 +213,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventAndFilterByState(Event $event, $page, $limit, array $filter = [])
+    public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -234,13 +234,13 @@ class RequestRepository implements RequestRepositoryInterface
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
 
-        return new PaginatedResult(array_map(function (Request $request) {
+        return new PaginatedResult(array_map(function (Request $request) use ($locale) {
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getFromSheet()),
+                $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetInfo($request->getToSheet()),
+                $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
                 ''

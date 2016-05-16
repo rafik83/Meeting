@@ -1,0 +1,897 @@
+Proximum\Vimeet\Domain\Model\Event:
+    event_asddays_2016:
+        title: "ASD Days"
+        domain: asddays-2016.<domain()>
+        timeZone: 'Europe/Paris'
+        locales: [fr, en]
+        fallback: fr
+        assetPath: ''
+        organiserName: "PROXIMUM"
+        paymentAddress: '@payment_address_event_asddays_2016'
+        configuration: '@configuration_asddays_2016'
+        organiserEmail: "accounts@proximumgroup.com"
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        legalInformation: |+
+            TVA acquittée sur les encaissements
+            Pas d'escompte pour paiement anticipé
+        # vat mode :
+        # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
+        # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
+        mode: 'et'
+        vat: 20
+        elementToJoinWithInvoice: |+
+            - Numéro de la Facture
+            - Nom de l'événement
+            - Montant net à payer
+        billingTemplate:
+            5645e4242d3df:
+                type: lib_text
+                required: true
+                label: { fr: "Nom", en: "Name" }
+                tags: ["billing_name"]
+            5645e47e7e499:
+                type: lib_text
+                required: false
+                label: { fr: "Téléphone", en: "Phone" }
+                tags: ["billing_phone"]
+            5645e52f445d1:
+                type: lib_email
+                required: true
+                label: { fr: "Email", en: "Email" }
+                tags: ["billing_email"]
+            5645e534daa0b:
+                type: lib_text
+                required: true
+                label: { fr: "Raison sociale", en: "Company" }
+                tags: ["billing_organization"]
+            5645e54061ff2:
+                type: lib_text
+                required: true
+                label: { fr: "Adresse", en: "Address" }
+                tags: ["billing_address"]
+            5645e5f35a9e0:
+                type: lib_text
+                required: true
+                label: { fr: "Code postal", en: "Zip code" }
+                tags: ["billing_zipcode"]
+            5645e6067f46a:
+                type: lib_text
+                required: true
+                label: { fr: "Ville", en: "City" }
+                tags: ["billing_city"]
+            5645e5fd8f6a7:
+                type: lib_country
+                required: true
+                label: { fr: "Pays", en: "Country" }
+                placeholder: { fr: "--- Sélectionner un pays  ---", en: "--- Sélectionner un pays  ---" }
+                tags: ["billing_country"]
+            5645e610e0e1b:
+                type: lib_text
+                required: false
+                label: { fr: "N° de TVA intracommunautaire", en: "N° VAT" }
+                tags: ["billing_vat_number"]
+
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_asddays_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
+
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    event_asddays_2016_fr:
+        __construct: false
+        description: "ASD Days, le Rdv international dédié à l'Aéronautique, le Spatial, la Défense, la Sécurité et les Drones."
+        locale: fr
+        event: '@event_asddays_2016'
+    event_asddays_2016_en:
+        __construct: false
+        description: "ASD Days, the international meeting dedicated to: Aerospace, Defence, Security & UAVs."
+        locale: en
+        event: '@event_asddays_2016'
+
+Proximum\Vimeet\Domain\Model\Address (local):
+    payment_address_event_asddays_2016:
+        __construct:
+            - 855 Avenue Roger Salengro
+            - 92370
+            - CHAVILLE
+            - fr
+
+Proximum\Vimeet\Domain\Model\Type:
+    event_asddays_2016_type_fournisseur:
+        __construct: ["@event_asddays_2016"]
+        position: 1
+        maxParticipant: 3
+        maxPlanning: 2
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
+        registrationTemplate: '@registration_template_asd_days'
+
+    event_asddays_2016_type_investisseur:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
+        registrationTemplate: '@registration_template_asd_days'
+
+    event_asddays_2016_type_donneur_ordre:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
+        registrationTemplate: '@registration_template_asd_days'
+
+    event_asddays_2016_type_structure_de_recherche:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
+        registrationTemplate: '@registration_template_asd_days_in_one_step'
+
+    event_asddays_2016_type_delegation:
+        __construct: ["@event_asddays_2016"]
+        position: 2
+        maxParticipant: 4
+        maxPlanning: 4
+        sheetTemplate: '@sheet_template_fournisseur_asddays'
+        registrationTemplate: '@registration_template_asd_days'
+
+Proximum\Vimeet\Domain\Model\TypeTranslation:
+    event_asddays_2016_type_fournisseur_fr:
+        __construct: ['@event_asddays_2016_type_fournisseur', fr, "Fournisseur"]
+    event_asddays_2016_type_fournisseur_en:
+        __construct: ['@event_asddays_2016_type_fournisseur', en, "Supplier"]
+    event_asddays_2016_type_investisseur_fr:
+        __construct: ['@event_asddays_2016_type_investisseur', fr, "Investisseur"]
+    event_asddays_2016_type_investisseur_en:
+        __construct: ['@event_asddays_2016_type_investisseur', en, "Investor"]
+    event_asddays_2016_type_donneur_ordre_fr:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', fr, "Donneur d'ordre"]
+    event_asddays_2016_type_donneur_ordre_en:
+        __construct: ['@event_asddays_2016_type_donneur_ordre', en, "Contractor"]
+    event_asddays_2016_type_structure_de_recherche_fr:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', fr, "Structure de recherche"]
+    event_asddays_2016_type_structure_de_recherche_en:
+        __construct: ['@event_asddays_2016_type_structure_de_recherche', en, "Research entity"]
+    event_asddays_2016_type_delegation_fr:
+        __construct: ['@event_asddays_2016_type_delegation', fr, "Délégation"]
+    event_asddays_2016_type_delegation_en:
+        __construct: ['@event_asddays_2016_type_delegation', en, "Delegation / Cluster"]
+
+Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
+    #
+    # Sheet template "fournisseur"
+    #
+    sheet_template_fournisseur_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Template ASD Days fournisseur"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        value:
+            69b3cde3:
+                component: "block"
+                type: "8-4"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        dcc42d3d:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Titre de votre fiche"
+                                placeholder:
+                                    fr: "Société en une phrase"
+                                help:
+                                    fr: ""
+                                length: "200"
+                                type: "title"
+                                required: true
+                                translatable: true
+                        291c7190:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    1b9a00b3:
+                                        component: "object"
+                                        type: "image"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Logo"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            length: null
+                                            type: null
+                                            required: false
+                                    6fe62a03:
+                                        component: "block"
+                                        type: "6-6"
+                                        config:
+                                            style: "style-1"
+                                        children:
+                                            -
+                                                fb030569:
+                                                    component: "object"
+                                                    type: "tag"
+                                                    config:
+                                                        style: "style-1"
+                                                        label:
+                                                            fr: "Catégorie"
+                                                        tag: "sheet_organization"
+                                            -
+                                                90713a3d:
+                                                    component: "object"
+                                                    type: "button-link"
+                                                    config:
+                                                        style: "style-1"
+                                                        label:
+                                                            fr: "Site internet"
+                                                        help:
+                                                            fr: ""
+                                                        required: false
+                                -
+                                    d691d21c:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description d'activité"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            length: "500"
+                                            type: "text"
+                                            required: false
+                                            translatable: true
+                        e438c993:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-3"
+                                label:
+                                    fr: "Compétences"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: 1
+                                nomenclature: "@nomenclature_competences->id"
+                        75adad94:
+                            component: "block"
+                            type: "6-6"
+                            config:
+                                style: "style-1"
+                            children:
+                                -
+                                    848e283e:
+                                        component: "object"
+                                        type: "carousel"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Slideshow"
+                                            placeholder:
+                                                fr: ""
+                                            help:
+                                                fr: ""
+                                            required: false
+                                -
+                                    1adc1873:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-3"
+                                            label:
+                                                fr: "Clients de référence"
+                                            placeholder:
+                                                fr: "Vos clients de référence"
+                                            help:
+                                                fr: ""
+                                            required: true
+                                            default: "1"
+                                            translatable: true
+                                    46663c1d:
+                                        component: "object"
+                                        type: "collection"
+                                        config:
+                                            style: "style-3"
+                                            label:
+                                                fr: "Projets innovant"
+                                            placeholder:
+                                                fr: "Vos projets innovant"
+                                            help:
+                                                fr: ""
+                                            required: false
+                                            default: "3"
+                                            translatable: true
+                        097ab5e8:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-3"
+                                label:
+                                    fr: "Equipements, technologies et process"
+                                placeholder:
+                                    fr: "Equipements, technologies, process, ..."
+                                help:
+                                    fr: "Vos equipements, technologies et process"
+                                required: false
+                                default: "3"
+                    -
+                        696dc236:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Repères"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: true
+                                default: "3"
+                                translatable: true
+                        a9271999:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Groupe / Membre"
+                                placeholder:
+                                    fr: ""
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                                translatable: true
+                        a23a2f5d:
+                            component: "object"
+                            type: "collection"
+                            config:
+                                style: "style-2"
+                                label:
+                                    fr: "Certifications"
+                                placeholder:
+                                    fr: "vos certifications"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                                translatable: true
+                        bef61d39:
+                            component: "object"
+                            type: "participant"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Participants"
+                                numberOfParticipantShown: "3"
+                        211efd1f:
+                            component: "object"
+                            type: "media"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Médias"
+                                placeholder:
+                                    fr: "Vos médias"
+                                help:
+                                    fr: ""
+                                required: false
+                                default: "3"
+                                translatable: true
+            69962d34:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        27db4a35:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-2"
+                                content:
+                                    fr: "Objectifs de participation"
+                                type: "title"
+                        37db4a33:
+                            component: "block"
+                            type: "4-8"
+                            config:
+                                style: "style-2"
+                            children:
+                                -
+                                    d927a04b:
+                                        component: "object"
+                                        type: "editable-text"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Description"
+                                            placeholder:
+                                                fr: "Description"
+                                            help:
+                                                fr: "Description"
+                                            length: "500"
+                                            type: "text"
+                                            required: false
+                                            translatable: true
+                                -
+                                    03b394ac:
+                                        component: "object"
+                                        type: "nomenclature"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Offres"
+                                            placeholder:
+                                                fr: "Vos offres"
+                                            help:
+                                                fr: "Vos offres"
+                                            required: true
+                                            nomenclature: "@nomenclature_offre_besoins->id"
+                                    63ccc105:
+                                        component: "object"
+                                        type: "nomenclature"
+                                        config:
+                                            style: "style-1"
+                                            label:
+                                                fr: "Besoins"
+                                            placeholder:
+                                                fr: "Vos besoins"
+                                            help:
+                                                fr: "Vos besoins"
+                                            required: true
+                                            nomenclature: "@nomenclature_offre_besoins->id"
+
+Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
+    registration_template_asd_days:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Inscription Template ASD Days"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: <dateTimeBetween('-10days', 'now')>
+        value:
+            811f6edf:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        dded0597:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                  fr: "Profil"
+                                  en: "Profile"
+                                type: "title"
+                        541f84d4:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Prénom"
+                                placeholder:
+                                    fr: "Prénom"
+                                help:
+                                    fr: ""
+                                length: "250"
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_firstname", "participant_data"]
+                        838197c7:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Nom"
+                                placeholder:
+                                    fr: "Nom"
+                                help:
+                                    fr: ""
+                                length: "250"
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_lastname", "participant_data"]
+                        dd321a4f:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Service (Juridique, Informatique, ...)"
+                                help:
+                                    fr: ""
+                                nomenclature: "@nomenclature_service->id"
+                                tags: ["participant_data"]
+                        6c4a3a4f:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Fonction"
+                                help:
+                                    fr: ""
+                                nomenclature: "@nomenclature_position->id"
+                                tags: ["participant_position", "participant_data"]
+                        1efb9cbb:
+                            component: "object"
+                            type: "telephone"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Téléphone portable"
+                                placeholder:
+                                    fr: "Téléphone portable"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_mobile", "participant_data"]
+                        3b759fbb:
+                            component: "object"
+                            type: "telephone"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Téléphone fixe"
+                                placeholder:
+                                    fr: "Téléphone fixe"
+                                help:
+                                    fr: ""
+                                length: "25"
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_phone", "participant_data"]
+            4bb4db28:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        0d86b25e:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: "Photo"
+                                    en: "Photo"
+                                type: "title"
+                        cb66008e:
+                            component: "object"
+                            type: "image"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Photo"
+                                placeholder:
+                                    fr: "Photo"
+                                help:
+                                    fr: ""
+                                required: false
+                                tags: ["participant_avatar", "participant_data"]
+            67019e4a:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        0fe9cb97:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: "Organisme"
+                                    en: "Company"
+                                type: "title"
+                        3ad4b72f:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Nom (Société / Organisme)"
+                                placeholder:
+                                    fr: "Nom (Société / Organisme)"
+                                help:
+                                    fr: ""
+                                length: "250"
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_organization", "sheet_title", "sheet_data"]
+                        0225feca:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Catégorie (Pme / Eti / Startup / ... )"
+                                help:
+                                    fr: ""
+                                nomenclature: "4"
+                                tags: ["sheet_data"]
+                        9ef18c06:
+                            component: "object"
+                            type: "url"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Site internet"
+                                placeholder:
+                                    fr: "Site internet"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_website", "sheet_data"]
+                        93de093f:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Adresse"
+                                placeholder:
+                                    fr: "Adresse"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_address", "sheet_data"]
+                        de66af5d:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Code postal"
+                                placeholder:
+                                    fr: "Code postal"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_zipcode", "sheet_data"]
+                        d224f0e7:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Ville"
+                                placeholder:
+                                    fr: "Ville"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_city", "sheet_data"]
+                        e801edd4:
+                            component: "object"
+                            type: "country"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Pays"
+                                placeholder:
+                                    fr: "Pays"
+                                help:
+                                    fr: ""
+                                length: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_country", "sheet_data"]
+    registration_template_asd_days_in_one_step:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Inscription Template ASD Days en une étape"
+        locales: ['fr']
+        fallback: 'fr'
+        createdAt: <dateTimeBetween('-10days', 'now')>
+        value:
+            811f6edf:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                     -
+                         dded0597:
+                             component: "object"
+                             type: "text"
+                             config:
+                                 style: "style-1"
+                                 content:
+                                   fr: "Mon profil"
+                                   en: "Profile"
+                                 type: "title"
+                         541f84d4:
+                             component: "object"
+                             type: "editable-text"
+                             config:
+                                 style: "style-1"
+                                 label:
+                                     fr: "Prénom"
+                                     en: "First name"
+                                 placeholder:
+                                     fr: "Prénom"
+                                     en: "First name"
+                                 help:
+                                     fr: ""
+                                 length: "250"
+                                 required: true
+                                 type: "text"
+                                 translatable: false
+                                 tags: ["participant_firstname", "participant_data"]
+                         838197c7:
+                             component: "object"
+                             type: "editable-text"
+                             config:
+                                 style: "style-1"
+                                 label:
+                                     fr: "Nom"
+                                     fr: "Last name"
+                                 placeholder:
+                                     fr: "Nom"
+                                     fr: "Last name"
+                                 help:
+                                     fr: ""
+                                 length: "250"
+                                 required: true
+                                 type: "text"
+                                 translatable: false
+                                 tags: ["participant_lastname", "participant_data"]
+                         6c4a3a4f:
+                             component: "object"
+                             type: "nomenclature"
+                             config:
+                                 style: "style-1"
+                                 label:
+                                     fr: "Fonction"
+                                     en: "Position"
+                                 help:
+                                     fr: ""
+                                 nomenclature: "@nomenclature_position->id"
+                                 tags: ["participant_position", "participant_data"]
+                         1efb9cbb:
+                             component: "object"
+                             type: "telephone"
+                             config:
+                                 style: "style-1"
+                                 label:
+                                     fr: "Téléphone portable"
+                                     en: "Mobile phone"
+                                 placeholder:
+                                     fr: "Téléphone portable"
+                                     en: "Mobile phone"
+                                 help:
+                                     fr: ""
+                                 length: ""
+                                 required: true
+                                 type: "text"
+                                 translatable: false
+                                 tags: ["participant_mobile", "participant_data"]
+            4bb4db28:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children: []
+            67019e4a:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children: []
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_asddays_1:
+        __construct: false
+        type: '@event_asddays_2016_type_fournisseur'
+        event: '@event_asddays_2016'
+        data:
+            # Titre de la fiche
+            dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
+            # Image
+            1b9a00b3: { file: "onera.jpg" }
+            # Lien
+            90713a3d: { url: "http://www.onera.fr/" }
+            # Description d'activité
+            d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
+            # Compétence
+            e438c993: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"]
+            # Carousel
+            848e283e: []
+            # Client de référence
+            1adc1873: { items: [{ title: { fr: "CNES" } }, { title: { fr: "CNRS" } }, { title: { fr: "Daher" } }, { title: { fr: "Dassault" } }, { title: { fr: "Dewe France" } }, { title: { fr: "DGAC" } }, { title: { fr: "DLR" } }, { title: { fr: "Durr" } }, { title: { fr: "Embraer" } }, { title: { fr: "Esa" } }, { title: { fr: "Honeywell" } }, { title: { fr: "Aircelle" } }, { title: { fr: "Messier Bugatti Dowty" } }, { title: { fr: "Snecma" } }, { title: { fr: "Turbomeca" } }, { title: { fr: "Zodiac Aerospace" } }]}
+            # Projets innovant
+            46663c1d: { items: [{ title: { fr: "Radar passif aéroporté" } }, { title: { fr: "Optique adaptative de SPHERE" } }, { title: { fr: "Initiative sur lanceurs réutilisables" } }, { title: { fr: "RAPID, un détecteur infrarouge révolutionnaire" } }] }
+            # Equipements, technologies et progrès
+            097ab5e8: { items: [{ title: { fr: "Fortes praepositis" } }, { title: { fr: "Agmina obluridi" } }, { title: { fr: "Atratum ioculatores" } }, { title: { fr: "Virgae coniunctis" } }, { title: { fr: "Velut incedit" } }, { title: { fr: "Post adegerit" } }, { title: { fr: "Ministerium" } }, { title: { fr: "Praepositis servitium" } } ] }
+            # Repères
+            696dc236: { items: [{ title: { fr: "2001 salariés" } }, { title: { fr: "207 M€ de CA en 2015" } }, { title: { fr: "Activitées en coopération : 25%" } }, { title: { fr: "Activités sur contrats : 47%" } }, { title: { fr: "1er parc de souffleries en Europe" } }, { title: { fr: "8 centres en France" } } ] }
+            # Groupe / Membre
+            a9271999: { items: [{ title: { fr: "Pôle de compétivité Astech" } }, { title: { fr: "Instituts Carnot" } }, { title: { fr: "Optitec" } } ] }
+            # Certification
+            a23a2f5d: { items: [{ title: { fr: "EN9100" } }, { title: { fr: "ISO14001" } }, { title: { fr: "OHSAS18001" } }, { title: { fr: "CAP26000" } }, { title: { fr: "ISO14001" } }, { title: { fr: "CAP26000" } } ] }
+            # Media
+            211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
+            # Offre
+            03b394ac: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            # Besoins
+            63ccc105: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            # Description
+            d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
+        registrationData:
+            3ad4b72f: { text: "Elao" }
+        packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_asddays_1:
+        __construct: false
+        user: "@user_asddays_1"
+        sheet: "@sheet_asddays_1"
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: "John" }
+            838197c7: { text: "DOE" }
+            1efb9cbb: { telephone: "+33909090909" }
+
+Proximum\Vimeet\Domain\Model\User:
+    user_asddays_1:
+        __construct: false
+        email: "user_asddays_1@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"

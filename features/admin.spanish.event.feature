@@ -4,8 +4,9 @@ Feature: Update spanish event
   Scenario: I can see the event
     Given the database is empty
     And the following fixtures files are loaded:
-      | EventSpanish.yml |
-      | Admin.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/SpanishEvent.yml |
+      | Admin.yml                                               |
     And elastica is populate
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"
@@ -107,10 +108,10 @@ Feature: Update spanish event
     And I follow "admin.happening_speaker.add"
     And I should be on this page "/admin/en/event/1/happening/speaker/create"
     When I fill in the following:
-      | create_speaker[firstname]                | Henry          |
-      | create_speaker[lastname]                 | Dupont         |
-      | create_speaker[function]                 | Developer      |
-      | create_speaker[organization]             | Elao           |
+      | create_speaker[firstname]                  | Henry       |
+      | create_speaker[lastname]                   | Dupont      |
+      | create_speaker[translations][es][position] | Developer   |
+      | create_speaker[organization]               | Elao        |
     And I press "form.create_speaker.children.submit.label"
     Then I should see "flash.admin.speaker.create.success"
 

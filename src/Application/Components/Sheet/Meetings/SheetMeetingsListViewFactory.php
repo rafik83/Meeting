@@ -98,13 +98,13 @@ class SheetMeetingsListViewFactory
     }
 
     /**
-     * @param Sheet $sheet
-     * @param int   $locale
-     * @param int   $meetingsRequestsNumber
-     * @param int   $meetingsPropositionsNumber
-     * @param int   $requestsNumber
-     * @param int   $propositionsNumber
-     * @param int   $availableSlots
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param int    $meetingsRequestsNumber
+     * @param int    $meetingsPropositionsNumber
+     * @param int    $requestsNumber
+     * @param int    $propositionsNumber
+     * @param int    $availableSlots
      *
      * @return SheetMeetingsListView
      */
@@ -139,7 +139,7 @@ class SheetMeetingsListViewFactory
 
         return new SheetMeetingsListView(
             $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetInfo($sheet),
+            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getType()->getTitle($locale),
             $meetingsRequestsNumber,
             $meetingsPropositionsNumber,

@@ -15,17 +15,17 @@
             {{ form_start(form, {attr: {class: 'styled-form'}}) }}
             <a href="{{ path('event') }}" class="back"><i class="icon-Retour"></i></a>
             <ul class="inputs">
-                <li>
+                <div>
                     <div class="avatar">
                         <img src="{{ asset('assets/images/dummy/default-user.svg')}}">
                     </div>
-                </li>
-                <li>
+                </div>
+                <div class="form-row">
                     {{ form_row(form.email) }}
-                </li>
-                <li class="validation">
+                </div>
+                <div class="validation">
                     <button type="submit" class="btn"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
-                </li>
+                </div>
             </ul>
             {{ form_end(form) }}
         </div>

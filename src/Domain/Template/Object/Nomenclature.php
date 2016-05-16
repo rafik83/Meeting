@@ -11,20 +11,54 @@
 namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
-class Nomenclature extends Object
+class Nomenclature extends EditableObject implements ContentObjectInterface
 {
+    /**
+     * @var NomenclatureModel
+     */
+    private $nomenclature;
+
     /**
      * @var null|array
      */
     private $nomenclatureLabels;
 
     /**
+     * @param string $nomenclature
+     *
+     * @return Nomenclature
+     */
+    public function setItem($nomenclature)
+    {
+        $this->data['items'] = $nomenclature;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function __toString()
+    public function getItem()
     {
-        return $this->getData() ? $this->getNomenclatureLabel() : '';
+        return isset($this->data['items']) ? $this->data['items'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getItem() ? $this->getItem() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setItem($value);
     }
 
     /**
@@ -36,11 +70,12 @@ class Nomenclature extends Object
     }
 
     /**
-     * @param array $nomenclatureLabels
+     * @param NomenclatureModel $nomenclature
      */
-    public function setNomenclatureLabels(array $nomenclatureLabels)
+    public function setNomenclature(NomenclatureModel $nomenclature)
     {
-        $this->nomenclatureLabels = $nomenclatureLabels;
+        $this->nomenclature       = $nomenclature;
+        $this->nomenclatureLabels = $nomenclature->getLabels($this->locale) ? : [];
     }
 
     /**
@@ -56,13 +91,13 @@ class Nomenclature extends Object
      */
     public function getNomenclatureLabel()
     {
-        if (isset($this->nomenclatureLabels[$this->getData()])) {
-            return $this->nomenclatureLabels[$this->getData()];
+        if (isset($this->nomenclatureLabels[$this->getItem()])) {
+            return $this->nomenclatureLabels[$this->getItem()];
         }
 
         foreach ($this->nomenclatureLabels as $values) {
-            if (isset($values[$this->getData()])) {
-                return $values[$this->getData()];
+            if (isset($values[$this->getItem()])) {
+                return $values[$this->getItem()];
             }
         }
 

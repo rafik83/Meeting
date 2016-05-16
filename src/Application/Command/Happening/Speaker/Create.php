@@ -31,9 +31,9 @@ class Create
     public $lastname;
 
     /**
-     * @var string
+     * @var array
      */
-    public $function;
+    public $translations = [];
 
     /**
      * @var string
@@ -58,5 +58,11 @@ class Create
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        foreach ($event->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'position' => '',
+            ];
+        }
     }
 }

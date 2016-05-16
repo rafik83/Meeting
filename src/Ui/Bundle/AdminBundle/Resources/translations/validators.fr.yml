@@ -7,10 +7,11 @@ validators:
         notValid:
             telephone: Le format du champ téléphone n'est pas correct
             image: Le format de l'image n'est pas valide, les formats autorisés sont le jpeg, le png et le gif
+            url: Le format du champ url n'est pas valide
     email: L'adresse e-mail saisie n'est pas valide
     required:
         email: L'adresse e-mail ne peut pas être vide
-        password:
+        password: Le mot de passe ne peut pas être vide
     emailDoesNotExist: L'email saisi n'existe pas
     emailAlreadyExist: Cet email est déjà utilisé, vous ne pouvez pas l'utiliser
     sameEmail: Vous utilisez déjà cet email
