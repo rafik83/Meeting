@@ -18,7 +18,7 @@ class Media
     private $collection;
 
     /**
-     * @var string
+     * @var array|string
      */
     private $title;
 
@@ -36,7 +36,7 @@ class Media
      * Media constructor.
      *
      * @param MediaCollection $collection
-     * @param string          $title
+     * @param array|string    $title
      * @param string          $url
      * @param string          $type
      */
