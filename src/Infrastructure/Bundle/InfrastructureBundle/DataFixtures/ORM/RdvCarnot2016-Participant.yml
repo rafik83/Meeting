@@ -7,8 +7,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Jean" }
-            838197c7: { text: "Dupond" }
+            541f84d4: { text: 'Paul' }
+            838197c7: { text: 'GASCOIGNE' }
 
     # Proximum participants
     proximum_participant_visiteur:
@@ -18,8 +18,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Jean" }
-            838197c7: { text: "MARTIN" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_exposant:
         __construct: false
         user: '@proximum_user_exposant'
@@ -27,8 +27,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "François" }
-            838197c7: { text: "BOUCHON" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_carnot:
         __construct: false
         user: '@proximum_user_carnot'
@@ -36,8 +36,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Isabelle" }
-            838197c7: { text: "JEANPIERRE" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
@@ -45,8 +45,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Maryline" }
-            838197c7: { text: "MONROUGE" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_test:
         __construct: false
         user: '@proximum_user_test'
@@ -54,8 +54,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Oscar" }
-            838197c7: { text: "LARI" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_ui:
         __construct: false
         user: '@proximum_user_ui'
@@ -63,51 +63,15 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            541f84d4: { text: "Antoine" }
-            838197c7: { text: "GROSMAN" }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
 
     # Random
-    participant_random_1:
+    participant_random_{1..30}:
         __construct: false
-        user: '@user_random_1'
-        sheet: '@sheet_exposant2'
-        owner: false
-        active: true
-        data:
-            838197c7: { text: <firstName()> }
-            541f84d4: { text: <lastName()> }
-    participant_random_2:
-        __construct: false
-        user: '@user_random_1'
-        sheet: '@sheet_exposant2'
-        owner: false
-        active: true
-        data:
-            838197c7: { text: <firstName()> }
-            541f84d4: { text: <lastName()> }
-    participant_random_3:
-        __construct: false
-        user: '@user_random_1'
-        sheet: '@sheet_exposant4'
-        owner: false
-        active: true
-        data:
-            838197c7: { text: <firstName()> }
-            541f84d4: { text: <lastName()> }
-    participant_random_4:
-        __construct: false
-        user: '@user_random_1'
-        sheet: '@sheet_exposant5'
-        owner: false
-        active: true
-        data:
-            838197c7: { text: <firstName()> }
-            541f84d4: { text: <lastName()> }
-    participant_random_1{10..30}:
-        __construct: false
-        user: '@user_random_1'
-        sheet: '@sheet_exposant*'
-        owner: false
+        user: '@user_random_<current()>'
+        sheet: '@sheet_exposant<current()>'
+        owner: true
         active: true
         data:
             838197c7: { text: <firstName()> }
