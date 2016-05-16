@@ -33,6 +33,51 @@ class Product
     private $translations;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $image;
+
+    /**
+     * @var float;
+     */
+    private $unitPrice;
+
+    /**
+     * @var int
+     */
+    private $quantityMin;
+
+    /**
+     * @var int
+     */
+    private $quantityMax;
+
+    /**
+     * @var int
+     */
+    private $availabilityCurrent;
+
+    /**
+     * @var int
+     */
+    private $availabilityMax;
+
+    /**
+     * @var bool
+     */
+    private $updatable;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $updatableUntil;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -73,5 +118,77 @@ class Product
     public function getTitle($locale)
     {
         return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @return float
+     */
+    public function getUnitPrice()
+    {
+        return $this->unitPrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantityMin()
+    {
+        return $this->quantityMin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantityMax()
+    {
+        return $this->quantityMax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAvailabilityCurrent()
+    {
+        return $this->availabilityCurrent;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAvailabilityMax()
+    {
+        return $this->availabilityMax;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isUpdatable()
+    {
+        return $this->updatable;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getUpdatableUntil()
+    {
+        return $this->updatableUntil;
     }
 }

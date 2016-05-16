@@ -6,6 +6,31 @@ Proximum\Vimeet\Domain\Model\Product:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        name:
+            type: string
+        image:
+            type: string
+            nullable: true
+        unitPrice:
+            type: float
+        quantityMin:
+            type: integer
+            nullable: true
+        quantityMax:
+            type: integer
+            nullable: true
+        availabilityCurrent:
+            type: integer
+            nullable: true
+        availabilityMax:
+            type: integer
+            nullable: true
+        updatable:
+            type: boolean
+        updatableUntil:
+            type: datetime
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\ProductTranslation
