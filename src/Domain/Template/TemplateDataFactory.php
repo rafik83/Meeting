@@ -144,37 +144,76 @@ class TemplateDataFactory
     private function doCreate(array $config, $locale, $fallback)
     {
         if (!isset($config['component'])) {
-            return array_map(function (array $child) use ($locale, $fallback) {
-                return $this->doCreate($child, $locale, $fallback);
-            }, $config);
+            return $this->buildComponents($config, $locale, $fallback);
         }
 
         if ($config['component'] === 'block') {
-            $block = new Block($config['type'], $config['config']);
-
-            foreach ($config['children'] as $column => $children) {
-                $block->addColumn($column);
-                foreach ($children as $key => $child) {
-                    $child = $this->doCreate($child, $locale, $fallback);
-                    $block->addChild($column, $key, $child);
-                }
-            }
-
-            return $block;
+            return $this->buildBlock($config, $locale, $fallback);
         }
 
         if ('object' === $config['component']) {
-            $class  = $this->objects[$config['type']];
-            $object = new $class($config['type'], $config['config'], $locale, $fallback);
-
-            if ($object instanceof Object\Nomenclature && $this->hasNomenclature($object->getNomenclatureId())) {
-                $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
-            }
-
-            return $object;
+            return $this->buildObject($config, $locale, $fallback);
         }
 
         throw new \Exception();
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return array
+     */
+    private function buildComponents(array $config, $locale, $fallback)
+    {
+        return array_map(
+            function (array $child) use ($locale, $fallback) {
+                return $this->doCreate($child, $locale, $fallback);
+            }, $config
+        );
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return Block
+     * @throws \Exception
+     */
+    private function buildBlock(array $config, $locale, $fallback)
+    {
+        $block = new Block($config['type'], $config['config']);
+
+        foreach ($config['children'] as $column => $children) {
+            $block->addColumn($column);
+            foreach ($children as $key => $child) {
+                $child = $this->doCreate($child, $locale, $fallback);
+                $block->addChild($column, $key, $child);
+            }
+        }
+
+        return $block;
+    }
+
+    /**
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     *
+     * @return mixed
+     */
+    private function buildObject(array $config, $locale, $fallback)
+    {
+        $class  = $this->objects[$config['type']];
+        $object = new $class($config['type'], $config['config'], $locale, $fallback);
+
+        if ($object instanceof Object\Nomenclature && $this->hasNomenclature($object->getNomenclatureId())) {
+            $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+        }
+
+        return $object;
     }
 
     /**
