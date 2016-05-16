@@ -20,6 +20,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         data: []
+        registrationData: []
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_1:
