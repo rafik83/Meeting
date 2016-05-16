@@ -21,7 +21,8 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $user = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $locale  = 'fr';
+        $user    = new User('email@email.com', '__password__', '__salt__', $locale);
         $account = new User\Account();
         $account->setFirstName('Test');
         $account->setLastName('Truc');
@@ -31,19 +32,19 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', []);
         $block = new Block('12', []);
-        $text  = new Object\Text('text', [], 'fr', 'fr');
+        $text  = new Object\Text('text', [], $locale, $locale);
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
 
         $block->addChild(1, 'dded0597', $text);
         $block->addChild(1, '541f84d4', $editableText1);
@@ -58,22 +59,22 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedTemplateData = new TemplateData('root', []);
         $expectedBlock = new Block('12', []);
-        $expectedText  = new Object\Text('text', [], 'fr', 'fr');
+        $expectedText  = new Object\Text('text', [], $locale, $locale);
         $expectedEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $expectedEditableText1->setContentValue('Test');
         $expectedEditableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $expectedEditableText2->setContentValue('Truc');
         $expectedTelephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $expectedTelephone1->setContentValue('Foo');
         $expectedTelephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $expectedTelephone2->setContentValue('Bar');
 
         $expectedBlock->addChild(1, 'dded0597', $expectedText);
@@ -92,28 +93,30 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
     public function testSet()
     {
-        $user = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $locale = 'fr';
+
+        $user = new User('email@email.com', '__password__', '__salt__', $locale);
         $account = new User\Account();
         $user->setAccount($account);
 
         $templateData = new TemplateData('root', []);
         $block = new Block('12', []);
-        $text  = new Object\Text('text', [], 'fr', 'fr');
+        $text  = new Object\Text('text', [], $locale, $locale);
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $editableText1->setContentValue('Test');
         $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $editableText2->setContentValue('Truc');
         $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $telephone1->setContentValue('Foo');
         $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ], 'fr', 'fr');
+        ], $locale, $locale);
         $telephone2->setContentValue('Bar');
 
         $block->addChild(1, 'dded0597', $text);
@@ -124,7 +127,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedUser = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $expectedUser = new User('email@email.com', '__password__', '__salt__', $locale);
         $account2 = new User\Account();
         $account2->setFirstName('Test');
         $account2->setLastName('Truc');

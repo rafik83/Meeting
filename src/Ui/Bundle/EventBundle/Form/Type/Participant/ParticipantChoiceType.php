@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
@@ -25,8 +25,6 @@ class ParticipantChoiceType extends AbstractType
     private $participantInfoGuesser;
 
     /**
-     * ParticipantChoiceType constructor.
-     *
      * @param ParticipantInfoGuesser $participantInfoGuesser
      */
     public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
@@ -41,14 +39,17 @@ class ParticipantChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices_as_values' => true,
-            'choice_label'      => function (Participant $participant) {
-                return $this->participantInfoGuesser->guessParticipantInfo($participant);
+            'choice_label'      => function (Options $options) {
+                return function (Participant $participant) use ($options) {
+                    return $this->participantInfoGuesser
+                        ->guessParticipantCompleteName($participant, $options['locale']);
+                };
             },
             'choices'           => function (Options $options) {
                 return $options['sheet']->getParticipants();
             },
         ]);
-        $resolver->setRequired('sheet');
+        $resolver->setRequired(['sheet', 'locale']);
     }
 
     /**

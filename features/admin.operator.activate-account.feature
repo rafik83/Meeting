@@ -1,16 +1,15 @@
 Feature: Operator Activate Account
   I need to be able to activate my account
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can activate my account
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml                  |
-      | app/Event.yml                     |
-      | AdminWithActivateAccountToken.yml |
-
-  Scenario: I can activate my account
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | AdminWithActivateAccountToken.yml                                        |
     When I go to this page "/admin/fr/activate-account/azertyuiopqsdfghjklmwxcvbn"
-    And the response status code should be 200
     Then I fill in the following:
       | form.admin_activate_account_password.children.password.children.first.label  | tructruc |
       | form.admin_activate_account_password.children.password.children.second.label | tructruc |

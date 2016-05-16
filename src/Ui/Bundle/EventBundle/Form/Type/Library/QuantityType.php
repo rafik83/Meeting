@@ -32,8 +32,6 @@ class QuantityType extends AbstractType
                 return array_combine($range, $range);
             },
             'choices_as_values' => true,
-            'product'           => null,
-            'cart'              => null,
         ]);
     }
 

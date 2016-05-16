@@ -37,7 +37,12 @@ class TaggedInfoGuesser
      */
     public function guess(AbstractTemplate $template, $data, $tag, $locale)
     {
-        $templateData = $this->templateDataFactory->create($template->getValue(), $data, $locale);
+        $templateData = $this->templateDataFactory->create(
+            $template->getValue(),
+            $data,
+            $locale,
+            $template->getFallback()
+        );
 
         return $templateData->getTaggedDatas($tag, $locale);
     }
@@ -53,7 +58,12 @@ class TaggedInfoGuesser
      */
     public function guessFirst(AbstractTemplate $template, $data, $tag, $locale, $default = null)
     {
-        $templateData = $this->templateDataFactory->create($template->getValue(), $data, $locale);
+        $templateData = $this->templateDataFactory->create(
+            $template->getValue(),
+            $data,
+            $locale,
+            $template->getFallback()
+        );
 
         return $this->guessFirstFromTemplateData($templateData, $tag, $locale, $default);
     }

@@ -4,11 +4,14 @@ Feature: Update a participation category
   Scenario: I can list event categories
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml |
-      | app/Event.yml    |
-      | app/Type.yml     |
-      | app/Category.yml |
-      | Admin.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Category.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
+      | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/category"
     Then I should see "Exposant"

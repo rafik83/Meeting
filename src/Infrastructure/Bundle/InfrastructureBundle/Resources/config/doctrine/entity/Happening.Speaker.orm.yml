@@ -11,8 +11,6 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
             type: string
         lastname:
             type: string
-        function:
-            type: string
         organization:
             type: string
         logo:
@@ -28,3 +26,8 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
         talkings:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking
             mappedBy: speaker
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation
+            mappedBy: speaker
+            indexBy: locale
+            cascade: ["persist"]

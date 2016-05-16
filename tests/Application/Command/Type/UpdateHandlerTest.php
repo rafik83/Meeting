@@ -25,17 +25,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event = new Event();
         $event->setLocales(['fr'], 'fr');
-        $template = new Template('test', [], [], [], '', '');
 
         //Expected
         $expectedType = new Type($event);
-        $expectedType->setTemplate($template);
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'truc'));
         $expectedType->getValidationCriteria()->setSheetAccepted(false);
 
         //Command
         $type = new Type($event);
-        $type->setTemplate($template);
         $type->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $type->getValidationCriteria()->setSheetAccepted(true);
         $create = new Update($type);

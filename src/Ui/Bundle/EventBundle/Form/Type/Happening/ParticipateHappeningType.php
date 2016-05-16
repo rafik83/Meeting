@@ -27,6 +27,7 @@ class ParticipateHappeningType extends AbstractType
         $builder
             ->add('participants', ParticipantEntityType::class, [
                 'sheet'         => $options['sheet'],
+                'locale'        => $options['locale'],
                 'multiple'      => true,
                 'expanded'      => true,
                 'query_builder' => function (EntityRepository $entityRepository) use ($options) {
@@ -48,6 +49,7 @@ class ParticipateHappeningType extends AbstractType
         $resolver->setRequired([
             'sheet',
             'happening',
+            'locale',
         ]);
 
         $resolver->setDefaults([

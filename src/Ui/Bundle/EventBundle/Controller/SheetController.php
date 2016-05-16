@@ -38,7 +38,7 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
 
@@ -173,7 +173,7 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the object form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getNewSheetTemplate();
+        $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
@@ -190,6 +190,11 @@ class SheetController extends Controller
         ]);
     }
 
+    /**
+     * @param EventView $eventView
+     *
+     * @return Response
+     */
     public function nomenclaturesAction(EventView $eventView)
     {
         return $this->render('EventBundle:Sheet:nomenclatures.html.twig', [

@@ -30,7 +30,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      *
      * @return Nomenclature
      */
-    public function setNomenclature($nomenclature)
+    public function setItem($nomenclature)
     {
         $this->data['items'] = $nomenclature;
 
@@ -40,7 +40,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     /**
      * @return string
      */
-    public function getNomenclature()
+    public function getItem()
     {
         return isset($this->data['items']) ? $this->data['items'] : null;
     }
@@ -50,7 +50,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getContentValue()
     {
-        return $this->getNomenclature() ? $this->getNomenclature() : '';
+        return $this->getItem() ? $this->getItem() : '';
     }
 
     /**
@@ -58,7 +58,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function setContentValue($value)
     {
-        $this->setNomenclature($value);
+        $this->setItem($value);
     }
 
     /**
@@ -91,13 +91,13 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getNomenclatureLabel()
     {
-        if (isset($this->nomenclatureLabels[$this->getNomenclature()])) {
-            return $this->nomenclatureLabels[$this->getNomenclature()];
+        if (isset($this->nomenclatureLabels[$this->getItem()])) {
+            return $this->nomenclatureLabels[$this->getItem()];
         }
 
         foreach ($this->nomenclatureLabels as $values) {
-            if (isset($values[$this->getNomenclature()])) {
-                return $values[$this->getNomenclature()];
+            if (isset($values[$this->getItem()])) {
+                return $values[$this->getItem()];
             }
         }
 

@@ -30,6 +30,7 @@ class UpdateType extends AbstractType
                 'meeting'  => $options['data']->meeting,
                 'multiple' => true,
                 'expanded' => true,
+                'locale'   => $options['locale'],
             ])
             ->add('message', TextareaType::class, [
                 'required' => false,
@@ -46,6 +47,8 @@ class UpdateType extends AbstractType
             'method'     => 'POST',
             'data_class' => Update::class,
         ]);
+
+        $resolver->setRequired(['locale']);
     }
 
     /**

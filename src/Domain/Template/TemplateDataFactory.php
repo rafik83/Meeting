@@ -64,10 +64,10 @@ class TemplateDataFactory
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
 
         return $this->create(
-            $sheet->getType()->getNewSheetTemplate()->getValue(),
+            $sheet->getType()->getSheetTemplate()->getValue(),
             $sheet->getData(),
             $locale,
-            $sheet->getType()->getNewSheetTemplate()->getFallback()
+            $sheet->getType()->getSheetTemplate()->getFallback()
         );
     }
 

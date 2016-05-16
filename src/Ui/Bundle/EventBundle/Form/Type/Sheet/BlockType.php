@@ -152,7 +152,7 @@ class BlockType extends AbstractType
 
         $builder->add($key, NomenclatureDataType::class, [
             'object' => $object,
-            'locale' => $locale
+            'locale' => $locale,
         ]);
     }
 }

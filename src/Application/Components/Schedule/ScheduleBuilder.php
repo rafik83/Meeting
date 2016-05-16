@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Schedule;
 
-use Proximum\Vimeet\Application\Components\Participant\ParticipantInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,6 +18,7 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ScheduleBuilder
 {
@@ -106,7 +106,7 @@ class ScheduleBuilder
     private function builScheduleViewForMeetingHappeningsAndUnavailabilities(Participant $participant, $locale)
     {
         $scheduleViews = [];
-        $scheduleViews = $this->buildMeetingsForScheduleViews($scheduleViews, $participant);
+        $scheduleViews = $this->buildMeetingsForScheduleViews($scheduleViews, $participant, $locale);
         $scheduleViews = $this->buildHappeningsForScheduleViews($scheduleViews, $participant, $locale);
         $scheduleViews = $this->buildUnavailabilitiesForScheduleViews($scheduleViews, $participant);
 
@@ -114,7 +114,7 @@ class ScheduleBuilder
 
         return [
             'participant' => $participant,
-            'name'        => $this->participantInfoGuesser->guessParticipantInfo($participant),
+            'name'        => $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale),
             'schedules'   => $scheduleViews,
         ];
     }
@@ -122,10 +122,11 @@ class ScheduleBuilder
     /**
      * @param array       $scheduleViews
      * @param Participant $participant
+     * @param string      $locale
      *
      * @return ScheduleView[]
      */
-    private function buildMeetingsForScheduleViews(array $scheduleViews, Participant $participant)
+    private function buildMeetingsForScheduleViews(array $scheduleViews, Participant $participant, $locale)
     {
         $meetingSlots = $this->meetingSlotRepository->findByEvent($participant->getSheet()->getEvent());
 
@@ -138,7 +139,7 @@ class ScheduleBuilder
                     $meetingSlot->getId(),
                     new ScheduleSlotView(
                         $meetingSlot->getId(),
-                        'Vide',
+                        '...',
                         $meetingSlot->getBegin(),
                         $meetingSlot->getEnd(),
                         false
@@ -157,7 +158,7 @@ class ScheduleBuilder
                     $meetingSlot->getId(),
                     new ScheduleSlotView(
                         $meetingSlot->getId(),
-                        'Vide',
+                        '...',
                         $meetingSlot->getBegin(),
                         $meetingSlot->getEnd(),
                         false
@@ -177,7 +178,7 @@ class ScheduleBuilder
                 $meeting->getSlot()->getId(),
                 new ScheduleSlotView(
                     $meeting->getId(),
-                    $this->sheetInfoGuesser->guessSheetInfo($sheet),
+                    $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
                     $meeting->getSlot()->getBegin(),
                     $meeting->getSlot()->getEnd(),
                     true

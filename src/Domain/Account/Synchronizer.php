@@ -56,11 +56,15 @@ class Synchronizer
      * @param TemplateData $templateData
      * @param User         $user
      *
-     * @return TemplateData
+     * @return null|TemplateData
      */
     public function get(TemplateData $templateData, User $user)
     {
         $account = $user->getAccount();
+
+        if (null === $account) {
+            return $templateData;
+        }
 
         /** @var Object $object */
         foreach ($templateData->getEditableObjects() as $object) {

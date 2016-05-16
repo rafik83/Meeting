@@ -31,19 +31,11 @@ class AddRowHandler
 
     /**
      * @param AddRow $addRow
+     *
+     * @deprecated must be rewrited in order to insert a row in db
      */
     public function handle(AddRow $addRow)
     {
-        $addRow->order->addRow(
-            $addRow->group,
-            uniqid(),
-            'added_row',
-            $addRow->label,
-            $addRow->description,
-            $addRow->price,
-            $addRow->quantity
-        );
-
         $this->orderRepository->set($addRow->order);
     }
 }

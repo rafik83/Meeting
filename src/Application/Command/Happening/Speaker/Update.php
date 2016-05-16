@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Update
@@ -46,6 +47,11 @@ class Update
     public $logo;
 
     /**
+     * @var array
+     */
+    public $translations = [];
+
+    /**
      * @var UploadedFile
      */
     public $photo;
@@ -60,7 +66,16 @@ class Update
         $this->speaker      = $speaker;
         $this->firstname    = $speaker->getFirstname();
         $this->lastname     = $speaker->getLastname();
-        $this->function     = $speaker->getFunction();
         $this->organization = $speaker->getOrganization();
+
+        /**
+         * @var SpeakerTranslation $translation
+         */
+        foreach ($speaker->getTranslations() as $translation) {
+            $this->translations[$translation->getLocale()] = [
+                'position' => $translation->getPosition(),
+            ];
+        }
+
     }
 }

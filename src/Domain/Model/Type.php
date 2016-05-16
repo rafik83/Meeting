@@ -40,16 +40,6 @@ class Type implements WhoInterface
     private $translations;
 
     /**
-     * @var array
-     */
-    private $participantTemplate = [];
-
-    /**
-     * @var array
-     */
-    private $oldSheetTemplate = [];
-
-    /**
      * @var SheetTemplate
      */
     private $sheetTemplate;
@@ -60,19 +50,9 @@ class Type implements WhoInterface
     private $registrationTemplate;
 
     /**
-     * @var array
-     */
-    private $packageTemplate = [];
-
-    /**
      * @var int
      */
     private $maxParticipant = 4;
-
-    /**
-     * @var int
-     */
-    private $freeParticipant = 1;
 
     /**
      * @var int
@@ -155,41 +135,21 @@ class Type implements WhoInterface
     }
 
     /**
-     * Get participantTemplate.
-     *
-     * @return array
-     */
-    public function getParticipantTemplate()
-    {
-        return $this->participantTemplate;
-    }
-
-    /**
-     * Get sheetTemplate.
-     *
-     * @return array
-     */
-    public function getSheetTemplate()
-    {
-        return $this->getOldSheetTemplate();
-    }
-
-    /**
      * @return SheetTemplate
      */
-    public function getNewSheetTemplate()
+    public function getSheetTemplate()
     {
         return $this->sheetTemplate;
     }
 
     /**
-     * Get sheetTemplate.
+     * @return SheetTemplate
      *
-     * @return array
+     * @deprecated Use getSheetTemplate()
      */
-    public function getOldSheetTemplate()
+    public function getNewSheetTemplate()
     {
-        return $this->oldSheetTemplate;
+        return $this->getSheetTemplate();
     }
 
     /**
@@ -210,48 +170,6 @@ class Type implements WhoInterface
         }
 
         return $data;
-    }
-
-    /**
-     * Get packageTemplate.
-     *
-     * @return array
-     */
-    public function getPackageTemplate()
-    {
-        return $this->packageTemplate;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPackageData()
-    {
-        $data = [];
-
-        $template = $this->getPackageTemplate();
-
-        foreach ($template as $key => $block) {
-            $data[$key] = [];
-
-            foreach ($block['template'] as $i => $row) {
-                $data[$key][$i] = null;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param array $participantTemplate
-     *
-     * @return self
-     */
-    public function setParticipantTemplate(array $participantTemplate)
-    {
-        $this->participantTemplate = $participantTemplate;
-
-        return $this;
     }
 
     /**
@@ -287,44 +205,11 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param array $sheetTemplate
-     *
-     * @return Type
-     */
-    public function setOldSheetTemplate(array $sheetTemplate)
-    {
-        $this->oldSheetTemplate = $sheetTemplate;
-
-        return $this;
-    }
-
-
-    /**
-     * @param array $packageTemplate
-     *
-     * @return Type
-     */
-    public function setPackageTemplate(array $packageTemplate)
-    {
-        $this->packageTemplate = $packageTemplate;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getMaxParticipant()
     {
         return $this->maxParticipant;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFreeParticipant()
-    {
-        return $this->freeParticipant;
     }
 
     /**
@@ -366,18 +251,6 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param Template $template
-     */
-    public function setTemplate(Template $template)
-    {
-        $this->participantTemplate = $template->getParticipant();
-        $this->oldSheetTemplate    = $template->getSheet();
-        $this->packageTemplate     = $template->getPackage();
-        $this->previewTemplate     = $template->getPreview();
-        $this->viewTemplate        = $template->getView();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getIdentifier()
@@ -386,163 +259,11 @@ class Type implements WhoInterface
     }
 
     /**
-     * @param $templateName
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function getTemplate($templateName)
-    {
-        $getter = 'get' . ucfirst($templateName) . 'Template';
-
-        if (!method_exists($this, $getter)) {
-            throw new \Exception("Method $getter not exists");
-        }
-
-        return $this->$getter();
-    }
-
-    /**
      * @return ValidationCriteria
      */
     public function getValidationCriteria()
     {
         return $this->validationCriteria;
-    }
-
-    /**
-     * @param string $name
-     * @param array $template
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public function setTemplateByName($name, array $template)
-    {
-        if (ucfirst($name) === 'Sheet') {
-            $setter = 'setOldSheetTemplate';
-        } else {
-            $setter = 'set' . ucfirst($name) . 'Template';
-        }
-
-        if (!method_exists($this, $setter)) {
-            throw new \Exception("Method $setter not exists");
-        }
-
-        return $this->$setter($template);
-    }
-
-    /**
-     * @return array
-     */
-    public function getTemplates()
-    {
-        return [
-            'participantTemplate' => $this->getParticipantTemplate(),
-            'sheetTemplate'       => $this->getSheetTemplate(),
-            'packageTemplate'     => $this->getPackageTemplate(),
-        ];
-    }
-
-    /**
-     * @param string $templateName
-     * @param string $group
-     * @param string $row
-     * @param array  $options
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public function updateTemplateRow($templateName, $group, $row, array $options)
-    {
-        $template = $this->getTemplate($templateName);
-
-        if ('default' === $group) {
-            if (!isset($template[$row])) {
-                throw new \Exception("$row do not exists in template $templateName");
-            }
-
-            $template[$row] = $options;
-        } else {
-            if (!isset($template[$group])) {
-                throw new \Exception("$group do not exists in template $templateName");
-            }
-
-            if (!isset($template[$group]['template'][$row])) {
-                throw new \Exception("$group / $row do not exists in template $templateName");
-            }
-
-            $template[$group]['template'][$row] = $options;
-        }
-
-        return $this->setTemplateByName($templateName, $template);
-    }
-
-    /**
-     * @param string $templateName
-     * @param string $group
-     * @param string $row
-     * @param array  $options
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public function addTemplateRow($templateName, $group, $row, array $options)
-    {
-        $template = $this->getTemplate($templateName);
-
-        if ('default' === $group) {
-            if (isset($template[$row])) {
-                throw new \Exception("$row already exists in template $templateName");
-            }
-
-            $template[$row] = $options;
-        } else {
-            if (!isset($template[$group])) {
-                throw new \Exception("$group do not exists in template $templateName");
-            }
-
-            if (isset($template[$group]['template'][$row])) {
-                throw new \Exception("$group / $row already exists in template $templateName");
-            }
-
-            $template[$group]['template'][$row] = $options;
-        }
-
-        return $this->setTemplateByName($templateName, $template);
-    }
-
-    /**
-     * @param string $templateName
-     * @param string $group
-     * @param array  $rows
-     *
-     * @return self
-     * @throws \Exception
-     */
-    public function setTemplateRows($templateName, $group, array $rows)
-    {
-        $template = $this->getTemplate($templateName);
-
-        if ('default' === $group) {
-            $template = [];
-
-            foreach ($rows as $row => $options) {
-                $template[$row] = $options;
-            }
-        } else {
-            if (!isset($template[$group])) {
-                throw new \Exception("$group do not exists in template $templateName");
-            }
-
-            $template[$group]['template'] = [];
-
-            foreach ($rows as $row => $options) {
-                $template[$group]['template'][$row] = $options;
-            }
-        }
-
-        return $this->setTemplateByName($templateName, $template);
     }
 
     /**
@@ -555,5 +276,15 @@ class Type implements WhoInterface
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     *
+     * @deprecated Use getRegistrationTemplate()
+     */
+    public function getParticipantTemplate()
+    {
+        return [];
     }
 }

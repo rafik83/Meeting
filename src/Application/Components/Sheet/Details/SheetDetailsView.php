@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
-use Proximum\Vimeet\Application\Components\Sheet\Block\BlockDataView;
 use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
@@ -53,11 +52,6 @@ class SheetDetailsView
      * @var BillingView
      */
     public $billing;
-
-    /**
-     * @var BlockDataView[]
-     */
-    public $blocks;
 
     /**
      * "nbre de demandes validée"
@@ -121,7 +115,6 @@ class SheetDetailsView
      * @param string          $ownerPhone
      * @param string          $package
      * @param BillingView     $billing
-     * @param BlockDataView[] $blocks
      * @param int             $approvedRequests
      * @param int             $pendingRequests
      * @param int             $refusedRequests
@@ -131,8 +124,23 @@ class SheetDetailsView
      * @param Comment[]       $comments
      * @param Trace[]         $traces
      */
-    public function __construct($title, $state, array $participants, $ownerEmail, $ownerPhone, $package, BillingView $billing, array $blocks, $approvedRequests, $pendingRequests, $refusedRequests, $approvedPropositions, $pendingPropositions, $refusedPropositions, array $comments, array $traces)
-    {
+    public function __construct(
+        $title,
+        $state,
+        array $participants,
+        $ownerEmail,
+        $ownerPhone,
+        $package,
+        BillingView $billing,
+        $approvedRequests,
+        $pendingRequests,
+        $refusedRequests,
+        $approvedPropositions,
+        $pendingPropositions,
+        $refusedPropositions,
+        array $comments,
+        array $traces
+    ) {
         $this->title                = $title;
         $this->state                = $state;
         $this->participants         = $participants;
@@ -140,7 +148,6 @@ class SheetDetailsView
         $this->ownerPhone           = $ownerPhone;
         $this->package              = $package;
         $this->billing              = $billing;
-        $this->blocks               = $blocks;
         $this->approvedRequests     = $approvedRequests;
         $this->pendingRequests      = $pendingRequests;
         $this->refusedRequests      = $refusedRequests;

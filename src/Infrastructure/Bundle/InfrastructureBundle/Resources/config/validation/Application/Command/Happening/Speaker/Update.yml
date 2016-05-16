@@ -6,8 +6,12 @@ Proximum\Vimeet\Application\Command\Happening\Speaker\Update:
             - NotBlank: ~
         lastname:
             - NotBlank: ~
-        function:
-            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        position:
+                            - NotBlank: ~
         organization:
             - NotBlank: ~
         logo:

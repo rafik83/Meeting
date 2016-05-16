@@ -30,6 +30,8 @@ class OrderController extends Controller
      * @param Order   $order
      *
      * @return Response
+     *
+     * @deprecated need to be rewritten
      */
     public function editAction(Request $request, Event $event, Order $order)
     {
@@ -37,13 +39,10 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
+            ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
-        $orderView = $this->get('components.sheet.order_view_factory')->createFromOrder(
-            $order,
-            $event->getAvailableLocale($request->getLocale())
-        );
+        $orderView = null;
 
         return $this->render(
             'AdminBundle:Order:edit.html.twig',
@@ -70,7 +69,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
+            ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
         $addRow = new AddRow($order, $group);
@@ -112,8 +111,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetInfo($order->getSheet())
-        ;
+            ->guessSheetName($order->getSheet(), $request->getLocale());
 
         $updateRow = new UpdateRow($order, $group, $row);
         $form      = $this->createForm(UpdateRowType::class, $updateRow);

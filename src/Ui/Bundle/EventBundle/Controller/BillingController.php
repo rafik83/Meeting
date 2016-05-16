@@ -10,18 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use DateTime;
 use Proximum\Vimeet\Application\Command\Billing\Update;
-use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\BillingUpdateType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ChoosePaymentModeType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,59 +65,6 @@ class BillingController extends Controller
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function paymentModeAction(Request $request, EventView $eventView, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
-        }
-
-        $cart = $this->get('vimeet_infrastructure.repository.cart_repository')->findBySheet($sheet);
-
-        if ($cart === null || $cart->getTemplate() !== $sheet->getTypePackageTemplate()) {
-            throw $this->createNotFoundException('No cart available to complete payment');
-        }
-
-        $createOrder = new Create(
-            $cart,
-            $sheet,
-            $cart->getData(),
-            $cart->getTemplate(),
-            $sheet->getBillingData(),
-            $sheet->getType()->getEvent()->getBillingTemplate(),
-            new DateTime()
-        );
-        $form = $this->createForm(ChoosePaymentModeType::class, $createOrder);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($createOrder);
-            $this->addFlash('success', 'flash.package.payment_mode.success');
-
-            // Go to the list of orders
-            return $this->redirectToRoute('event_sheet_list_orders', [
-                'sheet' => $sheet->getId(),
-            ]);
-        }
-
-        $cartView = $this->get('components.sheet.cart_view_factory')->createFromCart($cart, $request->getLocale());
-
-        return $this->render('EventBundle:Billing:paymentMode.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
-            'sheet'     => $sheet,
-            'cart_view' => $cartView,
         ]);
     }
 }

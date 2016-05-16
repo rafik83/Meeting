@@ -1,0 +1,78 @@
+Proximum\Vimeet\Domain\Model\Participant:
+    # Elao participant
+    participant_test:
+        __construct: false
+        user: '@user_test'
+        sheet: '@sheet_test'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: 'Paul' }
+            838197c7: { text: 'GASCOIGNE' }
+
+    # Proximum participants
+    proximum_participant_visiteur:
+        __construct: false
+        user: '@proximum_user_visiteur'
+        sheet: '@proximum_sheet_visiteur'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    proximum_participant_exposant:
+        __construct: false
+        user: '@proximum_user_exposant'
+        sheet: '@proximum_sheet_exposant'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    proximum_participant_carnot:
+        __construct: false
+        user: '@proximum_user_carnot'
+        sheet: '@proximum_sheet_carnot'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    proximum_participant_admin:
+        __construct: false
+        user: '@proximum_user_admin'
+        sheet: '@proximum_sheet_admin'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    proximum_participant_test:
+        __construct: false
+        user: '@proximum_user_test'
+        sheet: '@proximum_sheet_test'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    proximum_participant_ui:
+        __construct: false
+        user: '@proximum_user_ui'
+        sheet: '@proximum_sheet_ui'
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+
+    # Random
+    participant_random_{1..30}:
+        __construct: false
+        user: '@user_random_<current()>'
+        sheet: '@sheet_exposant<current()>'
+        owner: true
+        active: true
+        data:
+            838197c7: { text: <firstName()> }
+            541f84d4: { text: <lastName()> }

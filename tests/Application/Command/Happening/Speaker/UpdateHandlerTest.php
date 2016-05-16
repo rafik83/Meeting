@@ -1,0 +1,66 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Speaker;
+
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
+use Proximum\Vimeet\Application\Command\Happening\Speaker\UpdateHandler;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
+use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
+
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        //Context
+        $event = new Event();
+        $event->setLocales(['fr', 'en'], 'fr');
+
+        //Expected
+        $expectedSpeaker       = new Speaker($event, 'a', 'b', 'c', '', '');
+        $expectedTranslationFR = new SpeakerTranslation($expectedSpeaker, 'fr', 'ABC');
+        $expectedTranslationEN = new SpeakerTranslation($expectedSpeaker, 'en', 'DEF');
+        $expectedSpeaker->getTranslations()->set('fr', $expectedTranslationFR);
+        $expectedSpeaker->getTranslations()->set('en', $expectedTranslationEN);
+
+        //Command
+        $speaker       = new Speaker($event, 'firstName', 'lastName', 'orga', '', '');
+        $translationFR = new SpeakerTranslation($speaker, 'fr', 'foo');
+        $translationEN = new SpeakerTranslation($speaker, 'en', 'bar');
+        $speaker->getTranslations()->set('fr', $translationFR);
+        $speaker->getTranslations()->set('en', $translationEN);
+
+        $update = new Update($speaker);
+        $update->firstname    = 'a';
+        $update->lastname     = 'b';
+        $update->organization = 'c';
+        $update->translations = [
+            'fr' => [
+                'position' => 'ABC',
+            ],
+            'en' => [
+                'position' => 'DEF',
+            ]
+        ];
+
+        //Mock
+        $speakerRepository = $this->prophesize(SpeakerRepositoryInterface::class);
+        $speakerRepository->set($expectedSpeaker);
+
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
+
+        //Handler
+        $handler = new UpdateHandler($speakerRepository->reveal(), $fileStorage->reveal());
+        $handler->handle($update);
+    }
+}

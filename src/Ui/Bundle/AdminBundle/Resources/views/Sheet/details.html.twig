@@ -57,23 +57,7 @@
             <h3>Forfait</h3>
             {{ details.package }}
         </div>
-        <div class="col-md-6">
-            <h3>Commandes</h3>
-            <a href="{{ path('admin_sheet_billing', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary btn-sm">Commandes et transactions</a>
-        </div>
     </div>
-
-    {% for key, block in details.blocks %}
-        <h3>{{ block.title }}</h3>
-        <table class="table table-condensed">
-            {% for row in block.rows %}
-                <tr>
-                    <th class="col-md-3">{{ row.label }}</th>
-                    <td class="col-md-9">{{ row.value }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endfor %}
 
     <h3>Demandes de Rendez-vous</h3>
 

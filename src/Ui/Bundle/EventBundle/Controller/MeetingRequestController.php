@@ -38,12 +38,13 @@ class MeetingRequestController extends Controller
     /**
      * List meeting requests the sheet sent
      *
+     * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function listRequestAction(EventView $eventView, Sheet $sheet)
+    public function listRequestAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -51,8 +52,11 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getRequestSentBySheet($sheet);
-        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingRequest, $this->getUser(), $sheet);
+        $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')
+            ->getRequestSentBySheet($sheet);
+
+        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
+            ->generate($meetingRequest, $this->getUser(), $sheet, $request->getLocale());
 
         return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
             'eventView'     => $eventView,
@@ -64,12 +68,13 @@ class MeetingRequestController extends Controller
     /**
      * List meeting requests the sheet received
      *
+     * @param Request   $request
      * @param EventView $eventView
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function listPropositionAction(EventView $eventView, Sheet $sheet)
+    public function listPropositionAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -77,8 +82,11 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')->getPropositionReceivedBySheet($sheet);
-        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')->generate($meetingProposition, $this->getUser(), $sheet);
+        $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')
+            ->getPropositionReceivedBySheet($sheet);
+
+        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
+            ->generate($meetingProposition, $this->getUser(), $sheet, $request->getLocale());
 
         return $this->render('EventBundle:MeetingRequest:listProposition.html.twig', [
             'eventView'         => $eventView,
@@ -109,7 +117,10 @@ class MeetingRequestController extends Controller
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         $createRequest = new CreateRequest($from, $to, new \DateTime(), $this->getUser());
-        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, ['sheet' => $from]);
+        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
+            'sheet'  => $from,
+            'locale' => $request->getLocale(),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($createRequest);
@@ -120,8 +131,8 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
             'eventView' => $eventView,
-            'fromName'  => $sheetInfoGuesser->guessSheetInfo($from),
-            'toName'    => $sheetInfoGuesser->guessSheetInfo($to),
+            'fromName'  => $sheetInfoGuesser->guessSheetName($from, $request->getLocale()),
+            'toName'    => $sheetInfoGuesser->guessSheetName($to, $request->getLocale()),
             'form'      => $form->createView(),
         ]);
     }
@@ -145,7 +156,10 @@ class MeetingRequestController extends Controller
         }
 
         $approveRequest = new ApproveRequest($meetingRequest, new \DateTime());
-        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, ['sheet' => $sheet]);
+        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
+            'sheet'  => $sheet,
+            'locale' => $request->getLocale(),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($approveRequest);
@@ -159,8 +173,8 @@ class MeetingRequestController extends Controller
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
-            'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'      => $form->createView(),
         ]);
     }
@@ -198,8 +212,8 @@ class MeetingRequestController extends Controller
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
-            'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'      => $form->createView(),
         ]);
     }
@@ -207,15 +221,18 @@ class MeetingRequestController extends Controller
     /**
      * Display a meeting request
      *
+     * @param Request        $request
      * @param EventView      $eventView
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showRequestAction(EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function showRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $locale = $request->getLocale();
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToSee($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
@@ -236,14 +253,17 @@ class MeetingRequestController extends Controller
         $meetingRequestView = new ShowDetailsView(
             $meetingRequest->getId(),
             $meetingRequest->getToSheet()->getId(),
-            $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             $meetingRequest->getFromSheet()->getId(),
-            $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
-            array_map(function (Participant $participant) {
-                return $this
-                    ->get('vimeet_infrastructure.application.components.sheet.participant_info_guesser')
-                    ->guessParticipantInfo($participant);
-            }, $participants),
+            $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            array_map(
+                function (Participant $participant) use ($locale) {
+                    return $this
+                        ->get('template.participant_info_guesser')
+                        ->guessParticipantCompleteName($participant, $locale);
+                },
+                $participants
+            ),
             $messageRepository->getMessagesByMeetingRequest($meetingRequest),
             $meetingRequest->getState()
         );
@@ -292,8 +312,8 @@ class MeetingRequestController extends Controller
         return $this->render('EventBundle:MeetingRequest:cancelRequest.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
-            'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'      => $form->createView(),
         ]);
     }
@@ -318,10 +338,16 @@ class MeetingRequestController extends Controller
 
         if ($meetingRequest->getFromSheet() === $sheet) {
             $command = new UpdateRequestFrom($meetingRequest, new \DateTime(), $this->getUser());
-            $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, ['sheet' => $sheet]);
+            $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, [
+                'sheet'  => $sheet,
+                'locale' => $request->getLocale()
+            ]);
         } elseif ($meetingRequest->getToSheet() === $sheet) {
             $command = new UpdateRequestTo($meetingRequest, new \DateTime(), $this->getUser());
-            $form    = $this->createForm(MeetingRequestUpdateToType::class, $command, ['sheet' => $sheet]);
+            $form    = $this->createForm(MeetingRequestUpdateToType::class, $command, [
+                'sheet'  => $sheet,
+                'locale' => $request->getLocale()
+            ]);
         } else {
             throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
         }
@@ -337,8 +363,8 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
             'eventView' => $eventView,
-            'fromName'  => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getFromSheet()),
-            'toName'    => $sheetInfoGuesser->guessSheetInfo($meetingRequest->getToSheet()),
+            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'      => $form->createView(),
             'sheet'     => $sheet,
         ]);

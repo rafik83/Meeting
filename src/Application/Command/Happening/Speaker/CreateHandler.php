@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 
 class CreateHandler
@@ -43,14 +44,22 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $this->speakerRepository->add(new Speaker(
+        $speaker = new Speaker(
             $create->event,
             $create->firstname,
             $create->lastname,
-            $create->function,
             $create->organization,
             $this->fileStorageInterface->upload($create->logo),
             $this->fileStorageInterface->upload($create->photo)
-        ));
+        );
+
+        foreach ($create->translations as $locale => $translation) {
+            $speaker->getTranslations()->set(
+                $locale,
+                new SpeakerTranslation($speaker, $locale, $translation['position'])
+            );
+        }
+
+        $this->speakerRepository->add($speaker);
     }
 }

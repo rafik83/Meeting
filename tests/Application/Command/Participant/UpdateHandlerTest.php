@@ -29,12 +29,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
         $type  = new Type($event);
-        $type->setParticipantTemplate([
-            'foobar' => [
-                'required' => true,
-                'private'  => false,
-            ]
-        ]);
         $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $owner = true;
 
@@ -62,12 +56,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $event = new Event();
         $type  = new Type($event);
-        $type->setParticipantTemplate([
-            'foobar' => [
-                'required' => true,
-                'private'  => false,
-            ]
-        ]);
         $sheet = new Sheet($event, $type, [], [], new \DateTime());
         $owner = true;
 

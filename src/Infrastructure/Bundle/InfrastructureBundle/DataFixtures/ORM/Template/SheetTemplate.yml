@@ -102,7 +102,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: 1
-                                nomenclature: "@nomenclature_asddays_competences->id"
+                                nomenclature: "@nomenclature_competences->id"
                         75adad94:
                             component: "block"
                             type: "6-6"
@@ -272,7 +272,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos offres"
                                             required: true
-                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
+                                            nomenclature: "@nomenclature_offre_besoins->id"
                                     63ccc105:
                                         component: "object"
                                         type: "nomenclature"
@@ -285,4 +285,4 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos besoins"
                                             required: true
-                                            nomenclature: "@nomenclature_asddays_offre_besoins->id"
+                                            nomenclature: "@nomenclature_offre_besoins->id"
