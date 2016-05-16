@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Product:
+    type:  entity
+    table: product
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\ProductTranslation
+            mappedBy: product
+            indexBy: locale
+            cascade: ["persist"]
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
