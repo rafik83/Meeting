@@ -744,7 +744,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                              config:
                                  style: "style-1"
                                  content:
-                                   fr: "Profil"
+                                   fr: "Mon profil"
                                    en: "Profile"
                                  type: "title"
                          541f84d4:

@@ -4,8 +4,10 @@ Feature: Register and login user
   Scenario: Register an user in 3 steps
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml     |
-      | @InfrastructureBundle/DataFixtures/ORM/EventASDDays2016.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml              |
     When I go to this page "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
@@ -70,13 +72,16 @@ Feature: Register and login user
 
   Scenario: Fill a participant profile
     Given I am logged with "test@test.com" on event "http://asddays-2016.vimeet.proximum.dev"
-    When I go to this page "/fr/participate/1"
-    And I fill in the following:
-      | Prénom             | Paul                     |
-      | Nom                | Dupont                   |
-      | Téléphone portable | 0698765432               |
-      | Téléphone fixe     | 0198765432               |
-    And I select "Informatique" from "block[dd321a4f]"
-    And I select "Ingénieur chef de projet" from "block[6c4a3a4f]"
+    When I go to this page "/fr/"
+    And I check the "Fournisseur" radio
+    And I press "common.next"
+    Then I should be on this page "/fr/participate/1"
+    When I fill in the following:
+      | Prénom             | Paul       |
+      | Nom                | Dupont     |
+      | Téléphone portable | 0698765432 |
+      | Téléphone fixe     | 0198765432 |
+    And I select "Informatique" from "block[dd321a4f][nomenclature]"
+    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][nomenclature]"
     And I press "common.next"
     Then the response status code should be 200
