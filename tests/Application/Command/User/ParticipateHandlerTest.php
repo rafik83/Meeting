@@ -212,21 +212,21 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $now
         );
 
-        $templateData = new TemplateData('root', 'root', []);
-        $block = new Block(null, '12', []);
-        $text  = new Object\Text('dded0597', 'text', []);
-        $editableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $templateData = new TemplateData('root', []);
+        $block = new Block('12', []);
+        $text  = new Object\Text('text', [], 'fr', 'fr');
+        $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_data'],
-        ]);
-        $editableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        ], 'fr', 'fr');
+        $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_data'],
-        ]);
-        $telephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        ], 'fr', 'fr');
+        $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_data'],
-        ]);
-        $telephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        ], 'fr', 'fr');
+        $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_data'],
-        ]);
+        ], 'fr', 'fr');
 
         $block->addChild(1, 'dded0597', $text);
         $block->addChild(1, '541f84d4', $editableText1);
