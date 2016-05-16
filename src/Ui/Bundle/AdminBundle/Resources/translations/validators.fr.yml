@@ -11,7 +11,7 @@ validators:
     email: L'adresse e-mail saisie n'est pas valide
     required:
         email: L'adresse e-mail ne peut pas être vide
-        password:
+        password: Le mot de passe ne peut pas être vide
     emailDoesNotExist: L'email saisi n'existe pas
     emailAlreadyExist: Cet email est déjà utilisé, vous ne pouvez pas l'utiliser
     sameEmail: Vous utilisez déjà cet email
