@@ -86,4 +86,15 @@ class Update
             ];
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isColorsUpdated()
+    {
+        return
+            $this->leftColor  !== $this->event->getConfiguration()->getLeftColor() ||
+            $this->rightColor !== $this->event->getConfiguration()->getRightColor() ||
+            $this->textColor  !== $this->event->getConfiguration()->getTextColor();
+    }
 }
