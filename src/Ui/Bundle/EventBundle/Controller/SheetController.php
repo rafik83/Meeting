@@ -138,9 +138,11 @@ class SheetController extends Controller
         }
 
         return $this->createForm($types[$object->getType()], $object, [
-            'action' => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
-            'submit' => true,
-            'locale' => $locale,
+            'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'submit'      => true,
+            'locale'      => $locale,
+            'help'        => $object->getHelp(),
+            'placeholder' => $object->getPlaceholder(),
         ]);
     }
 

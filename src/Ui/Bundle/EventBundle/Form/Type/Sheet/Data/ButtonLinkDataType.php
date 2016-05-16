@@ -24,15 +24,20 @@ class ButtonLinkDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', UrlType::class)
+            ->add('url', UrlType::class, ['placeholder' => $options['placeholder']])
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['locale']);
         $resolver->setDefaults([
-            'data_class' => ButtonLink::class,
+            'data_class'  => ButtonLink::class,
+            'placeholder' => null,
+            'help'        => null,
         ]);
     }
 

@@ -149,4 +149,20 @@ class Object extends AbstractChild
     {
         return false;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getPlaceholder()
+    {
+        return $this->getOption('placeholder', $this->locale);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHelp()
+    {
+        return $this->getOption('help', $this->locale);
+    }
 }

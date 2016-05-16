@@ -940,7 +940,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 placeholder:
                                     fr: "Société en une phrase"
                                 help:
-                                    fr: ""
+                                    fr: "Le titre de votre fiche"
                                 length: "200"
                                 type: "title"
                                 required: true
@@ -1078,9 +1078,9 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 label:
                                     fr: "Equipements, technologies et process"
                                 placeholder:
-                                    fr: ""
+                                    fr: "Equipements, technologies, process, ..."
                                 help:
-                                    fr: ""
+                                    fr: "Vos equipements, technologies et process"
                                 required: false
                                 default: "3"
                                 translatable: true

@@ -27,9 +27,10 @@ class MediaCollectionDataType extends AbstractType
             ->add('medias', CollectionType::class, [
                 'entry_type'    => MediaDataType::class,
                 'entry_options' => [
-                    'label'      => false,
-                    'collection' => $options['data'],
-                    'required'   => false,
+                    'label'       => false,
+                    'collection'  => $options['data'],
+                    'required'    => false,
+                    'placeholder' => $options['placeholder']
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -45,7 +46,9 @@ class MediaCollectionDataType extends AbstractType
     {
         $resolver->setRequired(['locale']);
         $resolver->setDefaults([
-            'data_class' => MediaCollection::class,
+            'data_class'  => MediaCollection::class,
+            'placeholder' => null,
+            'help'        => null,
         ]);
     }
 

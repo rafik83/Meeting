@@ -6,6 +6,10 @@
     <div class="modal-body">
         {{ form_errors(form) }}
 
+        {% if form.vars.help|default(false) %}
+            <p class="help-block">{{ form.vars.help }}</p>
+        {% endif %}
+
         {% for key, child in form if key != 'submit' %}
             {{ form_row(child) }}
         {% endfor %}

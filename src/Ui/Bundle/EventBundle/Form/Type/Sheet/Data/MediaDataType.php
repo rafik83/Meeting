@@ -29,8 +29,8 @@ class MediaDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('url', UrlType::class)
+            ->add('title', TextType::class, ['placeholder' => $options['placeholder']])
+            ->add('url', UrlType::class, ['placeholder' => 'http://'])
             ->add('type', ChoiceType::class, [
                 'expanded' => true,
                 'choices'  => [
@@ -48,8 +48,9 @@ class MediaDataType extends AbstractType
     {
         $resolver->setRequired(['collection']);
         $resolver->setDefaults([
-            'data_class' => Media::class,
-            'empty_data' => function (Options $options) {
+            'placeholder' => null,
+            'data_class'  => Media::class,
+            'empty_data'  => function (Options $options) {
                 return function (FormInterface $form) use ($options) {
                     return new Media(
                         $options['collection'],

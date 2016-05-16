@@ -28,8 +28,9 @@ class ItemDataType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'    => false,
-                'required' => false,
+                'label'       => false,
+                'required'    => false,
+                'placeholder' => $options['placeholder']
             ])
         ;
     }
@@ -41,8 +42,9 @@ class ItemDataType extends AbstractType
     {
         $resolver->setRequired(['locale', 'collection']);
         $resolver->setDefaults([
-            'data_class' => Item::class,
-            'empty_data' => function (Options $options) {
+            'placeholder' => null,
+            'data_class'  => Item::class,
+            'empty_data'  => function (Options $options) {
                 return function (FormInterface $form) use ($options) {
                     return new Item($options['collection'], $form->get('title')->getData());
                 };
