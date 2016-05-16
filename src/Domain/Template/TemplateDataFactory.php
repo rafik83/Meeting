@@ -127,7 +127,7 @@ class TemplateDataFactory
         }
 
         foreach ($data as $key => $value) {
-            $templateData->getObject($key)->setData($value);
+            $templateData->getObject($key)->setData($value ? : []);
         }
 
         return $templateData;

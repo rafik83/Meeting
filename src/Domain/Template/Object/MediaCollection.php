@@ -22,13 +22,12 @@ class MediaCollection extends Object
     /**
      * {@inheritdoc}
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $data = array_merge(['medias' => []], $data);
 
-        $this->medias = array_map(function (array $media) {
-            return new Media($this, $media['title'], $media['url'], $media['type']);
-        }, array_values($data['medias']));
+        $this->buildMedias($data);
+        $this->padMedias();
 
         return parent::setData($data);
     }
@@ -40,7 +39,7 @@ class MediaCollection extends Object
     {
         $this->data['medias'] = array_values(array_map(function (Media $media) {
             return $media->getData();
-        }, $this->medias));
+        }, $this->getNotEmptyMedias()));
 
         return parent::getData();
     }
@@ -79,5 +78,56 @@ class MediaCollection extends Object
         }
 
         return $this;
+    }
+
+    /**
+     * Get default medias count
+     *
+     * @return int
+     */
+    public function getDefault()
+    {
+        return $this->getOption('default');
+    }
+
+    /**
+     * Pad medias
+     */
+    private function padMedias()
+    {
+        $default = $this->getDefault();
+
+        if ($default !== null) {
+            $pad = $default - count($this->medias);
+            while ($pad-- > 0) {
+                $this->medias[] = new Media($this, null, null, null);
+            }
+        }
+    }
+
+    /**
+     * Build medias
+     *
+     * @param array $data
+     */
+    private function buildMedias(array $data)
+    {
+        $this->medias = array_map(
+            function (array $media) {
+                return new Media($this, $media['title'], $media['url'], $media['type']);
+            }, array_values($data['medias'])
+        );
+    }
+
+    /**
+     * Get not empty medias
+     *
+     * @return array
+     */
+    private function getNotEmptyMedias()
+    {
+        return array_filter(array_values($this->medias), function (Media $media) {
+            return !$media->isEmpty();
+        });
     }
 }

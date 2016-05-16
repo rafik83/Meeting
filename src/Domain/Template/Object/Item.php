@@ -18,7 +18,7 @@ class Item
     private $collection;
 
     /**
-     * @var string
+     * @var array|string
      */
     private $title;
 
@@ -26,7 +26,7 @@ class Item
      * Item constructor.
      *
      * @param ItemCollection $collection
-     * @param string         $title
+     * @param array|string   $title
      */
     public function __construct(ItemCollection $collection, $title)
     {
@@ -113,5 +113,13 @@ class Item
     public function getData()
     {
         return ['title' => $this->title];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->title === null || is_array($this->title) && count(array_filter($this->title)) === 0;
     }
 }

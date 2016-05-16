@@ -22,13 +22,12 @@ class ItemCollection extends Object
     /**
      * {@inheritdoc}
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $data = array_merge(['items' => []], $data);
 
-        $this->items = array_map(function (array $item) {
-            return new Item($this, $item['title']);
-        }, array_values($data['items']));
+        $this->buildItems($data);
+        $this->padItems();
 
         return parent::setData($data);
     }
@@ -40,7 +39,7 @@ class ItemCollection extends Object
     {
         $this->data['items'] = array_values(array_map(function (Item $item) {
             return $item->getData();
-        }, $this->items));
+        }, $this->getNotEmptyItems()));
 
         return parent::getData();
     }
@@ -79,5 +78,56 @@ class ItemCollection extends Object
         }
 
         return $this;
+    }
+
+    /**
+     * Get default items count
+     *
+     * @return int
+     */
+    public function getDefault()
+    {
+        return $this->getOption('default');
+    }
+
+    /**
+     * Pad items
+     */
+    private function padItems()
+    {
+        $default = $this->getDefault();
+
+        if ($default !== null) {
+            $pad = $default - count($this->items);
+            while ($pad-- > 0) {
+                $this->items[] = new Item($this, null);
+            }
+        }
+    }
+
+    /**
+     * Build items
+     *
+     * @param array $data
+     */
+    private function buildItems(array $data)
+    {
+        $this->items = array_map(
+            function (array $item) {
+                return new Item($this, $item['title']);
+            }, array_values($data['items'])
+        );
+    }
+
+    /**
+     * Get not empty items
+     *
+     * @return array
+     */
+    private function getNotEmptyItems()
+    {
+        return array_filter(array_values($this->items), function (Item $item) {
+            return !$item->isEmpty();
+        });
     }
 }

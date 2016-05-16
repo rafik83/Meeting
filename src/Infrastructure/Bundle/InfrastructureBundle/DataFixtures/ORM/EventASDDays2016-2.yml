@@ -1223,7 +1223,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Titre de la fiche
             dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
             # Image
-            1b9a00b3: "onera.jpg"
+            1b9a00b3: { file: "onera.jpg" }
             # Lien
             90713a3d: { url: "http://www.onera.fr/" }
             # Description d'activité

@@ -50,7 +50,7 @@ class Object extends AbstractChild
      *
      * @return Object
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $this->data = $data;
 
@@ -92,7 +92,7 @@ class Object extends AbstractChild
      */
     public function getData()
     {
-        return $this->data;
+        return $this->data ? : [];
     }
 
     /**

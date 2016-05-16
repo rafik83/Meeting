@@ -134,4 +134,12 @@ class Media
             'type'  => $this->type,
         ];
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->title === null || is_array($this->title) && count(array_filter($this->title)) === 0;
+    }
 }
