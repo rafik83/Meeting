@@ -1,29 +1,26 @@
 Feature: Change my mail
   I need to be able to change my account
 
-  Background: Re-init the database and load the fixtures
+  Background:
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml                         |
-      | app/Event.yml                            |
-      | app/Type.yml                             |
-      | UserWithActivateAccountTokenAndSheet.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml  |
+      | UserWithActivateAccountTokenAndSheet.yml                       |
+    And I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can change my email
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
-    When I go to "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
-    And the response status code should be 200
-    Then I should be on "/fr/"
-    And the response status code should be 200
-    Then I follow "event.link.see_my_sheet"
-    And the response status code should be 200
+    When I go to this page "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
+    Then I should be on this page "/fr/"
+    When I follow "event.link.see_my_sheet"
+    Then the response status code should be 200
 
   Scenario: I can change my email full process
-    Given I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     When I go to this page "/fr/account"
     And the response status code should be 200
     Then I fill in the following:
-    | form.change_mail.children.mail.label | truc@bidule.com |
+      | form.change_mail.children.mail.label | truc@bidule.com |
     And I press "form.change_mail.children.submit.label"
     Then I should be on "/fr/"
     And the response status code should be 200
