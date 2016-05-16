@@ -153,26 +153,6 @@ class Type implements WhoInterface
     }
 
     /**
-     * @return array
-     */
-    public function getSheetData()
-    {
-        $data = [];
-
-        $template = $this->getSheetTemplate();
-
-        foreach ($template as $key => $block) {
-            $data[$key] = [];
-
-            foreach ($block['template'] as $i => $row) {
-                $data[$key][$i] = null;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * @param SheetTemplate $sheetTemplate
      *
      * @return Type

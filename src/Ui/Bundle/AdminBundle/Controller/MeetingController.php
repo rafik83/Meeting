@@ -29,7 +29,12 @@ class MeetingController extends Controller
 
         $meetings = $this
             ->get('vimeet_infrastructure.repository.meeting_repository')
-            ->getByEvent($event, $request->query->getInt('page', 1), 20);
+            ->getByEvent(
+                $event,
+                $request->query->getInt('page', 1),
+                20,
+                $event->getAvailableLocale($request->getLocale())
+            );
 
         return $this->render('AdminBundle:Meeting:list.html.twig', [
             'event'    => $event,

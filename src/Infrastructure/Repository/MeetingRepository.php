@@ -74,7 +74,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event, $page, $limit)
+    public function getByEvent(Event $event, $page, $limit, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -87,11 +87,11 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         $pagination = $this->paginator->paginate($queryBuilder, $page, $limit, 'meeting', 'id');
 
-        $pagination->results = array_map(function (Meeting $meeting) {
+        $pagination->results = array_map(function (Meeting $meeting) use ($locale) {
             return new MeetingView(
                 $meeting->getId(),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getFromSheet()),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getToSheet()),
+                $this->sheetInfoGuesser->guessSheetName($meeting->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetName($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
                 $meeting->getSlot()->getEnd()
