@@ -81,7 +81,7 @@ Feature: Register and login user
       | Nom                | Dupont     |
       | Téléphone portable | 0698765432 |
       | Téléphone fixe     | 0198765432 |
-    And I select "Informatique" from "block[dd321a4f][nomenclature]"
-    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][nomenclature]"
+    And I select "Informatique" from "block[dd321a4f][item]"
+    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item]"
     And I press "common.next"
     Then the response status code should be 200
