@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\ObjectValidator;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EditableTextValidator extends ObjectValidator
@@ -22,8 +23,28 @@ class EditableTextValidator extends ObjectValidator
      */
     protected function checkRequired(Object $object, Constraint $constraint)
     {
-        if (true === $object->getOption('required') && $object instanceof Object\EditableText) {
+        if ($object instanceof Object\EditableText && true === $object->getOption('required')) {
             $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.content')->validate($object->getContentValue(), new NotBlank());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function checkMinLength(Object $object, Constraint $constraint)
+    {
+        if ($object instanceof Object\EditableText && null !== $object->getOption('minLength')) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.content')->validate($object->getContentValue(), new Length(['min' => $object->getOption('minLength')]));
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function checkMaxLength(Object $object, Constraint $constraint)
+    {
+        if ($object instanceof Object\EditableText && null !== $object->getOption('maxLength')) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.content')->validate($object->getContentValue(), new Length(['max' => $object->getOption('maxLength')]));
         }
     }
 }

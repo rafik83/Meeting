@@ -32,4 +32,14 @@ class UrlValidator extends ObjectValidator
             $this->context->buildViolation('validators.field.notValid.url')->atPath($constraint->key . '.url')->addViolation();
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function checkRequired(Object $object, Constraint $constraint)
+    {
+        if ($object instanceof Object\Url && true === $object->getOption('required')) {
+            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.url')->validate($object->getContentValue(), new Constraints\NotBlank());
+        }
+    }
 }
