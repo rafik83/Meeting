@@ -19,6 +19,11 @@
     </ul>
 </li>
 <li>
+    <a href="{{ path('admin_product', { 'event': event.id }) }}">
+        {{ 'admin.product.link'|trans }}
+    </a>
+</li>
+<li>
     <a href="{{ path('admin_sheet', { 'event': event.id }) }}">
         {{ 'admin.sheet.link'|trans }}
     </a>

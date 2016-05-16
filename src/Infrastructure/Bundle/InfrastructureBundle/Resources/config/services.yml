@@ -83,6 +83,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.product_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingRepository
         arguments:
