@@ -26,6 +26,11 @@
   }
 }
 
+.btn.btn-gray {
+  background: $bg-container-color !important;
+  color: #00398c !important;
+}
+
 .btn-inactive {
   background: $button-bg-color-inactive !important;
 

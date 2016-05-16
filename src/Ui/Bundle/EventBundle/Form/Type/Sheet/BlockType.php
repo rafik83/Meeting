@@ -32,19 +32,19 @@ class BlockType extends AbstractType
         /** @var Template\Block $block */
         $block = $options['block'];
 
-        foreach ($block->getEditableObjects() as $object) {
+        foreach ($block->getEditableObjects() as $key => $object) {
             if ($object instanceof Template\Object\EditableText) {
-                $this->addText($builder, $object, $options['locale']);
+                $this->addText($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Nomenclature) {
-                $this->addNomenclature($builder, $object, $options['locale']);
+                $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Image) {
-                $this->addImage($builder, $object, $options['locale']);
+                $this->addImage($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
-                $this->addTelephone($builder, $object, $options['locale']);
+                $this->addTelephone($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Country) {
-                $this->addCountry($builder, $object, $options['locale']);
+                $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
-                $this->addUrl($builder, $object, $options['locale']);
+                $this->addUrl($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -62,26 +62,28 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addText(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addText($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), EditableTextInputDataType::class, [
+        $builder->add($key, EditableTextInputDataType::class, [
             'object' => $object,
             'locale' => $locale,
         ]);
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addImage(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), FileType::class, [
+        $builder->add($key, FileType::class, [
             'label'    => false,
             'required' => $object->getOption('required'),
             'mapped'   => false,
@@ -89,50 +91,55 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addTelephone(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), TelephoneDataType::class, [
+        $builder->add($key, TelephoneDataType::class, [
             'object' => $object,
             'locale' => $locale,
         ]);
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
-     * @param Template\Object\Url  $url
+     * @param Template\Object\Url  $object
      * @param string               $locale
      */
-    private function addUrl(FormBuilderInterface $builder, Template\Object\Url $url, $locale)
+    private function addUrl($key, FormBuilderInterface $builder, Template\Object\Url $object, $locale)
     {
-        $builder->add($url->getKey(), UrlDataType::class, [
-            'object' => $url,
-            'locale' => $locale,
-        ]);
-    }
-
-    /**
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
-     */
-    private function addCountry(FormBuilderInterface $builder, Template\Object $object, $locale)
-    {
-        $builder->add($object->getKey(), CountryDataType::class, [
+        $builder->add($key, UrlDataType::class, [
             'object' => $object,
             'locale' => $locale,
         ]);
     }
 
     /**
+     * @param string               $key
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addCountry($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($key, CountryDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
+        ]);
+    }
+
+    /**
+     * @param string                       $key
      * @param FormBuilderInterface         $builder
      * @param Template\Object\Nomenclature $object
      * @param string                       $locale
      */
     private function addNomenclature(
+        $key,
         FormBuilderInterface $builder,
         Template\Object\Nomenclature $object,
         $locale
@@ -143,7 +150,7 @@ class BlockType extends AbstractType
             return;
         }
 
-        $builder->add($object->getKey(), NomenclatureDataType::class, [
+        $builder->add($key, NomenclatureDataType::class, [
             'object' => $object,
             'locale' => $locale
         ]);

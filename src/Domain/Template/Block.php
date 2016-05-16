@@ -31,6 +31,32 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $key
+     * @param string $value
+     *
+     * @return Object
+     * @throws \Exception
+     */
+    public function __set($key, $value)
+    {
+        $object = $this->getObject($key);
+
+        if ($object instanceof Object\EditableText) {
+            return $object->setContent($value);
+        }
+
+        return $object->setData($value);
+    }
+
+    /**
+     * @param int $column
+     */
+    public function addColumn($column)
+    {
+        $this->children[$column] = [];
+    }
+
+    /**
      * @param int           $column
      * @param string        $name
      * @param AbstractChild $child
@@ -43,7 +69,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object[]
      */
     public function getObjects($key = null)
     {
@@ -77,7 +103,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object
+     * @return \Proximum\Vimeet\Domain\Template\Object
      * @throws \Exception
      */
     public function getObject($key)
@@ -206,19 +232,13 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return \Proximum\Vimeet\Domain\Template\Object\Image[]
      */
     public function getImageObjects()
     {
-        $objects = [];
-
-        foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Image) {
-                $objects[] = $object;
-            }
-        }
-
-        return $objects;
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object instanceof Object\Image;
+        });
     }
 
     /**

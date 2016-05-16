@@ -23,27 +23,36 @@ class Object extends AbstractChild
     protected $locale;
 
     /**
+     * @var string
+     */
+    protected $fallback;
+
+    /**
+     * Object constructor.
+     *
+     * @param string $type
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     */
+    public function __construct($type, array $config, $locale, $fallback)
+    {
+        parent::__construct($type, $config);
+
+        $this->locale   = $locale;
+        $this->fallback = $fallback;
+    }
+
+    /**
      * Set data
      *
      * @param array $data
      *
      * @return Object
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return Object
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
 
         return $this;
     }
@@ -56,6 +65,14 @@ class Object extends AbstractChild
         return $this->locale;
     }
 
+    /**
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->fallback;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -75,7 +92,7 @@ class Object extends AbstractChild
      */
     public function getData()
     {
-        return $this->data;
+        return $this->data ? : [];
     }
 
     /**
@@ -112,8 +129,40 @@ class Object extends AbstractChild
     /**
      * @return bool
      */
+    public function isTranslatable()
+    {
+        return $this->getOption('translatable') === true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->getData();
+    }
+
+    /**
+     * @return bool
+     */
     public function isEditable()
     {
         return false;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlaceholder()
+    {
+        return $this->getOption('placeholder', $this->locale);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHelp()
+    {
+        return $this->getOption('help', $this->locale);
     }
 }

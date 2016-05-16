@@ -5,12 +5,12 @@
     </header>
     <div class="section__content">
         <ul>
-            {% for list_item in data[uid]|default([]) %}
-                <li>{{ list_item }}</li>
+            {% for list_item in data[uid]['items']|default([]) %}
+                <li>{{ list_item['title']|localize(locale, fallback) }}</li>
             {% endfor %}
         </ul>
     </div>
     <footer>
-        <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
     </footer>
 </section>

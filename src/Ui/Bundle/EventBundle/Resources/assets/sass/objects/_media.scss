@@ -40,3 +40,14 @@
     }
 
 }
+
+.edit--media {
+    .collection {
+        >.form-group {
+            background-color: $bg-container-color;
+            border-radius: 3px;
+            margin: 30px;
+            padding: 30px;
+        }
+    }
+}

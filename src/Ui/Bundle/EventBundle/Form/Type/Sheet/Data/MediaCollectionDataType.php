@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\Object\MediaCollection;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditableTextDataType extends AbstractType
+class MediaCollectionDataType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,18 @@ class EditableTextDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', TextareaType::class, ['placeholder' => $options['placeholder'], 'attr' => ['rows' => 7]])
+            ->add('medias', CollectionType::class, [
+                'entry_type'    => MediaDataType::class,
+                'entry_options' => [
+                    'label'       => false,
+                    'collection'  => $options['data'],
+                    'required'    => false,
+                    'placeholder' => $options['placeholder']
+                ],
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'label'         => false,
+            ])
         ;
     }
 
@@ -35,7 +46,7 @@ class EditableTextDataType extends AbstractType
     {
         $resolver->setRequired(['locale']);
         $resolver->setDefaults([
-            'data_class'  => EditableText::class,
+            'data_class'  => MediaCollection::class,
             'placeholder' => null,
             'help'        => null,
         ]);
@@ -46,6 +57,6 @@ class EditableTextDataType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'sheet_editable_text_data';
+        return 'sheet_media_collection_data';
     }
 }

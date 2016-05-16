@@ -1,0 +1,96 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Template;
+
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\Object\Text;
+
+class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    public function testCreate()
+    {
+        $template = [
+            'ec74be5e' => [
+                'component' => 'object',
+                'type'      => 'text',
+                'config'    => [
+                    'content' => ['fr' => 'Lorem ipsum']
+                ],
+            ],
+            '211b2168' => [
+                'component' => 'block',
+                'type'      => '8-4',
+                'config'    => [],
+                'children'  => [
+                    [
+                        '0aea62b2' => [
+                            'component' => 'object',
+                            'type'      => 'editable-text',
+                            'config'    => [
+                                'label'       => ['fr' => 'Titre'],
+                                'placeholder' => ['fr' => 'Le titre'],
+                                'help'        => ['fr' => 'Ici le titre'],
+                                'length'      => 100,
+                                'required'    => true,
+                            ]
+                        ]
+                    ],
+                    [
+
+                    ]
+                ]
+            ],
+        ];
+
+        $data = [
+            'ec74be5e' => [
+                'text' => ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
+            ],
+            '0aea62b2' => [
+                'text' => ['fr' => 'Lorem ipsum 0aea62b2 fr', 'en' => 'Lorem ipsum 0aea62b2 en'],
+            ],
+        ];
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+
+        $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
+        $templateData = $factory->create($template, $data, 'fr', 'fr');
+
+        // Assert objects are created
+        $objects = $templateData->getObjects();
+        $this->assertCount(2, $objects);
+        $this->assertArrayHasKey('ec74be5e', $objects);
+        $this->assertArrayHasKey('0aea62b2', $objects);
+
+        // Assert objects are created with the right class
+        $this->assertInstanceOf(Text::class, $objects['ec74be5e']);
+        $this->assertInstanceOf(EditableText::class, $objects['0aea62b2']);
+
+        // Assert getObject($key) return the right object
+        $this->assertEquals($objects['ec74be5e'], $templateData->getObject('ec74be5e'));
+        $this->assertEquals($objects['0aea62b2'], $templateData->getObject('0aea62b2'));
+
+        // Assert getEditableObjects() return editable objects
+        $editableObjects = $templateData->getEditableObjects();
+        $this->assertCount(1, $editableObjects);
+        $this->assertArrayHasKey('0aea62b2', $editableObjects);
+        $this->assertEquals($editableObjects['0aea62b2'], $templateData->getObject('0aea62b2'));
+        $this->assertTrue($templateData->getObject('0aea62b2')->isEditable());
+
+        // Assert normalize give back the template array
+        $this->assertEquals($template, $templateData->normalize());
+
+        // Assert getData() give back the data array
+        $this->assertEquals($data, $templateData->getData());
+    }
+}
