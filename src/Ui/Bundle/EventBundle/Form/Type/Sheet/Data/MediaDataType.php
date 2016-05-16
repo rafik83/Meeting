@@ -1,0 +1,85 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
+
+use Proximum\Vimeet\Domain\Template\Object\Media;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class MediaDataType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('title', TextType::class, ['placeholder' => $options['placeholder']])
+            ->add('url', UrlType::class, ['placeholder' => 'http://'])
+            ->add('type', ChoiceType::class, [
+                'expanded' => true,
+                'choices'  => [
+                    'Document' => 'document',
+                    'Vidéo'    => 'video',
+                ],
+            ])
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['collection']);
+        $resolver->setDefaults([
+            'placeholder' => null,
+            'data_class'  => Media::class,
+            'empty_data'  => function (Options $options) {
+                return function (FormInterface $form) use ($options) {
+                    return new Media(
+                        $options['collection'],
+                        $form->get('title')->getData(),
+                        $form->get('url')->getData(),
+                        $form->get('type')->getData()
+                    );
+                };
+            },
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $data = $view->vars['data'];
+
+        if ($data instanceof Media && $data->getCollection()->getLocale() !== $data->getCollection()->getFallback()) {
+            $view->vars['form']->children['title']->vars['help'] = $data->getFallbackTitle();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'sheet_media_data';
+    }
+}

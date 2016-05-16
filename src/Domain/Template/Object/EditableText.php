@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
 
-class EditableText extends Object
+class EditableText extends EditableObject
 {
     /**
      * @return string
@@ -27,7 +27,7 @@ class EditableText extends Object
      */
     public function getContent()
     {
-        if (true === $this->getOption('translatable')) {
+        if ($this->isTranslatable()) {
             return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;
         }
 
@@ -41,7 +41,7 @@ class EditableText extends Object
      */
     public function setContent($content)
     {
-        if (true === $this->getOption('translatable')) {
+        if ($this->isTranslatable()) {
             $this->data['text'][$this->locale] = $content;
         } else {
             $this->data['text'] = $content;
@@ -51,16 +51,10 @@ class EditableText extends Object
     }
 
     /**
-     * @param array $data
-     *
-     * @return bool
+     * @return null|string
      */
-    public function missingRequiredData(array $data)
+    public function getValue()
     {
-        if (true === $this->getOption('required')) {
-            return !empty($data[$this->getKey()]['text']);
-        }
-
-        return true;
+        return $this->getContent();
     }
 }

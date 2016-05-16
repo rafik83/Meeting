@@ -161,8 +161,12 @@ class AppExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function localize(array $locales, $locale, $fallback, $default = '')
+    public function localize($locales, $locale, $fallback, $default = '')
     {
+        if (is_string($locales)) {
+            return $locales;
+        }
+
         return isset($locales[$locale]) ? $locales[$locale] : (isset($locales[$fallback]) ? $locales[$fallback] : $default);
     }
 

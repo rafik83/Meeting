@@ -1,0 +1,63 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Model;
+
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+
+class NomenclatureTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGetLabel()
+    {
+        $nomenclature = new Nomenclature('Compétences', 3, [
+            'ad987cae' => [
+                'label' => ['fr' => 'Compétences Aéronautiques', 'en' => 'Aeronautical skills'],
+                'children' => [
+                    'ecc44d0d' => [
+                        'label' => [ 'fr' => 'Ingénierie & Bureau d\'études', 'en' => 'Engineering and Engineering consulting firm' ],
+                        'children' => [
+                            'c93def9a' => [ 'label' => [ 'fr' => 'Modélisation et calculs', 'en' => 'Modelling and calculations' ] ],
+                            '34eab90c' => [ 'label' => [ 'fr' => 'Expérimentation & réalisation de prototypes', 'en' => 'Experiment and realization of prototypes' ] ],
+                        ],
+                    ],
+                    '32ef03cc' => [
+                        'label' => [ 'fr' => 'Informatique', 'en' => 'Computing' ],
+                        'children' => [
+                            'cab0332d' => [ 'label' => [ 'en' => 'Modelling and simulation' ] ]
+                        ],
+                    ],
+                    '2ec033da' => [
+                        'label' => [ 'fr' => 'Instrumentation Appareils de mesures scientifiques in-situ', 'en' => 'Instrumentation in situ scientific Measuring devices' ],
+                        'children' => [
+                            'aaa34eb9' => [ 'label' => [ 'fr' => 'Appareils de mesures scientifiques in-situ', 'en' => 'In situ scientific measuring devices' ] ],
+                            'bdec99a0' => [ 'label' => [ 'fr' => 'Prototypage', 'en' => 'Prototypage' ] ],
+                            'b35ae9c7' => [ 'label' => [ 'fr' => 'Technologie laser', 'en' => 'Laser technology' ] ],
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        // Existing label
+        $this->assertEquals('Compétences Aéronautiques', $nomenclature->getLabel('ad987cae', 'fr'));
+        $this->assertEquals('Ingénierie & Bureau d\'études', $nomenclature->getLabel('ecc44d0d', 'fr'));
+        $this->assertEquals('Experiment and realization of prototypes', $nomenclature->getLabel('34eab90c', 'en'));
+        $this->assertEquals('Technologie laser', $nomenclature->getLabel('b35ae9c7', 'fr'));
+
+        // Not existing label
+        $this->assertEquals(null, $nomenclature->getLabel('b35ae0c7', 'fr'));
+
+        // Not existing locale
+        $this->assertEquals(null, $nomenclature->getLabel('b35ae0c7', 'de'));
+
+        // Test fallback
+        $this->assertEquals('Modelling and simulation', $nomenclature->getLabel('cab0332d', 'fr', 'en'));
+    }
+}

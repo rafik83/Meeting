@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -31,18 +32,19 @@ class BlockType extends AbstractType
         /** @var Template\Block $block */
         $block = $options['block'];
 
-        foreach ($block->getObjects() as $object) {
+        foreach ($block->getEditableObjects() as $key => $object) {
             if ($object instanceof Template\Object\EditableText) {
-                $this->addText($builder, $object, $options['locale']);
-
+                $this->addText($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Nomenclature) {
-                $this->addNomenclature($builder, $object, $options['locale']);
+                $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Image) {
-                $this->addImage($builder, $object, $options['locale']);
+                $this->addImage($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
-                $this->addTelephone($builder, $object, $options['locale']);
+                $this->addTelephone($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Country) {
-                $this->addCountry($builder, $object, $options['locale']);
+                $this->addCountry($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Url) {
+                $this->addUrl($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -60,15 +62,16 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addText(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addText($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
         $attr = $object->getOption('length') ? ['maxlength' => $object->getOption('length')] : [];
 
-        $builder->add($object->getKey(), TextType::class, [
+        $builder->add($key, TextType::class, [
             'label'       => false,
             'placeholder' => $object->getOption('placeholder')[$locale],
             'required'    => $object->getOption('required'),
@@ -77,13 +80,14 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addImage(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), FileType::class, [
+        $builder->add($key, FileType::class, [
             'label'    => false,
             'required' => $object->getOption('required'),
             'mapped'   => false,
@@ -91,13 +95,14 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addTelephone(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), TelephoneType::class, [
+        $builder->add($key, TelephoneType::class, [
             'label'       => false,
             'required'    => $object->getOption('required'),
             'placeholder' => $object->getOption('placeholder')[$locale],
@@ -108,16 +113,33 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string               $key
+     * @param FormBuilderInterface $builder
+     * @param Template\Object\Url  $url
+     * @param string               $locale
+     */
+    private function addUrl($key, FormBuilderInterface $builder, Template\Object\Url $url, $locale)
+    {
+        $builder->add($key, UrlType::class, [
+            'label'       => false,
+            'required'    => $url->getOption('required'),
+            'placeholder' => $url->getOption('placeholder')[$locale],
+        ]);
+    }
+
+    /**
+     * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
      */
-    private function addCountry(FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addCountry($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($object->getKey(), CountryType::class, [
+        $builder->add($key, CountryType::class, [
             'label'       => false,
             'required'    => $object->getOption('required'),
-            'attr'     => [
+            'placeholder' => $object->getOption('placeholder')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],
@@ -125,11 +147,13 @@ class BlockType extends AbstractType
     }
 
     /**
+     * @param string                       $key
      * @param FormBuilderInterface         $builder
      * @param Template\Object\Nomenclature $object
      * @param string                       $locale
      */
     private function addNomenclature(
+        $key,
         FormBuilderInterface $builder,
         Template\Object\Nomenclature $object,
         $locale
@@ -148,16 +172,12 @@ class BlockType extends AbstractType
             }, $choices);
         }
 
-        if (true === $object->getOption('required')) {
-            // Add an empty option in order to show the placeholder in select2
-            $choices = array_merge(['' => ''], $choices);
-        }
-
-        $builder->add($object->getKey(), ChoiceType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'choices'  => $choices,
-            'attr'     => [
+        $builder->add($key, ChoiceType::class, [
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'choices'     => $choices,
+            'placeholder' => $object->getOption('label')[$locale],
+            'attr'        => [
                 'class'            => 'form-control select2',
                 'data-placeholder' => $object->getOption('label')[$locale],
             ],

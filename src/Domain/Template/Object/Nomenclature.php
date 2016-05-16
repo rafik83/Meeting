@@ -11,9 +11,15 @@
 namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
-class Nomenclature extends Object
+class Nomenclature extends EditableObject
 {
+    /**
+     * @var NomenclatureModel
+     */
+    private $nomenclature;
+
     /**
      * @var null|array
      */
@@ -24,7 +30,15 @@ class Nomenclature extends Object
      */
     public function __toString()
     {
-        return $this->getData() ? $this->getNomenclatureLabel() : '';
+        return $this->getData() !== null ? $this->getData() : '';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->getNomenclatureLabel();
     }
 
     /**
@@ -36,11 +50,12 @@ class Nomenclature extends Object
     }
 
     /**
-     * @param array $nomenclatureLabels
+     * @param NomenclatureModel $nomenclature
      */
-    public function setNomenclatureLabels(array $nomenclatureLabels)
+    public function setNomenclature(NomenclatureModel $nomenclature)
     {
-        $this->nomenclatureLabels = $nomenclatureLabels;
+        $this->nomenclature       = $nomenclature;
+        $this->nomenclatureLabels = $nomenclature->getLabels($this->locale) ? : [];
     }
 
     /**
