@@ -103,7 +103,13 @@
       }
 
       &.success,
-      &.fail { color: #FFFFFF; }
+      &.fail {
+        color: #FFFFFF;
+
+        > .text-danger {
+          color: #FFFFFF;
+        }
+      }
 
       &.success { background: $bg-success-color; }
       &.fail { background: $bg-fail-color; }
