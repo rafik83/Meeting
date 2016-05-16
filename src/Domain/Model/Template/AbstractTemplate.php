@@ -72,27 +72,63 @@ abstract class AbstractTemplate
         $keys = ['label', 'help', 'placeholder'];
 
         if (!isset($config['component'])) {
-            return array_map(function ($item) use ($locale) {
-                return self::createLocale($item, $locale);
-            }, $config);
+            return self::createComponents($config, $locale);
         }
 
         if ($config['component'] === 'block') {
-            foreach ($config['children'] as $key => $column) {
-                $config['children'][$key] = self::createLocale($column, $locale);
-            }
-
-            return $config;
+            return self::createBlock($config, $locale);
         }
 
         if ($config['component'] === 'object') {
-            foreach ($config['config'] as $key => $value) {
-                if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
-                    $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
-                }
-            }
+            return self::createObject($config, $locale, $keys);
+        }
 
-            return $config;
+        return $config;
+    }
+
+    /**
+     * @param $config
+     * @param $locale
+     *
+     * @return array
+     */
+    protected static function createComponents($config, $locale)
+    {
+        return array_map(
+            function ($item) use ($locale) {
+                return self::createLocale($item, $locale);
+            }, $config
+        );
+    }
+
+    /**
+     * @param $config
+     * @param $locale
+     *
+     * @return mixed
+     */
+    protected static function createBlock($config, $locale)
+    {
+        foreach ($config['children'] as $key => $column) {
+            $config['children'][$key] = self::createLocale($column, $locale);
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param $config
+     * @param $locale
+     * @param $keys
+     *
+     * @return mixed
+     */
+    protected static function createObject($config, $locale, $keys)
+    {
+        foreach ($config['config'] as $key => $value) {
+            if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
+                $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
+            }
         }
 
         return $config;
