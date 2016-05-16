@@ -5,25 +5,25 @@
     border-radius: 5px;
     background: $bg-container-color;
 
-    > ul {
-        &.inputs {
-            > li {
-                margin-bottom: 20px;
+    .inputs {
+        > .form-row {
+            margin-bottom: 20px;
 
-                &.split {
-                    display: flex;
+            &.split {
+                display: flex;
 
-                    > * {
-                        margin-right: 10px;
+                > * {
+                    margin-right: 10px;
 
-                        &:last-child { margin-right: 0; }
-                    }
+                    &:last-child { margin-right: 0; }
                 }
             }
         }
-    }
 
-    li:last-child { margin-bottom: 0 !important; }
+        > .form-row:last-child {
+            margin-bottom: 0 !important;
+        }
+    }
 
     .back {
         position: absolute;

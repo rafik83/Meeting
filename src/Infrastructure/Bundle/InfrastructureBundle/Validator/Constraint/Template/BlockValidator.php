@@ -29,7 +29,7 @@ class BlockValidator extends ConstraintValidator
         'text'          => ObjectConstraint::class,
         'carousel'      => ObjectConstraint::class,
         'telephone'     => Object\TelephoneConstraint::class,
-        'country'       => ObjectConstraint::class,
+        'country'       => Object\CountryConstraint::class,
         'url'           => Object\UrlConstraint::class,
     ];
 
