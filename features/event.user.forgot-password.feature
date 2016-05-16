@@ -1,19 +1,15 @@
 Feature: Forgot Password
   I need to be able to change my password if I forgot it
 
-  Background: Re-init the database and load the fixtures
+  Scenario: I can not request a token for a non-existent account
     Given the database is empty
     And the following fixtures files are loaded:
-      | app/Template.yml                |
-      | app/Event.yml                   |
-      | app/Type.yml                    |
-      | User.yml                        |
-      | Sheet.yml                       |
-      | OneSheetSeveralParticipants.yml |
-
-  Scenario: I can not request a token for a non-existent account
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml  |
+      | UserWithActivateAccountTokenAndSheet.yml                       |
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
-    And I fill in "form.forgotten_password.children.email.label" with "test-impossible@test.com"
+    And I fill in "form.forgotten_password.children.email.label" with "not-known-user@example.net"
     And I press "form.forgotten_password.children.submit.label"
     Then the response status code should be 200
     And I should see "validators.emailDoesNotExist"
@@ -30,8 +26,8 @@ Feature: Forgot Password
     And the response status code should be 200
     And I should see "new_password.title"
     And I fill in the following:
-      |form.new_password.children.password.children.first.label  | testtest |
-      |form.new_password.children.password.children.second.label | testtest |
+      |form.new_password.children.password.children.first.label  | newpassword |
+      |form.new_password.children.password.children.second.label | newpassword |
     And I press "form.new_password.children.submit.label"
     Then I should be on "/fr/"
     And the response status code should be 200
