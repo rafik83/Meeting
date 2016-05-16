@@ -130,12 +130,6 @@ class TemplateDataFactory
             $templateData->getObject($key)->setData($value);
         }
 
-        foreach ($templateData->getObjects() as $object) {
-            if ($object instanceof Object\Nomenclature && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])) {
-                $object->setNomenclatureLabels($this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale()) ? : []);
-            }
-        }
-
         return $templateData;
     }
 
@@ -173,9 +167,33 @@ class TemplateDataFactory
             $class  = $this->objects[$config['type']];
             $object = new $class($config['type'], $config['config'], $locale, $fallback);
 
+            if ($object instanceof Object\Nomenclature && $this->hasNomenclature($object->getNomenclatureId())) {
+                $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+            }
+
             return $object;
         }
 
         throw new \Exception();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool
+     */
+    private function hasNomenclature($id)
+    {
+        return null !== $this->nomenclatures && isset($this->nomenclatures[$id]);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Nomenclature
+     */
+    private function getNomenclature($id)
+    {
+        return $this->nomenclatures[$id];
     }
 }
