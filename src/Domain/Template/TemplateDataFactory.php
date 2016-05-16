@@ -21,10 +21,10 @@ class TemplateDataFactory
     private $objects = [
         'button-link'   => Object\ButtonLink::class,
         'choice'        => Object::class,
-        'collection'    => Object::class,
+        'collection'    => Object\ItemCollection::class,
         'editable-text' => Object\EditableText::class,
         'image'         => Object\Image::class,
-        'media'         => Object::class,
+        'media'         => Object\MediaCollection::class,
         'nomenclature'  => Object\Nomenclature::class,
         'participant'   => Object::class,
         'tag'           => Object::class,
@@ -63,7 +63,12 @@ class TemplateDataFactory
     {
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
 
-        return $this->create($sheet->getType()->getSheetTemplate()->getValue(), $sheet->getData(), $locale);
+        return $this->create(
+            $sheet->getType()->getSheetTemplate()->getValue(),
+            $sheet->getData(),
+            $locale,
+            $sheet->getType()->getSheetTemplate()->getFallback()
+        );
     }
 
     /**
@@ -76,7 +81,12 @@ class TemplateDataFactory
     {
         $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
 
-        return $this->create($type->getRegistrationTemplate()->getValue(), [], $locale);
+        return $this->create(
+            $type->getRegistrationTemplate()->getValue(),
+            [],
+            $locale,
+            $type->getRegistrationTemplate()->getFallback()
+        );
     }
 
     /**
@@ -94,7 +104,8 @@ class TemplateDataFactory
         return $this->create(
             $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
             $datas,
-            $locale
+            $locale,
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
         );
     }
 
@@ -102,32 +113,21 @@ class TemplateDataFactory
      * @param array  $template
      * @param array  $data
      * @param string $locale
+     * @param string $fallback
      *
      * @return TemplateData
      * @throws \Exception
      */
-    public function create(array $template, array $data, $locale)
+    public function create(array $template, array $data, $locale, $fallback)
     {
-        $templateData = new TemplateData('root', 'root', []);
+        $templateData = new TemplateData('root', []);
 
-        foreach ($this->doCreate($template) as $name => $child) {
+        foreach ($this->doCreate($template, $locale, $fallback) as $name => $child) {
             $templateData->addChild(0, $name, $child);
         }
 
         foreach ($data as $key => $value) {
-            $templateData->getObject($key)->setData($value);
-        }
-
-        foreach ($templateData->getObjects() as $object) {
-            $object->setLocale($locale);
-
-            if ($object instanceof Object\Nomenclature
-                && null !== $this->nomenclatures && isset($this->nomenclatures[$object->getNomenclatureId()])
-            ) {
-                $object->setNomenclatureLabels(
-                    $this->nomenclatures[$object->getNomenclatureId()]->getLabels($object->getLocale()) ? : []
-                );
-            }
+            $templateData->getObject($key)->setData($value ? : []);
         }
 
         return $templateData;
@@ -135,25 +135,27 @@ class TemplateDataFactory
 
     /**
      * @param array  $config
-     * @param string $objectKey
+     * @param string $locale
+     * @param string $fallback
      *
      * @return array|Block
      * @throws \Exception
      */
-    private function doCreate(array $config, $objectKey = null)
+    private function doCreate(array $config, $locale, $fallback)
     {
         if (!isset($config['component'])) {
-            return array_map(function (array $child) {
-                return $this->doCreate($child);
+            return array_map(function (array $child) use ($locale, $fallback) {
+                return $this->doCreate($child, $locale, $fallback);
             }, $config);
         }
 
         if ($config['component'] === 'block') {
-            $block = new Block($objectKey, $config['type'], $config['config']);
+            $block = new Block($config['type'], $config['config']);
 
             foreach ($config['children'] as $column => $children) {
+                $block->addColumn($column);
                 foreach ($children as $key => $child) {
-                    $child = $this->doCreate($child, $key);
+                    $child = $this->doCreate($child, $locale, $fallback);
                     $block->addChild($column, $key, $child);
                 }
             }
@@ -163,11 +165,35 @@ class TemplateDataFactory
 
         if ('object' === $config['component']) {
             $class  = $this->objects[$config['type']];
-            $object = new $class($objectKey, $config['type'], $config['config']);
+            $object = new $class($config['type'], $config['config'], $locale, $fallback);
+
+            if ($object instanceof Object\Nomenclature && $this->hasNomenclature($object->getNomenclatureId())) {
+                $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+            }
 
             return $object;
         }
 
         throw new \Exception();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool
+     */
+    private function hasNomenclature($id)
+    {
+        return null !== $this->nomenclatures && isset($this->nomenclatures[$id]);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Nomenclature
+     */
+    private function getNomenclature($id)
+    {
+        return $this->nomenclatures[$id];
     }
 }

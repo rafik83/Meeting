@@ -308,6 +308,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             required: true
                                             default: "1"
+                                            translatable: true
                                     46663c1d:
                                         component: "object"
                                         type: "collection"
@@ -321,6 +322,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             required: false
                                             default: "3"
+                                            translatable: true
                         097ab5e8:
                             component: "object"
                             type: "collection"
@@ -329,9 +331,9 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 label:
                                     fr: "Equipements, technologies et process"
                                 placeholder:
-                                    fr: ""
+                                    fr: "Equipements, technologies, process, ..."
                                 help:
-                                    fr: ""
+                                    fr: "Vos equipements, technologies et process"
                                 required: false
                                 default: "3"
                     -
@@ -348,6 +350,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: true
                                 default: "3"
+                                translatable: true
                         a9271999:
                             component: "object"
                             type: "collection"
@@ -361,6 +364,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
                         a23a2f5d:
                             component: "object"
                             type: "collection"
@@ -374,6 +378,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
                         bef61d39:
                             component: "object"
                             type: "participant"
@@ -395,6 +400,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ""
                                 required: false
                                 default: "3"
+                                translatable: true
             69962d34:
                 component: "block"
                 type: "12"
@@ -835,7 +841,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Titre de la fiche
             dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
             # Image
-            1b9a00b3: "onera.jpg"
+            1b9a00b3: { file: "onera.jpg" }
             # Lien
             90713a3d: { url: "http://www.onera.fr/" }
             # Description d'activité
@@ -845,19 +851,19 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Carousel
             848e283e: []
             # Client de référence
-            1adc1873: ["CNES", "CNRS", "Daher", "Dassault", "Dewe France", "DGAC", "DLR", "Durr", "Embraer", "Esa", "Honeywell", "Aircelle", "Messier Bugatti Dowty", "Snecma", "Turbomeca", "Zodiac Aerospace"]
+            1adc1873: { items: [{ title: { fr: "CNES" } }, { title: { fr: "CNRS" } }, { title: { fr: "Daher" } }, { title: { fr: "Dassault" } }, { title: { fr: "Dewe France" } }, { title: { fr: "DGAC" } }, { title: { fr: "DLR" } }, { title: { fr: "Durr" } }, { title: { fr: "Embraer" } }, { title: { fr: "Esa" } }, { title: { fr: "Honeywell" } }, { title: { fr: "Aircelle" } }, { title: { fr: "Messier Bugatti Dowty" } }, { title: { fr: "Snecma" } }, { title: { fr: "Turbomeca" } }, { title: { fr: "Zodiac Aerospace" } }]}
             # Projets innovant
-            46663c1d: ["Radar passif aéroporté", "Optique adaptative de SPHERE", "Initiative sur lanceurs réutilisables", "RAPID, un détecteur infrarouge révolutionnaire"]
+            46663c1d: { items: [{ title: { fr: "Radar passif aéroporté" } }, { title: { fr: "Optique adaptative de SPHERE" } }, { title: { fr: "Initiative sur lanceurs réutilisables" } }, { title: { fr: "RAPID, un détecteur infrarouge révolutionnaire" } }] }
             # Equipements, technologies et progrès
-            097ab5e8: ["Fortes praepositis", "Agmina obluridi", "Atratum ioculatores", "Virgae coniunctis", "Velut incedit", "Post adegerit", "Ministerium", "Praepositis servitium"]
+            097ab5e8: { items: [{ title: { fr: "Fortes praepositis" } }, { title: { fr: "Agmina obluridi" } }, { title: { fr: "Atratum ioculatores" } }, { title: { fr: "Virgae coniunctis" } }, { title: { fr: "Velut incedit" } }, { title: { fr: "Post adegerit" } }, { title: { fr: "Ministerium" } }, { title: { fr: "Praepositis servitium" } } ] }
             # Repères
-            696dc236: ["2001 salariés", "207 M€ de CA en 2015", "Activitées en coopération : 25%", "Activités sur contrats : 47%", "1er parc de souffleries en Europe", "8 centres en France"]
+            696dc236: { items: [{ title: { fr: "2001 salariés" } }, { title: { fr: "207 M€ de CA en 2015" } }, { title: { fr: "Activitées en coopération : 25%" } }, { title: { fr: "Activités sur contrats : 47%" } }, { title: { fr: "1er parc de souffleries en Europe" } }, { title: { fr: "8 centres en France" } } ] }
             # Groupe / Membre
-            a9271999: ["Pôle de compétivité Astech", "Instituts Carnot", "Optitec"]
+            a9271999: { items: [{ title: { fr: "Pôle de compétivité Astech" } }, { title: { fr: "Instituts Carnot" } }, { title: { fr: "Optitec" } } ] }
             # Certification
-            a23a2f5d: ["EN9100", "ISO14001", "OHSAS18001", "CAP26000", "ISO14001", "CAP26000"]
+            a23a2f5d: { items: [{ title: { fr: "EN9100" } }, { title: { fr: "ISO14001" } }, { title: { fr: "OHSAS18001" } }, { title: { fr: "CAP26000" } }, { title: { fr: "ISO14001" } }, { title: { fr: "CAP26000" } } ] }
             # Media
-            211efd1f: ["Brochure de présentation", "Projet Horizon 2020"]
+            211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
             # Offre
             03b394ac: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
             # Besoins

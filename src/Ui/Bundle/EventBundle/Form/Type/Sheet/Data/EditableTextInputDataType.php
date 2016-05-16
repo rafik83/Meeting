@@ -26,7 +26,7 @@ class EditableTextInputDataType extends AbstractType
         $text   = $options['object'];
         $locale = $options['locale'];
         $label  = $options['label'];
-        $attr   = $text->getOption('length') ? ['maxlength' => $text->getOption('length')] : [];
+        $attr   = $text->getOption('maxLength') ? ['maxlength' => $text->getOption('maxLength')] : [];
 
         $builder
             ->add('content', TextType::class, [

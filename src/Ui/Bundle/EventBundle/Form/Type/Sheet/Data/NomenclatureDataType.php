@@ -43,7 +43,7 @@ class NomenclatureDataType extends AbstractType
             }
 
             $builder
-                ->add('nomenclature', ChoiceType::class, [
+                ->add('item', ChoiceType::class, [
                     'label'       => $label ? $nomenclature->getOption('label')[$locale] : false,
                     'required'    => $nomenclature->getOption('required'),
                     'choices'     => $choices,

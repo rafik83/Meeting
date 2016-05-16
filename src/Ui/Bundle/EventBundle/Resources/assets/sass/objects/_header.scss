@@ -109,3 +109,43 @@
     &:last-child { margin-right: 0; }
   }
 }
+
+.content-header {
+  margin-top: 10px;
+  padding: 18px 0;
+
+  h1 {
+    margin: 5px 30px 0 0;
+  }
+
+  .nav {
+    > li {
+      > a {
+        padding: 6px 12px;
+      }
+    }
+  }
+
+  .nav-pills {
+    > li {
+      > a {
+        border-radius: 12px;
+        background-color: $bg-container-color;
+        color: $color-primary;
+      }
+
+      + li {
+        margin-left: 10px;
+      }
+
+      &.active > a {
+        &,
+        &:hover,
+        &:focus {
+          color: #fff;
+          background-color: $color-primary;
+        }
+      }
+    }
+  }
+}

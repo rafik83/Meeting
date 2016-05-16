@@ -21,7 +21,8 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $user = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $locale  = 'fr';
+        $user    = new User('email@email.com', '__password__', '__salt__', $locale);
         $account = new User\Account();
         $account->setFirstName('Test');
         $account->setLastName('Truc');
@@ -29,21 +30,21 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $account->setMobile('Bar');
         $user->setAccount($account);
 
-        $templateData = new TemplateData('root', 'root', []);
-        $block = new Block(null, '12', []);
-        $text  = new Object\Text('dded0597', 'text', []);
-        $editableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $templateData = new TemplateData('root', []);
+        $block = new Block('12', []);
+        $text  = new Object\Text('text', [], $locale, $locale);
+        $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ]);
-        $editableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        ], $locale, $locale);
+        $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ]);
-        $telephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        ], $locale, $locale);
+        $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ]);
-        $telephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        ], $locale, $locale);
+        $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ]);
+        ], $locale, $locale);
 
         $block->addChild(1, 'dded0597', $text);
         $block->addChild(1, '541f84d4', $editableText1);
@@ -56,24 +57,24 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         // Expected
-        $expectedTemplateData = new TemplateData('root', 'root', []);
-        $expectedBlock = new Block(null, '12', []);
-        $expectedText  = new Object\Text('dded0597', 'text', []);
-        $expectedEditableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $expectedTemplateData = new TemplateData('root', []);
+        $expectedBlock = new Block('12', []);
+        $expectedText  = new Object\Text('text', [], $locale, $locale);
+        $expectedEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ]);
+        ], $locale, $locale);
         $expectedEditableText1->setContentValue('Test');
-        $expectedEditableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        $expectedEditableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ]);
+        ], $locale, $locale);
         $expectedEditableText2->setContentValue('Truc');
-        $expectedTelephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        $expectedTelephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ]);
+        ], $locale, $locale);
         $expectedTelephone1->setContentValue('Foo');
-        $expectedTelephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        $expectedTelephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ]);
+        ], $locale, $locale);
         $expectedTelephone2->setContentValue('Bar');
 
         $expectedBlock->addChild(1, 'dded0597', $expectedText);
@@ -92,28 +93,30 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
     public function testSet()
     {
-        $user = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $locale = 'fr';
+
+        $user = new User('email@email.com', '__password__', '__salt__', $locale);
         $account = new User\Account();
         $user->setAccount($account);
 
-        $templateData = new TemplateData('root', 'root', []);
-        $block = new Block(null, '12', []);
-        $text  = new Object\Text('dded0597', 'text', []);
-        $editableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $templateData = new TemplateData('root', []);
+        $block = new Block('12', []);
+        $text  = new Object\Text('text', [], $locale, $locale);
+        $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
-        ]);
+        ], $locale, $locale);
         $editableText1->setContentValue('Test');
-        $editableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
-        ]);
+        ], $locale, $locale);
         $editableText2->setContentValue('Truc');
-        $telephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone'],
-        ]);
+        ], $locale, $locale);
         $telephone1->setContentValue('Foo');
-        $telephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile'],
-        ]);
+        ], $locale, $locale);
         $telephone2->setContentValue('Bar');
 
         $block->addChild(1, 'dded0597', $text);
@@ -124,7 +127,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedUser = new User('email@email.com', '__password__', '__salt__', 'fr');
+        $expectedUser = new User('email@email.com', '__password__', '__salt__', $locale);
         $account2 = new User\Account();
         $account2->setFirstName('Test');
         $account2->setLastName('Truc');

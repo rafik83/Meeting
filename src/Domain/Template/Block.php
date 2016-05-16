@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -22,12 +22,20 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object
+     * @return TemplateObject
      * @throws \Exception
      */
     public function __get($key)
     {
         return $this->getObject($key);
+    }
+
+    /**
+     * @param int $column
+     */
+    public function addColumn($column)
+    {
+        $this->children[$column] = [];
     }
 
     /**
@@ -43,7 +51,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object[]
+     * @return TemplateObject[]
      */
     public function getObjects($key = null)
     {
@@ -65,7 +73,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return \Proximum\Vimeet\Domain\Template\Object[]
+     * @return TemplateObject[]
      */
     public function getEditableObjects()
     {
@@ -77,7 +85,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return Object
+     * @return TemplateObject
      * @throws \Exception
      */
     public function getObject($key)
@@ -206,19 +214,13 @@ class Block extends AbstractChild
     }
 
     /**
-     * @return Object[]
+     * @return TemplateObject\Image[]
      */
     public function getImageObjects()
     {
-        $objects = [];
-
-        foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Image) {
-                $objects[] = $object;
-            }
-        }
-
-        return $objects;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\Image;
+        });
     }
 
     /**
@@ -229,7 +231,7 @@ class Block extends AbstractChild
     public function getTitle($locale)
     {
         foreach ($this->getObjects() as $object) {
-            if ($object instanceof Object\Text && $object->isTitle()) {
+            if ($object instanceof TemplateObject\Text && $object->isTitle()) {
                 return $object->getContent($locale);
             }
         }
@@ -261,7 +263,7 @@ class Block extends AbstractChild
      */
     public function getData()
     {
-        return array_map(function (Object $object) {
+        return array_map(function (TemplateObject $object) {
             return $object->getData();
         }, $this->getObjects());
     }

@@ -216,22 +216,21 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $now
         );
 
-        //  Template Data
-        $templateData = new TemplateData('root', 'root', []);
-        $block = new Block(null, '12', []);
-        $text  = new Object\Text('dded0597', 'text', []);
-        $editableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $templateData = new TemplateData('root', []);
+        $block = new Block('12', []);
+        $text  = new Object\Text('text', [], 'fr', 'fr');
+        $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
-        ]);
-        $editableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        ], 'fr', 'fr');
+        $editableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
-        ]);
-        $telephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        ], 'fr', 'fr');
+        $telephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone', 'participant_data'],
-        ]);
-        $telephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        ], 'fr', 'fr');
+        $telephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
-        ]);
+        ], 'fr', 'fr');
 
         $block->addChild(1, 'dded0597', $text);
         $block->addChild(1, '541f84d4', $editableText1);
@@ -241,24 +240,24 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedTemplateData = new TemplateData('root', 'root', []);
-        $expectedBlock = new Block(null, '12', []);
-        $expectedText  = new Object\Text('dded0597', 'text', []);
-        $exEditableText1 = new Object\EditableText('541f84d4', 'editable-text', [
+        $expectedTemplateData = new TemplateData('root', []);
+        $expectedBlock = new Block('12', []);
+        $expectedText  = new Object\Text('text', [], 'fr', 'fr');
+        $exEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
-        ]);
+        ], 'fr', 'fr');
         $exEditableText1->setContentValue('foo');
-        $exEditableText2 = new Object\EditableText('838197c7', 'editable-text', [
+        $exEditableText2 = new Object\EditableText('editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
-        ]);
+        ], 'fr', 'fr');
         $exEditableText2->setContentValue('bar');
-        $exTelephone1    = new Object\Telephone('1efb9cbb', 'telephone', [
+        $exTelephone1    = new Object\Telephone('telephone', [
             'tags' => ['participant_phone', 'participant_data'],
-        ]);
+        ], 'fr', 'fr');
         $exTelephone1->setContentValue('phone');
-        $exTelephone2    = new Object\Telephone('3b759fbb', 'telephone', [
+        $exTelephone2    = new Object\Telephone('telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
-        ]);
+        ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');
 
         $expectedBlock->addChild(1, 'dded0597', $expectedText);

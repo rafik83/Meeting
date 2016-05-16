@@ -11,9 +11,15 @@
 namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface
 {
+    /**
+     * @var NomenclatureModel
+     */
+    private $nomenclature;
+
     /**
      * @var null|array
      */
@@ -24,7 +30,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      *
      * @return Nomenclature
      */
-    public function setNomenclature($nomenclature)
+    public function setItem($nomenclature)
     {
         $this->data['items'] = $nomenclature;
 
@@ -34,7 +40,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     /**
      * @return string
      */
-    public function getNomenclature()
+    public function getItem()
     {
         return isset($this->data['items']) ? $this->data['items'] : null;
     }
@@ -44,7 +50,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getContentValue()
     {
-        return $this->getNomenclature() ? $this->getNomenclature() : '';
+        return $this->getItem() ? $this->getItem() : '';
     }
 
     /**
@@ -52,7 +58,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function setContentValue($value)
     {
-        $this->setNomenclature($value);
+        $this->setItem($value);
     }
 
     /**
@@ -64,11 +70,12 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @param array $nomenclatureLabels
+     * @param NomenclatureModel $nomenclature
      */
-    public function setNomenclatureLabels(array $nomenclatureLabels)
+    public function setNomenclature(NomenclatureModel $nomenclature)
     {
-        $this->nomenclatureLabels = $nomenclatureLabels;
+        $this->nomenclature       = $nomenclature;
+        $this->nomenclatureLabels = $nomenclature->getLabels($this->locale) ? : [];
     }
 
     /**
@@ -84,13 +91,13 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getNomenclatureLabel()
     {
-        if (isset($this->nomenclatureLabels[$this->getNomenclature()])) {
-            return $this->nomenclatureLabels[$this->getNomenclature()];
+        if (isset($this->nomenclatureLabels[$this->getItem()])) {
+            return $this->nomenclatureLabels[$this->getItem()];
         }
 
         foreach ($this->nomenclatureLabels as $values) {
-            if (isset($values[$this->getNomenclature()])) {
-                return $values[$this->getNomenclature()];
+            if (isset($values[$this->getItem()])) {
+                return $values[$this->getItem()];
             }
         }
 
