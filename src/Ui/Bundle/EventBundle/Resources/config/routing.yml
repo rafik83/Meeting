@@ -115,8 +115,8 @@ event_sheet_update:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
 event_sheet_update_nomenclatures:
-    path:     /fiche-de-presentation/nomenclatures
-    methods:  [GET, POST]
+    path:     /sheet/nomenclatures
+    methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:nomenclatures }
 
 #

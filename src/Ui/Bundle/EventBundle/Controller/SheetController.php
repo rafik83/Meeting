@@ -190,6 +190,11 @@ class SheetController extends Controller
         ]);
     }
 
+    /**
+     * @param EventView $eventView
+     *
+     * @return Response
+     */
     public function nomenclaturesAction(EventView $eventView)
     {
         return $this->render('EventBundle:Sheet:nomenclatures.html.twig', [
