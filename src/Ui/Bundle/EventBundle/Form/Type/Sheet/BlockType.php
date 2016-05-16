@@ -107,13 +107,13 @@ class BlockType extends AbstractType
     /**
      * @param string               $key
      * @param FormBuilderInterface $builder
-     * @param Template\Object\Url  $url
+     * @param Template\Object\Url  $object
      * @param string               $locale
      */
-    private function addUrl($key, FormBuilderInterface $builder, Template\Object\Url $url, $locale)
+    private function addUrl($key, FormBuilderInterface $builder, Template\Object\Url $object, $locale)
     {
         $builder->add($key, UrlDataType::class, [
-            'object' => $url,
+            'object' => $object,
             'locale' => $locale,
         ]);
     }

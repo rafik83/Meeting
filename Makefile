@@ -114,9 +114,11 @@ build@prod: build-assets@prod
 
 build-assets:
 	gulp --dev
+	bin/console vimeet:event:build-guideline-asset
 
 build-assets@prod:
 	gulp
+	bin/console vimeet:event:build-guideline-asset
 
 ################
 # Translations #
