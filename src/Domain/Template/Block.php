@@ -31,24 +31,6 @@ class Block extends AbstractChild
     }
 
     /**
-     * @param string $key
-     * @param string $value
-     *
-     * @return Object
-     * @throws \Exception
-     */
-    public function __set($key, $value)
-    {
-        $object = $this->getObject($key);
-
-        if ($object instanceof Object\EditableText) {
-            return $object->setContent($value);
-        }
-
-        return $object->setData($value);
-    }
-
-    /**
      * @param int $column
      */
     public function addColumn($column)
