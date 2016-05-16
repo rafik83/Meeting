@@ -41,14 +41,14 @@ class Configuration
 
     /**
      * @param string $leftColor
-     *
-     * @return self
+     * @param string $rightColor
+     * @param string $textColor
      */
-    public function setLeftColor($leftColor)
+    public function setColors($leftColor, $rightColor, $textColor)
     {
-        $this->leftColor = $leftColor;
-
-        return $this;
+        $this->leftColor  = $leftColor;
+        $this->rightColor = $rightColor;
+        $this->textColor  = $textColor;
     }
 
     /**
@@ -60,35 +60,11 @@ class Configuration
     }
 
     /**
-     * @param string $rightColor
-     *
-     * @return self
-     */
-    public function setRightColor($rightColor)
-    {
-        $this->rightColor = $rightColor;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getRightColor()
     {
         return $this->rightColor;
-    }
-
-    /**
-     * @param string $textColor
-     *
-     * @return self
-     */
-    public function setTextColor($textColor)
-    {
-        $this->textColor = $textColor;
-
-        return $this;
     }
 
     /**
