@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\TraceableInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
