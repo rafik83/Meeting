@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Product\Create;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +35,31 @@ class ProductController extends Controller
             [
                 'event'    => $event,
                 'products' => $products,
+            ]
+        );
+    }
+
+    public function createAction(Request $request, Event $event)
+    {
+        $create = new Create($event);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'method' => 'POST',
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($create);
+            $this->addFlash('success', 'flash.admin.product.create.success');
+
+            return $this->redirectToRoute('admin_product', [
+                'event' => $event->getId(),
+            ]);
+        }
+
+        return $this->render(
+            'AdminBundle:Product:create.html.twig', [
+                'event' => $event,
+                'form'  => $form->createView()
             ]
         );
     }
