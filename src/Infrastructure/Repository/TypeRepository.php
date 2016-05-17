@@ -193,6 +193,24 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getLocalizedTypesByEvent(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type, translation')
+            ->from(Type::class, 'type', 'type.id')
+            ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypesTitleByEventAndLocale(Event $event, $locale)
     {
         $queryBuilder = $this

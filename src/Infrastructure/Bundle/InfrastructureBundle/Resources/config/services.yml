@@ -1021,6 +1021,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
              - '@fos_elastica.finder.app.sheet'
+             - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Command
