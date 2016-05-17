@@ -400,8 +400,6 @@ function TemplateObject(element, locale)
         this.object = new ButtonLinkObject(this.element, this.locale);
     } else if (this.type === 'participant') {
         this.object = new ParticipantObject(this.element, this.locale);
-    } else if (this.type === 'choice') {
-        this.object = new ChoiceObject(this.element, this.locale);
     } else if (this.type === 'image') {
         this.object = new ImageObject(this.element, this.locale);
     } else if (this.type === 'tag') {
@@ -605,74 +603,6 @@ ParticipantObject.prototype.save = function ()
     this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
     this.form.bind('participant', this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown);
-};
-
-
-/**
- * ChoiceObject
- *
- * @param element
- * @param locale
- * @constructor
- */
-function ChoiceObject(element, locale)
-{
-    this.element = element;
-    this.locale  = locale;
-    this.form    = new Form(element);
-    this.config  = JSON.parse(this.element.getAttribute('data-config'));
-}
-
-ChoiceObject.prototype.getContent = function ()
-{
-    var content = '';
-
-    for (var key in this.config.choices) {
-        if (Object.prototype.hasOwnProperty.call(this.config.choices, key)) {
-            if (content !== '') {
-                content = content + ',';
-            }
-
-            content = content + this.config.choices[key];
-        }
-    }
-
-    return content;
-};
-
-ChoiceObject.prototype.fill = function ()
-{
-    this.form.set('style', this.config.style);
-    this.form.set('label', this.config.label[this.locale]);
-    this.form.set('placeholder', this.config.placeholder[this.locale]);
-    this.form.set('type', this.config.type);
-    this.form.set('required', this.config.required);
-    this.form.set('choices', this.getContent());
-
-    this.form.bind('choice', this.config.label[this.locale] + ' ' + this.config.type);
-};
-
-ChoiceObject.prototype.save = function ()
-{
-    this.config.style                    = this.form.get('style');
-    this.config.label[this.locale]       = this.form.get('label');
-    this.config.placeholder[this.locale] = this.form.get('placeholder');
-    this.config.type                     = this.form.get('type');
-    this.config.required                 = this.form.get('required');
-
-    var result = {};
-
-    var current = this.form.get('choices').split(',').filter(function(item, pos, self) {
-        return self.indexOf(item) === pos;
-    });
-
-    for (var index = 0; index < current.length; ++index) {
-        result[current[index]] = current[index];
-    }
-
-    this.config.choices = result;
-
-    this.form.bind('choice', this.config.label[this.locale] + ' ' + this.config.type);
 };
 
 /**
