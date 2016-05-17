@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
-
+    <a href="{{ path('admin_product_create', {'event': event.id}) }}" class="btn btn-primary">{{ 'admin.product_create.title'|trans }}</a>
     <table class="table table-hover">
         <thead>
         <tr>
