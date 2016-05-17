@@ -48,6 +48,7 @@ class FollowerChoiceType extends AbstractType
             'choice_label'      => function (Admin $admin) {
                 return $admin->getDisplayName();
             },
+            'choice_translation_domain' => false,
         ]);
     }
 

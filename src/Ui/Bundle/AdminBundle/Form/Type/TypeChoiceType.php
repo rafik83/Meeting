@@ -50,6 +50,7 @@ class TypeChoiceType extends AbstractType
             'choices'           => function (Options $options) {
                 return $this->typeRepository->getLocalizedTypesByEvent($options['event'], $options['locale']);
             },
+            'choice_translation_domain' => false,
         ]);
     }
 
