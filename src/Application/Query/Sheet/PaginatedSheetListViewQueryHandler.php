@@ -115,9 +115,7 @@ class PaginatedSheetListViewQueryHandler
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getState(),
             $sheet->isCompleted(),
-            array_map(function (Category $category) use ($locale) {
-                    return $category->getTitle($locale);
-            }, $sheet->getType()->getCategories()->toArray()),
+            $sheet->getType()->getCategoriesTitles($locale),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
                 $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner(), $locale),

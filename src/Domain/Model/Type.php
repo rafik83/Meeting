@@ -267,4 +267,16 @@ class Type implements WhoInterface
     {
         return [];
     }
+
+    /**
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getCategoriesTitles($locale)
+    {
+        return $this->categories->map(function (Category $category) use ($locale) {
+            return $category->getTitle($locale);
+        })->toArray();
+    }
 }
