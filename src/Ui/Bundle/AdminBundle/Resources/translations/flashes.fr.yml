@@ -166,6 +166,9 @@ flash:
             registration:
                 update:
                     success: Template d'Inscription modifié avec succès
+        product:
+            create:
+                success: Le produit a bien été créé
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:
