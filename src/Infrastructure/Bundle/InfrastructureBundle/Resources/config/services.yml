@@ -704,6 +704,13 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
+    command.product.create_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Create }
 
     #
     # Security
