@@ -373,3 +373,19 @@ event_notification_read:
         notification: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:read }
+
+#
+# Product Selection
+#
+product_step_1:
+    path: /product/step1
+    defaults: { _controller: EventBundle:Product:step1 }
+    methods:  [GET]
+product_step_2:
+    path: /product/step2
+    defaults: { _controller: EventBundle:Product:step2 }
+    methods:  [GET]
+product_step_3:
+    path: /product/step3
+    defaults: { _controller: EventBundle:Product:step3 }
+    methods:  [GET]
