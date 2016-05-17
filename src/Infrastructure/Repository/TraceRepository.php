@@ -44,41 +44,25 @@ class TraceRepository implements TraceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastAcceptBySheet(TraceableInterface $sheet)
+    public function getLastByTraceableObjectsAndAction(array $objects, $action)
     {
+        $ids = array_map(function (TraceableInterface $object) {
+            return Trace::identifier($object);
+        }, $objects);
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('trace')
             ->from(Trace::class, 'trace', 'trace.id')
-            ->where('trace.object = :object')
-            ->setParameter('object', sprintf('%s%s', $sheet->getTraceableName(), $sheet->getId()))
+            ->leftJoin(Trace::class, 'trace2', 'WITH', 'trace2.action = trace.action AND trace2.object = trace.object AND trace2.id > trace.id')
+            ->where('trace2.id IS NULL')
+            ->andWhere('trace.object IN (:ids)')
+            ->setParameter('ids', $ids)
             ->andWhere('trace.action = :action')
-            ->setParameter('action', Trace::ACCEPT)
-            ->orderBy('trace.date', 'DESC')
-            ->setMaxResults(1);
+            ->setParameter('action', $action);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastValidateBySheet(TraceableInterface $sheet)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('trace')
-            ->from(Trace::class, 'trace', 'trace.id')
-            ->where('trace.object = :object')
-            ->setParameter('object', sprintf('%s%s', $sheet->getTraceableName(), $sheet->getId()))
-            ->andWhere('trace.action = :action')
-            ->setParameter('action', Trace::VALIDATE)
-            ->orderBy('trace.date', 'DESC')
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

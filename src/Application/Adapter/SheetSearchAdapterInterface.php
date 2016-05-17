@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface SheetSearchAdapterInterface
 {
@@ -21,7 +22,7 @@ interface SheetSearchAdapterInterface
      * @param int    $limit
      * @param string $locale
      *
-     * @return mixed
+     * @return PaginatedResult
      */
     public function find(Event $event, array $filters, $page, $limit, $locale);
 }
