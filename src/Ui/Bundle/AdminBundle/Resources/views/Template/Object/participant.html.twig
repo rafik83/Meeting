@@ -1,12 +1,14 @@
+{% trans_default_domain 'templates' %}
+
 {% set config = {
-    label: { (locale): 'Participant' },
+    label: { (locale): 'template.object.participant'|trans },
     numberOfParticipantShown: 1,
     style: ''
 }|merge(config|default({})) %}
 
 <div class="object" data-object="participant"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
-        <li class="object-title">Les participants</li>
+        <li class="object-title">{{ 'template.participant.title'|trans }}</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -27,31 +29,31 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Les participants</h4>
+                                <h4 class="modal-title">{{ 'template.participant.title'|trans }}</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label class="form-label">Style</label>
+                                    <label class="form-label">{{ 'template.style.title'|trans }}</label>
                                     <select class="form-control" name="style" title="Style">
-                                        <option value="default" selected="selected">Par défaut</option>
+                                        <option value="default" selected="selected">{{ 'template.style.default'|trans }}</option>
                                     </select>
                                 </div>
                                 <hr />
                                 <div class="form-group">
-                                    <label class="form-label">Label</label>
+                                    <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Nombre de participants affichés sur la fiche</label>
+                                    <label class="form-label">{{ 'template.participant.display'|trans }}</label>
                                     <input class="form-control" type="number" name="numberOfParticipantShown" />
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
+                                <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}<</button>
                             </div>
                         </div>
                     </div>

@@ -1,3 +1,5 @@
+{% trans_default_domain 'templates' %}
+
 {% set config = {
     label: { (locale): 'Lien' },
     help: { (locale): '' },
@@ -7,7 +9,7 @@
 
 <div class="object" data-object="button-link"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
-        <li class="object-title">Lien</li>
+        <li class="object-title">{{ 'template.object.button-link'|trans }}</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -28,38 +30,38 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Lien</h4>
+                                <h4 class="modal-title">{{ 'template.object.button-link'|trans }}</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label class="form-label">Style</label>
+                                    <label class="form-label">{{ 'template.style.title'|trans }}</label>
                                     <select class="form-control" name="style" title="Style">
-                                        <option value="default" selected="selected">Par défaut</option>
+                                        <option value="default" selected="selected">{{ 'template.style.default'|trans }}</option>
                                     </select>
                                 </div>
                                 <hr />
                                 <div class="form-group">
-                                    <label class="form-label">Label</label>
+                                    <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Aide</label>
+                                    <label class="form-label">{{ 'template.help.title'|trans }}</label>
                                     <textarea class="form-control" name="help"></textarea>
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Requis</label>
+                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                     <input type="checkbox" name="required" />
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
+                                <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}</button>
                             </div>
                         </div>
                     </div>
