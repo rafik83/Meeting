@@ -1,0 +1,88 @@
+.product {
+    .tunnel-step {
+
+    }
+
+    .main__container {
+        padding: 25px 40px;
+        h2 { text-transform: none; }
+    }
+
+    form {
+        .form-group:nth-of-type(odd) { background-color: #FFF; }
+        .form-group {
+            margin-bottom: 0;
+
+            .checkbox {
+                margin: 0;
+                label { margin-bottom: -7px; }
+                input {
+                    margin-top: 30px;
+                    margin-left: -5px;
+                }
+            }
+
+            .selected-formule {
+                border: solid 4px $color-highlighted;
+                margin-top: -4px;
+            }
+
+            .table {
+                margin-bottom: 0;
+
+                tbody {
+                    tr td {
+                        border-top: none;
+                        border-right: solid 2px #ccc;
+                        padding: 20px;
+                        &:last-child { border-right: none; }
+
+                        h3 {
+                            font-size: 24px;
+                            text-transform: none;
+                        }
+
+                        dl {
+                            border-top: solid 1px #ccc;
+                            padding-top: 10px;
+                            margin-bottom: 0;
+                            &:first-child {
+                                border-top: none;
+                                padding-top: 0;
+                            }
+                            dt {
+                                font-family: 'OpenSans';
+                                font-size: 18px;
+                            }
+                            dd { padding-bottom: 10px; }
+                        }
+
+                        .content-label{
+                            font-family: 'OpenSans';
+                            width: 140px;
+
+                            h2 { margin-bottom: 0; }
+
+                            .price {
+                                display: block;
+                                font-size: 40px;
+                                color: $color-highlighted;
+                                sup {
+                                    font-size: 20px;
+                                    top: -0.8em;
+                                }
+                            }
+
+                            .limite {
+                                background: #F2E63D;
+                                display: inline-block;
+                                padding: 8px;
+                                border-radius: 4px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
