@@ -78,12 +78,40 @@ class Product
     private $updatableUntil;
 
     /**
-     * @param Event $event
+     * @param Event                   $event
+     * @param string                  $name
+     * @param string                  $image
+     * @param float                   $unitPrice
+     * @param int                     $quantityMin
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
+     * @param \DateTimeInterface|null $updatableUntil
      */
-    public function __construct(Event $event)
-    {
-        $this->event        = $event;
-        $this->translations = new ArrayCollection();
+    public function __construct(
+        Event $event,
+        $name,
+        $image,
+        $unitPrice,
+        $quantityMin,
+        $quantityMax,
+        $availabilityCurrent,
+        $availabilityMax,
+        $updatable,
+        $updatableUntil
+    ) {
+        $this->event               = $event;
+        $this->translations        = new ArrayCollection();
+        $this->name                = $name;
+        $this->image               = $image;
+        $this->unitPrice           = $unitPrice;
+        $this->quantityMin         = $quantityMin;
+        $this->quantityMax         = $quantityMax;
+        $this->availabilityCurrent = $availabilityCurrent;
+        $this->availabilityMax     = $availabilityMax;
+        $this->updatable           = $updatable;
+        $this->updatableUntil      = $updatableUntil;
     }
 
     /**
