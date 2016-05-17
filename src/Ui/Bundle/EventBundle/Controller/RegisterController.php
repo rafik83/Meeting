@@ -180,6 +180,7 @@ class RegisterController extends Controller
 
         $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
+        dump($registrationTemplate);
 
         $participantBlock = $registrationTemplate->getFirstBlock();
 
@@ -304,7 +305,7 @@ class RegisterController extends Controller
             }
         }
 
-        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfos($participant, $locale);
+        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate, $locale);
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'eventView'        => $eventView,

@@ -112,6 +112,28 @@ class ParticipantInfoGuesser
     }
 
     /**
+     * @param TemplateData $templateData
+     * @param string       $locale
+     *
+     * @return array
+     */
+    public function guessParticipantInfosWithTemplateData(TemplateData $templateData, $locale)
+    {
+        $tags         = Tag::getParticipantTags();
+        $infos        = [];
+
+        foreach ($tags as $tag) {
+            $infos[$tag] = $this->taggedInfoGuesser->guessFirstFromTemplateData(
+                $templateData,
+                $tag,
+                $locale
+            );
+        }
+
+        return $infos;
+    }
+
+    /**
      * @param Participant $participant
      * @param string      $locale
      *
