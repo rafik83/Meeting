@@ -35,6 +35,15 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Product $product)
+    {
+        $this->entityManager->persist($product);
+        $this->entityManager->flush($product);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this

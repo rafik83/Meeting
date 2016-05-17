@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Product;
 interface ProductRepositoryInterface
 {
     /**
+     * @param Product $product
+     */
+    public function add(Product $product);
+
+    /**
      * @param Event $event
      *
      * @return Product[]
