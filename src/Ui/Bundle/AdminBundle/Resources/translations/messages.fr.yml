@@ -498,6 +498,11 @@ admin:
                 date: Date de création
                 action: Action
     template:
+        action:
+            edit: Modifier
+            save: Enregistrer
+            addLanguage: Ajouter une langue
+            close: Fermer
         sheet:
             link: Template de Participation
         registration:
