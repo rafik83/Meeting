@@ -29,3 +29,7 @@ register:
         - Des cartes de visites complètes pour tous,
         - Identifiez facilement les agendas de chacuns...
 
+sheet:
+    object:
+        action:
+            edit: Editer
