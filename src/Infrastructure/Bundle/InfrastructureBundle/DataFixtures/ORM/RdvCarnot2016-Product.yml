@@ -1,14 +1,16 @@
 Proximum\Vimeet\Domain\Model\Product:
     product_1:
-        __construct: ["@event_rdv_carnot_2016"]
-        name: 'Identité visuelle Exposant'
-        unitPrice: 15
-        quantityMin: 1
-        quantityMax: 1
-        availabilityCurrent: 10
-        availabilityMax: 100
-        updatable: true
-        updatableUntil: "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>"
+        __construct:
+            - "@event_rdv_carnot_2016"
+            - 'Identité visuelle Exposant'
+            - null
+            - 15
+            - 1
+            - 1
+            - 10
+            - 100
+            - true
+            - "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>"
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_1_fr:
