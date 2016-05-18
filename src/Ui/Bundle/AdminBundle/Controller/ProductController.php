@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -39,6 +40,12 @@ class ProductController extends Controller
         );
     }
 
+    /**
+     * @param Request $request
+     * @param Event $event
+     *
+     * @return RedirectResponse|Response
+     */
     public function createAction(Request $request, Event $event)
     {
         $create = new Create($event);
