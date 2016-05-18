@@ -26,23 +26,45 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     private $nomenclatureLabels;
 
     /**
+     * @deprecated Use setItems instead
+     *
      * @param string $nomenclature
      *
      * @return Nomenclature
      */
     public function setItem($nomenclature)
     {
-        $this->data['items'] = $nomenclature;
+        return $this->setItems($nomenclature);
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return Nomenclature
+     */
+    public function setItems(array $items)
+    {
+        $this->data['items'] = $items;
 
         return $this;
     }
 
     /**
+     * @deprecated Use getItems instead
+     *
      * @return string
      */
     public function getItem()
     {
-        return isset($this->data['items']) ? $this->data['items'] : null;
+        return $this->getItems();
+    }
+
+    /**
+     * @return array
+     */
+    public function getItems()
+    {
+        return isset($this->data['items']) ? $this->data['items'] : [];
     }
 
     /**

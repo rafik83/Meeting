@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature;
 
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\KeyToNomenclatureItemTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -20,6 +22,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CheckboxesType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer(new KeyToNomenclatureItemTransformer($options['nomenclature']));
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,13 +44,12 @@ class CheckboxesType extends AbstractType
             'multiple'                  => true,
             'choice_translation_domain' => false,
             'choices_as_values'         => true,
+            'choice_name'               => function (NomenclatureItem $item) { return $item->getKey(); },
+            'choice_value'              => function (NomenclatureItem $item) { return $item->getKey(); },
             'choice_label'              => function (Options $options) {
                 return function (NomenclatureItem $item) use ($options) {
                     return $item->getLabel($options['locale']);
                 };
-            },
-            'choice_name'               => function (NomenclatureItem $item) {
-                return $item->getKey();
             },
         ]);
     }

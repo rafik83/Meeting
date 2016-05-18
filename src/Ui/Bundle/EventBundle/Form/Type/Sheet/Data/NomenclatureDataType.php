@@ -120,7 +120,7 @@ class NomenclatureDataType extends AbstractType
      */
     private function addCheckboxes(Nomenclature $nomenclature, FormInterface $form, array $options)
     {
-        $form->add('item', CheckboxesType::class, [
+        $form->add('items', CheckboxesType::class, [
             'nomenclature' => $nomenclature,
             'locale'       => $options['locale'],
         ]);

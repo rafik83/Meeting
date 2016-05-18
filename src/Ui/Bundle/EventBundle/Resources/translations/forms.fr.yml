@@ -53,5 +53,5 @@ form:
                 label: Enregistrer
     nomenclature_data:
         children:
-            item:
+            items:
                 label: Sélectionnez vos compétences
