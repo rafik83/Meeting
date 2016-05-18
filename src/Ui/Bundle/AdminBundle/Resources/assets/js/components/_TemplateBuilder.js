@@ -799,7 +799,7 @@ NomenclatureObject.prototype.fill = function ()
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('nomenclature', this.config.nomenclature);
-    this.form.set('multiple', this.config.multiple ? 'true' : 'false');
+    this.form.set('mode', this.config.mode ? 'true' : 'false');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -810,7 +810,7 @@ NomenclatureObject.prototype.save = function ()
     this.config.label[this.locale] = this.form.get('label');
     this.config.help[this.locale]  = this.form.get('help');
     this.config.nomenclature       = this.form.get('nomenclature');
-    this.config.multiple           = 'true' === this.form.get('multiple');
+    this.config.mode               = this.form.get('mode');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

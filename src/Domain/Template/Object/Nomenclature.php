@@ -127,19 +127,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isMultiple()
+    public function getMode()
     {
-        return (bool) $this->getOption('multiple');
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExpanded()
-    {
-        return (bool) $this->getOption('expanded');
+        return $this->getOption('mode');
     }
 
     /**
@@ -147,7 +139,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function isSingles()
     {
-        return false;
+        return $this->getMode() === 'singles';
     }
 
     /**
@@ -155,7 +147,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function isRadios()
     {
-        return false;
+        return $this->getMode() === 'radios';
     }
 
     /**
@@ -163,6 +155,6 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function isCheckboxes()
     {
-        return true;
+        return $this->getMode() === 'checkboxes';
     }
 }
