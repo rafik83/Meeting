@@ -124,13 +124,15 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoriesByEvent(Event $event)
+    public function getCategoriesByEvent(Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('category')
+            ->select('category, translation')
             ->from('Entity:Category', 'category')
+            ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('locale', $locale)
             ->where('category.event = :event')
             ->setParameter('event', $event);
 

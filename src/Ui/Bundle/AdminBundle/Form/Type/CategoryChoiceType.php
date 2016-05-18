@@ -48,8 +48,9 @@ class CategoryChoiceType extends AbstractType
                 };
             },
             'choices'           => function (Options $options) {
-                return $this->categoryRepository->getCategoriesByEvent($options['event']);
+                return $this->categoryRepository->getCategoriesByEvent($options['event'], $options['locale']);
             },
+            'choice_translation_domain' => false,
         ]);
     }
 

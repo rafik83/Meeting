@@ -21,18 +21,12 @@ interface TraceRepositoryInterface
     public function add(Trace $trace);
 
     /**
-     * @param TraceableInterface $sheet
+     * @param TraceableInterface[] $objects
+     * @param string               $action
      *
-     * @return Trace
+     * @return Trace[]
      */
-    public function getLastAcceptBySheet(TraceableInterface $sheet);
-
-    /**
-     * @param TraceableInterface $sheet
-     *
-     * @return Trace
-     */
-    public function getLastValidateBySheet(TraceableInterface $sheet);
+    public function getLastByTraceableObjectsAndAction(array $objects, $action);
 
     /**
      * @param TraceableInterface $traceable
