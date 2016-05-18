@@ -8,9 +8,91 @@
 {% block nomenclature_checkboxes_row %}
     {{ form_errors(form) }}
     {% if nomenclature.depth == 1 %}
+        <div>
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form_label(form) }}
+                </h1>
 
+                <a href="#" class="btn btn-gray pull-right">
+                    <i class="icon-Retour"></i>Retour à la fiche
+                </a>
+            </div>
+
+            <section class="object object--collection style--style-1 section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="object--nomenclature">
+                            <h3 class="title-table">{{ nomenclature.title }}</h3>
+
+                            <div class="border-table">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        {% for first_label_item in nomenclature.firstLevel %}
+                                            <tr>
+                                                <td>
+                                                    {{ form_row(form[first_label_item.key]) }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="link-table pull-right">
+                                <a href="#">Tous sélectionner</a> /
+                                <a href="#">Aucun</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     {% elseif nomenclature.depth == 2 %}
+        <div>
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form_label(form) }}
+                </h1>
 
+                <a href="#" class="btn btn-gray pull-right">
+                    <i class="icon-Retour"></i>Retour à la fiche
+                </a>
+            </div>
+
+            <section class="object object--collection style--style-1 section">
+                <div class="row">
+                    {% for first_level_item in nomenclature.firstLevel %}
+                        <div class="col-md-4">
+                            <div class="object--nomenclature">
+                                <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
+
+                                <div class="border-table">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                        {% for second_label_item in first_level_item.children %}
+                                            <tr>
+                                                <td>
+                                                    {{ form_row(form[second_label_item.key]) }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="link-table pull-right">
+                                    <a href="#">Tous sélectionner</a> /
+                                    <a href="#">Aucun</a>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
     {% elseif nomenclature.depth == 3 %}
         <div>
             <div class="content-header clearfix">
