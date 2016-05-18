@@ -44,15 +44,27 @@ class CreateType extends AbstractType
             ->add('unitPrice', NumberType::class)
             ->add('quantityMin', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
             ->add('quantityMax', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
             ->add('availabilityMax', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
             ->add('updatable', CheckboxType::class, [
                 'required' => false,
