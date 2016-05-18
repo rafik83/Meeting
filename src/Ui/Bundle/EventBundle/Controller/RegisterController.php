@@ -180,7 +180,6 @@ class RegisterController extends Controller
 
         $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
-        dump($registrationTemplate);
 
         $participantBlock = $registrationTemplate->getFirstBlock();
 
