@@ -41,6 +41,6 @@ class TranslationsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'speaker_translation';
+        return 'product_translation';
     }
 }
