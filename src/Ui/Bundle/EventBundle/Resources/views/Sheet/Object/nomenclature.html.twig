@@ -19,7 +19,7 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -40,7 +40,7 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -63,7 +63,7 @@
                     </ul>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
                 </footer>
             </section>
 

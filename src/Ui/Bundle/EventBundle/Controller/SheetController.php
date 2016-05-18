@@ -131,6 +131,7 @@ class SheetController extends Controller
             'button-link'   => Data\ButtonLinkDataType::class,
             'media'         => Data\MediaCollectionDataType::class,
             'collection'    => Data\ItemCollectionDataType::class,
+            'nomenclature'  => Data\NomenclatureDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {
@@ -159,6 +160,8 @@ class SheetController extends Controller
      */
     public function updateAction(Request $request, EventView $eventView, $locale, $key)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $sheet        = $this->getUserSheet($eventView, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
@@ -177,7 +180,11 @@ class SheetController extends Controller
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+        $twig = $object->getType() === 'nomenclature'
+            ? 'EventBundle:Sheet:nomenclatures.html.twig'
+            : 'EventBundle:Sheet:sheet.html.twig';
+
+        return $this->render($twig, [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'template'      => $template,
@@ -187,18 +194,6 @@ class SheetController extends Controller
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
-        ]);
-    }
-
-    /**
-     * @param EventView $eventView
-     *
-     * @return Response
-     */
-    public function nomenclaturesAction(EventView $eventView)
-    {
-        return $this->render('EventBundle:Sheet:nomenclatures.html.twig', [
-            'eventView' => $eventView,
         ]);
     }
 }

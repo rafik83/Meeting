@@ -140,6 +140,66 @@ class Nomenclature
             ($fallback ? self::label($value, $fallback) : null);
     }
 
+    public function getItems()
+    {
+        return self::items($this->value);
+    }
+
+    private static function items(array $items)
+    {
+        return array_map(function ($key, $item) {
+            return new NomenclatureItem($key, $item['label'], isset($item['children']) ? self::items($item['children']) : []);
+        }, array_keys($items), $items);
+    }
+
+    /**
+     * @return NomenclatureItem[]
+     */
+    public function getFirstLevel()
+    {
+        return $this->getItems();
+    }
+
+    /**
+     * @return NomenclatureItem[]
+     */
+    public function getSecondLevel()
+    {
+        return array_reduce($this->getItems(), function (array $carry, NomenclatureItem $item) {
+            return array_merge($carry, $item->getChildren());
+        }, []);
+    }
+
+    /**
+     * @return NomenclatureItem[]
+     */
+    public function getThirdLevel()
+    {
+        return array_reduce($this->getItems(), function (array $carry, NomenclatureItem $item) {
+            return array_merge($carry, $item->getGrantChildren());
+        }, []);
+    }
+
+    /**
+     * @return NomenclatureItem[]
+     */
+    public function getLastLevel()
+    {
+        if ($this->depth === 1) {
+            return $this->getFirstLevel();
+        }
+
+        if ($this->depth === 2) {
+            return $this->getSecondLevel();
+        }
+
+        if ($this->depth === 3) {
+            return $this->getThirdLevel();
+        }
+
+        return [];
+    }
+
     /**
      * @param string $locale
      *

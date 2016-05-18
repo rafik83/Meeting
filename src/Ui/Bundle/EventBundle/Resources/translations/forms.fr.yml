@@ -51,3 +51,7 @@ form:
                             label: Titre
             submit:
                 label: Enregistrer
+    nomenclature_data:
+        children:
+            item:
+                label: Sélectionnez vos compétences

@@ -103,4 +103,44 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
 
         return null;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMultiple()
+    {
+        return (bool) $this->getOption('multiple');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpanded()
+    {
+        return (bool) $this->getOption('expanded');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSingles()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRadios()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCheckboxes()
+    {
+        return true;
+    }
 }
