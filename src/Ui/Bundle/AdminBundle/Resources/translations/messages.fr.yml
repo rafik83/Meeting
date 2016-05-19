@@ -518,3 +518,4 @@ admin:
         productsSelection:
             link: Template de forfait de participation
             title: Template de forfait de participation
+            create: Créer un template

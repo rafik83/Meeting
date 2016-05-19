@@ -491,7 +491,7 @@ admin_template_registration_add_locale:
 admin_template_products_selection_list:
     path: /template/products-selection
     defaults: { _controller: AdminBundle:ProductsSelectionTemplate:list }
-    methods: [GET]
+    methods: [GET, POST]
 
 #
 # SheetTemplate

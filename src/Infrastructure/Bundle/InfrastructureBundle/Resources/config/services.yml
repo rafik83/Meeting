@@ -151,6 +151,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.template.products_selection_template_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Template\ProductsSelectionTemplateRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -686,6 +690,13 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.template.products_selection.create_for_event_handler:
+        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateForEventHandler
+        arguments:
+            - '@repository.template.products_selection_template_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateForEvent }
     command.register.participant_step_handler:
         class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
         arguments:

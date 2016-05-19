@@ -803,3 +803,11 @@ form:
                 label: Contenu du template
             submit:
                 label: Enregistrer
+    template_products_selection_create:
+        children:
+            title:
+                label: Titre
+            event:
+                label: Choisir un événement
+            submit:
+                label: Enregistrer

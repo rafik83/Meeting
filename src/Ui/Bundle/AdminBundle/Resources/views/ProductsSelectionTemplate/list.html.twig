@@ -1,5 +1,44 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-<h1 class="page-header">{{ 'admin.template.productsSelection.title'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.template.productsSelection.title'|trans }}</h1>
+
+    <p>
+        <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
+            {{ 'admin.template.productsSelection.create'|trans }}
+        </button>
+    </p>
+
+    {{ form_start(form) }}
+    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="create-modal-label">{{ 'admin.template.productsSelection.create'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_errors(form) }}
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.event) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {{ 'admin.cancel'|trans }}
+                    </button>
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    <table class="table">
+        {% for template in templates %}
+            <tr>
+                <td>{{ template.title }}</td>
+                <td>{{ template.event.title }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
