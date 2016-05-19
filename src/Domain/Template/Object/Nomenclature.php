@@ -26,8 +26,6 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     private $nomenclatureLabels;
 
     /**
-     * @deprecated Use setItems instead
-     *
      * @param string $nomenclature
      *
      * @return Nomenclature
@@ -50,13 +48,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @deprecated Use getItems instead
-     *
      * @return string
      */
     public function getItem()
     {
-        return $this->getItems();
+        return !empty($this->getItems()) ? array_values($this->getItems())[0] : null;
     }
 
     /**

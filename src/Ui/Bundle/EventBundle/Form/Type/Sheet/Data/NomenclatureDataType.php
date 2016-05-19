@@ -175,6 +175,7 @@ class NomenclatureDataType extends AbstractType
                     'choices' => $nomenclature->getFirstLevel(),
                     'locale'  => $options['locale'],
                     'label'   => false,
+                    'mapped'  => false,
                 ])
                 ->add('item', SingleType::class, [
                     'choices'     => $nomenclature->getSecondLevel(),
@@ -192,11 +193,13 @@ class NomenclatureDataType extends AbstractType
                     'choices' => $nomenclature->getFirstLevel(),
                     'locale'  => $options['locale'],
                     'label'   => false,
+                    'mapped'  => false,
                 ])
                 ->add('second', SingleType::class, [
                     'choices'     => $nomenclature->getSecondLevel(),
                     'locale'      => $options['locale'],
                     'label'       => false,
+                    'mapped'      => false,
                     'choice_attr' => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
