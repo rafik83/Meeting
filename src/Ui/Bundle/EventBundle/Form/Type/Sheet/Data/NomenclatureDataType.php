@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SingleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -137,78 +138,51 @@ class NomenclatureDataType extends AbstractType
     {
         if ($nomenclature->getDepth() === 1) {
             $form
-                ->add('item', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getFirstLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
+                ->add('item', SingleType::class, [
+                    'choices'     => $nomenclature->getFirstLevel(),
+                    'locale'      => $options['locale'],
+                    'label'       => false,
+                    'placeholder' => $nomenclature->getTitle(),
                 ])
             ;
         } elseif ($nomenclature->getDepth() === 2) {
             $form
-                ->add('first', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getFirstLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
+                ->add('first', SingleType::class, [
+                    'choices' => $nomenclature->getFirstLevel(),
+                    'locale'  => $options['locale'],
+                    'label'   => false,
                 ])
-                ->add('item', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getSecondLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
-                    'choice_attr'               => function (NomenclatureItem $item) {
+                ->add('item', SingleType::class, [
+                    'choices'     => $nomenclature->getSecondLevel(),
+                    'locale'      => $options['locale'],
+                    'label'       => false,
+                    'placeholder' => $nomenclature->getTitle(),
+                    'choice_attr' => function (NomenclatureItem $item) {
                         return ['data-parents' => $item->getKey()];
                     },
                 ])
             ;
         } elseif ($nomenclature->getDepth() === 3) {
             $form
-                ->add('first', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getFirstLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
+                ->add('first', SingleType::class, [
+                    'choices' => $nomenclature->getFirstLevel(),
+                    'locale'  => $options['locale'],
+                    'label'   => false,
                 ])
-                ->add('second', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getSecondLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
-                    'choice_attr'               => function (NomenclatureItem $item) {
+                ->add('second', SingleType::class, [
+                    'choices'     => $nomenclature->getSecondLevel(),
+                    'locale'      => $options['locale'],
+                    'label'       => false,
+                    'choice_attr' => function (NomenclatureItem $item) {
                         return ['data-parents' => $item->getKey()];
                     },
                 ])
-                ->add('item', ChoiceType::class, [
-                    'choices'                   => $nomenclature->getThirdLevel(),
-                    'placeholder'               => '',
-                    'mapped'                    => false,
-                    'choice_translation_domain' => false,
-                    'choices_as_values'         => true,
-                    'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                        return $item->getLabel($options['locale']);
-                    },
-                    'choice_attr'               => function (NomenclatureItem $item) {
+                ->add('item', SingleType::class, [
+                    'choices'     => $nomenclature->getThirdLevel(),
+                    'locale'      => $options['locale'],
+                    'label'       => false,
+                    'placeholder' => $nomenclature->getTitle(),
+                    'choice_attr' => function (NomenclatureItem $item) {
                         return ['data-parents' => $item->getKey()];
                     },
                 ])

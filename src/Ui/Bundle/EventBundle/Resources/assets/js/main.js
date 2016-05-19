@@ -17,11 +17,14 @@ function init (target) {
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
-        $(element).select2({'language': {
-            'noResults': function () {
-                return $(element).data('no-results-label');
-            }
-        }});
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: true
+        });
     });
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {

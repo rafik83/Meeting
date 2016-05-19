@@ -140,11 +140,17 @@ class Nomenclature
             ($fallback ? self::label($value, $fallback) : null);
     }
 
+    /**
+     * @return NomenclatureItem[]
+     */
     public function getItems()
     {
         return self::items($this->value);
     }
 
+    /**
+     * @return NomenclatureItem[]
+     */
     private static function items(array $items)
     {
         return array_map(function ($key, $item) {

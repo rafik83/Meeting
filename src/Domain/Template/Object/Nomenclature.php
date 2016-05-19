@@ -34,7 +34,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function setItem($nomenclature)
     {
-        return $this->setItems($nomenclature);
+        return $this->setItems((array) $nomenclature);
     }
 
     /**

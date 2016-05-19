@@ -141,7 +141,6 @@ class BlockType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
-            'object' => $object,
             'locale' => $locale,
         ]);
     }
