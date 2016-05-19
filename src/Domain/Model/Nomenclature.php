@@ -149,6 +149,8 @@ class Nomenclature
     }
 
     /**
+     * @param array $items
+     *
      * @return NomenclatureItem[]
      */
     private static function items(array $items)
