@@ -3,97 +3,311 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <section class="main product">
-        <header class="tunnel-step">
+    <section class="main">
+        <header>
             <h1>
                 <i class="icon-Panier_2"></i>
                 Forfait de participation
             </h1>
+
+            <div class="tunnel-step">
+                tunnel
+            </div>
         </header>
 
         <div class="main__container">
-            <h2>Sélectionner votre formule</h2>
+            <div class="product">
+                <div class="content-header clearfix">
+                    <h2 class="pull-left">Sélectionner vos options</h2>
+                    <p class="category-option pull-left">Equipement & logistique</p>
+                </div>
 
-            <section class="object object--collection style--style-1 section">
-                <form class="form-select-option">
-                    <div class="form-group">
-                        <table class="table">
+                <section class="object object--collection style--style-1 section">
+                    <form class="form--table--head">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Prix unitaire</th>
                                     <th>Intitulé & description</th>
-                                    <th>Quantité</th>
-                                    <th>Total</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Total</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <div class="select-formule">
-                                            <h2>Découverte</h2>
-                                            <span class="price-formule">500 <sup>€ HT</sup></span>
-                                            <span class="limite-formule">Disponible <br>50 sur 75</span>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                            <span class="product-limite">Disponible <br>0 sur 45</span>
                                         </div>
                                     </td>
-                                    <td width="550px">
+                                    <td>
                                         <h3>Une formule économique pour votre première participation</h3>
                                         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
                                     </td>
+                                    <td width="200px">
+                                        <h3 class="out-of-stock text-center">Epuisé</h3>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>à partir de</p>
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
                                     <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="select-quantity">
+                                            <input type='button' value='-' class='qtyminus' field='quantity' />
+                                            <input type='text' name='quantity' value='0' class='qty' />
+                                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                                        </div>
+                                        <p class="text-center">1 est inclus dans la formule</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="selected-line">
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>le pack complet</p>
+                                            <span class="product-price">299 <sup>€ HT</sup></span>
+                                            <p>au lieu de 499 €</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
                                         <div class="select-quantity">
                                             <input type='button' value='-' class='qtyminus' field='quantity' />
                                             <input type='text' name='quantity' value='0' class='qty' />
                                             <input type='button' value='+' class='qtyplus' field='quantity' />
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="select-formule">
-                                            <h2>Découverte</h2>
-                                            <span class="price-formule">500 <sup>€ HT</sup></span>
-                                            <span class="limite-formule">Disponible <br>50 sur 75</span>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </form>
+                </section>
 
-                    <div class="form-group selected-line ">
-                        <table class="table">
+                <div class="content-header clearfix">
+                    <h2 class="pull-left">Sélectionner vos options</h2>
+                    <p class="category-option pull-left">Communication</p>
+                </div>
+
+                <section class="object object--collection style--style-1 section">
+                    <form class="form--table--head">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prix unitaire</th>
+                                    <th>Intitulé & description</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <div class="select-formule">
-                                            <h2>Early bird</h2>
-                                            <span class="price-formule">1200 <sup>€ HT</sup></span>
-                                            <span class="limite-formule">Date limite <br>26/04/2016</span>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                            <span class="product-limite">Disponible <br>0 sur 45</span>
                                         </div>
                                     </td>
-                                    <td width="550px">
-                                        <h3>Une formule économique</h3>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
                                         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
                                     </td>
+                                    <td width="200px">
+                                        <h3 class="out-of-stock text-center">Epuisé</h3>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>à partir de</p>
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
                                     <td>
-                                        <dl>
-                                            <dt>Formule sans stand</dt>
-                                            <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
-                                            <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>Accès libre aux conférences</dt>
-                                            <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                        </dl>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="select-quantity">
+                                            <input type='button' value='-' class='qtyminus' field='quantity' />
+                                            <input type='text' name='quantity' value='0' class='qty' />
+                                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                                        </div>
+                                        <p class="text-center">1 est inclus dans la formule</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="selected-line">
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>le pack complet</p>
+                                            <span class="product-price">299 <sup>€ HT</sup></span>
+                                            <p>au lieu de 499 €</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="select-quantity">
+                                            <input type='button' value='-' class='qtyminus' field='quantity' />
+                                            <input type='text' name='quantity' value='0' class='qty' />
+                                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                                        </div>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </form>
+                </section>
+
+                <div class="content-header clearfix">
+                    <h2 class="pull-left">Sélectionner vos options</h2>
+                    <p class="category-option pull-left">Sous-événement</p>
+                </div>
+
+                <section class="object object--collection style--style-1 section">
+                    <form class="form--table--head">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prix unitaire</th>
+                                    <th>Intitulé & description</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                            <span class="product-limite">Disponible <br>0 sur 45</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <h3 class="out-of-stock text-center">Epuisé</h3>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>à partir de</p>
+                                            <span class="product-price">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="select-quantity">
+                                            <input type='button' value='-' class='qtyminus' field='quantity' />
+                                            <input type='text' name='quantity' value='0' class='qty' />
+                                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                                        </div>
+                                        <p class="text-center">1 est inclus dans la formule</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="selected-line">
+                                    <td width="200px">
+                                        <div class="product">
+                                            <p>le pack complet</p>
+                                            <span class="product-price">299 <sup>€ HT</sup></span>
+                                            <p>au lieu de 499 €</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h3>Une formule économique pour votre première participation</h3>
+                                        <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="select-quantity">
+                                            <input type='button' value='-' class='qtyminus' field='quantity' />
+                                            <input type='text' name='quantity' value='0' class='qty' />
+                                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                                        </div>
+                                    </td>
+                                    <td width="200px">
+                                        <div class="product">
+                                            <span class="product-price text-center">1000 <sup>€ HT</sup></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="#" class="btn pull-right"><i class="icon-Valider_3"></i>Valider vos options</a>
+                        </div>
                     </div>
-                </form>
-            </section>
+                </section>
+            </div>
         </div>
     </section>
 {% endblock %}
