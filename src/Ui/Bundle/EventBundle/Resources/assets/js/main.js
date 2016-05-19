@@ -16,6 +16,26 @@ function init (target) {
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
+    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
+
+        var parentId = element.getAttribute('data-parent');
+        var $element = $(element).choice().data('choice');
+        var $parent  = $('#' + parentId).choice().data('choice');
+
+        $element.addMatcher(parentId, function (filter, option) {
+            return option.data.parent === filter;
+        });
+
+        $parent.element.on('change', function (event) {
+            if ($parent.value === null) {
+                $element.reset();
+            } else {
+                $element.filter($parent.value, parentId);
+            }
+        });
+
+    });
+
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
         $(element).select2({
             language: {

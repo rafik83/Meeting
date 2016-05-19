@@ -21,6 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -81,6 +82,29 @@ class NomenclatureDataType extends AbstractType
             'placeholder' => null,
             'help'        => null,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $data = $form->getData();
+
+        if (!$data instanceof Object\Nomenclature) {
+            throw new \Exception('Nomenclature object expected.');
+        }
+
+        if ($data->isSingles()) {
+            // Put data-parent="" on select inputs
+            $keys = array_keys($view->children);
+            foreach ($keys as $index => $parent) {
+                if (isset($keys[$index + 1])) {
+                    $child = $keys[$index + 1];
+                    $view->children[$child]->vars['attr']['data-parent'] = $view->children[$parent]->vars['id'];
+                }
+            }
+        }
     }
 
     /**
@@ -158,7 +182,7 @@ class NomenclatureDataType extends AbstractType
                     'label'       => false,
                     'placeholder' => $nomenclature->getTitle(),
                     'choice_attr' => function (NomenclatureItem $item) {
-                        return ['data-parents' => $item->getKey()];
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
             ;
@@ -174,7 +198,7 @@ class NomenclatureDataType extends AbstractType
                     'locale'      => $options['locale'],
                     'label'       => false,
                     'choice_attr' => function (NomenclatureItem $item) {
-                        return ['data-parents' => $item->getKey()];
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
                 ->add('item', SingleType::class, [
@@ -183,7 +207,7 @@ class NomenclatureDataType extends AbstractType
                     'label'       => false,
                     'placeholder' => $nomenclature->getTitle(),
                     'choice_attr' => function (NomenclatureItem $item) {
-                        return ['data-parents' => $item->getKey()];
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
             ;
