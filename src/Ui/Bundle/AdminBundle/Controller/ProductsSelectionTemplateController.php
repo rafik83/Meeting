@@ -13,13 +13,19 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class TemplateController extends Controller
+class ProductsSelectionTemplateController extends Controller
 {
     /**
      * @return Response
      */
     public function listAction()
     {
-        return $this->render('AdminBundle:Template:list.html.twig');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $templates = [];
+
+        return $this->render('AdminBundle:ProductsSelectionTemplate:list.html.twig', [
+            'templates' => $templates,
+        ]);
     }
 }
