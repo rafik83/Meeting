@@ -1,7 +1,7 @@
-Feature: Template
-  I need to be able to add, update, duplicate, see template
+Feature: Manage templates
+  As an Admin, I need to be able to add, update, duplicate, see templates
 
-  Scenario: see list of template
+  Scenario: see list of templates
     Given the database is empty
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
@@ -10,14 +10,10 @@ Feature: Template
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
-    And I follow "admin.template_list.link"
-    Then I should be on this page "/admin/fr/template"
-    And I should see "admin.template.sheet.link"
-    And I should see "admin.template.registration.link"
-    Then I follow "admin.template.sheet.link"
+    And I follow "admin.template.sheet.link"
     And I should be on this page "/admin/fr/template/sheet"
     And I should see "Template ASD Days"
-    Then I go to this page "/admin/fr/template"
+    Then I go to this page "/admin/fr/event"
     And I follow "admin.template.registration.link"
     Then I should be on this page "/admin/fr/template/registration"
     And I should see "Inscription Template de base"
