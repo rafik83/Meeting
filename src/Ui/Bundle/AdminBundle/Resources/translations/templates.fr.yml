@@ -35,7 +35,7 @@ template:
     label:
         title: Label
     help:
-        title: help
+        title: Aide
     required:
         title: Requis
     translatable:
