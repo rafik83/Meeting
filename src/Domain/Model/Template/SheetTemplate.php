@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Model\Template;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetTemplate extends AbstractTemplate
 {

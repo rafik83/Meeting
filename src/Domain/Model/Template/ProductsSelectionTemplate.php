@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model\Template;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class ProductsSelectionTemplate extends AbstractTemplate
 {
     /**
