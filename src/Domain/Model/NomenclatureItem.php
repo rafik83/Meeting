@@ -46,7 +46,7 @@ class NomenclatureItem
         $this->children = $children;
 
         foreach ($children as $child) {
-            return $child->setParent($this);
+            $child->setParent($this);
         }
     }
 
