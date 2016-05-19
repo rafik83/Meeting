@@ -62,6 +62,179 @@ abstract class AbstractTemplate
     abstract public function getFallback();
 
     /**
+     * @param string             $title
+     * @param array              $value
+     * @param array              $locales
+     * @param string             $fallback
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct($title, array $value, array $locales, $fallback, \DateTimeInterface $createdAt)
+    {
+        $this->title     = $title;
+        $this->value     = $value;
+        $this->fallback  = $fallback;
+        $this->createdAt = $createdAt;
+
+        foreach ($locales as $locale) {
+            $this->addLocale($locale);
+        }
+
+        if (!$this->hasLocale($fallback)) {
+            throw new \InvalidArgumentException('Default locale should be in the template locales.');
+        }
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setEvent(Event $event)
+    {
+        $this->event = $event;
+
+        // Add event locales
+        foreach ($event->getLocales() as $locale) {
+            $this->addLocale($locale);
+        }
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get locales
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return AbstractTemplate
+     */
+    public function addLocale($locale)
+    {
+        if (!$this->hasLocale($locale) && $locale !== null) {
+            $this->locales[] = $locale;
+            $this->fixValue([$locale]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasLocale($locale)
+    {
+        return in_array($locale, $this->locales);
+    }
+
+    /**
+     * Get locales available for the current event if set, else get all locales.
+     *
+     * @return array
+     */
+    public function getEnabledLocales()
+    {
+        return $this->event ? array_filter($this->locales, function ($locale) {
+            return $this->event->hasLocale($locale);
+        }) : $this->locales;
+    }
+
+    /**
+     * Get value
+     *
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param array $value
+     *
+     * @return SheetTemplate
+     */
+    public function setValue(array $value)
+    {
+        $this->value = $value;
+
+        $this->fixValue($this->locales);
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Consolidate value for each locales
+     *
+     * @param array $locales
+     */
+    protected function fixValue(array $locales)
+    {
+        foreach ($locales as $locale) {
+            $this->value = self::createLocale($this->value, $locale);
+        }
+    }
+
+    /**
      * @param array  $config
      * @param string $locale
      *
@@ -97,7 +270,8 @@ abstract class AbstractTemplate
         return array_map(
             function ($item) use ($locale) {
                 return self::createLocale($item, $locale);
-            }, $config
+            },
+            $config
         );
     }
 
@@ -132,15 +306,5 @@ abstract class AbstractTemplate
         }
 
         return $config;
-    }
-
-    /**
-     * Get value
-     *
-     * @return array
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 }
