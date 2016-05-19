@@ -519,3 +519,7 @@ admin:
             link: Template de forfait de participation
             title: Template de forfait de participation
             create: Créer un template
+            table:
+                column:
+                    title: Titre
+                    event: Evènement

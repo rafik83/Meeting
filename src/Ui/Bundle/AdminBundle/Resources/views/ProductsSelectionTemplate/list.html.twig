@@ -34,11 +34,25 @@
     {{ form_end(form) }}
 
     <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'admin.template.productsSelection.table.column.title'|trans }}</th>
+                <th>{{ 'admin.template.productsSelection.table.column.event'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for template in templates %}
             <tr>
                 <td>{{ template.title }}</td>
                 <td>{{ template.event.title }}</td>
             </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">
+                    {{ 'admin.zero-result'|trans }}
+                </td>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
