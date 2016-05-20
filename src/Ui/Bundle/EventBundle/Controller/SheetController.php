@@ -144,6 +144,7 @@ class SheetController extends Controller
             'locale'      => $locale,
             'help'        => $object->getHelp(),
             'placeholder' => $object->getPlaceholder(),
+            'object'      => $object,
         ]);
     }
 
