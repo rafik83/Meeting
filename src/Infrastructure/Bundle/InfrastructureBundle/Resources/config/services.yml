@@ -715,6 +715,13 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Create }
+    command.package.create_handler:
+        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
+        arguments:
+            - '@repository.package_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
 
     #
     # Security
