@@ -88,20 +88,22 @@ class CreateHandler
         // Deal with the collection of features included in the package
         if (is_array($create->features)) {
             foreach ($create->features as $feature) {
-                foreach ($feature['translations'] as $locale => $translation) {
+                if (isset($feature['translations'])) {
                     $featureObject = new Package\Feature($package);
-
                     $package->getFeatures()->add($featureObject);
 
-                    $featureObject->getTranslations()->set(
-                        $locale,
-                        new Package\FeatureTranslation(
-                            $featureObject,
+                    foreach ($feature['translations'] as $locale => $translation) {
+
+                        $featureObject->getTranslations()->set(
                             $locale,
-                            $translation['title'],
-                            $translation['description']
-                        )
-                    );
+                            new Package\FeatureTranslation(
+                                $featureObject,
+                                $locale,
+                                $translation['title'],
+                                $translation['description']
+                            )
+                        );
+                    }
                 }
             }
         }
