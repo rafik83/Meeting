@@ -10,28 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature;
 
-use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ItemToSinglesTransformer implements DataTransformerInterface
+class ItemToSinglesTransformer extends AbstractTransformer
 {
-    /**
-     * @var Nomenclature
-     */
-    private $nomenclature;
-
-    /**
-     * KeyToNomenclatureItemTransformer constructor.
-     *
-     * @param Nomenclature $nomenclature
-     */
-    public function __construct(Nomenclature $nomenclature)
-    {
-        $this->nomenclature = $nomenclature;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -90,22 +73,5 @@ class ItemToSinglesTransformer implements DataTransformerInterface
         }
 
         return $item->getKey();
-    }
-
-    /**
-     * @param NomenclatureItem[] $items
-     * @param string             $key
-     *
-     * @return NomenclatureItem
-     */
-    private static function findByKey(array $items, $key)
-    {
-        foreach ($items as $item) {
-            if ($item->getKey() === $key) {
-                return $item;
-            }
-        }
-
-        return null;
     }
 }

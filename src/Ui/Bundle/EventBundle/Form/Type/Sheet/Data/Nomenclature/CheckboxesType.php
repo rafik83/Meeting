@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature;
 
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\KeysToNomenclatureItemsTransformer;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemsToCheckboxTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,7 +27,7 @@ class CheckboxesType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer(new KeysToNomenclatureItemsTransformer($options['nomenclature']));
+        $builder->addModelTransformer(new ItemsToCheckboxTransformer($options['nomenclature']));
     }
 
     /**
