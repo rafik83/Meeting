@@ -37,16 +37,13 @@ class CreateType extends AbstractType
                 'entry_type' => PackageTranslationsType::class,
                 'label'      => false,
             ])
-            ->add('file', FileType::class, [
-                'required' => false,
-            ])
-            ->add('unitPrice', NumberType::class)
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
             ])
             ->add('availabilityMax', IntegerType::class, [
                 'required' => false,
             ])
+            ->add('unitPrice', NumberType::class)
             ->add('features', CollectionType::class, [
                 'entry_type'    => FeatureType::class,
                 'allow_add'     => true,
@@ -61,6 +58,9 @@ class CreateType extends AbstractType
                 'attr'     => [
                     'min' => 0,
                 ]
+            ])
+            ->add('file', FileType::class, [
+                'required' => false,
             ])
             ->add('productIncluded', CollectionType::class, [
                 'entry_type'    => ProductIncludedType::class,
