@@ -10,15 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\ProductsSelection;
 
-use Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateForEvent;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
+use Proximum\Vimeet\Application\Command\Template\ProductsSelection\Update;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateForEventType extends AbstractType
+class UpdateType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -29,13 +27,9 @@ class CreateForEventType extends AbstractType
             ->add('title', TextType::class, [
                 'required' => true,
             ])
-            ->add('event', EventChoiceType::class, [
-                'required'         => true,
-                'repositoryMethod' => function (EventRepositoryInterface $eventRepository) use ($options) {
-                    return $eventRepository->getEventsByAdmin($options['user']);
-                },
-            ])
-        ;
+            ->add('templateData', TemplateDataType::class, [
+                'label' => false,
+            ]);
     }
 
     /**
@@ -43,9 +37,8 @@ class CreateForEventType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['user']);
         $resolver->setDefaults([
-            'data_class' => CreateForEvent::class,
+            'data_class' => Update::class,
         ]);
     }
 
@@ -54,6 +47,6 @@ class CreateForEventType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'template_products_selection_create';
+        return 'template_products_selection_update';
     }
 }

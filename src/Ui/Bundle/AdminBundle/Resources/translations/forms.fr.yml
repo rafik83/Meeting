@@ -806,8 +806,22 @@ form:
     template_products_selection_create:
         children:
             title:
-                label: Titre
+                label: Titre du template
             event:
                 label: Choisir un événement
+            submit:
+                label: Enregistrer
+    template_products_selection_update:
+        children:
+            title:
+                label: Titre du template
+            templateData:
+                children:
+                    blocks:
+                        prototype:
+                            label: Libellé de l'étape
+                            children:
+                                enabled:
+                                    label: Etape activée
             submit:
                 label: Enregistrer

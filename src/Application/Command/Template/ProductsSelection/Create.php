@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Template\ProductsSelection;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CreateForEvent
+class Create
 {
     /**
      * @var string

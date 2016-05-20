@@ -38,6 +38,7 @@
             <tr>
                 <th>{{ 'admin.template.productsSelection.table.column.title'|trans }}</th>
                 <th>{{ 'admin.template.productsSelection.table.column.event'|trans }}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +46,11 @@
             <tr>
                 <td>{{ template.title }}</td>
                 <td>{{ template.event.title }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_template_products_selection_update', { 'template': template.id }) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.template.productsSelection.update'|trans }}
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>

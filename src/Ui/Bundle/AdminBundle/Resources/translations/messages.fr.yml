@@ -519,6 +519,14 @@ admin:
             link: Template de forfait de participation
             title: Template de forfait de participation
             create: Créer un template
+            update: Modifier
+            steps:
+                step1:
+                    label: Formules
+                step2:
+                    label: Participants & Plannings
+                step3:
+                    label: Options
             table:
                 column:
                     title: Titre

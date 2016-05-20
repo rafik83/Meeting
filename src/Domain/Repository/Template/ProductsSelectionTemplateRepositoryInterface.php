@@ -25,4 +25,9 @@ interface ProductsSelectionTemplateRepositoryInterface
      * @param ProductsSelectionTemplate $productsSelectionTemplate
      */
     public function add(ProductsSelectionTemplate $productsSelectionTemplate);
+
+    /**
+     * @param ProductsSelectionTemplate $productsSelectionTemplate
+     */
+    public function set(ProductsSelectionTemplate $productsSelectionTemplate);
 }

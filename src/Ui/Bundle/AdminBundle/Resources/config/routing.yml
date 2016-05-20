@@ -493,6 +493,13 @@ admin_template_products_selection_list:
     defaults: { _controller: AdminBundle:ProductsSelectionTemplate:list }
     methods: [GET, POST]
 
+admin_template_products_selection_update:
+    path: /template/products-selection/{template}/update
+    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:update }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+
 #
 # SheetTemplate
 #

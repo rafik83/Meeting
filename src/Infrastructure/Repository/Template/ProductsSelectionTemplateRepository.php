@@ -62,4 +62,12 @@ class ProductsSelectionTemplateRepository implements ProductsSelectionTemplateRe
         $this->entityManager->persist($productsSelectionTemplate);
         $this->entityManager->flush($productsSelectionTemplate);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(ProductsSelectionTemplate $productsSelectionTemplate)
+    {
+        $this->entityManager->flush($productsSelectionTemplate);
+    }
 }

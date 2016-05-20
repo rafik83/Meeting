@@ -13,8 +13,14 @@ namespace Proximum\Vimeet\Application\Command\Template\ProductsSelection;
 use Proximum\Vimeet\Domain\Model\Template\ProductsSelectionTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\ProductsSelectionTemplateRepositoryInterface;
 
-class CreateForEventHandler
+class CreateHandler
 {
+    private $stepsLabel = [
+        'Formules',
+        'Participants & Plannings',
+        'Options',
+    ];
+
     /**
      * @var ProductsSelectionTemplateRepositoryInterface
      */
@@ -40,13 +46,36 @@ class CreateForEventHandler
     }
 
     /**
-     * @param CreateForEvent $create
+     * @param Create $create
+     *
+     * @return ProductsSelectionTemplate
      */
-    public function handle(CreateForEvent $create)
+    public function handle(Create $create)
     {
+        $value = [];
+        $uid   = uniqid();
+
+        // create 3 blocks
+        for ($step = 0; $step < 3; $step++) {
+            $labels = [];
+            foreach ($create->event->getLocales() as $locale) {
+                $labels[$locale] = $this->stepsLabel[$step];
+            }
+
+            $value[sha1($step . $uid)] = [
+                'component' => 'block',
+                'type'      => '12',
+                'config'    => [
+                    'label'     => $labels,
+                    'enabled'   => true,
+                ],
+                'children'  => [],
+            ];
+        }
+
         $template = new ProductsSelectionTemplate(
             $create->title,
-            [],
+            $value,
             $create->event->getLocales(),
             $create->event->getFallback(),
             $this->dateTime
@@ -55,5 +84,7 @@ class CreateForEventHandler
         $template->setEvent($create->event);
 
         $this->productsSelectionTemplateRepository->add($template);
+
+        return $template;
     }
 }
