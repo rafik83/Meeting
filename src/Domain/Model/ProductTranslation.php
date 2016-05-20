@@ -97,4 +97,12 @@ class ProductTranslation
     {
         return $this->description;
     }
+
+    /**
+     * @return string
+     */
+    public function getOptionalPriceText()
+    {
+        return $this->optionalPriceText;
+    }
 }
