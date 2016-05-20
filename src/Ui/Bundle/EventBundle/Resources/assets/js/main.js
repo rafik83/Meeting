@@ -34,6 +34,12 @@ function init (target) {
             }
         });
 
+        if ($parent.value === null) {
+            $element.reset();
+        } else {
+            $element.filter($parent.value, parentId);
+        }
+
     });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
