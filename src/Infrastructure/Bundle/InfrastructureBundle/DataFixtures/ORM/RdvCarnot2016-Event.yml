@@ -202,6 +202,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: false
+                                mode: "checkboxes"
                                 default: 1
                                 nomenclature: "@nomenclature_competences->id"
                         75adad94:
@@ -373,6 +374,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos offres"
                                             required: true
+                                            mode: "checkboxes"
                                             nomenclature: "@nomenclature_offre_besoins->id"
                                     63ccc105:
                                         component: "object"
@@ -386,6 +388,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Vos besoins"
                                             required: true
+                                            mode: "checkboxes"
                                             nomenclature: "@nomenclature_offre_besoins->id"
 
 Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
@@ -466,6 +469,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "@nomenclature_position->id"
+                                mode: "singles"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
                             component: "object"
@@ -570,6 +574,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                 nomenclature: "4"
+                                mode: "singles"
                                 tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
