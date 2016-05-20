@@ -833,7 +833,7 @@ form:
                         description:
                             label: Description
                         optionalPriceText:
-                            label: Text optionnel sous le prix
+                            label: Texte optionnel sous le prix
     package_create:
         children:
             name:
@@ -880,5 +880,5 @@ form:
                         descriptionContent:
                             label: Contenu de la description
                         optionalPriceText:
-                            label: Text optionnel sous le prix
+                            label: Texte optionnel sous le prix
 
