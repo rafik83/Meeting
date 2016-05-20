@@ -448,17 +448,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 type: "text"
                                 translatable: false
                                 tags: ["participant_lastname", "participant_data"]
-                        dd321a4f:
-                            component: "object"
-                            type: "nomenclature"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Service (Juridique, Informatique, ...)"
-                                help:
-                                    fr: ""
-                                nomenclature: "@nomenclature_service->id"
-                                tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
                             type: "nomenclature"
