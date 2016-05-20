@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\ProductsSelection;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\ProductsSelectionTemplate;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
