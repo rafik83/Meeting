@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SingleType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SinglesType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -47,27 +43,21 @@ class NomenclatureDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
-            $data = $event->getData();
-            $form = $event->getForm();
+        if (!$options['object'] instanceof Object\Nomenclature) {
+            throw new \Exception('Nomenclature object expected.');
+        }
 
-            if (!$data instanceof Object\Nomenclature) {
-                throw new \Exception('Nomenclature object expected.');
-            }
+        $nomenclature = $this->nomenclatureRepository->findById($options['object']->getNomenclatureId());
 
-            $nomenclature = $this->nomenclatureRepository->findById($data->getNomenclatureId());
-
-            if ($data->isSingles()) {
-                $this->addSingles($nomenclature, $form, $options);
-            } elseif ($data->isRadios()) {
-                $this->addRadios($nomenclature, $form, $options);
-            } elseif ($data->isCheckboxes()) {
-                $this->addCheckboxes($nomenclature, $form, $options);
-            } else {
-                throw new \Exception('Not implemented yet.');
-            }
-
-        });
+        if ($options['object']->isSingles()) {
+            $this->addSingles($nomenclature, $builder, $options);
+        } elseif ($options['object']->isRadios()) {
+            $this->addRadios($nomenclature, $builder, $options);
+        } elseif ($options['object']->isCheckboxes()) {
+            $this->addCheckboxes($nomenclature, $builder, $options);
+        } else {
+            throw new \Exception('Not implemented yet.');
+        }
     }
 
     /**
@@ -75,7 +65,7 @@ class NomenclatureDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
             'label'       => false,
             'data_class'  => Object\Nomenclature::class,
@@ -87,42 +77,19 @@ class NomenclatureDataType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        $data = $form->getData();
-
-        if (!$data instanceof Object\Nomenclature) {
-            throw new \Exception('Nomenclature object expected.');
-        }
-
-        if ($data->isSingles()) {
-            // Put data-parent="" on select inputs
-            $keys = array_keys($view->children);
-            foreach ($keys as $index => $parent) {
-                if (isset($keys[$index + 1])) {
-                    $child = $keys[$index + 1];
-                    $view->children[$child]->vars['attr']['data-parent'] = $view->children[$parent]->vars['id'];
-                }
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'nomenclature_data';
     }
 
     /**
-     * @param Nomenclature  $nomenclature
-     * @param FormInterface $form
-     * @param array         $options
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
      *
      * @throws \Exception
      */
-    private function addRadios(Nomenclature $nomenclature, FormInterface $form, array $options)
+    private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {
         $form->add('item', ChoiceType::class, [
             'choices'                   => $nomenclature->getLastLevel(),
@@ -137,13 +104,13 @@ class NomenclatureDataType extends AbstractType
     }
 
     /**
-     * @param Nomenclature  $nomenclature
-     * @param FormInterface $form
-     * @param array         $options
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
      *
      * @throws \Exception
      */
-    private function addCheckboxes(Nomenclature $nomenclature, FormInterface $form, array $options)
+    private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {
         $form->add('items', CheckboxesType::class, [
             'nomenclature' => $nomenclature,
@@ -152,76 +119,18 @@ class NomenclatureDataType extends AbstractType
     }
 
     /**
-     * @param Nomenclature  $nomenclature
-     * @param FormInterface $form
-     * @param array         $options
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
      *
      * @throws \Exception
      */
-    private function addSingles(Nomenclature $nomenclature, FormInterface $form, array $options)
+    private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {
-        if ($nomenclature->getDepth() === 1) {
-            $form
-                ->add('item', SingleType::class, [
-                    'choices'      => $nomenclature->getFirstLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
-                    'nomenclature' => $nomenclature,
-                ])
-            ;
-        } elseif ($nomenclature->getDepth() === 2) {
-            $form
-                ->add('first', SingleType::class, [
-                    'choices'      => $nomenclature->getFirstLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'mapped'       => false,
-                    'nomenclature' => $nomenclature,
-                ])
-                ->add('item', SingleType::class, [
-                    'choices'      => $nomenclature->getSecondLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
-                    'nomenclature' => $nomenclature,
-                    'choice_attr'  => function (NomenclatureItem $item) {
-                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
-                    },
-                ])
-            ;
-        } elseif ($nomenclature->getDepth() === 3) {
-            $form
-                ->add('first', SingleType::class, [
-                    'choices'      => $nomenclature->getFirstLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'mapped'       => false,
-                    'nomenclature' => $nomenclature,
-                ])
-                ->add('second', SingleType::class, [
-                    'choices'      => $nomenclature->getSecondLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'mapped'       => false,
-                    'nomenclature' => $nomenclature,
-                    'choice_attr' => function (NomenclatureItem $item) {
-                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
-                    },
-                ])
-                ->add('item', SingleType::class, [
-                    'choices'      => $nomenclature->getThirdLevel(),
-                    'locale'       => $options['locale'],
-                    'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
-                    'nomenclature' => $nomenclature,
-                    'choice_attr'  => function (NomenclatureItem $item) {
-                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
-                    },
-                ])
-            ;
-        } else {
-            throw new \Exception(sprintf('Not implementation for depth of %s', $nomenclature->getDepth()));
-        }
+        $form->add('item', SinglesType::class, [
+            'nomenclature' => $nomenclature,
+            'locale'       => $options['locale'],
+            'label'        => false,
+        ]);
     }
 }
