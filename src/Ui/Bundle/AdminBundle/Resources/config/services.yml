@@ -83,3 +83,9 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: form.type }
+    form_type_product.product_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+        tags:
+            - { name: form.type }
