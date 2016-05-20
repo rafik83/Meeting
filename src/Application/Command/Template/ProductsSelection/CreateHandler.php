@@ -12,15 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Template\ProductsSelection;
 
 use Proximum\Vimeet\Domain\Model\Template\ProductsSelectionTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\ProductsSelectionTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ProductsSelectionTemplateFactory;
 
 class CreateHandler
 {
-    private $stepsLabel = [
-        'Formules',
-        'Participants & Plannings',
-        'Options',
-    ];
-
     /**
      * @var ProductsSelectionTemplateRepositoryInterface
      */
@@ -29,20 +24,21 @@ class CreateHandler
     /**
      * @var \DateTimeInterface
      */
-    private $dateTime;
+    private $createdAt;
 
     /**
-     * CreateForEventHandler constructor.
-     *
      * @param ProductsSelectionTemplateRepositoryInterface $productsSelectionTemplateRepository
-     * @param \DateTimeInterface                           $dateTime
+     * @param ProductsSelectionTemplateFactory             $productsSelectionTemplateFactory
+     * @param \DateTimeInterface                           $createdAt
      */
     public function __construct(
         ProductsSelectionTemplateRepositoryInterface $productsSelectionTemplateRepository,
-        \DateTimeInterface $dateTime
+        ProductsSelectionTemplateFactory $productsSelectionTemplateFactory,
+        \DateTimeInterface $createdAt
     ) {
         $this->productsSelectionTemplateRepository = $productsSelectionTemplateRepository;
-        $this->dateTime                            = $dateTime;
+        $this->productsSelectionTemplateFactory    = $productsSelectionTemplateFactory;
+        $this->createdAt                           = $createdAt;
     }
 
     /**
@@ -52,36 +48,11 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $value = [];
-        $uid   = uniqid();
-
-        // create 3 blocks
-        for ($step = 0; $step < 3; $step++) {
-            $labels = [];
-            foreach ($create->event->getLocales() as $locale) {
-                $labels[$locale] = $this->stepsLabel[$step];
-            }
-
-            $value[sha1($step . $uid)] = [
-                'component' => 'block',
-                'type'      => '12',
-                'config'    => [
-                    'label'     => $labels,
-                    'enabled'   => true,
-                ],
-                'children'  => [],
-            ];
-        }
-
-        $template = new ProductsSelectionTemplate(
+        $template = $this->productsSelectionTemplateFactory->createFromEvent(
+            $create->event,
             $create->title,
-            $value,
-            $create->event->getLocales(),
-            $create->event->getFallback(),
-            $this->dateTime
+            $this->createdAt
         );
-
-        $template->setEvent($create->event);
 
         $this->productsSelectionTemplateRepository->add($template);
 

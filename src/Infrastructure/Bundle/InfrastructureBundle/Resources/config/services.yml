@@ -694,6 +694,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateHandler
         arguments:
             - '@repository.template.products_selection_template_repository'
+            - '@template.products_selection_template_factory'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Create }
@@ -961,6 +962,9 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+
+    template.products_selection_template_factory:
+        class: Proximum\Vimeet\Domain\Template\ProductsSelectionTemplateFactory
 
     #
     # Guesser
