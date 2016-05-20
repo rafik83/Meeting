@@ -39,9 +39,15 @@ class CreateType extends AbstractType
             ])
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ]
             ])
             ->add('availabilityMax', IntegerType::class, [
                 'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ]
             ])
             ->add('unitPrice', NumberType::class)
             ->add('features', CollectionType::class, [
