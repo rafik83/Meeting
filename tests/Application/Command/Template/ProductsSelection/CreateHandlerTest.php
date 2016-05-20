@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Template\Registration;
+namespace Proximum\Vimeet\Tests\Application\Command\Template\ProductsSelection;
 
 use Proximum\Vimeet\Application\Command\Template\ProductsSelection\Create;
 use Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateHandler;
@@ -20,7 +20,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        // context
         $createdAt = new \DateTime();
 
         $event = new Event();
