@@ -3,183 +3,226 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <section class="main product">
-        <header class="tunnel-step">
+    <section class="main">
+        <header class="header-product">
             <h1>
                 <i class="icon-Panier_2"></i>
                 Forfait de participation
             </h1>
+
+            <ul class="tunnel-step">
+                <li class="li complete">
+                    <div class="number-step">1</div>
+                    <div class="name-step">
+                        <p>Formule</p>
+                    </div>
+                </li>
+
+                <li class="li current">
+                    <div class="number-step">2</div>
+                    <div class="name-step">
+                        <p>Participants & Planning</p>
+                    </div>
+                </li>
+
+                <li class="li">
+                    <div class="number-step">3</div>
+                    <div class="name-step">
+                        <p>Option</p>
+                    </div>
+                </li>
+
+                <li class="li">
+                    <div class="number-step">4</div>
+                    <div class="name-step">
+                        <p>Récapitulatif & Facturation</p>
+                    </div>
+                </li>
+
+                <li class="li">
+                    <div class="number-step">5</div>
+                    <div class="name-step">
+                        <p>Paiement</p>
+                    </div>
+                </li>
+            </ul>
         </header>
 
         <div class="main__container">
-            <h2>Sélectionner votre formule</h2>
+            <div class="product">
+                <div class="step-number-title"> 1 </div>
 
-            <section class="object object--collection style--style-1 section">
-                <form class="form--table">
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="190px">
-                                                <div class="product">
-                                                    <h2>Découverte</h2>
-                                                    <span class="product-price">500 <sup>€ HT</sup></span>
-                                                    <span class="product-limite">Disponible <br>50 sur 75</span>
-                                                </div>
-                                            </td>
-                                            <td width="500px">
-                                                <h3>Une formule économique pour votre première participation</h3>
-                                                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
-                                            </td>
-                                            <td>
-                                                <dl>
-                                                    <dt>Formule sans stand</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Accès libre aux conférences</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </label>
+                <div class="content-header">
+                    <h2>Sélectionner votre formule</h2>
+                </div>
+
+                <section class="object object--collection style--style-1 section">
+                    <form class="form--table">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="190px">
+                                                    <div class="product">
+                                                        <h2>Découverte</h2>
+                                                        <span class="product-price">500 <sup>€ HT</sup></span>
+                                                        <span class="product-limite">Disponible <br>50 sur 75</span>
+                                                    </div>
+                                                </td>
+                                                <td width="500px">
+                                                    <h3>Une formule économique pour votre première participation</h3>
+                                                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                                </td>
+                                                <td>
+                                                    <dl>
+                                                        <dt>Formule sans stand</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>Accès libre aux conférences</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="checkbox selected-line">
-                            <label>
-                                <input type="checkbox">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="190px">
-                                                <div class="product">
-                                                    <h2>Early bird</h2>
-                                                    <span class="product-price">1200 <sup>€ HT</sup></span>
-                                                    <span class="product-limite">Date limite <br>26/04/2016</span>
-                                                </div>
-                                            </td>
-                                            <td width="500px">
-                                                <h3>Une formule économique</h3>
-                                                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
-                                                {# <a href="#" class="btn pull-right"><i class="icon-Valider_3"></i>Valider votre formule</a> #}
-                                            </td>
-                                            <td>
-                                                <dl>
-                                                    <dt>Formule sans stand</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Accès libre aux conférences</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
+                        <div class="form-group">
+                            <div class="checkbox selected-line">
+                                <label>
+                                    <input type="checkbox">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="190px">
+                                                    <div class="product">
+                                                        <h2>Early bird</h2>
+                                                        <span class="product-price">1200 <sup>€ HT</sup></span>
+                                                        <span class="product-limite">Date limite <br>26/04/2016</span>
+                                                    </div>
+                                                </td>
+                                                <td width="500px">
+                                                    <h3>Une formule économique</h3>
+                                                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                                    <a href="#" class="btn pull-right"><i class="icon-Valider_3"></i>Valider votre formule</a>
+                                                </td>
+                                                <td>
+                                                    <dl>
+                                                        <dt>Formule sans stand</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>Accès libre aux conférences</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
 
-                                                <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </label>
+                                                    <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="190px">
-                                                <div class="product">
-                                                    <h2>Exposant</h2>
-                                                    <span class="product-price">1499 <sup>€ HT</sup></span>
-                                                    <span class="product-limite">Date limite <br>26/04/2016</span>
-                                                </div>
-                                            </td>
-                                            <td width="500px">
-                                                <h3>Une formule économique</h3>
-                                                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
-                                            </td>
-                                            <td>
-                                                <dl>
-                                                    <dt>Formule sans stand</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Accès libre aux conférences</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="190px">
+                                                    <div class="product">
+                                                        <h2>Exposant</h2>
+                                                        <span class="product-price">1499 <sup>€ HT</sup></span>
+                                                        <span class="product-limite">Date limite <br>26/04/2016</span>
+                                                    </div>
+                                                </td>
+                                                <td width="500px">
+                                                    <h3>Une formule économique</h3>
+                                                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                                </td>
+                                                <td>
+                                                    <dl>
+                                                        <dt>Formule sans stand</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>Accès libre aux conférences</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
 
-                                                <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </label>
+                                                    <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="190px">
-                                                <div class="product">
-                                                    <h2>Sponsor village</h2>
-                                                    <span class="product-price">3499 <sup>€ HT</sup></span>
-                                                    <span class="product-limite">Date limite <br>26/04/2016</span>
-                                                </div>
-                                            </td>
-                                            <td width="500px">
-                                                <h3>Une formule économique</h3>
-                                                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
-                                            </td>
-                                            <td>
-                                                <dl>
-                                                    <dt>Formule sans stand</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
-                                                <dl>
-                                                    <dt>Accès libre aux conférences</dt>
-                                                    <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
-                                                </dl>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="190px">
+                                                    <div class="product">
+                                                        <h2>Sponsor village</h2>
+                                                        <span class="product-price">3499 <sup>€ HT</sup></span>
+                                                        <span class="product-limite">Date limite <br>26/04/2016</span>
+                                                    </div>
+                                                </td>
+                                                <td width="500px">
+                                                    <h3>Une formule économique</h3>
+                                                    <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                                                </td>
+                                                <td>
+                                                    <dl>
+                                                        <dt>Formule sans stand</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia</dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>1 participant avec 1 planning de rendez-vous inclus</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
+                                                    <dl>
+                                                        <dt>Accès libre aux conférences</dt>
+                                                        <dd>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis </dd>
+                                                    </dl>
 
-                                                <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </label>
+                                                    <a href="#"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </section>
+                    </form>
+                </section>
+            </div>
         </div>
     </section>
 {% endblock %}

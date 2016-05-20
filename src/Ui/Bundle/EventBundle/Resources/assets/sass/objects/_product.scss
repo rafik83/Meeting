@@ -1,25 +1,44 @@
+.main {
+    > .header-product {
+        height: 90px;
+        position: relative;
+
+        h1 {
+          position: absolute;
+          bottom: 34px;
+      }
+    }
+}
+
 .product {
     padding-left: 25px;
     position: relative;
 
     .step-number-title {
-        font-size: 15px;
+        font-size: 20px;
+        font-family: 'OpenSans';
+        font-weight: bold;
+        border-width: 2px 0;
         color: #FFF;
-        padding: 10px;
-        display: inline-block;
+        padding: 4px 10px 4px 25px;
+        display: block;
         position: absolute;
-        left: -25px;
+        left: -40px;
         top: 0;
         @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+        &:after {
+
+        }
 
         &:before {
             border-color: $color-primary transparent transparent transparent;
             position: absolute;
             left: 0;
-            border-width: 15px 0 0 40px;
+            border-width: 11px 0 0 15px;
             display: block;
             border-style: solid;
-            bottom: -15px;
+            bottom: -11px;
             content: '';
         }
     }

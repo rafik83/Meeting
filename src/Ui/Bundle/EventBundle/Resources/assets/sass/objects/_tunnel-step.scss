@@ -1,0 +1,50 @@
+.tunnel-step {
+  list-style-type: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  left: 280px;
+  bottom: 7px;
+
+  .li {
+    width: 180px;
+    display: flex;
+    justify-content: flex-start;
+    border-top: 4px solid #DDD;
+    position: relative;
+    &:last-child { width: 0; }
+
+    .number-step {
+      width: 25px;
+      height: 25px;
+      background: #DDD;
+      border-radius: 25px;
+      position: absolute;
+      top: -15px;
+      left: 0;
+      color: #333333;
+      text-align: center;
+      padding-top: 2px;
+    }
+    .name-step p {
+      width: 180px;
+      display: flex;
+      justify-content: center;
+      margin-left: -80px;
+      margin-top: 15px;
+    }
+  }
+  .li.current .number-step {
+    background: #333;
+    color: #FFF;
+  }
+  .li.complete {
+    border-top: 4px solid #333;
+  }
+  .li.complete .number-step {
+    background: #333;
+    color: #FFF;
+  }
+}
+
