@@ -155,6 +155,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.package_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
