@@ -3,6 +3,7 @@ var $                 = require('jquery'),
     Confirm           = require('./components/_Confirm'),
     ChoiceDescription = require('./components/_ChoiceDescription'),
     AjaxForm          = require('./components/_AjaxForm'),
+    SelectParent      = require('./components/_SelectParent'),
     UploadPreview     = require('./components/_UploadPreview');
 
 require('bootstrap');
@@ -15,32 +16,6 @@ function init (target) {
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
-
-    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
-
-        var parentId = element.getAttribute('data-parent');
-        var $element = $(element).choice().data('choice');
-        var $parent  = $('#' + parentId).choice().data('choice');
-
-        $element.addMatcher(parentId, function (filter, option) {
-            return option.data.parent === filter;
-        });
-
-        $parent.element.on('change', function (event) {
-            if ($parent.value === null) {
-                $element.reset();
-            } else {
-                $element.filter($parent.value, parentId);
-            }
-        });
-
-        if ($parent.value === null) {
-            $element.reset();
-        } else {
-            $element.filter($parent.value, parentId);
-        }
-
-    });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
         $(element).select2({
@@ -57,7 +32,7 @@ function init (target) {
         $(element).intlTelInput({
             initialCountry: 'auto',
             preferredCountries: [],
-            nationalMode: false,
+            nationalMode: false
         });
     });
 
@@ -77,6 +52,7 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
+    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) { new SelectParent(element) });
     [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
