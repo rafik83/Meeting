@@ -34,14 +34,11 @@ class CreateType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
+            ->add('unitPrice', NumberType::class)
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationsType::class,
                 'label'      => false,
             ])
-            ->add('file', FileType::class, [
-                'required' => false,
-            ])
-            ->add('unitPrice', NumberType::class)
             ->add('quantityMin', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
@@ -65,6 +62,9 @@ class CreateType extends AbstractType
                 'attr'     => [
                     'min' => 0,
                 ],
+            ])
+            ->add('file', FileType::class, [
+                'required' => false,
             ])
             ->add('updatable', CheckboxType::class, [
                 'required' => false,
