@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Application\Command\Package\CreateHandler;
@@ -69,7 +70,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-
         $create                      = new Create($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
@@ -82,6 +82,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             0 => [
                 'product'  => $product,
                 'quantity' => 2,
+            ]
+        ];
+        $create->features = [
+            0 => [
+                'translations' => [
+                    'fr' => ['title' => 'Titre', 'description' => 'Description'],
+                    'en' => ['title' => 'Titre', 'description' => 'Description'],
+                ]
             ]
         ];
 
@@ -123,7 +131,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $pacakgeRepository = $this->prophesize(PackageRepositoryInterface::class);
-        $pacakgeRepository->add($expectedPackage)->shouldBeCalled();
+        $pacakgeRepository->add(Argument::that(function (Package $package) use ($expectedPackage) {
+            return $package->getFeatures()->count() === $expectedPackage->getFeatures()->count();
+        }))->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
