@@ -56,46 +56,53 @@ class CreateHandler
         );
 
         // Deal with the translations of the package
-        foreach ($create->translations as $locale => $translation) {
-            $package->getTranslations()->set(
-                $locale,
-                new PackageTranslation(
-                    $package,
+        if (is_array($create->translations)) {
+            foreach ($create->translations as $locale => $translation) {
+                $package->getTranslations()->set(
                     $locale,
-                    $translation['title'],
-                    $translation['descriptionTitle'],
-                    $translation['descriptionContent'],
-                    $translation['optionalPriceText']
-                )
-            );
-        }
-
-        // Deal with the collection of product included in the package
-        foreach ($create->productIncluded as $key => $productIncluded) {
-            $package->getProductIncluded()->add(new Package\ProductIncluded(
-                    $package,
-                    $productIncluded['product'],
-                    $productIncluded['quantity']
-                )
-            );
-        }
-
-        // Deal with the collection of feature included in the package
-        foreach ($create->features as $feature) {
-            foreach($feature['translations'] as $locale => $translation) {
-                $featureObject = new Package\Feature($package);
-
-                $package->getFeatures()->add($featureObject);
-
-                $featureObject->getTranslations()->set(
-                    $locale,
-                    new Package\FeatureTranslation(
-                        $featureObject,
+                    new PackageTranslation(
+                        $package,
                         $locale,
                         $translation['title'],
-                        $translation['description']
+                        $translation['descriptionTitle'],
+                        $translation['descriptionContent'],
+                        $translation['optionalPriceText']
                     )
                 );
+            }
+        }
+
+        // Deal with the collection of products included in the package
+        if (is_array($create->productIncluded)) {
+            foreach ($create->productIncluded as $key => $productIncluded) {
+                $package->getProductIncluded()->add(
+                    new Package\ProductIncluded(
+                        $package,
+                        $productIncluded['product'],
+                        $productIncluded['quantity']
+                    )
+                );
+            }
+        }
+
+        // Deal with the collection of features included in the package
+        if (is_array($create->features)) {
+            foreach ($create->features as $feature) {
+                foreach ($feature['translations'] as $locale => $translation) {
+                    $featureObject = new Package\Feature($package);
+
+                    $package->getFeatures()->add($featureObject);
+
+                    $featureObject->getTranslations()->set(
+                        $locale,
+                        new Package\FeatureTranslation(
+                            $featureObject,
+                            $locale,
+                            $translation['title'],
+                            $translation['description']
+                        )
+                    );
+                }
             }
         }
 
