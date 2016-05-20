@@ -49,9 +49,8 @@ class PackageRepository implements PackageRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('package', 'pi')
+            ->select('package')
             ->from(Package::class, 'package')
-            ->join('package.productIncluded', 'pi', 'WITH', 'pi.package = package.id')
             ->where('package.event = :event')
             ->setParameter('event', $event);
 

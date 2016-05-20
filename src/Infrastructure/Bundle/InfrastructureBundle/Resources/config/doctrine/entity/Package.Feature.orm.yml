@@ -15,3 +15,4 @@ Proximum\Vimeet\Domain\Model\Package\Feature:
     manyToOne:
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: features

@@ -12,6 +12,6 @@ Proximum\Vimeet\Domain\Model\Package\ProductIncluded:
     manyToOne:
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
-            mappedBy: productIncluded
+            inversedBy: productIncluded
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
