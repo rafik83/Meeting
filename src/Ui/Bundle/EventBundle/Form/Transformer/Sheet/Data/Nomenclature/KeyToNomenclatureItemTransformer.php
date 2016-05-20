@@ -37,23 +37,21 @@ class KeyToNomenclatureItemTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('Array expected, %s given.', gettype($value)));
-        }
-
         if (empty ($value)) {
             return $value;
         }
 
         $items = $this->nomenclature->getLastLevel();
 
-        return array_map(function ($key) use ($items) {
-            if ($item = self::findByKey($items, $key)) {
-                return $item;
-            }
+        if (!is_string($value)) {
+            throw new TransformationFailedException(sprintf('String expected, %s given.', gettype($value)));
+        }
 
-            throw new TransformationFailedException(sprintf('"%s" key not found, available key are "%s"', $key, implode(', ', array_keys($items))));
-        }, $value);
+        if ($item = self::findByKey($items, $value)) {
+            return $item;
+        }
+
+        throw new TransformationFailedException(sprintf('"%s" key not found, available key are "%s"', $key, implode(', ', array_keys($items))));
     }
 
     /**
@@ -61,17 +59,15 @@ class KeyToNomenclatureItemTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('Array expected, %s given.', gettype($value)));
-        }
-
         if (empty ($value)) {
             return $value;
         }
 
-        return array_map(function (NomenclatureItem $item) {
-            return $item->getKey();
-        }, $value);
+        if ($value instanceof NomenclatureItem) {
+            return $value->getKey();
+        }
+
+        throw new TransformationFailedException(sprintf('NomenclatureItem expected, %s given.', gettype($value)));
     }
 
     /**

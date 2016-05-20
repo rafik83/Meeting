@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature;
 
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\KeyToNomenclatureItemTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -23,9 +25,17 @@ class SingleType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer(new KeyToNomenclatureItemTransformer($options['nomenclature']));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'nomenclature']);
         $resolver->setDefaults([
             'placeholder'               => function (Options $options) {
                 return implode(', ', array_map(function (NomenclatureItem $item) use ($options) {
@@ -41,7 +51,6 @@ class SingleType extends AbstractType
                     return $item->getLabel($options['locale']);
                 };
             },
-            'parent'                    => null,
         ]);
     }
 

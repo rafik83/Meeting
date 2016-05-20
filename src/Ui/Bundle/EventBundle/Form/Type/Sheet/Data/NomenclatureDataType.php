@@ -163,26 +163,29 @@ class NomenclatureDataType extends AbstractType
         if ($nomenclature->getDepth() === 1) {
             $form
                 ->add('item', SingleType::class, [
-                    'choices'     => $nomenclature->getFirstLevel(),
-                    'locale'      => $options['locale'],
-                    'label'       => false,
-                    'placeholder' => $nomenclature->getTitle(),
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
                 ])
             ;
         } elseif ($nomenclature->getDepth() === 2) {
             $form
                 ->add('first', SingleType::class, [
-                    'choices' => $nomenclature->getFirstLevel(),
-                    'locale'  => $options['locale'],
-                    'label'   => false,
-                    'mapped'  => false,
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'mapped'       => false,
+                    'nomenclature' => $nomenclature,
                 ])
                 ->add('item', SingleType::class, [
-                    'choices'     => $nomenclature->getSecondLevel(),
-                    'locale'      => $options['locale'],
-                    'label'       => false,
-                    'placeholder' => $nomenclature->getTitle(),
-                    'choice_attr' => function (NomenclatureItem $item) {
+                    'choices'      => $nomenclature->getSecondLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
+                    'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
@@ -190,26 +193,29 @@ class NomenclatureDataType extends AbstractType
         } elseif ($nomenclature->getDepth() === 3) {
             $form
                 ->add('first', SingleType::class, [
-                    'choices' => $nomenclature->getFirstLevel(),
-                    'locale'  => $options['locale'],
-                    'label'   => false,
-                    'mapped'  => false,
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'mapped'       => false,
+                    'nomenclature' => $nomenclature,
                 ])
                 ->add('second', SingleType::class, [
-                    'choices'     => $nomenclature->getSecondLevel(),
-                    'locale'      => $options['locale'],
-                    'label'       => false,
-                    'mapped'      => false,
+                    'choices'      => $nomenclature->getSecondLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'mapped'       => false,
+                    'nomenclature' => $nomenclature,
                     'choice_attr' => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
                 ->add('item', SingleType::class, [
-                    'choices'     => $nomenclature->getThirdLevel(),
-                    'locale'      => $options['locale'],
-                    'label'       => false,
-                    'placeholder' => $nomenclature->getTitle(),
-                    'choice_attr' => function (NomenclatureItem $item) {
+                    'choices'      => $nomenclature->getThirdLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
+                    'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
                 ])
