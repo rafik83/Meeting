@@ -107,8 +107,6 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
-     *
-     * @throws \Exception
      */
     private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {
@@ -122,8 +120,6 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
-     *
-     * @throws \Exception
      */
     private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {

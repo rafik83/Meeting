@@ -35,7 +35,7 @@ abstract class AbstractTransformer implements DataTransformerInterface
      * @param NomenclatureItem[] $items
      * @param string             $key
      *
-     * @return NomenclatureItem
+     * @return NomenclatureItem|null
      */
     protected static function findByKey(array $items, $key)
     {
