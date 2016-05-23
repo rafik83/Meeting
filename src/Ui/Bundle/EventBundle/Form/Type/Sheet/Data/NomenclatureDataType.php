@@ -86,8 +86,6 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
-     *
-     * @throws \Exception
      */
     private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
     {
