@@ -878,6 +878,7 @@ MediaObject.prototype.fill = function ()
     this.form.set('linkPlaceholder', this.config.linkPlaceholder[this.locale]);
     this.form.set('translatable', this.config.translatable);
     this.form.set('max', this.config.max);
+    this.form.set('default', this.config.default);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -889,6 +890,7 @@ MediaObject.prototype.save = function ()
     this.config.linkPlaceholder[this.locale]  = this.form.get('linkPlaceholder');
     this.config.translatable                  = this.form.get('translatable');
     this.config.max                           = this.form.get('max');
+    this.config.default                       = this.form.get('default');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
