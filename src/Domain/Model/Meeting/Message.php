@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 class Message
 {
@@ -142,5 +143,20 @@ class Message
     public function getMeeting()
     {
         return $this->meeting;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getToParticipantsAndOwner()
+    {
+        $toSheetOwner   = $this->getTo()->getOwner();
+        $toParticipants = $this->getTo()->getParticipants()->toArray();
+
+        if (!in_array($toSheetOwner, $toParticipants)) {
+            array_push($toParticipants, $toSheetOwner);
+        }
+
+        return $toParticipants;
     }
 }
