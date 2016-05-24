@@ -212,10 +212,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Logo"
+                                                en: "Logo"
                                             placeholder:
-                                                fr: ""
+                                                fr: "Ajouter un logo"
+                                                en: "Add a logo"
                                             help:
-                                                fr: ""
+                                                fr: "Télécharger un logo pour améliorer votre visibilité"
+                                                eb: "Upload a logo to improve your impact"
                                             length: null
                                             type: null
                                             required: false
