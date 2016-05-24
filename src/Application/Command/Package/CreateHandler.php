@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\Package;
-use Proximum\Vimeet\Domain\Model\PackageTranslation;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class CreateHandler
