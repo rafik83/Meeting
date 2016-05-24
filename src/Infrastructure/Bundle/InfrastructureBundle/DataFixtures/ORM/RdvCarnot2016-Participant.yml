@@ -38,6 +38,15 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+    proximum_participant_carnot2:
+        __construct: false
+        user: '@proximum_user_carnot2'
+        sheet: '@proximum_sheet_carnot'
+        owner: false
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
