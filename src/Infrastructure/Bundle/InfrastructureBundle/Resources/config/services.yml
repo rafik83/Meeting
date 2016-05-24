@@ -1037,6 +1037,12 @@ services:
             - '@repository.trace_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
+    query.participant.card_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardListViewQuery }
 
     #
     # Elastic Transformer
