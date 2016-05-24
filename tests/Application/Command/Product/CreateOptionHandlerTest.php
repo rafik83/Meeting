@@ -11,14 +11,13 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Command\Product\Create;
-use Proximum\Vimeet\Application\Command\Product\CreateHandler;
+use Proximum\Vimeet\Application\Command\Product\CreateOption;
+use Proximum\Vimeet\Application\Command\Product\CreateOptionHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\ProductTranslation;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -28,7 +27,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $name                = 'Name';
         $image               = 'Image';
         $unitPrice           = 100;
-        $quantityMin         = 2;
         $quantityMax         = 4;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
@@ -36,21 +34,20 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $updatableUntil      = new \DateTime();
         $translations = [
             'fr' => [
-                'title'             => 'foo',
-                'description'       => 'bar',
-                'optionalPriceText' => 'optional',
+                'title'       => 'foo',
+                'description' => 'bar',
+                'addon'       => 'optional',
             ],
             'en' => [
-                'title'             => 'enfoo',
-                'description'       => 'enbar',
-                'optionalPriceText' => 'enoptional',
+                'title'       => 'enfoo',
+                'description' => 'enbar',
+                'addon'       => 'enoptional',
             ],
         ];
 
-        $create                      = new Create($event);
+        $create                      = new CreateOption($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
-        $create->quantityMin         = $quantityMin;
         $create->quantityMax         = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
@@ -63,36 +60,18 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedProduct = new Product(
             $event,
+            Product::TYPE_OPTION,
             $name,
             $image,
             $unitPrice,
-            $quantityMin,
             $quantityMax,
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
             $updatableUntil
         );
-        $expectedProduct->getTranslations()->set(
-            'fr',
-            new ProductTranslation(
-                $expectedProduct,
-                'fr',
-                'foo',
-                'bar',
-                'optional'
-            )
-        );
-        $expectedProduct->getTranslations()->set(
-            'en',
-            new ProductTranslation(
-                $expectedProduct,
-                'en',
-                'enfoo',
-                'enbar',
-                'enoptional'
-            )
-        );
+        $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional');
+        $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional');
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
@@ -102,7 +81,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
 
         // Handler
-        $handler = new CreateHandler($productRepository->reveal(), $fileStorage->reveal());
+        $handler = new CreateOptionHandler($productRepository->reveal(), $fileStorage->reveal());
         $handler->handle($create);
     }
 }
