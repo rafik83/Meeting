@@ -30,6 +30,8 @@ register:
         - Identifiez facilement les agendas de chacuns...
 
 sheet:
+    title: Fiche de présentation
     object:
         action:
+            add: "Ajouter:"
             edit: Editer
