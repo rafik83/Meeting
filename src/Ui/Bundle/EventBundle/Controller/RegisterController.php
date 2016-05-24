@@ -344,7 +344,7 @@ class RegisterController extends Controller
             if ($form->has($key) && $form->get($key)->getData() !== null) {
                 $file = $form->get($key)->getData();
 
-                if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
+                if ($file instanceof UploadedFile) {
                     if ($form->has($key) && '' !== $object->getContentValue() && $form->get($key)->getData() !== null) {
                         $fileStorage->remove($object->getContentValue());
                     }
