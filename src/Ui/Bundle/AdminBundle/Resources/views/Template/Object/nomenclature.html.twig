@@ -1,14 +1,16 @@
+{% trans_default_domain 'templates' %}
+
 {% set config = {
-    label: { (locale): 'Nomenclature' },
+    label: { (locale): 'template.object.nomenclature'|trans },
     help: { (locale): '' },
     nomenclature: '',
-    multiple: false,
+    mode: 'checkboxes',
     style: ''
 }|merge(config|default({})) %}
 
 <div class="object" data-object="nomenclature"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
-        <li class="object-title">Nomenclature</li>
+        <li class="object-title">{{ 'template.object.nomenclature'|trans }}</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -29,11 +31,11 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Nomenclature</h4>
+                                <h4 class="modal-title">{{ 'template.object.nomenclature'|trans }}</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label class="form-label">Style</label>
+                                    <label class="form-label">{{ 'template.style.title'|trans }}</label>
                                     <select class="form-control" name="style" title="Style">
                                         <option value="style-1">Style 1</option>
                                         <option value="style-2">Style 2</option>
@@ -42,21 +44,21 @@
                                 </div>
                                 <hr />
                                 <div class="form-group">
-                                    <label class="form-label">Label</label>
+                                    <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Aide</label>
+                                    <label class="form-label">{{ 'template.help.title'|trans }}</label>
                                     <textarea class="form-control" name="help"></textarea>
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Nomenclature</label>
+                                    <label class="form-label">{{ 'template.nomenclature.title'|trans }}</label>
                                     <select class="form-control" name="nomenclature">
                                         {% if nomenclatures is defined %}
                                             {% for nomenclature in nomenclatures %}
@@ -68,21 +70,21 @@
                                 <div class="form-group">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="false">
-                                            Choix unique
+                                            <input type="radio" name="mode" value="checkboxes">
+                                            {{ 'template.nomenclature.choice.checkboxes'|trans }}
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="true">
-                                            Choix multiple
+                                            <input type="radio" name="mode" value="singles">
+                                            {{ 'template.nomenclature.choice.singles'|trans }}
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
+                                <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}</button>
                             </div>
                         </div>
                     </div>

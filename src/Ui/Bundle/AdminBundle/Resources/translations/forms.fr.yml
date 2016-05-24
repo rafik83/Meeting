@@ -825,3 +825,81 @@ form:
                                     label: Etape activée
             submit:
                 label: Enregistrer
+    product_create:
+        children:
+            name:
+                label: Nom backoffice du produit
+            file:
+                label: Image
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMin:
+                label: Quantité min
+            quantityMax:
+                label: Quantité max
+            availabilityCurrent:
+                label: Stock actuel
+            availabilityMax:
+                label: Stock max
+            updatable:
+                label: Ce produit peut être modifiable après une commande
+            updatableUntil:
+                label: Ce produit peut être modifiable jusqu'au
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+                        optionalPriceText:
+                            label: Texte optionnel sous le prix
+    package_create:
+        children:
+            name:
+                label: Nom backoffice de la formule
+            file:
+                label: Image
+            unitPrice:
+                label: Prix unitaire (HT)
+            availabilityCurrent:
+                label: Stock actuel
+            availabilityMax:
+                label: Stock Max
+            submit:
+                label: Enregistrer
+            participantIncluded:
+                label: Nombre de participants inclus avec cette formule
+            productIncluded:
+                label: Produits liés à la formule
+                label_add: Ajouter un produit lié à cette formule
+                label_delete: Supprimer ce produit de la formule
+                prototype:
+                    label: Produits liés à la formule
+                    children:
+                        product:
+                            label: Produit
+                            placeholder: --- Choissisez un produit ---
+                        quantity:
+                            label: Quantité liée
+            features:
+                label: Prestations incluses avec cette formule
+                label_add: Ajouter une prestation incluse
+                label_delete: Supprimer cette prestation
+                prototype:
+                    children:
+                        title: Titre de la prestation
+                        description: Description de la prestation
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre de la formule
+                        descriptionTitle:
+                            label: Titre de la description
+                        descriptionContent:
+                            label: Contenu de la description
+                        optionalPriceText:
+                            label: Texte optionnel sous le prix

@@ -1,0 +1,51 @@
+template:
+    object:
+        editable-text: Texte modifiable
+        text: Texte non modifiable
+        collection: Collection
+        button-link: Lien
+        image: Image
+        media: Media
+        nomenclature: Nomenclature
+        tag: Tag
+        participant: Participant
+    media:
+        placeholder:
+            title: Placeholder du titre
+            link: Placeholder du lien
+        max: Nombre maximum de média
+        default: Nombre de média par default
+    nomenclature:
+        title: Nomenclature
+        choice:
+            checkboxes: Cases à cocher (choix multiple)
+            singles: Listes déroulantes (choix unique)
+    participant:
+        title: Les participants
+        display: Nombre de participants affichés sur la fiche
+    action:
+        close: Fermer
+        save: Enregistrer
+    style:
+        title: Style
+        default: Par défaut
+    placeholder:
+        title: Placeholder
+    content:
+        title: Contenu
+    label:
+        title: Label
+    help:
+        title: Aide
+    required:
+        title: Requis
+    translatable:
+        title: Traduisible
+    maxLength:
+        title: Longueur max
+    hideLabel:
+        title: Cacher le label
+    type:
+        title: Type
+    defaultElement:
+        title: Élément par défaut

@@ -22,8 +22,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class SheetSearchQuery extends BoolQuery
+class SheetSearchQueryBuilder
 {
+    /**
+     * @var BoolQuery
+     */
+    private $query;
+
     /**
      * SheetSearchQuery constructor.
      *
@@ -32,10 +37,22 @@ class SheetSearchQuery extends BoolQuery
      */
     public function __construct(Event $event, array $filters)
     {
+        $this->query = new BoolQuery();
+
         $this->matchEvent($event);
         $this->hasOwner();
         $this->hasParticipant();
         $this->filter($filters);
+    }
+
+    /**
+     * Get query
+     *
+     * @return BoolQuery
+     */
+    public function getQuery()
+    {
+        return $this->query;
     }
 
     /**
@@ -47,7 +64,7 @@ class SheetSearchQuery extends BoolQuery
     {
         $matchEvent = new Match();
         $matchEvent->setField('event', $event->getId());
-        $this->addMust($matchEvent);
+        $this->query->addMust($matchEvent);
     }
 
     /**
@@ -57,7 +74,7 @@ class SheetSearchQuery extends BoolQuery
     {
         $rangeOwner = new Range();
         $rangeOwner->addField('owner', ['gt' => 0]);
-        $this->addMust($rangeOwner);
+        $this->query->addMust($rangeOwner);
     }
 
     /**
@@ -67,7 +84,7 @@ class SheetSearchQuery extends BoolQuery
     {
         $range = new Range();
         $range->addField('participantNumber', ['gt' => 0]);
-        $this->addMust($range);
+        $this->query->addMust($range);
     }
 
     /**
@@ -100,7 +117,7 @@ class SheetSearchQuery extends BoolQuery
                 ->setFieldAnalyzer('sheetName', 'sheetAnalyzer')
             ;
 
-            $this->addMust($match);
+            $this->query->addMust($match);
         }
     }
 
@@ -114,7 +131,7 @@ class SheetSearchQuery extends BoolQuery
             $match2
                 ->setFieldQuery('state', $filters['state']);
 
-            $this->addMust($match2);
+            $this->query->addMust($match2);
         }
     }
 
@@ -128,7 +145,7 @@ class SheetSearchQuery extends BoolQuery
             $matchType
                 ->setField('type', $filters['type']->getId());
 
-            $this->addMust($matchType);
+            $this->query->addMust($matchType);
         }
     }
 
@@ -144,7 +161,7 @@ class SheetSearchQuery extends BoolQuery
             $matchQuery->setField('categories.id', $filters['category']->getId());
 
             $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('categories');
-            $this->addMust($nested);
+            $this->query->addMust($nested);
         }
     }
 
@@ -158,7 +175,7 @@ class SheetSearchQuery extends BoolQuery
             $matchFollower
                 ->setField('followUp', $filters['follower']->getId());
 
-            $this->addMust($matchFollower);
+            $this->query->addMust($matchFollower);
         }
     }
 
@@ -189,8 +206,8 @@ class SheetSearchQuery extends BoolQuery
         $rangePredefinedDateEnd
             ->addField('createdAt', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
 
-        $this->addMust($rangePredefinedDateBegin);
-        $this->addMust($rangePredefinedDateEnd);
+        $this->query->addMust($rangePredefinedDateBegin);
+        $this->query->addMust($rangePredefinedDateEnd);
     }
 
     /**
@@ -214,15 +231,7 @@ class SheetSearchQuery extends BoolQuery
         $rangePredefinedDateBegin->addField('createdAt', ['gte' => $beginWeek->setTime(0, 0, 0)->format('c')]);
         $rangePredefinedDateEnd->addField('createdAt', ['lte' => $endWeek->setTime(23, 59, 59)->format('c')]);
 
-        $this->addMust($rangePredefinedDateBegin);
-        $this->addMust($rangePredefinedDateEnd);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _getBaseName()
-    {
-        return 'bool';
+        $this->query->addMust($rangePredefinedDateBegin);
+        $this->query->addMust($rangePredefinedDateEnd);
     }
 }

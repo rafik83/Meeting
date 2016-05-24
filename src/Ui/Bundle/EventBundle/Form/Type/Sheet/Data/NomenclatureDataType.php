@@ -10,49 +10,53 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SinglesType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class NomenclatureDataType extends AbstractType
 {
+    /**
+     * @var NomenclatureRepositoryInterface
+     */
+    private $nomenclatureRepository;
+
+    /**
+     * NomenclatureDataType constructor.
+     *
+     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     */
+    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    {
+        $this->nomenclatureRepository = $nomenclatureRepository;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $nomenclature = $options['object'];
-        $locale       = $options['locale'];
-        $label        = $options['label'];
+        if (!$options['object'] instanceof Object\Nomenclature) {
+            throw new \Exception('Nomenclature object expected.');
+        }
 
-        $choices = $nomenclature->getNomenclatureLabels();
+        $nomenclature = $this->nomenclatureRepository->findById($options['object']->getNomenclatureId());
 
-        if (null !== $choices) {
-
-            if (!is_array(reset($choices))) {
-                $choices = array_flip($choices);
-            } else {
-                $choices = array_map(
-                    function ($values) {
-                        return array_flip($values);
-                    },
-                    $choices
-                );
-            }
-
-            $builder
-                ->add('item', ChoiceType::class, [
-                    'label'       => $label ? $nomenclature->getOption('label')[$locale] : false,
-                    'required'    => $nomenclature->getOption('required'),
-                    'choices'     => $choices,
-                    'placeholder' => $nomenclature->getOption('label')[$locale],
-                    'attr'        => [
-                        'class'            => 'form-control select2',
-                        'data-placeholder' => $nomenclature->getOption('label')[$locale],
-                    ],
-                ]);
+        if ($options['object']->isSingles()) {
+            $this->addSingles($nomenclature, $builder, $options);
+        } elseif ($options['object']->isRadios()) {
+            $this->addRadios($nomenclature, $builder, $options);
+        } elseif ($options['object']->isCheckboxes()) {
+            $this->addCheckboxes($nomenclature, $builder, $options);
+        } else {
+            throw new \Exception('Not implemented yet.');
         }
     }
 
@@ -61,11 +65,12 @@ class NomenclatureDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\Nomenclature::class);
+        $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
-            'label'      => false,
-            'data_class' => Object\Nomenclature::class
+            'label'       => false,
+            'data_class'  => Object\Nomenclature::class,
+            'placeholder' => null,
+            'help'        => null,
         ]);
     }
 
@@ -75,5 +80,51 @@ class NomenclatureDataType extends AbstractType
     public function getBlockPrefix()
     {
         return 'nomenclature_data';
+    }
+
+    /**
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
+     */
+    private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    {
+        $form->add('item', ChoiceType::class, [
+            'choices'                   => $nomenclature->getLastLevel(),
+            'expanded'                  => true,
+            'multiple'                  => false,
+            'choice_translation_domain' => false,
+            'choices_as_values'         => true,
+            'choice_label'              => function (NomenclatureItem $item) use ($options) {
+                return $item->getLabel($options['locale']);
+            },
+        ]);
+    }
+
+    /**
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
+     */
+    private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    {
+        $form->add('items', CheckboxesType::class, [
+            'nomenclature' => $nomenclature,
+            'locale'       => $options['locale'],
+        ]);
+    }
+
+    /**
+     * @param Nomenclature         $nomenclature
+     * @param FormBuilderInterface $form
+     * @param array                $options
+     */
+    private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    {
+        $form->add('item', SinglesType::class, [
+            'nomenclature' => $nomenclature,
+            'locale'       => $options['locale'],
+            'label'        => false,
+        ]);
     }
 }

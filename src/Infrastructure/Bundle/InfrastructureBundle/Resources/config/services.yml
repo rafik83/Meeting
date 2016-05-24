@@ -83,6 +83,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.product_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingRepository
         arguments:
@@ -153,6 +157,10 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.template.products_selection_template_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\ProductsSelectionTemplateRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.package_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -718,6 +726,20 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
+    command.product.create_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Create }
+    command.package.create_handler:
+        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
+        arguments:
+            - '@repository.package_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
 
     #
     # Security

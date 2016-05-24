@@ -39,9 +39,11 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form_themes:
-        - "AdminBundle::layout.html.twig"
+        - "@Ui/layout.html.twig"
     date:
         timezone: Europe/Paris
+    paths:
+        "%kernel.root_dir%/../src/Ui/Resources/views": Ui
 
 # Doctrine Configuration
 doctrine:

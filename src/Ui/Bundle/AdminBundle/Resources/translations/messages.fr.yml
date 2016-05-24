@@ -288,6 +288,15 @@ admin:
             title: Modifier mon mot de passe
     order:
         link: Commandes et transactions
+    product:
+        link: Catalogue de produits
+        title: Catalogue de produits
+        name: Nom
+        unitPrice: Prix unitaire
+        quantityMinMax: Quantité min / max
+        availabilityCurrentMax: Disponibilité courante / max
+        updatable: Modifiable
+        updatableUntil: Modifiable jusqu'à
     sheet:
         title: Participations
         link: Participations
@@ -500,6 +509,11 @@ admin:
                 date: Date de création
                 action: Action
     template:
+        action:
+            edit: Modifier
+            save: Enregistrer
+            addLanguage: Ajouter une langue
+            close: Fermer
         sheet:
             link: Template de présentation
         registration:
@@ -531,3 +545,13 @@ admin:
                 column:
                     title: Titre
                     event: Evènement
+    product_create:
+        title: Ajouter
+    package_create:
+        title: Ajouter une formule au catalogue
+    package:
+        link: Catalogue de formules
+        title: Catalogue de formules
+        name: Nom
+        unitPrice: Prix unitaire
+        productIncluded: Produits inclus

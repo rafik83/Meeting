@@ -3,6 +3,7 @@ var $                 = require('jquery'),
     Confirm           = require('./components/_Confirm'),
     ChoiceDescription = require('./components/_ChoiceDescription'),
     AjaxForm          = require('./components/_AjaxForm'),
+    SelectParent      = require('./components/_SelectParent'),
     UploadPreview     = require('./components/_UploadPreview');
 
 require('bootstrap');
@@ -17,18 +18,21 @@ function init (target) {
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
-        $(element).select2({'language': {
-            'noResults': function () {
-                return $(element).data('no-results-label');
-            }
-        }});
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: true
+        });
     });
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
             initialCountry: 'auto',
             preferredCountries: [],
-            nationalMode: false,
+            nationalMode: false
         });
     });
 
@@ -48,6 +52,7 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
+    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) { new SelectParent(element) });
     [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });

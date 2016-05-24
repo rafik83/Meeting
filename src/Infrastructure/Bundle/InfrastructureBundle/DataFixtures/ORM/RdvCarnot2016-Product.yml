@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\Product:
+    product_1:
+        __construct:
+            - "@event_rdv_carnot_2016"
+            - 'Identité visuelle Exposant'
+            - null
+            - 15
+            - 1
+            - 1
+            - 10
+            - 100
+            - true
+            - "<date('2016-10-18 12:20:00', 'Europe/Paris', 'UTC')>"
+
+Proximum\Vimeet\Domain\Model\ProductTranslation:
+    product_1_fr:
+        __construct: false
+        product: '@product_1'
+        locale: 'fr'
+        title: 'Identité visuelle'
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam neque quam, laoreet quis ex id, posuere efficitur enim."
+        optionalPriceText: "Au lieu de 20€"
+    product_1_en:
+        __construct: false
+        product: '@product_1'
+        locale: 'en'
+        title: 'Visual identity'
+        description: "Proin ut enim interdum, viverra mi a, bibendum enim. Pellentesque eget ante quis arcu auctor ornare. Proin turpis sem, posuere in cursus ut, tempus nec nulla. Aliquam sed leo faucibus, posuere massa sit amet, tincidunt ligula. Sed libero lorem, facilisis vitae libero nec, convallis convallis mauris."
+        optionalPriceText: "Instead of 20€"

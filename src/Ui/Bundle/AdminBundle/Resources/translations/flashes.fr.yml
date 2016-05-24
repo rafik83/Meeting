@@ -169,6 +169,12 @@ flash:
             products_selection:
                 update:
                     success: Template de forfait modifié avec succès
+        product:
+            create:
+                success: Le produit a bien été créé
+        package:
+            create:
+                success: La formule a bien été créée
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

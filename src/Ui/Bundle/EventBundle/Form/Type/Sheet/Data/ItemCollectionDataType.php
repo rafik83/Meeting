@@ -45,7 +45,7 @@ class ItemCollectionDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
             'data_class'  => ItemCollection::class,
             'placeholder' => null,
