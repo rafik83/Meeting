@@ -465,14 +465,6 @@ admin_happening_speaker_delete:
     defaults: { _controller: AdminBundle:Speaker:delete }
 
 #
-# Template
-#
-admin_template_list:
-    path: /template
-    defaults: { _controller: AdminBundle:Template:list }
-    methods: [GET]
-
-#
 # RegistrationTemplate
 #
 admin_template_registration_list:
@@ -490,6 +482,21 @@ admin_template_registration_add_locale:
     path: /template/regitration/{template}/locale
     defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
     methods: [POST]
+    requirements:
+        template: \d+
+
+#
+# ProductsSelectionTemplate
+#
+admin_template_products_selection_list:
+    path: /template/products-selection
+    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:list }
+    methods: [GET, POST]
+
+admin_template_products_selection_update:
+    path: /template/products-selection/{template}/update
+    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:update }
+    methods: [GET, POST]
     requirements:
         template: \d+
 

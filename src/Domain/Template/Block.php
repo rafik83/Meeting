@@ -31,6 +31,41 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->getOption('enabled');
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->setOption('enabled', $enabled);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->getOption('label');
+    }
+
+    /**
+     * @param string $label
+     * @param string $locale
+     */
+    public function setLabel($label)
+    {
+        $this->setOption('label', $label);
+    }
+
+    /**
      * @param int $column
      */
     public function addColumn($column)
@@ -49,8 +84,24 @@ class Block extends AbstractChild
     }
 
     /**
-     * @param string $key
-     *
+     * @return Block[]
+     */
+    public function getBlocks()
+    {
+        $blocks = [];
+
+        foreach ($this->children as $children) {
+            foreach ($children as $block) {
+                if ($block instanceof Block) {
+                    $blocks[] = $block;
+                }
+            }
+        }
+
+        return $blocks;
+    }
+
+    /**
      * @return TemplateObject[]
      */
     public function getObjects($key = null)

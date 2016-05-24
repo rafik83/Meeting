@@ -50,6 +50,20 @@ abstract class AbstractChild
     }
 
     /**
+     * @param string      $name
+     * @param mixed       $value
+     * @param null|string $locale
+     */
+    public function setOption($name, $value, $locale = null)
+    {
+        if (null === $locale) {
+            $this->config[$name] = $value;
+        } else {
+            $this->config[$name][$locale] = $value;
+        }
+    }
+
+    /**
      * Get type
      *
      * @return string

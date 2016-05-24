@@ -155,6 +155,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.template.products_selection_template_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Template\ProductsSelectionTemplateRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.package_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
@@ -694,6 +698,20 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
+    command.template.products_selection.create_handler:
+        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateHandler
+        arguments:
+            - '@repository.template.products_selection_template_repository'
+            - '@template.products_selection_template_factory'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Create }
+    command.template.products_selection.update_handler:
+        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\UpdateHandler
+        arguments:
+            - '@repository.template.products_selection_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Update }
     command.register.participant_step_handler:
         class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
         arguments:
@@ -966,6 +984,9 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+
+    template.products_selection_template_factory:
+        class: Proximum\Vimeet\Domain\Template\ProductsSelectionTemplateFactory
 
     #
     # Guesser
