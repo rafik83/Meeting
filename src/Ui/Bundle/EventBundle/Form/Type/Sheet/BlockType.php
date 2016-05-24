@@ -21,6 +21,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class BlockType extends AbstractType
 {
@@ -84,9 +85,15 @@ class BlockType extends AbstractType
     private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
         $builder->add($key, FileType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'mapped'   => false,
+            'label'       => false,
+            'required'    => $object->getOption('required'),
+            'mapped'      => false,
+            'attr'        => [
+                'accept' => 'image/*',
+            ],
+            'constraints' => [
+                new Image(),
+            ],
         ]);
     }
 
