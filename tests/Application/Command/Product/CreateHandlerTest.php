@@ -49,7 +49,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $create                      = new Create($event);
         $create->name                = $name;
-        $create->image               = $image;
         $create->unitPrice           = $unitPrice;
         $create->quantityMin         = $quantityMin;
         $create->quantityMax         = $quantityMax;

@@ -1,0 +1,38 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block list_title 'admin.package.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ block('list_title') }}</h1>
+    <a href="{{ path('admin_package_create', {'event': event.id}) }}" class="btn btn-primary">{{ 'admin.package_create.title'|trans }}</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.package.name'|trans }}</th>
+            <th>{{ 'admin.package.unitPrice'|trans }}</th>
+            <th>{{ 'admin.package.productIncluded'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package in packages %}
+            <tr>
+                <td>{{ package.name }}</td>
+                <td>{{ package.unitPrice }}</td>
+                <td>
+                    {% if package.productIncluded %}
+                        <ul>
+                        {% for productIncluded in package.productIncluded %}
+                            <li>{{ productIncluded.quantity }} {{ productIncluded.product.name }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

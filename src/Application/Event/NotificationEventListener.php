@@ -24,8 +24,11 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -72,6 +75,59 @@ class NotificationEventListener implements EventSubscriberInterface
     }
 
     /**
+     * Get from participants and owner
+     *
+     * @param MessageSubjectInterface $messageSubject
+     *
+     * @return Participant[]
+     */
+    private function getFromParticipants(MessageSubjectInterface $messageSubject)
+    {
+        $fromSheetOwner   = $messageSubject->getFromSheet()->getOwner();
+        $fromParticipants = $messageSubject->getFromParticipants()->toArray();
+
+        if (!in_array($fromSheetOwner, $fromParticipants)) {
+            array_push($fromParticipants, $fromSheetOwner);
+        }
+
+        return $fromParticipants;
+    }
+
+    /**
+     * @param MessageSubjectInterface $messageSubject
+     *
+     * @return Participant[]
+     */
+    private function getToParticipants(MessageSubjectInterface $messageSubject)
+    {
+        $toSheetOwner   = $messageSubject->getToSheet()->getOwner();
+        $toParticipants = $messageSubject->getToParticipants()->toArray();
+
+        if (!in_array($toSheetOwner, $toParticipants)) {
+            array_push($toParticipants, $toSheetOwner);
+        }
+
+        return $toParticipants;
+    }
+
+    /**
+     * @param Participant             $participant
+     * @param MessageSubjectInterface $messageSubject
+     *
+     * @return Sheet
+     */
+    private function guessSheetThatParticipantHasMeetingWith(Participant $participant, MessageSubjectInterface $messageSubject)
+    {
+        if ($participant->getSheet() === $messageSubject->getFromSheet()) {
+            return $messageSubject->getToSheet();
+        } elseif ($participant->getSheet() === $messageSubject->getToSheet()) {
+            return $messageSubject->getFromSheet();
+        } else {
+            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
+        }
+    }
+
+    /**
      * Notify added participant
      *
      * @param ParticipantAddedEvent $event
@@ -84,14 +140,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // Guess the sheet the participant has meeting with
-        if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
-            $sheet = $event->getMeeting()->getToSheet();
-        } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
-            $sheet = $event->getMeeting()->getFromSheet();
-        } else {
-            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
-        }
-
+        $sheet  = $this->guessSheetThatParticipantHasMeetingWith($event->getParticipant(), $event->getMeeting());
         $locale = $event->getParticipant()->getLocale();
 
         // Translate message
@@ -129,14 +178,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // Guess the sheet the participant has meeting with
-        if ($event->getParticipant()->getSheet() === $event->getMeeting()->getFromSheet()) {
-            $sheet = $event->getMeeting()->getToSheet();
-        } elseif ($event->getParticipant()->getSheet() === $event->getMeeting()->getToSheet()) {
-            $sheet = $event->getMeeting()->getFromSheet();
-        } else {
-            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
-        }
-
+        $sheet  = $this->guessSheetThatParticipantHasMeetingWith($event->getParticipant(), $event->getMeeting());
         $locale = $event->getParticipant()->getLocale();
 
         // Translate message
@@ -174,14 +216,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // Guess the sheet the participant has meeting with
-        if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
-            $sheet = $event->getMeetingRequest()->getToSheet();
-        } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
-            $sheet = $event->getMeetingRequest()->getFromSheet();
-        } else {
-            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
-        }
-
+        $sheet  = $this->guessSheetThatParticipantHasMeetingWith($event->getParticipant(), $event->getMeetingRequest());
         $locale = $event->getParticipant()->getLocale();
 
         // Translate message
@@ -219,14 +254,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // Guess the sheet the participant has meeting with
-        if ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getFromSheet()) {
-            $sheet = $event->getMeetingRequest()->getToSheet();
-        } elseif ($event->getParticipant()->getSheet() === $event->getMeetingRequest()->getToSheet()) {
-            $sheet = $event->getMeetingRequest()->getFromSheet();
-        } else {
-            throw new \RuntimeException('Unable to guess the sheet the participant has meeting with.');
-        }
-
+        $sheet  = $this->guessSheetThatParticipantHasMeetingWith($event->getParticipant(), $event->getMeetingRequest());
         $locale = $event->getParticipant()->getLocale();
 
         // Translate message
@@ -259,15 +287,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onRequestRefused(RequestRefusedEvent $event)
     {
         // From : Get sheet owner and request participants
-        $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
-
-        if (!in_array($fromSheetOwner, $fromParticipants)) {
-            array_push($fromParticipants, $fromSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($fromParticipants as $participant) {
+        foreach ($this->getFromParticipants($event->getRequest()) as $participant) {
             $locale = $participant->getLocale();
 
             // Translate message
@@ -304,15 +324,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onRequestAccepted(RequestAcceptedEvent $event)
     {
         // From : Get sheet owner and request participants
-        $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
-
-        if (!in_array($fromSheetOwner, $fromParticipants)) {
-            array_push($fromParticipants, $fromSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($fromParticipants as $participant) {
+        foreach ($this->getFromParticipants($event->getRequest()) as $participant) {
             $locale = $participant->getLocale();
 
             // Translate message
@@ -350,15 +362,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onRequestCanceled(RequestCanceledEvent $event)
     {
         // From : Get owner and request participants
-        $fromSheetOwner   = $event->getRequest()->getFromSheet()->getOwner();
-        $fromParticipants = $event->getRequest()->getFromParticipants()->toArray();
-
-        if (!in_array($fromSheetOwner, $fromParticipants)) {
-            array_push($fromParticipants, $fromSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($fromParticipants as $participant) {
+        foreach ($this->getFromParticipants($event->getRequest()) as $participant) {
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 continue;
@@ -389,15 +393,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // To : Get sheet owner and request participants
-        $toSheetOwner   = $event->getRequest()->getToSheet()->getOwner();
-        $toParticipants = $event->getRequest()->getToParticipants()->toArray();
-
-        if (!in_array($toSheetOwner, $toParticipants)) {
-            array_push($toParticipants, $toSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($toParticipants as $participant) {
+        foreach ($this->getToParticipants($event->getRequest()) as $participant) {
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 return;
@@ -436,15 +432,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onMeetingCanceled(CanceledEvent $event)
     {
         // From : Get sheet owner and meeting participants
-        $fromSheetOwner   = $event->getMeeting()->getFromSheet()->getOwner();
-        $fromParticipants = $event->getMeeting()->getFromParticipants()->toArray();
-
-        if (!in_array($fromSheetOwner, $fromParticipants)) {
-            array_push($fromParticipants, $fromSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($fromParticipants as $participant) {
+        foreach ($this->getFromParticipants($event->getMeeting()) as $participant) {
             $locale = $participant->getLocale();
 
             // Don't send notification to user when he is the emitter
@@ -475,15 +463,7 @@ class NotificationEventListener implements EventSubscriberInterface
         }
 
         // To : Get sheet owner and meeting participants
-        $toSheetOwner   = $event->getMeeting()->getFromSheet()->getOwner();
-        $toParticipants = $event->getMeeting()->getFromParticipants()->toArray();
-
-        if (!in_array($toSheetOwner, $toParticipants)) {
-            array_push($toParticipants, $toSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($toParticipants as $participant) {
+        foreach ($this->getToParticipants($event->getMeeting()) as $participant) {
             // Don't send notification to user when he is the emitter
             if ($participant->getUser() === $event->getEmitter()) {
                 return;
@@ -557,15 +537,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onMessage(MessageEvent $event)
     {
         // Get sheet owner and subject participants
-        $toSheetOwner   = $event->getMessage()->getTo()->getOwner();
-        $toParticipants = $event->getMessage()->getTo()->getParticipants()->toArray();
-
-        if (!in_array($toSheetOwner, $toParticipants)) {
-            array_push($toParticipants, $toSheetOwner);
-        }
-
-        /** @var Participant $participant */
-        foreach ($toParticipants as $participant) {
+        foreach ($event->getMessage()->getToParticipantsAndOwner() as $participant) {
             $locale = $participant->getLocale();
 
             // Translate message

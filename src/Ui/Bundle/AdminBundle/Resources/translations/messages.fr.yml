@@ -524,3 +524,11 @@ admin:
                     edit: Modifier
     product_create:
         title: Ajouter
+    package_create:
+        title: Ajouter une formule au catalogue
+    package:
+        link: Catalogue de formules
+        title: Catalogue de formules
+        name: Nom
+        unitPrice: Prix unitaire
+        productIncluded: Produits inclus

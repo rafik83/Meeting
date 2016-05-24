@@ -88,15 +88,17 @@ class DontSeeWhatType extends AbstractType
     {
         if ($who instanceof Type) {
             // need to be rewritten
-            // return $who->getSheetTemplate();
-            return [];
+            $template = $who->getSheetTemplate();
+
+            return is_array($template) ? $template : [];
         }
 
         if ($who instanceof Category) {
             return $this->templatesIntersectRecursive(array_map(function (Type $type) {
                 // need to be rewritten
-                // return $type->getSheetTemplate();
-                return $type->getSheetTemplate();
+                $template = $type->getSheetTemplate();
+
+                return is_array($template) ? $template : [];
             }, $who->getTypes()->toArray()));
         }
 

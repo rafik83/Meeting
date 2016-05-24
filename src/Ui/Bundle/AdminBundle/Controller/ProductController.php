@@ -22,12 +22,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ProductController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Event $event)
     {
         $products = $this->get('vimeet_infrastructure.repository.product_repository')->findByEvent($event);
 
@@ -42,7 +41,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */

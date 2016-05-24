@@ -155,6 +155,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.package_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -711,6 +715,13 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Create }
+    command.package.create_handler:
+        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
+        arguments:
+            - '@repository.package_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
 
     #
     # Security

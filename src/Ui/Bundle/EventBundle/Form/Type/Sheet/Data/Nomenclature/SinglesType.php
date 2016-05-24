@@ -1,0 +1,121 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature;
+
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Domain\Model\NomenclatureItem;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemToSinglesTransformer;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class SinglesType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $nomenclature = $options['nomenclature'];
+
+        if (!$nomenclature instanceof Nomenclature) {
+            throw new \Exception(sprintf('"%s" expected, "%s" given.', Nomenclature::class, gettype($nomenclature)));
+        }
+
+        $builder->addModelTransformer(new ItemToSinglesTransformer($nomenclature));
+
+        if ($nomenclature->getDepth() === 1) {
+            $builder
+                ->add('first', SingleType::class, [
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
+                ])
+            ;
+        } elseif ($nomenclature->getDepth() === 2) {
+            $builder
+                ->add('first', SingleType::class, [
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'nomenclature' => $nomenclature,
+                ])
+                ->add('second', SingleType::class, [
+                    'choices'      => $nomenclature->getSecondLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
+                    'choice_attr'  => function (NomenclatureItem $item) {
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
+                    },
+                ])
+            ;
+        } elseif ($nomenclature->getDepth() === 3) {
+            $builder
+                ->add('first', SingleType::class, [
+                    'choices'      => $nomenclature->getFirstLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'nomenclature' => $nomenclature,
+                ])
+                ->add('second', SingleType::class, [
+                    'choices'      => $nomenclature->getSecondLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'nomenclature' => $nomenclature,
+                    'choice_attr' => function (NomenclatureItem $item) {
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
+                    },
+                ])
+                ->add('third', SingleType::class, [
+                    'choices'      => $nomenclature->getThirdLevel(),
+                    'locale'       => $options['locale'],
+                    'label'        => false,
+                    'placeholder'  => $nomenclature->getTitle(),
+                    'nomenclature' => $nomenclature,
+                    'choice_attr'  => function (NomenclatureItem $item) {
+                        return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
+                    },
+                ])
+            ;
+        } else {
+            throw new \Exception(sprintf('Not implementation for depth of %s', $nomenclature->getDepth()));
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['locale', 'nomenclature']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        // Put data-parent="" on select inputs
+        $keys = array_keys($view->children);
+        foreach ($keys as $index => $parent) {
+            if (isset($keys[$index + 1])) {
+                $child = $keys[$index + 1];
+                $view->children[$child]->vars['attr']['data-parent'] = $view->children[$parent]->vars['id'];
+            }
+        }
+    }
+}
