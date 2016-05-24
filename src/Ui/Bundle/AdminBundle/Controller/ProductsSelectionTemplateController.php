@@ -67,27 +67,18 @@ class ProductsSelectionTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN') && !$this->getUser()->hasEvent($template->getEvent())) {
             throw $this->createAccessDeniedException('You are not allowed to edit this template.');
         }
 
-        $locale = $template->getEvent()->getAvailableLocale($request->getLocale());
-
-        $templateData = $this->get('template.template_data_factory')->create(
-            $template->getValue(),
-            [],
-            $locale,
-            $template->getFallback()
-        );
+        $locale       = $template->getEvent()->getAvailableLocale($request->getLocale());
+        $templateData = $this->get('template.template_data_factory')->createProductsSelectionTemplate($template, $locale);
 
         $update = new Update($template, $templateData);
-        $form   = $this->createForm(UpdateType::class, $update, [
-            'submit' => true,
-        ]);
+        $form   = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
-
             $this->addFlash('success', 'flash.admin.template.products_selection.update.success');
 
             return $this->redirectToRoute('admin_template_products_selection_list');

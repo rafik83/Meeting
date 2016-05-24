@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\ProductsSelectionTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -106,6 +107,22 @@ class TemplateDataFactory
             $datas,
             $locale,
             $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+        );
+    }
+
+    /**
+     * @param ProductsSelectionTemplate $template
+     * @param string                    $locale
+     *
+     * @return TemplateData
+     */
+    public function createProductsSelectionTemplate(ProductsSelectionTemplate $template, $locale)
+    {
+        return $this->create(
+            $template->getValue(),
+            [],
+            $locale,
+            $template->getFallback()
         );
     }
 
