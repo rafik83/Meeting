@@ -38,11 +38,11 @@ Proximum\Vimeet\Domain\Model\Product:
             cascade: ["persist"]
         features:
             targetEntity: Proximum\Vimeet\Domain\Model\Product\Feature
-            mappedBy: package
+            mappedBy: product
             cascade: ["persist"]
         productIncluded:
             targetEntity: Proximum\Vimeet\Domain\Model\Product\ProductIncluded
-            mappedBy: package
+            mappedBy: product
             cascade: ["persist"]
     manyToOne:
         event:
