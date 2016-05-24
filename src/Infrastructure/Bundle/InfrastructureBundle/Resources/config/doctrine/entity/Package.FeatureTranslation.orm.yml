@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Package\FeatureTranslation:
+    type:  entity
+    table: package_feature_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        description:
+            type: text
+            nullable: true
+        locale:
+            type: string
+    manyToOne:
+        feature:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package\Feature
+            inversedBy: translations

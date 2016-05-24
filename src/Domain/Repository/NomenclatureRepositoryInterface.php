@@ -26,4 +26,11 @@ interface NomenclatureRepositoryInterface
      * @return Nomenclature[]
      */
     public function findByEvent($event);
+
+    /**
+     * @param int $id
+     *
+     * @return Nomenclature
+     */
+    public function findById($id);
 }

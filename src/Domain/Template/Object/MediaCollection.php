@@ -140,4 +140,12 @@ class MediaCollection extends Object
             return !$media->isEmpty();
         });
     }
+
+    /**
+     * @return int
+     */
+    public function getMax()
+    {
+        return $this->getOption('max');
+    }
 }

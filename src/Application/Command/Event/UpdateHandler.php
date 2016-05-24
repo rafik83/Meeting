@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -44,55 +45,57 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $leftColor    = $update->leftColor;
-        $rightColor   = $update->rightColor;
-        $textColor    = $update->textColor;
-        $colorUpdated = false;
+        $colorUpdated = $update->isColorsUpdated();
 
         $event = $update->event;
         $event->update($update->title, $update->locales, $update->fallback, $update->mode, $update->vat);
+        $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 
-        if ($leftColor !== $event->getConfiguration()->getLeftColor()) {
-            $event->getConfiguration()->setLeftColor($leftColor);
-            $colorUpdated = true;
+        $this->updateTranslatons($update);
+
+        if ($colorUpdated) {
+            $this->buildAssets($event);
         }
 
-        if ($rightColor !== $event->getConfiguration()->getRightColor()) {
-            $event->getConfiguration()->setRightColor($rightColor);
-            $colorUpdated = true;
-        }
+        $this->eventRepository->set($event);
+    }
 
-        if ($textColor !== $event->getConfiguration()->getTextColor()) {
-            $event->getConfiguration()->setTextColor($textColor);
-            $colorUpdated = true;
-        }
-
-        foreach ($event->getLocales() as $locale) {
-            if (!$event->getTranslations()->get($locale)) {
-                $event->getTranslations()->set($locale, new EventTranslation($event, $locale, ''));
+    /**
+     * @param Update $update
+     */
+    private function updateTranslatons(Update $update)
+    {
+        // Create missing translation
+        foreach ($update->event->getLocales() as $locale) {
+            if (!$update->event->getTranslations()->get($locale)) {
+                $update->event->getTranslations()->set($locale, new EventTranslation($update->event, $locale, ''));
             }
         }
 
-        foreach ($event->getTranslations() as $translation) {
+        // Update translations
+        foreach ($update->event->getTranslations() as $translation) {
             if (isset($update->translations[$translation->getLocale()])) {
                 $translation->update($update->translations[$translation->getLocale()]['description']);
             }
 
-            if (!$event->hasLocale($translation->getLocale())) {
-                $event->getTranslations()->removeElement($translation);
+            // Remove deleted translations
+            if (!$update->event->hasLocale($translation->getLocale())) {
+                $update->event->getTranslations()->removeElement($translation);
             }
         }
+    }
 
-        if ($colorUpdated) {
-            try {
-                $assetPath = $this->guidelinesGenerator->generate($event);
-
-                $event->setAssetPath($assetPath);
-            } catch(GuidelineAssetBuildFailedException $exception) {
-                throw new GuidelineAssetBuildFailedException($exception->getMessage());
-            }
+    /**
+     * @param Event $event
+     *
+     * @throws GuidelineAssetBuildFailedException
+     */
+    private function buildAssets(Event $event)
+    {
+        try {
+            $event->setAssetPath($this->guidelinesGenerator->generate($event));
+        } catch (GuidelineAssetBuildFailedException $exception) {
+            throw new GuidelineAssetBuildFailedException($exception->getMessage());
         }
-
-        $this->eventRepository->set($event);
     }
 }

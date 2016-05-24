@@ -140,4 +140,12 @@ class ItemCollection extends Object
             return !$item->isEmpty();
         });
     }
+
+    /**
+     * @return int
+     */
+    public function getMax()
+    {
+        return $this->getOption('max');
+    }
 }

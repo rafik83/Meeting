@@ -194,7 +194,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: "Société en une phrase"
                                 help:
                                     fr: ""
-                                length: "200"
+                                length: 200
                                 type: "title"
                                 required: true
                                 translatable: true
@@ -257,7 +257,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             help:
                                                 fr: ""
-                                            length: "500"
+                                            length: 500
                                             type: "text"
                                             required: false
                                             translatable: true
@@ -273,6 +273,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: false
+                                mode: "checkboxes"
                                 default: 1
                                 nomenclature: "@nomenclature_competences->id"
                         75adad94:
@@ -307,7 +308,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: ""
                                             required: true
-                                            default: "1"
+                                            default: 1
                                             translatable: true
                                     46663c1d:
                                         component: "object"
@@ -321,7 +322,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: ""
                                             required: false
-                                            default: "3"
+                                            default: 3
                                             translatable: true
                         097ab5e8:
                             component: "object"
@@ -335,7 +336,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: "Vos equipements, technologies et process"
                                 required: false
-                                default: "3"
+                                default: 3
                     -
                         696dc236:
                             component: "object"
@@ -349,7 +350,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: true
-                                default: "3"
+                                default: 3
                                 translatable: true
                         a9271999:
                             component: "object"
@@ -363,7 +364,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: false
-                                default: "3"
+                                default: 3
                                 translatable: true
                         a23a2f5d:
                             component: "object"
@@ -377,7 +378,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: false
-                                default: "3"
+                                default: 3
                                 translatable: true
                         bef61d39:
                             component: "object"
@@ -386,7 +387,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Participants"
-                                numberOfParticipantShown: "3"
+                                numberOfParticipantShown: 3
                         211efd1f:
                             component: "object"
                             type: "media"
@@ -399,7 +400,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                 required: false
-                                default: "3"
+                                default: 3
+                                max: 3
                                 translatable: true
             69962d34:
                 component: "block"
@@ -434,7 +436,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Description"
                                             help:
                                                 fr: "Description"
-                                            length: "500"
+                                            length: 500
                                             type: "text"
                                             required: false
                                             translatable: true
@@ -450,6 +452,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos offres"
                                             help:
                                                 fr: "Vos offres"
+                                            mode: "checkboxes"
                                             required: true
                                             nomenclature: "@nomenclature_offre_besoins->id"
                                     63ccc105:
@@ -463,6 +466,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos besoins"
                                             help:
                                                 fr: "Vos besoins"
+                                            mode: "checkboxes"
                                             required: true
                                             nomenclature: "@nomenclature_offre_besoins->id"
 
@@ -502,7 +506,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Prénom"
                                 help:
                                     fr: ""
-                                length: "250"
+                                length: 250
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -518,22 +522,11 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Nom"
                                 help:
                                     fr: ""
-                                length: "250"
+                                length: 250
                                 required: true
                                 type: "text"
                                 translatable: false
                                 tags: ["participant_lastname", "participant_data"]
-                        dd321a4f:
-                            component: "object"
-                            type: "nomenclature"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Service (Juridique, Informatique, ...)"
-                                help:
-                                    fr: ""
-                                nomenclature: "@nomenclature_service->id"
-                                tags: ["participant_data"]
                         6c4a3a4f:
                             component: "object"
                             type: "nomenclature"
@@ -543,6 +536,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Fonction"
                                 help:
                                     fr: ""
+                                mode: "singles"
                                 nomenclature: "@nomenclature_position->id"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
@@ -633,22 +627,11 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Nom (Société / Organisme)"
                                 help:
                                     fr: ""
-                                length: "250"
+                                length: 250
                                 required: true
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_organization", "sheet_title", "sheet_data"]
-                        0225feca:
-                            component: "object"
-                            type: "nomenclature"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Catégorie (Pme / Eti / Startup / ... )"
-                                help:
-                                    fr: ""
-                                nomenclature: "4"
-                                tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
                             type: "url"
@@ -766,7 +749,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                      en: "First name"
                                  help:
                                      fr: ""
-                                 length: "250"
+                                 length: 250
                                  required: true
                                  type: "text"
                                  translatable: false
@@ -784,7 +767,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                      fr: "Last name"
                                  help:
                                      fr: ""
-                                 length: "250"
+                                 length: 250
                                  required: true
                                  type: "text"
                                  translatable: false
@@ -799,6 +782,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                      en: "Position"
                                  help:
                                      fr: ""
+                                 mode: "singles"
                                  nomenclature: "@nomenclature_position->id"
                                  tags: ["participant_position", "participant_data"]
                          1efb9cbb:
@@ -847,7 +831,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Description d'activité
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
             # Compétence
-            e438c993: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"]
+            e438c993: { items: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"] }
             # Carousel
             848e283e: []
             # Client de référence
@@ -865,9 +849,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Media
             211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
             # Offre
-            03b394ac: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            03b394ac: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
             # Besoins
-            63ccc105: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"]
+            63ccc105: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
             # Description
             d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
         registrationData:

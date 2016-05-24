@@ -1,13 +1,14 @@
-var $               = require('jquery'),
-    bootstrap       = require('bootstrap'),
-    tablesort       = require('tablesort'),
-    Confirm         = require('./components/_Confirm'),
-    CheckAll        = require('./components/_CheckAll'),
-    LoadingButton   = require('./components/_LoadingButton'),
-    TemplateBuilder = require('./components/_TemplateBuilder'),
-    Batch           = require('./components/_Batch'),
-    Slots           = require('./components/_Slots'),
-    Update          = require('./components/_Update');
+var $                    = require('jquery'),
+    bootstrap            = require('bootstrap'),
+    tablesort            = require('tablesort'),
+    Confirm              = require('./components/_Confirm'),
+    CheckAll             = require('./components/_CheckAll'),
+    LoadingButton        = require('./components/_LoadingButton'),
+    TemplateBuilder      = require('./components/_TemplateBuilder'),
+    SelectPackageProduct = require('./components/_SelectPackageProduct'),
+    Batch                = require('./components/_Batch'),
+    Slots                = require('./components/_Slots'),
+    Update               = require('./components/_Update');
 
 require('elao-form.js');
 
@@ -70,10 +71,13 @@ function init(target) {
         element.addEventListener('click', function () { loadingButton.start(); });
     });
 
+
     // Disable click on <a href="#"></a>
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
+
+    new SelectPackageProduct();
 }
 
 // Call init function when element is added to DOM

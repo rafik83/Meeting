@@ -32,7 +32,17 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function setItem($nomenclature)
     {
-        $this->data['items'] = $nomenclature;
+        return $this->setItems((array) $nomenclature);
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return Nomenclature
+     */
+    public function setItems(array $items)
+    {
+        $this->data['items'] = $items;
 
         return $this;
     }
@@ -42,7 +52,15 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getItem()
     {
-        return isset($this->data['items']) ? $this->data['items'] : null;
+        return !empty($this->getItems()) ? array_values($this->getItems())[0] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getItems()
+    {
+        return isset($this->data['items']) ? $this->data['items'] : [];
     }
 
     /**
@@ -79,6 +97,16 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * Get nomenclature
+     *
+     * @return NomenclatureModel
+     */
+    public function getNomenclature()
+    {
+        return $this->nomenclature;
+    }
+
+    /**
      * @return array|null
      */
     public function getNomenclatureLabels()
@@ -102,5 +130,37 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
         }
 
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->getOption('mode');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSingles()
+    {
+        return $this->getMode() === 'singles';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRadios()
+    {
+        return $this->getMode() === 'radios';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCheckboxes()
+    {
+        return $this->getMode() === 'checkboxes';
     }
 }

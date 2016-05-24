@@ -533,11 +533,45 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+#
+# Product
+#
+admin_product:
+    path: /event/{event}/product
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Product:list }
+admin_product_create:
+    path: /event/{event}/product/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:create }
+
+#
+# Package
+#
+admin_package:
+    path: /event/{event}/package
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Package:list }
+admin_package_create:
+    path: /event/{event}/package/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Package:create }
+
 # Organizer #
 admin_organizer_template_sheet_list:
     path: /organizer/template/sheet
     defaults: { _controller: AdminBundle:SheetTemplate:listOrganizerTemplate }
     methods: [GET, POST]
+
 # Organizer #
 admin_organizer_template_sheet_duplicate:
     path: /organizer/template/sheet/{template}/duplicate

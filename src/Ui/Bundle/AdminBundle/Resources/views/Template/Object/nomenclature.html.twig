@@ -4,7 +4,7 @@
     label: { (locale): 'template.object.nomenclature'|trans },
     help: { (locale): '' },
     nomenclature: '',
-    multiple: false,
+    mode: 'checkboxes',
     style: ''
 }|merge(config|default({})) %}
 
@@ -70,14 +70,14 @@
                                 <div class="form-group">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="false">
-                                            {{ 'template.nomenclature.choice.unique'|trans }}
+                                            <input type="radio" name="mode" value="checkboxes">
+                                            {{ 'template.nomenclature.choice.checkboxes'|trans }}
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="true">
-                                            {{ 'template.nomenclature.choice.mutliple'|trans }}
+                                            <input type="radio" name="mode" value="singles">
+                                            {{ 'template.nomenclature.choice.singles'|trans }}
                                         </label>
                                     </div>
                                 </div>

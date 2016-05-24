@@ -32,6 +32,7 @@ class BatchType extends AbstractType
                 'choice_name'       => function ($id) { return $id; },
                 'expanded'          => true,
                 'multiple'          => true,
+                'label'             => false,
             ])
             ->add('follower', FollowerChoiceType::class, [
                 'event'       => $options['event'],

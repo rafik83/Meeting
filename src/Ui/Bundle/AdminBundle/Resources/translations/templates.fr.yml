@@ -14,11 +14,12 @@ template:
             title: Placeholder du titre
             link: Placeholder du lien
         max: Nombre maximum de média
+        default: Nombre de média par default
     nomenclature:
         title: Nomenclature
         choice:
-            unique: Choix unique
-            mutliple: Choix multiple
+            checkboxes: Cases à cocher (choix multiple)
+            singles: Listes déroulantes (choix unique)
     participant:
         title: Les participants
         display: Nombre de participants affichés sur la fiche

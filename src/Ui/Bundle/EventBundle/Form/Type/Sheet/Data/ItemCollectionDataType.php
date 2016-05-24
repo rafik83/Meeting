@@ -35,6 +35,7 @@ class ItemCollectionDataType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'label'         => false,
+                'max'           => $options['data']->getMax(),
             ])
         ;
     }
@@ -44,7 +45,7 @@ class ItemCollectionDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
             'data_class'  => ItemCollection::class,
             'placeholder' => null,
