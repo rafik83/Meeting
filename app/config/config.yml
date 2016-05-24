@@ -128,6 +128,8 @@ fos_elastica:
                             type: integer
                         participantNumber:
                             type: integer
+                        participants:
+                            type: nested
                         event:
                             type: integer
                         owner:

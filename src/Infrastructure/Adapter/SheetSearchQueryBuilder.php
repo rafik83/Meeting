@@ -96,7 +96,7 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $this->filterBySheetName($filters);
+        $this->filterByText($filters);
         $this->filterByState($filters);
         $this->filterByType($filters);
         $this->filterByCategory($filters);
@@ -107,18 +107,51 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
-    protected function filterBySheetName(array &$filters)
+    protected function filterByText(array &$filters)
     {
-        if (isset($filters['sheetName']) && $filters['sheetName'] !== null) {
-            $match = new Match();
-            $match
-                ->setFieldQuery('sheetName', $filters['sheetName'])
-                ->setFieldFuzziness('sheetName', 'AUTO')
-                ->setFieldAnalyzer('sheetName', 'sheetAnalyzer')
-            ;
-
-            $this->query->addMust($match);
+        if (!isset($filters['sheetName']) || null === $filters['sheetName']) {
+            return;
         }
+
+        if (false !== strpos($filters['sheetName'], '@')) {
+            $this->filterByParticipantEmail($filters['sheetName']);
+
+            return;
+        }
+
+        $this->filterBySheetName($filters['sheetName']);
+    }
+
+    /**
+     * @param $sheetName
+     */
+    protected function filterBySheetName($sheetName)
+    {
+        $match = new Match();
+        $match
+            ->setFieldQuery('sheetName', $sheetName)
+            ->setFieldFuzziness('sheetName', 'AUTO')
+            ->setFieldAnalyzer('sheetName', 'sheetAnalyzer');
+
+        $this->query->addMust($match);
+    }
+
+    /**
+     * @param string $email
+     */
+    protected function filterByParticipantEmail($email)
+    {
+        $match = new Match();
+        $match->setField('participants.email', $email);
+
+
+        $boolQuery = new BoolQuery();
+        $boolQuery->addMust($match);
+
+        $nested = new Nested();
+        $nested->setQuery($boolQuery)->setPath('participants');
+
+        $this->query->addMust($nested);
     }
 
     /**
@@ -126,7 +159,7 @@ class SheetSearchQueryBuilder
      */
     protected function filterByState(array &$filters)
     {
-        if (isset($filters['state']) && in_array($filters['state'], [Sheet::STATE_ACCEPTED, Sheet::STATE_PENDING, Sheet::STATE_VALIDATED])) {
+        if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
             $match2 = new Match();
             $match2
                 ->setFieldQuery('state', $filters['state']);

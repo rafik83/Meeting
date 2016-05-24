@@ -16,6 +16,7 @@ use FOS\ElasticaBundle\Transformer\ModelToElasticaTransformerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
@@ -44,7 +45,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheetName         = $this->sheetInfoGuesser->guessSheetName($sheet, $sheet->getEvent()->getFallback());
             $state             = $sheet->getState();
             $type              = $sheet->getType()->getId();
-            $categories = array_map(
+            $categories        = array_map(
                 function (Category $category) {
                     return ['id' => $category->getId()];
                 },
@@ -54,6 +55,19 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $participantNumber = count($sheet->getParticipants());
             $event             = $sheet->getEvent()->getId();
             $createdAt         = $sheet->getCreatedAt()->format('c');
+
+            $participants = [];
+
+            if (null !== $sheet->getParticipants()) {
+                $participants = array_map(
+                    function (Participant $participant) {
+                        return [
+                            'email' => $participant->getUser()->getEmail()
+                        ];
+                    },
+                    $sheet->getParticipants()->toArray()
+                );
+            }
 
             try {
                 $owner = $sheet->getOwner()->getId();
@@ -72,6 +86,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'categories'        => $categories,
             'followUp'          => $followUp,
             'participantNumber' => $participantNumber,
+            'participants'      => $participants,
             'event'             => $event,
             'owner'             => $owner,
             'createdAt'         => $createdAt,
