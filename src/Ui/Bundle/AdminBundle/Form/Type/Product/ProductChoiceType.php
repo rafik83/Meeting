@@ -38,15 +38,15 @@ class ProductChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'class'        => Event::class,
-            'choice_label' => 'name',
+            'choice_label'     => 'name',
             'repositoryMethod' => function (Options $options) {
                 return function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEvent($options['event']);
                 };
             },
-            'choices' => function (Options $options) {
+            'choices'          => function (Options $options) {
                 return $options['repositoryMethod']($this->productRepository);
             },
         ]);

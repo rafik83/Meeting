@@ -36,7 +36,7 @@ class CreateOptionType extends AbstractType
             ->add('name', TextType::class)
             ->add('unitPrice', NumberType::class)
             ->add('translations', CollectionType::class, [
-                'entry_type' => TranslationsType::class,
+                'entry_type' => Option\TranslationsType::class,
                 'label'      => false,
             ])
             ->add('quantityMax', IntegerType::class, [

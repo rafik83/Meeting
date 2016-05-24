@@ -43,11 +43,6 @@ class CreatePackage
     /**
      * @var int
      */
-    public $quantityMax;
-
-    /**
-     * @var int
-     */
     public $availabilityCurrent;
 
     /**
@@ -56,14 +51,14 @@ class CreatePackage
     public $availabilityMax;
 
     /**
-     * @var bool
+     * @var array
      */
-    public $updatable;
+    public $features = [];
 
     /**
-     * @var \DateTimeInterface|null
+     * @var array
      */
-    public $updatableUntil;
+    public $productIncluded = [];
 
     /**
      * @param Event $event

@@ -856,7 +856,7 @@ form:
                             label: Description
                         optionalPriceText:
                             label: Texte optionnel sous le prix
-    package_create:
+    product_create_package:
         children:
             name:
                 label: Nom backoffice de la formule
@@ -897,9 +897,9 @@ form:
                     children:
                         title:
                             label: Titre de la formule
-                        descriptionTitle:
+                        heading:
                             label: Titre de la description
-                        descriptionContent:
+                        description:
                             label: Contenu de la description
-                        optionalPriceText:
+                        addon:
                             label: Texte optionnel sous le prix

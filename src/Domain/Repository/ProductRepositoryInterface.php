@@ -26,4 +26,12 @@ interface ProductRepositoryInterface
      * @return Product[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $type
+     *
+     * @return Product[]
+     */
+    public function findByEventAndType(Event $event, $type);
 }

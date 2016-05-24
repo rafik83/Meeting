@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Package;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class FeatureTranslationsType extends AbstractType
+class TranslationsType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,13 +24,18 @@ class FeatureTranslationsType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'    => 'form.package_create.children.features.prototype.children.title',
+                'required' => true,
+            ])
+            ->add('heading', TextType::class, [
                 'required' => true,
             ])
             ->add('description', TextareaType::class, [
-                'label'    => 'form.package_create.children.features.prototype.children.description',
                 'required' => false,
-            ]);
+            ])
+            ->add('addon', TextareaType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**
@@ -38,6 +43,6 @@ class FeatureTranslationsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'feature_translation';
+        return 'package_translation';
     }
 }

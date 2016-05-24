@@ -74,7 +74,7 @@ class ProductController extends Controller
     public function createPackageAction(Request $request, Event $event)
     {
         $create = new CreatePackage($event);
-        $form   = $this->createForm(CreatePackageType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreatePackageType::class, $create, ['submit' => true, 'event' => $event]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);

@@ -49,11 +49,11 @@ class CreatePackageHandler
             $create->name,
             $this->fileStorageInterface->upload($create->file),
             $create->unitPrice,
-            $create->quantityMax,
+            1,
             $create->availabilityCurrent,
             $create->availabilityMax,
-            $create->updatable,
-            $create->updatableUntil
+            false,
+            null
         );
 
         foreach ($create->translations as $locale => $translation) {

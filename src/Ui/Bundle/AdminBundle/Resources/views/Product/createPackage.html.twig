@@ -9,12 +9,10 @@
     {{ form_row(form.translations) }}
     {{ form_row(form.file) }}
     {{ form_row(form.unitPrice) }}
-    {{ form_row(form.quantityMin) }}
-    {{ form_row(form.quantityMax) }}
     {{ form_row(form.availabilityCurrent) }}
     {{ form_row(form.availabilityMax) }}
-    {{ form_row(form.updatable) }}<br>
-    {{ form_row(form.updatableUntil) }}
+    {{ form_row(form.features) }}
+    {{ form_row(form.productIncluded) }}
 {% endblock %}
 
 {% block goback_link path('admin_product', {event: event.id}) %}

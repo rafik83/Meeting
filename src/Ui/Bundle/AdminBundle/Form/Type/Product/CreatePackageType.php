@@ -11,10 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Application\Command\Product\CreatePackage;
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -36,42 +35,44 @@ class CreatePackageType extends AbstractType
             ->add('name', TextType::class)
             ->add('unitPrice', NumberType::class)
             ->add('translations', CollectionType::class, [
-                'entry_type' => TranslationsType::class,
+                'entry_type' => Package\TranslationsType::class,
                 'label'      => false,
-            ])
-            ->add('quantityMin', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ])
-            ->add('quantityMax', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
             ])
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
-                ],
+                ]
             ])
             ->add('availabilityMax', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
+                ]
+            ])
+            ->add('features', CollectionType::class, [
+                'entry_type'    => Feature\FeatureType::class,
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'entry_options' => [
+                    'label' => false,
+                    'event' => $options['event'],
                 ],
             ])
             ->add('file', FileType::class, [
                 'required' => false,
             ])
-            ->add('updatable', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('updatableUntil', DateTimeType::class, [
-                'data'     => null,
-                'required' => false,
+            ->add('productIncluded', CollectionType::class, [
+                'entry_type'    => ProductIncludedType::class,
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'entry_options' => [
+                    'label' => false,
+                    'event' => $options['event'],
+                ],
+                'attr' => [
+                    'data-collection-product-included' => 'data-collection-product-included',
+                ],
             ]);
     }
 
@@ -90,6 +91,8 @@ class CreatePackageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['event']);
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => CreatePackage::class,
         ]);
@@ -100,6 +103,6 @@ class CreatePackageType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'product_create';
+        return 'product_create_package';
     }
 }

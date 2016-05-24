@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -29,7 +29,7 @@ class TranslationsType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('optionalPriceText', TextareaType::class, [
+            ->add('addon', TextareaType::class, [
                 'required' => false,
             ]);
     }
