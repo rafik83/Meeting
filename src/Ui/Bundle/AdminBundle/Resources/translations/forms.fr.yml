@@ -818,11 +818,11 @@ form:
             availabilityCurrent:
                 label: Stock actuel
             availabilityMax:
-                label: Stock Max
+                label: Stock max
             updatable:
-                label: Ce produit peut être mis à jour après une commande
+                label: Ce produit peut être modifiable après une commande
             updatableUntil:
-                label: Ce produit peut être mis à jour jusqu'au
+                label: Ce produit peut être modifiable jusqu'au
             submit:
                 label: Enregistrer
             translations:
@@ -881,4 +881,3 @@ form:
                             label: Contenu de la description
                         optionalPriceText:
                             label: Texte optionnel sous le prix
-

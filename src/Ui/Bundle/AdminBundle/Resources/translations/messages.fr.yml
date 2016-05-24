@@ -523,7 +523,7 @@ admin:
                 content:
                     edit: Modifier
     product_create:
-        title: Ajouter un produit au catalogue
+        title: Ajouter
     package_create:
         title: Ajouter une formule au catalogue
     package:

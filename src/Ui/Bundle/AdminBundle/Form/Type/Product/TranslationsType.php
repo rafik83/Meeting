@@ -31,9 +31,7 @@ class TranslationsType extends AbstractType
             ])
             ->add('optionalPriceText', TextareaType::class, [
                 'required' => false,
-            ])
-            ;
-        ;
+            ]);
     }
 
     /**

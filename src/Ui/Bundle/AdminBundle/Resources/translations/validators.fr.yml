@@ -42,9 +42,9 @@ validators:
                 min: Vous devez choisir au moins {{ limit }} participant
     spot:
         reference:
-            unique: Cette identifiant est déjà utilisé
+            unique: Cet identifiant est déjà utilisé
     product:
         quantity:
-            greaterOrEqual: La quantité min doit être inférieur à la quantité max
+            greaterOrEqual: La quantité min doit être inférieure à la quantité max
             minRequired: Si vous définissez une quantité, vous devez définir un min et un max
             maxRequired: Si vous définissez une quantité, vous devez définir un min et un max
