@@ -11,13 +11,13 @@
 namespace Proximum\Vimeet\Infrastructure\Elastica\Transformer;
 
 use Elastica\Document;
-use FOS\ElasticaBundle\Exception\InvalidArgumentTypeException;
 use FOS\ElasticaBundle\Transformer\ModelToElasticaTransformerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -27,69 +27,72 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $sheetInfoGuesser;
 
     /**
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @var ParticipantInfoGuesser
      */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser)
+    private $participantInfoGuesser;
+
+    /**
+     * @param SheetInfoGuesser       $sheetInfoGuesser
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     */
+    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
     {
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
-     * {@inheritDoc}
+     * @param Sheet $sheet
+     * @param array $fields
+     *
+     * @return Document
      */
     public function transform($sheet, array $fields)
     {
-        $id = $sheet->getId();
+        $locale = $sheet->getEvent()->getFallback();
 
-        if ($sheet instanceof Sheet) {
-            $sheetName         = $this->sheetInfoGuesser->guessSheetName($sheet, $sheet->getEvent()->getFallback());
-            $state             = $sheet->getState();
-            $type              = $sheet->getType()->getId();
-            $categories        = array_map(
-                function (Category $category) {
-                    return ['id' => $category->getId()];
+        $participants = [];
+
+        if (null !== $sheet->getParticipants()) {
+            $participants = array_map(
+                function (Participant $participant) use ($locale) {
+                    return [
+                        'email'    => $participant->getUser()->getEmail(),
+                        'lastname' => $this->participantInfoGuesser->guessParticipantLastName(
+                            $participant,
+                            $locale
+                        ),
+                    ];
                 },
-                $sheet->getType()->getCategories()->toArray()
+                $sheet->getParticipants()->toArray()
             );
-            $followUp          = $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : 0;
-            $participantNumber = count($sheet->getParticipants());
-            $event             = $sheet->getEvent()->getId();
-            $createdAt         = $sheet->getCreatedAt()->format('c');
-
-            $participants = [];
-
-            if (null !== $sheet->getParticipants()) {
-                $participants = array_map(
-                    function (Participant $participant) {
-                        return [
-                            'email' => $participant->getUser()->getEmail()
-                        ];
-                    },
-                    $sheet->getParticipants()->toArray()
-                );
-            }
-
-            try {
-                $owner = $sheet->getOwner()->getId();
-            } catch (\RuntimeException $e) {
-                $owner = 0;
-            }
-        } else {
-            throw new InvalidArgumentTypeException($sheet, 'Sheet');
         }
 
-        return new Document($id, [
-            'id'                => $id,
-            'sheetName'         => $sheetName,
-            'state'             => $state,
-            'type'              => $type,
+        try {
+            $owner = $sheet->getOwner()->getId();
+        } catch (\RuntimeException $e) {
+            $owner = null;
+        }
+
+        $categories = array_map(
+            function (Category $category) {
+                return ['id' => $category->getId()];
+            },
+            $sheet->getType()->getCategories()->toArray()
+        );
+
+        return new Document($sheet->getId(), [
+            'id'                => $sheet->getId(),
+            'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            'state'             => $sheet->getState(),
+            'type'              => $sheet->getType()->getId(),
             'categories'        => $categories,
-            'followUp'          => $followUp,
-            'participantNumber' => $participantNumber,
+            'followUp'          => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
+            'participantNumber' => count($sheet->getParticipants()),
             'participants'      => $participants,
-            'event'             => $event,
+            'event'             => $sheet->getEvent()->getId(),
             'owner'             => $owner,
-            'createdAt'         => $createdAt,
+            'createdAt'         => $sheet->getCreatedAt()->format('c'),
         ]);
     }
 }
