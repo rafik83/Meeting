@@ -65,4 +65,22 @@ class Feature
     {
         return $this->translations;
     }
+
+    /**
+     * @param string $locale
+     * @param string $title
+     * @param string $description
+     *
+     * @return Feature
+     */
+    public function translate($locale, $title, $description)
+    {
+        if ($this->translations->get($locale)) {
+            $this->translations->get($locale)->set($title, $description);
+        } else {
+            $this->translations->set($locale, new FeatureTranslation($this, $locale, $title, $description));
+        }
+
+        return $this;
+    }
 }

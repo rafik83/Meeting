@@ -58,12 +58,12 @@ class Create
     /**
      * @var array
      */
-    public $features;
+    public $features = [];
 
     /**
      * @var array
      */
-    public $productIncluded;
+    public $productIncluded = [];
 
     /**
      * @param Event $event

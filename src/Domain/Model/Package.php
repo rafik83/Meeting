@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Package\Feature;
+use Proximum\Vimeet\Domain\Model\Package\ProductIncluded;
 
 /**
  * "Formule".
@@ -127,6 +129,35 @@ class Package
     }
 
     /**
+     * @param string $locale
+     * @param string $title
+     * @param string $descriptionTitle
+     * @param string $descriptionContent
+     * @param string $optionalPriceText
+     *
+     * @return Package
+     */
+    public function translate($locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText)
+    {
+        if ($this->translations->get($locale)) {
+            $this->translations->get($locale)->set($title, $descriptionTitle, $descriptionContent, $optionalPriceText);
+        } else {
+            $this->translations->set($locale, new PackageTranslation($this, $locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string             $locale
+     * @param PackageTranslation $translation
+     */
+    public function setTranslation($locale, PackageTranslation $translation)
+    {
+        $this->translations->set($locale, $translation);
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -175,6 +206,18 @@ class Package
     }
 
     /**
+     * @param Feature $feature
+     *
+     * @return Package
+     */
+    public function addFeature(Feature $feature)
+    {
+        $this->features->add($feature);
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getParticipantIncluded()
@@ -188,5 +231,18 @@ class Package
     public function getProductIncluded()
     {
         return $this->productIncluded;
+    }
+
+    /**
+     * @param Product $product
+     * @param int     $quantity
+     *
+     * @return Package
+     */
+    public function includeProduct(Product $product, $quantity)
+    {
+        $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
+
+        return $this;
     }
 }
