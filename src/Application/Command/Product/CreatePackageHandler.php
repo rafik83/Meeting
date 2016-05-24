@@ -60,6 +60,20 @@ class CreatePackageHandler
             $product->translate($locale, $translation['title'], $translation['heading'], $translation['description'], $translation['addon']);
         }
 
+        foreach ($create->productIncluded as $productIncluded) {
+            $product->includeProduct($productIncluded['product'], $productIncluded['quantity']);
+        }
+
+        foreach ($create->features as $feature) {
+            $object = new Product\Feature($product);
+
+            foreach ($feature['translations'] as $locale => $translation) {
+                $object->translate($locale, $translation['title'], $translation['description']);
+            }
+
+            $product->addFeature($object);
+        }
+
         $this->productRepository->add($product);
     }
 }

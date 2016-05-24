@@ -149,6 +149,8 @@ class Product
         \DateTimeInterface $updatableUntil = null
     ) {
         $this->translations        = new ArrayCollection();
+        $this->features            = new ArrayCollection();
+        $this->productIncluded     = new ArrayCollection();
         $this->event               = $event;
         $this->type                = $type;
         $this->name                = $name;
@@ -320,11 +322,13 @@ class Product
     }
 
     /**
+     * @deprecated Use getIncludedProducts instead
+     *
      * @return ProductIncluded[]
      */
     public function getProductIncluded()
     {
-        return $this->productIncluded->toArray();
+        return $this->getIncludedProducts();
     }
 
     /**
@@ -358,5 +362,21 @@ class Product
     protected function getTranslation($locale)
     {
         return $this->translations->get($locale);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIncludedProducts()
+    {
+        return !$this->productIncluded->isEmpty();
+    }
+
+    /**
+     * @return ProductIncluded[]
+     */
+    public function getIncludedProducts()
+    {
+        return $this->productIncluded->toArray();
     }
 }
