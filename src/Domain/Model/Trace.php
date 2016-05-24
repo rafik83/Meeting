@@ -137,4 +137,31 @@ class Trace
     {
         return $this->object;
     }
+
+    /**
+     * @param Trace[]            $traces
+     * @param TraceableInterface $traceable
+     *
+     * @return Trace|null
+     */
+    public static function find(array &$traces, TraceableInterface $traceable)
+    {
+        foreach ($traces as $trace) {
+            if ($trace->getObject() === self::identifier($traceable)) {
+                return $trace;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param TraceableInterface $traceable
+     *
+     * @return string
+     */
+    public static function identifier(TraceableInterface $traceable)
+    {
+        return $traceable->getTraceableName().$traceable->getId();
+    }
 }

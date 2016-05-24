@@ -11,21 +11,15 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Query;
-use Elastica\Query\BoolQuery;
-use Elastica\Query\Match;
-use Elastica\Query\Nested;
-use Elastica\Query\Range;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Sheet\Constant;
-use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -35,13 +29,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private $finder;
 
     /**
-     * Constructor
+     * @var SheetRepositoryInterface
+     */
+    private $repository;
+
+    /**
+     * SheetSearchAdapter constructor.
      *
      * @param PaginatedFinderInterface $finder
+     * @param SheetRepositoryInterface $repository
      */
-    public function __construct(PaginatedFinderInterface $finder)
+    public function __construct(PaginatedFinderInterface $finder, SheetRepositoryInterface $repository)
     {
-        $this->finder = $finder;
+        $this->finder     = $finder;
+        $this->repository = $repository;
     }
 
     /**
@@ -49,115 +50,16 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function find(Event $event, array $filters, $page, $limit, $locale)
     {
-        $query = new Query();
-        $bool  = new BoolQuery();
-
-        $matchEvent = new Match();
-        $matchEvent->setField('event', $event->getId());
-        $bool->addMust($matchEvent);
-
-        $rangeOwner = new Range();
-        $rangeOwner->addField('owner', ['gt' => 0]);
-        $bool->addMust($rangeOwner);
-
-        if (!empty($filters)) {
-            if (isset($filters['sheetName']) && $filters['sheetName'] !== null) {
-                $match = new Match();
-                $match
-                    ->setFieldQuery('sheetName', $filters['sheetName'])
-                    ->setFieldFuzziness('sheetName', 'AUTO')
-                    ->setFieldAnalyzer('sheetName', 'sheetAnalyzer');
-
-                $bool->addMust($match);
-            }
-
-            if (isset($filters['state']) && in_array($filters['state'], [Sheet::STATE_ACCEPTED, Sheet::STATE_PENDING, Sheet::STATE_VALIDATED])) {
-                $match2 = new Match();
-                $match2
-                    ->setFieldQuery('state', $filters['state']);
-
-                $bool->addMust($match2);
-            }
-
-            if (isset($filters['type']) && $filters['type'] instanceof Type) {
-                $matchType = new Match();
-                $matchType
-                    ->setField('type', $filters['type']->getId());
-
-                $bool->addMust($matchType);
-            }
-
-            if (isset($filters['category']) && $filters['category'] instanceof Category) {
-                $nested = new Nested();
-                $boolQuery = new BoolQuery();
-                $matchQuery = new Match();
-                $matchQuery->setField('categories.id', $filters['category']->getId());
-
-                $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('categories');
-                $bool->addMust($nested);
-            }
-
-            if (isset($filters['follower']) && $filters['follower'] instanceof Admin) {
-                $matchFollower = new Match();
-                $matchFollower
-                    ->setField('followUp', $filters['follower']->getId());
-
-                $bool->addMust($matchFollower);
-            }
-
-            if (isset($filters['predefined'])) {
-                if ($filters['predefined'] === Constant::CREATED_TODAY) {
-                    $rangePredefinedDateBegin = new Range();
-                    $rangePredefinedDateEnd   = new Range();
-
-                    $rangePredefinedDateBegin
-                        ->addField('createdAt', ['gte' => (new \DateTime())->setTime(0, 0, 0)->format('c')]);
-                    $rangePredefinedDateEnd
-                        ->addField('createdAt', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
-
-                    $bool->addMust($rangePredefinedDateBegin);
-                    $bool->addMust($rangePredefinedDateEnd);
-                } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
-                    $now = new \DateTime();
-                    $dayOfWeek = $now->format('N');
-
-                    $beginWeek = clone $now;
-
-                    if ($dayOfWeek > 1) {
-                        $beginWeek->modify(sprintf('-%s day', $dayOfWeek - 1));
-                    }
-
-                    $endWeek = clone $beginWeek;
-                    $endWeek->modify('+6 day');
-
-                    $rangePredefinedDateBegin = new Range();
-                    $rangePredefinedDateEnd   = new Range();
-                    $rangePredefinedDateBegin
-                        ->addField('createdAt', ['gte' => $beginWeek->setTime(0, 0, 0)->format('c')]);
-                    $rangePredefinedDateEnd
-                        ->addField('createdAt', ['lte' => $endWeek->setTime(23, 59, 59)->format('c')]);
-
-                    $bool->addMust($rangePredefinedDateBegin);
-                    $bool->addMust($rangePredefinedDateEnd);
-                }
-            }
-        }
-
-        $range = new Range();
-        $range->addField('participantNumber', ['gt' => 0]);
-        $bool->addMust($range);
-
-        $query->setQuery($bool);
+        $query = new Query(new SheetSearchQuery($event, $filters));
 
         try {
-            $result = $this->finder
-                ->findPaginated($query)
-                ->setMaxPerPage($limit)
-                ->setCurrentPage($page);
+            $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
         } catch (NotValidCurrentPageException $ex) {
             throw new UnavailableCurrentPageException(sprintf('Current page %s not available', $page));
         }
 
-        return new PaginatedResult($result->getCurrentPageResults(), $page, $limit, $result->getNbResults());
+        $sheets = $this->repository->findFullSheets($result->getCurrentPageResults());
+
+        return new PaginatedResult($sheets, $page, $limit, $result->getNbResults());
     }
 }

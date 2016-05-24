@@ -75,7 +75,7 @@
             {% for item in choice.vars.choices %}
                 <li {{ selectedValue == item.value ? 'class="active"' : '' }}>
                     <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value})|url_encode }}">
-                        {{ item.label|trans }}
+                        {{ choice.vars.choice_translation_domain|default(false) is same as(false) ? item.label : item.label|trans }}
                     </a>
                 </li>
             {% endfor %}

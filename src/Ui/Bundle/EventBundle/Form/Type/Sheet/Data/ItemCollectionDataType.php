@@ -35,6 +35,7 @@ class ItemCollectionDataType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'label'         => false,
+                'max'           => $options['data']->getMax(),
             ])
         ;
     }

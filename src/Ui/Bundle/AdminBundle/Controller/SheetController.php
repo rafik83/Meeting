@@ -128,9 +128,10 @@ class SheetController extends Controller
     private function createFilterForm($type, $data, array $options = [])
     {
         return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
-            'method'          => 'GET',
-            'csrf_protection' => false,
-            'required'        => false,
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'required'           => false,
+            'allow_extra_fields' => true,
         ]));
     }
 

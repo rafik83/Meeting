@@ -97,4 +97,11 @@ interface SheetRepositoryInterface
      * @return array
      */
     public function getIdsByEvent(Event $event);
+
+    /**
+     * @param array $sheets
+     *
+     * @return Sheet
+     */
+    public function findFullSheets(array $sheets);
 }

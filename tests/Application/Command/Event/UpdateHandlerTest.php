@@ -23,9 +23,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->getConfiguration()->setLeftColor('#111111');
-        $event->getConfiguration()->setRightColor('#BBBBBB');
-        $event->getConfiguration()->setTextColor('#333333');
+        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -49,9 +47,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
-        $expectedEvent->getConfiguration()->setRightColor('#000000');
-        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -71,9 +67,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->getConfiguration()->setLeftColor('#111111');
-        $event->getConfiguration()->setRightColor('#BBBBBB');
-        $event->getConfiguration()->setTextColor('#333333');
+        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -97,9 +91,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
-        $expectedEvent->getConfiguration()->setRightColor('#000000');
-        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -120,9 +112,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual event
         $event = new Event();
-        $event->getConfiguration()->setLeftColor('#FFFFFF');
-        $event->getConfiguration()->setRightColor('#000000');
-        $event->getConfiguration()->setTextColor('#CCCCCC');
+        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20);
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -146,9 +136,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected event
         $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setLeftColor('#FFFFFF');
-        $expectedEvent->getConfiguration()->setRightColor('#000000');
-        $expectedEvent->getConfiguration()->setTextColor('#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 

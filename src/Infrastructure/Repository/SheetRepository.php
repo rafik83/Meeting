@@ -218,4 +218,32 @@ class SheetRepository implements SheetRepositoryInterface
 
         return array_keys($queryBuilder->getQuery()->getResult());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findFullSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participant, type, typeTranslation, category, categoryTranslation, user')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->leftJoin('sheet.participants', 'participant')
+            ->leftJoin('participant.user', 'user')
+            ->leftJoin('sheet.type', 'type')
+            ->leftJoin('type.translations', 'typeTranslation')
+            ->leftJoin('type.categories', 'category')
+            ->leftJoin('category.translations', 'categoryTranslation')
+            ->where('sheet.id IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        $results = $queryBuilder->getQuery()->getResult();
+
+        foreach ($sheets as $key => $sheet) {
+            $sheets[$key] = $results[$sheet instanceof Sheet ? $sheet->getId() : $sheet];
+        }
+
+        return $sheets;
+    }
 }

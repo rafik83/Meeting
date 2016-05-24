@@ -20,7 +20,6 @@
                 <td>{{ type.position }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">{{ 'admin.type.update.link'|trans }}</a>
-                    <a href="{{ path('admin_type_template_field_list', { 'event': event.id, 'type': type.id }) }}" class="btn btn-default btn-sm">Formulaire</a>
                 </td>
             </tr>
         {% endfor %}
