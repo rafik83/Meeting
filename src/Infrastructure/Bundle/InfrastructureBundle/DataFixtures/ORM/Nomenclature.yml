@@ -5,7 +5,7 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
         depth: 3
         value:
             ad987cae:
-                label: { fr: "Compétences Aéronautiques", en: "Aeronautical skills" }
+                label: { fr: "Aéronautiques", en: "Aeronautical" }
                 children:
                     ecc44d0d:
                         label: { fr: "Ingénierie & Bureau d'études", en: "Engineering and Engineering consulting firm" }
@@ -23,7 +23,7 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
                             bdec99a0: { label: { fr: "Prototypage", en: "Prototypage" } }
                             b35ae9c7: { label: { fr: "Technologie laser", en: "Laser technology" } }
             dea09e034:
-                label: { fr: "Compétences Défenses", en: "Defence skills" }
+                label: { fr: "Défenses", en: "Defence" }
                 children:
                     acc44d0d:
                         label: { fr: "Ingénierie & Bureau d'études", en: "Engineering and Engineering consulting firm" }

@@ -13,13 +13,13 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for key, child in nomenclature.value if key in data[uid]|default([]) %}
+                    {% for key, child in nomenclature.value if key in data[uid]['items']|default([]) %}
                         <li>{{ child.label|localize(locale, fallback) }}</li>
                     {% endfor %}
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -31,16 +31,16 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for child in nomenclature.value if child.children|keys|intersect(data[uid]|default([]))|length > 0 %}
+                    {% for child in nomenclature.value if child.children|keys|intersect(data[uid]['items']|default([]))|length > 0 %}
                         <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                        {% for key, grandchild in child.children if key in data[uid]|default([]) %}
+                        {% for key, grandchild in child.children if key in data[uid]['items']|default([]) %}
                             <li>{{ grandchild.label|localize(locale, fallback) }}</li>
                         {% endfor %}
                     {% endfor %}
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
             </footer>
         </section>
 
@@ -54,16 +54,16 @@
                 </header>
                 <div class="section__content">
                     <ul>
-                        {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid]|default([]))|length > 0 %}
+                        {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid]['items']|default([]))|length > 0 %}
                             <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                            {% for key, grandgrandchild in grandchild.children if key in data[uid]|default([]) %}
+                            {% for key, grandgrandchild in grandchild.children if key in data[uid]['items']|default([]) %}
                                 <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
                             {% endfor %}
                         {% endfor %}
                     </ul>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="#">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
                 </footer>
             </section>
 

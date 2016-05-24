@@ -101,7 +101,7 @@ interface SheetRepositoryInterface
     /**
      * @param array $sheets
      *
-     * @return Sheet
+     * @return Sheet[]
      */
     public function findFullSheets(array $sheets);
 }

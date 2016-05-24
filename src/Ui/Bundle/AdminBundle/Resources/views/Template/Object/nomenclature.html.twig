@@ -2,7 +2,7 @@
     label: { (locale): 'Nomenclature' },
     help: { (locale): '' },
     nomenclature: '',
-    multiple: false,
+    mode: 'checkboxes',
     style: ''
 }|merge(config|default({})) %}
 
@@ -68,14 +68,14 @@
                                 <div class="form-group">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="false">
-                                            Choix unique
+                                            <input type="radio" name="mode" value="checkboxes">
+                                            Cases à cocher (choix multiple)
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="multiple" value="true">
-                                            Choix multiple
+                                            <input type="radio" name="mode" value="singles">
+                                            Listes déroulantes (choix unique)
                                         </label>
                                     </div>
                                 </div>

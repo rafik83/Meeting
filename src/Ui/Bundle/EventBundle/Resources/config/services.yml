@@ -114,6 +114,12 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType
         tags:
             - { name: 'form.type' }
+    form_type_sheet_data.nomenclature_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: 'form.type' }
     #
     # Event Listener
     #

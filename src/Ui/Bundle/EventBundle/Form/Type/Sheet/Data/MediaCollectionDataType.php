@@ -45,7 +45,7 @@ class MediaCollectionDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale']);
+        $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
             'data_class'  => MediaCollection::class,
             'placeholder' => null,

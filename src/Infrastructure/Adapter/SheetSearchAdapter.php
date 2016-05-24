@@ -15,10 +15,8 @@ use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
@@ -50,7 +48,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function find(Event $event, array $filters, $page, $limit, $locale)
     {
-        $query = new Query(new SheetSearchQuery($event, $filters));
+        $builder = new SheetSearchQueryBuilder($event, $filters);
+        $query   = new Query($builder->getQuery());
 
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
