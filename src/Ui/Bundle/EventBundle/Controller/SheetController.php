@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
@@ -41,6 +42,13 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $participants  = $this->get('tactician.commandbus')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->get('vimeet_infrastructure.repository.user_repository')->getFullUser($this->getUser()),
+                $locale
+            )
+        );
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
@@ -49,6 +57,7 @@ class SheetController extends Controller
             'data'          => $data,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
         ]);
     }
 
