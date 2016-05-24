@@ -1,4 +1,12 @@
 
 <div id="object-{{ uid }}" class="object object--image {{ 'style--' ~ config['style'] }}">
-    <img src="{{ asset('assets/images/dummy/logo.jpg') }}" alt="{{ config['label']|localize(locale, fallback) }}" >
+    <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
+        <div class="placeholder">
+            {% if data[uid] is defined and data[uid]['image'] is defined and null != data[uid]['image'] %}
+                <img src="{{ data[uid]['image'] }}">
+            {% else %}
+                <div>(+) {{ config['placeholder']|localize(locale, fallback)|default(config['label']|localize(locale, fallback)) }}</div>
+            {% endif %}
+        </div>
+    </a>
 </div>
