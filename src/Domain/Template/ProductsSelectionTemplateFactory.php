@@ -48,7 +48,7 @@ class ProductsSelectionTemplateFactory
                 'component' => 'object',
                 'type'      => 'options',
                 'config'    => [
-                    'label'     => 'Options',
+                    'label'     => ['fr' => 'Options'],
                     'enabled'   => true,
                     'products'  => [],
                 ],

@@ -20,20 +20,23 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 class TemplateDataFactory
 {
     private $objects = [
-        'button-link'   => Object\ButtonLink::class,
-        'choice'        => Object::class,
-        'collection'    => Object\ItemCollection::class,
-        'editable-text' => Object\EditableText::class,
-        'image'         => Object\Image::class,
-        'media'         => Object\MediaCollection::class,
-        'nomenclature'  => Object\Nomenclature::class,
-        'participant'   => Object::class,
-        'tag'           => Object::class,
-        'text'          => Object\Text::class,
-        'carousel'      => Object::class,
-        'telephone'     => Object\Telephone::class,
-        'country'       => Object\Country::class,
-        'url'           => Object\Url::class,
+        'button-link'           => Object\ButtonLink::class,
+        'choice'                => Object::class,
+        'collection'            => Object\ItemCollection::class,
+        'editable-text'         => Object\EditableText::class,
+        'image'                 => Object\Image::class,
+        'media'                 => Object\MediaCollection::class,
+        'nomenclature'          => Object\Nomenclature::class,
+        'participant'           => Object::class,
+        'tag'                   => Object::class,
+        'text'                  => Object\Text::class,
+        'carousel'              => Object::class,
+        'telephone'             => Object\Telephone::class,
+        'country'               => Object\Country::class,
+        'url'                   => Object\Url::class,
+        'package'               => Object::class,
+        'participants_planings' => Object::class,
+        'options'               => Object::class,
     ];
 
     /**
