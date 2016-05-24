@@ -43,7 +43,7 @@
 
                 &:after {
                     content: '●';
-                    color: $color-highlighted;
+                    color: #ffffff;
                     margin-left: 6px;
                 }
                 &:last-child:after { content: ' '; }
