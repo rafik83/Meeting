@@ -23,12 +23,8 @@ class StateChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choices'           => [
-                'event.sheet.state.pending'    => Sheet::STATE_PENDING,
-                'event.sheet.state.accepted'   => Sheet::STATE_ACCEPTED,
-                'event.sheet.state.validated'  => Sheet::STATE_VALIDATED,
-            ],
+            'choices_as_values'         => true,
+            'choices'                   => Sheet::getAllStates(),
             'choice_translation_domain' => 'messages',
         ]);
     }
