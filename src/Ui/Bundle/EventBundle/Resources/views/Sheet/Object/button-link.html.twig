@@ -4,6 +4,6 @@
         <a href="{{ data[uid]['url']|default('#') }}" class="btn"><i class="icon-Desktop"></i> {{ data[uid]['label'][locale]|default(config['label']|localize(locale, fallback)) }}</a>
     </p>
     <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ config['label']|localize(locale, fallback) }}"</a>
     </footer>
 </div>

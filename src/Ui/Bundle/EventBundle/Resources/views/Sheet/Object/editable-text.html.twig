@@ -1,17 +1,21 @@
 
 <section id="object-{{ uid }}" class="object object--editable-text {{ 'style--' ~ config['style'] }}">
-    {% if config.type == 'title' %}
-        <header>
-            <h2>{{ data[uid]['text'][locale]|default(config['label']|localize(locale, fallback)) }}</h2>
-        </header>
-    {% elseif config.type == 'text' %}
-        <header>
-            <h2>{{ config['label']|localize(locale, fallback) }}</h2>
-        </header>
+    {% if true != config.hideLabel|default %}
+        {% if config.type == 'title' %}
+            <header>
+                <h2>{{ data[uid]['text'][locale]|default(config['label']|localize(locale, fallback)) }}</h2>
+            </header>
+        {% elseif config.type == 'text' %}
+            <header>
+                <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+            </header>
+        {% endif %}
+    {% endif %}
+    {% if config.type == 'text' %}
         <p>{{ data[uid]['text'][locale]|default|nl2br }}</p>
     {% endif %}
 
     <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ config['label']|localize(locale, fallback) }}"</a>
     </footer>
 </section>

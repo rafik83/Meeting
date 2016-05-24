@@ -37,9 +37,27 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ path('admin_template_list') }}">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ 'admin.template_list.link'|trans }}
+                                    <span class="caret"></span>
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="{{ path('admin_template_registration_list') }}">
+                                            {{ 'admin.template.registration.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_sheet_list') }}">
+                                            {{ 'admin.template.sheet.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_products_selection_list') }}">
+                                            {{ 'admin.template.productsSelection.link'|trans }}
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_ORGANIZER') %}
@@ -47,9 +65,22 @@
                                 <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
                             </li>
                             <li>
-                                <a href="{{ path('admin_organizer_template_sheet_list') }}">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ 'admin.template_list.organizer_link'|trans }}
+                                    <span class="caret"></span>
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="{{ path('admin_organizer_template_sheet_list') }}">
+                                            {{ 'admin.template.sheet.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_products_selection_list') }}">
+                                            {{ 'admin.template.productsSelection.link'|trans }}
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         {% endif %}
                     {% endif %}
@@ -58,7 +89,7 @@
                     {% if event is defined %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Menu
+                                {{ 'admin.menu.link'|trans }}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -74,18 +105,35 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ path('admin_template_list') }}">
-                                            {{ 'admin.template_list.link'|trans }}
+                                        <a href="{{ path('admin_template_registration_list') }}">
+                                            {{ 'admin.template.registration.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_sheet_list') }}">
+                                            {{ 'admin.template.sheet.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_products_selection_list') }}">
+                                            {{ 'admin.template.productsSelection.link'|trans }}
                                         </a>
                                     </li>
                                 {% endif %}
                                 {% if is_granted('ROLE_ORGANIZER') %}
                                     <li>
-                                        <a href="{{ path('admin_list_operator') }}">{{ 'admin.operator_list.link'|trans }}</a>
+                                        <a href="{{ path('admin_list_operator') }}">
+                                            {{ 'admin.operator_list.link'|trans }}
+                                        </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('admin_organizer_template_sheet_list') }}">
-                                            {{ 'admin.template_list.organizer_link'|trans }}
+                                            {{ 'admin.template.sheet.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_template_products_selection_list') }}">
+                                            {{ 'admin.template.productsSelection.link'|trans }}
                                         </a>
                                     </li>
                                 {% endif %}

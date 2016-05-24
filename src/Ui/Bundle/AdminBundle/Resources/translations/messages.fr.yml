@@ -271,6 +271,8 @@ admin:
         link: Retour
     zero-result: Aucun résultat
     cancel: Annuler
+    menu:
+        link: Menu
     events:
         link: Mes évènements
     role:
@@ -507,8 +509,13 @@ admin:
                 date: Date de création
                 action: Action
     template:
+        action:
+            edit: Modifier
+            save: Enregistrer
+            addLanguage: Ajouter une langue
+            close: Fermer
         sheet:
-            link: Template de Participation
+            link: Template de présentation
         registration:
             link: Template d'Inscription
             title: Templates d'Inscription
@@ -522,6 +529,22 @@ admin:
                     action: Action
                 content:
                     edit: Modifier
+        productsSelection:
+            link: Template de forfait de participation
+            title: Template de forfait de participation
+            create: Créer un template
+            update: Modifier
+            steps:
+                step1:
+                    label: Formules
+                step2:
+                    label: Participants & Plannings
+                step3:
+                    label: Options
+            table:
+                column:
+                    title: Titre
+                    event: Evènement
     product_create:
         title: Ajouter
     package_create:

@@ -166,6 +166,9 @@ flash:
             registration:
                 update:
                     success: Template d'Inscription modifié avec succès
+            products_selection:
+                update:
+                    success: Template de forfait modifié avec succès
         product:
             create:
                 success: Le produit a bien été créé

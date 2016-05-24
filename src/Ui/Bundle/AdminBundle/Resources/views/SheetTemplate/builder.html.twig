@@ -30,8 +30,8 @@
                             {% endif %}
                         </ul>
                     </div>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#update-modal">Modifier</button>
-                    <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">Enregistrer</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#update-modal">{{ 'admin.template.action.edit'|trans }}</button>
+                    <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">{{ 'admin.template.action.save'|trans }}</button>
                 </div>
             </div>
             {{ include('AdminBundle::flashes.html.twig') }}
@@ -82,7 +82,6 @@
                             {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:choice.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}
@@ -101,13 +100,13 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
+                            <h4 class="modal-title" id="configure-modal-label">{{ 'admin.template.action.addLanguage'|trans }}</h4>
                         </div>
                         <div class="modal-body">
                             {{ form_row(add_locale_form.locale) }}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.template.action.close'|trans }}</button>
                             {{ form_row(add_locale_form.submit) }}
                         </div>
                     </div>
