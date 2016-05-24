@@ -8,13 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Package;
+namespace Proximum\Vimeet\Domain\Model\Product;
 
-use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 
 /**
- * Product included in the package
+ * Product included in the product
  */
 class ProductIncluded
 {
@@ -24,14 +23,14 @@ class ProductIncluded
     private $id;
 
     /**
-     * @var Package
+     * @var Product
      */
-    private $package;
+    private $product;
 
     /**
      * @var Product
      */
-    private $product;
+    private $included;
 
     /**
      * @var int
@@ -39,14 +38,14 @@ class ProductIncluded
     private $quantity;
 
     /**
-     * @param Package $package
      * @param Product $product
+     * @param Product $included
      * @param int     $quantity
      */
-    public function __construct(Package $package, Product $product, $quantity)
+    public function __construct(Product $product, Product $included, $quantity)
     {
-        $this->package  = $package;
         $this->product  = $product;
+        $this->included = $included;
         $this->quantity = $quantity;
     }
 
@@ -59,19 +58,19 @@ class ProductIncluded
     }
 
     /**
-     * @return Package
-     */
-    public function getPackage()
-    {
-        return $this->package;
-    }
-
-    /**
      * @return Product
      */
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getIncluded()
+    {
+        return $this->included;
     }
 
     /**

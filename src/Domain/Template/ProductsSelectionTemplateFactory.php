@@ -15,25 +15,6 @@ use Proximum\Vimeet\Domain\Model\Template\ProductsSelectionTemplate;
 
 class ProductsSelectionTemplateFactory
 {
-    private $stepsLabel = [
-        'Formules',
-        'Participants & Plannings',
-        'Options',
-    ];
-
-    /**
-     * @var string
-     */
-    private $uid;
-
-    /**
-     * ProductsSelectionTemplateFactory constructor.
-     */
-    public function __construct()
-    {
-        $this->uid = uniqid();
-    }
-
     /**
      * @param Event              $event
      * @param string             $title
@@ -43,25 +24,36 @@ class ProductsSelectionTemplateFactory
      */
     public function createFromEvent(Event $event, $title, \DateTimeInterface $createdAt)
     {
-        $value = [];
-
-        // create 3 blocks
-        for ($step = 0; $step < 3; $step++) {
-            $labels = [];
-            foreach ($event->getLocales() as $locale) {
-                $labels[$locale] = $this->stepsLabel[$step];
-            }
-
-            $value[sha1($step . $this->uid)] = [
-                'component' => 'block',
-                'type'      => '12',
+        $value = [
+            'packages' => [
+                'component' => 'object',
+                'type'      => 'package',
                 'config'    => [
-                    'label'     => $labels,
-                    'enabled'   => true,
+                    'label'   => ['fr' => 'Formules'],
+                    'enabled' => true,
+                    'package' => [],
                 ],
-                'children'  => [],
-            ];
-        }
+            ],
+            'participants_planings' => [
+                'component' => 'object',
+                'type'      => 'participants_planings',
+                'config'    => [
+                    'label'       => ['fr' => 'Participants & Plannings'],
+                    'enabled'     => true,
+                    'participant' => null,
+                    'planing'     => null,
+                ],
+            ],
+            'options' => [
+                'component' => 'object',
+                'type'      => 'options',
+                'config'    => [
+                    'label'     => 'Options',
+                    'enabled'   => true,
+                    'products'  => [],
+                ],
+            ]
+        ];
 
         return new ProductsSelectionTemplate(
             $event,

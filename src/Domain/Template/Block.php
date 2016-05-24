@@ -51,18 +51,18 @@ class Block extends AbstractChild
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel($locale)
     {
-        return $this->getOption('label');
+        return $this->getOption('label', $locale);
     }
 
     /**
      * @param string $label
      * @param string $locale
      */
-    public function setLabel($label)
+    public function setLabel($label, $locale)
     {
-        $this->setOption('label', $label);
+        $this->setOption('label', $label, $locale);
     }
 
     /**

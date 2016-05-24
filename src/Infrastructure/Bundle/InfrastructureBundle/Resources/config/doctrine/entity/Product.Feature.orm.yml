@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Package\Feature:
+Proximum\Vimeet\Domain\Model\Product\Feature:
     type:  entity
-    table: package_feature
+    table: product_feature
     id:
         id:
             type: integer
@@ -8,11 +8,11 @@ Proximum\Vimeet\Domain\Model\Package\Feature:
                 strategy: AUTO
     oneToMany:
         translations:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package\FeatureTranslation
+            targetEntity: Proximum\Vimeet\Domain\Model\Product\FeatureTranslation
             mappedBy: feature
             indexBy: locale
             cascade: ["persist"]
     manyToOne:
-        package:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
             inversedBy: features

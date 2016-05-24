@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Package;
+namespace Proximum\Vimeet\Domain\Model\Product;
 
 class FeatureTranslation
 {

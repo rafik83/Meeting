@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Package\ProductIncluded:
+Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     type:  entity
-    table: package_product_included
+    table: product_product_included
     id:
         id:
             type: integer
@@ -10,8 +10,8 @@ Proximum\Vimeet\Domain\Model\Package\ProductIncluded:
         quantity:
             type: integer
     manyToOne:
-        package:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
             inversedBy: productIncluded
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

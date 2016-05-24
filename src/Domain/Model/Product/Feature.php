@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model\Package;
+namespace Proximum\Vimeet\Domain\Model\Product;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Product;
 
 /**
  * Prestation incluse dans une formule
@@ -24,9 +24,9 @@ class Feature
     private $id;
 
     /**
-     * @var Package
+     * @var Product
      */
-    private $package;
+    private $product;
 
     /**
      * @var ArrayCollection
@@ -34,11 +34,11 @@ class Feature
     private $translations;
 
     /**
-     * @param Package $package
+     * @param Product $product
      */
-    public function __construct(Package $package)
+    public function __construct(Product $product)
     {
-        $this->package      = $package;
+        $this->product      = $product;
         $this->translations = new ArrayCollection();
     }
 
@@ -51,11 +51,11 @@ class Feature
     }
 
     /**
-     * @return Package
+     * @return Product
      */
-    public function getPackage()
+    public function getProduct()
     {
-        return $this->package;
+        return $this->product;
     }
 
     /**

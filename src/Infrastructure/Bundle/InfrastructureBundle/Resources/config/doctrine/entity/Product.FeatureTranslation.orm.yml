@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Package\FeatureTranslation:
+Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
     type:  entity
-    table: package_feature_translation
+    table: product_feature_translation
     id:
         id:
             type: integer
@@ -16,5 +16,5 @@ Proximum\Vimeet\Domain\Model\Package\FeatureTranslation:
             type: string
     manyToOne:
         feature:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package\Feature
+            targetEntity: Proximum\Vimeet\Domain\Model\Product\Feature
             inversedBy: translations

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,27 +35,50 @@ class ProductTranslation
     /**
      * @var string
      */
-    private $description;
+    private $heading;
 
     /**
      * @var string
      */
-    private $optionalPriceText;
+    private $description;
+
+    /**
+     * Small addon text dipslayed under the price
+     *
+     * @var string
+     */
+    private $addon;
 
     /**
      * @param Product $product
      * @param string  $locale
      * @param string  $title
+     * @param string  $heading
      * @param string  $description
-     * @param string  $optionalPriceText
+     * @param string  $addon
      */
-    public function __construct(Product $product, $locale, $title, $description, $optionalPriceText)
+    public function __construct(Product $product, $locale, $title, $heading, $description, $addon)
     {
-        $this->product           = $product;
-        $this->locale            = $locale;
-        $this->title             = $title;
-        $this->description       = $description;
-        $this->optionalPriceText = $optionalPriceText;
+        $this->product     = $product;
+        $this->locale      = $locale;
+        $this->title       = $title;
+        $this->heading     = $heading;
+        $this->description = $description;
+        $this->addon       = $addon;
+    }
+
+    /**
+     * @param string $title
+     * @param string $heading
+     * @param string $description
+     * @param string $addon
+     */
+    public function set($title, $heading, $description, $addon)
+    {
+        $this->title       = $title;
+        $this->heading     = $heading;
+        $this->description = $description;
+        $this->addon       = $addon;
     }
 
     /**
@@ -91,6 +114,18 @@ class ProductTranslation
     }
 
     /**
+     * Get heading
+     *
+     * @return string
+     */
+    public function getHeading()
+    {
+        return $this->heading;
+    }
+
+    /**
+     * Get description
+     *
      * @return string
      */
     public function getDescription()
@@ -99,10 +134,12 @@ class ProductTranslation
     }
 
     /**
+     * Get addon
+     *
      * @return string
      */
-    public function getOptionalPriceText()
+    public function getAddon()
     {
-        return $this->optionalPriceText;
+        return $this->addon;
     }
 }
