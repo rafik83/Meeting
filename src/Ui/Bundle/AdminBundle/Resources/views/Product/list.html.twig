@@ -1,0 +1,36 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block list_title 'admin.product.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ block('list_title') }}</h1>
+    <a href="{{ path('admin_product_create', {'event': event.id}) }}" class="btn btn-primary">{{ 'admin.product_create.title'|trans }}</a>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.product.name'|trans }}</th>
+            <th>{{ 'admin.product.unitPrice'|trans }}</th>
+            <th>{{ 'admin.product.quantityMinMax'|trans }}</th>
+            <th>{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
+            <th>{{ 'admin.product.updatable'|trans }}</th>
+            <th>{{ 'admin.product.updatableUntil'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.unitPrice }}</td>
+                <td>{{ product.quantityMin }} / {{ product.quantityMax }}</td>
+                <td>{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
+                <td>{{ product.updatable ? '✓' : '' }}</td>
+                <td>{{ product.updatableUntil ? product.updatableUntil|date('d/m/Y') : '-' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
