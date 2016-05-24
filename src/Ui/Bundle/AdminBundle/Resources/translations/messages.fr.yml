@@ -293,7 +293,7 @@ admin:
         title: Catalogue de produits
         name: Nom
         unitPrice: Prix unitaire
-        quantityMinMax: Quantité min / max
+        quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
@@ -546,7 +546,14 @@ admin:
                     title: Titre
                     event: Evènement
     product_create:
-        title: Ajouter
+        option:
+            title: Ajouter un produit
+        package:
+            title: Ajouter une formule
+        participant:
+            title: Ajouter un participant
+        planning:
+            title: Ajouter un planning
     package_create:
         title: Ajouter une formule au catalogue
     package:

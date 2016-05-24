@@ -825,7 +825,7 @@ form:
                                     label: Etape activée
             submit:
                 label: Enregistrer
-    product_create:
+    product_create_option:
         children:
             name:
                 label: Nom backoffice du produit

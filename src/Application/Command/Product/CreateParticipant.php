@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Create
+class CreateParticipant
 {
     /**
      * @var Event
@@ -31,19 +30,9 @@ class Create
     public $translations = [];
 
     /**
-     * @var UploadedFile
-     */
-    public $file;
-
-    /**
      * @var float
      */
     public $unitPrice;
-
-    /**
-     * @var int
-     */
-    public $quantityMin;
 
     /**
      * @var int
@@ -78,11 +67,7 @@ class Create
         $this->event = $event;
 
         foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = [
-                'title'             => '',
-                'description'       => '',
-                'optionalPriceText' => '',
-            ];
+            $this->translations[$locale] = ['title' => null];
         }
     }
 }

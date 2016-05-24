@@ -34,6 +34,13 @@ class Product
     private $id;
 
     /**
+     * One of the TYPE_* const
+     *
+     * @var string
+     */
+    private $type;
+
+    /**
      * Which event the product is available for.
      *
      * @var Event
@@ -171,6 +178,16 @@ class Product
     }
 
     /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * @return ProductTranslation[]
      */
     public function getTranslations()
@@ -181,18 +198,18 @@ class Product
     /**
      * @param string $locale
      * @param string $title
-     * @param string $descriptionTitle
-     * @param string $descriptionContent
-     * @param string $optionalPriceText
+     * @param string $heading
+     * @param string $description
+     * @param string $addon
      *
      * @return Product
      */
-    public function translate($locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText)
+    public function translate($locale, $title, $heading, $description, $addon)
     {
         if ($this->hasTranslation($locale)) {
-            $this->getTranslation($locale)->set($title, $descriptionTitle, $descriptionContent, $optionalPriceText);
+            $this->getTranslation($locale)->set($title, $heading, $description, $addon);
         } else {
-            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText));
+            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $heading, $description, $addon));
         }
 
         return $this;

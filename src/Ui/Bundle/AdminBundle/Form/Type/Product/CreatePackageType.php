@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
-use Proximum\Vimeet\Application\Command\Product\Create;
+use Proximum\Vimeet\Application\Command\Product\CreatePackage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AbstractType
+class CreatePackageType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -91,7 +91,7 @@ class CreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Create::class,
+            'data_class' => CreatePackage::class,
         ]);
     }
 

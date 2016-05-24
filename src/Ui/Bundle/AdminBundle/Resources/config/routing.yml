@@ -550,12 +550,30 @@ admin_product:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Product:list }
-admin_product_create:
-    path: /event/{event}/product/create
+admin_product_create_option:
+    path: /event/{event}/product/create/option
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:create }
+    defaults: { _controller: AdminBundle:Product:createOption }
+admin_product_create_package:
+    path: /event/{event}/product/create/package
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:createPackage }
+admin_product_create_participant:
+    path: /event/{event}/product/create/participant
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:createParticipant }
+admin_product_create_planning:
+    path: /event/{event}/product/create/planning
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:createPlanning }
 
 #
 # Package

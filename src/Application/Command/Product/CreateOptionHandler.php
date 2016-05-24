@@ -12,10 +12,9 @@ namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\ProductTranslation;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreateHandler
+class CreateOptionHandler
 {
     /**
      * @var ProductRepositoryInterface
@@ -40,16 +39,16 @@ class CreateHandler
     }
 
     /**
-     * @param Create $create
+     * @param CreateOption $create
      */
-    public function handle(Create $create)
+    public function handle(CreateOption $create)
     {
         $product = new Product(
             $create->event,
+            Product::TYPE_OPTION,
             $create->name,
             $this->fileStorageInterface->upload($create->file),
             $create->unitPrice,
-            $create->quantityMin,
             $create->quantityMax,
             $create->availabilityCurrent,
             $create->availabilityMax,
@@ -58,16 +57,7 @@ class CreateHandler
         );
 
         foreach ($create->translations as $locale => $translation) {
-            $product->getTranslations()->set(
-                $locale,
-                new ProductTranslation(
-                    $product,
-                    $locale,
-                    $translation['title'],
-                    $translation['description'],
-                    $translation['optionalPriceText']
-                )
-            );
+            $product->translate($locale, $translation['title'], null, $translation['description'], $translation['addon']);
         }
 
         $this->productRepository->add($product);

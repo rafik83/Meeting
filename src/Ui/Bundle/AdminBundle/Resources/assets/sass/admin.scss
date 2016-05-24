@@ -158,6 +158,19 @@ button, a {
   height: 34px;
 }
 
+.glyphicon-product-option {
+  @extend .glyphicon-shopping-cart;
+}
+.glyphicon-product-package {
+  @extend .glyphicon-th-list;
+}
+.glyphicon-product-participant {
+  @extend .glyphicon-user;
+}
+.glyphicon-product-planning {
+  @extend .glyphicon-calendar;
+}
+
 /* tablesort */
 th.sort-header::-moz-selection { background:transparent; }
 th.sort-header::selection      { background:transparent; }
