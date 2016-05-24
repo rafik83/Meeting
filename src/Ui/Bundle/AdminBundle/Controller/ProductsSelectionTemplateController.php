@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductsSelectionTemplateController extends Controller
 {
     /**
+     * @param Request $request
+     *
      * @return RedirectResponse|Response
      */
     public function listAction(Request $request)
