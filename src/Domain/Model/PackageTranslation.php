@@ -66,6 +66,20 @@ class PackageTranslation
     }
 
     /**
+     * @param string $title
+     * @param string $descriptionTitle
+     * @param string $descriptionContent
+     * @param string $optionalPriceText
+     */
+    public function set($title, $descriptionTitle, $descriptionContent, $optionalPriceText)
+    {
+        $this->title              = $title;
+        $this->descriptionTitle   = $descriptionTitle;
+        $this->descriptionContent = $descriptionContent;
+        $this->optionalPriceText  = $optionalPriceText;
+    }
+
+    /**
      * @return int
      */
     public function getId()
