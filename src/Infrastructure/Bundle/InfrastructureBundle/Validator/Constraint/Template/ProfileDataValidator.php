@@ -16,9 +16,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class ProfileDataValidator extends ConstraintValidator
 {
-    private $objects = [
+    private $objectsConstraint = [
         'button-link'   => ObjectConstraint::class,
         'choice'        => ObjectConstraint::class,
+        'carousel'      => ObjectConstraint::class,
+        'country'       => Object\CountryConstraint::class,
         'collection'    => ObjectConstraint::class,
         'editable-text' => Object\EditableTextConstraint::class,
         'image'         => ObjectConstraint::class,
@@ -26,10 +28,8 @@ class ProfileDataValidator extends ConstraintValidator
         'nomenclature'  => Object\NomenclatureConstraint::class,
         'participant'   => ObjectConstraint::class,
         'tag'           => ObjectConstraint::class,
-        'text'          => ObjectConstraint::class,
-        'carousel'      => ObjectConstraint::class,
         'telephone'     => Object\TelephoneConstraint::class,
-        'country'       => Object\CountryConstraint::class,
+        'text'          => ObjectConstraint::class,
         'url'           => Object\UrlConstraint::class,
     ];
 
@@ -39,13 +39,13 @@ class ProfileDataValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$value instanceof TemplateData) {
-            $this->context->buildViolation('Block expected')->addViolation();
+            $this->context->buildViolation('Template expected')->addViolation();
         }
 
         $validator = $this->context->getValidator()->inContext($this->context);
 
         foreach ($value->getProfileObjects() as $key => $object) {
-            $class      = $this->objects[$object->getType()];
+            $class      = $this->objectsConstraint[$object->getType()];
             $constraint = new $class(['key' => $key]);
             $validator->validate($object, $constraint, ['profile', 'Default']);
         }
