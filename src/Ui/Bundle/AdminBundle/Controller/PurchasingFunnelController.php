@@ -65,8 +65,6 @@ class PurchasingFunnelController extends Controller
             throw $this->createAccessDeniedException('You are not allowed to edit this purchasing funnel.');
         }
 
-        $locale       = $purchasingFunnel->getEvent()->getAvailableLocale($request->getLocale());
-
         $update = new Update($purchasingFunnel);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $purchasingFunnel->getEvent(),
@@ -81,8 +79,7 @@ class PurchasingFunnelController extends Controller
         }
 
         return $this->render('AdminBundle:PurchasingFunnel:update.html.twig', [
-            'locale' => $locale,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }
