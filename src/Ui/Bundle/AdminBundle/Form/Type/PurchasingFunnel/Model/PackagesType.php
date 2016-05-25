@@ -40,12 +40,17 @@ class PackagesType extends AbstractType
                 'entry_type' => TextType::class,
                 'required'   => false,
             ])
-            ->add('packages', ProductChoiceType::class, [
-                'event'            => $options['event'],
-                'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                    return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PACKAGE]);
-                },
-                'multiple' => true,
+            ->add('packages', CollectionType::class, [
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'entry_type'    => ProductChoiceType::class,
+                'entry_options' => [
+                    'label'            => false,
+                    'event'            => $options['event'],
+                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
+                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PACKAGE]);
+                    },
+                ]
             ])
         ;
     }

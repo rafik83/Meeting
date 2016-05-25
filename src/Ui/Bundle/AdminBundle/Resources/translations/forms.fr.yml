@@ -823,6 +823,8 @@ form:
                         label: Libellé de l'étape
                     packages:
                         label: Forfaits
+                        label_add: Ajouter un forfait
+                        label_delete: Supprimer
             participantAndPlanning:
                 children:
                     enabled:
@@ -841,6 +843,8 @@ form:
                         label: Libellé de l'étape
                     options:
                         label: Options
+                        label_add: Ajouter une option
+                        label_delete: Supprimer
 
 
             templateData:

@@ -40,12 +40,17 @@ class OptionsType extends AbstractType
                 'entry_type' => TextType::class,
                 'required'   => false,
             ])
-            ->add('options', ProductChoiceType::class, [
-                'event'            => $options['event'],
-                'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                    return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
-                },
-                'multiple' => true,
+            ->add('options', CollectionType::class, [
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'entry_type'    => ProductChoiceType::class,
+                'entry_options' => [
+                    'label'            => false,
+                    'event'            => $options['event'],
+                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
+                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
+                    },
+                ]
             ])
         ;
     }
