@@ -33,7 +33,9 @@ class ParticipantAndPlanningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('enabled', CheckboxType::class)
+            ->add('enabled', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('labels', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'required'   => false,
