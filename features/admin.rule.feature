@@ -19,7 +19,10 @@ Feature: add rule who see who
       | who_see_who_seeable | type:1     |
     And I press "form.who_see_who.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/category/2/see/type/1/dont-see"
-    When I check "dont_see_what_participant_563caf2f0ddbd"
-    And I press "form.dont_see_what.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/who-see-who"
-    And I should see "flash.admin.event.who_see_what.success"
+  #
+  # Need to rewrite the dont see what
+  #
+#    When I check "dont_see_what_participant_563caf2f0ddbd"
+#    And I press "form.dont_see_what.children.submit.label"
+#    Then I should be on this page "/admin/fr/event/1/who-see-who"
+#    And I should see "flash.admin.event.who_see_what.success"

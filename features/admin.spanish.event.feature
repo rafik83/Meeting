@@ -41,10 +41,13 @@ Feature: Update spanish event
     And I press "form.who_see_who.children.submit.label"
     Then I should be on this page "/admin/en/event/1/type/1/see/type/2/dont-see"
     And I should see "Who.see_who_but_dont_see"
-    Then I check "Nombre"
-    And I check "Empresa"
-    And I press "form.dont_see_what.children.submit.label"
-    Then I should see "flash.admin.event.who_see_what.success"
+  #
+  # Need to rewrite the dont see what
+  #
+#    Then I check "Nombre"
+#    And I check "Empresa"
+#    And I press "form.dont_see_what.children.submit.label"
+#    Then I should see "flash.admin.event.who_see_what.success"
 
   Scenario: I can see types list
     Given I am logged with "test@test.com" on admin
