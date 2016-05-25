@@ -30,7 +30,7 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
-            initialCountry: 'auto',
+            initialCountry: $(element).data('initial-country'),
             preferredCountries: [],
             nationalMode: false
         });
