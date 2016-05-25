@@ -10,18 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Image;
 
 class BlockType extends AbstractType
 {
@@ -84,16 +84,12 @@ class BlockType extends AbstractType
      */
     private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($key, FileType::class, [
-            'label'       => false,
-            'required'    => $object->getOption('required'),
-            'mapped'      => false,
-            'attr'        => [
-                'accept' => 'image/*',
-            ],
-            'constraints' => [
-                new Image(),
-            ],
+        $builder->add($key, ImageDataType::class, [
+            'locale' => $locale,
+            'object' => $object,
+            'attr' => [
+                'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
+            ]
         ]);
     }
 

@@ -24,21 +24,20 @@ class ImageDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $image  = $options['object'];
-        $label  = $options['label'];
+        /** @var Object\Image $image */
+        $image = $options['object'];
 
         $builder->add('file', FileType::class, [
-            'label'       => $label,
+            'label'       => $options['label'],
             'required'    => $image->getOption('required'),
             'mapped'      => false,
             'attr'        => [
-                'accept'  => 'image/*',
+                'accept' => implode(', ', Object\Image::supportedMimeType()),
             ],
             'constraints' => [
-                new Image(),
+                new Image(['mimeTypes' => Object\Image::supportedMimeType()]),
             ]
         ]);
-        ;
     }
 
     /**

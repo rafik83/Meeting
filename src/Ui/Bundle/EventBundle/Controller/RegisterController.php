@@ -340,19 +340,17 @@ class RegisterController extends Controller
         $fileStorage  = $this->get('adapter.local_file_storage');
 
         foreach ($imageObjects as $key => $object) {
-            if ($form->has($key) && $form->get($key)->getData() !== null) {
-                $file = $form->get($key)->getData();
+            if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
+                $file = $form->get($key)->get('file')->getData();
 
-                if ($file instanceof UploadedFile) {
-                    if ($form->has($key) && '' !== $object->getContentValue() && $form->get($key)->getData() !== null) {
+                if ($file instanceof UploadedFile && $file !== null) {
+                    if ('' !== $object->getContentValue()) {
                         $fileStorage->remove($object->getContentValue());
                     }
 
-                    if ($form->has($key) && $form->get($key)->getData() !== null) {
-                        $data[$key]['image'] = $fileStorage->upload($form->get($key)->getData());
-                    }
+                    $data[$key]['image'] = $fileStorage->upload($file);
                 } else {
-                    $form->get($key)->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
                 }
             }
         }

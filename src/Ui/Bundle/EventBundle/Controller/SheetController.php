@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -119,13 +119,13 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Object $object
-     * @param string $locale
-     * @param string $key
+     * @param Template\Object $object
+     * @param string          $locale
+     * @param string          $key
      *
      * @return Form
      */
-    private function createObjectForm(Object $object, $locale, $key)
+    private function createObjectForm(Template\Object $object, $locale, $key)
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -172,7 +172,7 @@ class SheetController extends Controller
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($object instanceof Object\Image) {
+            if ($object instanceof Template\Object\Image) {
                 $file = $form->get('file')->getData();
 
                 if ($file instanceof UploadedFile) {
