@@ -740,14 +740,12 @@ services:
         class: Proximum\Vimeet\Application\Command\Product\CreateParticipantHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
-            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateParticipant }
     command.product.create_planning_handler:
         class: Proximum\Vimeet\Application\Command\Product\CreatePlanningHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
-            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlanning }
 
