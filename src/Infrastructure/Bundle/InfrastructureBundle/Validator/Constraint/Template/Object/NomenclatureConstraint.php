@@ -1,0 +1,29 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\Object;
+
+use Symfony\Component\Validator\Constraint;
+
+class NomenclatureConstraint extends Constraint
+{
+    /**
+     * @var string
+     */
+    public $key;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatedBy()
+    {
+        return NomenclatureValidator::class;
+    }
+}
