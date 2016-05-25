@@ -83,5 +83,5 @@ Proximum\Vimeet\Domain\Model\Participant:
         owner: true
         active: true
         data:
-            838197c7: { text: <firstName()> }
-            541f84d4: { text: <lastName()> }
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
