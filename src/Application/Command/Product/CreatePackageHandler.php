@@ -39,32 +39,32 @@ class CreatePackageHandler
     }
 
     /**
-     * @param CreatePackage $create
+     * @param CreatePackage $createPackage
      */
-    public function handle(CreatePackage $create)
+    public function handle(CreatePackage $createPackage)
     {
         $product = new Product(
-            $create->event,
+            $createPackage->event,
             Product::TYPE_PACKAGE,
-            $create->name,
-            $this->fileStorageInterface->upload($create->file),
-            $create->unitPrice,
+            $createPackage->name,
+            $this->fileStorageInterface->upload($createPackage->file),
+            $createPackage->unitPrice,
             1,
-            $create->availabilityCurrent,
-            $create->availabilityMax,
+            $createPackage->availabilityCurrent,
+            $createPackage->availabilityMax,
             false,
             null
         );
 
-        foreach ($create->translations as $locale => $translation) {
+        foreach ($createPackage->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], $translation['heading'], $translation['description'], $translation['addon']);
         }
 
-        foreach ($create->productIncluded as $productIncluded) {
+        foreach ($createPackage->productIncluded as $productIncluded) {
             $product->includeProduct($productIncluded['product'], $productIncluded['quantity']);
         }
 
-        foreach ($create->features as $feature) {
+        foreach ($createPackage->features as $feature) {
             $object = new Product\Feature($product);
 
             foreach ($feature['translations'] as $locale => $translation) {

@@ -854,7 +854,7 @@ form:
                             label: Titre
                         description:
                             label: Description
-                        optionalPriceText:
+                        addon:
                             label: Texte optionnel sous le prix
     product_create_package:
         children:
@@ -903,3 +903,33 @@ form:
                             label: Contenu de la description
                         addon:
                             label: Texte optionnel sous le prix
+    product_create_participant:
+        children:
+            name:
+                label: Nom backoffice du participant
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+    product_create_planning:
+        children:
+            name:
+                label: Nom backoffice du planning
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre

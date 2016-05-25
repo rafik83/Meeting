@@ -39,24 +39,24 @@ class CreateOptionHandler
     }
 
     /**
-     * @param CreateOption $create
+     * @param CreateOption $createOption
      */
-    public function handle(CreateOption $create)
+    public function handle(CreateOption $createOption)
     {
         $product = new Product(
-            $create->event,
+            $createOption->event,
             Product::TYPE_OPTION,
-            $create->name,
-            $this->fileStorageInterface->upload($create->file),
-            $create->unitPrice,
-            $create->quantityMax,
-            $create->availabilityCurrent,
-            $create->availabilityMax,
-            $create->updatable,
-            $create->updatableUntil
+            $createOption->name,
+            $this->fileStorageInterface->upload($createOption->file),
+            $createOption->unitPrice,
+            $createOption->quantityMax,
+            $createOption->availabilityCurrent,
+            $createOption->availabilityMax,
+            $createOption->updatable,
+            $createOption->updatableUntil
         );
 
-        foreach ($create->translations as $locale => $translation) {
+        foreach ($createOption->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, $translation['description'], $translation['addon']);
         }
 

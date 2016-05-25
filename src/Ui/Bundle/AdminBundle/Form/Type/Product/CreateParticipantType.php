@@ -11,11 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Application\Command\Product\CreateParticipant;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\TranslationsType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -39,39 +37,11 @@ class CreateParticipantType extends AbstractType
                 'entry_type' => TranslationsType::class,
                 'label'      => false,
             ])
-            ->add('quantityMin', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ])
             ->add('quantityMax', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
                 ],
-            ])
-            ->add('availabilityCurrent', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ])
-            ->add('availabilityMax', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ])
-            ->add('file', FileType::class, [
-                'required' => false,
-            ])
-            ->add('updatable', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('updatableUntil', DateTimeType::class, [
-                'data'     => null,
-                'required' => false,
             ]);
     }
 
@@ -100,6 +70,6 @@ class CreateParticipantType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'product_create';
+        return 'product_create_participant';
     }
 }

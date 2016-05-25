@@ -39,24 +39,24 @@ class CreatePlanningHandler
     }
 
     /**
-     * @param CreatePackage $create
+     * @param CreatePlanning $createPlanning
      */
-    public function handle(CreatePackage $create)
+    public function handle(CreatePlanning $createPlanning)
     {
         $product = new Product(
-            $create->event,
-            Product::TYPE_PARTICIPANT,
-            $create->name,
+            $createPlanning->event,
+            Product::TYPE_PLANNING,
+            $createPlanning->name,
             null,
-            $create->unitPrice,
-            $create->quantityMax,
-            $create->availabilityCurrent,
-            $create->availabilityMax,
-            $create->updatable,
-            $create->updatableUntil
+            $createPlanning->unitPrice,
+            $createPlanning->quantityMax,
+            null,
+            null,
+            true,
+            null
         );
 
-        foreach ($create->translations as $locale => $translation) {
+        foreach ($createPlanning->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, null, null);
         }
 

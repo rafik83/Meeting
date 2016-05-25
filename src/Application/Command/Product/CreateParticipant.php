@@ -40,26 +40,6 @@ class CreateParticipant
     public $quantityMax;
 
     /**
-     * @var int
-     */
-    public $availabilityCurrent;
-
-    /**
-     * @var int
-     */
-    public $availabilityMax;
-
-    /**
-     * @var bool
-     */
-    public $updatable;
-
-    /**
-     * @var \DateTimeInterface|null
-     */
-    public $updatableUntil;
-
-    /**
      * @param Event $event
      */
     public function __construct(Event $event)

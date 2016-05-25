@@ -12,62 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CreatePlanning
+class CreatePlanning extends CreateParticipant
 {
-    /**
-     * @var Event
-     */
-    public $event;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var float
-     */
-    public $unitPrice;
-
-    /**
-     * @var int
-     */
-    public $quantityMax;
-
-    /**
-     * @var int
-     */
-    public $availabilityCurrent;
-
-    /**
-     * @var int
-     */
-    public $availabilityMax;
-
-    /**
-     * @var bool
-     */
-    public $updatable;
-
-    /**
-     * @var \DateTimeInterface|null
-     */
-    public $updatableUntil;
-
-    /**
-     * @param Event $event
-     */
-    public function __construct(Event $event)
-    {
-        $this->event = $event;
-
-        foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = ['title' => null];
-        }
-    }
 }

@@ -39,24 +39,24 @@ class CreateParticipantHandler
     }
 
     /**
-     * @param CreatePackage $create
+     * @param CreateParticipant $createParticipant
      */
-    public function handle(CreatePackage $create)
+    public function handle(CreateParticipant $createParticipant)
     {
         $product = new Product(
-            $create->event,
+            $createParticipant->event,
             Product::TYPE_PARTICIPANT,
-            $create->name,
+            $createParticipant->name,
             null,
-            $create->unitPrice,
-            $create->quantityMax,
-            $create->availabilityCurrent,
-            $create->availabilityMax,
-            $create->updatable,
-            $create->updatableUntil
+            $createParticipant->unitPrice,
+            $createParticipant->quantityMax,
+            null,
+            null,
+            true,
+            null
         );
 
-        foreach ($create->translations as $locale => $translation) {
+        foreach ($createParticipant->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, null, null);
         }
 
