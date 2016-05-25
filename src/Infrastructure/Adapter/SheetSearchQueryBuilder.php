@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
@@ -109,31 +108,49 @@ class SheetSearchQueryBuilder
      */
     protected function filterByText(array &$filters)
     {
-        if (!isset($filters['sheetName']) || null === $filters['sheetName']) {
+        if (!isset($filters['text']) || null === $filters['text']) {
             return;
         }
 
-        if (false !== strpos($filters['sheetName'], '@')) {
-            $this->filterByParticipantEmail($filters['sheetName']);
+        if (false !== strpos($filters['text'], '@')) {
+            $this->filterByParticipantEmail($filters['text']);
 
             return;
         }
 
-        $this->filterBySheetName($filters['sheetName']);
+        $this->filterBySheetNameOrParticipantLastname($filters['text']);
     }
 
     /**
-     * @param $sheetName
+     * @param string $text
      */
-    protected function filterBySheetName($sheetName)
+    protected function filterBySheetNameOrParticipantLastname($text)
     {
-        $match = new Match();
-        $match
-            ->setFieldQuery('sheetName', $sheetName)
+        $filterBySheetNameOrParticipantLastnameQuery = new BoolQuery();
+
+        $matchSheetName = new Match();
+        $matchSheetName
+            ->setFieldQuery('sheetName', $text)
             ->setFieldFuzziness('sheetName', 'AUTO')
             ->setFieldAnalyzer('sheetName', 'sheetAnalyzer');
 
-        $this->query->addMust($match);
+        $filterBySheetNameOrParticipantLastnameQuery->addShould($matchSheetName);
+
+        $matchLastname = new Match();
+        $matchLastname
+            ->setFieldQuery('participants.lastname', $text)
+            ->setFieldFuzziness('participants.lastname', 'AUTO')
+            ->setFieldAnalyzer('participants.lastname', 'sheetAnalyzer');
+
+        $boolQuery = new BoolQuery();
+        $boolQuery->addMust($matchLastname);
+
+        $nestedParticipants = new Nested();
+        $nestedParticipants->setQuery($boolQuery)->setPath('participants');
+
+        $filterBySheetNameOrParticipantLastnameQuery->addShould($nestedParticipants);
+
+        $this->query->addMust($filterBySheetNameOrParticipantLastnameQuery);
     }
 
     /**
@@ -141,12 +158,12 @@ class SheetSearchQueryBuilder
      */
     protected function filterByParticipantEmail($email)
     {
-        $match = new Match();
-        $match->setField('participants.email', $email);
-
+        $matchEmail = new Match();
+        $matchEmail
+            ->setFieldQuery('participants.email', $email);
 
         $boolQuery = new BoolQuery();
-        $boolQuery->addMust($match);
+        $boolQuery->addMust($matchEmail);
 
         $nested = new Nested();
         $nested->setQuery($boolQuery)->setPath('participants');

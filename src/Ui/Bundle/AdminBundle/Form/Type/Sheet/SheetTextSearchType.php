@@ -21,11 +21,14 @@ class SheetTextSearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['label' => false]);
-        $resolver->setDefaults(['placeholder' => '']);
-        $resolver->setDefaults(['required' => false]);
+        $resolver->setDefaults(
+            [
+                'label'       => false,
+                'placeholder' => '',
+                'required'    => false,
+            ]
+        );
     }
-
 
     /**
      * {@inheritdoc}

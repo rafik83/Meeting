@@ -23,12 +23,12 @@ class FilterPartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('text', SheetTextSearchType::class, [
+                'label'       => false,
+                'placeholder' => 'form.sheet_filter.children.text_search.label',
+            ])
             ->add('state', HiddenType::class)
             ->add('category', HiddenType::class)
-            ->add('sheetName', SheetNameType::class, [
-                'label'       => false,
-                'placeholder' => 'form.sheet_filter.children.sheet_name.label',
-            ])
             ->add('type', HiddenType::class)
             ->add('follower', HiddenType::class)
             ->add('predefined', HiddenType::class)
