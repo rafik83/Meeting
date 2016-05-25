@@ -35,8 +35,10 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnel:
             mappedBy: purchasingFunnel
             cascade: ["persist"]
             orderBy: { rank: ASC }
+            orphanRemoval: true
         options:
             targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelOption
             mappedBy: purchasingFunnel
             cascade: ["persist"]
             orderBy: { rank: ASC }
+            orphanRemoval: true
