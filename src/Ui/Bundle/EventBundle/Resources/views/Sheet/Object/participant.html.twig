@@ -10,15 +10,15 @@
                 <div class="user__avatar">
                     <span class="bullet"></span>
                     {% if participant.editable %}
-                    <a href="#">
-                        <div class="avatar">
-                            {% if participant.avatar != null %}
-                                <img  src="{{ asset(participant.avatar) }}">
-                            {% else %}
-                                <p>{{ participant.firstname|first }}{{ participant.lastname|first }}</p>
-                            {% endif %}
-                        </div>
-                    </a>
+                        <a href="{{ path('event_account_participant_profile', {sheet: participant.sheetId, participant: participant.id}) }}">
+                            <div class="avatar">
+                                {% if participant.avatar != null %}
+                                    <img  src="{{ asset(participant.avatar) }}">
+                                {% else %}
+                                    <p>{{ participant.firstname|first }}{{ participant.lastname|first }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
                     {% else %}
                         <div class="avatar">
                             {% if participant.avatar != null %}
