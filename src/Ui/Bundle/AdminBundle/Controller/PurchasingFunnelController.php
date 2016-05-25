@@ -75,7 +75,9 @@ class PurchasingFunnelController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.template.products_selection.update.success');
 
-            return $this->redirectToRoute('admin_purchasing_funnel_list');
+            return $this->redirectToRoute('admin_purchasing_funnel_update', [
+                'purchasingFunnel' => $purchasingFunnel->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:PurchasingFunnel:update.html.twig', [
