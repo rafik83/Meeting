@@ -119,6 +119,11 @@ class Event implements EventInterface
     private $assetPath;
 
     /**
+     * @var string
+     */
+    private $country;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -289,14 +294,16 @@ class Event implements EventInterface
      * @param string $fallback
      * @param string $mode
      * @param float  $vat
+     * @param string $country
      */
-    public function update($title, array $locales, $fallback, $mode, $vat)
+    public function update($title, array $locales, $fallback, $mode, $vat, $country)
     {
         $this->title    = $title;
         $this->locales  = $locales;
         $this->fallback = $fallback;
         $this->mode     = $mode;
         $this->vat      = $vat;
+        $this->country  = $country;
     }
 
     /**
@@ -363,5 +370,13 @@ class Event implements EventInterface
     public function getElementToJoinWithInvoice()
     {
         return $this->elementToJoinWithInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

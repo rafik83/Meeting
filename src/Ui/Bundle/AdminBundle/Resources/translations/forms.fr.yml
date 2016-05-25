@@ -134,6 +134,8 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            country:
+                label: Pays
             mode:
                 label: Mode
             vat:

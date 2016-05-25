@@ -35,6 +35,11 @@ class Update
     public $fallback;
 
     /**
+     * @var string
+     */
+    public $country;
+
+    /**
      * @var array
      */
     public $translations;
@@ -75,6 +80,7 @@ class Update
         $this->fallback     = $event->getFallback();
         $this->translations = [];
         $this->mode         = $event->getMode();
+        $this->country      = $event->getCountry();
         $this->vat          = $event->getVat();
         $this->leftColor    = $event->getConfiguration()->getLeftColor();
         $this->rightColor   = $event->getConfiguration()->getRightColor();
