@@ -1047,7 +1047,6 @@ services:
     query.participant.card_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
         arguments:
-            - '@template.participant_info_guesser'
             - '@query.participant.card_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardListViewQuery }
