@@ -48,6 +48,11 @@ class CardView
     public $owner;
 
     /**
+     * @var int
+     */
+    public $sheetId;
+
+    /**
      * @param int    $id
      * @param bool    $editable
      * @param string $firstname
@@ -55,8 +60,9 @@ class CardView
      * @param string $position
      * @param string $avatar
      * @param bool   $owner
+     * @param int    $sheetId
      */
-    public function __construct($id, $editable, $firstname, $lastname, $position, $avatar, $owner)
+    public function __construct($id, $editable, $firstname, $lastname, $position, $avatar, $owner, $sheetId)
     {
         $this->id        = $id;
         $this->editable  = $editable;
@@ -65,5 +71,6 @@ class CardView
         $this->position  = $position;
         $this->avatar    = $avatar;
         $this->owner     = $owner;
+        $this->sheetId   = $sheetId;
     }
 }

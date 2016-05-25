@@ -10,10 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant;
 
-
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
-use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class CardListViewQueryHandler
@@ -24,11 +21,20 @@ class CardListViewQueryHandler
     private $participantInfoGuesser;
 
     /**
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @var CardViewQueryHandler
      */
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    private $cardViewQueryHandler;
+
+    /**
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param CardViewQueryHandler   $cardViewQueryHandler
+     */
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        CardViewQueryHandler $cardViewQueryHandler
+    ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->cardViewQueryHandler   = $cardViewQueryHandler;
     }
 
     /**
@@ -40,25 +46,13 @@ class CardListViewQueryHandler
     {
         $participants = $cardListViewQuery->sheet->getParticipants();
         $user         = $cardListViewQuery->user;
-
         $cardListView = new CardListView();
 
         foreach ($participants as $participant) {
-            $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $cardListViewQuery->locale);
+            $editable      = $participant->getUser() === $user || $cardListViewQuery->sheet->getUserParticipant($user)->isOwner();
+            $cardViewQuery = new CardViewQuery($participant, $cardListViewQuery->locale, $editable);
 
-            $editable = $participant->getUser() === $user || $cardListViewQuery->sheet->getUserParticipant($user)->isOwner();
-
-            $cardView = new CardView(
-                $participant->getId(),
-                $editable,
-                $infos[Tag::PARTICIPANT_FIRSTNAME],
-                $infos[Tag::PARTICIPANT_LASTNAME],
-                $infos[Tag::PARTICIPANT_POSITION],
-                $infos[Tag::PARTICIPANT_AVATAR],
-                $participant->isOwner()
-            );
-
-            $cardListView->cardViews[$participant->getId()] = $cardView;
+            $cardListView->cardViews[$participant->getId()] = $this->cardViewQueryHandler->handle($cardViewQuery);
         }
 
         return $cardListView;
