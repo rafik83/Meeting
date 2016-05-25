@@ -46,6 +46,10 @@ class CreateHandler
     {
         $purchasingFunnel = new PurchasingFunnel($create->event, $create->title, $this->dateTime);
 
+        foreach ($create->event->getLocales() as $locale) {
+            $purchasingFunnel->translate($locale, 'Forfait', 'Participant et planning', 'Options');
+        }
+
         $this->purchasingFunnelRepository->add($purchasingFunnel);
 
         return new CreateResult($purchasingFunnel);
