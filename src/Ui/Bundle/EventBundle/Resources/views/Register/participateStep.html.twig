@@ -25,7 +25,7 @@
                     {% for child in form %}
                         {% if child.vars.type|default == 'file' %}
                             {% set photo_explanation = true %}
-                            {{ include('EventBundle:Participant:preview.html.twig', { 'participantInfos': participantInfos, 'participantAvatarId': child.vars.id ~ '_preview' }) }}
+                            {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participantCard, 'participantAvatarId': child.vars.id ~ '_preview' }) }}
                             {{ form_row(child, { 'attr': { 'data-registration-object-type-image-upload': '#' ~ child.vars.id ~ '_preview' } }) }}
                         {% else %}
                             {{ form_row(child) }}
