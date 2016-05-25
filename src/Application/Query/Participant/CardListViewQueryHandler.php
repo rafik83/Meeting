@@ -11,29 +11,18 @@
 namespace Proximum\Vimeet\Application\Query\Participant;
 
 use Proximum\Vimeet\Application\View\Participant\CardListView;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class CardListViewQueryHandler
 {
-    /**
-     * @var ParticipantInfoGuesser
-     */
-    private $participantInfoGuesser;
-
     /**
      * @var CardViewQueryHandler
      */
     private $cardViewQueryHandler;
 
     /**
-     * @param ParticipantInfoGuesser $participantInfoGuesser
      * @param CardViewQueryHandler   $cardViewQueryHandler
      */
-    public function __construct(
-        ParticipantInfoGuesser $participantInfoGuesser,
-        CardViewQueryHandler $cardViewQueryHandler
-    ) {
-        $this->participantInfoGuesser = $participantInfoGuesser;
+    public function __construct(CardViewQueryHandler $cardViewQueryHandler) {
         $this->cardViewQueryHandler   = $cardViewQueryHandler;
     }
 

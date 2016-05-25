@@ -305,7 +305,6 @@ class RegisterController extends Controller
         }
 
         $participantCard = $this->get('tactician.commandbus')->handle(new CardViewQuery($participant, $locale));
-        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate, $locale);
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'eventView'       => $eventView,

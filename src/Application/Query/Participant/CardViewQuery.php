@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Participant;
 
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
 class CardViewQuery
 {
