@@ -9,9 +9,22 @@ login:
     connect: Se connecter
     forgotPassword: Mot de passe oublié ?
 
+
+account:
+    update:
+        title: Modifier mon compte
+        profile:
+            title: Profil
+    update_email:
+        title: Changer mon email
+    change_password:
+        title: Changer le mot de passe
+        link: Changer le mot de passe
+
 common:
     need_help: Besoin d'aide
     next: Suivant
+    validate: Valider
 
 register:
     register_as: S'inscrire en tant que :
