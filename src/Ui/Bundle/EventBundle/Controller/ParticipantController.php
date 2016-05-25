@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\Update;
+use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantUpdat
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,6 +33,76 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ParticipantController extends Controller
 {
+    /**
+     * @param EventView   $eventView
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     *
+     * @return Response
+     */
+    public function seeAction(EventView $eventView, Sheet $sheet, Participant $participant)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user               = $this->getUser();
+        $participantManager = $this->get('components.participant.participant_manager');
+
+        if (!$participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)) {
+            throw $this->createAccessDeniedException('You are not allowed to update this participant');
+        }
+
+        return $this->render('EventBundle:Participant:see.html.twig', [
+            'eventView'   => $eventView,
+            'participant' => $participant
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventView   $eventView
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     *
+     * @return Response
+     */
+    public function updateProfileAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user               = $this->getUser();
+        $locale             = $request->getLocale();
+        $participantManager = $this->get('components.participant.participant_manager');
+
+        if (!$participantManager->isUserAllowedToEditParticipant($sheet, $participant, $user)) {
+            throw $this->createAccessDeniedException('You are not allowed to update this participant');
+        }
+
+        $profileTemplate = $this->get('template.template_data_factory')->createProfileTemplate($participant, $locale);
+        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+
+        $form = $this->createForm(ProfileType::class, $profileTemplate, [
+            'event'    => $event,
+            'locale'   => $locale,
+            'template' => $profileTemplate,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $data = array_filter($profileTemplate->getData(), function ($value) {
+                return null !== $value;
+            });
+
+            $updateProfile = new UpdateProfile($profileTemplate, $participant, $locale, $data, $user);
+            $this->get('tactician.commandbus')->handle($updateProfile);
+
+            return $this->redirectToRoute('event_sheet');
+        }
+
+        return $this->render('EventBundle:Participant:updateProfile.html.twig', [
+            'eventView' => $eventView,
+            'form'      => $form->createView()
+        ]);
+    }
+
     /**
      * @param Request   $request
      * @param EventView $eventView
@@ -42,7 +114,7 @@ class ParticipantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $participantManager = $this->get('vimeet_infrastructure.application.components.participant.participant_manager');
+        $participantManager = $this->get('components.participant.participant_manager');
 
         if ($participantManager->canAddParticipant($sheet) <= 0) {
             throw $this->createAccessDeniedException('You can not add a new participant');
@@ -92,7 +164,7 @@ class ParticipantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
+        if (!$this->get('components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
             throw $this->createAccessDeniedException('You are not allowed to update this participant');
         }
 
@@ -136,7 +208,7 @@ class ParticipantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('vimeet_infrastructure.application.components.participant.participant_manager')->isUserAllowedToDeleteParticipant($sheet, $participant, $this->getUser())) {
+        if (!$this->get('components.participant.participant_manager')->isUserAllowedToDeleteParticipant($sheet, $participant, $this->getUser())) {
             throw $this->createAccessDeniedException('You are not allowed to delete this participant');
         }
 
