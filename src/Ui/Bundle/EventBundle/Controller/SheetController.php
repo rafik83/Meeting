@@ -88,7 +88,7 @@ class SheetController extends Controller
         }
 
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
+            throw $this->createNotFoundException('No participant for this user is attached on this sheet');
         }
 
         if (!$eventView->hasLocale($locale)) {
