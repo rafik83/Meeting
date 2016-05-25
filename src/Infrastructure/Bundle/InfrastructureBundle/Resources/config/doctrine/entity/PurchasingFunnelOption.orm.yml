@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\PurchasingFunnelOption:
+    type:  entity
+    table: purchasing_funnel_option
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        rank:
+            type: integer
+    manyToOne:
+        purchasingFunnel:
+            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnel
+            inversedBy: options
+        option:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

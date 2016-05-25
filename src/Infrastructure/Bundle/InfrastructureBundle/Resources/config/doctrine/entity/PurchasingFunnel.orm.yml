@@ -28,12 +28,15 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnel:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelTranslation
             mappedBy: purchasingFunnel
-    manyToMany:
+            cascade: ["persist"]
+            indexBy: locale
         packages:
-            targetEntity: Proximum\Vimeet\Domain\Model\Product
-            joinTable:
-                name: purchasing_funnels_packages
+            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelPackage
+            mappedBy: purchasingFunnel
+            cascade: ["persist"]
+            orderBy: { rank: ASC }
         options:
-            targetEntity: Proximum\Vimeet\Domain\Model\Product
-            joinTable:
-                name: purchasing_funnels_options
+            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelOption
+            mappedBy: purchasingFunnel
+            cascade: ["persist"]
+            orderBy: { rank: ASC }

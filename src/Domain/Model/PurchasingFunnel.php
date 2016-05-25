@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 
 class PurchasingFunnel
 {
@@ -136,23 +137,31 @@ class PurchasingFunnel
     }
 
     /**
-     * Get packages
+     * Get ordered packages
      *
      * @return Product[]
      */
     public function getPackages()
     {
-        return $this->packages->toArray();
+        return $this
+            ->packages
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->map(function (PurchasingFunnelPackage $package) { return $package->getPackage(); })
+            ->toArray();
     }
 
     /**
-     * Get options
+     * Get ordered options
      *
      * @return Product[]
      */
     public function getOptions()
     {
-        return $this->options->toArray();
+        return $this
+            ->options
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->map(function (PurchasingFunnelOption $option) { return $option->getOption(); })
+            ->toArray();
     }
 
     /**
@@ -241,15 +250,54 @@ class PurchasingFunnel
     }
 
     /**
+     * @param Product $package
+     *
+     * @return bool
+     */
+    public function hasPackage(Product $package)
+    {
+        return $this->packages->exists(function (PurchasingFunnelPackage $pfp) use ($package) {
+            return $pfp->getPackage() === $package;
+        });
+    }
+
+    /**
      * @param array $packages
      *
      * @return PurchasingFunnel
      */
     public function choosePackages(array $packages)
     {
-        self::setCollectionItems($this->packages, $packages);
+        // Remove delete packages and update rank
+        foreach ($this->packages as $package) {
+            $rank = $package instanceof PurchasingFunnelPackage && array_search($package->getPackage(), $packages);
+            if (false === $rank) {
+                $this->packages->removeElement($package);
+            } else {
+                $package->setRank($rank);
+            }
+        }
+
+        // Add new package
+        foreach ($packages as $rank => $package) {
+            if (!$this->hasPackage($package)) {
+                $this->packages->add(new PurchasingFunnelPackage($this, $package, $rank));
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * @param Product $option
+     *
+     * @return bool
+     */
+    public function hasOption(Product $option)
+    {
+        return $this->options->exists(function (PurchasingFunnelOption $pfp) use ($option) {
+            return $pfp->getOption() === $option;
+        });
     }
 
     /**
@@ -259,7 +307,22 @@ class PurchasingFunnel
      */
     public function chooseOptions(array $options)
     {
-        self::setCollectionItems($this->options, $options);
+        // Remove delete options and update rank
+        foreach ($this->options as $option) {
+            $rank = $option instanceof PurchasingFunnelOption && array_search($option->getOption(), $options);
+            if (false === $rank) {
+                $this->options->removeElement($option);
+            } else {
+                $option->setRank($rank);
+            }
+        }
+
+        // Add new option
+        foreach ($options as $rank => $option) {
+            if (!$this->hasOption($option)) {
+                $this->options->add(new PurchasingFunnelOption($this, $option, $rank));
+            }
+        }
 
         return $this;
     }
@@ -326,26 +389,5 @@ class PurchasingFunnel
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getOptionsLabel()
             : null;
-    }
-
-    /**
-     * @param ArrayCollection $collection
-     * @param array           $items
-     */
-    private static function setCollectionItems(ArrayCollection $collection, array $items)
-    {
-        // Remove deleted items
-        foreach ($collection as $item) {
-            if (!in_array($item, $items)) {
-                $collection->removeElement($item);
-            }
-        }
-
-        // Add new items
-        foreach ($items as $item) {
-            if (!$collection->contains($item)) {
-                $collection->add($item);
-            }
-        }
     }
 }
