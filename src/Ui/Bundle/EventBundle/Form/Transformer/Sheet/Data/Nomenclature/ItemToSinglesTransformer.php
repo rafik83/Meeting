@@ -56,20 +56,16 @@ class ItemToSinglesTransformer extends AbstractTransformer
      */
     public function reverseTransform($value)
     {
-        if (empty($value)) {
-            return $value;
-        }
-
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('"array" expected, "%s" given', gettype($value)));
-        }
-
         $positions = [1 => 'first', 2 => 'second', 3 => 'third'];
         $depth     = $this->nomenclature->getDepth();
         $item      = isset($positions[$depth]) && isset($value[$positions[$depth]]) ? $value[$positions[$depth]] : null;
 
+        if (empty($item)) {
+            return $item;
+        }
+
         if (!$item instanceof NomenclatureItem) {
-            throw new TransformationFailedException();
+            throw new TransformationFailedException(sprintf('"%s" expected, "%s" given', NomenclatureItem::class, gettype($value)));
         }
 
         return $item->getKey();
