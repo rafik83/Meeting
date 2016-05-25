@@ -1,4 +1,16 @@
 form:
+    change_password_user:
+        children:
+            plainPassword:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            currentPassword:
+                label: Mot de passe actuel
+            submit:
+                label: Envoyer
     email:
         placeholder: Saisissez votre adresse e-mail
     register:
