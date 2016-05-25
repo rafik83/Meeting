@@ -29,9 +29,9 @@ class ProductsSelectionTemplateFactory
                 'component' => 'object',
                 'type'      => 'package',
                 'config'    => [
-                    'label'   => ['fr' => 'Formules'],
-                    'enabled' => true,
-                    'package' => [],
+                    'label'    => ['fr' => 'Formules'],
+                    'enabled'  => true,
+                    'products' => [],
                 ],
             ],
             'participants_planings' => [

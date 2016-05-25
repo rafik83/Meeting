@@ -1,0 +1,35 @@
+Proximum\Vimeet\Domain\Model\PurchasingFunnel:
+    type:  entity
+    table: purchasing_funnel
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        packagesEnabled:
+            type: boolean
+        participantAndPlanningEnabled:
+            type: boolean
+        optionsEnabled:
+            type: boolean
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+        planning:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelTranslation
+            mappedBy: purchasingFunnel
+    manyToMany:
+        packages:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+        options:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

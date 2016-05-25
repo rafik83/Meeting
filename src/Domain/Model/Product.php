@@ -190,6 +190,38 @@ class Product
     }
 
     /**
+     * @return bool
+     */
+    public function isPackage()
+    {
+        return $this->type === self::TYPE_PACKAGE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOption()
+    {
+        return $this->type === self::TYPE_OPTION;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipant()
+    {
+        return $this->type === self::TYPE_PARTICIPANT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlanning()
+    {
+        return $this->type === self::TYPE_PLANNING;
+    }
+
+    /**
      * @return ProductTranslation[]
      */
     public function getTranslations()

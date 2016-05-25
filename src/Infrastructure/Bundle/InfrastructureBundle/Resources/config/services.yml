@@ -155,8 +155,8 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.template.products_selection_template_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\Template\ProductsSelectionTemplateRepository
+    repository.purchasing_funnel_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PurchasingFunnelRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -694,28 +694,19 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
-    command.template.products_selection.create_handler:
-        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateHandler
-        arguments:
-            - '@repository.template.products_selection_template_repository'
-            - '@template.products_selection_template_factory'
-            - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Create }
-    command.template.products_selection.update_handler:
-        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\UpdateHandler
-        arguments:
-            - '@repository.template.products_selection_template_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Update }
-    command.register.participant_step_handler:
-        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@account.synchronizer'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.purchasing_funnel.create_handler:
+        class: Proximum\Vimeet\Application\Command\PurchasingFunnel\CreateHandler
+            arguments:
+                - '@repository.purchasing_funnel_repository'
+                - '@datetime'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Create }
+    command.purchasing_funnel.update_handler:
+        class: Proximum\Vimeet\Application\Command\PurchasingFunnel\UpdateHandler
+            arguments:
+                - '@repository.purchasing_funnel_repository'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Update }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:

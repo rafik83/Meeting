@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Template\ProductsSelection;
+namespace Proximum\Vimeet\Application\Command\PurchasingFunnel;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
