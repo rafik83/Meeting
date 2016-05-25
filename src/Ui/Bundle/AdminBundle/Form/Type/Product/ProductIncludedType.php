@@ -32,7 +32,9 @@ class ProductIncludedType extends AbstractType
                 'placeholder'      => 'form.product_create_package.children.productIncluded.prototype.children.product.placeholder',
                 'attr'             => ['data-package-product-included-select' => 'data-package-product-included-select'],
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                    return $productRepository->findByEventAndType($options['event'], Product::TYPE_OPTION);
+                    $types = [Product::TYPE_OPTION, Product::TYPE_PARTICIPANT, Product::TYPE_PLANNING];
+
+                    return $productRepository->findByEventAndTypes($options['event'], $types);
                 },
             ])
             ->add('quantity', IntegerType::class, [

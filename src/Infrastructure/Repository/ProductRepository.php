@@ -60,7 +60,7 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventAndType(Event $event, $type)
+    public function findByEventAndTypes(Event $event, array $types)
     {
         $queryBuilder = $this
             ->entityManager
@@ -69,8 +69,8 @@ class ProductRepository implements ProductRepositoryInterface
             ->from(Product::class, 'product')
             ->where('product.event = :event')
             ->setParameter('event', $event)
-            ->andWhere('product.type = :type')
-            ->setParameter('type', $type);
+            ->andWhere('product.type IN (:types)')
+            ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
     }
