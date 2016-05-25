@@ -31,5 +31,9 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnel:
     manyToMany:
         packages:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinTable:
+                name: purchasing_funnels_packages
         options:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinTable:
+                name: purchasing_funnels_options

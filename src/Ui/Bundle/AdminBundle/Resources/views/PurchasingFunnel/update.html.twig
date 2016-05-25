@@ -1,0 +1,18 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.purchasing_funnel.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    <div class="well">
+        {{ form_row(form.packages) }}
+    </div>
+    <div class="well">
+        {{ form_row(form.participantAndPlanning) }}
+    </div>
+    <div class="well">
+        {{ form_row(form.options) }}
+    </div>
+{% endblock form_content %}
+
+{% block goback_link path('admin_purchasing_funnel_list') %}

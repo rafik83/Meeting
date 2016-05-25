@@ -803,7 +803,7 @@ form:
                 label: Contenu du template
             submit:
                 label: Enregistrer
-    template_products_selection_create:
+    purchasing_funnel_create:
         children:
             title:
                 label: Titre du template
@@ -811,10 +811,38 @@ form:
                 label: Choisir un événement
             submit:
                 label: Enregistrer
-    template_products_selection_update:
+    purchasing_funnel_update:
         children:
             title:
                 label: Titre du template
+            packages:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    packages:
+                        label: Forfaits
+            participantAndPlanning:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    participant:
+                        label: Participant
+                    planning:
+                        label: Planning
+            options:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    options:
+                        label: Options
+
+
             templateData:
                 children:
                     blocks:

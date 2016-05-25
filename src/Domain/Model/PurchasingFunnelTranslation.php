@@ -13,6 +13,11 @@ namespace Proximum\Vimeet\Domain\Model;
 class PurchasingFunnelTranslation
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var PurchasingFunnel
      */
     private $purchasingFunnel;
@@ -53,6 +58,16 @@ class PurchasingFunnelTranslation
         $this->packagesLabel               = $packagesLabel;
         $this->participantAndPlanningLabel = $participantAndPlanningLabel;
         $this->optionsLabel                = $optionsLabel;
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

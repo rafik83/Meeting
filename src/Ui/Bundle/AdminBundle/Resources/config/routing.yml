@@ -486,19 +486,19 @@ admin_template_registration_add_locale:
         template: \d+
 
 #
-# ProductsSelectionTemplate
+# PurchasingFunnel
 #
-admin_template_products_selection_list:
-    path: /template/products-selection
-    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:list }
+admin_purchasing_funnel_list:
+    path: /template/purchasing_funnel
+    defaults: { _controller: AdminBundle:PurchasingFunnel:list }
     methods: [GET, POST]
 
-admin_template_products_selection_update:
-    path: /template/products-selection/{template}/update
-    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:update }
+admin_purchasing_funnel_update:
+    path: /template/purchasing_funnel/{purchasingFunnel}/update
+    defaults: { _controller: AdminBundle:PurchasingFunnel:update }
     methods: [GET, POST]
     requirements:
-        template: \d+
+        purchasingFunnel: \d+
 
 #
 # SheetTemplate

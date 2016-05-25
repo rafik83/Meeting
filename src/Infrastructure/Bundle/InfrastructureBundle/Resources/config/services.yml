@@ -166,7 +166,7 @@ services:
     vimeet_infrastructure.data_fixtures_orm.provider:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
         arguments:
-            - %domain%
+            - '%domain%'
         tags:
             - { name: hautelook_alice.faker.provider }
 
@@ -696,17 +696,17 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
     command.purchasing_funnel.create_handler:
         class: Proximum\Vimeet\Application\Command\PurchasingFunnel\CreateHandler
-            arguments:
-                - '@repository.purchasing_funnel_repository'
-                - '@datetime'
-            tags:
-                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Create }
+        arguments:
+            - '@repository.purchasing_funnel_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Create }
     command.purchasing_funnel.update_handler:
         class: Proximum\Vimeet\Application\Command\PurchasingFunnel\UpdateHandler
-            arguments:
-                - '@repository.purchasing_funnel_repository'
-            tags:
-                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Update }
+        arguments:
+            - '@repository.purchasing_funnel_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Update }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
