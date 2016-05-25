@@ -256,7 +256,7 @@ class PurchasingFunnel
      */
     public function hasPackage(Product $package)
     {
-        return $this->packages->exists(function (PurchasingFunnelPackage $pfp) use ($package) {
+        return $this->packages->exists(function ($key, PurchasingFunnelPackage $pfp) use ($package) {
             return $pfp->getPackage() === $package;
         });
     }
@@ -295,7 +295,7 @@ class PurchasingFunnel
      */
     public function hasOption(Product $option)
     {
-        return $this->options->exists(function (PurchasingFunnelOption $pfp) use ($option) {
+        return $this->options->exists(function ($key, PurchasingFunnelOption $pfp) use ($option) {
             return $pfp->getOption() === $option;
         });
     }
