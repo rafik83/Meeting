@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template;
 
-use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class BlockValidator extends ConstraintValidator
+class ProfileDataValidator extends ConstraintValidator
 {
     private $objects = [
         'button-link'   => ObjectConstraint::class,
@@ -38,16 +38,16 @@ class BlockValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value instanceof Block) {
+        if (!$value instanceof TemplateData) {
             $this->context->buildViolation('Block expected')->addViolation();
         }
 
         $validator = $this->context->getValidator()->inContext($this->context);
 
-        foreach ($value->getEditableObjects() as $key => $object) {
+        foreach ($value->getProfileObjects() as $key => $object) {
             $class      = $this->objects[$object->getType()];
             $constraint = new $class(['key' => $key]);
-            $validator->validate($object, $constraint, ['block', 'Default']);
+            $validator->validate($object, $constraint, ['profile', 'Default']);
         }
     }
 }
