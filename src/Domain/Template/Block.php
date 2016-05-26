@@ -232,21 +232,19 @@ class Block extends AbstractChild
         return null;
     }
 
-
     /**
      * @param string $tag
-     * @param string $locale
      *
-     * @return array;
+     * @return array
      */
-    public function getTaggedDatas($tag, $locale)
+    public function getTaggedDatas($tag)
     {
         $tagged = [];
 
         foreach ($this->children as $children) {
             foreach ($children as $block) {
                 if ($block instanceof Block) {
-                    $tagged = array_merge($tagged, $block->getTaggedDatas($tag, $locale));
+                    $tagged = array_merge($tagged, $block->getTaggedDatas($tag));
                 }
 
                 if ($block instanceof Object) {

@@ -103,8 +103,7 @@ class ParticipantInfoGuesser
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $templateData,
-                $tag,
-                $locale
+                $tag
             );
         }
 
@@ -125,8 +124,7 @@ class ParticipantInfoGuesser
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $templateData,
-                $tag,
-                $locale
+                $tag
             );
         }
 
