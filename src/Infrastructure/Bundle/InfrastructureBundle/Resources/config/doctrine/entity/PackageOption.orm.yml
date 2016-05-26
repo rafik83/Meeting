@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\PackageOption:
+    type:  entity
+    table: package_option
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        rank:
+            type: integer
+    manyToOne:
+        package:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: options
+        option:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

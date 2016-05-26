@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\PackagePlan:
+    type:  entity
+    table: package_plan
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        rank:
+            type: integer
+    manyToOne:
+        package:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: plans
+        plan:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

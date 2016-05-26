@@ -1,0 +1,44 @@
+Proximum\Vimeet\Domain\Model\Package:
+    type:  entity
+    table: package
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        plansEnabled:
+            type: boolean
+        participantAndPlanningEnabled:
+            type: boolean
+        optionsEnabled:
+            type: boolean
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+        planning:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageTranslation
+            mappedBy: package
+            cascade: ["persist"]
+            indexBy: locale
+        plans:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackagePlan
+            mappedBy: package
+            cascade: ["persist"]
+            orderBy: { rank: ASC }
+            orphanRemoval: true
+        options:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageOption
+            mappedBy: package
+            cascade: ["persist"]
+            orderBy: { rank: ASC }
+            orphanRemoval: true

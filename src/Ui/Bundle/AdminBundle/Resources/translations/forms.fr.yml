@@ -803,7 +803,7 @@ form:
                 label: Contenu du template
             submit:
                 label: Enregistrer
-    purchasing_funnel_create:
+    package_create:
         children:
             title:
                 label: Titre du template
@@ -811,7 +811,7 @@ form:
                 label: Choisir un événement
             submit:
                 label: Enregistrer
-    purchasing_funnel_update:
+    package_update:
         children:
             title:
                 label: Titre du template

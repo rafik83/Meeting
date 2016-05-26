@@ -1,0 +1,21 @@
+Proximum\Vimeet\Domain\Model\PackageTranslation:
+    type:  entity
+    table: package_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        plansLabel:
+            type: string
+        participantAndPlanningLabel:
+            type: string
+        optionsLabel:
+            type: string
+    manyToOne:
+        package:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: translations

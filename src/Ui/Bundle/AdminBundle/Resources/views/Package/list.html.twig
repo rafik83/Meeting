@@ -1,38 +1,64 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block list_title 'admin.package.title'|trans %}
-
 {% block content %}
-    <h1 class="page-header">{{ block('list_title') }}</h1>
-    <a href="{{ path('admin_package_create', {'event': event.id}) }}" class="btn btn-primary">{{ 'admin.package_create.title'|trans }}</a>
-    <table class="table table-hover">
+    <h1 class="page-header">{{ 'admin.package.title'|trans }}</h1>
+
+    <p>
+        <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
+            {{ 'admin.package.create'|trans }}
+        </button>
+    </p>
+
+    {{ form_start(form) }}
+        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="create-modal-label">{{ 'admin.package.create'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_errors(form) }}
+                        {{ form_row(form.title) }}
+                        {{ form_row(form.event) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            {{ 'admin.cancel'|trans }}
+                        </button>
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
+    <table class="table">
         <thead>
-        <tr>
-            <th>{{ 'admin.package.name'|trans }}</th>
-            <th>{{ 'admin.package.unitPrice'|trans }}</th>
-            <th>{{ 'admin.package.productIncluded'|trans }}</th>
-        </tr>
+            <tr>
+                <th>{{ 'admin.package.table.column.title'|trans }}</th>
+                <th>{{ 'admin.package.table.column.event'|trans }}</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
         {% for package in packages %}
             <tr>
-                <td>{{ package.name }}</td>
-                <td>{{ package.unitPrice }}</td>
-                <td>
-                    {% if package.productIncluded %}
-                        <ul>
-                        {% for productIncluded in package.productIncluded %}
-                            <li>{{ productIncluded.quantity }} {{ productIncluded.product.name }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
+                <td>{{ package.title }}</td>
+                <td>{{ package.event.title }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_package_update', { 'package': package.id }) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.package.update'|trans }}
+                    </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="2">
+                    {{ 'admin.zero-result'|trans }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-{% endblock content %}
+{% endblock %}

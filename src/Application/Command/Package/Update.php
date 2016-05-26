@@ -1,0 +1,78 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Package;
+
+use Proximum\Vimeet\Domain\Model\Package;
+
+class Update
+{
+    /**
+     * @var Package
+     */
+    public $package;
+
+    /**
+     * @var string
+     */
+    public $title;
+
+    /**
+     * @var Model\Plans
+     */
+    public $plans;
+
+    /**
+     * @var Model\ParticipantAndPlanning
+     */
+    public $participantAndPlanning;
+
+    /**
+     * @var Model\Options
+     */
+    public $options;
+
+    /**
+     * Update constructor.
+     *
+     * @param Package $package
+     */
+    public function __construct(Package $package)
+    {
+        $plansLabels               = [];
+        $participantAndPlanningLabels = [];
+        $optionsLabels                = [];
+
+        foreach ($package->getEvent()->getLocales() as $locale) {
+            $plansLabels[$locale]               = $package->getPlansLabel($locale);
+            $participantAndPlanningLabels[$locale] = $package->getParticipantAndPlanningLabel($locale);
+            $optionsLabels[$locale]                = $package->getOptionsLabel($locale);
+        }
+
+        $this->package       = $package;
+        $this->title                  = $package->getTitle();
+        $this->plans               = new Model\Plans(
+            $plansLabels,
+            $package->isPlansEnabled(),
+            $package->getPlans()
+        );
+        $this->participantAndPlanning = new Model\ParticipantAndPlanning(
+            $participantAndPlanningLabels,
+            $package->isParticipantAndPlanningEnabled(),
+            $package->getParticipant(),
+            $package->getPlanning()
+        );
+        $this->options                = new Model\Options(
+            $optionsLabels,
+            $package->isOptionsEnabled(),
+            $package->getOptions()
+        );
+    }
+}

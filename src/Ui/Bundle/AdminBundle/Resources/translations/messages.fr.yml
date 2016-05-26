@@ -529,7 +529,7 @@ admin:
                     action: Action
                 content:
                     edit: Modifier
-    purchasing_funnel:
+    package:
         link: Template de forfait de participation
         title: Template de forfait de participation
         create: Créer un template

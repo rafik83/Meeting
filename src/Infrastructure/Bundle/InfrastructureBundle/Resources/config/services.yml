@@ -155,8 +155,8 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.purchasing_funnel_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\PurchasingFunnelRepository
+    repository.package_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -694,19 +694,19 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
-    command.purchasing_funnel.create_handler:
-        class: Proximum\Vimeet\Application\Command\PurchasingFunnel\CreateHandler
+    command.package.create_handler:
+        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
         arguments:
-            - '@repository.purchasing_funnel_repository'
+            - '@repository.package_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Create }
-    command.purchasing_funnel.update_handler:
-        class: Proximum\Vimeet\Application\Command\PurchasingFunnel\UpdateHandler
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
+    command.package.update_handler:
+        class: Proximum\Vimeet\Application\Command\Package\UpdateHandler
         arguments:
-            - '@repository.purchasing_funnel_repository'
+            - '@repository.package_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PurchasingFunnel\Update }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Update }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:

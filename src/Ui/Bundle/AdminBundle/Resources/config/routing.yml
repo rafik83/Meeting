@@ -486,19 +486,19 @@ admin_template_registration_add_locale:
         template: \d+
 
 #
-# PurchasingFunnel
+# Package
 #
-admin_purchasing_funnel_list:
-    path: /template/purchasing_funnel
-    defaults: { _controller: AdminBundle:PurchasingFunnel:list }
+admin_package_list:
+    path: /template/package
+    defaults: { _controller: AdminBundle:Package:list }
     methods: [GET, POST]
 
-admin_purchasing_funnel_update:
-    path: /template/purchasing_funnel/{purchasingFunnel}/update
-    defaults: { _controller: AdminBundle:PurchasingFunnel:update }
+admin_package_update:
+    path: /template/package/{package}/update
+    defaults: { _controller: AdminBundle:Package:update }
     methods: [GET, POST]
     requirements:
-        purchasingFunnel: \d+
+        package: \d+
 
 #
 # SheetTemplate
@@ -574,22 +574,6 @@ admin_product_create_planning:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createPlanning }
-
-#
-# Package
-#
-admin_package:
-    path: /event/{event}/package
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Package:list }
-admin_package_create:
-    path: /event/{event}/package/create
-    requirements:
-        event: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Package:create }
 
 # Organizer #
 admin_organizer_template_sheet_list:

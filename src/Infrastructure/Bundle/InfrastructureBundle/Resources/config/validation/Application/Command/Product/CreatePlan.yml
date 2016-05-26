@@ -1,0 +1,49 @@
+Proximum\Vimeet\Application\Command\Product\CreatePlan:
+    properties:
+        event:
+            - NotBlank: ~
+        name:
+            - NotBlank: ~
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        file:
+            - Image: ~
+        availabilityCurrent:
+            - Range:
+                min: 0
+        availabilityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        heading:
+                            - NotBlank: ~
+                        description: ~
+                        addon: ~
+        features:
+            - All:
+                - Collection:
+                    fields:
+                        translations:
+                            - All:
+                                - Collection:
+                                    fields:
+                                        title:
+                                            - NotBlank: ~
+                                        description: ~
+        productIncluded:
+            - All:
+                - Collection:
+                    fields:
+                        quantity:
+                            - NotBlank: ~
+                            - Range:
+                                min: 0
+                        product:
+                            - NotBlank: ~
