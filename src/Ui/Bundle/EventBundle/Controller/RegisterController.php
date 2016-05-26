@@ -303,7 +303,7 @@ class RegisterController extends Controller
             }
         }
 
-        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate, $locale);
+        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate);
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'eventView'        => $eventView,
