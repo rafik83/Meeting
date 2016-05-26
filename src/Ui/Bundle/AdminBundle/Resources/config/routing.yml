@@ -556,12 +556,12 @@ admin_product_create_option:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createOption }
-admin_product_create_package:
-    path: /event/{event}/product/create/package
+admin_product_create_plan:
+    path: /event/{event}/product/create/plan
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:createPackage }
+    defaults: { _controller: AdminBundle:Product:createPlan }
 admin_product_create_participant:
     path: /event/{event}/product/create/participant
     requirements:

@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Product\CreateOption;
-use Proximum\Vimeet\Application\Command\Product\CreatePackage;
+use Proximum\Vimeet\Application\Command\Product\CreatePlan;
 use Proximum\Vimeet\Application\Command\Product\CreateParticipant;
 use Proximum\Vimeet\Application\Command\Product\CreatePlanning;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreateOptionType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreatePackageType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreatePlanType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreateParticipantType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\CreatePlanningType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -71,10 +71,10 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function createPackageAction(Request $request, Event $event)
+    public function createPlanAction(Request $request, Event $event)
     {
-        $create = new CreatePackage($event);
-        $form   = $this->createForm(CreatePackageType::class, $create, ['submit' => true, 'event' => $event]);
+        $create = new CreatePlan($event);
+        $form   = $this->createForm(CreatePlanType::class, $create, ['submit' => true, 'event' => $event]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
@@ -83,7 +83,7 @@ class ProductController extends Controller
             return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
         }
 
-        return $this->render('AdminBundle:Product:createPackage.html.twig', [
+        return $this->render('AdminBundle:Product:createPlan.html.twig', [
             'event' => $event,
             'form'  => $form->createView()
         ]);

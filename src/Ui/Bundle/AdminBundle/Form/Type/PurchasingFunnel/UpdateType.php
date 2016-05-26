@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel;
 use Proximum\Vimeet\Application\Command\PurchasingFunnel\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel\Model\OptionsType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel\Model\PackagesType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel\Model\PlansType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel\Model\ParticipantAndPlanningType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,7 +31,7 @@ class UpdateType extends AbstractType
             ->add('title', TextType::class, [
                 'required' => true,
             ])
-            ->add('packages', PackagesType::class, [
+            ->add('plans', PlansType::class, [
                 'event' => $options['event'],
                 'label' => false,
             ])

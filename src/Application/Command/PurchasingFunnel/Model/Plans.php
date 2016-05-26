@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\PurchasingFunnel\Model;
 
 use Proximum\Vimeet\Domain\Model\Product;
 
-class Packages
+class Plans
 {
     /**
      * @var array
@@ -27,26 +27,26 @@ class Packages
     /**
      * @var Product[]
      */
-    public $packages;
+    public $plans;
 
     /**
      * Options constructor.
      *
      * @param array     $labels
      * @param bool      $enabled
-     * @param Product[] $packages
+     * @param Product[] $plans
      */
-    public function __construct(array $labels, $enabled, array $packages)
+    public function __construct(array $labels, $enabled, array $plans)
     {
-        foreach ($packages as $package) {
-            if (!$package->isPackage()) {
+        foreach ($plans as $plan) {
+            if (!$plan->isPlan()) {
                 throw new \RuntimeException();
             }
         }
 
         $this->labels   = $labels;
         $this->enabled  = $enabled;
-        $this->packages = $packages;
+        $this->plans = $plans;
     }
 
     /**

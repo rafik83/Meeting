@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Package;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -43,6 +43,6 @@ class TranslationsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'package_translation';
+        return 'plan_translation';
     }
 }

@@ -815,13 +815,13 @@ form:
         children:
             title:
                 label: Titre du template
-            packages:
+            plans:
                 children:
                     enabled:
                         label: Activé
                     labels:
                         label: Libellé de l'étape
-                    packages:
+                    plans:
                         label: Forfaits
                         label_add: Ajouter un forfait
                         label_delete: Supprimer
@@ -888,7 +888,7 @@ form:
                             label: Description
                         addon:
                             label: Texte optionnel sous le prix
-    product_create_package:
+    product_create_plan:
         children:
             name:
                 label: Nom backoffice de la formule

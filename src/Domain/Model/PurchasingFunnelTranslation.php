@@ -30,7 +30,7 @@ class PurchasingFunnelTranslation
     /**
      * @var string
      */
-    private $packagesLabel;
+    private $plansLabel;
 
     /**
      * @var string
@@ -47,15 +47,15 @@ class PurchasingFunnelTranslation
      *
      * @param PurchasingFunnel $purchasingFunnel
      * @param string           $locale
-     * @param string           $packagesLabel
+     * @param string           $plansLabel
      * @param string           $participantAndPlanningLabel
      * @param string           $optionsLabel
      */
-    public function __construct(PurchasingFunnel $purchasingFunnel, $locale, $packagesLabel, $participantAndPlanningLabel, $optionsLabel)
+    public function __construct(PurchasingFunnel $purchasingFunnel, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
         $this->purchasingFunnel            = $purchasingFunnel;
         $this->locale                      = $locale;
-        $this->packagesLabel               = $packagesLabel;
+        $this->plansLabel               = $plansLabel;
         $this->participantAndPlanningLabel = $participantAndPlanningLabel;
         $this->optionsLabel                = $optionsLabel;
     }
@@ -71,25 +71,25 @@ class PurchasingFunnelTranslation
     }
 
     /**
-     * @param string $packagesLabel
+     * @param string $plansLabel
      * @param string $participantAndPlanningLabel
      * @param string $optionsLabel
      */
-    public function set($packagesLabel, $participantAndPlanningLabel, $optionsLabel)
+    public function set($plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
-        $this->packagesLabel               = $packagesLabel;
+        $this->plansLabel                  = $plansLabel;
         $this->participantAndPlanningLabel = $participantAndPlanningLabel;
         $this->optionsLabel                = $optionsLabel;
     }
 
     /**
-     * Get packagesLabel
+     * Get plansLabel
      *
      * @return string
      */
-    public function getPackagesLabel()
+    public function getPlansLabel()
     {
-        return $this->packagesLabel;
+        return $this->plansLabel;
     }
 
     /**

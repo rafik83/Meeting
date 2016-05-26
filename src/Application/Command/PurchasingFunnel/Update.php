@@ -25,9 +25,9 @@ class Update
     public $title;
 
     /**
-     * @var Model\Packages
+     * @var Model\Plans
      */
-    public $packages;
+    public $plans;
 
     /**
      * @var Model\ParticipantAndPlanning
@@ -46,22 +46,22 @@ class Update
      */
     public function __construct(PurchasingFunnel $purchasingFunnel)
     {
-        $packagesLabels               = [];
+        $plansLabels               = [];
         $participantAndPlanningLabels = [];
         $optionsLabels                = [];
 
         foreach ($purchasingFunnel->getEvent()->getLocales() as $locale) {
-            $packagesLabels[$locale]               = $purchasingFunnel->getPackagesLabel($locale);
+            $plansLabels[$locale]               = $purchasingFunnel->getPlansLabel($locale);
             $participantAndPlanningLabels[$locale] = $purchasingFunnel->getParticipantAndPlanningLabel($locale);
             $optionsLabels[$locale]                = $purchasingFunnel->getOptionsLabel($locale);
         }
 
         $this->purchasingFunnel       = $purchasingFunnel;
         $this->title                  = $purchasingFunnel->getTitle();
-        $this->packages               = new Model\Packages(
-            $packagesLabels,
-            $purchasingFunnel->isPackagesEnabled(),
-            $purchasingFunnel->getPackages()
+        $this->plans               = new Model\Plans(
+            $plansLabels,
+            $purchasingFunnel->isPlansEnabled(),
+            $purchasingFunnel->getPlans()
         );
         $this->participantAndPlanning = new Model\ParticipantAndPlanning(
             $participantAndPlanningLabels,

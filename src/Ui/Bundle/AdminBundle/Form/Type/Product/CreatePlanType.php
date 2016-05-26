@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
-use Proximum\Vimeet\Application\Command\Product\CreatePackage;
+use Proximum\Vimeet\Application\Command\Product\CreatePlan;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -24,7 +24,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreatePackageType extends AbstractType
+class CreatePlanType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class CreatePackageType extends AbstractType
             ->add('name', TextType::class)
             ->add('unitPrice', NumberType::class)
             ->add('translations', CollectionType::class, [
-                'entry_type' => Package\TranslationsType::class,
+                'entry_type' => Plan\TranslationsType::class,
                 'label'      => false,
             ])
             ->add('availabilityCurrent', IntegerType::class, [
@@ -94,7 +94,7 @@ class CreatePackageType extends AbstractType
         $resolver->setRequired(['event']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'data_class' => CreatePackage::class,
+            'data_class' => CreatePlan::class,
         ]);
     }
 
@@ -103,6 +103,6 @@ class CreatePackageType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'product_create_package';
+        return 'product_create_plan';
     }
 }

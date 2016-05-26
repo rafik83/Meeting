@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PurchasingFunnel\Model;
 
-use Proximum\Vimeet\Application\Command\PurchasingFunnel\Model\Packages;
+use Proximum\Vimeet\Application\Command\PurchasingFunnel\Model\Plans;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PackagesType extends AbstractType
+class PlansType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class PackagesType extends AbstractType
                 'entry_type' => TextType::class,
                 'required'   => false,
             ])
-            ->add('packages', CollectionType::class, [
+            ->add('plans', CollectionType::class, [
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'entry_type'    => ProductChoiceType::class,
@@ -48,7 +48,7 @@ class PackagesType extends AbstractType
                     'label'            => false,
                     'event'            => $options['event'],
                     'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PACKAGE]);
+                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLAN]);
                     },
                 ]
             ])
@@ -63,7 +63,7 @@ class PackagesType extends AbstractType
         $resolver->setRequired(['event']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'data_class' => Packages::class,
+            'data_class' => Plans::class,
         ]);
     }
 

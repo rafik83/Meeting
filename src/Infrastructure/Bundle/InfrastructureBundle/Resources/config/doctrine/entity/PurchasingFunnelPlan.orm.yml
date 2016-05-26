@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\PurchasingFunnelPackage:
+Proximum\Vimeet\Domain\Model\PurchasingFunnelPlan:
     type:  entity
-    table: purchasing_funnel_package
+    table: purchasing_funnel_plan
     id:
         id:
             type: integer
@@ -12,6 +12,6 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnelPackage:
     manyToOne:
         purchasingFunnel:
             targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnel
-            inversedBy: packages
-        package:
+            inversedBy: plans
+        plan:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

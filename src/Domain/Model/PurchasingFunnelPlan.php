@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class PurchasingFunnelPackage
+class PurchasingFunnelPlan
 {
     /**
      * @var int
@@ -25,7 +25,7 @@ class PurchasingFunnelPackage
     /**
      * @var Product
      */
-    private $package;
+    private $plan;
 
     /**
      * @var int
@@ -33,20 +33,20 @@ class PurchasingFunnelPackage
     private $rank;
 
     /**
-     * PurchasingFunnelPackage constructor.
+     * PurchasingFunnelPlan constructor.
      *
      * @param PurchasingFunnel $purchasingFunnel
-     * @param Product          $package
+     * @param Product          $plan
      * @param int              $rank
      */
-    public function __construct(PurchasingFunnel $purchasingFunnel, Product $package, $rank)
+    public function __construct(PurchasingFunnel $purchasingFunnel, Product $plan, $rank)
     {
-        if (!$package->isPackage()) {
-            throw new \DomainException(sprintf('Product of type "%s" expected. Type "%s" given.', Product::TYPE_PACKAGE, $package->getType()));
+        if (!$plan->isPlan()) {
+            throw new \DomainException(sprintf('Product of type "%s" expected. Type "%s" given.', Product::TYPE_PLAN, $plan->getType()));
         }
 
         $this->purchasingFunnel = $purchasingFunnel;
-        $this->package          = $package;
+        $this->plan          = $plan;
         $this->rank             = $rank;
     }
 
@@ -71,13 +71,13 @@ class PurchasingFunnelPackage
     }
 
     /**
-     * Get package
+     * Get plan
      *
      * @return Product
      */
-    public function getPackage()
+    public function getPlan()
     {
-        return $this->package;
+        return $this->plan;
     }
 
     /**
@@ -95,7 +95,7 @@ class PurchasingFunnelPackage
      *
      * @param int $rank
      *
-     * @return PurchasingFunnelPackage
+     * @return PurchasingFunnelPlan
      */
     public function setRank($rank)
     {

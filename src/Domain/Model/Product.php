@@ -18,12 +18,12 @@ use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
  * "Produit".
  *
  * A product can be bought buy a sheet.
- * A product can be a participant, a planning or an option.
+ * A product can be a plan, a participant, a planning or an option.
  * Each product can be included in a package.
  */
 class Product
 {
-    const TYPE_PACKAGE     = 'package';
+    const TYPE_PLAN        = 'plan';
     const TYPE_OPTION      = 'option';
     const TYPE_PARTICIPANT = 'participant';
     const TYPE_PLANNING    = 'planning';
@@ -192,9 +192,9 @@ class Product
     /**
      * @return bool
      */
-    public function isPackage()
+    public function isPlan()
     {
-        return $this->type === self::TYPE_PACKAGE;
+        return $this->type === self::TYPE_PLAN;
     }
 
     /**

@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnelTranslation:
     fields:
         locale:
             type: string
-        packagesLabel:
+        plansLabel:
             type: string
         participantAndPlanningLabel:
             type: string

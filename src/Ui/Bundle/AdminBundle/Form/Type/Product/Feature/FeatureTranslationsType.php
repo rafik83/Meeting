@@ -24,11 +24,11 @@ class FeatureTranslationsType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'    => 'form.product_create_package.children.features.prototype.children.title',
+                'label'    => 'form.product_create_plan.children.features.prototype.children.title',
                 'required' => true,
             ])
             ->add('description', TextareaType::class, [
-                'label'    => 'form.product_create_package.children.features.prototype.children.description',
+                'label'    => 'form.product_create_plan.children.features.prototype.children.description',
                 'required' => false,
             ]);
     }

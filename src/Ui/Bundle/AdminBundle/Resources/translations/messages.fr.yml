@@ -548,15 +548,15 @@ admin:
     product_create:
         option:
             title: Ajouter un produit
-        package:
+        plan:
             title: Ajouter une formule
         participant:
             title: Ajouter un participant
         planning:
             title: Ajouter un planning
-    package_create:
+    plan_create:
         title: Ajouter une formule au catalogue
-    package:
+    plan:
         link: Catalogue de formules
         title: Catalogue de formules
         name: Nom

@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnel:
     fields:
         title:
             type: string
-        packagesEnabled:
+        plansEnabled:
             type: boolean
         participantAndPlanningEnabled:
             type: boolean
@@ -30,8 +30,8 @@ Proximum\Vimeet\Domain\Model\PurchasingFunnel:
             mappedBy: purchasingFunnel
             cascade: ["persist"]
             indexBy: locale
-        packages:
-            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelPackage
+        plans:
+            targetEntity: Proximum\Vimeet\Domain\Model\PurchasingFunnelPlan
             mappedBy: purchasingFunnel
             cascade: ["persist"]
             orderBy: { rank: ASC }

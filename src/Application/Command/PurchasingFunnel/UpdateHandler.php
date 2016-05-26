@@ -36,8 +36,8 @@ class UpdateHandler
     {
         $update->purchasingFunnel
             ->setTitle($update->title)
-            ->enable($update->packages->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
-            ->choosePackages($update->packages->packages)
+            ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
+            ->choosePlans($update->plans->plans)
             ->chooseParticipant($update->participantAndPlanning->participant)
             ->choosePlanning($update->participantAndPlanning->planning)
             ->chooseOptions($update->options->options)
@@ -46,7 +46,7 @@ class UpdateHandler
         foreach ($update->purchasingFunnel->getEvent()->getLocales() as $locale) {
             $update->purchasingFunnel->translate(
                 $locale,
-                $update->packages->getLabel($locale),
+                $update->plans->getLabel($locale),
                 $update->participantAndPlanning->getLabel($locale),
                 $update->options->getLabel($locale)
             );

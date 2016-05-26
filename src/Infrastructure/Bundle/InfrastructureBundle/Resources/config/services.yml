@@ -720,13 +720,13 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateOption }
-    command.product.create_package_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreatePackageHandler
+    command.product.create_plan_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreatePlanHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePackage }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlan }
     command.product.create_participant_handler:
         class: Proximum\Vimeet\Application\Command\Product\CreateParticipantHandler
         arguments:

@@ -33,7 +33,7 @@ class PurchasingFunnel
     /**
      * @var ArrayCollection
      */
-    private $packages;
+    private $plans;
 
     /**
      * @var Product
@@ -58,7 +58,7 @@ class PurchasingFunnel
     /**
      * @var bool
      */
-    private $packagesEnabled = true;
+    private $plansEnabled = true;
 
     /**
      * @var bool
@@ -87,7 +87,7 @@ class PurchasingFunnel
         $this->event        = $event;
         $this->title        = $title;
         $this->createdAt    = $createdAt;
-        $this->packages     = new ArrayCollection();
+        $this->plans        = new ArrayCollection();
         $this->options      = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -137,16 +137,16 @@ class PurchasingFunnel
     }
 
     /**
-     * Get ordered packages
+     * Get ordered plans
      *
      * @return Product[]
      */
-    public function getPackages()
+    public function getPlans()
     {
         return $this
-            ->packages
+            ->plans
             ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
-            ->map(function (PurchasingFunnelPackage $package) { return $package->getPackage(); })
+            ->map(function (PurchasingFunnelPlan $plan) { return $plan->getPlan(); })
             ->toArray();
     }
 
@@ -185,13 +185,13 @@ class PurchasingFunnel
     }
 
     /**
-     * Get packagesEnabled
+     * Get plansEnabled
      *
      * @return boolean
      */
-    public function isPackagesEnabled()
+    public function isPlansEnabled()
     {
-        return $this->packagesEnabled;
+        return $this->plansEnabled;
     }
 
     /**
@@ -216,33 +216,33 @@ class PurchasingFunnel
 
     /**
      * @param string $locale
-     * @param string $packagesLabel
+     * @param string $plansLabel
      * @param string $participantAndPlanningLabel
      * @param string $optionsLabel
      *
      * @return PurchasingFunnel
      */
-    public function translate($locale, $packagesLabel, $participantAndPlanningLabel, $optionsLabel)
+    public function translate($locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
         if (!$this->translations->containsKey($locale)) {
-            $this->translations->add(new PurchasingFunnelTranslation($this, $locale, $packagesLabel, $participantAndPlanningLabel, $optionsLabel));
+            $this->translations->add(new PurchasingFunnelTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
         } else {
-            $this->translations->get($locale)->set($packagesLabel, $participantAndPlanningLabel, $optionsLabel);
+            $this->translations->get($locale)->set($plansLabel, $participantAndPlanningLabel, $optionsLabel);
         }
 
         return $this;
     }
 
     /**
-     * @param bool $packagesEnabled
+     * @param bool $plansEnabled
      * @param bool $participantAndPlanningEnabled
      * @param bool $optionsEnabled
      *
      * @return PurchasingFunnel
      */
-    public function enable($packagesEnabled, $participantAndPlanningEnabled, $optionsEnabled)
+    public function enable($plansEnabled, $participantAndPlanningEnabled, $optionsEnabled)
     {
-        $this->packagesEnabled               = $packagesEnabled;
+        $this->plansEnabled               = $plansEnabled;
         $this->participantAndPlanningEnabled = $participantAndPlanningEnabled;
         $this->optionsEnabled                = $optionsEnabled;
 
@@ -250,38 +250,38 @@ class PurchasingFunnel
     }
 
     /**
-     * @param Product $package
+     * @param Product $plan
      *
      * @return bool
      */
-    public function hasPackage(Product $package)
+    public function hasPlan(Product $plan)
     {
-        return $this->packages->exists(function ($key, PurchasingFunnelPackage $pfp) use ($package) {
-            return $pfp->getPackage() === $package;
+        return $this->plans->exists(function ($key, PurchasingFunnelPlan $pfp) use ($plan) {
+            return $pfp->getPlan() === $plan;
         });
     }
 
     /**
-     * @param array $packages
+     * @param array $plans
      *
      * @return PurchasingFunnel
      */
-    public function choosePackages(array $packages)
+    public function choosePlans(array $plans)
     {
-        // Remove delete packages and update rank
-        foreach ($this->packages as $package) {
-            $rank = $package instanceof PurchasingFunnelPackage && array_search($package->getPackage(), $packages);
+        // Remove delete plans and update rank
+        foreach ($this->plans as $plan) {
+            $rank = $plan instanceof PurchasingFunnelPlan && array_search($plan->getPlan(), $plans);
             if (false === $rank) {
-                $this->packages->removeElement($package);
+                $this->plans->removeElement($plan);
             } else {
-                $package->setRank($rank);
+                $plan->setRank($rank);
             }
         }
 
-        // Add new package
-        foreach ($packages as $rank => $package) {
-            if (!$this->hasPackage($package)) {
-                $this->packages->add(new PurchasingFunnelPackage($this, $package, $rank));
+        // Add new plan
+        foreach ($plans as $rank => $plan) {
+            if (!$this->hasPlan($plan)) {
+                $this->plans->add(new PurchasingFunnelPlan($this, $plan, $rank));
             }
         }
 
@@ -360,10 +360,10 @@ class PurchasingFunnel
      *
      * @return string|null
      */
-    public function getPackagesLabel($locale)
+    public function getPlansLabel($locale)
     {
         return $this->translations->containsKey($locale)
-            ? $this->translations->get($locale)->getPackagesLabel()
+            ? $this->translations->get($locale)->getPlansLabel()
             : null;
     }
 
