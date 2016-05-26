@@ -266,12 +266,10 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-
         $form = $this->createForm(BlockType::class, $participantBlock, [
             'block'   => $participantBlock,
             'locale'  => $locale,
-            'country' => $event->getCountry(),
+            'country' => $eventView->country,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -119,6 +119,8 @@ class Event implements EventInterface
     private $assetPath;
 
     /**
+     * ISO 3166-1 alpha-2 country code
+     *
      * @var string
      */
     private $country;
