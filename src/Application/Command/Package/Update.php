@@ -46,7 +46,7 @@ class Update
      */
     public function __construct(Package $package)
     {
-        $plansLabels               = [];
+        $plansLabels                  = [];
         $participantAndPlanningLabels = [];
         $optionsLabels                = [];
 
@@ -56,9 +56,9 @@ class Update
             $optionsLabels[$locale]                = $package->getOptionsLabel($locale);
         }
 
-        $this->package       = $package;
+        $this->package                = $package;
         $this->title                  = $package->getTitle();
-        $this->plans               = new Model\Plans(
+        $this->plans                  = new Model\Plans(
             $plansLabels,
             $package->isPlansEnabled(),
             $package->getPlans()
