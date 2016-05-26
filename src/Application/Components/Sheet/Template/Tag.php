@@ -36,7 +36,6 @@ final class Tag
     const BILLING_EXTRA               = 'billing_extra';
     const SHEET_TITLE                 = 'sheet_title';
     const SHEET_ORGANIZATION          = 'sheet_organization';
-    const SHEET_PACKAGE               = 'sheet_package';
     const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
 
     // Setter
