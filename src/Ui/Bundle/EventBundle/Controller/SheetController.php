@@ -189,6 +189,13 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $participants  = $this->get('tactician.commandbus')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->get('vimeet_infrastructure.repository.user_repository')->getFullUser($this->getUser()),
+                $locale
+            )
+        );
 
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
@@ -204,6 +211,7 @@ class SheetController extends Controller
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
+            'participants'  => $participants,
         ]);
     }
 }
