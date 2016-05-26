@@ -13,30 +13,31 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 final class Tag
 {
     // Getter
-    const PARTICIPANT_FIRSTNAME = 'participant_firstname';
-    const PARTICIPANT_LASTNAME  = 'participant_lastname';
-    const PARTICIPANT_AVATAR    = 'participant_avatar';
-    const PARTICIPANT_POSITION  = 'participant_position';
-    const PARTICIPANT_PHONE     = 'participant_phone';
-    const PARTICIPANT_MOBILE    = 'participant_mobile';
-    const PARTICIPANT_ADDRESS   = 'participant_address';
-    const PARTICIPANT_ZIPCODE   = 'participant_zipcode';
-    const PARTICIPANT_CITY      = 'participant_city';
-    const PARTICIPANT_COUNTRY   = 'participant_country';
-    const PARTICIPANT_WEBSITE   = 'participant_website';
-    const BILLING_NAME          = 'billing_name';
-    const BILLING_ADDRESS       = 'billing_address';
-    const BILLING_CITY          = 'billing_city';
-    const BILLING_ZIPCODE       = 'billing_zipcode';
-    const BILLING_COUNTRY       = 'billing_country';
-    const BILLING_PHONE         = 'billing_phone';
-    const BILLING_EMAIL         = 'billing_email';
-    const BILLING_ORGANIZATION  = 'billing_organization';
-    const BILLING_VAT_NUMBER    = 'billing_vat_number';
-    const BILLING_EXTRA         = 'billing_extra';
-    const SHEET_TITLE           = 'sheet_title';
-    const SHEET_ORGANIZATION    = 'sheet_organization';
-    const SHEET_PACKAGE         = 'sheet_package';
+    const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
+    const PARTICIPANT_LASTNAME        = 'participant_lastname';
+    const PARTICIPANT_AVATAR          = 'participant_avatar';
+    const PARTICIPANT_POSITION        = 'participant_position';
+    const PARTICIPANT_PHONE           = 'participant_phone';
+    const PARTICIPANT_MOBILE          = 'participant_mobile';
+    const PARTICIPANT_ADDRESS         = 'participant_address';
+    const PARTICIPANT_ZIPCODE         = 'participant_zipcode';
+    const PARTICIPANT_CITY            = 'participant_city';
+    const PARTICIPANT_COUNTRY         = 'participant_country';
+    const PARTICIPANT_WEBSITE         = 'participant_website';
+    const BILLING_NAME                = 'billing_name';
+    const BILLING_ADDRESS             = 'billing_address';
+    const BILLING_CITY                = 'billing_city';
+    const BILLING_ZIPCODE             = 'billing_zipcode';
+    const BILLING_COUNTRY             = 'billing_country';
+    const BILLING_PHONE               = 'billing_phone';
+    const BILLING_EMAIL               = 'billing_email';
+    const BILLING_ORGANIZATION        = 'billing_organization';
+    const BILLING_VAT_NUMBER          = 'billing_vat_number';
+    const BILLING_EXTRA               = 'billing_extra';
+    const SHEET_TITLE                 = 'sheet_title';
+    const SHEET_ORGANIZATION          = 'sheet_organization';
+    const SHEET_PACKAGE               = 'sheet_package';
+    const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
 
     // Setter
     const PARTICIPANT_DATA = 'participant_data';
@@ -101,6 +102,7 @@ final class Tag
         return [
             self::SHEET_ORGANIZATION,
             self::SHEET_TITLE,
+            self::SHEET_ORGANIZATION_CATEGORY,
         ];
     }
 }
