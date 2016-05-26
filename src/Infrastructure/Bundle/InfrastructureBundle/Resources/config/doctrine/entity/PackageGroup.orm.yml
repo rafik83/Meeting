@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\PackageGroup:
+    type:  entity
+    table: package_group
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        rank:
+            type: integer
+    manyToOne:
+        package:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: groups
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageGroupTranslation
+            mappedBy: group
+            cascade: ["persist"]
+            indexBy: locale
+        optionRanks:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageOptionRank
+            mappedBy: group
+            cascade: ["persist"]
+            orderBy: { rank: ASC }
+            orphanRemoval: true

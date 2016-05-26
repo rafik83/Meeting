@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\PackageOption:
+Proximum\Vimeet\Domain\Model\PackageOptionRank:
     type:  entity
     table: package_option
     id:
@@ -10,8 +10,8 @@ Proximum\Vimeet\Domain\Model\PackageOption:
         rank:
             type: integer
     manyToOne:
-        package:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package
-            inversedBy: options
+        group:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
+            inversedBy: optionRanks
         option:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

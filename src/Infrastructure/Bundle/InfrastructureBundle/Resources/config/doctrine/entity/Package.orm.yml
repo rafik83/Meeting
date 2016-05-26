@@ -36,8 +36,8 @@ Proximum\Vimeet\Domain\Model\Package:
             cascade: ["persist"]
             orderBy: { rank: ASC }
             orphanRemoval: true
-        options:
-            targetEntity: Proximum\Vimeet\Domain\Model\PackageOption
+        groups:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
             mappedBy: package
             cascade: ["persist"]
             orderBy: { rank: ASC }

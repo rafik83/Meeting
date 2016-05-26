@@ -40,8 +40,15 @@ class UpdateHandler
             ->choosePlans($update->plans->plans)
             ->chooseParticipant($update->participantAndPlanning->participant)
             ->choosePlanning($update->participantAndPlanning->planning)
-            ->chooseOptions($update->options->options)
         ;
+
+        foreach ($update->options->groups as $rank => $group) {
+            foreach ($update->package->getEvent()->getLocales() as $locale) {
+                $update->package->group($rank)->translate($locale, $group->getLabel($locale));
+            }
+
+            $update->package->group($rank)->setOptions($group->options);
+        }
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(

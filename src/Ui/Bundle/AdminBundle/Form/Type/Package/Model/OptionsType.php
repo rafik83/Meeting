@@ -13,16 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model;
 use Proximum\Vimeet\Application\Command\Package\Model\Options;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OptionsType extends AbstractType
@@ -36,20 +32,18 @@ class OptionsType extends AbstractType
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('labels', CollectionType::class, [
+            ->add('labels', TranslationsType::class, [
                 'entry_type' => TextType::class,
+                'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('options', CollectionType::class, [
-                'allow_add'     => true,
-                'allow_delete'  => true,
-                'entry_type'    => ProductChoiceType::class,
-                'entry_options' => [
-                    'label'            => false,
-                    'event'            => $options['event'],
-                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
-                    },
+            ->add('groups', CollectionType::class, [
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'entry_type'     => GroupType::class,
+                'entry_options'  => [
+                    'label' => false,
+                    'event' => $options['event'],
                 ]
             ])
         ;
@@ -65,15 +59,5 @@ class OptionsType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Options::class,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        foreach ($view->children['labels'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
     }
 }

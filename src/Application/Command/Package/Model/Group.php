@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package\Model;
 
 use Proximum\Vimeet\Domain\Model\Product;
 
-class Options
+class Group
 {
     /**
      * @var array
@@ -20,27 +20,20 @@ class Options
     public $labels;
 
     /**
-     * @var bool
-     */
-    public $enabled;
-
-    /**
      * @var Product[]
      */
-    public $groups;
+    public $options;
 
     /**
-     * Options constructor.
+     * Group constructor.
      *
      * @param array     $labels
-     * @param bool      $enabled
-     * @param Group[]   $groups
+     * @param Product[] $options
      */
-    public function __construct(array $labels, $enabled, array $groups)
+    public function __construct(array $labels = [], array $options = [])
     {
         $this->labels  = $labels;
-        $this->enabled = $enabled;
-        $this->groups  = $groups;
+        $this->options = $options;
     }
 
     /**

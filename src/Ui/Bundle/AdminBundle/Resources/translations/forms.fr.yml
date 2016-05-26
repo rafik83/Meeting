@@ -841,10 +841,18 @@ form:
                         label: Activé
                     labels:
                         label: Libellé de l'étape
-                    options:
-                        label: Options
-                        label_add: Ajouter une option
+                    groups:
+                        label: Groupes
+                        label_add: Ajouter un groupe
                         label_delete: Supprimer
+                        prototype:
+                            children:
+                                labels:
+                                    label: Libellé du groupe
+                                options:
+                                    label: Options
+                                    label_add: Ajouter une option
+                                    label_delete: Supprimer
 
 
             templateData:

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class PackageOption
+class PackageOptionRank
 {
     /**
      * @var int
@@ -18,9 +18,9 @@ class PackageOption
     private $id;
 
     /**
-     * @var Package
+     * @var PackageGroup
      */
-    private $package;
+    private $group;
 
     /**
      * @var Product
@@ -35,19 +35,19 @@ class PackageOption
     /**
      * PackageOption constructor.
      *
-     * @param Package $package
-     * @param Product          $option
-     * @param int              $rank
+     * @param PackageGroup $group
+     * @param Product      $option
+     * @param int          $rank
      */
-    public function __construct(Package $package, Product $option, $rank)
+    public function __construct(PackageGroup $group, Product $option, $rank)
     {
         if (!$option->isOption()) {
-            throw new \DomainException(sprintf('Product of type "%s" expected. Type "%s" given.', Product::TYPE_Option, $option->getType()));
+            throw new \DomainException(sprintf('Product of type "%s" expected. Type "%s" given.', Product::TYPE_OPTION, $option->getType()));
         }
 
-        $this->package = $package;
-        $this->option           = $option;
-        $this->rank             = $rank;
+        $this->group  = $group;
+        $this->option = $option;
+        $this->rank   = $rank;
     }
 
     /**
@@ -61,13 +61,13 @@ class PackageOption
     }
 
     /**
-     * Get package
+     * Get group
      *
-     * @return Package
+     * @return PackageGroup
      */
-    public function getPackage()
+    public function getGroup()
     {
-        return $this->package;
+        return $this->group;
     }
 
     /**

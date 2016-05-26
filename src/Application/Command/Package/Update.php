@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Proximum\Vimeet\Application\Command\Package\Model\Group;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\PackageGroup;
 
 class Update
 {
@@ -72,7 +74,9 @@ class Update
         $this->options                = new Model\Options(
             $optionsLabels,
             $package->isOptionsEnabled(),
-            $package->getOptions()
+            array_map(function (PackageGroup $group) {
+                return new Group($group->getLabels(), $group->getOptions());
+            }, $package->getGroups())
         );
     }
 }

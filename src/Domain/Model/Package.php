@@ -48,7 +48,7 @@ class Package
     /**
      * @var ArrayCollection
      */
-    private $options;
+    private $groups;
 
     /**
      * @var
@@ -88,7 +88,7 @@ class Package
         $this->title        = $title;
         $this->createdAt    = $createdAt;
         $this->plans        = new ArrayCollection();
-        $this->options      = new ArrayCollection();
+        $this->groups       = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
@@ -151,16 +151,15 @@ class Package
     }
 
     /**
-     * Get ordered options
+     * Get ordered groups
      *
-     * @return Product[]
+     * @return PackageGroup[]
      */
-    public function getOptions()
+    public function getGroups()
     {
         return $this
-            ->options
+            ->groups
             ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
-            ->map(function (PackageOption $option) { return $option->getOption(); })
             ->toArray();
     }
 
@@ -289,42 +288,17 @@ class Package
     }
 
     /**
-     * @param Product $option
+     * @param int $rank
      *
-     * @return bool
+     * @return PackageGroup
      */
-    public function hasOption(Product $option)
+    public function group($rank)
     {
-        return $this->options->exists(function ($key, PackageOption $pfp) use ($option) {
-            return $pfp->getOption() === $option;
-        });
-    }
-
-    /**
-     * @param Product[] $options
-     *
-     * @return Package
-     */
-    public function chooseOptions(array $options)
-    {
-        // Remove delete options and update rank
-        foreach ($this->options as $option) {
-            $rank = $option instanceof PackageOption && array_search($option->getOption(), $options);
-            if (false === $rank) {
-                $this->options->removeElement($option);
-            } else {
-                $option->setRank($rank);
-            }
+        if (!$this->groups->containsKey($rank)) {
+            $this->groups->set($rank, new PackageGroup($this, $rank));
         }
 
-        // Add new option
-        foreach ($options as $rank => $option) {
-            if (!$this->hasOption($option)) {
-                $this->options->add(new PackageOption($this, $option, $rank));
-            }
-        }
-
-        return $this;
+        return $this->groups->get($rank);
     }
 
     /**
