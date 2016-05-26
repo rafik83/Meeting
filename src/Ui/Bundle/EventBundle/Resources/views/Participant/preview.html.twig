@@ -6,7 +6,7 @@
                     {% if participant.avatar != null %}
                         <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                     {% else %}
-                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first }}{{ participant.lastname|first }}</p>
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
                     {% endif %}
                 </div>
             </div>

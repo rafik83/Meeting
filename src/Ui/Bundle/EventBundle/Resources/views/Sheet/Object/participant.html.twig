@@ -15,7 +15,7 @@
                                 {% if participant.avatar != null %}
                                     <img  src="{{ asset(participant.avatar) }}">
                                 {% else %}
-                                    <p>{{ participant.firstname|first }}{{ participant.lastname|first }}</p>
+                                    <p>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
                                 {% endif %}
                             </div>
                         </a>
