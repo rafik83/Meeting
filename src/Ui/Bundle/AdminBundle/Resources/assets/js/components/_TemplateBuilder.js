@@ -731,7 +731,7 @@ NomenclatureObject.prototype.fill = function ()
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('nomenclature', this.config.nomenclature);
-    this.form.set('mode', this.config.mode ? 'true' : 'false');
+    this.form.set('mode', this.config.mode);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
