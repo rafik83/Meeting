@@ -51,7 +51,7 @@ class Update
         $optionsLabels                = [];
 
         foreach ($package->getEvent()->getLocales() as $locale) {
-            $plansLabels[$locale]               = $package->getPlansLabel($locale);
+            $plansLabels[$locale]                  = $package->getPlansLabel($locale);
             $participantAndPlanningLabels[$locale] = $package->getParticipantAndPlanningLabel($locale);
             $optionsLabels[$locale]                = $package->getOptionsLabel($locale);
         }
