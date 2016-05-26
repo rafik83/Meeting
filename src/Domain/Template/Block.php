@@ -263,6 +263,30 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return array
+     */
+    public function getAllTaggedDatas()
+    {
+        $tagged = [];
+
+        foreach ($this->getEditableObjects() as $object) {
+            foreach ($object->getTags() as $tag) {
+                if (!$object instanceof Object\ContentObjectInterface) {
+                    continue;
+                }
+
+                if ($object instanceof Object\Nomenclature) {
+                    $tagged[$tag][] = $object->getNomenclatureLabel();
+                } else {
+                    $tagged[$tag][] = $object->getContentValue();
+                }
+            }
+        }
+
+        return $tagged;
+    }
+
+    /**
      * @return TemplateObject\Image[]
      */
     public function getImageObjects()
