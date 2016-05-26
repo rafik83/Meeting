@@ -65,7 +65,7 @@ class NomenclatureDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale', 'object']);
+        $resolver->setRequired(['locale', 'object', 'placeholder']);
         $resolver->setDefaults([
             'label'       => false,
             'data_class'  => Object\Nomenclature::class,
@@ -124,6 +124,7 @@ class NomenclatureDataType extends AbstractType
         $form->add('item', SinglesType::class, [
             'nomenclature' => $nomenclature,
             'locale'       => $options['locale'],
+            'placeholder'  => $options['placeholder'],
             'label'        => false,
         ]);
     }
