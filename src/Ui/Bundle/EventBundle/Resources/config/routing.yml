@@ -134,16 +134,26 @@ event_sheet_update:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
 
+event_sheet_add_participant:
+    path:   /sheet/{locale}/{key}/participant/form
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:addParticipant }
+
+event_sheet_handle_participant:
+    path:   /sheet/{locale}/{key}/participant
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Sheet:handleParticipant }
+
+
 #
 # Sheet - Participant
 #
-
-event_sheet_add_participant:
-    path:     /sheet/{sheet}/add_participant
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Participant:add }
 
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}
