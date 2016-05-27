@@ -46,10 +46,17 @@ class PlansType extends AbstractType
                 'entry_options' => [
                     'label'            => false,
                     'event'            => $options['event'],
+                    'placeholder'      => '',
                     'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                         return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLAN]);
                     },
-                ]
+                    'attr'             => [
+                        'data-shared-choices' => 'plans'
+                    ],
+                ],
+                'attr'             => [
+                    'data-shared-choices-collection' => 'plans'
+                ],
             ])
         ;
     }

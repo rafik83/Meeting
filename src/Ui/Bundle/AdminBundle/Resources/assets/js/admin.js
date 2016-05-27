@@ -8,6 +8,8 @@ var $                    = require('jquery'),
     SelectPackageProduct = require('./components/_SelectPackageProduct'),
     Batch                = require('./components/_Batch'),
     Slots                = require('./components/_Slots'),
+    SharedChoices        = require('./components/_SharedChoices'),
+    SharedChoicesCollection        = require('./components/_SharedChoicesCollection'),
     Update               = require('./components/_Update');
 
 require('elao-form.js');
@@ -16,7 +18,11 @@ require('elao-form.js');
 
 function init(target) {
 
-    $('[data-collection]', target).collection().on('collection:added', function (event) { init(event.target); });
+    $('[data-collection]', target).collection()
+        .on('collection:added', function (event, item) { init(item.element.get(0)); })
+        .on('collection:deleted', function (event, item) {
+
+        });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
@@ -78,6 +84,14 @@ function init(target) {
     });
 
     new SelectPackageProduct();
+
+    [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
+        $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
+    });
+
+    //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {
+    //    new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]');
+    //});
 }
 
 // Call init function when element is added to DOM
