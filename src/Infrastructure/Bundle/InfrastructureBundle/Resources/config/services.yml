@@ -199,6 +199,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.template_data_factory'
             - '@components.token.user.activate_account_token_generator'
             - '@repository.user_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
