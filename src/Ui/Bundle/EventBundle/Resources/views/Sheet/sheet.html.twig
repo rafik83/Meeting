@@ -38,11 +38,14 @@
 
     </section>
 
-    <div class="modal fade clear-on-hidden-modal{% if form is defined %} show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+    <div class="modal fade clear-on-hidden-modal{% if form is defined or form_participant is defined %} show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 {% if form is defined %}
                     {{ include('EventBundle:Sheet:form.html.twig', { 'form': form, 'label': label, 'uid': uid, 'type': form.vars.data.type }) }}
+                {% elseif form_participant is defined %}
+                    {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'label': label }) }}
+
                 {% endif %}
             </div>
         </div>
