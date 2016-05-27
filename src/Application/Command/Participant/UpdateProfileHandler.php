@@ -50,9 +50,10 @@ class UpdateProfileHandler
         foreach ($updateProfile->data as $key => $value) {
             if ($templateData->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
                 $participantData = array_merge($participantData, [$key => $value]);
-            }
 
-            $templateData->getObject($key)->setData($value);
+                // Set the data on the TemplateData to use it with the accountSynchronizer
+                $templateData->getObject($key)->setData($value);
+            }
         }
 
         $updateProfile->participant->setData($participantData);
