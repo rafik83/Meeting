@@ -45,14 +45,13 @@ class ActivateAccountController extends Controller
         }
 
         $command = new ActivateAccountPassword($user);
-        $form    = $this->createForm(ActivateAccountPasswordType::class, $command, ['submit' => true]);
+        $form    = $this->createForm(ActivateAccountPasswordType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
             $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
-            $this->addFlash('success', 'flash.activate_account.success');
 
-            return $this->redirectToRoute('event_sheet_update_participant', [
+            return $this->redirectToRoute('event_account_participant_profile', [
                 'sheet'       => $sheet->getId(),
                 'participant' => $sheet->getUserParticipant($user)->getId()
             ]);
