@@ -20,9 +20,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GroupType extends AbstractType
@@ -39,17 +36,17 @@ class GroupType extends AbstractType
                 'required'   => false,
             ])
             ->add('options', CollectionType::class, [
-                'allow_add'     => true,
-                'allow_delete'  => true,
-                'entry_type'    => ProductChoiceType::class,
+                'entry_type'     => ProductChoiceType::class,
+                'allow_add'      => true,
+                'allow_delete'   => true,
                 'prototype_name' => '__option__',
-                'entry_options' => [
+                'entry_options'  => [
                     'label'            => false,
                     'event'            => $options['event'],
                     'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                         return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
                     },
-                ]
+                ],
             ])
         ;
     }
@@ -64,15 +61,5 @@ class GroupType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Group::class,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        foreach ($view->children['labels'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
     }
 }

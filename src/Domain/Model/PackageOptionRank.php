@@ -89,4 +89,18 @@ class PackageOptionRank
     {
         return $this->rank;
     }
+
+    /**
+     * Set rank
+     *
+     * @param int $rank
+     *
+     * @return PackageOptionRank
+     */
+    public function setRank($rank)
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
 }

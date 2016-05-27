@@ -16,9 +16,7 @@ require('elao-form.js');
 
 function init(target) {
 
-    $('[data-collection]', target).collection().on('collection:added', function (event) {
-        init(event.target);
-    });
+    $('[data-collection]', target).collection().on('collection:added', function (event) { init(event.target); });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 

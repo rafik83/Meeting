@@ -59,4 +59,12 @@ class ProductChoiceType extends AbstractType
     {
         return ChoiceType::class;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'product_choice';
+    }
 }
