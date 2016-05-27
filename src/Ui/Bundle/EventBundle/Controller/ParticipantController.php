@@ -76,12 +76,11 @@ class ParticipantController extends Controller
         }
 
         $profileTemplate = $this->get('template.template_data_factory')->createProfileTemplate($participant, $locale);
-        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
 
         $form = $this->createForm(ProfileType::class, $profileTemplate, [
-            'event'    => $event,
             'locale'   => $locale,
             'template' => $profileTemplate,
+            'country'  => $eventView->country,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
@@ -55,9 +54,9 @@ class ProfileType extends AbstractType
             'data_class'        => Template\TemplateData::class,
             'validation_groups' => ['Default', 'profile']
         ]);
-        $resolver->setRequired(['event', 'template', 'locale']);
+        $resolver->setRequired(['template', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
-        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('country', 'string');
         $resolver->setAllowedTypes('template', Template\TemplateData::class);
     }
 
