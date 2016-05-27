@@ -17,10 +17,11 @@ use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -127,13 +128,13 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Object $object
-     * @param string $locale
-     * @param string $key
+     * @param Template\Object $object
+     * @param string          $locale
+     * @param string          $key
      *
      * @return Form
      */
-    private function createObjectForm(Object $object, $locale, $key)
+    private function createObjectForm(Template\Object $object, $locale, $key)
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -141,6 +142,7 @@ class SheetController extends Controller
             'media'         => Data\MediaCollectionDataType::class,
             'collection'    => Data\ItemCollectionDataType::class,
             'nomenclature'  => Data\NomenclatureDataType::class,
+            'image'         => Data\ImageDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {
@@ -179,6 +181,22 @@ class SheetController extends Controller
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if ($object instanceof Template\Object\Image) {
+                $file = $form->get('file')->getData();
+
+                if ($file instanceof UploadedFile) {
+                    $image        = $object->getImage();
+                    $fileStorage  = $this->get('adapter.local_file_storage');
+
+                    if (null !== $image) {
+                        $fileStorage->remove($image);
+                    }
+
+                    $newImage = $fileStorage->upload($file);
+                    $object->setImage($newImage);
+                }
+            }
+
             $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
             return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);

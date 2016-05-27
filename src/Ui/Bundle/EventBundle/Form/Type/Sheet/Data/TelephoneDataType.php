@@ -33,7 +33,8 @@ class TelephoneDataType extends AbstractType
                 'required'    => $telephone->getOption('required'),
                 'placeholder' => $telephone->getOption('placeholder')[$locale],
                 'attr'        => [
-                    'class' => 'telephone-intl-input',
+                    'class'                => 'telephone-intl-input',
+                    'data-initial-country' => strtolower($options['country']),
                 ]
             ])
         ;
@@ -44,7 +45,7 @@ class TelephoneDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['object', 'locale']);
+        $resolver->setRequired(['object', 'locale', 'country']);
         $resolver->setAllowedTypes('object', Object\Telephone::class);
         $resolver->setDefaults([
             'label'      => false,

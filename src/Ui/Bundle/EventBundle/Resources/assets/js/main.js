@@ -30,7 +30,7 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
-            initialCountry: 'auto',
+            initialCountry: $(element).data('initial-country'),
             preferredCountries: [],
             nationalMode: false
         });
@@ -53,7 +53,7 @@ function init (target) {
     $('.show-modal').modal('show');
 
     [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) { new SelectParent(element) });
-    [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
+    [].forEach.call(target.querySelectorAll('[data-image-preview]'), function (element) { new UploadPreview(element, element.getAttribute('data-image-preview')) });
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });

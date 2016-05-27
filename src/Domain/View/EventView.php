@@ -55,6 +55,13 @@ class EventView implements EventInterface
     public $asset;
 
     /**
+     * ISO 3166-1 alpha-2 country code
+     *
+     * @var string
+     */
+    public $country;
+
+    /**
      * EventView constructor.
      *
      * @param int    $id
@@ -65,9 +72,19 @@ class EventView implements EventInterface
      * @param array  $locales
      * @param string $timeZone
      * @param string $asset
+     * @param string $country
      */
-    public function __construct($id, $title, $description, $locale, $fallback, array $locales, $timeZone, $asset)
-    {
+    public function __construct(
+        $id,
+        $title,
+        $description,
+        $locale,
+        $fallback,
+        array $locales,
+        $timeZone,
+        $asset,
+        $country
+    ) {
         $this->id          = $id;
         $this->title       = $title;
         $this->description = $description;
@@ -76,6 +93,7 @@ class EventView implements EventInterface
         $this->locales     = $locales;
         $this->timeZone    = $timeZone;
         $this->asset       = $asset;
+        $this->country     = $country;
     }
 
     /**

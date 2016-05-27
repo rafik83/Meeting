@@ -48,7 +48,14 @@ class UpdateHandler
         $colorUpdated = $update->isColorsUpdated();
 
         $event = $update->event;
-        $event->update($update->title, $update->locales, $update->fallback, $update->mode, $update->vat);
+        $event->update(
+            $update->title,
+            $update->locales,
+            $update->fallback,
+            $update->mode,
+            $update->vat,
+            $update->country
+        );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 
         $this->updateTranslatons($update);

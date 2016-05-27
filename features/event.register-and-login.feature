@@ -77,10 +77,10 @@ Feature: Register and login user
     And I press "common.next"
     Then I should be on this page "/fr/participate/1"
     When I fill in the following:
-      | Prénom             | Paul        |
-      | Nom                | Dupont      |
-      | Téléphone portable | +0698765432 |
-      | Téléphone fixe     | +0198765432 |
+      | Prénom             | Paul         |
+      | Nom                | Dupont       |
+      | Téléphone portable | +33698765432 |
+      | Téléphone fixe     | +33198765432 |
     And I select "Informatique" from "block[6c4a3a4f][item][first]"
     And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
     And I press "common.next"

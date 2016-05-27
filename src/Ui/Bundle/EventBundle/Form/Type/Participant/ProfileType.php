@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
@@ -37,7 +36,7 @@ class ProfileType extends AbstractType
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
-                $this->addTelephone($key, $builder, $object, $options['locale']);
+                $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\Object\Country) {
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
@@ -55,9 +54,9 @@ class ProfileType extends AbstractType
             'data_class'        => Template\TemplateData::class,
             'validation_groups' => ['Default', 'profile']
         ]);
-        $resolver->setRequired(['event', 'template', 'locale']);
+        $resolver->setRequired(['template', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
-        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('country', 'string');
         $resolver->setAllowedTypes('template', Template\TemplateData::class);
     }
 
@@ -84,8 +83,9 @@ class ProfileType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
-            'locale' => $locale,
-            'object' => $object,
+            'locale'      => $locale,
+            'object'      => $object,
+            'placeholder' => $object->getOption('label')[$locale],
         ]);
     }
 
@@ -108,12 +108,14 @@ class ProfileType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
+     * @param string               $country
      */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
-            'object' => $object,
-            'locale' => $locale,
+            'object'  => $object,
+            'locale'  => $locale,
+            'country' => $country,
         ]);
     }
 

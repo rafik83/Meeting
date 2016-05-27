@@ -194,13 +194,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
-    vimeet_infrastructure.vimeet.application.command.participant.update_handler:
-        class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@components.participant.participant_manager'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Update }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
