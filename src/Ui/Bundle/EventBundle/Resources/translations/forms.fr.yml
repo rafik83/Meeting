@@ -37,6 +37,10 @@ form:
                 label: URL
             submit:
                 label: Enregistrer
+    sheet_image_data:
+        children:
+            submit:
+                label: Enregister
     sheet_media_collection_data:
         children:
             medias:

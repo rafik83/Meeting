@@ -11,12 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
-use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Template\Object\Image;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -340,19 +339,17 @@ class RegisterController extends Controller
         $fileStorage  = $this->get('adapter.local_file_storage');
 
         foreach ($imageObjects as $key => $object) {
-            if ($form->has($key) && $form->get($key)->getData() !== null) {
-                $file = $form->get($key)->getData();
+            if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
+                $file = $form->get($key)->get('file')->getData();
 
-                if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
-                    if ($form->has($key) && '' !== $object->getContentValue() && $form->get($key)->getData() !== null) {
+                if ($file instanceof UploadedFile && $file !== null) {
+                    if ('' !== $object->getContentValue()) {
                         $fileStorage->remove($object->getContentValue());
                     }
 
-                    if ($form->has($key) && $form->get($key)->getData() !== null) {
-                        $data[$key]['image'] = $fileStorage->upload($form->get($key)->getData());
-                    }
+                    $data[$key]['image'] = $fileStorage->upload($file);
                 } else {
-                    $form->get($key)->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
                 }
             }
         }
