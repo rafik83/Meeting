@@ -1,0 +1,9 @@
+Proximum\Vimeet\Application\Command\Participant\Add:
+    properties:
+        firstName:
+            - NotBlank: ~
+        lastName:
+            - NotBlank: ~
+        email:
+            - NotBlank: ~
+            - Email: ~
