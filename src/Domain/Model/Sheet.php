@@ -375,7 +375,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     public function getUserParticipant(User $user)
     {
         foreach ($this->participants as $participant) {
-            if ($participant->getUser()->getId() === $user->getId()) {
+            if ($participant->getUser() === $user) {
                 return $participant;
             }
         }
