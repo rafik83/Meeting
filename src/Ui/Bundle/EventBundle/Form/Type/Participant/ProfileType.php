@@ -37,7 +37,7 @@ class ProfileType extends AbstractType
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
-                $this->addTelephone($key, $builder, $object, $options['locale']);
+                $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\Object\Country) {
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
@@ -108,12 +108,14 @@ class ProfileType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
+     * @param string               $country
      */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
-            'object' => $object,
-            'locale' => $locale,
+            'object'  => $object,
+            'locale'  => $locale,
+            'country' => $country,
         ]);
     }
 
