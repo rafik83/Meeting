@@ -28,12 +28,17 @@ class Add
     /**
      * @var string
      */
-    public $email;
+    public $firstName;
 
     /**
-     * @var array
+     * @var string
      */
-    public $data;
+    public $lastName;
+
+    /**
+     * @var string
+     */
+    public $email;
 
     /**
      * @var Participant
