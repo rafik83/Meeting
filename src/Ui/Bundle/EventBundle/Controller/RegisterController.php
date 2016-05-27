@@ -11,14 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
-<<<<<<< d14ee1b2c2db7997649f64b3944e73fbc518c9f2
-=======
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Template\Object\Image;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
->>>>>>> 446 - Adapt controllers
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
