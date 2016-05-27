@@ -71,3 +71,11 @@ form:
         children:
             items:
                 label: Sélectionnez vos compétences
+    add_participant:
+        children:
+            firstName:
+                placeholder: Prénom
+            lastName:
+                placeholder: NOM
+            email:
+                placeholder: E-mail
