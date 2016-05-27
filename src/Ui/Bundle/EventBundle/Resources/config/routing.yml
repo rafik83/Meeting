@@ -145,14 +145,6 @@ event_sheet_add_participant:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Participant:add }
 
-event_sheet_update_participant:
-    path:     /sheet/{sheet}/update_participant/{participant}
-    requirements:
-        sheet: \d+
-        participant: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Participant:update }
-
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}
     requirements:

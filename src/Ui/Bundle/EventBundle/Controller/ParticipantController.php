@@ -12,16 +12,15 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
-use Proximum\Vimeet\Application\Command\Participant\Update;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
 use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
-use Proximum\Vimeet\Application\Exception\Participant\UpdateNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddParticipantType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -143,52 +142,6 @@ class ParticipantController extends Controller
         }
 
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'form'      => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request     $request
-     * @param EventView   $eventView
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if (!$this->get('components.participant.participant_manager')->isUserAllowedToEditParticipant($sheet, $participant, $this->getUser())) {
-            throw $this->createAccessDeniedException('You are not allowed to update this participant');
-        }
-
-        $updateParticipant = new Update($sheet, $this->getUser(), $participant);
-        $form              = $this->createForm(ParticipantUpdateType::class, $updateParticipant, [
-            'template' => $sheet->getType()->getParticipantTemplate(),
-            'locale'   => $request->getLocale(),
-            'submit'   => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($updateParticipant);
-                $this->addFlash('success', 'flash.sheet.update_participant.success');
-
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
-            } catch (UpdateNotAllowedException $exception) {
-                $this->addFlash('error', 'flash.sheet.update_participant.access_denied');
-            } catch (RequiredDataEmptyException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            }
-        }
-
-        return $this->render('EventBundle:Participant:update.html.twig', [
             'eventView' => $eventView,
             'sheet'     => $sheet,
             'form'      => $form->createView(),
