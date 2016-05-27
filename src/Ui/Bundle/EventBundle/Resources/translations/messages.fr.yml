@@ -25,6 +25,7 @@ common:
     need_help: Besoin d'aide
     next: Suivant
     validate: Valider
+    backToSheet: Retour à la fiche
 
 register:
     register_as: S'inscrire en tant que :
@@ -48,3 +49,5 @@ sheet:
         action:
             add: "Ajouter:"
             edit: Editer
+    participant:
+        sendInvite: Envoyer l'invitation
