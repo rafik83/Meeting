@@ -103,6 +103,16 @@ class Package
     }
 
     /**
+     * Get createdAt
+     *
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * Get event
      *
      * @return Event

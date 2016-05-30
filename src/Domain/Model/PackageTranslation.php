@@ -83,6 +83,26 @@ class PackageTranslation
     }
 
     /**
+     * Get package
+     *
+     * @return Package
+     */
+    public function getPackage()
+    {
+        return $this->package;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
      * Get plansLabel
      *
      * @return string
