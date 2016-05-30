@@ -132,7 +132,7 @@
     <div class="row">
         <ul>
             {% for trace in details.traces %}
-                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|date('d/m/Y H:i')}) }}
+                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
                     {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
                     {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
                 </li>
@@ -151,7 +151,7 @@
                 {{ 'admin.sheet.details.comments.author'|trans({
                     '%firstname%': comment.author.firstname,
                     '%lastname%': comment.author.lastname,
-                    '%date%': comment.createdAt|date('d/m/Y H:i')
+                    '%date%': comment.createdAt|localizeddate('medium', 'short', app.request.locale)
                 }) }}
             </span>
             </blockquote>

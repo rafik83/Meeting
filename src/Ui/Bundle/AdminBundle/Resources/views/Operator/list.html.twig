@@ -38,7 +38,7 @@
                 <td>{{ operator.lastname }}</td>
                 <td>{{ operator.firstname }}</td>
                 <td>{{ operator.email }}</td>
-                <td>{{ operator.lastLoginAt|date('d/m/Y H:i') }}</td>
+                <td>{{ operator.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td>
                     <ul>
                         {% for event in operator.events %}

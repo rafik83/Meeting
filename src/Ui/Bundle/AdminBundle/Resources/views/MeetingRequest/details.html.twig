@@ -35,8 +35,8 @@
                     {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
             </td>
-            <td>{{ meetingRequestView.createdAt|date('d/m/Y H:i') }}</td>
-            <td>{{ meetingRequestView.stateUpdatedAt|date('d/m/Y H:i') }}</td>
+            <td>{{ meetingRequestView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+            <td>{{ meetingRequestView.stateUpdatedAt|localizeddate('medium', 'short', app.request.locale) }}</td>
         </tr>
         </tbody>
     </table>
@@ -52,7 +52,7 @@
             {{ message.content }}
             <br>
             <span class="label label-default">
-                {{ message.createdAt|date('d/m/Y H:i') }}
+                {{ message.createdAt|localizeddate('medium', 'short', app.request.locale) }}
             </span>
         </blockquote>
     {% endfor %}

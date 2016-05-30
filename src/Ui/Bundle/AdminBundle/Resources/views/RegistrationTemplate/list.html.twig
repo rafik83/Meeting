@@ -15,7 +15,7 @@
         {% for template in templates %}
             <tr>
                 <td>{{ template.title }}</td>
-                <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">{{ 'admin.template.registration.table.content.edit'|trans }}</a>
                 </td>
@@ -50,7 +50,7 @@
                     </ul>
                 {% endif %}
             </td>
-            <td>{{ template.createdAt|date('d/m/Y H:i') }}</td>
+            <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
             <td class="text-right">
                 <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">{{ 'admin.template.registration.table.content.edit'|trans }}</a>
             </td>

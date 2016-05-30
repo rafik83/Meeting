@@ -93,7 +93,7 @@
                     <td>
                         <span class="label label-default"
                             {% if sheet.state == 'accepted' or sheet.state == 'validated' %}
-                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|date('d/m/Y H:i')}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
+                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
                             {% endif %}
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
@@ -104,10 +104,10 @@
                     </td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
-                    <td>{{ sheet.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                     <td>
                         {% if sheet.lastLoginAt %}
-                            {{ sheet.lastLoginAt|date('d/m/Y H:i') }}
+                            {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
                         {% endif %}
                     </td>
                     <td>{{ sheet.follower }}</td>
