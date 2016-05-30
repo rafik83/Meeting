@@ -71,7 +71,7 @@ class CreatePlanType extends AbstractType
                     'event' => $options['event'],
                 ],
                 'attr' => [
-                    'data-collection-product-included' => 'data-collection-product-included',
+                    'data-shared-choices-collection' => 'products',
                 ],
             ]);
     }

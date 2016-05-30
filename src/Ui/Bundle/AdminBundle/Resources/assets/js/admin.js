@@ -6,10 +6,8 @@ var $                       = require('jquery'),
     Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
-    SelectPackageProduct    = require('./components/_SelectPackageProduct'),
     Batch                   = require('./components/_Batch'),
     Slots                   = require('./components/_Slots'),
-    SharedChoices           = require('./components/_SharedChoices'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update');
@@ -107,8 +105,6 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
-
-    new SelectPackageProduct();
 
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
