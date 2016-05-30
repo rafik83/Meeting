@@ -158,3 +158,21 @@
         </div>
     {% endif %}
 {% endblock %}
+
+{% block plans_item_row %}
+    <div {{ block('row_container_attributes') }}>
+        <div class="form-inline plan-choice">
+            <div class="form-group sort-handle">
+                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                <i class="glyphicon glyphicon-product-plan"></i>
+            </div>
+            <div class="form-group">
+                {{ form_widget(form) }}
+            </div>
+            <div class="form-group">
+                {{ block('collection_delete_button') }}
+            </div>
+        </div>
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}

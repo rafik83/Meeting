@@ -3,6 +3,7 @@ var $                       = require('jquery'),
     tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAll                = require('./components/_CheckAll'),
+    Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
     SelectPackageProduct    = require('./components/_SelectPackageProduct'),
@@ -28,6 +29,23 @@ function init(target) {
                     o.refresh();
                 }
             });
+
+            /*
+            item.element.find('.collection').each(function (key, element) {
+
+                console.log(element);
+
+                var collection = $(element).data('collection');
+
+                console.log(collection); // => undefined
+
+                // trigger collection:deleted on sub collection items
+                //for (var i = 0, i < collection.items.length, i++) {
+                //    collection.element.trigger('collection:deleted', [collection.items[i]]);
+                //}
+            });
+            */
+
         });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
@@ -77,6 +95,9 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
+    [].forEach.call(target.querySelectorAll('[data-sortable]'), function (element) {
+        new Sortable(element, { handle: '.sort-handle' });
+    });
 
     [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));

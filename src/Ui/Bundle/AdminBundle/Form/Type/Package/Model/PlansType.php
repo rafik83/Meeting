@@ -55,7 +55,8 @@ class PlansType extends AbstractType
                     ],
                 ],
                 'attr'             => [
-                    'data-shared-choices-collection' => 'plans'
+                    'data-shared-choices-collection' => 'plans',
+                    'data-sortable'                  => '',
                 ],
             ])
         ;
