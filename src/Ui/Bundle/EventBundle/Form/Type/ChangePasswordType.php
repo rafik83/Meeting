@@ -22,6 +22,16 @@ class ChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => ChangePassword::class,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,16 +41,6 @@ class ChangePasswordType extends AbstractType
                 'invalid_message' => 'validators.password.mismatch',
             ])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => ChangePassword::class,
-        ]);
     }
 
     /**
