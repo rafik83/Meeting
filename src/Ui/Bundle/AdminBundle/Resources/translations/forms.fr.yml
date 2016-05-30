@@ -852,7 +852,7 @@ form:
                                 options:
                                     label: Options
                                     label_add: Ajouter une option
-                                    label_delete: Supprimer
+                                    label_delete: "&times;"
 
 
             templateData:
