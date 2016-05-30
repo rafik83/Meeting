@@ -20,7 +20,7 @@ Feature: Change my mail
     When I go to this page "/fr/account/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
-    And I press "form.change_mail.children.submit.label"
+    And I press "common.validate"
     Then I should be on "/fr/"
     And the response status code should be 200
     And I should see "flash.change_mail.success"

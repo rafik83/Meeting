@@ -38,7 +38,6 @@ class AccountController extends Controller
         $changeMail = new ChangeMail($this->getUser(), $eventView);
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
             'action' => $this->generateUrl('event_account_change_mail'),
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
