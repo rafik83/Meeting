@@ -22,27 +22,37 @@ class ProductCollectionType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'product_types', 'collection_group']);
         $resolver->setDefaults([
-           'allow_add'      => true,
-           'allow_delete'   => true,
-           'prototype_name' => '__option__',
-           'entry_type'    => ProductChoiceType::class,
-           'entry_options' => function (Options $options) {
-               return [
-                   'label'            => false,
-                   'event'            => $options['event'],
-                   'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                       return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
-                   },
-               ];
-           }
+            'entry_type'     => ProductChoiceType::class,
+            'allow_add'      => true,
+            'allow_delete'   => true,
+            'prototype_name' => '__option__',
+            'entry_options'  => function (Options $options) {
+                return [
+                    'label'            => false,
+                    'event'            => $options['event'],
+                    'placeholder'      => '',
+                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
+                        return $productRepository->findByEventAndTypes($options['event'], $options['product_types']);
+                    },
+                    'attr'             => [
+                        'data-shared-choices-collection-item' => $options['collection_group'],
+                    ],
+                ];
+            },
+            'attr'             => function (Options $options) {
+                return [
+                    'data-shared-choices-collection' => $options['collection_group'],
+                    'data-sortable'                  => '',
+                ];
+            },
        ]);
     }
 
     public function getBlockPrefix()
     {
-        return 'dsfmljdsmlkjflmkhdflkjsdhglkjsdghgkljdfh';
+        return 'product_collection';
     }
 
     public function getParent()

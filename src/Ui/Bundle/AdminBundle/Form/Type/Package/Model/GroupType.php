@@ -35,26 +35,10 @@ class GroupType extends AbstractType
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('options', CollectionType::class, [
-                'entry_type'     => ProductChoiceType::class,
-                'allow_add'      => true,
-                'allow_delete'   => true,
-                'prototype_name' => '__option__',
-                'entry_options'  => [
-                    'label'            => false,
-                    'event'            => $options['event'],
-                    'placeholder'      => '',
-                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
-                    },
-                    'attr'             => [
-                        'data-shared-choices-collection-item' => 'options'
-                    ],
-                ],
-                'attr'             => [
-                    'data-shared-choices-collection' => 'options',
-                    'data-sortable'                  => '',
-                ],
+            ->add('options', ProductCollectionType::class, [
+                'event'            => $options['event'],
+                'product_types'    => [Product::TYPE_OPTION],
+                'collection_group' => 'options'
             ])
         ;
     }

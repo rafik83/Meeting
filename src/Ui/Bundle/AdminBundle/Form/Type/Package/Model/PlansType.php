@@ -39,25 +39,10 @@ class PlansType extends AbstractType
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('plans', CollectionType::class, [
-                'allow_add'     => true,
-                'allow_delete'  => true,
-                'entry_type'    => ProductChoiceType::class,
-                'entry_options' => [
-                    'label'            => false,
-                    'event'            => $options['event'],
-                    'placeholder'      => '',
-                    'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                        return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLAN]);
-                    },
-                    'attr'             => [
-                        'data-shared-choices-collection-item' => 'plans'
-                    ],
-                ],
-                'attr'             => [
-                    'data-shared-choices-collection' => 'plans',
-                    'data-sortable'                  => '',
-                ],
+            ->add('plans', ProductCollectionType::class, [
+                'event'            => $options['event'],
+                'product_types'    => [Product::TYPE_PLAN],
+                'collection_group' => 'plans'
             ])
         ;
     }
