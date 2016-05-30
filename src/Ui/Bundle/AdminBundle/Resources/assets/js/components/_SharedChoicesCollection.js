@@ -24,7 +24,11 @@ SharedChoicesCollection.prototype.added = function (event, item)
 
 SharedChoicesCollection.prototype.refresh = function ()
 {
-    this.element.find('[data-shared-choices="' + this.name + '"]').data('shared-choices-object').refresh();
+    var object = this.element.find('[data-shared-choices="' + this.name + '"]').data('shared-choices-object');
+
+    if (object !== undefined) {
+        object.refresh();
+    }
 };
 
 module.exports = SharedChoicesCollection;
