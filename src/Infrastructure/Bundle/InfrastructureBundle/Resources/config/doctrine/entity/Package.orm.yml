@@ -30,8 +30,8 @@ Proximum\Vimeet\Domain\Model\Package:
             mappedBy: package
             cascade: ["persist"]
             indexBy: locale
-        plans:
-            targetEntity: Proximum\Vimeet\Domain\Model\PackagePlan
+        planRanks:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackagePlanRank
             mappedBy: package
             cascade: ["persist"]
             orderBy: { rank: ASC }

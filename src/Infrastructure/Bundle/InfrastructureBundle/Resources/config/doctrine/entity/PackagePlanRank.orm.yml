@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\PackagePlan:
+Proximum\Vimeet\Domain\Model\PackagePlanRank:
     type:  entity
     table: package_plan
     id:
@@ -12,6 +12,6 @@ Proximum\Vimeet\Domain\Model\PackagePlan:
     manyToOne:
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
-            inversedBy: plans
+            inversedBy: planRanks
         plan:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

@@ -33,7 +33,7 @@ class Package
     /**
      * @var ArrayCollection
      */
-    private $plans;
+    private $planRanks;
 
     /**
      * @var Product
@@ -87,7 +87,7 @@ class Package
         $this->event        = $event;
         $this->title        = $title;
         $this->createdAt    = $createdAt;
-        $this->plans        = new ArrayCollection();
+        $this->planRanks    = new ArrayCollection();
         $this->groups       = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -144,9 +144,9 @@ class Package
     public function getPlans()
     {
         return $this
-            ->plans
+            ->planRanks
             ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
-            ->map(function (PackagePlan $plan) { return $plan->getPlan(); })
+            ->map(function (PackagePlanRank $plan) { return $plan->getPlan(); })
             ->toArray();
     }
 
@@ -241,7 +241,7 @@ class Package
      */
     public function enable($plansEnabled, $participantAndPlanningEnabled, $optionsEnabled)
     {
-        $this->plansEnabled               = $plansEnabled;
+        $this->plansEnabled                  = $plansEnabled;
         $this->participantAndPlanningEnabled = $participantAndPlanningEnabled;
         $this->optionsEnabled                = $optionsEnabled;
 
@@ -255,7 +255,7 @@ class Package
      */
     public function hasPlan(Product $plan)
     {
-        return $this->plans->exists(function ($key, PackagePlan $pfp) use ($plan) {
+        return $this->planRanks->exists(function ($key, PackagePlanRank $pfp) use ($plan) {
             return $pfp->getPlan() === $plan;
         });
     }
@@ -267,20 +267,22 @@ class Package
      */
     public function choosePlans(array $plans)
     {
-        // Remove delete plans and update rank
-        foreach ($this->plans as $plan) {
-            $rank = $plan instanceof PackagePlan && array_search($plan->getPlan(), $plans);
-            if (false === $rank) {
-                $this->plans->removeElement($plan);
+        // Remove delete plans
+        foreach ($this->planRanks as $planRank) {
+
+            if (!in_array($planRank->getPlan(), $plans)) {
+                $this->planRanks->removeElement($planRank);
             } else {
-                $plan->setRank($rank);
+                $planRank->setRank(array_search($planRank->getPlan(), $plans));
             }
         }
 
         // Add new plan
         foreach ($plans as $rank => $plan) {
             if (!$this->hasPlan($plan)) {
-                $this->plans->add(new PackagePlan($this, $plan, $rank));
+                $this->planRanks->add(new PackagePlanRank($this, $plan, $rank));
+            } else {
+
             }
         }
 

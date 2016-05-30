@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class PackagePlan
+class PackagePlanRank
 {
     /**
      * @var int
@@ -33,7 +33,7 @@ class PackagePlan
     private $rank;
 
     /**
-     * PackagePlan constructor.
+     * PackagePlanRank constructor.
      *
      * @param Package $package
      * @param Product          $plan
@@ -46,8 +46,8 @@ class PackagePlan
         }
 
         $this->package = $package;
-        $this->plan          = $plan;
-        $this->rank             = $rank;
+        $this->plan    = $plan;
+        $this->rank    = $rank;
     }
 
     /**
@@ -95,7 +95,7 @@ class PackagePlan
      *
      * @param int $rank
      *
-     * @return PackagePlan
+     * @return PackagePlanRank
      */
     public function setRank($rank)
     {
