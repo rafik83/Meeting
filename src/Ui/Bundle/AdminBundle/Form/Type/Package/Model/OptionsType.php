@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model;
 
 use Proximum\Vimeet\Application\Command\Package\Model\Options;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
