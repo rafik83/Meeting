@@ -44,7 +44,10 @@ class OptionsType extends AbstractType
                 'entry_options'  => [
                     'label' => false,
                     'event' => $options['event'],
-                ]
+                ],
+                'attr'           => [
+                    'class' => 'package-options-groups'
+                ],
             ])
         ;
     }
