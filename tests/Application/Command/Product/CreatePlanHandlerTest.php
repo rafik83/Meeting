@@ -8,17 +8,17 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Package;
+namespace Proximum\Vimeet\Tests\Application\Command\Plan;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Command\Product\CreatePackage;
-use Proximum\Vimeet\Application\Command\Product\CreatePackageHandler;
+use Proximum\Vimeet\Application\Command\Product\CreatePlan;
+use Proximum\Vimeet\Application\Command\Product\CreatePlanHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
+class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -48,7 +48,7 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
         $product->translate('fr', 'foo', null, 'bar', 'optional');
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
 
-        $create                      = new CreatePackage($event);
+        $create                      = new CreatePlan($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
         $create->availabilityCurrent = $availabilityCurrent;
@@ -63,9 +63,9 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Expected
-        $expectedPackage = new Product(
+        $expectedPlan = new Product(
             $event,
-            Product::TYPE_PACKAGE,
+            Product::TYPE_PLAN,
             $name,
             $image,
             $unitPrice,
@@ -74,19 +74,19 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityMax,
             false
         );
-        $expectedPackage->translate('fr', 'foo', 'bar', 'barContent', 'optional');
-        $expectedPackage->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
-        $expectedPackage->includeProduct($product, 2);
+        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
+        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
+        $expectedPlan->includeProduct($product, 2);
 
         // Mock
         $pacakgeRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $pacakgeRepository->add($expectedPackage)->shouldBeCalled();
+        $pacakgeRepository->add($expectedPlan)->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
 
         // Handler
-        $handler = new CreatePackageHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
+        $handler = new CreatePlanHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
         $handler->handle($create);
     }
 
@@ -118,7 +118,7 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
         $product->translate('fr', 'foo', null, 'bar', 'optional');
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
 
-        $create                      = new CreatePackage($event);
+        $create                      = new CreatePlan($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
         $create->availabilityCurrent = $availabilityCurrent;
@@ -141,9 +141,9 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Expected
-        $expectedPackage = new Product(
+        $expectedPlan = new Product(
             $event,
-            Product::TYPE_PACKAGE,
+            Product::TYPE_PLAN,
             $name,
             $image,
             $unitPrice,
@@ -152,26 +152,26 @@ class CreatePackageHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityMax,
             false
         );
-        $expectedPackage->translate('fr', 'foo', 'bar', 'barContent', 'optional');
-        $expectedPackage->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
-        $expectedPackage->includeProduct($product, 2);
+        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
+        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
+        $expectedPlan->includeProduct($product, 2);
 
-        $feature = new Product\Feature($expectedPackage);
+        $feature = new Product\Feature($expectedPlan);
         $feature->translate('fr', 'Titre', 'Description');
         $feature->translate('en', 'Titre', 'Description');
-        $expectedPackage->addFeature($feature);
+        $expectedPlan->addFeature($feature);
 
         // Mock
         $pacakgeRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $pacakgeRepository->add(Argument::that(function (Product $package) use ($expectedPackage) {
-            return count($package->getFeatures()) === count($expectedPackage->getFeatures());
+        $pacakgeRepository->add(Argument::that(function (Product $plan) use ($expectedPlan) {
+            return count($plan->getFeatures()) === count($expectedPlan->getFeatures());
         }))->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
 
         // Handler
-        $handler = new CreatePackageHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
+        $handler = new CreatePlanHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
         $handler->handle($create);
     }
 }
