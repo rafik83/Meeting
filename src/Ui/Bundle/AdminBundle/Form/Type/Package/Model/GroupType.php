@@ -48,7 +48,7 @@ class GroupType extends AbstractType
                         return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_OPTION]);
                     },
                     'attr'             => [
-                        'data-shared-choices' => 'options'
+                        'data-shared-choices-collection-item' => 'options'
                     ],
                 ],
                 'attr'             => [

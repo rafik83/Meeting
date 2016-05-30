@@ -7,8 +7,8 @@ function SharedChoicesCollection(element, name)
     this.element    = $(element);
     this.name       = name;
 
-    this.element.find('[data-shared-choices="' + this.name + '"]').each(function (key, element) {
-        $(element).data('shared-choices-object', new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]'));
+    this.element.find('[data-shared-choices-collection-item="' + this.name + '"]').each(function (key, element) {
+        $(element).data('shared-choices-collection-item-object', new SharedChoices(element, '[data-shared-choices-collection-item="' + element.getAttribute('data-shared-choices-collection-item') + '"]'));
     }.bind(this));
 
     this.element.on('collection:added', this.added.bind(this));
@@ -17,14 +17,14 @@ function SharedChoicesCollection(element, name)
 
 SharedChoicesCollection.prototype.added = function (event, item)
 {
-    item.element.find('[data-shared-choices="' + this.name + '"]').each(function (key, element) {
-        $(element).data('shared-choices-object', new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]'));
+    item.element.find('[data-shared-choices-collection-item="' + this.name + '"]').each(function (key, element) {
+        $(element).data('shared-choices-collection-item-object', new SharedChoices(element, '[data-shared-choices-collection-item="' + element.getAttribute('data-shared-choices-collection-item') + '"]'));
     });
 };
 
 SharedChoicesCollection.prototype.refresh = function ()
 {
-    var object = this.element.find('[data-shared-choices="' + this.name + '"]').data('shared-choices-object');
+    var object = this.element.find('[data-shared-choices-collection-item="' + this.name + '"]').data('shared-choices-collection-item-object');
 
     if (object !== undefined) {
         object.refresh();
