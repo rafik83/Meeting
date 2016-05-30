@@ -52,7 +52,8 @@ class GroupType extends AbstractType
                     ],
                 ],
                 'attr'             => [
-                    'data-shared-choices-collection' => 'options'
+                    'data-shared-choices-collection' => 'options',
+                    'data-sortable'                  => '',
                 ],
             ])
         ;
