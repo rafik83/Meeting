@@ -10,11 +10,11 @@ function SharedChoices(element, selector)
     this.choice   = this.element.choice().data('choice');
 
     this.choice.addMatcher('my_filter', function (filter, option) {
-        console.log(filter);
         return option.isSelected() || filter.indexOf(option.value) === -1;
     });
 
     this.element.on('change', this.refresh.bind(this));
+    this.element.on('focus', this.refresh.bind(this));
     this.refresh();
 }
 
@@ -22,8 +22,6 @@ SharedChoices.prototype.refresh = function ()
 {
     var siblings = $(this.selector);
     var values = [];
-
-    console.log(siblings);
 
     // Gather selected values & reset all selects
     siblings.each(function (key, element) {
