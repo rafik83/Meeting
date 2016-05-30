@@ -844,7 +844,7 @@ form:
                     groups:
                         label: Groupes
                         label_add: Ajouter un groupe
-                        label_delete: Supprimer
+                        label_delete: "&times;"
                         prototype:
                             children:
                                 labels:

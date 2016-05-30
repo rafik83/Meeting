@@ -192,3 +192,13 @@
         {{ form_errors(form) }}
     </div>
 {% endblock %}
+
+{% block groups_item_row %}
+    <div {{ block('row_container_attributes') }}>
+        <div class="text-right mg-bt">
+            {{ block('collection_delete_button') }}
+        </div>
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
