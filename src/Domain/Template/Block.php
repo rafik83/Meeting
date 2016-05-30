@@ -145,6 +145,26 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getCompanyObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof Object\Image;
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getAvatarObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof Object\Image;
+        });
+    }
+
+    /**
      * @param string $key
      *
      * @return TemplateObject
