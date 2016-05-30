@@ -4,38 +4,11 @@
         <h2>{{ config['label']|localize(locale, fallback) }}</h2>
     </header>
     <div class="section__content">
-        <ul class="list list--users">
+        <div class="list list--users">
             {% for participant in participants.cardViews %}
-            <li class="user clearfix">
-                <div class="user__avatar">
-                    <span class="bullet"></span>
-                    {% if participant.editable %}
-                        <a href="{{ path('event_account_participant_profile', {sheet: participant.sheetId, participant: participant.id}) }}">
-                            <div class="avatar">
-                                {% if participant.avatar != null %}
-                                    <img  src="{{ asset(participant.avatar) }}">
-                                {% else %}
-                                    <p>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% else %}
-                        <div class="avatar">
-                            {% if participant.avatar != null %}
-                                <img  src="{{ asset(participant.avatar) }}">
-                            {% else %}
-                                <p>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="user__infos">
-                    <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
-                    <p class="job">{{ participant.position }}</p>
-                </div>
-            </li>
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
             {% endfor %}
-        </ul>
+        </div>
     </div>
     <footer>
         <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
