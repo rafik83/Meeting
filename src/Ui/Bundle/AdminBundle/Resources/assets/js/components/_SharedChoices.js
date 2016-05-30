@@ -14,7 +14,7 @@ function SharedChoices(element, selector)
     });
 
     this.element.on('change', this.refresh.bind(this));
-    this.element.on('focus', this.refresh.bind(this));
+    //this.element.on('focus', this.refresh.bind(this));
     this.refresh();
 }
 
@@ -26,14 +26,20 @@ SharedChoices.prototype.refresh = function ()
     // Gather selected values & reset all selects
     siblings.each(function (key, element) {
         var choice = $(element).data('choice');
-        values.push(choice.value);
-        choice.reset();
+
+        if (choice !== undefined && typeof choice === 'object') {
+            values.push(choice.value);
+            choice.reset();
+        }
     });
 
     // Filter
     siblings.each(function (key, element) {
         var choice = $(element).data('choice');
-        choice.filter(values, 'my_filter');
+
+        if (choice !== undefined && typeof choice === 'object') {
+            choice.filter(values, 'my_filter');
+        }
     });
 };
 
