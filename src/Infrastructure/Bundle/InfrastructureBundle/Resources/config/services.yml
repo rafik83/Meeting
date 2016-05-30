@@ -742,6 +742,13 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateProfile }
+    command.participant.update_avatar_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
 
     #
     # Security
