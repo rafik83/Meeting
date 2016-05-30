@@ -11,6 +11,7 @@ var $                       = require('jquery'),
     Slots                   = require('./components/_Slots'),
     SharedChoices           = require('./components/_SharedChoices'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
+    SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update');
 
 require('elao-form.js');
@@ -95,9 +96,6 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
-    [].forEach.call(target.querySelectorAll('[data-sortable]'), function (element) {
-        new Sortable(element, { handle: '.sort-handle' });
-    });
 
     [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
@@ -114,6 +112,7 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
+        new SortableCollection(element);
     });
 
     //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {

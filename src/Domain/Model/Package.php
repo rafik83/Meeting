@@ -281,8 +281,6 @@ class Package
         foreach ($plans as $rank => $plan) {
             if (!$this->hasPlan($plan)) {
                 $this->planRanks->add(new PackagePlanRank($this, $plan, $rank));
-            } else {
-
             }
         }
 

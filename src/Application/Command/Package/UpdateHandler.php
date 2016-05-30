@@ -37,12 +37,12 @@ class UpdateHandler
         $update->package
             ->setTitle($update->title)
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
-            ->choosePlans($update->plans->plans)
+            ->choosePlans(array_values($update->plans->plans))
             ->chooseParticipant($update->participantAndPlanning->participant)
             ->choosePlanning($update->participantAndPlanning->planning)
         ;
 
-        foreach ($update->options->groups as $rank => $group) {
+        foreach (array_values($update->options->groups) as $rank => $group) {
             foreach ($update->package->getEvent()->getLocales() as $locale) {
                 $update->package->group($rank)->translate($locale, $group->getLabel($locale));
             }
