@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d094d71ca443ea7f350adef89b8ea086",
+    "hash": "11e905355c366fb747f8c824556ee4ae",
+    "content-hash": "e49baea32a7595e1254c91b321a656a2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -943,16 +944,16 @@
         },
         {
             "name": "elao/form-bundle",
-            "version": "v2.0.1",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormBundle.git",
-                "reference": "b985eda8023a5ee770e73b2bc4d377de227a9177"
+                "reference": "039aea8077fe014d9b8f9aa33fd067ad25ea77f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/b985eda8023a5ee770e73b2bc4d377de227a9177",
-                "reference": "b985eda8023a5ee770e73b2bc4d377de227a9177",
+                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/039aea8077fe014d9b8f9aa33fd067ad25ea77f9",
+                "reference": "039aea8077fe014d9b8f9aa33fd067ad25ea77f9",
                 "shasum": ""
             },
             "require": {
@@ -962,7 +963,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -996,7 +997,7 @@
                 "form",
                 "javascript"
             ],
-            "time": "2016-02-09 10:31:10"
+            "time": "2016-05-30 13:20:19"
         },
         {
             "name": "elao/form-translation-bundle",
@@ -1008,7 +1009,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/60245b345c3bbde8177f5d039c560e8116c615ff",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/28719183ff410f911e6e9cf4e35311e34a7af8da",
                 "reference": "28719183ff410f911e6e9cf4e35311e34a7af8da",
                 "shasum": ""
             },
@@ -1157,7 +1158,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/fef1f2c6237616843e01ab55920d24bdef516805",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSElasticaBundle/zipball/ec53cd0805d0ba53a98f70a91a760071d19f66dc",
                 "reference": "ec53cd0805d0ba53a98f70a91a760071d19f66dc",
                 "shasum": ""
             },
