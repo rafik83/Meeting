@@ -20,10 +20,23 @@ class EditableTextConstraint extends Constraint
     public $key;
 
     /**
+     * @var bool
+     */
+    public $isInBlock = true;
+
+    /**
      * {@inheritdoc}
      */
     public function validatedBy()
     {
         return EditableTextValidator::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
     }
 }

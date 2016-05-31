@@ -1,4 +1,4 @@
 Proximum\Vimeet\Domain\Template\Object\EditableText:
-    getters:
-        content:
-            - Type: { type: string }
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\Object\EditableTextConstraint:
+            isInBlock: false
