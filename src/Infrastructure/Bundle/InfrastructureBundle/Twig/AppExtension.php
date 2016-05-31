@@ -40,7 +40,6 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
-            new \Twig_Extensions_Extension_Intl(),
         ];
     }
 
