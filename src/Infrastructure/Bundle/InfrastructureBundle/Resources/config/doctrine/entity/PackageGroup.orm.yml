@@ -13,12 +13,15 @@ Proximum\Vimeet\Domain\Model\PackageGroup:
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
             inversedBy: groups
+            joinColumn:
+                onDelete: CASCADE
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageGroupTranslation
             mappedBy: group
             cascade: ["persist"]
             indexBy: locale
+            orphanRemoval: true
         optionRanks:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageOptionRank
             mappedBy: group

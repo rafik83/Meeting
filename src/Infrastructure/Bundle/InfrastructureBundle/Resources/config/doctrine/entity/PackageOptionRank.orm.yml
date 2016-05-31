@@ -13,5 +13,9 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         group:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
             inversedBy: optionRanks
+            joinColumn:
+                onDelete: CASCADE
         option:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: CASCADE

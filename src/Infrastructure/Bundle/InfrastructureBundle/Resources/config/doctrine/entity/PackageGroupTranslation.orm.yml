@@ -15,3 +15,5 @@ Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
         group:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

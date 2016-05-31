@@ -30,6 +30,7 @@ Proximum\Vimeet\Domain\Model\Package:
             mappedBy: package
             cascade: ["persist"]
             indexBy: locale
+            orphanRemoval: true
         planRanks:
             targetEntity: Proximum\Vimeet\Domain\Model\PackagePlanRank
             mappedBy: package
