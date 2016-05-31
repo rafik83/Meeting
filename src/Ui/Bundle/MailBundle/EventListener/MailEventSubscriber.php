@@ -178,7 +178,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/completeProfile.html.twig',
-            'user_forgot_password',
+            'user_complete_profile',
             $event->getLocale(),
             $event->getEventView()->title,
             $event->getParticipant()->getId()
