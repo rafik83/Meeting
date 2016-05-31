@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
@@ -153,6 +154,8 @@ class AddHandler
         // Send activation event
         if ($addNewUser) {
             $this->sendActivationEvent($add, $user);
+        } else {
+            $this->sendCompleteProfileEvent($add, $user);
         }
     }
 
@@ -175,5 +178,21 @@ class AddHandler
         );
 
         $this->eventDispatcher->dispatch('user_activate_account', $activateAccountEvent);
+    }
+
+    /**
+     * @param Add  $add
+     * @param User $user
+     */
+    private function sendCompleteProfileEvent(Add $add, User $user)
+    {
+        $completeProfileEvent = new CompleteProfileEvent(
+            $user,
+            $add->eventView,
+            $add->participant,
+            $add->locale
+        );
+
+        $this->eventDispatcher->dispatch('user_complete_profile', $completeProfileEvent);
     }
 }
