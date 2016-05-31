@@ -86,7 +86,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             help:
                                                 fr: ""
-                                            length: "500"
+                                            maxLength: 300
                                             type: "text"
                                             required: false
                         e438c993:
@@ -256,7 +256,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Description"
                                             help:
                                                 fr: "Description"
-                                            length: "500"
+                                            maxLength: 300
                                             type: "text"
                                             required: false
                                 -
