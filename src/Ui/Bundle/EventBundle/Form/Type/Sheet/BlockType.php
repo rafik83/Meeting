@@ -54,14 +54,14 @@ class BlockType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['block', 'locale', 'country']);
-        $resolver->setAllowedTypes('locale', 'string');
-        $resolver->setAllowedTypes('country', 'string');
-        $resolver->setAllowedTypes('block', Template\Block::class);
         $resolver->setDefaults([
             'data_class'        => Template\Block::class,
             'validation_groups' => ['block', 'Default']
         ]);
+        $resolver->setRequired(['block', 'locale', 'country']);
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('country', 'string');
+        $resolver->setAllowedTypes('block', Template\Block::class);
     }
 
     /**

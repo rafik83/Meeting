@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -45,14 +46,13 @@ class ActivateAccountController extends Controller
         }
 
         $command = new ActivateAccountPassword($user);
-        $form    = $this->createForm(ActivateAccountPasswordType::class, $command, ['submit' => true]);
+        $form    = $this->createForm(ActivateAccountPasswordType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
             $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
-            $this->addFlash('success', 'flash.activate_account.success');
 
-            return $this->redirectToRoute('event_sheet_update_participant', [
+            return $this->redirectToRoute('event_account_participant_profile', [
                 'sheet'       => $sheet->getId(),
                 'participant' => $sheet->getUserParticipant($user)->getId()
             ]);
@@ -61,6 +61,25 @@ class ActivateAccountController extends Controller
         return $this->render('EventBundle:ActivateAccount:password.html.twig', [
             'eventView' => $eventView,
             'form'      => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return RedirectResponse
+     */
+    public function completeProfileAction(Participant $participant)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->get('adapter.authentication_manager')->disconnect();
+        }
+
+        $this->addFlash('login_email', $participant->getUser()->getEmail());
+
+        return $this->redirectToRoute('event_account_participant', [
+            'sheet'       => $participant->getSheet()->getId(),
+            'participant' => $participant->getId(),
         ]);
     }
 }

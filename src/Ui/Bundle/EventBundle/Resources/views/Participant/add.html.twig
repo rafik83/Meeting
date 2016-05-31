@@ -1,13 +1,29 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
 
-{% block title 'event.sheet.block.add_participant.title'|trans %}
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        {{ 'sheet.object.action.add'|trans }} {{ label }}
+    </h4>
+</div>
+<div class="modal-body">
+    {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+        <div class="inputs">
+            {{ form_errors(form) }}
 
-{% block content %}
-    <h2>{{ 'event.sheet.block.add_participant.title'|trans }}</h2>
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.email) }}
 
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            {{ form(form) }}
+            <div class="validation">
+                <button type="submit" class="btn">
+                    {{ 'sheet.participant.sendInvite'|trans }}
+                </button>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    {{ form_end(form) }}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'common.backToSheet'|trans }}
+    </button>
+</div>

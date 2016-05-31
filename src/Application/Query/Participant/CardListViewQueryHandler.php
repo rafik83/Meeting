@@ -22,7 +22,8 @@ class CardListViewQueryHandler
     /**
      * @param CardViewQueryHandler   $cardViewQueryHandler
      */
-    public function __construct(CardViewQueryHandler $cardViewQueryHandler) {
+    public function __construct(CardViewQueryHandler $cardViewQueryHandler)
+    {
         $this->cardViewQueryHandler   = $cardViewQueryHandler;
     }
 
@@ -38,7 +39,7 @@ class CardListViewQueryHandler
         $cardListView = new CardListView();
 
         foreach ($participants as $participant) {
-            $editable      = $participant->getUser() === $user || $cardListViewQuery->sheet->getUserParticipant($user)->isOwner();
+            $editable      = $participant->getUser() === $user || $cardListViewQuery->sheet->getUserParticipant($user) !== null && $cardListViewQuery->sheet->getUserParticipant($user)->isOwner();
             $cardViewQuery = new CardViewQuery($participant, $cardListViewQuery->locale, $editable);
 
             $cardListView->cardViews[$participant->getId()] = $this->cardViewQueryHandler->handle($cardViewQuery);

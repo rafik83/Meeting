@@ -378,13 +378,17 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     /**
      * @param User $user
      *
-     * @return Participant
+     * @return Participant|null
      */
     public function getUserParticipant(User $user)
     {
-        return $this->participants->filter(function (Participant $participant) use ($user) {
-            return $participant->getUser() === $user;
-        })->first() ? : null;
+        foreach ($this->participants as $participant) {
+            if ($participant->getUser() === $user) {
+                return $participant;
+            }
+        }
+
+        return null;
     }
 
     /**
