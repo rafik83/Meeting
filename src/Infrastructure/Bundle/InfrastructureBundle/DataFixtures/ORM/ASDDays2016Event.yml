@@ -262,10 +262,10 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             help:
                                                 fr: ""
-                                            length: 500
                                             type: "text"
-                                            required: false
+                                            required: true
                                             translatable: true
+                                            maxLength: 300
                         e438c993:
                             component: "object"
                             type: "nomenclature"
@@ -441,7 +441,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Description"
                                             help:
                                                 fr: "Description"
-                                            length: 500
+                                            maxLength: 500
                                             type: "text"
                                             required: false
                                             translatable: true
@@ -864,7 +864,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             # Lien
             90713a3d: { url: "http://www.onera.fr/" }
             # Description d'activité
-            d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels, des grands industriels et des PME-PMI." } }
+            d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
             # Compétence
             e438c993: { items: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"] }
             # Carousel

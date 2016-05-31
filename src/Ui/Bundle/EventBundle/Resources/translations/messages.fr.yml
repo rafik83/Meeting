@@ -58,5 +58,6 @@ sheet:
         action:
             add: "Ajouter:"
             edit: Editer
+            backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation

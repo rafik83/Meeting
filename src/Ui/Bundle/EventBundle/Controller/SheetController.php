@@ -161,6 +161,7 @@ class SheetController extends Controller
             throw $this->createNotFoundException('No form found for this object');
         }
 
+
         return $this->createForm($types[$object->getType()], $object, [
             'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
             'submit'      => true,
@@ -168,6 +169,7 @@ class SheetController extends Controller
             'help'        => $object->getHelp(),
             'placeholder' => $object->getPlaceholder(),
             'object'      => $object,
+            'required'    => $object->getRequired(),
         ]);
     }
 
