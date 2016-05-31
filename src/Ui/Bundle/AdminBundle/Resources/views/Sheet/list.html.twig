@@ -13,7 +13,7 @@
 
             <div class="input-group">
                 {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
-                {{ form_widget(filter_part_form.sheetName) }}
+                {{ form_widget(filter_part_form.text) }}
             </div>
 
             {{ form_end(filter_part_form) }}
@@ -32,7 +32,7 @@
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#validate-comment">
-                                Valider
+                                {{ 'admin.sheet.validate'|trans }}
                             </a>
                         </li>
                         <li>
@@ -88,7 +88,9 @@
                         <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                             {{ sheet.title }}
                         </a><br>
-                        <small>{{ sheet.owner.firstname }} {{ sheet.owner.lastname }} ({{ sheet.owner.email }})</small><br>
+                        <small>
+                            {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
+                        </small>
                     </td>
                     <td>
                         <span class="label label-default"

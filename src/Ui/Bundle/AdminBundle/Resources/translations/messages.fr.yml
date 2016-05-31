@@ -301,6 +301,7 @@ admin:
         title: Participations
         link: Participations
         read: Voir
+        validate: Valider
         commercialFollowUp: Attribuer le suivi commercial
         impersonate: Impersonnation
         exit_impersonation: Quitter l'impersonnation
