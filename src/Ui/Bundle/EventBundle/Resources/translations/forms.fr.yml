@@ -19,6 +19,12 @@ form:
                 label: Texte
             submit:
                 label: Enregistrer
+        data:
+            maxLength:
+                translations:
+                    plural: caractères restants
+                    singular: caractère restant
+                    reached: Nombre de caractères maximum atteint
     sheet_button_link_data:
         children:
             url:

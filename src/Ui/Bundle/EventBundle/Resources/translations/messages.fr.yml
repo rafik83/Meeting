@@ -33,3 +33,4 @@ sheet:
     object:
         action:
             edit: Editer
+            backToSheet: Retour à la fiche
