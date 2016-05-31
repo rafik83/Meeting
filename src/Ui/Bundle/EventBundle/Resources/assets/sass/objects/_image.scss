@@ -1,11 +1,25 @@
 
 .object--image {
+    margin-bottom: 40px;
 
-    padding-bottom: 20px;
-
-    img {
-        box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
+    a {
         width: 100%;
-    }
+        color: #C3C3C3;
 
+        .placeholder {
+            background-color: #fff;
+            height: 160px;
+            box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
+            text-align: center;
+
+            img {
+                max-height: 160px;
+                max-width: 100%;
+            }
+
+            div {
+                padding-top: 65px;
+            }
+        }
+    }
 }

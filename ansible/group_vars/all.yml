@@ -188,6 +188,8 @@ elao_php_configs:
     config:
       - date.timezone: UTC
       # App
+      - upload_max_filesize: 8M
+      - post_max_size: 8M
 
 elao_php_applications:
   - composer
@@ -230,6 +232,7 @@ _all_nginx_configs:
       - location ~ ^/(app(_[-\w]+)?)\.php(/|$):
         - include: conf.d/php_fpm_params
         #- internal;
+      - client_max_body_size: 8M
 
 #######
 # Npm #
