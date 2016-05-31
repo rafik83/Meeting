@@ -34,7 +34,14 @@ mail:
         end: |
             Cordialement,
             L'équipe Vimeet
-
+    completeProfile:
+        subject: '[%event%] Invitation en tant que participant'
+        body: |
+            Vous avez été invité en tant que participant pour l'événement %event%.
+            Pour y accéder, cliquer sur le lien suivant et entrer votre mot de passe Vimeet pour confirmer votre participation
+        end: |
+            Cordialement,
+            L'équipe Vimeet
 admin:
     mail:
         resetPassword:
