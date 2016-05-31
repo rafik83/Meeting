@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Package\Model\Group:
+    properties:
+        labels:
+            - NotBlank: ~
+            - All:
+                constraints:
+                    - NotBlank: ~
+                    - Type: { type: string }
+        options:
+            - NotBlank: ~
+            - Type: { type: array }
+            - Count: { min: 1 }
+            - All:
+                - NotBlank: ~
