@@ -16,7 +16,7 @@ When I am logged, I need to be able to change my password
       | form.change_password_user.children.currentPassword.label               | p@ssw0rd     |
       | form.change_password_user.children.plainPassword.children.first.label  | new-p@ssw0rd |
       | form.change_password_user.children.plainPassword.children.second.label | new-p@ssw0rd |
-    And I press "form.change_password_user.children.submit.label"
+    And I press "common.validate"
     Then I should see "flash.change_password.success"
 
   Scenario: Change the password failed
@@ -27,5 +27,5 @@ When I am logged, I need to be able to change my password
       | form.change_password_user.children.currentPassword.label               | whatever-wrong-password |
       | form.change_password_user.children.plainPassword.children.first.label  | new-p@ssw0rd            |
       | form.change_password_user.children.plainPassword.children.second.label | new-p@ssw0rd            |
-    And I press "form.change_password_user.children.submit.label"
+    And I press "common.validate"
     Then I should see "validators.currentPassword"

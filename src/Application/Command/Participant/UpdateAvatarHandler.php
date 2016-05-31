@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
-class UpdateProfileHandler
+class UpdateAvatarHandler
 {
     /**
      * @var ParticipantRepositoryInterface
@@ -39,29 +38,17 @@ class UpdateProfileHandler
     }
 
     /**
-     * @param UpdateProfile $updateProfile
+     * @param UpdateAvatar $updateAvatar
      */
-    public function handle(UpdateProfile $updateProfile)
+    public function handle(UpdateAvatar $updateAvatar)
     {
-        $participant     = $updateProfile->participant;
-        $participantData = $updateProfile->participant->getData();
-        $templateData    = $updateProfile->templateData;
-
-        foreach ($updateProfile->data as $key => $value) {
-            if ($templateData->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
-                $participantData = array_merge($participantData, [$key => $value]);
-
-                // Set the data on the TemplateData to use it with the accountSynchronizer
-                $templateData->getObject($key)->setData($value);
-            }
-        }
-
-        $updateProfile->participant->setData($participantData);
+        $participant = $updateAvatar->participant;
+        $participant->setData($updateAvatar->templateData->getData());
 
         $this->participantRepository->set($participant);
 
-        if ($participant->getUser() === $updateProfile->user) {
-            $this->accountSynchronizer->set($templateData, $updateProfile->participant->getUser());
+        if ($participant->getUser() === $updateAvatar->user) {
+            $this->accountSynchronizer->set($updateAvatar->templateData, $participant->getUser());
         }
     }
 }

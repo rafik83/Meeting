@@ -3,24 +3,75 @@
 {% block title eventView.title %}
 
 {% block content %}
-    <div class="profile__content">
-        <section class="main">
-            <header>
-                <h1>{{ 'account.update.profil.title'|trans }}</h1>
-            </header>
-
-            <div class="main__content">
-                <div class="preview">
-                    <ul>
-                        <li>
-                            <a href="{{ path('event_change_password') }}">{{ 'account.change_password.title'|trans }}</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('event_account_change_mail') }}">{{ 'account.update_email.title'|trans }}</a>
-                        </li>
-                    </ul>
+    <div class="profile__center">
+        <div class="profile__box">
+            <section class="main">
+                <header>
+                    <h1>{{ 'account.profile.profile'|trans }}</h1>
+                </header>
+                <div class="main__content">
+                    <div class="preview">
+                        <div class="object--participant">
+                            <div class="list list--users">
+                                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card}) }}
+                            </div>
+                            {% for key, avatar in avatarTemplate %}
+                                <a href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
+                                    {{ 'account.profile.updateAvatar'|trans }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <p>{{ 'account.profile.contactInformation'|trans }}:</p>
+                            <ul>
+                            {% for object in profileTemplate %}
+                                <li>
+                                    {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                                </li>
+                            {% endfor %}
+                                <li>{{ participant.user.getEmail() }}</li>
+                            </ul>
+                        </div>
+                        <div class="validation">
+                            <a href="{{ path('event_account_participant_profile', {sheet: sheet.id, participant: participant.id}) }}">
+                                <button type="submit" class="btn">
+                                    {{ 'common.update'|trans }}
+                                </button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+                {% if participant.user == app.user %}
+                <ul>
+                    <li>
+                        <a href="{{ path('event_change_password') }}">{{ 'account.change_password.title'|trans }}</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('event_account_change_mail') }}">{{ 'account.update_email.title'|trans }}</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </section>
+        </div>
+        <div class="profile__box">
+            <section class="main">
+                <header>
+                    <h1>{{ 'account.profile.company'|trans }}</h1>
+                </header>
+                <div class="main__content">
+                    <div class="preview">
+                        <div>
+                            <ul>
+                                {% for object in companyTemplate %}
+                                    <li>
+                                        {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 {% endblock %}

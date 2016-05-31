@@ -1,14 +1,33 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
 {% block title 'account.update.title'|trans %}
 
 {% block content %}
-    <h2>{{ 'account.update.title'|trans }}</h2>
-    <h3>{{ 'account.update_email.title'|trans }}</h3>
+<div class="profile__content">
+    <section class="main">
+        <header>
+            <h1>{{ 'account.update_email.title'|trans }}</h1>
+        </header>
 
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            {{ form(form) }}
+        <div class="main__content">
+            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+
+            {{ form_errors(form) }}
+
+            <div class="inputs">
+                {% for child in form %}
+                    {{ form_row(child) }}
+                {% endfor %}
+                <div class="validation">
+                    <button type="submit" class="btn">
+                        <i class="icon-Suivant_3"></i> {{ 'common.validate'|trans }}
+                    </button>
+                </div>
+            </div>
+            {{ form_end(form) }}
         </div>
-    </div>
+    </section>
+</div>
 {% endblock %}

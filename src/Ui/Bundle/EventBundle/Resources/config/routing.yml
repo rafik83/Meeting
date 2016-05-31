@@ -99,6 +99,7 @@ event_account_participant:
     path: /account/sheet/{sheet}/participant/{participant}
     methods: [GET]
     requirements:
+        sheet: \d+
         participant: \d+
     defaults: { _controller: EventBundle:Participant:see }
 
@@ -107,8 +108,18 @@ event_account_participant_profile:
     path: /account/sheet/{sheet}/participant/{participant}/profile
     methods: [GET, POST]
     requirements:
+        sheet: \d+
         participant: \d+
     defaults: { _controller: EventBundle:Participant:updateProfile }
+
+event_account_participant_avatar:
+    path: /account/sheet/{sheet}/participant/{participant}/avatar/{key}
+    methods: [GET, POST]
+    requirements:
+        sheet: \d+
+        participant: \d+
+        key: \w+
+    defaults: { _controller: EventBundle:Participant:updateAvatar }
 
 #
 # Sheet
@@ -155,7 +166,7 @@ event_sheet_handle_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:handleParticipant }
+    defaults: { _controller: EventBundle:Sheet:handleAddParticipant }
 
 
 #

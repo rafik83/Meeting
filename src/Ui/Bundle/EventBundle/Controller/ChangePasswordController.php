@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\User\ChangePassword;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\ChangePasswordType;
 use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,8 +36,6 @@ class ChangePasswordController extends Controller
             'action' => $this->generateUrl('event_change_password'),
             'method' => 'POST',
         ]);
-
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($changePassword);

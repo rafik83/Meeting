@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class UpdateProfile
+class UpdateAvatar
 {
     /**
      * @var TemplateData
@@ -25,11 +25,6 @@ class UpdateProfile
      * @var Participant
      */
     public $participant;
-
-    /**
-     * @var array
-     */
-    public $data;
 
     /**
      * @var string
@@ -45,15 +40,13 @@ class UpdateProfile
      * @param TemplateData $templateData
      * @param Participant  $participant
      * @param string       $locale
-     * @param array        $data
      * @param User         $user
      */
-    public function __construct(TemplateData $templateData, Participant $participant, $locale, $data, User $user)
+    public function __construct(TemplateData $templateData, Participant $participant, $locale, User $user)
     {
         $this->templateData = $templateData;
         $this->participant  = $participant;
         $this->locale       = $locale;
-        $this->data         = $data;
         $this->user         = $user;
     }
 }

@@ -293,7 +293,7 @@ class SheetController extends Controller
      * @return Response
      * @throws \Exception
      */
-    public function handleParticipantAction(Request $request, EventView $eventView, $locale, $key)
+    public function handleAddParticipantAction(Request $request, EventView $eventView, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -326,7 +326,7 @@ class SheetController extends Controller
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
                 $sheet,
-                $this->get('vimeet_infrastructure.repository.user_repository')->getFullUser($this->getUser()),
+                $this->getUser(),
                 $locale
             )
         );
