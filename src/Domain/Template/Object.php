@@ -165,4 +165,12 @@ class Object extends AbstractChild
     {
         return $this->getOption('help', $this->locale);
     }
+
+    /**
+     * @return bool
+     */
+    public function getRequired()
+    {
+        return null !== $this->getOption('required') ? $this->getOption('required') : false;
+    }
 }
