@@ -6,6 +6,7 @@ Proximum\Vimeet\Domain\Model\Event:
         locales: [fr, en]
         fallback: fr
         assetPath: ''
+        country: 'FR'
         organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'

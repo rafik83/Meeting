@@ -11,15 +11,15 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -182,9 +182,9 @@ class RegisterController extends Controller
         $participantBlock = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
-            'event'  => $event,
-            'locale' => $locale,
-            'block'  => $participantBlock,
+            'block'   => $participantBlock,
+            'locale'  => $locale,
+            'country' => $event->getCountry(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -265,12 +265,10 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-
         $form = $this->createForm(BlockType::class, $participantBlock, [
-            'event'  => $event,
-            'locale' => $locale,
-            'block'  => $participantBlock,
+            'block'   => $participantBlock,
+            'locale'  => $locale,
+            'country' => $eventView->country,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
@@ -41,7 +40,7 @@ class BlockType extends AbstractType
             } elseif ($object instanceof Template\Object\Image) {
                 $this->addImage($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
-                $this->addTelephone($key, $builder, $object, $options['locale']);
+                $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\Object\Country) {
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
@@ -56,9 +55,9 @@ class BlockType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class' => Template\Block::class]);
-        $resolver->setRequired(['event', 'block', 'locale']);
+        $resolver->setRequired(['block', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
-        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('country', 'string');
         $resolver->setAllowedTypes('block', Template\Block::class);
     }
 
@@ -98,12 +97,14 @@ class BlockType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
+     * @param string               $country
      */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
-            'object' => $object,
-            'locale' => $locale,
+            'object'  => $object,
+            'locale'  => $locale,
+            'country' => $country,
         ]);
     }
 

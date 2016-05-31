@@ -44,7 +44,7 @@ class TaggedInfoGuesser
             $template->getFallback()
         );
 
-        return $templateData->getTaggedDatas($tag, $locale);
+        return $templateData->getTaggedDatas($tag);
     }
 
     /**
@@ -65,20 +65,19 @@ class TaggedInfoGuesser
             $template->getFallback()
         );
 
-        return $this->guessFirstFromTemplateData($templateData, $tag, $locale, $default);
+        return $this->guessFirstFromTemplateData($templateData, $tag, $default);
     }
 
     /**
      * @param TemplateData $templateData
      * @param string       $tag
-     * @param string       $locale
      * @param string|null  $default
      *
      * @return string|null
      */
-    public function guessFirstFromTemplateData(TemplateData $templateData, $tag, $locale, $default = null)
+    public function guessFirstFromTemplateData(TemplateData $templateData, $tag, $default = null)
     {
-        $taggedDatas = $templateData->getTaggedDatas($tag, $locale);
+        $taggedDatas = $templateData->getTaggedDatas($tag);
         $taggedData  = array_shift($taggedDatas);
 
         return $taggedData !== null ? $taggedData : $default;
