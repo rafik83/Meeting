@@ -227,6 +227,12 @@ class SheetController extends Controller
             )
         );
 
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
@@ -238,6 +244,7 @@ class SheetController extends Controller
             'data'          => $data,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
+            'taggedData'    => $taggedData,
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
@@ -324,6 +331,12 @@ class SheetController extends Controller
             )
         );
 
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'        => $eventView,
             'sheet'            => $sheet,
@@ -331,6 +344,7 @@ class SheetController extends Controller
             'data'             => $data,
             'locale'           => $locale,
             'nomenclatures'    => $nomenclatures,
+            'taggedData'    => $taggedData,
             'form_participant' => $form->createView(),
             'label'            => $label,
             'uid'              => $key,
