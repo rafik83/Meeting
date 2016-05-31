@@ -39,13 +39,13 @@ class EditableTextDataType extends AbstractType
     {
         $object    = $options['object'];
         $locale    = $options['locale'];
-        $attributs = [
+        $attributes = [
             'rows' => 7,
         ];
 
         if (null !== $object->getOption('maxLength')) {
-            $attributs['data-text-max-length-indicator']    = $object->getOption('maxLength');
-            $attributs['data-text-max-length-translations'] = sprintf(
+            $attributes['data-text-max-length-indicator']    = $object->getOption('maxLength');
+            $attributes['data-text-max-length-translations'] = sprintf(
                 '%s|%s|%s',
                 $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.plural', [], 'forms', $locale),
                 $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.singular', [], 'forms', $locale),
@@ -56,7 +56,7 @@ class EditableTextDataType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 'placeholder' => $options['placeholder'],
-                'attr'        => $attributs,
+                'attr'        => $attributes,
                 'required'    => $object->getRequired(),
             ])
         ;
