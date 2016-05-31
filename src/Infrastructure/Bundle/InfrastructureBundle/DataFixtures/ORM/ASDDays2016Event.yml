@@ -914,3 +914,277 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+
+Proximum\Vimeet\Domain\Model\Product:
+    # plans
+    product_plan_1_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'plan'
+        name: 'Formule B2B Meeting'
+        image: ~
+        unitPrice: 1690
+        quantityMax: 1
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+    product_plan_2_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'plan'
+        name: 'Formule Exposant'
+        image: ~
+        unitPrice: 2880
+        quantityMax: 1
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+    # participants
+    product_participant_1_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'participant'
+        name: 'Participant supplémentaire Fournisseur'
+        image: ~
+        unitPrice: 195
+        quantityMax: 10
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+    # plannings
+    product_planning_1_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'planning'
+        name: 'Planning supplémentaire Fournisseur'
+        image: ~
+        unitPrice: 495
+        quantityMax: 10
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+    # options
+    product_option_1_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'option'
+        name: 'Option 4m² supplémentaires Fournisseur'
+        image: ~
+        unitPrice: 990
+        quantityMax: 1
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+    product_option_2_asddays:
+        __construct: false
+        event: '@event_asddays_2016'
+        type: 'option'
+        name: 'Option chaise'
+        image: ~
+        unitPrice: 9
+        quantityMax: 10
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: true
+        updatableUntil: ~
+
+Proximum\Vimeet\Domain\Model\ProductTranslation:
+    product_plan_1_asddays_fr:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'Formule B2B Meeting'
+        heading: 'Pas de stand'
+        description: 'Vous changez de lieu à chaque rendez-vous.'
+        addon: ''
+        locale: 'fr'
+    product_plan_1_asddays_en:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'B2B Meeting Formula'
+        heading: 'No booth'
+        description: 'You have to move at each appointment.'
+        addon: ''
+        locale: 'en'
+    product_plan_2_asddays_fr:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'Formule Exposant'
+        heading: 'Stand équipé 4m² (2x2m)'
+        description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
+        addon: ''
+        locale: 'fr'
+    product_plan_2_asddays_en:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'Exhibitor Formula'
+        heading: 'An equipped 4 sqm booth (2X2 m)'
+        description: 'With a banner, lighting, 1 table and 4 chairs.'
+        addon: ''
+        locale: 'en'
+    product_participant_1_asddays_fr:
+        __construct: false
+        product: '@product_participant_1_asddays'
+        title: 'Participant supplémentaire'
+        heading: ''
+        description: 'Accompagnant le premier sur un même agenda incluant une entrée à la convention d’affaire, accès illimité à la pause café et aux conférences.'
+        addon: ''
+        locale: 'fr'
+    product_participant_1_asddays_en:
+        __construct: false
+        product: '@product_participant_1_asddays'
+        title: 'Extra participant'
+        heading: ''
+        description: 'Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.'
+        addon: ''
+        locale: 'en'
+    product_planning_1_asddays_fr:
+        __construct: false
+        product: '@product_planning_1_asddays'
+        title: 'Planning supplémentaire'
+        heading: ''
+        description: 'En fonction du nombre de rendez-vous bi validés'
+        addon: ''
+        locale: 'fr'
+    product_planning_1_asddays_en:
+        __construct: false
+        product: '@product_planning_1_asddays'
+        title: 'Extra planning'
+        heading: ''
+        description: 'According to the number of bi-validated meetings'
+        addon: ''
+        locale: 'en'
+    product_option_1_asddays_fr:
+        __construct: false
+        product: '@product_option_1_asddays'
+        title: 'Option 4m² supplémentaires'
+        heading: ''
+        description: 'Option valable uniquement en complément des formules Exposant et Parrain.'
+        addon: ''
+        locale: 'fr'
+    product_option_1_asddays_en:
+        __construct: false
+        product: '@product_option_1_asddays'
+        title: 'Add booth option (4 sqm)'
+        heading: ''
+        description: 'Option available in addition with exhibitor and sponsor formula only.'
+        addon: ''
+        locale: 'en'
+    product_option_2_asddays_fr:
+        __construct: false
+        product: '@product_option_2_asddays'
+        title: 'Chaise'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_2_asddays_en:
+        __construct: false
+        product: '@product_option_2_asddays'
+        title: 'Chair'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+
+Proximum\Vimeet\Domain\Model\Package:
+    package_asd_days:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Package ASD Days"
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        participant: '@product_participant_1_asddays'
+        planning: '@product_planning_1_asddays'
+        plansEnabled: true
+        participantAndPlanningEnabled: true
+        optionsEnabled: true
+
+Proximum\Vimeet\Domain\Model\PackageTranslation:
+    package_asd_days_fr:
+        __construct: false
+        package: '@package_asd_days'
+        locale: 'fr'
+        plansLabel: 'Formules Rendez-vous d’Affaires'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+    package_asd_days_en:
+        __construct: false
+        package: '@package_asd_days'
+        locale: 'en'
+        plansLabel: 'Business Meetings Formula'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+
+Proximum\Vimeet\Domain\Model\PackagePlanRank:
+    package_plan_1_rank_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+        plan: '@product_plan_1_asddays'
+    package_plan_2_rank_asd_days:
+        __construct: false
+        rank: 2
+        package: '@package_asd_days'
+        plan: '@product_plan_2_asddays'
+
+Proximum\Vimeet\Domain\Model\PackageGroup:
+    package_group_1_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+    package_group_2_asd_days:
+        __construct: false
+        rank: 2
+        package: '@package_asd_days'
+    package_group_3_asd_days:
+        __construct: false
+        rank: 3
+        package: '@package_asd_days'
+
+Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
+    package_group_1_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options d’exposition'
+        group: '@package_group_1_asd_days'
+    package_group_1_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting options'
+        group: '@package_group_1_asd_days'
+    package_group_2_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: "Options d'exposition et de communication"
+        group: '@package_group_2_asd_days'
+    package_group_2_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting and communication options'
+        group: '@package_group_2_asd_days'
+    package_group_3_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options de communication'
+        group: '@package_group_3_asd_days'
+    package_group_3_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Communication options'
+        group: '@package_group_3_asd_days'
+
+Proximum\Vimeet\Domain\Model\PackageOptionRank:
+    package_group_1_option_1_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_1_asd_days'
+        option: '@product_option_1_asddays'
+    package_group_1_option_2_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_1_asd_days'
+        option: '@product_option_2_asddays'
