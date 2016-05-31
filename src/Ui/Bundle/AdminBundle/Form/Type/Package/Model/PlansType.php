@@ -39,7 +39,8 @@ class PlansType extends AbstractType
             ->add('plans', ProductCollectionType::class, [
                 'event'            => $options['event'],
                 'product_types'    => [Product::TYPE_PLAN],
-                'collection_group' => 'plans'
+                'collection_group' => 'plans',
+                'error_bubbling'   => false,
             ])
         ;
     }

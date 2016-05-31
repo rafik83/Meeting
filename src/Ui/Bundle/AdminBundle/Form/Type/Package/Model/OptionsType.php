@@ -36,7 +36,8 @@ class OptionsType extends AbstractType
                 'required'   => false,
             ])
             ->add('groups', GroupCollectionType::class, [
-                'event' => $options['event'],
+                'event'          => $options['event'],
+                'error_bubbling' => false,
             ])
         ;
     }

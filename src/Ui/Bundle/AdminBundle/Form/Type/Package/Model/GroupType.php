@@ -35,7 +35,8 @@ class GroupType extends AbstractType
             ->add('options', ProductCollectionType::class, [
                 'event'            => $options['event'],
                 'product_types'    => [Product::TYPE_OPTION],
-                'collection_group' => 'options'
+                'collection_group' => 'options',
+                'error_bubbling'   => false,
             ])
         ;
     }
