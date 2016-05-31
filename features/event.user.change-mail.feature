@@ -17,8 +17,7 @@ Feature: Change my mail
     Then the response status code should be 200
 
   Scenario: I can change my email full process
-    When I go to this page "/fr/account"
-    And the response status code should be 200
+    When I go to this page "/fr/account/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
     And I press "form.change_mail.children.submit.label"

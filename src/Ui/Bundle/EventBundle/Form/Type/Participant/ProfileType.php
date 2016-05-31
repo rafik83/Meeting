@@ -8,13 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
@@ -22,23 +20,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockType extends AbstractType
+class ProfileType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Template\Block $block */
-        $block = $options['block'];
+        /** @var Template\TemplateData $template */
+        $template = $options['template'];
 
-        foreach ($block->getEditableObjects() as $key => $object) {
+        foreach ($template->getProfileObjects() as $key => $object) {
             if ($object instanceof Template\Object\EditableText) {
                 $this->addText($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
-            } elseif ($object instanceof Template\Object\Image) {
-                $this->addImage($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
                 $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\Object\Country) {
@@ -54,14 +50,14 @@ class BlockType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['block', 'locale', 'country']);
+        $resolver->setDefaults([
+            'data_class'        => Template\TemplateData::class,
+            'validation_groups' => ['Default', 'profile']
+        ]);
+        $resolver->setRequired(['template', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('country', 'string');
-        $resolver->setAllowedTypes('block', Template\Block::class);
-        $resolver->setDefaults([
-            'data_class'        => Template\Block::class,
-            'validation_groups' => ['block', 'Default']
-        ]);
+        $resolver->setAllowedTypes('template', Template\TemplateData::class);
     }
 
     /**
@@ -79,35 +75,17 @@ class BlockType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
+     * @param string                       $key
+     * @param FormBuilderInterface         $builder
+     * @param Template\Object\Nomenclature $object
+     * @param string                       $locale
      */
-    private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
     {
-        $builder->add($key, ImageDataType::class, [
-            'locale' => $locale,
-            'object' => $object,
-            'attr' => [
-                'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
-            ]
-        ]);
-    }
-
-    /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
-     * @param string               $country
-     */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
-    {
-        $builder->add($key, TelephoneDataType::class, [
-            'object'  => $object,
-            'locale'  => $locale,
-            'country' => $country,
+        $builder->add($key, NomenclatureDataType::class, [
+            'locale'      => $locale,
+            'object'      => $object,
+            'placeholder' => $object->getOption('label')[$locale],
         ]);
     }
 
@@ -130,26 +108,28 @@ class BlockType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param Template\Object      $object
      * @param string               $locale
+     * @param string               $country
+     */
+    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
+    {
+        $builder->add($key, TelephoneDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
+            'country' => $country,
+        ]);
+    }
+
+    /**
+     * @param string               $key
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
      */
     private function addCountry($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
         $builder->add($key, CountryDataType::class, [
             'object' => $object,
             'locale' => $locale,
-        ]);
-    }
-
-    /**
-     * @param string                       $key
-     * @param FormBuilderInterface         $builder
-     * @param Template\Object\Nomenclature $object
-     * @param string                       $locale
-     */
-    private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
-    {
-        $builder->add($key, NomenclatureDataType::class, [
-            'locale' => $locale,
-            'object' => $object,
         ]);
     }
 }

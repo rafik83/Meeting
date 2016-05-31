@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
 
 class Block extends AbstractChild
@@ -134,6 +135,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getProfileObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof Object\Image;
+        });
+    }
+
+    /**
      * @param string $key
      *
      * @return TemplateObject
@@ -148,6 +159,19 @@ class Block extends AbstractChild
         }
 
         throw new \Exception("Object $key not found.");
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasObject($key)
+    {
+        $objects = $this->getObjects();
+
+        return isset($objects[$key]);
     }
 
     /**

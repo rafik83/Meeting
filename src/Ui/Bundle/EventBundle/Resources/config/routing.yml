@@ -28,10 +28,10 @@ event_register_new_user:
 #
 # Change mail
 #
-event_account:
-    path: /account
+event_account_change_mail:
+    path: /account/change-mail
     methods: [GET, POST]
-    defaults: { _controller: EventBundle:Account:update }
+    defaults: { _controller: EventBundle:Account:updateEmail }
 
 event_activate_new_mail:
     path: /account/change_mail/{token}
@@ -85,6 +85,25 @@ event_participant_step:
     defaults: { _controller: EventBundle:Register:participantStep }
 
 #
+# Profil
+#
+
+event_account_participant:
+    path: /account/sheet/{sheet}/participant/{participant}
+    methods: [GET]
+    requirements:
+        participant: \d+
+    defaults: { _controller: EventBundle:Participant:see }
+
+
+event_account_participant_profile:
+    path: /account/sheet/{sheet}/participant/{participant}/profile
+    methods: [GET, POST]
+    requirements:
+        participant: \d+
+    defaults: { _controller: EventBundle:Participant:updateProfile }
+
+#
 # Sheet
 #
 
@@ -125,14 +144,6 @@ event_sheet_add_participant:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Participant:add }
-
-event_sheet_update_participant:
-    path:     /sheet/{sheet}/update_participant/{participant}
-    requirements:
-        sheet: \d+
-        participant: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Participant:update }
 
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}

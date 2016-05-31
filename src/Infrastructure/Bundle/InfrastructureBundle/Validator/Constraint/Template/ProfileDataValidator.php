@@ -10,15 +10,17 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template;
 
-use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class BlockValidator extends ConstraintValidator
+class ProfileDataValidator extends ConstraintValidator
 {
-    private $objects = [
+    private $objectsConstraint = [
         'button-link'   => ObjectConstraint::class,
         'choice'        => ObjectConstraint::class,
+        'carousel'      => ObjectConstraint::class,
+        'country'       => Object\CountryConstraint::class,
         'collection'    => ObjectConstraint::class,
         'editable-text' => Object\EditableTextConstraint::class,
         'image'         => ObjectConstraint::class,
@@ -26,10 +28,8 @@ class BlockValidator extends ConstraintValidator
         'nomenclature'  => Object\NomenclatureConstraint::class,
         'participant'   => ObjectConstraint::class,
         'tag'           => ObjectConstraint::class,
-        'text'          => ObjectConstraint::class,
-        'carousel'      => ObjectConstraint::class,
         'telephone'     => Object\TelephoneConstraint::class,
-        'country'       => Object\CountryConstraint::class,
+        'text'          => ObjectConstraint::class,
         'url'           => Object\UrlConstraint::class,
     ];
 
@@ -38,16 +38,16 @@ class BlockValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value instanceof Block) {
-            $this->context->buildViolation('Block expected')->addViolation();
+        if (!$value instanceof TemplateData) {
+            $this->context->buildViolation('Template expected')->addViolation();
         }
 
         $validator = $this->context->getValidator()->inContext($this->context);
 
-        foreach ($value->getEditableObjects() as $key => $object) {
-            $class      = $this->objects[$object->getType()];
+        foreach ($value->getProfileObjects() as $key => $object) {
+            $class      = $this->objectsConstraint[$object->getType()];
             $constraint = new $class(['key' => $key]);
-            $validator->validate($object, $constraint, ['block', 'Default']);
+            $validator->validate($object, $constraint, ['profile', 'Default']);
         }
     }
 }

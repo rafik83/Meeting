@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -300,15 +301,15 @@ class RegisterController extends Controller
             }
         }
 
-        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate, $locale);
+        $participantCard = $this->get('tactician.commandbus')->handle(new CardViewQuery($participant, $locale));
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
-            'eventView'        => $eventView,
-            'form'             => $form->createView(),
-            'stepsCount'       => $registrationTemplate->getBlocksCount(),
-            'stepNumber'       => $step,
-            'stepTitle'        => $participantBlock->getTitle($locale),
-            'participantInfos' => $participantInfos,
+            'eventView'       => $eventView,
+            'form'            => $form->createView(),
+            'stepsCount'      => $registrationTemplate->getBlocksCount(),
+            'stepNumber'      => $step,
+            'stepTitle'       => $participantBlock->getTitle($locale),
+            'participantCard' => $participantCard,
         ]);
     }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
@@ -42,6 +43,13 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $participants  = $this->get('tactician.commandbus')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->get('vimeet_infrastructure.repository.user_repository')->getFullUser($this->getUser()),
+                $locale
+            )
+        );
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
@@ -50,6 +58,7 @@ class SheetController extends Controller
             'data'          => $data,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
         ]);
     }
 
@@ -80,7 +89,7 @@ class SheetController extends Controller
         }
 
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
+            throw $this->createNotFoundException('No participant for this user is attached on this sheet');
         }
 
         if (!$eventView->hasLocale($locale)) {
@@ -198,6 +207,13 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $participants  = $this->get('tactician.commandbus')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->get('vimeet_infrastructure.repository.user_repository')->getFullUser($this->getUser()),
+                $locale
+            )
+        );
 
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
@@ -213,6 +229,7 @@ class SheetController extends Controller
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
+            'participants'  => $participants,
         ]);
     }
 }
