@@ -37,9 +37,9 @@ class UpdateHandler
         $update->package
             ->setTitle($update->title)
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
-            ->choosePlans(array_values($update->plans->plans))
-            ->chooseParticipant($update->participantAndPlanning->participant)
-            ->choosePlanning($update->participantAndPlanning->planning)
+            ->setPlans(array_values($update->plans->plans))
+            ->setParticipant($update->participantAndPlanning->participant)
+            ->setPlanning($update->participantAndPlanning->planning)
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
 

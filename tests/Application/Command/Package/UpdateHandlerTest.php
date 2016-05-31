@@ -43,9 +43,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expected = new Package($event, 'Foobar', $dateTime);
         $expected->translate('fr', 'Plans fr', 'P&P fr', 'Options fr');
         $expected->translate('en', 'Plans en', 'P&P en', 'Options en');
-        $expected->choosePlans([$plan1, $plan3, $plan2]);
-        $expected->chooseParticipant($participant);
-        $expected->choosePlanning($planning);
+        $expected->setPlans([$plan1, $plan3, $plan2]);
+        $expected->setParticipant($participant);
+        $expected->setPlanning($planning);
         $expected->setGroups([
             [$option4, $option1],
             [$option2, $option3],

@@ -275,7 +275,7 @@ class Package
      *
      * @return Package
      */
-    public function choosePlans(array $plans)
+    public function setPlans(array $plans)
     {
         // Remove delete plans
         foreach ($this->planRanks as $planRank) {
@@ -318,7 +318,7 @@ class Package
      *
      * @return Package
      */
-    public function choosePlanning($planning)
+    public function setPlanning($planning)
     {
         $this->planning = $planning;
 
@@ -332,7 +332,7 @@ class Package
      *
      * @return Package
      */
-    public function chooseParticipant($participant)
+    public function setParticipant($participant)
     {
         $this->participant = $participant;
 
