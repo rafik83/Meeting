@@ -131,16 +131,14 @@ class SheetSearchQueryBuilder
         $matchSheetName = new Match();
         $matchSheetName
             ->setFieldQuery('sheetName', $text)
-            ->setFieldFuzziness('sheetName', 'AUTO')
-            ->setFieldAnalyzer('sheetName', 'sheetAnalyzer');
+            ->setFieldFuzziness('sheetName', 'AUTO');
 
         $filterBySheetNameOrParticipantLastnameQuery->addShould($matchSheetName);
 
         $matchLastname = new Match();
         $matchLastname
             ->setFieldQuery('participants.lastname', $text)
-            ->setFieldFuzziness('participants.lastname', 'AUTO')
-            ->setFieldAnalyzer('participants.lastname', 'sheetAnalyzer');
+            ->setFieldFuzziness('participants.lastname', 'AUTO');
 
         $boolQuery = new BoolQuery();
         $boolQuery->addMust($matchLastname);
