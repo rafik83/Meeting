@@ -44,7 +44,7 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
                 'addon'       => 'enoptional',
             ],
         ];
-        $product = new Product($event, 'product', '', 100, 2, 4, 3, 4, false, null);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
         $product->translate('fr', 'foo', null, 'bar', 'optional');
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
 
@@ -63,16 +63,13 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Expected
-        $expectedPlan = new Product(
+        $expectedPlan = Product::createPlan(
             $event,
-            Product::TYPE_PLAN,
             $name,
             $image,
             $unitPrice,
-            1,
             $availabilityCurrent,
-            $availabilityMax,
-            false
+            $availabilityMax
         );
         $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
         $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
@@ -114,7 +111,7 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
                 'addon'       => 'enoptional',
             ],
         ];
-        $product = new Product($event, 'product', '', 100, 2, 4, 3, 4, false, null);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
         $product->translate('fr', 'foo', null, 'bar', 'optional');
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
 
@@ -141,16 +138,13 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Expected
-        $expectedPlan = new Product(
+        $expectedPlan = Product::createPlan(
             $event,
-            Product::TYPE_PLAN,
             $name,
             $image,
             $unitPrice,
-            1,
             $availabilityCurrent,
-            $availabilityMax,
-            false
+            $availabilityMax
         );
         $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
         $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');

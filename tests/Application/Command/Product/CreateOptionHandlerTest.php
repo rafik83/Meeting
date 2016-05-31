@@ -58,9 +58,8 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         // Expected
-        $expectedProduct = new Product(
+        $expectedProduct = Product::createOption(
             $event,
-            Product::TYPE_OPTION,
             $name,
             $image,
             $unitPrice,

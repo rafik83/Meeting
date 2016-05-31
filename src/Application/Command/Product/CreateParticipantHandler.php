@@ -33,17 +33,11 @@ class CreateParticipantHandler
      */
     public function handle(CreateParticipant $createParticipant)
     {
-        $product = new Product(
+        $product = Product::createParticipant(
             $createParticipant->event,
-            Product::TYPE_PARTICIPANT,
             $createParticipant->name,
-            null,
             $createParticipant->unitPrice,
-            $createParticipant->quantityMax,
-            null,
-            null,
-            true,
-            null
+            $createParticipant->quantityMax
         );
 
         foreach ($createParticipant->translations as $locale => $translation) {

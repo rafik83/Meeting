@@ -43,17 +43,13 @@ class CreatePlanHandler
      */
     public function handle(CreatePlan $createPlan)
     {
-        $product = new Product(
+        $product = Product::createPlan(
             $createPlan->event,
-            Product::TYPE_PLAN,
             $createPlan->name,
             $this->fileStorageInterface->upload($createPlan->file),
             $createPlan->unitPrice,
-            1,
             $createPlan->availabilityCurrent,
-            $createPlan->availabilityMax,
-            false,
-            null
+            $createPlan->availabilityMax
         );
 
         foreach ($createPlan->translations as $locale => $translation) {

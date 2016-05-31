@@ -136,7 +136,7 @@ class Product
      * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
      */
-    public function __construct(
+    private function __construct(
         Event $event,
         $type,
         $name,
@@ -410,5 +410,108 @@ class Product
     public function getIncludedProducts()
     {
         return $this->productIncluded->toArray();
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $name
+     * @param string $image
+     * @param int    $unitPrice
+     * @param int    $availabilityCurrent
+     * @param int    $availabilityMax
+     *
+     * @return Product
+     */
+    public static function createPlan(Event $event, $name, $image, $unitPrice, $availabilityCurrent, $availabilityMax)
+    {
+        return new self(
+            $event,
+            Product::TYPE_PLAN,
+            $name,
+            $image,
+            $unitPrice,
+            1,
+            $availabilityCurrent,
+            $availabilityMax,
+            false,
+            null
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $name
+     * @param int    $unitPrice
+     * @param int    $quantityMax
+     *
+     * @return Product
+     */
+    public static function createParticipant(Event $event, $name, $unitPrice, $quantityMax)
+    {
+        return new self(
+            $event,
+            Product::TYPE_PARTICIPANT,
+            $name,
+            null,
+            $unitPrice,
+            $quantityMax,
+            null,
+            null,
+            true,
+            null
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $name
+     * @param int    $unitPrice
+     * @param int    $quantityMax
+     *
+     * @return Product
+     */
+    public static function createPlanning(Event $event, $name, $unitPrice, $quantityMax)
+    {
+        return new self(
+            $event,
+            Product::TYPE_PLANNING,
+            $name,
+            null,
+            $unitPrice,
+            $quantityMax,
+            null,
+            null,
+            true,
+            null
+        );
+    }
+
+    /**
+     * @param Event              $event
+     * @param string             $name
+     * @param string             $image
+     * @param int                $unitPrice
+     * @param int                $quantityMax
+     * @param int                $availabilityCurrent
+     * @param int                $availabilityMax
+     * @param bool               $updatable
+     * @param \DateTimeInterface $updatableUntil
+     *
+     * @return Product
+     */
+    public static function createOption(Event $event, $name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null)
+    {
+        return new self(
+            $event,
+            Product::TYPE_OPTION,
+            $name,
+            $image,
+            $unitPrice,
+            $quantityMax,
+            $availabilityCurrent,
+            $availabilityMax,
+            $updatable,
+            $updatableUntil
+        );
     }
 }

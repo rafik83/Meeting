@@ -33,17 +33,11 @@ class CreatePlanningHandler
      */
     public function handle(CreatePlanning $createPlanning)
     {
-        $product = new Product(
+        $product = Product::createPlanning(
             $createPlanning->event,
-            Product::TYPE_PLANNING,
             $createPlanning->name,
-            null,
             $createPlanning->unitPrice,
-            $createPlanning->quantityMax,
-            null,
-            null,
-            true,
-            null
+            $createPlanning->quantityMax
         );
 
         foreach ($createPlanning->translations as $locale => $translation) {

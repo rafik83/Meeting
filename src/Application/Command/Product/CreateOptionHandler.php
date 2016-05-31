@@ -43,9 +43,8 @@ class CreateOptionHandler
      */
     public function handle(CreateOption $createOption)
     {
-        $product = new Product(
+        $product = Product::createOption(
             $createOption->event,
-            Product::TYPE_OPTION,
             $createOption->name,
             $this->fileStorageInterface->upload($createOption->file),
             $createOption->unitPrice,
