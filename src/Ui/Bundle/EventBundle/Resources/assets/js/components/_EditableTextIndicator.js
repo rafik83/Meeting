@@ -25,10 +25,13 @@ EditableTextIndicator.prototype.count = function ()
   var remaining = this.max - current;
 
   if (remaining > 1) {
+    this.element.parentElement.classList.remove('has-error');
     this.maxIndicatorArea.innerHTML = remaining + ' ' + this.maxIndicatorRemainingPluralTranslation;
   } else if (remaining === 1) {
+    this.element.parentElement.classList.remove('has-error');
     this.maxIndicatorArea.innerHTML = remaining + ' ' + this.maxIndicatorRemainingSingularTranslation;
   } else {
+    this.element.parentElement.classList.add('has-error');
     this.maxIndicatorArea.innerHTML = this.maxIndicatorReachedTranslation;
   }
 };
