@@ -237,7 +237,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         style: "style-1"
                                                         label:
                                                             fr: "Catégorie"
-                                                        tag: "sheet_organization"
+                                                            en: "Catégory"
+                                                        tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"
@@ -627,15 +628,32 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Nom (Société / Organisme)"
+                                    en: "Company name"
                                 placeholder:
                                     fr: "Nom (Société / Organisme)"
+                                    en: "Company name"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: 250
                                 required: true
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_organization", "sheet_title", "sheet_data"]
+                        97ed778d:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Catégorie (PME / ETI / Start-up / ...)"
+                                    en: "Catégory (PME / ETI / Start-up / ...)"
+                                help:
+                                    fr: ""
+                                    en: ""
+                                mode: "singles"
+                                nomenclature: "@nomenclature_company_category->id"
+                                tags: ["sheet_organization_category", "sheet_data"]
                         9ef18c06:
                             component: "object"
                             type: "url"
@@ -643,10 +661,13 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Site internet"
+                                    en: "Website"
                                 placeholder:
                                     fr: "Site internet"
+                                    en: "Website"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: ""
                                 required: false
                                 type: "text"
@@ -659,10 +680,13 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Adresse"
+                                    en: "Address"
                                 placeholder:
                                     fr: "Adresse"
+                                    en: "Address"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: ""
                                 required: true
                                 type: "text"
@@ -675,10 +699,13 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Code postal"
+                                    en: "Zip code"
                                 placeholder:
                                     fr: "Code postal"
+                                    en: "Zip code"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: ""
                                 required: true
                                 type: "text"
@@ -691,8 +718,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Ville"
+                                    en: "City"
                                 placeholder:
                                     fr: "Ville"
+                                    en: "City"
                                 help:
                                     fr: ""
                                 length: ""
@@ -707,14 +736,16 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Pays"
+                                    en: "Country"
                                 placeholder:
                                     fr: "Pays"
+                                    en: "Country"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: ""
                                 required: true
                                 type: "text"
-                                translatable: false
                                 tags: ["participant_country", "sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false

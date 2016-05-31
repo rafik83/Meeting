@@ -256,11 +256,10 @@ class Block extends AbstractChild
         return null;
     }
 
-
     /**
      * @param string $tag
      *
-     * @return array;
+     * @return array
      */
     public function getTaggedDatas($tag)
     {
@@ -280,6 +279,30 @@ class Block extends AbstractChild
                             $tagged[] = $block->getContentValue();
                         }
                     }
+                }
+            }
+        }
+
+        return $tagged;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllTaggedDatas()
+    {
+        $tagged = [];
+
+        foreach ($this->getEditableObjects() as $object) {
+            foreach ($object->getTags() as $tag) {
+                if (!$object instanceof Object\ContentObjectInterface) {
+                    continue;
+                }
+
+                if ($object instanceof Object\Nomenclature) {
+                    $tagged[$tag][] = $object->getNomenclatureLabel();
+                } else {
+                    $tagged[$tag][] = $object->getContentValue();
                 }
             }
         }
