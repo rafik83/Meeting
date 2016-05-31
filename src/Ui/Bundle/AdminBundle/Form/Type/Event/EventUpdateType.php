@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,6 +44,7 @@ class EventUpdateType extends AbstractType
                 'entry_type' => EventUpdateTranslationType::class,
                 'label'      => false,
             ])
+            ->add('country', CountryType::class)
             ->add('mode', VatModeType::class, [
                 'expanded' => true,
             ])

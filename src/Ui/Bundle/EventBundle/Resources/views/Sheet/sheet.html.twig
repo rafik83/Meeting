@@ -1,14 +1,14 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block title %}
-
+    {{ eventView.title }}: {{ 'sheet.title'|trans }}
 {% endblock %}
 
 {% block content %}
     <section class="main">
 
         <header>
-            <h1><i class="icon-Document_1"></i> Fiche de présentation</h1>
+            <h1><i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}</h1>
             <ul class="tabs">
                 {% for event_locale in eventView.locales %}
                     <li{% if event_locale == locale %} class="active"{% endif %}>
@@ -32,6 +32,7 @@
                     'data': data,
                     'taggedData': taggedData,
                     'nomenclatures': nomenclatures
+                    'participants': participants,
                 }, false) }}
             {% endfor %}
         </div>

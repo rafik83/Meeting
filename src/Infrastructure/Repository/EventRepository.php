@@ -142,7 +142,8 @@ class EventRepository implements EventRepositoryInterface
                 event.fallback,
                 event.locales,
                 event.timeZone,
-                event.assetPath
+                event.assetPath,
+                event.country
             )')
             ->from(Event::class, 'event')
             ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')

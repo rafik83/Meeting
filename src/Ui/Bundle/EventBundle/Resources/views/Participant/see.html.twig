@@ -1,0 +1,26 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'account.update.profil.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                <div class="preview">
+                    <ul>
+                        <li>
+                            <a href="{{ path('event_change_password') }}">{{ 'account.change_password.title'|trans }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('event_account_change_mail') }}">{{ 'account.update_email.title'|trans }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

@@ -11,16 +11,16 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Template\Object\Image;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
+use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -183,9 +183,9 @@ class RegisterController extends Controller
         $participantBlock = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
-            'event'  => $event,
-            'locale' => $locale,
-            'block'  => $participantBlock,
+            'block'   => $participantBlock,
+            'locale'  => $locale,
+            'country' => $event->getCountry(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -266,12 +266,10 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-
         $form = $this->createForm(BlockType::class, $participantBlock, [
-            'event'  => $event,
-            'locale' => $locale,
-            'block'  => $participantBlock,
+            'block'   => $participantBlock,
+            'locale'  => $locale,
+            'country' => $eventView->country,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -303,15 +301,15 @@ class RegisterController extends Controller
             }
         }
 
-        $participantInfos = $this->get('template.participant_info_guesser')->guessParticipantInfosWithTemplateData($registrationTemplate);
+        $participantCard = $this->get('tactician.commandbus')->handle(new CardViewQuery($participant, $locale));
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
-            'eventView'        => $eventView,
-            'form'             => $form->createView(),
-            'stepsCount'       => $registrationTemplate->getBlocksCount(),
-            'stepNumber'       => $step,
-            'stepTitle'        => $participantBlock->getTitle($locale),
-            'participantInfos' => $participantInfos,
+            'eventView'       => $eventView,
+            'form'            => $form->createView(),
+            'stepsCount'      => $registrationTemplate->getBlocksCount(),
+            'stepNumber'      => $step,
+            'stepTitle'       => $participantBlock->getTitle($locale),
+            'participantCard' => $participantCard,
         ]);
     }
 
@@ -341,19 +339,17 @@ class RegisterController extends Controller
         $fileStorage  = $this->get('adapter.local_file_storage');
 
         foreach ($imageObjects as $key => $object) {
-            if ($form->has($key) && $form->get($key)->getData() !== null) {
-                $file = $form->get($key)->getData();
+            if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
+                $file = $form->get($key)->get('file')->getData();
 
-                if ($file instanceof UploadedFile && in_array($file->getClientMimeType(), Image::supportedMimeType())) {
-                    if ($form->has($key) && '' !== $object->getContentValue() && $form->get($key)->getData() !== null) {
+                if ($file instanceof UploadedFile && $file !== null) {
+                    if ('' !== $object->getContentValue()) {
                         $fileStorage->remove($object->getContentValue());
                     }
 
-                    if ($form->has($key) && $form->get($key)->getData() !== null) {
-                        $data[$key]['image'] = $fileStorage->upload($form->get($key)->getData());
-                    }
+                    $data[$key]['image'] = $fileStorage->upload($file);
                 } else {
-                    $form->get($key)->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
                 }
             }
         }

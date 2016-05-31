@@ -128,6 +128,24 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return TemplateData
+     */
+    public function createProfileTemplate(Participant $participant, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+
+        return $this->create(
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+            $participant->getData(),
+            $locale,
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+        );
+    }
+
+    /**
      * @param array  $template
      * @param array  $data
      * @param string $locale

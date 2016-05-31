@@ -1,8 +1,7 @@
-
-function UploadPreview(element)
+function UploadPreview(element, target)
 {
   this.element = element;
-  this.target  = document.querySelector(this.element.getAttribute('data-registration-object-type-image-upload'));
+  this.target  = document.querySelector(target);
   this.element.addEventListener('change', this.readFile.bind(this));
 }
 
