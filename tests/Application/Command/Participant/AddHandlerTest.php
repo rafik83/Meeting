@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandlerTest extends \PHPUnit_Framework_TestCase
@@ -37,6 +38,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
         $sheet = new Sheet($event, $type, [], [], $now);
         $owner = false;
+        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
@@ -104,7 +106,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
 
-        $add = new Add($sheet, 'fr');
+        $add = new Add($sheet, $eventView, 'fr');
         $add->email = 'test@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
@@ -129,6 +131,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], [], $now);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
+        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedParticipant = new Participant(
@@ -176,7 +179,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
 
-        $add = new Add($sheet, 'fr');
+        $add = new Add($sheet, $eventView, 'fr');
         $add->email = 'test@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
