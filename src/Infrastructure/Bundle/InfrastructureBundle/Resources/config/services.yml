@@ -1059,6 +1059,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
 
     #
     # Elastic Adapter

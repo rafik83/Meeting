@@ -103,8 +103,7 @@ class ParticipantInfoGuesser
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $templateData,
-                $tag,
-                $locale
+                $tag
             );
         }
 
@@ -113,20 +112,18 @@ class ParticipantInfoGuesser
 
     /**
      * @param TemplateData $templateData
-     * @param string       $locale
      *
      * @return array
      */
-    public function guessParticipantInfosWithTemplateData(TemplateData $templateData, $locale)
+    public function guessParticipantInfosWithTemplateData(TemplateData $templateData)
     {
-        $tags         = Tag::getParticipantTags();
-        $infos        = [];
+        $tags  = Tag::getParticipantTags();
+        $infos = [];
 
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $templateData,
-                $tag,
-                $locale
+                $tag
             );
         }
 

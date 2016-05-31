@@ -90,6 +90,24 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromSheet(Sheet $sheet, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+
+        return $this->create(
+            $sheet->getType()->getRegistrationTemplate()->getValue(),
+            $sheet->getRegistrationData(),
+            $locale,
+            $sheet->getType()->getRegistrationTemplate()->getFallback()
+        );
+    }
+
+    /**
      * @param Participant $participant
      * @param string      $locale
      *

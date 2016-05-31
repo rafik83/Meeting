@@ -56,11 +56,18 @@ class SheetController extends Controller
             )
         );
 
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'template'      => $template,
             'data'          => $data,
+            'taggedData'    => $taggedData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,

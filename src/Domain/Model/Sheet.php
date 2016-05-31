@@ -120,9 +120,17 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
+     * @return array
+     */
+    public static function getAllStates()
+    {
+        return [self::STATE_ACCEPTED, self::STATE_PENDING, self::STATE_VALIDATED];
+    }
+
+    /**
      * Get id.
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {

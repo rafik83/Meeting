@@ -9,6 +9,10 @@ template:
         nomenclature: Nomenclature
         tag: Tag
         participant: Participant
+    tag:
+        sheet_title: Titre de fiche
+        sheet_organization: Nom de l'organisation
+        sheet_organization_category: Catégorie d'organisation
     media:
         placeholder:
             title: Placeholder du titre
