@@ -67,6 +67,13 @@ event_activate_account:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:password }
 
+event_activate_account_already_known:
+    path: /complete-profile/{participant}
+    methods: [GET]
+    requirements:
+        participant: \d+
+    defaults: { _controller: EventBundle:ActivateAccount:completeProfile }
+
 #
 # Join event
 #
