@@ -9,7 +9,7 @@
 
     {{ form_start(form) }}
 
-    <p><b>Date de la demande de RDV :</b> {{ requestView.createdAt|date('d/m/Y') }}</p>
+    <p><b>Date de la demande de RDV :</b> {{ requestView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</p>
     <p><b>Motivation :</b> {{ requestView.description|default('-') }}</p>
 
     <div class="row">

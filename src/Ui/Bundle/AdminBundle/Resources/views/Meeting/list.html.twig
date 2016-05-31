@@ -20,10 +20,10 @@
                     <td>{{ meeting.sheetNameFrom }}</td>
                     <td>{{ meeting.sheetNameTo }}</td>
                     <td>
-                        {{ meeting.slotBegin|date('d/m/Y H:i') }}
-                        {{ meeting.slotEnd|date('H:i') }}
+                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale) }}
+                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale) }}
                     </td>
-                    <td>{{ meeting.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale) }}</td>
                 </tr>
             {% else %}
                 <tr>

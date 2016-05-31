@@ -33,7 +33,7 @@
                         {{ meeting_request.sheetNameTo }}
                     </a>
                 </td>
-                <td>{{ meeting_request.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td>
                     {{ macro.state_label(
                         ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
