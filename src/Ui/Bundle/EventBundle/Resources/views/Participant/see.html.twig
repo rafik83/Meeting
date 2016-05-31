@@ -29,6 +29,7 @@
                                     {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                                 </li>
                             {% endfor %}
+                                <li>{{ participant.user.getEmail() }}</li>
                             </ul>
                         </div>
                         <div class="validation">

@@ -51,7 +51,7 @@ class ActivateAccountController extends Controller
             $this->get('tactician.commandbus')->handle($command);
             $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
 
-            return $this->redirectToRoute('event_account_participant_profile', [
+            return $this->redirectToRoute('event_account_participant', [
                 'sheet'       => $sheet->getId(),
                 'participant' => $sheet->getUserParticipant($user)->getId()
             ]);

@@ -159,7 +159,7 @@ event_sheet_handle_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:handleParticipant }
+    defaults: { _controller: EventBundle:Sheet:handleAddParticipant }
 
 
 #
