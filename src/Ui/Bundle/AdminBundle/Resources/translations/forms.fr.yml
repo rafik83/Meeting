@@ -847,12 +847,14 @@ form:
                         label_delete: "&times;"
                         prototype:
                             children:
-                                labels:
-                                    label: Libellé du groupe
-                                options:
-                                    label: Options
-                                    label_add: Ajouter une option
-                                    label_delete: "&times;"
+                                item:
+                                    children:
+                                        labels:
+                                            label: Libellé du groupe
+                                        options:
+                                            label: Options
+                                            label_add: Ajouter une option
+                                            label_delete: "&times;"
 
 
             templateData:

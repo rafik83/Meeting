@@ -85,6 +85,20 @@ class PackageGroup
     }
 
     /**
+     * Set rank
+     *
+     * @param int $rank
+     *
+     * @return PackageGroup
+     */
+    public function setRank($rank)
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
+
+    /**
      * @param string $locale
      * @param string $label
      *

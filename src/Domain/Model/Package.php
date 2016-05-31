@@ -374,4 +374,39 @@ class Package
             ? $this->translations->get($locale)->getOptionsLabel()
             : null;
     }
+
+    /**
+     * @param array $groupOptions
+     * @param array $groupLabels
+     *
+     * @return Package
+     */
+    public function setGroups(array $groupOptions, array $groupLabels)
+    {
+        foreach ($groupLabels as $rank => $labels) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            foreach ($labels as $locale => $label) {
+                $this->groups->get($rank)->setRank($rank)->translate($locale, $label);
+            }
+        }
+
+        foreach ($groupOptions as $rank => $options) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            $this->groups->get($rank)->setOptions(is_array($options) ? $options : []);
+        }
+
+        foreach ($this->getGroups() as $rank => $group) {
+            if (!isset($groupLabels[$rank]) && !isset($groupOptions[$rank])) {
+                $this->groups->remove($rank);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -94,12 +94,14 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
+    [].forEach.call(target.querySelectorAll('[data-sortable-collection]'), function (element) {
+        new SortableCollection(element, element.getAttribute('data-sortable-collection'));
+    });
 
     [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
         element.addEventListener('click', function () { loadingButton.start(); });
     });
-
 
     // Disable click on <a href="#"></a>
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
@@ -108,7 +110,6 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
-        new SortableCollection(element);
     });
 
     //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {

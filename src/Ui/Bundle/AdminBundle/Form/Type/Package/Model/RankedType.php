@@ -23,13 +23,8 @@ class RankedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('value', $options['value_type'], array_merge(['label' => false], $options['value_options']))
-            ->add('rank', HiddenType::class, [
-                'label' => false,
-                'attr'  => [
-                    'data-rank' => '',
-                ]
-            ])
+            ->add('item', $options['item_type'], array_merge(['label' => false], $options['item_options']))
+            ->add('rank', $options['rank_type'], array_merge(['label' => false], $options['rank_options']))
         ;
     }
 
@@ -38,7 +33,11 @@ class RankedType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['value_type']);
-        $resolver->setDefaults(['value_options' => []]);
+        $resolver->setRequired(['item_type']);
+        $resolver->setDefaults([
+            'item_options' => [],
+            'rank_type'    => HiddenType::class,
+            'rank_options' => [],
+        ]);
     }
 }

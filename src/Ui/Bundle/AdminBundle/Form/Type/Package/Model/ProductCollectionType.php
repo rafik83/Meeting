@@ -12,23 +12,22 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model;
 
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\DataTransformer\RankedCollectionTransformer;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProductCollectionType extends AbstractType implements DataTransformerInterface
+class ProductCollectionType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer($this);
+        $builder->addModelTransformer(new RankedCollectionTransformer());
     }
 
     /**
@@ -44,8 +43,13 @@ class ProductCollectionType extends AbstractType implements DataTransformerInter
             'prototype_name' => '__option__',
             'entry_options'  => function (Options $options) {
                 return [
-                    'value_type'    => ProductChoiceType::class,
-                    'value_options' => [
+                    'rank_options' => [
+                        'attr' => [
+                            'data-rank' => $options['collection_group'],
+                        ],
+                    ],
+                    'item_type'    => ProductChoiceType::class,
+                    'item_options' => [
                         'label'            => false,
                         'event'            => $options['event'],
                         'placeholder'      => '',
@@ -61,7 +65,7 @@ class ProductCollectionType extends AbstractType implements DataTransformerInter
             'attr'             => function (Options $options) {
                 return [
                     'data-shared-choices-collection' => $options['collection_group'],
-                    'data-sortable'                  => '',
+                    'data-sortable-collection'       => $options['collection_group'],
                 ];
             },
        ]);
@@ -81,45 +85,5 @@ class ProductCollectionType extends AbstractType implements DataTransformerInter
     public function getParent()
     {
         return CollectionType::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function transform($value)
-    {
-        if (null === $value) {
-            return [];
-        }
-
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('"array" expected, "%s" given.', gettype($value)));
-        }
-
-        return array_map(function (Product $product, $rank) {
-            return ['value' => $product, 'rank' => $rank];
-        }, array_values($value), array_keys($value));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reverseTransform($value)
-    {
-        if (null === $value) {
-            return [];
-        }
-
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('"array" expected, "%s" given.', gettype($value)));
-        }
-
-        usort($value, function (array $one, array $another) {
-            return $one['rank'] - $another['rank'];
-        });
-
-        return array_map(function (array $ranked) {
-            return $ranked['value'];
-        }, $value);
     }
 }

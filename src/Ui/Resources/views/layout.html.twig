@@ -195,8 +195,13 @@
 
 {% block groups_item_row %}
     <div {{ block('row_container_attributes') }}>
-        <div class="text-right mg-bt">
-            {{ block('collection_delete_button') }}
+        <div class="mg-bt">
+            <span class="btn btn-default sort-handle">
+                <i class="glyphicon glyphicon-resize-vertical"></i>
+            </span>
+            <div class="pull-right">
+                {{ block('collection_delete_button') }}
+            </div>
         </div>
         {{ form_widget(form) }}
         {{ form_errors(form) }}

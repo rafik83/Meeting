@@ -25,7 +25,7 @@ class Options
     public $enabled;
 
     /**
-     * @var Product[]
+     * @var Group[]
      */
     public $groups;
 
@@ -52,5 +52,21 @@ class Options
     public function getLabel($locale, $default = null)
     {
         return isset($this->labels[$locale]) ? $this->labels[$locale] : $default;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupOptions()
+    {
+        return array_map(function (Group $group) { return $group->options; }, $this->groups);
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupLabels()
+    {
+        return array_map(function (Group $group) { return $group->labels; }, $this->groups);
     }
 }

@@ -36,17 +36,8 @@ class OptionsType extends AbstractType
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('groups', CollectionType::class, [
-                'allow_add'      => true,
-                'allow_delete'   => true,
-                'entry_type'     => GroupType::class,
-                'entry_options'  => [
-                    'label' => false,
-                    'event' => $options['event'],
-                ],
-                'attr'           => [
-                    'class' => 'package-options-groups'
-                ],
+            ->add('groups', GroupCollectionType::class, [
+                'event' => $options['event'],
             ])
         ;
     }

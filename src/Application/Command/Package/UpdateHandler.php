@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Pagerfanta\Tests\Adapter\DoctrineORM\Group;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class UpdateHandler
@@ -40,15 +41,8 @@ class UpdateHandler
             ->choosePlans(array_values($update->plans->plans))
             ->chooseParticipant($update->participantAndPlanning->participant)
             ->choosePlanning($update->participantAndPlanning->planning)
+            ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
-
-        foreach (array_values($update->options->groups) as $rank => $group) {
-            foreach ($update->package->getEvent()->getLocales() as $locale) {
-                $update->package->group($rank)->translate($locale, $group->getLabel($locale));
-            }
-
-            $update->package->group($rank)->setOptions($group->options);
-        }
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(
