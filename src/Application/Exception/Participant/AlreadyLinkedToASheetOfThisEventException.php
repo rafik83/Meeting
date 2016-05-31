@@ -8,12 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Participant;
+namespace Proximum\Vimeet\Application\Exception\Participant;
 
-class Create
+class AlreadyLinkedToASheetOfThisEventException extends ParticipantException
 {
-    /**
-     * @var
-     */
-    public $data;
+
 }

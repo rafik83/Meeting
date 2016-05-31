@@ -120,9 +120,17 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
+     * @return array
+     */
+    public static function getAllStates()
+    {
+        return [self::STATE_ACCEPTED, self::STATE_PENDING, self::STATE_VALIDATED];
+    }
+
+    /**
      * Get id.
      *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -370,13 +378,17 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     /**
      * @param User $user
      *
-     * @return Participant
+     * @return Participant|null
      */
     public function getUserParticipant(User $user)
     {
-        return $this->participants->filter(function (Participant $participant) use ($user) {
-            return $participant->getUser() === $user;
-        })->first() ? : null;
+        foreach ($this->participants as $participant) {
+            if ($participant->getUser() === $user) {
+                return $participant;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -24,7 +24,7 @@
                 <td>{{ product.quantityMin }} / {{ product.quantityMax }}</td>
                 <td>{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
                 <td>{{ product.updatable ? '✓' : '' }}</td>
-                <td>{{ product.updatableUntil ? product.updatableUntil|date('d/m/Y') : '-' }}</td>
+                <td>{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
             </tr>
         {% else %}
             <tr>

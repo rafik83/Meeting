@@ -31,14 +31,13 @@ class AccountController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function updateAction(Request $request, EventView $eventView)
+    public function updateEmailAction(Request $request, EventView $eventView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $changeMail = new ChangeMail($this->getUser(), $eventView);
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
-            'action' => $this->generateUrl('event_account'),
-            'submit' => true,
+            'action' => $this->generateUrl('event_account_change_mail'),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

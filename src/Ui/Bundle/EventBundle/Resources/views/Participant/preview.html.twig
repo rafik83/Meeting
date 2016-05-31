@@ -1,19 +1,29 @@
-<div class="object--participant">
-    <div class="list list--users">
-        <div class="user clearfix">
-            <div class="user__avatar">
+<div class="user clearfix">
+    <div class="user__avatar">
+        <span class="bullet"></span>
+        {% if participant.editable and null != participant.sheetId %}
+            <a href="{{ path('event_account_participant', {sheet: participant.sheetId, participant: participant.id}) }}">
                 <div class="avatar">
-                    {% if participantInfos['participant_avatar'] is defined and participantInfos['participant_avatar'] != null %}
-                        <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participantInfos['participant_avatar']) }}">
+                    {% if participant.avatar != null %}
+                        <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                     {% else %}
-                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participantInfos['participant_firstname']|first }}{{ participantInfos['participant_lastname']|first }}</p>
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
                     {% endif %}
                 </div>
+            </a>
+        {% else %}
+            <div class="avatar">
+                {% if participant.avatar != null %}
+                    <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
+                {% else %}
+                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
+                {% endif %}
             </div>
-            <div class="user__infos">
-                <p class="name">{{ participantInfos['participant_firstname'] }} {{ participantInfos['participant_lastname'] }}</p>
-                <p class="job">{{ participantInfos['participant_position'] }}</p>
-            </div>
-        </div>
+        {% endif %}
+    </div>
+    <div class="user__infos">
+        <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
+        <p class="job">{{ participant.position }}</p>
     </div>
 </div>
+

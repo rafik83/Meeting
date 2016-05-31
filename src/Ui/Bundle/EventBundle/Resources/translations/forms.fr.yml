@@ -1,4 +1,16 @@
 form:
+    change_password_user:
+        children:
+            plainPassword:
+                children:
+                    first:
+                        label: Nouveau mot de passe
+                    second:
+                        label: Ressaisir le nouveau mot de passe
+            currentPassword:
+                label: Mot de passe actuel
+            submit:
+                label: Envoyer
     email:
         placeholder: Saisissez votre adresse e-mail
     register:
@@ -31,6 +43,10 @@ form:
                 label: URL
             submit:
                 label: Enregistrer
+    sheet_image_data:
+        children:
+            submit:
+                label: Enregister
     sheet_media_collection_data:
         children:
             medias:
@@ -61,3 +77,11 @@ form:
         children:
             items:
                 label: Sélectionnez vos compétences
+    add_participant:
+        children:
+            firstName:
+                placeholder: Prénom
+            lastName:
+                placeholder: NOM
+            email:
+                placeholder: E-mail

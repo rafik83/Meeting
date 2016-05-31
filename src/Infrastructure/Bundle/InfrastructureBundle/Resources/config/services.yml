@@ -194,18 +194,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
-    vimeet_infrastructure.vimeet.application.command.participant.update_handler:
-        class: Proximum\Vimeet\Application\Command\Participant\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.participant.participant_manager'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Update }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
         class: Proximum\Vimeet\Application\Command\Participant\AddHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.template_data_factory'
             - '@components.token.user.activate_account_token_generator'
             - '@repository.user_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -215,7 +210,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.participant.participant_manager'
+            - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
     vimeet_infrastructure.vimeet.application.command.billing.update_handler:
@@ -740,6 +735,20 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
+    command.participant.update_profile_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateProfile }
+    command.participant.update_avatar_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
 
     #
     # Security
@@ -777,7 +786,7 @@ services:
     #
     # Components
     #
-    vimeet_infrastructure.application.components.participant.participant_manager:
+    components.participant.participant_manager:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantManager
 
     #
@@ -1037,6 +1046,18 @@ services:
             - '@repository.trace_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
+    query.participant.card_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
+        arguments:
+            - '@query.participant.card_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardListViewQuery }
+    query.participant.card_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
 
     #
     # Elastic Transformer
@@ -1045,6 +1066,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
 
     #
     # Elastic Adapter

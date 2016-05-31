@@ -115,7 +115,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @return nulL|string
+     * @return null|string
      */
     public function getNomenclatureLabel()
     {
@@ -124,7 +124,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
         }
 
         foreach ($this->nomenclatureLabels as $values) {
-            if (isset($values[$this->getItem()])) {
+            if (null !== $this->getItem() && isset($values[$this->getItem()])) {
                 return $values[$this->getItem()];
             }
         }

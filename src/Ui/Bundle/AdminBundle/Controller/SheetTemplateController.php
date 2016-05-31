@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
@@ -242,7 +243,8 @@ class SheetTemplateController extends Controller
             'update_form'     => $updateForm->createView(),
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
-            'nomenclatures'   => $nomenclatures
+            'nomenclatures'   => $nomenclatures,
+            'sheet_tags'      => Tag::getSheetTags(),
         ]);
     }
 

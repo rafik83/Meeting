@@ -62,7 +62,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         style: "style-1"
                                                         label:
                                                             fr: "Catégorie"
-                                                        tag: "sheet_organization"
+                                                        tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"

@@ -10,16 +10,23 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -41,14 +48,29 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $participants  = $this->get('tactician.commandbus.query')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->getUser(),
+                $locale
+            )
+        );
+
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
             'template'      => $template,
             'data'          => $data,
+            'taggedData'    => $taggedData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
         ]);
     }
 
@@ -79,7 +101,7 @@ class SheetController extends Controller
         }
 
         if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('No participant for this user is attached on this sheet');
+            throw $this->createNotFoundException('No participant for this user is attached on this sheet');
         }
 
         if (!$eventView->hasLocale($locale)) {
@@ -118,13 +140,13 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Object $object
-     * @param string $locale
-     * @param string $key
+     * @param Template\Object $object
+     * @param string          $locale
+     * @param string          $key
      *
      * @return Form
      */
-    private function createObjectForm(Object $object, $locale, $key)
+    private function createObjectForm(Template\Object $object, $locale, $key)
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -132,6 +154,7 @@ class SheetController extends Controller
             'media'         => Data\MediaCollectionDataType::class,
             'collection'    => Data\ItemCollectionDataType::class,
             'nomenclature'  => Data\NomenclatureDataType::class,
+            'image'         => Data\ImageDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {
@@ -172,6 +195,22 @@ class SheetController extends Controller
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if ($object instanceof Template\Object\Image) {
+                $file = $form->get('file')->getData();
+
+                if ($file instanceof UploadedFile) {
+                    $image        = $object->getImage();
+                    $fileStorage  = $this->get('adapter.local_file_storage');
+
+                    if (null !== $image) {
+                        $fileStorage->remove($image);
+                    }
+
+                    $newImage = $fileStorage->upload($file);
+                    $object->setImage($newImage);
+                }
+            }
+
             $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
             return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
@@ -182,6 +221,19 @@ class SheetController extends Controller
         $template      = $sheet->getType()->getSheetTemplate();
         $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $participants  = $this->get('tactician.commandbus.query')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->getUser(),
+                $locale
+            )
+        );
+
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
@@ -194,9 +246,111 @@ class SheetController extends Controller
             'data'          => $data,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
+            'taggedData'    => $taggedData,
             'form'          => $form->createView(),
             'label'         => $label,
             'uid'           => $key,
+            'participants'  => $participants,
+        ]);
+    }
+
+    /**
+     * Render the form of the addition of a participant. Loaded by ajax from the sheet.
+     *
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function addParticipantAction(EventView $eventView, $locale, $key)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $sheet        = $this->getUserSheet($eventView, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        $addParticipant = new Add($sheet, $eventView, $locale);
+        $form           = $this->createForm(AddType::class, $addParticipant, [
+            'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
+        ]);
+
+        return $this->render('EventBundle:Participant:add.html.twig', [
+            'uid'   => $key,
+            'form'  => $form->createView(),
+            'label' => $label,
+        ]);
+    }
+
+    /**
+     * Add a participant and display the sheet with the modal in case of form error.
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function handleAddParticipantAction(Request $request, EventView $eventView, $locale, $key)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $sheet        = $this->getUserSheet($eventView, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        $addParticipant = new Add($sheet, $eventView, $locale);
+        $form           = $this->createForm(AddType::class, $addParticipant, [
+            'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
+        ]);
+
+        // Handle the form, update the object and redirect to the sheet if valid
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($addParticipant);
+
+                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+            } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
+                $form->get('email')->addError(new FormError('validators.participant.alreadyLinkedToASheet'));
+            } catch (ParticipantAlreadyExistException $exception) {
+                $form->get('email')->addError(new FormError('validators.participant.alreadyLinkedToThisSheet'));
+            }
+        }
+
+        // If the form is not valid, render the sheet and force the popin with the participant form
+        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
+        $template      = $sheet->getType()->getSheetTemplate();
+        $data          = $sheet->getData();
+        $participants  = $this->get('tactician.commandbus.query')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->getUser(),
+                $locale
+            )
+        );
+
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'        => $eventView,
+            'sheet'            => $sheet,
+            'template'         => $template,
+            'data'             => $data,
+            'locale'           => $locale,
+            'nomenclatures'    => $nomenclatures,
+            'taggedData'    => $taggedData,
+            'form_participant' => $form->createView(),
+            'label'            => $label,
+            'uid'              => $key,
+            'participants'     => $participants,
         ]);
     }
 }

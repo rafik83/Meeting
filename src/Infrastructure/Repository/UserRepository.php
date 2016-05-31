@@ -47,12 +47,29 @@ class UserRepository implements UserRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('user.id')
-            ->from('Entity:User', 'user')
+            ->from(User::class, 'user')
             ->where('user.email = :email')
             ->setParameter('email', $email)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult() ? true : false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullUser($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->where('user.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -72,7 +89,7 @@ class UserRepository implements UserRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('user')
-            ->from('Entity:User', 'user')
+            ->from(User::class, 'user')
             ->where('user.email = :email')
             ->setParameter('email', $email)
             ->setMaxResults(1);

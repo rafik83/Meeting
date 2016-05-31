@@ -111,6 +111,8 @@ fos_elastica:
                             sheetAnalyzer:
                                 tokenizer: "standard"
                                 filter: ["standard", "lowercase"]
+                            emailAnalyzer:
+                                tokenizer: "uax_url_email"
             types:
                 sheet:
                     mappings:
@@ -118,6 +120,7 @@ fos_elastica:
                             type: integer
                         sheetName:
                             type: string
+                            analyzer: "sheetAnalyzer"
                         state:
                             type: string
                         categories:
@@ -128,6 +131,15 @@ fos_elastica:
                             type: integer
                         participantNumber:
                             type: integer
+                        participants:
+                            type: nested
+                            properties:
+                                lastname:
+                                    type: string
+                                    analyzer: "sheetAnalyzer"
+                                email:
+                                    type: string
+                                    analyzer: "emailAnalyzer"
                         event:
                             type: integer
                         owner:

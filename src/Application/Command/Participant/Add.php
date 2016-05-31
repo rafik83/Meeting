@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\EventView;
 
 class Add
 {
@@ -28,12 +29,17 @@ class Add
     /**
      * @var string
      */
-    public $email;
+    public $firstName;
 
     /**
-     * @var array
+     * @var string
      */
-    public $data;
+    public $lastName;
+
+    /**
+     * @var string
+     */
+    public $email;
 
     /**
      * @var Participant
@@ -46,13 +52,20 @@ class Add
     public $owner;
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @var EventView
      */
-    public function __construct(Sheet $sheet, $locale)
+    public $eventView;
+
+    /**
+     * @param Sheet     $sheet
+     * @param EventView $eventView
+     * @param string    $locale
+     */
+    public function __construct(Sheet $sheet, EventView $eventView, $locale)
     {
-        $this->sheet  = $sheet;
-        $this->locale = $locale;
-        $this->owner  = false;
+        $this->sheet     = $sheet;
+        $this->eventView = $eventView;
+        $this->locale    = $locale;
+        $this->owner     = false;
     }
 }
