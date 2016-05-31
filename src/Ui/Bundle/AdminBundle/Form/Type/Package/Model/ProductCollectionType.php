@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model;
 
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\DataTransformer\RankedCollectionTransformer;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;

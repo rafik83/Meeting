@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Model;
 
-use Proximum\Vimeet\Domain\Model\Product;
-
 class Options
 {
     /**

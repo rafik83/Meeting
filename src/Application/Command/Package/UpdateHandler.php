@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
-use Pagerfanta\Tests\Adapter\DoctrineORM\Group;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class UpdateHandler
