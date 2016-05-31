@@ -42,7 +42,7 @@ class EditableTextValidator extends ObjectValidator
      */
     protected function checkMinLength(Object $object, Constraint $constraint)
     {
-        if ($object instanceof Object\EditableText && null !== $object->getOption('minLength')) {
+        if ($object instanceof Object\EditableText && null !== $object->getOption('minLength') && '' !== $object->getOption('minLength')) {
             if ($constraint->isInBlock) {
                 $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.content')->validate($object->getContentValue(), new Length(['min' => $object->getOption('minLength')]));
             } else {
@@ -56,7 +56,7 @@ class EditableTextValidator extends ObjectValidator
      */
     protected function checkMaxLength(Object $object, Constraint $constraint)
     {
-        if ($object instanceof Object\EditableText && null !== $object->getOption('maxLength')) {
+        if ($object instanceof Object\EditableText && null !== $object->getOption('maxLength') && '' !== $object->getOption('maxLength')) {
             if ($constraint->isInBlock) {
                 $this->context->getValidator()->inContext($this->context)->atPath(
                     $constraint->key.'.content'

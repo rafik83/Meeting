@@ -43,7 +43,7 @@ class EditableTextDataType extends AbstractType
             'rows' => 7,
         ];
 
-        if (null !== $object->getOption('maxLength')) {
+        if (null !== $object->getOption('maxLength') && '' !== $object->getOption('maxLength')) {
             $attributes['data-text-max-length-indicator']    = $object->getOption('maxLength');
             $attributes['data-text-max-length-translations'] = sprintf(
                 '%s|%s|%s',
