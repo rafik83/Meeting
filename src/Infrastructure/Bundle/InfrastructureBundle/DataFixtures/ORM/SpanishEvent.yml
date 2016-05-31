@@ -6,6 +6,7 @@ Proximum\Vimeet\Domain\Model\Event:
         locales: [es]
         fallback: es
         assetPath: ''
+        country: 'ES'
         organiserName: PROXIMUM
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_event_spanish'
