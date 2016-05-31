@@ -24,6 +24,9 @@ class FilterFullType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('text', SheetTextSearchType::class, [
+                'label' => 'form.sheet_filter.children.text_search.label',
+            ])
             ->add('state', StateChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.state.label',
                 'placeholder' => '',
@@ -37,9 +40,6 @@ class FilterFullType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
-            ])
-            ->add('sheetName', SheetNameType::class, [
-                'label' => 'form.sheet_filter.children.sheet_name.label',
             ])
             ->add('type', TypeChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.type.label',

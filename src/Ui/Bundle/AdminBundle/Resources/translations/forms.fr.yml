@@ -620,8 +620,8 @@ form:
                 label: Type
             follower:
                 label: Suivi commercial
-            sheet_name:
-                label: Titre de la fiche
+            text_search:
+                label: Titre de la fiche, nom ou email de participant
     create_admin:
         children:
             email:
