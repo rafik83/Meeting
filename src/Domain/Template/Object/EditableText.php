@@ -57,4 +57,44 @@ class EditableText extends EditableObject implements ContentObjectInterface
     {
         $this->setContent($value);
     }
+
+    /**
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return (bool) $this->getOption('required');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMinLength()
+    {
+        return !empty($this->getOption('minLength'));
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinLength()
+    {
+        return (int) $this->getOption('minLength');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMaxLength()
+    {
+        return !empty($this->getOption('maxLength'));
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxLength()
+    {
+        return (int) $this->getOption('maxLength');
+    }
 }
