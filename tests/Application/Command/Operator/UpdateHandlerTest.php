@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -50,7 +49,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository->set($expectedOperator)->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
@@ -66,14 +64,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $activateAccountTokenGenerator->generate($expectedOperator)->shouldNotBeCalled();
-        $activateAccountTokenRepository->deleteAllForUser($expectedOperator)->shouldNotBeCalled();
-        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldNotBeCalled();
         $eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent)->shouldNotBeCalled();
 
         $handler = new UpdateHandler(
             $adminRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
         $handler->handle($command);
@@ -105,7 +100,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository->set($expectedOperator)->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
@@ -121,14 +115,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $activateAccountTokenGenerator->generate($expectedOperator)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
-        $activateAccountTokenRepository->deleteAllForUser($expectedOperator)->shouldBeCalled();
-        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
         $eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent)->shouldBeCalled();
 
         $handler = new UpdateHandler(
             $adminRepository->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
         $handler->handle($command);

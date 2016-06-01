@@ -198,7 +198,6 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '@components.token.user.activate_account_token_generator'
-            - '@repository.user_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
@@ -570,7 +569,6 @@ services:
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@components.token.admin.activate_account_token_generator'
-            - '@repository.admin_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Create }
@@ -579,7 +577,6 @@ services:
         arguments:
             - '@repository.admin_repository'
             - '@components.token.admin.activate_account_token_generator'
-            - '@repository.admin_activate_account_token_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Update }
@@ -864,10 +861,12 @@ services:
     components.token.user.activate_account_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator
         arguments:
+            - '@repository.user_activate_account_token_repository'
             - '@datetime'
     components.token.admin.activate_account_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
+            - '@repository.admin_activate_account_token_repository'
             - '@datetime'
     components.token.change_mail_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator

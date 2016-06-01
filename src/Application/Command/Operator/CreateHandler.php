@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
-use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -29,11 +28,6 @@ class CreateHandler extends AbstractCreateHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var ActivateAccountTokenRepositoryInterface
-     */
-    private $activateAccountTokenRepository;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -43,7 +37,6 @@ class CreateHandler extends AbstractCreateHandler
      * @param PasswordEncoderInterface                $encoder
      * @param SaltGeneratorInterface                  $saltGenerator
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
@@ -51,13 +44,11 @@ class CreateHandler extends AbstractCreateHandler
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         parent::__construct($adminRepository, $encoder, $saltGenerator);
 
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
@@ -102,17 +93,8 @@ class CreateHandler extends AbstractCreateHandler
      */
     private function sendActivationEvent(Create $create, Admin $admin)
     {
-        $activateAccountToken = $this->activateAccountTokenGenerator->generate($admin);
-
-        $this->activateAccountTokenRepository->deleteAllForUser($admin);
-        $this->activateAccountTokenRepository->create($activateAccountToken);
-
-        $activateAccountEvent = new ActivateAccountEvent(
-            $admin,
-            $activateAccountToken,
-            $create->organizer->getLocale()
-        );
-
-        $this->eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent);
+        $token = $this->activateAccountTokenGenerator->generate($admin);
+        $event = new ActivateAccountEvent($admin, $token, $create->organizer->getLocale());
+        $this->eventDispatcher->dispatch('admin_activate_account', $event);
     }
 }
