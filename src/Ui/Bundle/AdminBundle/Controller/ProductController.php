@@ -33,6 +33,8 @@ class ProductController extends Controller
      */
     public function listAction(Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $products = $this->get('vimeet_infrastructure.repository.product_repository')->findByEvent($event);
 
         return $this->render('AdminBundle:Product:list.html.twig', [
@@ -49,6 +51,8 @@ class ProductController extends Controller
      */
     public function createOptionAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreateOption($event);
         $form   = $this->createForm(CreateOptionType::class, $create, ['submit' => true]);
 
@@ -73,6 +77,8 @@ class ProductController extends Controller
      */
     public function createPlanAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreatePlan($event);
         $form   = $this->createForm(CreatePlanType::class, $create, ['submit' => true, 'event' => $event]);
 
@@ -97,6 +103,8 @@ class ProductController extends Controller
      */
     public function createParticipantAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreateParticipant($event);
         $form   = $this->createForm(CreateParticipantType::class, $create, ['submit' => true]);
 
@@ -121,6 +129,8 @@ class ProductController extends Controller
      */
     public function createPlanningAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new CreatePlanning($event);
         $form   = $this->createForm(CreatePlanningType::class, $create, ['submit' => true]);
 
