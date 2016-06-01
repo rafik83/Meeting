@@ -21,6 +21,21 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $defaultLabels = [
+            'plans' => [
+                'fr' => 'Forfait',
+                'en' => 'Plans',
+            ],
+            'participant_and_planning' => [
+                'fr' => 'Participant et planning',
+                'en' => 'Participant and Planning',
+            ],
+            'options' => [
+                'fr' => 'Options',
+                'en' => 'Options',
+            ],
+        ];
+
         $dateTime = new \DateTimeImmutable();
 
         $event = new Event();
@@ -28,7 +43,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $package = new Package($event, 'Lorem ipsum', $dateTime);
         $package->translate('fr', 'Forfait', 'Participant et planning', 'Options');
-        $package->translate('en', 'Forfait', 'Participant et planning', 'Options');
+        $package->translate('en', 'Plans', 'Participant and Planning', 'Options');
 
         $command        = new Create();
         $command->event = $event;
@@ -39,7 +54,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $packageRepository->add($package)->shouldBeCalled();
 
-        $handler = new CreateHandler($packageRepository->reveal(), $dateTime);
+        $handler = new CreateHandler($packageRepository->reveal(), $dateTime, $defaultLabels);
 
         $this->assertEquals(new CreateResult($package), $handler->handle($command));
     }
