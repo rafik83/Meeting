@@ -1,4 +1,4 @@
-function CheckAll(element, selector)
+function CheckAllCheckbox(element, selector)
 {
     this.element = element;
     this.all     = document.querySelectorAll(selector);
@@ -14,7 +14,7 @@ function CheckAll(element, selector)
     }.bind(this));
 }
 
-CheckAll.prototype.check = function ()
+CheckAllCheckbox.prototype.check = function ()
 {
     var checked = this.element.checked;
 
@@ -29,9 +29,9 @@ CheckAll.prototype.check = function ()
     });
 };
 
-CheckAll.prototype.count = function ()
+CheckAllCheckbox.prototype.count = function ()
 {
     return [].reduce.call(this.all, function (previous, current) { return current.checked ? ++previous : previous }, 0);
 };
 
-module.exports = CheckAll;
+module.exports = CheckAllCheckbox;

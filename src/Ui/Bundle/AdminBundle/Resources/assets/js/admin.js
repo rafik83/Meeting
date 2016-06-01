@@ -2,7 +2,7 @@ var $                    = require('jquery'),
     bootstrap            = require('bootstrap'),
     tablesort            = require('tablesort'),
     Confirm              = require('./components/_Confirm'),
-    CheckAll             = require('./components/_CheckAll'),
+    CheckAllCheckbox     = require('./components/_CheckAllCheckbox'),
     LoadingButton        = require('./components/_LoadingButton'),
     TemplateBuilder      = require('./components/_TemplateBuilder'),
     SelectPackageProduct = require('./components/_SelectPackageProduct'),
@@ -61,7 +61,7 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
-    [].forEach.call(target.querySelectorAll('[data-check-all]'), function (element) { new CheckAll(element, element.getAttribute('data-check-all')); });
+    [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
