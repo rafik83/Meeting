@@ -26,15 +26,22 @@ class CreateHandler
     private $dateTime;
 
     /**
+     * @var array
+     */
+    private $defaultLabels;
+
+    /**
      * CreateHandler constructor.
      *
      * @param PackageRepositoryInterface $packageRepository
      * @param \DateTimeInterface         $dateTime
+     * @param array                      $defaultLabels
      */
-    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
+    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime, array $defaultLabels)
     {
         $this->packageRepository = $packageRepository;
         $this->dateTime          = $dateTime;
+        $this->defaultLabels     = $defaultLabels;
     }
 
     /**
@@ -47,7 +54,12 @@ class CreateHandler
         $package = new Package($create->event, $create->title, $this->dateTime);
 
         foreach ($create->event->getLocales() as $locale) {
-            $package->translate($locale, 'Forfait', 'Participant et planning', 'Options');
+            $package->translate(
+                $locale,
+                isset($this->defaultLabels['plans'][$locale]) ? $this->defaultLabels['plans'][$locale] : '',
+                isset($this->defaultLabels['participant_and_planning'][$locale]) ? $this->defaultLabels['participant_and_planning'][$locale] : '',
+                isset($this->defaultLabels['options'][$locale]) ? $this->defaultLabels['options'][$locale] : ''
+            );
         }
 
         $this->packageRepository->add($package);

@@ -694,6 +694,7 @@ services:
         arguments:
             - '@repository.package_repository'
             - '@datetime'
+            - '%infrastructure.package.default_labels%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
     command.package.update_handler:

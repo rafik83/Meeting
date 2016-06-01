@@ -27,6 +27,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.bundle_guideline_path', $config['bundle_guideline_path']);
         $container->setParameter('infrastructure.font_path', $config['font_path']);
         $container->setParameter('infrastructure.image_path', $config['image_path']);
+        $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

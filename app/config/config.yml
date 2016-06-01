@@ -171,6 +171,17 @@ infrastructure:
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
+    package:
+        default_labels:
+            plans:
+                fr: Forfait
+                en: Plans
+            participant_and_planning:
+                fr: Participant et planning
+                en: Participant and Planning
+            options:
+                fr: Options
+                en: Options
 
 tactician:
     commandbus:
