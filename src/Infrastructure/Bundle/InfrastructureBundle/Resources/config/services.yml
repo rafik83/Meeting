@@ -993,9 +993,6 @@ services:
         arguments:
             - '@repository.nomenclature_repository'
 
-    template.products_selection_template_factory:
-        class: Proximum\Vimeet\Domain\Template\ProductsSelectionTemplateFactory
-
     #
     # Guesser
     #
