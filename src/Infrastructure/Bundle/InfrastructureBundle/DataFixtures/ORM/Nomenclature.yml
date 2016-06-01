@@ -149,3 +149,17 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             activite1: { label: { fr: "AGRICULTURE, SYLVICULTURE ET PÊCHE", en: "AGRICULTURE, SYLVICULTURE ET PÊCHE" }}
             activite2: { label: { fr: "COMMERCE", en: "COMMERCE" }}
             activite3: { label: { fr: "INFORMATION ET COMMUNICATION", en: "INFORMATION ET COMMUNICATION" }}
+    nomenclature_company_category:
+        __construct: false
+        title: "Catégorie"
+        depth: 1
+        value:
+            category1: { label: { fr: "PME", en: "PME" }}
+            category2: { label: { fr: "Start-up", en: "Start-up" }}
+            category3: { label: { fr: "Grand groupe", en: "Large group" }}
+            category4: { label: { fr: "Organisme public", en: "Publique organization" }}
+            category5: { label: { fr: "ETI", en: "ETI" }}
+            category6: { label: { fr: "Institutionnelle", en: "Institutional" }}
+            category6: { label: { fr: "Structure de recherche", en: "Research structure" }}
+            category6: { label: { fr: "Association", en: "Association" }}
+            category6: { label: { fr: "Pôle de compétitivité", en: "Cluster" }}

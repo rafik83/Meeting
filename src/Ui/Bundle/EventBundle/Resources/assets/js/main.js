@@ -1,10 +1,11 @@
-var $                 = require('jquery'),
-    PubSub            = require('pubsub-js'),
-    Confirm           = require('./components/_Confirm'),
-    ChoiceDescription = require('./components/_ChoiceDescription'),
-    AjaxForm          = require('./components/_AjaxForm'),
-    SelectParent      = require('./components/_SelectParent'),
-    UploadPreview     = require('./components/_UploadPreview');
+var $                     = require('jquery'),
+    PubSub                = require('pubsub-js'),
+    Confirm               = require('./components/_Confirm'),
+    ChoiceDescription     = require('./components/_ChoiceDescription'),
+    AjaxForm              = require('./components/_AjaxForm'),
+    SelectParent          = require('./components/_SelectParent'),
+    UploadPreview         = require('./components/_UploadPreview'),
+    EditableTextIndicator = require('./components/_EditableTextIndicator');
 
 require('bootstrap');
 require('elao-form.js');
@@ -53,11 +54,12 @@ function init (target) {
     $('.show-modal').modal('show');
 
     [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) { new SelectParent(element) });
-    [].forEach.call(target.querySelectorAll('[data-registration-object-type-image-upload]'), function (element) { new UploadPreview(element) });
+    [].forEach.call(target.querySelectorAll('[data-image-preview]'), function (element) { new UploadPreview(element, element.getAttribute('data-image-preview')) });
     [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });
+    [].forEach.call(target.querySelectorAll('[data-text-max-length-indicator]'), function (element) { new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations')); });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

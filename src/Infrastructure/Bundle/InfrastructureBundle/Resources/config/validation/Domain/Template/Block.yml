@@ -1,4 +1,3 @@
 Proximum\Vimeet\Domain\Template\Block:
     constraints:
-        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\BlockConstraint: ~
-
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\BlockConstraint: { groups: [block] }

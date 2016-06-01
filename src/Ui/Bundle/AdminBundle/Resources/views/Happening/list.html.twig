@@ -24,8 +24,8 @@
             <tr>
                 <td>{{ happening.title }}</td>
                 <td>{{ happening.speakers|join(', ') }}</td>
-                <td>{{ happening.begin|date('d/m/Y H\\hi') }}</td>
-                <td>{{ happening.end|date('d/m/Y H\\hi') }}</td>
+                <td>{{ happening.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ happening.end|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     {% if happening.canUpdate %}
                         <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default btn-sm">

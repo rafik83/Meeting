@@ -46,7 +46,7 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.reference }}</td>
-                        <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ order.date|localizeddate('medium', 'short', app.request.locale) }}</td>
                         <td>{{ order.paymentMode }}</td>
                         <td class="text-right">{{ (order.total)|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
@@ -85,7 +85,7 @@
                 {% for transaction in transactions %}
                     <tr>
                         <td>{{ transaction.reference }}</td>
-                        <td>{{ transaction.date|date('d/m/Y H:i') }}</td>
+                        <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
                         <td>{{ transaction.mode }}</td>
                         <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">

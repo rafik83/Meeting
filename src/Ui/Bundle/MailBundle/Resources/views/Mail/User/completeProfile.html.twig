@@ -1,0 +1,11 @@
+{% block subject %}
+    {{ 'mail.completeProfile.subject'|trans({'%event%': mail.eventTitle}, 'mail', mail.locale)|html }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.completeProfile.body'|trans({'%event%': mail.eventTitle}, 'mail', mail.locale)|html|nl2br }}
+    <a href="{{ url('event_activate_account_already_known', {'participant': mail.participantId}) }}">
+        {{ url('event_activate_account_already_known', {'participant': mail.participantId}) }}
+    </a><br>
+    {{ 'mail.completeProfile.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

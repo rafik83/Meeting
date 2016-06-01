@@ -10,14 +10,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,7 +54,10 @@ class BlockType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => Template\Block::class]);
+        $resolver->setDefaults([
+            'data_class'        => Template\Block::class,
+            'validation_groups' => ['block', 'Default']
+        ]);
         $resolver->setRequired(['block', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('country', 'string');
@@ -82,10 +86,12 @@ class BlockType extends AbstractType
      */
     private function addImage($key, FormBuilderInterface $builder, Template\Object $object, $locale)
     {
-        $builder->add($key, FileType::class, [
-            'label'    => false,
-            'required' => $object->getOption('required'),
-            'mapped'   => false,
+        $builder->add($key, ImageDataType::class, [
+            'locale' => $locale,
+            'object' => $object,
+            'attr' => [
+                'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
+            ]
         ]);
     }
 
@@ -142,8 +148,9 @@ class BlockType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
-            'locale' => $locale,
-            'object' => $object,
+            'locale'      => $locale,
+            'object'      => $object,
+            'placeholder' => $object->getOption('label')[$locale],
         ]);
     }
 }

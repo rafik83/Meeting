@@ -28,10 +28,10 @@ event_register_new_user:
 #
 # Change mail
 #
-event_account:
-    path: /account
+event_account_change_mail:
+    path: /account/change-mail
     methods: [GET, POST]
-    defaults: { _controller: EventBundle:Account:update }
+    defaults: { _controller: EventBundle:Account:updateEmail }
 
 event_activate_new_mail:
     path: /account/change_mail/{token}
@@ -67,6 +67,13 @@ event_activate_account:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:password }
 
+event_activate_account_already_known:
+    path: /complete-profile/{participant}
+    methods: [GET]
+    requirements:
+        participant: \d+
+    defaults: { _controller: EventBundle:ActivateAccount:completeProfile }
+
 #
 # Join event
 #
@@ -83,6 +90,36 @@ event_participant_step:
         participant: \d+
         step: \d+
     defaults: { _controller: EventBundle:Register:participantStep }
+
+#
+# Profil
+#
+
+event_account_participant:
+    path: /account/sheet/{sheet}/participant/{participant}
+    methods: [GET]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:Participant:see }
+
+
+event_account_participant_profile:
+    path: /account/sheet/{sheet}/participant/{participant}/profile
+    methods: [GET, POST]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:Participant:updateProfile }
+
+event_account_participant_avatar:
+    path: /account/sheet/{sheet}/participant/{participant}/avatar/{key}
+    methods: [GET, POST]
+    requirements:
+        sheet: \d+
+        participant: \d+
+        key: \w+
+    defaults: { _controller: EventBundle:Participant:updateAvatar }
 
 #
 # Sheet
@@ -115,24 +152,26 @@ event_sheet_update:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
 
+event_sheet_add_participant:
+    path:   /sheet/{locale}/{key}/participant/form
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:addParticipant }
+
+event_sheet_handle_participant:
+    path:   /sheet/{locale}/{key}/participant
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Sheet:handleAddParticipant }
+
+
 #
 # Sheet - Participant
 #
-
-event_sheet_add_participant:
-    path:     /sheet/{sheet}/add_participant
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Participant:add }
-
-event_sheet_update_participant:
-    path:     /sheet/{sheet}/update_participant/{participant}
-    requirements:
-        sheet: \d+
-        participant: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Participant:update }
 
 event_sheet_delete_participant:
     path:     /sheet/{sheet}/delete_participant/{participant}

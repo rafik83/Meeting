@@ -14,18 +14,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SheetNameType extends AbstractType
+class SheetTextSearchType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['label' => false]);
-        $resolver->setDefaults(['placeholder' => '']);
-        $resolver->setDefaults(['required' => false]);
+        $resolver->setDefaults(
+            [
+                'label'       => false,
+                'placeholder' => '',
+                'required'    => false,
+            ]
+        );
     }
-
 
     /**
      * {@inheritdoc}

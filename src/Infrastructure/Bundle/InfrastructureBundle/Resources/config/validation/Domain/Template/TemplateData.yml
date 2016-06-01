@@ -1,0 +1,4 @@
+Proximum\Vimeet\Domain\Template\TemplateData:
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\ProfileDataConstraint: { groups: [profile] }
+

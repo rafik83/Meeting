@@ -9,9 +9,32 @@ login:
     connect: Se connecter
     forgotPassword: Mot de passe oublié ?
 
+
+account:
+    profile:
+        title: Profil
+        profile: Profil
+        company: Société / Organisme
+        contactInformation: Coordonnées
+        updateAvatar: Modifier la photo
+    update:
+        title: Modifier mon compte
+        profile:
+            title: Profil
+        avatar:
+            title: Photo
+    update_email:
+        title: Changer mon email
+    change_password:
+        title: Changer le mot de passe
+        link: Changer le mot de passe
+
 common:
+    update: Modifier
     need_help: Besoin d'aide
     next: Suivant
+    validate: Valider
+    backToSheet: Retour à la fiche
 
 register:
     register_as: S'inscrire en tant que :
@@ -30,6 +53,11 @@ register:
         - Identifiez facilement les agendas de chacuns...
 
 sheet:
+    title: Fiche de présentation
     object:
         action:
+            add: "Ajouter:"
             edit: Editer
+            backToSheet: Retour à la fiche
+    participant:
+        sendInvite: Envoyer l'invitation

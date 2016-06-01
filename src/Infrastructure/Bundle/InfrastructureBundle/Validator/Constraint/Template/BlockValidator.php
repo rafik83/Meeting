@@ -23,7 +23,7 @@ class BlockValidator extends ConstraintValidator
         'editable-text' => Object\EditableTextConstraint::class,
         'image'         => ObjectConstraint::class,
         'media'         => ObjectConstraint::class,
-        'nomenclature'  => ObjectConstraint::class,
+        'nomenclature'  => Object\NomenclatureConstraint::class,
         'participant'   => ObjectConstraint::class,
         'tag'           => ObjectConstraint::class,
         'text'          => ObjectConstraint::class,
@@ -47,7 +47,7 @@ class BlockValidator extends ConstraintValidator
         foreach ($value->getEditableObjects() as $key => $object) {
             $class      = $this->objects[$object->getType()];
             $constraint = new $class(['key' => $key]);
-            $validator->validate($object, $constraint);
+            $validator->validate($object, $constraint, ['block', 'Default']);
         }
     }
 }

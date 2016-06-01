@@ -6,3 +6,7 @@ rules:
         enabled: true
         max_length: 20
         threshold: 12
+    symfony.controller.too_many_template_variables:
+        enabled: true
+        max_count: 8
+        threshold: 10

@@ -40,7 +40,7 @@ class SinglesType extends AbstractType
                     'choices'      => $nomenclature->getFirstLevel(),
                     'locale'       => $options['locale'],
                     'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
+                    'placeholder'  => $options['placeholder'],
                     'nomenclature' => $nomenclature,
                 ])
             ;
@@ -56,7 +56,7 @@ class SinglesType extends AbstractType
                     'choices'      => $nomenclature->getSecondLevel(),
                     'locale'       => $options['locale'],
                     'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
+                    'placeholder'  => $options['placeholder'],
                     'nomenclature' => $nomenclature,
                     'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
@@ -84,7 +84,7 @@ class SinglesType extends AbstractType
                     'choices'      => $nomenclature->getThirdLevel(),
                     'locale'       => $options['locale'],
                     'label'        => false,
-                    'placeholder'  => $nomenclature->getTitle(),
+                    'placeholder'  => $options['placeholder'],
                     'nomenclature' => $nomenclature,
                     'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
@@ -101,7 +101,7 @@ class SinglesType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale', 'nomenclature']);
+        $resolver->setRequired(['locale', 'nomenclature', 'placeholder']);
     }
 
     /**

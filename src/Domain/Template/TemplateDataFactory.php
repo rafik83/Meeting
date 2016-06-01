@@ -94,6 +94,24 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromSheet(Sheet $sheet, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+
+        return $this->create(
+            $sheet->getType()->getRegistrationTemplate()->getValue(),
+            $sheet->getRegistrationData(),
+            $locale,
+            $sheet->getType()->getRegistrationTemplate()->getFallback()
+        );
+    }
+
+    /**
      * @param Participant $participant
      * @param string      $locale
      *
@@ -126,6 +144,24 @@ class TemplateDataFactory
             [],
             $locale,
             $template->getFallback()
+        );
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return TemplateData
+     */
+    public function createProfileTemplate(Participant $participant, $locale)
+    {
+        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+
+        return $this->create(
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+            $participant->getData(),
+            $locale,
+            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
         );
     }
 

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
+use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -25,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserRese
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MailEventSubscriber implements EventSubscriberInterface
@@ -168,6 +170,24 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param UserCompleteProfileEvent $event
+     */
+    public function onUserCompleteProfile(UserCompleteProfileEvent $event)
+    {
+        $mail = new UserCompleteProfileMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'MailBundle:Mail:User/completeProfile.html.twig',
+            'user_complete_profile',
+            $event->getLocale(),
+            $event->getEventView()->title,
+            $event->getParticipant()->getId()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -179,6 +199,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             'admin_reset_password'    => 'onAdminResetPassword',
             'user_activate_account'   => 'onUserActivateAccount',
             'user_reset_password'     => 'onUserResetPassword',
+            'user_complete_profile'   => 'onUserCompleteProfile',
         ];
     }
 }

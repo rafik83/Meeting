@@ -15,7 +15,7 @@
         .form-group {
             >.control-label { color: $color-highlighted; }
             .form-control { border-radius: 0; }
-            input[type="text"], input[type="url"] { height: 45px; }
+            input[type="text"], input[type="url"], input[type="email"] { height: 45px; }
         }
     }
 
@@ -23,4 +23,8 @@
         padding: 0 40px 25px 40px;
         border-top: 0;
     }
+}
+
+.modal-content {
+    border-radius: 0px;
 }

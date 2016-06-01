@@ -1,0 +1,38 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{% block title eventView.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'account.update.avatar.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+
+                {{ form_errors(form) }}
+
+                <div class="inputs">
+                    <div class="object--participant">
+                        <div class="list list--users">
+                            {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card, 'participantAvatarId': form[key].vars.id~ '_preview'}) }}
+                        </div>
+                    </div>
+                    {{ form_row(form[key].file, { 'attr': { 'data-image-preview': '#' ~ form[key].vars.id ~ '_preview' } }) }}
+
+                    <div class="validation">
+                        <button type="submit" class="btn">
+                            <i class="icon-Suivant_3"></i> {{ 'common.validate'|trans }}
+                        </button>
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </div>
+{% endblock %}

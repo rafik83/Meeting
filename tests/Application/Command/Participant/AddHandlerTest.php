@@ -18,13 +18,15 @@ use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandlerTest extends \PHPUnit_Framework_TestCase
@@ -36,10 +38,24 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
         $sheet = new Sheet($event, $type, [], [], $now);
         $owner = false;
+        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
-        $expectedParticipant = new Participant($expectedSheet, $expectedUser, ['foobar' => 'barfoo'], $owner, false);
+        $expectedParticipant = new Participant(
+            $expectedSheet,
+            $expectedUser,
+            [
+                '541f84d4' => [
+                    'text' => 'jean'
+                ],
+                '838197c7' => [
+                    'text' => 'truc',
+                ],
+            ],
+            $owner,
+            false
+        );
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
@@ -47,6 +63,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
+
+        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
+        $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
@@ -71,13 +90,32 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
-        $add = new Add($sheet, 'fr');
+        $templateData = new Template\TemplateData('root', []);
+        $block = new Template\Block('12', []);
+        $editableText1 = new Template\Object\EditableText('editable-text', [
+            'tags' => ['participant_firstname', 'participant_data'],
+        ], 'fr', 'fr');
+        $editableText1->setContentValue('truc');
+        $editableText2 = new Template\Object\EditableText('editable-text', [
+            'tags' => ['participant_lastname', 'participant_data'],
+        ], 'fr', 'fr');
+        $editableText2->setContentValue('bidule');
+
+        $block->addChild(1, '541f84d4', $editableText1);
+        $block->addChild(1, '838197c7', $editableText2);
+        $templateData->addChild(0, '811f6edf', $block);
+        $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
+
+        $add = new Add($sheet, $eventView, 'fr');
         $add->email = 'test@test.com';
-        $add->data  = ['foobar' => 'barfoo'];
+        $add->firstName = 'jean';
+        $add->lastName  = 'truc';
 
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantRepository->reveal(),
+            $sheetRepository->reveal(),
+            $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
@@ -93,9 +131,23 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], [], $now);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
+        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
-        $expectedParticipant = new Participant($expectedSheet, $user, ['foobar' => 'barfoo'], $owner, false);
+        $expectedParticipant = new Participant(
+            $expectedSheet,
+            $user,
+            [
+                '541f84d4' => [
+                    'text' => 'jean'
+                ],
+                '838197c7' => [
+                    'text' => 'truc',
+                ],
+            ],
+            $owner,
+            false
+        );
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
@@ -103,17 +155,40 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
+        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
+        $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
+
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
-        $add = new Add($sheet, 'fr');
+        $templateData = new Template\TemplateData('root', []);
+        $block = new Template\Block('12', []);
+        $editableText1 = new Template\Object\EditableText('editable-text', [
+            'tags' => ['participant_firstname', 'participant_data'],
+        ], 'fr', 'fr');
+        $editableText1->setContentValue('truc');
+        $editableText2 = new Template\Object\EditableText('editable-text', [
+            'tags' => ['participant_lastname', 'participant_data'],
+        ], 'fr', 'fr');
+        $editableText2->setContentValue('bidule');
+
+        $block->addChild(1, '541f84d4', $editableText1);
+        $block->addChild(1, '838197c7', $editableText2);
+        $templateData->addChild(0, '811f6edf', $block);
+
+        $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
+
+        $add = new Add($sheet, $eventView, 'fr');
         $add->email = 'test@test.com';
-        $add->data  = ['foobar' => 'barfoo'];
+        $add->firstName = 'jean';
+        $add->lastName  = 'truc';
 
         $handler = new AddHandler(
             $userRepository->reveal(),
             $participantRepository->reveal(),
+            $sheetRepository->reveal(),
+            $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()

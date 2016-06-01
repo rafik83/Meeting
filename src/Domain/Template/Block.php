@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
 
 class Block extends AbstractChild
@@ -134,6 +135,36 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getProfileObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof Object\Image;
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getCompanyObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof Object\Image;
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getAvatarObjects()
+    {
+        return array_filter($this->getObjects(), function (Object $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof Object\Image;
+        });
+    }
+
+    /**
      * @param string $key
      *
      * @return TemplateObject
@@ -148,6 +179,19 @@ class Block extends AbstractChild
         }
 
         throw new \Exception("Object $key not found.");
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasObject($key)
+    {
+        $objects = $this->getObjects();
+
+        return isset($objects[$key]);
     }
 
     /**
@@ -232,21 +276,19 @@ class Block extends AbstractChild
         return null;
     }
 
-
     /**
      * @param string $tag
-     * @param string $locale
      *
-     * @return array;
+     * @return array
      */
-    public function getTaggedDatas($tag, $locale)
+    public function getTaggedDatas($tag)
     {
         $tagged = [];
 
         foreach ($this->children as $children) {
             foreach ($children as $block) {
                 if ($block instanceof Block) {
-                    $tagged = array_merge($tagged, $block->getTaggedDatas($tag, $locale));
+                    $tagged = array_merge($tagged, $block->getTaggedDatas($tag));
                 }
 
                 if ($block instanceof Object) {
@@ -257,6 +299,30 @@ class Block extends AbstractChild
                             $tagged[] = $block->getContentValue();
                         }
                     }
+                }
+            }
+        }
+
+        return $tagged;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllTaggedDatas()
+    {
+        $tagged = [];
+
+        foreach ($this->getEditableObjects() as $object) {
+            foreach ($object->getTags() as $tag) {
+                if (!$object instanceof Object\ContentObjectInterface) {
+                    continue;
+                }
+
+                if ($object instanceof Object\Nomenclature) {
+                    $tagged[$tag][] = $object->getNomenclatureLabel();
+                } else {
+                    $tagged[$tag][] = $object->getContentValue();
                 }
             }
         }

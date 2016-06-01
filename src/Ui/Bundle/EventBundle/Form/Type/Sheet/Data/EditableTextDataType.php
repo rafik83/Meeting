@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,12 +20,45 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EditableTextDataType extends AbstractType
 {
     /**
+     * @var TranslatorAdapter
+     */
+    private $translator;
+
+    /**
+     * @param TranslatorAdapter $translator
+     */
+    public function __construct(TranslatorAdapter $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $object    = $options['object'];
+        $locale    = $options['locale'];
+        $attributes = [
+            'rows' => 7,
+        ];
+
+        if (null !== $object->getOption('maxLength') && '' !== $object->getOption('maxLength')) {
+            $attributes['data-text-max-length-indicator']    = $object->getOption('maxLength');
+            $attributes['data-text-max-length-translations'] = sprintf(
+                '%s|%s|%s',
+                $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.plural', [], 'forms', $locale),
+                $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.singular', [], 'forms', $locale),
+                $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.reached', [], 'forms', $locale)
+            );
+        }
+
         $builder
-            ->add('content', TextareaType::class, ['placeholder' => $options['placeholder'], 'attr' => ['rows' => 7]])
+            ->add('content', TextareaType::class, [
+                'placeholder' => $options['placeholder'],
+                'attr'        => $attributes,
+                'required'    => $object->getRequired(),
+            ])
         ;
     }
 

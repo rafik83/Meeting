@@ -50,11 +50,11 @@ class NomenclatureDataType extends AbstractType
         $nomenclature = $this->nomenclatureRepository->findById($options['object']->getNomenclatureId());
 
         if ($options['object']->isSingles()) {
-            $this->addSingles($nomenclature, $builder, $options);
+            $this->addSingles($nomenclature, $builder, $options, $options['object']);
         } elseif ($options['object']->isRadios()) {
-            $this->addRadios($nomenclature, $builder, $options);
+            $this->addRadios($nomenclature, $builder, $options, $options['object']);
         } elseif ($options['object']->isCheckboxes()) {
-            $this->addCheckboxes($nomenclature, $builder, $options);
+            $this->addCheckboxes($nomenclature, $builder, $options, $options['object']);
         } else {
             throw new \Exception('Not implemented yet.');
         }
@@ -65,7 +65,7 @@ class NomenclatureDataType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale', 'object']);
+        $resolver->setRequired(['locale', 'object', 'placeholder']);
         $resolver->setDefaults([
             'label'       => false,
             'data_class'  => Object\Nomenclature::class,
@@ -86,13 +86,15 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
+     * @param Object\Nomenclature  $object
      */
-    private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
     {
         $form->add('item', ChoiceType::class, [
             'choices'                   => $nomenclature->getLastLevel(),
             'expanded'                  => true,
             'multiple'                  => false,
+            'required'                  => $object->getOption('required'),
             'choice_translation_domain' => false,
             'choices_as_values'         => true,
             'choice_label'              => function (NomenclatureItem $item) use ($options) {
@@ -105,12 +107,14 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
+     * @param Object\Nomenclature  $object
      */
-    private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
     {
         $form->add('items', CheckboxesType::class, [
             'nomenclature' => $nomenclature,
             'locale'       => $options['locale'],
+            'required'     => $object->getOption('required'),
         ]);
     }
 
@@ -118,13 +122,16 @@ class NomenclatureDataType extends AbstractType
      * @param Nomenclature         $nomenclature
      * @param FormBuilderInterface $form
      * @param array                $options
+     * @param Object\Nomenclature  $object
      */
-    private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options)
+    private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
     {
         $form->add('item', SinglesType::class, [
             'nomenclature' => $nomenclature,
             'locale'       => $options['locale'],
+            'placeholder'  => $options['placeholder'],
             'label'        => false,
+            'required'     => $object->getOption('required'),
         ]);
     }
 }

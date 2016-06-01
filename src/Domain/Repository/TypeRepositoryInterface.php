@@ -57,6 +57,15 @@ interface TypeRepositoryInterface
     public function getTypeViewById($typeId, $locale);
 
     /**
+     * @param int    $typeId
+     * @apram int    $eventId
+     * @param string $locale
+     *
+     * @return TypeView
+     */
+    public function getTypeViewByIdAndEvent($typeId, $eventId, $locale);
+
+    /**
      * @param int $typeId
      *
      * @return TypeTemplatesView
