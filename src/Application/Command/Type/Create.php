@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -31,6 +32,11 @@ class Create
      * @var SheetTemplate
      */
     public $sheetTemplate;
+
+    /**
+     * @var Package
+     */
+    public $package;
 
     /**
      * @var RegistrationTemplate
@@ -55,7 +61,7 @@ class Create
     /**
      * @var int
      */
-    public $position;
+    public $rank;
 
     /**
      * Create constructor.
