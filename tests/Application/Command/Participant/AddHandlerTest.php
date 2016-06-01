@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
+use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -120,7 +121,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
-        $handler->handle($add);
+
+        $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
     }
 
     public function testHandleWhenUserExists()
@@ -193,6 +195,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
-        $handler->handle($add);
+
+        $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
     }
 }
