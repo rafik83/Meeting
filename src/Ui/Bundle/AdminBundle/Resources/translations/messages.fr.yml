@@ -552,9 +552,9 @@ admin:
         plan:
             title: Ajouter une formule
         participant:
-            title: Ajouter un participant
+            title: Ajouter un produit participant
         planning:
-            title: Ajouter un planning
+            title: Ajouter un produit planning
     plan_create:
         title: Ajouter une formule au catalogue
     plan:
