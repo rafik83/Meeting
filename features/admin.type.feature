@@ -9,6 +9,7 @@ Feature: add type
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
@@ -23,6 +24,7 @@ Feature: add type
     And I fill in the following:
       | type_create_sheetTemplate         | 0    |
       | type_create_registrationTemplate  | 0    |
+      | type_create_package               | 0    |
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |
       | type_create_position              | 1    |
