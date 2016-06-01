@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -56,11 +55,6 @@ class AddHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var ActivateAccountTokenRepositoryInterface
-     */
-    private $activateAccountTokenRepository;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -73,7 +67,6 @@ class AddHandler
      * @param SheetRepositoryInterface                $sheetRepository
      * @param TemplateDataFactory                     $templateDataFactory
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
@@ -82,7 +75,6 @@ class AddHandler
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository                 = $userRepository;
@@ -90,7 +82,6 @@ class AddHandler
         $this->sheetRepository                = $sheetRepository;
         $this->templateDataFactory            = $templateDataFactory;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
@@ -135,19 +126,9 @@ class AddHandler
      */
     private function sendActivationEvent(Add $add, User $user)
     {
-        $activateAccountToken = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
-
-        $this->activateAccountTokenRepository->deleteAllForUser($user);
-        $this->activateAccountTokenRepository->create($activateAccountToken);
-
-        $activateAccountEvent = new ActivateAccountEvent(
-            $user,
-            $add->sheet->getEvent(),
-            $activateAccountToken,
-            $add->locale
-        );
-
-        $this->eventDispatcher->dispatch('user_activate_account', $activateAccountEvent);
+        $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
+        $event = new ActivateAccountEvent($user, $add->sheet->getEvent(), $token, $add->locale);
+        $this->eventDispatcher->dispatch('user_activate_account', $event);
     }
 
     /**
@@ -157,14 +138,8 @@ class AddHandler
      */
     private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
-        $completeProfileEvent = new CompleteProfileEvent(
-            $user,
-            $add->eventView,
-            $participant,
-            $add->locale
-        );
-
-        $this->eventDispatcher->dispatch('user_complete_profile', $completeProfileEvent);
+        $event = new CompleteProfileEvent($user, $add->eventView, $participant, $add->locale);
+        $this->eventDispatcher->dispatch('user_complete_profile', $event);
     }
 
     /**

@@ -69,7 +69,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
@@ -87,8 +86,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
-        $activateAccountTokenRepository->deleteAllForUser($expectedUser)->shouldBeCalled();
-        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', []);
@@ -118,7 +115,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
 
@@ -161,7 +157,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $templateData = new Template\TemplateData('root', []);
@@ -192,7 +187,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
 
