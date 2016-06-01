@@ -89,6 +89,14 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
     }
 
     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return !empty($this->password);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSalt()

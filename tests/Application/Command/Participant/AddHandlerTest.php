@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
+use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -68,7 +69,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
@@ -86,8 +86,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
-        $activateAccountTokenRepository->deleteAllForUser($expectedUser)->shouldBeCalled();
-        $activateAccountTokenRepository->create($expectedActivateAccountToken)->shouldBeCalled();
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', []);
@@ -117,10 +115,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
-        $handler->handle($add);
+
+        $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
     }
 
     public function testHandleWhenUserExists()
@@ -159,7 +157,6 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $activateAccountTokenRepository = $this->prophesize(ActivateAccountTokenRepositoryInterface::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
         $templateData = new Template\TemplateData('root', []);
@@ -190,9 +187,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $activateAccountTokenRepository->reveal(),
             $eventDispatcher->reveal()
         );
-        $handler->handle($add);
+
+        $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
     }
 }

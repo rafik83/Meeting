@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -55,11 +54,6 @@ class AddHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var ActivateAccountTokenRepositoryInterface
-     */
-    private $activateAccountTokenRepository;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -72,7 +66,6 @@ class AddHandler
      * @param SheetRepositoryInterface                $sheetRepository
      * @param TemplateDataFactory                     $templateDataFactory
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
@@ -81,7 +74,6 @@ class AddHandler
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository                 = $userRepository;
@@ -89,74 +81,42 @@ class AddHandler
         $this->sheetRepository                = $sheetRepository;
         $this->templateDataFactory            = $templateDataFactory;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
     /**
      * @param Add $add
      *
+     * @return AddResult
+     * @throws AlreadyLinkedToASheetOfThisEventException
      * @throws EmailCanNotBeNullException
      * @throws ParticipantAlreadyExistException
-     * @throws AlreadyLinkedToASheetOfThisEventException
      */
     public function handle(Add $add)
     {
-        $addNewUser = false;
-
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();
         }
 
-        // Try to find user
-        $user = $this->userRepository->findByEmail($add->email);
+        $user = $this->findOrCreateUser($add);
 
-        // Create user if not exists
-        if (null === $user) {
-            $user = new User($add->email, '', '', $add->locale);
-            $this->userRepository->add($user);
-
-            $addNewUser = true;
-        }
-
-        if (false === $addNewUser && $add->sheet->hasUser($user)) {
+        if ($add->sheet->hasUser($user)) {
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
         }
 
-        if (false === $addNewUser) {
-            $sheets = $this->sheetRepository->getSheetByUserAndEvent($user, $add->sheet->getEvent());
-
-            if (!empty($sheets)) {
-                throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
-            }
+        if (!empty($this->sheetRepository->getSheetByUserAndEvent($user, $add->sheet->getEvent()))) {
+            throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
+        $participant = $this->createAndFillParticipant($add, $user);
 
-        $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
-
-        foreach ($templateData->getObjects() as $object) {
-            if ($object->hasTag(Tag::PARTICIPANT_FIRSTNAME) && $object instanceof Template\Object\EditableText) {
-                $object->setContent($add->firstName);
-            }
-
-            if ($object->hasTag(Tag::PARTICIPANT_LASTNAME) && $object instanceof Template\Object\EditableText) {
-                $object->setContent($add->lastName);
-            }
-        }
-
-        $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
-
-        // Add the new participant
-        $this->participantRepository->add($participant);
-
-        $add->participant = $participant;
-
-        // Send activation event
-        if ($addNewUser) {
-            $this->sendActivationEvent($add, $user);
+        if ($user->isActive()) {
+            $this->sendCompleteProfileEvent($add, $user, $participant);
         } else {
-            $this->sendCompleteProfileEvent($add, $user);
+            $this->sendActivationEvent($add, $user);
         }
+
+        return new AddResult($participant);
     }
 
     /**
@@ -165,34 +125,56 @@ class AddHandler
      */
     private function sendActivationEvent(Add $add, User $user)
     {
-        $activateAccountToken = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
-
-        $this->activateAccountTokenRepository->deleteAllForUser($user);
-        $this->activateAccountTokenRepository->create($activateAccountToken);
-
-        $activateAccountEvent = new ActivateAccountEvent(
-            $user,
-            $add->sheet->getEvent(),
-            $activateAccountToken,
-            $add->locale
-        );
-
-        $this->eventDispatcher->dispatch('user_activate_account', $activateAccountEvent);
+        $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
+        $event = new ActivateAccountEvent($user, $add->sheet->getEvent(), $token, $add->locale);
+        $this->eventDispatcher->dispatch('user_activate_account', $event);
     }
 
     /**
-     * @param Add  $add
-     * @param User $user
+     * @param Add         $add
+     * @param User        $user
+     * @param Participant $participant
      */
-    private function sendCompleteProfileEvent(Add $add, User $user)
+    private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
-        $completeProfileEvent = new CompleteProfileEvent(
-            $user,
-            $add->eventView,
-            $add->participant,
-            $add->locale
-        );
+        $event = new CompleteProfileEvent($user, $add->eventView, $participant, $add->locale);
+        $this->eventDispatcher->dispatch('user_complete_profile', $event);
+    }
 
-        $this->eventDispatcher->dispatch('user_complete_profile', $completeProfileEvent);
+    /**
+     * @param Add $add
+     *
+     * @return User
+     */
+    private function findOrCreateUser(Add $add)
+    {
+        $user = $this->userRepository->findByEmail($add->email);
+
+        if (null === $user) {
+            $user = new User($add->email, '', '', $add->locale);
+            $this->userRepository->add($user);
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param Add $add
+     * @param     $user
+     *
+     * @return Participant
+     */
+    protected function createAndFillParticipant(Add $add, $user)
+    {
+        $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
+        $templateData->setTaggedData([
+            Tag::PARTICIPANT_FIRSTNAME => $add->firstName,
+            Tag::PARTICIPANT_LASTNAME  => $add->lastName,
+        ]);
+
+        $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
+        $this->participantRepository->add($participant);
+
+        return $participant;
     }
 }

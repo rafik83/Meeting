@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 
@@ -40,11 +39,6 @@ class Add
      * @var string
      */
     public $email;
-
-    /**
-     * @var Participant
-     */
-    public $participant;
 
     /**
      * @var bool

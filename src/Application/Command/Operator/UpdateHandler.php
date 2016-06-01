@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGener
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -31,11 +30,6 @@ class UpdateHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var ActivateAccountTokenRepositoryInterface
-     */
-    private $activateAccountTokenRepository;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -43,18 +37,15 @@ class UpdateHandler
     /**
      * @param AdminRepositoryInterface                $adminRepository
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository
      * @param EventDispatcherInterface                $eventDispatcher
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->adminRepository                = $adminRepository;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
@@ -92,17 +83,8 @@ class UpdateHandler
      */
     private function sendActivationEvent(Admin $operator)
     {
-        $activateAccountToken = $this->activateAccountTokenGenerator->generate($operator);
-
-        $this->activateAccountTokenRepository->deleteAllForUser($operator);
-        $this->activateAccountTokenRepository->create($activateAccountToken);
-
-        $activateAccountEvent = new ActivateAccountEvent(
-            $operator,
-            $activateAccountToken,
-            $operator->getLocale()
-        );
-
-        $this->eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent);
+        $token = $this->activateAccountTokenGenerator->generate($operator);
+        $event = new ActivateAccountEvent($operator, $token, $operator->getLocale());
+        $this->eventDispatcher->dispatch('admin_activate_account', $event);
     }
 }
