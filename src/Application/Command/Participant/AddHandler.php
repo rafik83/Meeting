@@ -161,36 +161,19 @@ class AddHandler
 
     /**
      * @param Add $add
-     *
-     * @return Template\TemplateData
-     */
-    private function createAndFillTemplateData(Add $add)
-    {
-        $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
-
-        foreach ($templateData->getObjects() as $object) {
-            if ($object->hasTag(Tag::PARTICIPANT_FIRSTNAME) && $object instanceof Template\Object\EditableText) {
-                $object->setContent($add->firstName);
-            }
-
-            if ($object->hasTag(Tag::PARTICIPANT_LASTNAME) && $object instanceof Template\Object\EditableText) {
-                $object->setContent($add->lastName);
-            }
-        }
-
-        return $templateData;
-    }
-
-    /**
-     * @param Add $add
      * @param     $user
      *
      * @return Participant
      */
     protected function createAndFillParticipant(Add $add, $user)
     {
-        $templateData = $this->createAndFillTemplateData($add);
-        $participant  = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
+        $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
+        $templateData->setTaggedData([
+            Tag::PARTICIPANT_FIRSTNAME => $add->firstName,
+            Tag::PARTICIPANT_LASTNAME  => $add->lastName,
+        ]);
+
+        $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
         $this->participantRepository->add($participant);
 
         return $participant;

@@ -384,4 +384,22 @@ class Block extends AbstractChild
             return $object->getData();
         }, $this->getObjects());
     }
+
+    /**
+     * @param array $data
+     *
+     * @return Block
+     */
+    public function setTaggedData(array $data)
+    {
+        foreach ($this->getObjects() as $object) {
+            foreach ($data as $tag => $value) {
+                if ($object->hasTag($tag) && $object instanceof TemplateObject\ContentObjectInterface) {
+                    $object->setContentValue($value);
+                }
+            }
+        }
+
+        return $this;
+    }
 }
