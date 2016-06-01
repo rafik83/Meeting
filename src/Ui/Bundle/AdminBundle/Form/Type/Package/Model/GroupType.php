@@ -28,9 +28,10 @@ class GroupType extends AbstractType
     {
         $builder
             ->add('labels', TranslationsType::class, [
-                'entry_type' => TextType::class,
-                'locales'    => $options['event']->getLocales(),
-                'required'   => false,
+                'entry_type'     => TextType::class,
+                'locales'        => $options['event']->getLocales(),
+                'required'       => false,
+                'error_bubbling' => false,
             ])
             ->add('options', ProductCollectionType::class, [
                 'event'            => $options['event'],

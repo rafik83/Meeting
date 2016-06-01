@@ -24,7 +24,8 @@ class TranslationsType extends AbstractType
     {
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, $options['entry_type'], array_merge([
-                'label' => ucfirst(Intl::getLocaleBundle()->getLocaleName($locale))
+                'label'          => ucfirst(Intl::getLocaleBundle()->getLocaleName($locale)),
+                'error_bubbling' => false,
             ], $options['entry_options']));
         }
     }

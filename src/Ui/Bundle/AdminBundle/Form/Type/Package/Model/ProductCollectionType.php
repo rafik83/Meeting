@@ -58,7 +58,10 @@ class ProductCollectionType extends AbstractType
                         'attr'             => [
                             'data-shared-choices-collection-item' => $options['collection_group'],
                         ],
-                    ]
+                    ],
+                    'error_mapping' => [
+                        '.'  => 'item',
+                    ],
                 ];
             },
             'attr'             => function (Options $options) {

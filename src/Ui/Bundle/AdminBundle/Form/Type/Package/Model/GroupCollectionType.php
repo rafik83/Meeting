@@ -49,6 +49,11 @@ class GroupCollectionType extends AbstractType
                         'label' => false,
                         'event' => $options['event'],
                     ],
+                    'error_bubbling' => false,
+                    'error_mapping' => [
+                        'labels'  => 'item.labels',
+                        'options' => 'item.options',
+                    ],
                 ];
             },
             'attr'           => [
