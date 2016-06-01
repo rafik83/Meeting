@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Model;
 
+use Proximum\Vimeet\Application\Command\Package\Exception\WrongTypeException;
 use Proximum\Vimeet\Domain\Model\Product;
 
 class ParticipantAndPlanning
@@ -41,15 +42,17 @@ class ParticipantAndPlanning
      * @param bool    $enabled
      * @param Product $participant
      * @param Product $planning
+     *
+     * @throws WrongTypeException
      */
     public function __construct(array $labels, $enabled, Product $participant = null, Product $planning = null)
     {
         if ($participant && !$participant->isParticipant()) {
-            throw new \RuntimeException();
+            throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
         }
 
         if ($planning && !$planning->isPlanning()) {
-            throw new \RuntimeException();
+            throw new WrongTypeException($participant, Product::TYPE_PLANNING);
         }
 
         $this->labels      = $labels;
