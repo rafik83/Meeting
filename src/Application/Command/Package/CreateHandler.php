@@ -34,7 +34,7 @@ class CreateHandler
     public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
     {
         $this->packageRepository = $packageRepository;
-        $this->dateTime                   = $dateTime;
+        $this->dateTime          = $dateTime;
     }
 
     /**
