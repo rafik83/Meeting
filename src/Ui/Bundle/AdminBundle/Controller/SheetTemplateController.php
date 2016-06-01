@@ -59,7 +59,9 @@ class SheetTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
+        $baseTemplates   = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
+        $events          = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
+        $eventsTemplates = $this->get('repository.template.sheet_template_repository')->getTemplateForGivenEvents($events);
 
         $create = new Create($request->getLocale());
         $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
@@ -74,8 +76,9 @@ class SheetTemplateController extends Controller
         }
 
         return $this->render('AdminBundle:SheetTemplate:list.html.twig', [
-            'templates' => $templates,
-            'form'      => $form->createView(),
+            'baseTemplates'   => $baseTemplates,
+            'eventsTemplates' => $eventsTemplates,
+            'form'            => $form->createView(),
         ]);
     }
 

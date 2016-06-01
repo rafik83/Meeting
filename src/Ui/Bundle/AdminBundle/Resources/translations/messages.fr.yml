@@ -511,12 +511,21 @@ admin:
                 action: Action
     template:
         action:
+            create: Créer un template
             edit: Modifier
             save: Enregistrer
+            duplicate: Dupliquer
             addLanguage: Ajouter une langue
             close: Fermer
         sheet:
             link: Template de présentation
+            titleBase: Templates globaux
+            titleEvent: Templates assignés
+            table:
+                column:
+                    title: Titre
+                    eventType: Événement/Type(s)
+                    action: Action
         registration:
             link: Template d'Inscription
             title: Templates d'Inscription
