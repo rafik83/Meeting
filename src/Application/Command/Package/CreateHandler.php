@@ -29,7 +29,7 @@ class CreateHandler
      * CreateHandler constructor.
      *
      * @param PackageRepositoryInterface $packageRepository
-     * @param \DateTimeInterface                  $dateTime
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
     {
