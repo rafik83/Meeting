@@ -136,7 +136,7 @@
                                                     {% for third_label_item in second_level_item.children %}
                                                         <tr>
                                                             <td>
-                                                                {{ form_row(form[third_label_item.key]) }}
+                                                                {{ form_row(form[third_label_item.key], { 'attr': { 'class': 'item-' ~ second_level_item.key } }) }}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -145,8 +145,9 @@
                                         </div>
 
                                         <p class="link-table pull-right">
-                                            <a href="#">Tous sélectionner</a> /
-                                            <a href="#">Aucun</a>
+                                            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ second_level_item.key }}">Tous sélectionner</button>
+                                            /
+                                            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ second_level_item.key }}">Aucun</button>
                                         </p>
                                     </div>
                                 </div>
