@@ -76,6 +76,11 @@ class Package
     private $createdAt;
 
     /**
+     * @var Type[]
+     */
+    private $types;
+
+    /**
      * Package constructor.
      *
      * @param Event              $event
@@ -408,5 +413,13 @@ class Package
         }
 
         return $this;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }

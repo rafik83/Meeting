@@ -43,3 +43,6 @@ Proximum\Vimeet\Domain\Model\Package:
             cascade: ["persist"]
             orderBy: { rank: ASC }
             orphanRemoval: true
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            mappedBy: package
