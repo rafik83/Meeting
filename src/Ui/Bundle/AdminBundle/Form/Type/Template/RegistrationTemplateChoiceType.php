@@ -39,7 +39,6 @@ class RegistrationTemplateChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'events'           => [],
-            'class'            => Template::class,
             'choices'          => function (Options $options) {
                 return $this->getResults($options);
             },
