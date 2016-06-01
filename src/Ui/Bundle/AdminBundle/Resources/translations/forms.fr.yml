@@ -824,8 +824,8 @@ form:
                     labels:
                         label: Libellé de l'étape
                     plans:
-                        label: Forfaits
-                        label_add: Ajouter un forfait
+                        label: Formules
+                        label_add: Ajouter une formule
                         label_delete: "&times;"
             participantAndPlanning:
                 children:
