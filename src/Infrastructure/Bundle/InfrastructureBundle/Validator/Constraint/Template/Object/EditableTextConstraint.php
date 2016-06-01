@@ -39,4 +39,12 @@ class EditableTextConstraint extends Constraint
     {
         return self::CLASS_CONSTRAINT;
     }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->isInBlock ? $this->key . '.content' : 'content';
+    }
 }
