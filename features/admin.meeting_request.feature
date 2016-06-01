@@ -12,7 +12,6 @@ Feature: See meeting request
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
