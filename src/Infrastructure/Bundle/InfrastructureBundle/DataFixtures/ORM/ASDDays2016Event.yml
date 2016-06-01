@@ -918,80 +918,36 @@ Proximum\Vimeet\Domain\Model\User:
 Proximum\Vimeet\Domain\Model\Product:
     # plans
     product_plan_1_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'plan'
-        name: 'Formule B2B Meeting'
-        image: ~
-        unitPrice: 1690
+        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', '', 1690, '', ''] }
         quantityMax: 1
-        availabilityCurrent: ~
-        availabilityMax: ~
-        updatable: true
+        updatable: false
         updatableUntil: ~
     product_plan_2_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'plan'
-        name: 'Formule Exposant'
-        image: ~
-        unitPrice: 2880
+        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', '', 2880, '', '' ] }
         quantityMax: 1
-        availabilityCurrent: ~
-        availabilityMax: ~
-        updatable: true
+        updatable: false
         updatableUntil: ~
     # participants
     product_participant_1_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'participant'
-        name: 'Participant supplémentaire Fournisseur'
+        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 1O ] }
         image: ~
-        unitPrice: 195
-        quantityMax: 10
         availabilityCurrent: ~
         availabilityMax: ~
-        updatable: true
+        updatable: false
         updatableUntil: ~
     # plannings
     product_planning_1_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'planning'
-        name: 'Planning supplémentaire Fournisseur'
-        image: ~
-        unitPrice: 495
-        quantityMax: 10
+        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
         availabilityCurrent: ~
         availabilityMax: ~
-        updatable: true
+        updatable: false
         updatableUntil: ~
     # options
     product_option_1_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'option'
-        name: 'Option 4m² supplémentaires Fournisseur'
-        image: ~
-        unitPrice: 990
-        quantityMax: 1
-        availabilityCurrent: ~
-        availabilityMax: ~
-        updatable: true
-        updatableUntil: ~
+        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
+
     product_option_2_asddays:
-        __construct: false
-        event: '@event_asddays_2016'
-        type: 'option'
-        name: 'Option chaise'
-        image: ~
-        unitPrice: 9
-        quantityMax: 10
-        availabilityCurrent: ~
-        availabilityMax: ~
-        updatable: true
-        updatableUntil: ~
+        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 10, '', '', true, null] }
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_asddays_fr:
