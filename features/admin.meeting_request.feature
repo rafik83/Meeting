@@ -9,6 +9,7 @@ Feature: See meeting request
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
