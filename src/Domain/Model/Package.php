@@ -51,7 +51,7 @@ class Package
     private $groups;
 
     /**
-     * @var
+     * @var ArrayCollection
      */
     private $translations;
 
