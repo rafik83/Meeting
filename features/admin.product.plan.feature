@@ -14,16 +14,16 @@ Feature: Handle Product
     Then I follow "admin.product.link"
     And I should be on this page "/admin/fr/event/1/product"
     And I should see "admin.zero-result"
-    Then I follow "admin.product_create.title"
-    And I should be on this page "/admin/fr/event/1/product/create"
+    Then I follow "admin.product_create.plan.title"
+    And I should be on this page "/admin/fr/event/1/product/create/plan"
     And I fill in the following:
-      | form.product_create.children.name.label        | ProductTitre |
-      | product_create_translations_fr_title           | Titre fr     |
-      | product_create_translations_en_title           | Titre en     |
-      | form.product_create.children.unitPrice.label   | 20           |
-      | form.product_create.children.quantityMin.label | 1            |
-      | form.product_create.children.quantityMax.label | 4            |
-    And I press "form.product_create.children.submit.label"
+      | form.product_create_plan.children.name.label        | ProductTitre   |
+      | product_create_plan_translations_fr_title           | Titre fr       |
+      | product_create_plan_translations_fr_heading         | Description fr |
+      | product_create_plan_translations_en_title           | Titre en       |
+      | product_create_plan_translations_en_heading         | Description en |
+      | form.product_create_plan.children.unitPrice.label   | 20             |
+    And I press "form.product_create_plan.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/product"
     And I should see "admin.product.create.success"
 

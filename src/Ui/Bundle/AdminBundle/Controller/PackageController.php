@@ -73,7 +73,7 @@ class PackageController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.template.products_selection.update.success');
+            $this->addFlash('success', 'flash.admin.template.package.update.success');
 
             return $this->redirectToRoute('admin_package_update', [
                 'package' => $package->getId(),

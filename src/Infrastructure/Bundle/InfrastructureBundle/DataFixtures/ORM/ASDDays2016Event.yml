@@ -945,9 +945,14 @@ Proximum\Vimeet\Domain\Model\Product:
     # options
     product_option_1_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
-
     product_option_2_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 10, '', '', true, null] }
+    product_option_3_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option A', '', 9, 10, '', '', true, null] }
+    product_option_4_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 9, 10, '', '', true, null] }
+    product_option_5_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 9, 10, '', '', true, null] }
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_asddays_fr:
@@ -1144,3 +1149,18 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         rank: 1
         group: '@package_group_1_asd_days'
         option: '@product_option_2_asddays'
+    package_group_2_option_3_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_2_asd_days'
+        option: '@product_option_3_asddays'
+    package_group_3_option_4_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_asd_days'
+        option: '@product_option_4_asddays'
+    package_group_3_option_5_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_asd_days'
+        option: '@product_option_5_asddays'
