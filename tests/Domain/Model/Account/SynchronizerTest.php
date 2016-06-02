@@ -142,6 +142,5 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         // Test Synchronizer
         $accountSynchronizer = new Synchronizer($userRepository->reveal());
         $accountSynchronizer->set($templateData, $user);
-
     }
 }
