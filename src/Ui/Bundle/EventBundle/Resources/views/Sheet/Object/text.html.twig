@@ -1,6 +1,6 @@
 
-<section id="object-{{ uid }}" class="object object--text {{ 'style--' ~ config['style'] }} section">
+<section id="object-{{ uid }}" class="object object--text {{ 'style--' ~ item.style }} section">
     <header>
-        <h2>{{ config['content']|localize(locale, fallback) }}</h2>
+        <h2>{{ item.content(locale, fallback) }}</h2>
     </header>
 </section>

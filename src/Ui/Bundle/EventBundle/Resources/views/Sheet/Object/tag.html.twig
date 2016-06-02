@@ -1,9 +1,9 @@
 
-<div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ config['style'] }}">
+<div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     <header>
-        <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+        <h2>{{ item.label(locale, fallback) }}</h2>
     </header>
     <div class="section__content">
-        <p>{{ taggedData[config['tag']]|join(', ')|default }}</p>
+        <p>{{ taggedData[item.tag]|join(', ')|default }}</p>
     </div>
 </div>

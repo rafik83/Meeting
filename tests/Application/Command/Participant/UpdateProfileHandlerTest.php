@@ -224,8 +224,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             $accountSynchronizer->reveal()
         );
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $text  = new Object\Text('text', [], 'fr', 'fr');
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
@@ -252,8 +252,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedTemplateData = new TemplateData('root', []);
-        $expectedBlock = new Block('12', []);
+        $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $expectedBlock = new Block('12', [], 'fr', 'fr');
         $expectedText  = new Object\Text('text', [], 'fr', 'fr');
         $exEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
@@ -496,8 +496,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             $accountSynchronizer->reveal()
         );
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $text  = new Object\Text('text', [], 'fr', 'fr');
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
@@ -524,8 +524,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedTemplateData = new TemplateData('root', []);
-        $expectedBlock = new Block('12', []);
+        $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $expectedBlock = new Block('12', [], 'fr', 'fr');
         $expectedText  = new Object\Text('text', [], 'fr', 'fr');
         $exEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],

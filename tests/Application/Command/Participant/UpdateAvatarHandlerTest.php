@@ -136,8 +136,8 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
             $accountSynchronizer->reveal()
         );
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
@@ -275,8 +275,8 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
             $accountSynchronizer->reveal()
         );
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');

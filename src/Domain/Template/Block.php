@@ -21,6 +21,14 @@ class Block extends AbstractChild
     protected $children = [];
 
     /**
+     * {@inheritdoc}
+     */
+    public function getComponent()
+    {
+        return 'block';
+    }
+
+    /**
      * @param string $key
      *
      * @return TemplateObject
@@ -29,6 +37,16 @@ class Block extends AbstractChild
     public function __get($key)
     {
         return $this->getObject($key);
+    }
+
+    /**
+     * Get children
+     *
+     * @return array
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 
     /**
@@ -69,6 +87,16 @@ class Block extends AbstractChild
     public function addColumn($column)
     {
         $this->children[$column] = [];
+    }
+
+    /**
+     * @param int $column
+     *
+     * @return array
+     */
+    public function getColumn($column)
+    {
+        return isset($this->children[$column]) ? $this->children[$column] : [];
     }
 
     /**

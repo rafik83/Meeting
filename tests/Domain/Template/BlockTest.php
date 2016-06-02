@@ -17,15 +17,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetBlocks()
     {
-        $block = new Block('12', []);
+        $block = new Block('12', [], 'fr', 'fr');
 
-        $blockA = new Block('block-a', []);
-        $blockA->addChild(0, 'block-aa', new Block('block-aa', []));
-        $blockB = new Block('block-b', []);
-        $blockB->addChild(0, 'block-ba', new Block('block-ba', []));
-        $blockB->addChild(0, 'block-bb', new Block('block-bb', []));
-        $blockB->addChild(1, 'block-bc', new Block('block-bc', []));
-        $blockC = new Block('block-c', []);
+        $blockA = new Block('block-a', [], 'fr', 'fr');
+        $blockA->addChild(0, 'block-aa', new Block('block-aa', [], 'fr', 'fr'));
+        $blockB = new Block('block-b', [], 'fr', 'fr');
+        $blockB->addChild(0, 'block-ba', new Block('block-ba', [], 'fr', 'fr'));
+        $blockB->addChild(0, 'block-bb', new Block('block-bb', [], 'fr', 'fr'));
+        $blockB->addChild(1, 'block-bc', new Block('block-bc', [], 'fr', 'fr'));
+        $blockC = new Block('block-c', [], 'fr', 'fr');
 
         $block->addChild(0, 'block-a', $blockA);
         $block->addChild(0, 'object-1', new EditableText('editable-text', [], 'fr', 'fr'));
@@ -38,15 +38,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBlock()
     {
-        $block = new Block('12', []);
+        $block = new Block('12', [], 'fr', 'fr');
 
-        $blockA = new Block('block-a', []);
-        $blockA->addChild(0, 'block-aa', new Block('block-aa', []));
-        $blockB = new Block('block-b', []);
-        $blockB->addChild(0, 'block-ba', new Block('block-ba', []));
-        $blockB->addChild(0, 'block-bb', new Block('block-bb', []));
-        $blockB->addChild(1, 'block-bc', new Block('block-bc', []));
-        $blockC = new Block('block-c', []);
+        $blockA = new Block('block-a', [], 'fr', 'fr');
+        $blockA->addChild(0, 'block-aa', new Block('block-aa', [], 'fr', 'fr'));
+        $blockB = new Block('block-b', [], 'fr', 'fr');
+        $blockB->addChild(0, 'block-ba', new Block('block-ba', [], 'fr', 'fr'));
+        $blockB->addChild(0, 'block-bb', new Block('block-bb', [], 'fr', 'fr'));
+        $blockB->addChild(1, 'block-bc', new Block('block-bc', [], 'fr', 'fr'));
+        $blockC = new Block('block-c', [], 'fr', 'fr');
 
         $block->addChild(0, 'block-a', $blockA);
         $block->addChild(0, 'object-1', new EditableText('editable-text', [], 'fr', 'fr'));
@@ -62,19 +62,19 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBlocksCount()
     {
-        $block = new Block('12', []);
+        $block = new Block('12', [], 'fr', 'fr');
 
-        $blockA = new Block('block-a', []);
-        $blockA->addChild(0, 'block-aa', new Block('block-aa', []));
+        $blockA = new Block('block-a', [], 'fr', 'fr');
+        $blockA->addChild(0, 'block-aa', new Block('block-aa', [], 'fr', 'fr'));
         $blockA->addChild(0, 'object-1', new EditableText('editable-text', [], 'fr', 'fr'));
         $blockA->addChild(0, 'object-2', new EditableText('editable-text', [], 'fr', 'fr'));
 
-        $blockB = new Block('block-b', []);
-        $blockB->addChild(0, 'block-ba', (new Block('block-ba', []))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(0, 'block-bb', (new Block('block-bb', []))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(1, 'block-bc', (new Block('block-bc', []))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB = new Block('block-b', [], 'fr', 'fr');
+        $blockB->addChild(0, 'block-ba', (new Block('block-ba', [], 'fr', 'fr'))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(0, 'block-bb', (new Block('block-bb', [], 'fr', 'fr'))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(1, 'block-bc', (new Block('block-bc', [], 'fr', 'fr'))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
 
-        $blockC = new Block('block-c', []);
+        $blockC = new Block('block-c', [], 'fr', 'fr');
 
         $block->addChild(0, 'block-a', $blockA);
         $block->addChild(0, 'object-6', new EditableText('editable-text', [], 'fr', 'fr'));
@@ -87,19 +87,19 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNextBlockPosition()
     {
-        $block = new Block('12', []);
+        $block = new Block('12', [], 'fr', 'fr');
 
-        $blockA = new Block('block-a', []);
-        $blockA->addChild(0, 'block-aa', new Block('block-aa', []));
+        $blockA = new Block('block-a', [], 'fr', 'fr');
+        $blockA->addChild(0, 'block-aa', new Block('block-aa', [], 'fr', 'fr'));
         $blockA->addChild(0, 'object-1', new EditableText('editable-text', [], 'fr', 'fr'));
         $blockA->addChild(0, 'object-2', new EditableText('editable-text', [], 'fr', 'fr'));
 
-        $blockB = new Block('block-b', []);
-        $blockB->addChild(0, 'block-ba', (new Block('block-ba', []))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(0, 'block-bb', (new Block('block-bb', []))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(1, 'block-bc', (new Block('block-bc', []))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB = new Block('block-b', [], 'fr', 'fr');
+        $blockB->addChild(0, 'block-ba', (new Block('block-ba', [], 'fr', 'fr'))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(0, 'block-bb', (new Block('block-bb', [], 'fr', 'fr'))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(1, 'block-bc', (new Block('block-bc', [], 'fr', 'fr'))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
 
-        $blockC = new Block('block-c', []);
+        $blockC = new Block('block-c', [], 'fr', 'fr');
 
         $block->addChild(0, 'block-a', $blockA);
         $block->addChild(0, 'object-6', new EditableText('editable-text', [], 'fr', 'fr'));

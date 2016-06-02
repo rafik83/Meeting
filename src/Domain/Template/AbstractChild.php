@@ -23,15 +23,29 @@ abstract class AbstractChild
     protected $config = [];
 
     /**
-     * AbstractChild constructor.
+     * @var string
+     */
+    protected $locale;
+
+    /**
+     * @var string
+     */
+    protected $fallback;
+
+    /**
+     * AbstactChild constructor.
      *
      * @param string $type
      * @param array  $config
+     * @param string $locale
+     * @param string $fallback
      */
-    public function __construct($type, array $config)
+    public function __construct($type, array $config, $locale, $fallback)
     {
-        $this->type   = $type;
-        $this->config = $config;
+        $this->type     = $type;
+        $this->config   = $config;
+        $this->locale   = $locale;
+        $this->fallback = $fallback;
     }
 
     /**
@@ -72,6 +86,35 @@ abstract class AbstractChild
     {
         return $this->type;
     }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFallback()
+    {
+        return $this->fallback;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStyle()
+    {
+        return $this->getOption('style');
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getComponent();
 
     /**
      * @return array

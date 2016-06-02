@@ -30,8 +30,8 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $account->setMobile('Bar');
         $user->setAccount($account);
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $text  = new Object\Text('text', [], $locale, $locale);
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
@@ -57,8 +57,8 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         // Expected
-        $expectedTemplateData = new TemplateData('root', []);
-        $expectedBlock = new Block('12', []);
+        $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $expectedBlock = new Block('12', [], 'fr', 'fr');
         $expectedText  = new Object\Text('text', [], $locale, $locale);
         $expectedEditableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
@@ -99,8 +99,8 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $account = new User\Account();
         $user->setAccount($account);
 
-        $templateData = new TemplateData('root', []);
-        $block = new Block('12', []);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
         $text  = new Object\Text('text', [], $locale, $locale);
         $editableText1 = new Object\EditableText('editable-text', [
             'tags' => ['participant_firstname'],

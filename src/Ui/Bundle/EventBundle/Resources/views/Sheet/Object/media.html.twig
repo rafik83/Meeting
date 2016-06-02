@@ -1,11 +1,11 @@
 
 <section id="object-{{ uid }}" class="object object--media section">
     <header>
-        <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+        <h2>{{ item.label(locale, fallback) }}</h2>
     </header>
     <div class="section__content">
         <ul class="list list--medias">
-            {% for media in data[uid]['medias']|default([]) %}
+            {% for media in item.data['medias']|default([]) %}
                 <li>
                     <i class="icon-Document_1"></i>
                     <a href="{{ media['url'] }}">{{ media['title']|localize(locale, fallback) }}</a>
@@ -14,6 +14,6 @@
         </ul>
     </div>
     <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
     </footer>
 </section>
