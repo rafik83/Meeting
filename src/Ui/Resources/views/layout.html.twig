@@ -124,7 +124,7 @@
 
             {% for first_level_item in nomenclature.firstLevel %}
                 <section class="object object--collection style--style-1 section">
-                    <div role="tabpanel" class="tab-pane{% if loop.first %} active{% endif %}" id="{{ first_level_item.key }}">
+                    <div id="{{ first_level_item.key }}">
                         <header>
                             <h2>{{ first_level_item.label(locale) }}</h2>
                         </header>
