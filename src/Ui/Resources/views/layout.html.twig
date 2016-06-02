@@ -31,7 +31,7 @@
                 <div class="object--nomenclature">
                     <div class="border-table">
                         <div class="row">
-                            {% for table in nomenclature.firstLevel|batch(nomenclature.firstLevel|length / 3) %}
+                            {% for table in nomenclature.firstLevelSorted(locale)|batch(nomenclature.firstLevel|length / 3) %}
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <table class="table table-striped">
                                         <tbody>
@@ -74,7 +74,7 @@
 
             <section class="object object--collection style--style-1 section">
                 <div class="row">
-                    {% for first_level_item in nomenclature.firstLevel %}
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                         <div class="col-md-4">
                             <div class="object--nomenclature">
                                 <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
@@ -82,7 +82,7 @@
                                 <div class="border-table with-title">
                                     <table class="table table-striped">
                                         <tbody>
-                                        {% for second_label_item in first_level_item.children %}
+                                        {% for second_label_item in first_level_item.childrenSorted(locale) %}
                                             <tr>
                                                 <td>
                                                     {{ form_row(form[second_label_item.key]) }}
@@ -112,7 +112,7 @@
                 </h1>
 
                 <ul class="nav nav-pills pull-left" role="tablist">
-                    {% for first_level_item in nomenclature.firstLevel %}
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                         <li role="presentation"{% if loop.first %} class="active"{% endif %}>
                             <a href="#{{ first_level_item.key }}" aria-controls="{{ first_level_item.key }}">
                                 {{ first_level_item.label(locale) }}
@@ -128,7 +128,7 @@
                 {% endif %}
             </div>
 
-            {% for first_level_item in nomenclature.firstLevel %}
+            {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                 <section class="object object--collection style--style-1 section">
                     <div id="{{ first_level_item.key }}">
                         <header>
@@ -136,7 +136,7 @@
                         </header>
 
                         <div class="row">
-                            {% for second_level_item in first_level_item.children %}
+                            {% for second_level_item in first_level_item.childrenSorted(locale) %}
                                 <div class="col-md-4">
                                     <div class="object--nomenclature">
                                         <h3 class="title-table">{{ second_level_item.label(locale) }}</h3>
@@ -144,7 +144,7 @@
                                         <div class="border-table with-title">
                                             <table class="table table-striped">
                                                 <tbody>
-                                                    {% for third_label_item in second_level_item.children %}
+                                                    {% for third_label_item in second_level_item.childrenSorted(locale) %}
                                                         <tr>
                                                             <td>
                                                                 {{ form_row(form[third_label_item.key], { 'attr': { 'class': 'item-' ~ second_level_item.key } }) }}

@@ -169,6 +169,31 @@ class Nomenclature
     }
 
     /**
+     * @param $locale
+     *
+     * @return NomenclatureItem[]
+     */
+    public function getFirstLevelSorted($locale)
+    {
+        $items = $this->getItems();
+
+        self::sort($items, $locale);
+
+        return $items;
+    }
+
+    /**
+     * @param array  $items
+     * @param string $locale
+     */
+    public static function sort(&$items, $locale)
+    {
+        usort($items, function (NomenclatureItem $one, NomenclatureItem $another) use ($locale) {
+            return strcasecmp($one->getLabel($locale), $another->getLabel($locale));
+        });
+    }
+
+    /**
      * @return NomenclatureItem[]
      */
     public function getSecondLevel()

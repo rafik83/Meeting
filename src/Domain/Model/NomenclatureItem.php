@@ -95,6 +95,20 @@ class NomenclatureItem
     }
 
     /**
+     * @param string $locale
+     *
+     * @return NomenclatureItem[]
+     */
+    public function getChildrenSorted($locale)
+    {
+        $children = $this->getChildren();
+
+        Nomenclature::sort($children, $locale);
+
+        return $children;
+    }
+
+    /**
      * Get grant children
      *
      * @return NomenclatureItem[]
