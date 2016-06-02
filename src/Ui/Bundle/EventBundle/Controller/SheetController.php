@@ -319,8 +319,6 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the participant form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getSheetTemplate();
-        $data          = $sheet->getData();
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
                 $sheet,
