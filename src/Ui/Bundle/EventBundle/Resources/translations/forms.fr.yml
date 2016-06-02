@@ -77,6 +77,8 @@ form:
         children:
             items:
                 label: Sélectionnez vos compétences
+            submit:
+                label: Enregistrer
     add_participant:
         children:
             firstName:

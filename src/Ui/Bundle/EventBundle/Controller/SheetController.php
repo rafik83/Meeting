@@ -346,7 +346,7 @@ class SheetController extends Controller
             'data'             => $data,
             'locale'           => $locale,
             'nomenclatures'    => $nomenclatures,
-            'taggedData'    => $taggedData,
+            'taggedData'       => $taggedData,
             'form_participant' => $form->createView(),
             'label'            => $label,
             'uid'              => $key,

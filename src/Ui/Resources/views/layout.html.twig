@@ -15,9 +15,11 @@
                     {{ form_label(form) }}
                 </h1>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i>Retour à la fiche
+                    </a>
+                {% endif %}
             </div>
 
             <section class="object object--collection style--style-1 section">
@@ -57,9 +59,11 @@
                     {{ form_label(form) }}
                 </h1>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i>Retour à la fiche
+                    </a>
+                {% endif %}
             </div>
 
             <section class="object object--collection style--style-1 section">
@@ -111,11 +115,12 @@
                     {% endfor %}
                 </ul>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i>Retour à la fiche
+                    </a>
+                {% endif %}
             </div>
-
 
             {% for first_level_item in nomenclature.firstLevel %}
                 <section class="object object--collection style--style-1 section">
