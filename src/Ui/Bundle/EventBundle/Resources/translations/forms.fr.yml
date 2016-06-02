@@ -76,7 +76,7 @@ form:
     nomenclature_data:
         children:
             items:
-                label: Sélectionnez vos compétences
+                label: Sélectionnez :
             submit:
                 label: Enregistrer
     add_participant:

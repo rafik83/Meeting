@@ -9,7 +9,10 @@
         {{ form_start(form) }}
             {{ form_errors(form) }}
             {% for key, child in form if key != 'submit' %}
-                {{ form_row(child, { 'sheet_uri': path('event_sheet', { 'sheet': sheet.id }) }) }}
+                {{ form_row(child, {
+                    'sheet_uri': path('event_sheet', { 'sheet': sheet.id }),
+                    'nomenclature_label': label
+                }) }}
             {% endfor %}
             <div class="text-right mg-bt">
                 {{ form_widget(form.submit) }}
