@@ -293,7 +293,7 @@ admin:
         title: Catalogue de produits
         name: Nom
         unitPrice: Prix unitaire
-        quantityMinMax: Quantité min / max
+        quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
@@ -511,12 +511,21 @@ admin:
                 action: Action
     template:
         action:
+            create: Créer un template
             edit: Modifier
             save: Enregistrer
+            duplicate: Dupliquer
             addLanguage: Ajouter une langue
             close: Fermer
         sheet:
             link: Template de présentation
+            titleBase: Templates globaux
+            titleEvent: Templates assignés
+            table:
+                column:
+                    title: Titre
+                    eventType: Événement/Type(s)
+                    action: Action
         registration:
             link: Template d'Inscription
             title: Templates d'Inscription
@@ -530,27 +539,34 @@ admin:
                     action: Action
                 content:
                     edit: Modifier
-        productsSelection:
-            link: Template de forfait de participation
-            title: Template de forfait de participation
-            create: Créer un template
-            update: Modifier
-            steps:
-                step1:
-                    label: Formules
-                step2:
-                    label: Participants & Plannings
-                step3:
-                    label: Options
-            table:
-                column:
-                    title: Titre
-                    event: Evènement
-    product_create:
-        title: Ajouter
-    package_create:
-        title: Ajouter une formule au catalogue
     package:
+        link: Template de forfait de participation
+        title: Template de forfait de participation
+        create: Créer un template
+        update: Modifier
+        steps:
+            step1:
+                label: Formules
+            step2:
+                label: Participants & Plannings
+            step3:
+                label: Options
+        table:
+            column:
+                title: Titre
+                event: Evènement
+    product_create:
+        option:
+            title: Ajouter un produit
+        plan:
+            title: Ajouter une formule
+        participant:
+            title: Ajouter un produit participant
+        planning:
+            title: Ajouter un produit planning
+    plan_create:
+        title: Ajouter une formule au catalogue
+    plan:
         link: Catalogue de formules
         title: Catalogue de formules
         name: Nom

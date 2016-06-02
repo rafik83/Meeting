@@ -8,11 +8,11 @@ Feature: add type
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
-      | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
@@ -23,9 +23,10 @@ Feature: add type
     And I fill in the following:
       | type_create_sheetTemplate         | 0    |
       | type_create_registrationTemplate  | 0    |
+      | type_create_package               | 0    |
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |
-      | type_create_position              | 1    |
+      | type_create_rank                  | 1    |
     And I press "form.type_create.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.type.create.success"

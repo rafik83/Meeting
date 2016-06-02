@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template;
 
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -39,7 +38,6 @@ class SheetTemplateChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'events'           => [],
-            'class'            => SheetTemplate::class,
             'choices'          => function (Options $options) {
                 return $this->getResults($options);
             },

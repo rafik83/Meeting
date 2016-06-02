@@ -3,7 +3,9 @@ Proximum\Vimeet\Application\Command\Type\Create:
         sheetTemplate:
             - NotBlank: ~
         registrationTemplate:
-            - NotBlank:
+            - NotBlank: ~
+        package:
+            - NotBlank: ~
         translations:
             - All:
                 - Collection:

@@ -486,19 +486,19 @@ admin_template_registration_add_locale:
         template: \d+
 
 #
-# ProductsSelectionTemplate
+# Package
 #
-admin_template_products_selection_list:
-    path: /template/products-selection
-    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:list }
+admin_package_list:
+    path: /template/package
+    defaults: { _controller: AdminBundle:Package:list }
     methods: [GET, POST]
 
-admin_template_products_selection_update:
-    path: /template/products-selection/{template}/update
-    defaults: { _controller: AdminBundle:ProductsSelectionTemplate:update }
+admin_package_update:
+    path: /template/package/{package}/update
+    defaults: { _controller: AdminBundle:Package:update }
     methods: [GET, POST]
     requirements:
-        template: \d+
+        package: \d+
 
 #
 # SheetTemplate
@@ -550,28 +550,30 @@ admin_product:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Product:list }
-admin_product_create:
-    path: /event/{event}/product/create
+admin_product_create_option:
+    path: /event/{event}/product/create/option
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:create }
-
-#
-# Package
-#
-admin_package:
-    path: /event/{event}/package
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Package:list }
-admin_package_create:
-    path: /event/{event}/package/create
+    defaults: { _controller: AdminBundle:Product:createOption }
+admin_product_create_plan:
+    path: /event/{event}/product/create/plan
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Package:create }
+    defaults: { _controller: AdminBundle:Product:createPlan }
+admin_product_create_participant:
+    path: /event/{event}/product/create/participant
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:createParticipant }
+admin_product_create_planning:
+    path: /event/{event}/product/create/planning
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:createPlanning }
 
 # Organizer #
 admin_organizer_template_sheet_list:

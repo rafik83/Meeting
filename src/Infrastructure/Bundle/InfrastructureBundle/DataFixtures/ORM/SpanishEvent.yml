@@ -101,15 +101,13 @@ Proximum\Vimeet\Domain\Model\Type:
     event_spanish_type_fournisseur:
         __construct: ["@event_spanish"]
         position: 0
-        maxParticipant: 4
-        maxPlanning: 4
+        package: '@package_spanish_event'
         registrationTemplate: '@registration_template_event_spanish'
 
     event_spanish_type_exposant:
         __construct: ["@event_spanish"]
         position: 1
-        maxParticipant: 4
-        maxPlanning: 4
+        package: '@package_spanish_event'
         registrationTemplate: '@registration_template_event_spanish'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
@@ -358,3 +356,252 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 translatable: false
                                 tags: ["sheet_data"]
 
+Proximum\Vimeet\Domain\Model\Product:
+    # plans
+    product_plan_1_spanish_event:
+        __construct: { createPlan: ['@event_spanish', 'Formule B2B Meeting', '', 1690, '', ''] }
+        quantityMax: 1
+        updatable: false
+        updatableUntil: ~
+    product_plan_2_spanish_event:
+        __construct: { createPlan: [ '@event_spanish', 'Formule Exposant', '', 2880, '', '' ] }
+        quantityMax: 1
+        updatable: false
+        updatableUntil: ~
+    # participants
+    product_participant_1_spanish_event:
+        __construct: { createParticipant: [ '@event_spanish', 'Participant supplémentaire Fournisseur', 195, 1O ] }
+        image: ~
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: false
+        updatableUntil: ~
+    # plannings
+    product_planning_1_spanish_event:
+        __construct: { createPlanning: [ '@event_spanish', 'Planning supplémentaire Fournisseur', 495, 1O ] }
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: false
+        updatableUntil: ~
+    # options
+    product_option_1_spanish_event:
+        __construct: { createOption: ['@event_spanish', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
+    product_option_2_spanish_event:
+        __construct: { createOption: ['@event_spanish', 'Option chaise', '', 9, 10, '', '', true, null] }
+    product_option_3_spanish_event:
+        __construct: { createOption: ['@event_spanish', 'Option A', '', 9, 10, '', '', true, null] }
+    product_option_4_spanish_event:
+        __construct: { createOption: ['@event_spanish', 'Option B', '', 9, 10, '', '', true, null] }
+    product_option_5_spanish_event:
+        __construct: { createOption: ['@event_spanish', 'Option C', '', 9, 10, '', '', true, null] }
+
+Proximum\Vimeet\Domain\Model\ProductTranslation:
+    product_plan_1_spanish_event_fr:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+        title: 'Formule B2B Meeting'
+        heading: 'Pas de stand'
+        description: 'Vous changez de lieu à chaque rendez-vous.'
+        addon: ''
+        locale: 'fr'
+    product_plan_1_spanish_event_en:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+        title: 'B2B Meeting Formula'
+        heading: 'No booth'
+        description: 'You have to move at each appointment.'
+        addon: ''
+        locale: 'en'
+    product_plan_2_spanish_event_fr:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+        title: 'Formule Exposant'
+        heading: 'Stand équipé 4m² (2x2m)'
+        description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
+        addon: ''
+        locale: 'fr'
+    product_plan_2_spanish_event_en:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+        title: 'Exhibitor Formula'
+        heading: 'An equipped 4 sqm booth (2X2 m)'
+        description: 'With a banner, lighting, 1 table and 4 chairs.'
+        addon: ''
+        locale: 'en'
+    product_participant_1_spanish_event_fr:
+        __construct: false
+        product: '@product_participant_1_spanish_event'
+        title: 'Participant supplémentaire'
+        heading: ''
+        description: 'Accompagnant le premier sur un même agenda incluant une entrée à la convention d’affaire, accès illimité à la pause café et aux conférences.'
+        addon: ''
+        locale: 'fr'
+    product_participant_1_spanish_event_en:
+        __construct: false
+        product: '@product_participant_1_spanish_event'
+        title: 'Extra participant'
+        heading: ''
+        description: 'Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.'
+        addon: ''
+        locale: 'en'
+    product_planning_1_spanish_event_fr:
+        __construct: false
+        product: '@product_planning_1_spanish_event'
+        title: 'Planning supplémentaire'
+        heading: ''
+        description: 'En fonction du nombre de rendez-vous bi validés'
+        addon: ''
+        locale: 'fr'
+    product_planning_1_spanish_event_en:
+        __construct: false
+        product: '@product_planning_1_spanish_event'
+        title: 'Extra planning'
+        heading: ''
+        description: 'According to the number of bi-validated meetings'
+        addon: ''
+        locale: 'en'
+    product_option_1_spanish_event_fr:
+        __construct: false
+        product: '@product_option_1_spanish_event'
+        title: 'Option 4m² supplémentaires'
+        heading: ''
+        description: 'Option valable uniquement en complément des formules Exposant et Parrain.'
+        addon: ''
+        locale: 'fr'
+    product_option_1_spanish_event_en:
+        __construct: false
+        product: '@product_option_1_spanish_event'
+        title: 'Add booth option (4 sqm)'
+        heading: ''
+        description: 'Option available in addition with exhibitor and sponsor formula only.'
+        addon: ''
+        locale: 'en'
+    product_option_2_spanish_event_fr:
+        __construct: false
+        product: '@product_option_2_spanish_event'
+        title: 'Chaise'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_2_spanish_event_en:
+        __construct: false
+        product: '@product_option_2_spanish_event'
+        title: 'Chair'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+
+Proximum\Vimeet\Domain\Model\Package:
+    package_spanish_event:
+        __construct: false
+        event: '@event_spanish'
+        title: "Package Spanish Event"
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        participant: '@product_participant_1_spanish_event'
+        planning: '@product_planning_1_spanish_event'
+        plansEnabled: true
+        participantAndPlanningEnabled: true
+        optionsEnabled: true
+
+Proximum\Vimeet\Domain\Model\PackageTranslation:
+    package_spanish_event_fr:
+        __construct: false
+        package: '@package_spanish_event'
+        locale: 'fr'
+        plansLabel: 'Formules Rendez-vous d’Affaires'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+    package_spanish_event_en:
+        __construct: false
+        package: '@package_spanish_event'
+        locale: 'en'
+        plansLabel: 'Business Meetings Formula'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+
+Proximum\Vimeet\Domain\Model\PackagePlanRank:
+    package_plan_1_rank_spanish_event:
+        __construct: false
+        rank: 1
+        package: '@package_spanish_event'
+        plan: '@product_plan_1_spanish_event'
+    package_plan_2_rank_spanish_event:
+        __construct: false
+        rank: 2
+        package: '@package_spanish_event'
+        plan: '@product_plan_2_spanish_event'
+
+Proximum\Vimeet\Domain\Model\PackageGroup:
+    package_group_1_spanish_event:
+        __construct: false
+        rank: 1
+        package: '@package_spanish_event'
+    package_group_2_spanish_event:
+        __construct: false
+        rank: 2
+        package: '@package_spanish_event'
+    package_group_3_spanish_event:
+        __construct: false
+        rank: 3
+        package: '@package_spanish_event'
+
+Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
+    package_group_1_spanish_event_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options d’exposition'
+        group: '@package_group_1_spanish_event'
+    package_group_1_spanish_event_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting options'
+        group: '@package_group_1_spanish_event'
+    package_group_2_spanish_event_fr:
+        __construct: false
+        locale: 'fr'
+        label: "Options d'exposition et de communication"
+        group: '@package_group_2_spanish_event'
+    package_group_2_spanish_event_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting and communication options'
+        group: '@package_group_2_spanish_event'
+    package_group_3_spanish_event_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options de communication'
+        group: '@package_group_3_spanish_event'
+    package_group_3_spanish_event_en:
+        __construct: false
+        locale: 'en'
+        label: 'Communication options'
+        group: '@package_group_3_spanish_event'
+
+Proximum\Vimeet\Domain\Model\PackageOptionRank:
+    package_group_1_option_1_spanish_event:
+        __construct: false
+        rank: 1
+        group: '@package_group_1_spanish_event'
+        option: '@product_option_1_spanish_event'
+    package_group_1_option_2_spanish_event:
+        __construct: false
+        rank: 1
+        group: '@package_group_1_spanish_event'
+        option: '@product_option_2_spanish_event'
+    package_group_2_option_3_spanish_event:
+        __construct: false
+        rank: 1
+        group: '@package_group_2_spanish_event'
+        option: '@product_option_3_spanish_event'
+    package_group_3_option_4_spanish_event:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_spanish_event'
+        option: '@product_option_4_spanish_event'
+    package_group_3_option_5_spanish_event:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_spanish_event'
+        option: '@product_option_5_spanish_event'

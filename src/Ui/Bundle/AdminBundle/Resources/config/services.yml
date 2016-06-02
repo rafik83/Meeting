@@ -89,3 +89,9 @@ services:
             - '@vimeet_infrastructure.repository.product_repository'
         tags:
             - { name: form.type }
+    form_type_package.package_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType
+        arguments:
+            - '@repository.package_repository'
+        tags:
+            - { name: form.type }

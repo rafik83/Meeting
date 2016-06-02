@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Product\Feature:
+    type:  entity
+    table: product_feature
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product\FeatureTranslation
+            mappedBy: feature
+            indexBy: locale
+            cascade: ["persist"]
+    manyToOne:
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            inversedBy: features

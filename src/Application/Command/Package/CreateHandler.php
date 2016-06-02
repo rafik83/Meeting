@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
@@ -22,65 +21,49 @@ class CreateHandler
     private $packageRepository;
 
     /**
-     * @var FileStorageInterface
+     * @var \DateTimeInterface
      */
-    private $fileStorage;
+    private $dateTime;
 
     /**
-     * @param PackageRepositoryInterface $packageRepository
-     * @param FileStorageInterface       $fileStorage
+     * @var array
      */
-    public function __construct(PackageRepositoryInterface $packageRepository, FileStorageInterface $fileStorage)
+    private $defaultLabels;
+
+    /**
+     * CreateHandler constructor.
+     *
+     * @param PackageRepositoryInterface $packageRepository
+     * @param \DateTimeInterface         $dateTime
+     * @param array                      $defaultLabels
+     */
+    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime, array $defaultLabels)
     {
         $this->packageRepository = $packageRepository;
-        $this->fileStorage       = $fileStorage;
+        $this->dateTime          = $dateTime;
+        $this->defaultLabels     = $defaultLabels;
     }
 
     /**
      * @param Create $create
+     *
+     * @return CreateResult
      */
     public function handle(Create $create)
     {
-        // Create the package
-        $package = new Package(
-            $create->event,
-            $create->name,
-            $this->fileStorage->upload($create->file),
-            $create->unitPrice,
-            $create->availabilityCurrent,
-            $create->availabilityMax,
-            $create->participantIncluded
-        );
+        $package = new Package($create->event, $create->title, $this->dateTime);
 
-        // Deal with the translations of the package
-        foreach ($create->translations as $locale => $translation) {
+        foreach ($create->event->getLocales() as $locale) {
             $package->translate(
                 $locale,
-                $translation['title'],
-                $translation['descriptionTitle'],
-                $translation['descriptionContent'],
-                $translation['optionalPriceText']
+                isset($this->defaultLabels['plans'][$locale]) ? $this->defaultLabels['plans'][$locale] : '',
+                isset($this->defaultLabels['participant_and_planning'][$locale]) ? $this->defaultLabels['participant_and_planning'][$locale] : '',
+                isset($this->defaultLabels['options'][$locale]) ? $this->defaultLabels['options'][$locale] : ''
             );
         }
 
-        // Deal with the collection of products included in the package
-        foreach ($create->productIncluded as $key => $productIncluded) {
-            $package->includeProduct($productIncluded['product'], $productIncluded['quantity']);
-        }
-
-        // Deal with the collection of features included in the package
-        foreach ($create->features as $feature) {
-            if (isset($feature['translations'])) {
-                $featureObject = new Package\Feature($package);
-
-                foreach ($feature['translations'] as $locale => $translation) {
-                    $featureObject->translate($locale, $translation['title'], $translation['description']);
-                }
-
-                $package->addFeature($featureObject);
-            }
-        }
-
         $this->packageRepository->add($package);
+
+        return new CreateResult($package);
     }
 }

@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
+    type:  entity
+    table: product_product_included
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+    manyToOne:
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            inversedBy: productIncluded
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

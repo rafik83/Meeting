@@ -18,11 +18,6 @@ class PackageTranslation
     private $id;
 
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @var Package
      */
     private $package;
@@ -30,56 +25,44 @@ class PackageTranslation
     /**
      * @var string
      */
-    private $title;
+    private $locale;
 
     /**
      * @var string
      */
-    private $descriptionTitle;
+    private $plansLabel;
 
     /**
      * @var string
      */
-    private $descriptionContent;
+    private $participantAndPlanningLabel;
 
     /**
      * @var string
      */
-    private $optionalPriceText;
+    private $optionsLabel;
 
     /**
+     * PackageTranslation constructor.
+     *
      * @param Package $package
-     * @param string  $locale
-     * @param string  $title
-     * @param string  $descriptionTitle
-     * @param string  $descriptionContent
-     * @param string  $optionalPriceText
+     * @param string           $locale
+     * @param string           $plansLabel
+     * @param string           $participantAndPlanningLabel
+     * @param string           $optionsLabel
      */
-    public function __construct(Package $package, $locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText)
+    public function __construct(Package $package, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
         $this->package            = $package;
-        $this->locale             = $locale;
-        $this->title              = $title;
-        $this->descriptionTitle   = $descriptionTitle;
-        $this->descriptionContent = $descriptionContent;
-        $this->optionalPriceText  = $optionalPriceText;
+        $this->locale                      = $locale;
+        $this->plansLabel               = $plansLabel;
+        $this->participantAndPlanningLabel = $participantAndPlanningLabel;
+        $this->optionsLabel                = $optionsLabel;
     }
 
     /**
-     * @param string $title
-     * @param string $descriptionTitle
-     * @param string $descriptionContent
-     * @param string $optionalPriceText
-     */
-    public function set($title, $descriptionTitle, $descriptionContent, $optionalPriceText)
-    {
-        $this->title              = $title;
-        $this->descriptionTitle   = $descriptionTitle;
-        $this->descriptionContent = $descriptionContent;
-        $this->optionalPriceText  = $optionalPriceText;
-    }
-
-    /**
+     * Get id
+     *
      * @return int
      */
     public function getId()
@@ -88,14 +71,20 @@ class PackageTranslation
     }
 
     /**
-     * @return string
+     * @param string $plansLabel
+     * @param string $participantAndPlanningLabel
+     * @param string $optionsLabel
      */
-    public function getLocale()
+    public function set($plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
-        return $this->locale;
+        $this->plansLabel                  = $plansLabel;
+        $this->participantAndPlanningLabel = $participantAndPlanningLabel;
+        $this->optionsLabel                = $optionsLabel;
     }
 
     /**
+     * Get package
+     *
      * @return Package
      */
     public function getPackage()
@@ -104,34 +93,42 @@ class PackageTranslation
     }
 
     /**
+     * Get locale
+     *
      * @return string
      */
-    public function getTitle()
+    public function getLocale()
     {
-        return $this->title;
+        return $this->locale;
     }
 
     /**
+     * Get plansLabel
+     *
      * @return string
      */
-    public function getDescriptionTitle()
+    public function getPlansLabel()
     {
-        return $this->descriptionTitle;
+        return $this->plansLabel;
     }
 
     /**
+     * Get participantAndPlanningLabel
+     *
      * @return string
      */
-    public function getDescriptionContent()
+    public function getParticipantAndPlanningLabel()
     {
-        return $this->descriptionContent;
+        return $this->participantAndPlanningLabel;
     }
 
     /**
+     * Get optionsLabel
+     *
      * @return string
      */
-    public function getOptionalPriceText()
+    public function getOptionsLabel()
     {
-        return $this->optionalPriceText;
+        return $this->optionsLabel;
     }
 }

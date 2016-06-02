@@ -50,16 +50,6 @@ class Type implements WhoInterface
     private $registrationTemplate;
 
     /**
-     * @var int
-     */
-    private $maxParticipant = 4;
-
-    /**
-     * @var int
-     */
-    private $maxPlanning = 4;
-
-    /**
      * @var string
      */
     private $previewTemplate = '';
@@ -78,6 +68,11 @@ class Type implements WhoInterface
      * @var ValidationCriteria
      */
     private $validationCriteria;
+
+    /**
+     * @var Package
+     */
+    private $package;
 
     /**
      * Type constructor.
@@ -185,19 +180,53 @@ class Type implements WhoInterface
     }
 
     /**
-     * @return int
+     * @param Package $package
+     *
+     * @return Type
      */
-    public function getMaxParticipant()
+    public function setPackage(Package $package)
     {
-        return $this->maxParticipant;
+        $this->package = $package;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return Package
+     */
+    public function getPackage()
+    {
+        return $this->package;
+    }
+
+    /**
+     * @return int|double
+     */
+    public function getMaxParticipant()
+    {
+        if (null !== $this->package
+            && null !== $this->package->getParticipant()
+            && null !== $this->package->getParticipant()->getQuantityMax()
+        ) {
+            return $this->package->getParticipant()->getQuantityMax();
+        }
+
+        return INF;
+    }
+
+    /**
+     * @return int|double
      */
     public function getMaxPlanning()
     {
-        return $this->maxPlanning;
+        if (null !== $this->package
+            && null !== $this->package->getPlanning()
+            && null !== $this->package->getPlanning()->getQuantityMax()
+        ) {
+            return $this->package->getPlanning()->getQuantityMax();
+        }
+
+        return $this->getMaxParticipant();
     }
 
     /**

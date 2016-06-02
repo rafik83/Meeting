@@ -9,10 +9,13 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
     fields:
         title:
             type: string
+        heading:
+            type: string
+            nullable: true
         description:
             type: text
             nullable: true
-        optionalPriceText:
+        addon:
             type: text
             nullable: true
         locale:

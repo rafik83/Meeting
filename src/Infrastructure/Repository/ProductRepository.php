@@ -56,4 +56,22 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventAndTypes(Event $event, array $types)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('product.type IN (:types)')
+            ->setParameter('types', $types);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

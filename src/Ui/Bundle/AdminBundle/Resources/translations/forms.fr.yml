@@ -165,7 +165,7 @@ form:
         add_with_participant: Ajouter un planning supplémentaire avec le participant
     type_update:
         children:
-            position:
+            rank:
                 label: Position
             validationCriteria:
                 label: Critère de validation automatique des fiches de présentation
@@ -183,7 +183,7 @@ form:
                 label: Enregistrer
     type_create:
         children:
-            position:
+            rank:
                 label: Position
             validationCriteria:
                 label: Critère de validation automatique des fiches de présentation
@@ -193,7 +193,7 @@ form:
             template:
                 label: Template
             sheetTemplate:
-                label: Template de Participation
+                label: Template de présentation
             registrationTemplate:
                 label: Template d'Inscription
             translations:
@@ -203,6 +203,8 @@ form:
                             label: Titre
                         description:
                             label: Description
+            package:
+                label: Template de forfait de participation
             submit:
                 label: Enregistrer
     category_create:
@@ -805,7 +807,7 @@ form:
                 label: Contenu du template
             submit:
                 label: Enregistrer
-    template_products_selection_create:
+    package_create:
         children:
             title:
                 label: Titre du template
@@ -813,10 +815,52 @@ form:
                 label: Choisir un événement
             submit:
                 label: Enregistrer
-    template_products_selection_update:
+    package_update:
         children:
             title:
                 label: Titre du template
+            plans:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    plans:
+                        label: Formules
+                        label_add: Ajouter une formule
+                        label_delete: "&times;"
+            participantAndPlanning:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    participant:
+                        label: Participant
+                    planning:
+                        label: Planning
+            options:
+                children:
+                    enabled:
+                        label: Activé
+                    labels:
+                        label: Libellé de l'étape
+                    groups:
+                        label: Groupes
+                        label_add: Ajouter un groupe
+                        label_delete: "&times;"
+                        prototype:
+                            children:
+                                item:
+                                    children:
+                                        labels:
+                                            label: Libellé du groupe
+                                        options:
+                                            label: Options
+                                            label_add: Ajouter une option
+                                            label_delete: "&times;"
+
+
             templateData:
                 children:
                     blocks:
@@ -827,7 +871,7 @@ form:
                                     label: Etape activée
             submit:
                 label: Enregistrer
-    product_create:
+    product_create_option:
         children:
             name:
                 label: Nom backoffice du produit
@@ -856,9 +900,9 @@ form:
                             label: Titre
                         description:
                             label: Description
-                        optionalPriceText:
+                        addon:
                             label: Texte optionnel sous le prix
-    package_create:
+    product_create_plan:
         children:
             name:
                 label: Nom backoffice de la formule
@@ -899,9 +943,39 @@ form:
                     children:
                         title:
                             label: Titre de la formule
-                        descriptionTitle:
+                        heading:
                             label: Titre de la description
-                        descriptionContent:
+                        description:
                             label: Contenu de la description
-                        optionalPriceText:
+                        addon:
                             label: Texte optionnel sous le prix
+    product_create_participant:
+        children:
+            name:
+                label: Nom backoffice du participant
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+    product_create_planning:
+        children:
+            name:
+                label: Nom backoffice du planning
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre

@@ -8,6 +8,7 @@ Feature: Show the homepage of an event
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
     Then I should see "Les rendez-vous CARNOT 2016"

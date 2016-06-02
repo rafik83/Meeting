@@ -36,7 +36,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $type = $update->type;
-        $type->setPosition($update->position);
+        $type->setPosition($update->rank);
 
         $localesTitleAlreadyExists = [];
 
