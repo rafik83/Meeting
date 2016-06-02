@@ -12,11 +12,15 @@
                 <h2>{{ config['label']|localize(locale, fallback) }}</h2>
             </header>
             <div class="section__content">
-                <ul>
-                    {% for key, child in nomenclature.value if key in data[uid]['items']|default([]) %}
-                        <li>{{ child.label|localize(locale, fallback) }}</li>
-                    {% endfor %}
-                </ul>
+                {% if data[uid]['items'] is empty %}
+                    <p class="help">{{ config['label']|localize(locale, fallback) }}</p>
+                {% else %}
+                    <ul>
+                        {% for key, child in nomenclature.value if key in data[uid]['items']|default([]) %}
+                            <li>{{ child.label|localize(locale, fallback) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
             <footer>
                 <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
@@ -46,28 +50,44 @@
 
     {% elseif nomenclature.depth == 3 %}
 
-        {% for child in nomenclature.value %}
-
+        {% if data[uid]['items'] is empty %}
             <section class="object--nomenclature {{ 'style--' ~ config['style'] }} section">
                 <header>
-                    <h2>{{ child.label|localize(locale, fallback) }}</h2>
+                    <h2>{{ config['label']|localize(locale, fallback) }}</h2>
                 </header>
                 <div class="section__content">
-                    <ul>
-                        {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid]['items']|default([]))|length > 0 %}
-                            <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                            {% for key, grandgrandchild in grandchild.children if key in data[uid]['items']|default([]) %}
-                                <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
+                    <p class="help">{{ config['help']|localize(locale, fallback) }}</p>
                 </div>
                 <footer>
                     <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
                 </footer>
             </section>
+        {% else %}
 
-        {% endfor %}
+            {% for child in nomenclature.value %}
+
+                <section class="object--nomenclature {{ 'style--' ~ config['style'] }} section">
+                    <header>
+                        <h2>{{ child.label|localize(locale, fallback) }}</h2>
+                    </header>
+                    <div class="section__content">
+                        <ul>
+                            {% for grandchild in child.children if grandchild.children|keys|intersect(data[uid]['items']|default([]))|length > 0 %}
+                                <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
+                                {% for key, grandgrandchild in grandchild.children if key in data[uid]['items']|default([]) %}
+                                    <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <footer>
+                        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ config['label']|localize(locale, fallback) }}"</a>
+                    </footer>
+                </section>
+
+            {% endfor %}
+
+        {% endif %}
 
     {% endif %}
 
