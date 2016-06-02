@@ -28,23 +28,6 @@ function init(target) {
                     o.refresh();
                 }
             });
-
-            /*
-            item.element.find('.collection').each(function (key, element) {
-
-                console.log(element);
-
-                var collection = $(element).data('collection');
-
-                console.log(collection); // => undefined
-
-                // trigger collection:deleted on sub collection items
-                //for (var i = 0, i < collection.items.length, i++) {
-                //    collection.element.trigger('collection:deleted', [collection.items[i]]);
-                //}
-            });
-            */
-
         });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
@@ -111,10 +94,6 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
     });
-
-    //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {
-    //    new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]');
-    //});
 }
 
 // Call init function when element is added to DOM
