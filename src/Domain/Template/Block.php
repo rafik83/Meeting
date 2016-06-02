@@ -48,8 +48,6 @@ class Block extends AbstractChild
     }
 
     /**
-     * @param string $locale
-     *
      * @return string
      */
     public function getLabel()
@@ -59,7 +57,6 @@ class Block extends AbstractChild
 
     /**
      * @param string $label
-     * @param string $locale
      */
     public function setLabel($label)
     {
@@ -78,28 +75,28 @@ class Block extends AbstractChild
      * @param int           $column
      * @param string        $name
      * @param AbstractChild $child
+     *
+     * @return Block
      */
     public function addChild($column, $name, AbstractChild $child)
     {
         $this->children[$column][$name] = $child;
+
+        return $this;
     }
 
     /**
+     * Get first levels blocks
+     *
      * @return Block[]
      */
     public function getBlocks()
     {
-        $blocks = [];
-
-        foreach ($this->children as $children) {
-            foreach ($children as $block) {
-                if ($block instanceof Block) {
-                    $blocks[] = $block;
-                }
-            }
-        }
-
-        return $blocks;
+        return array_reduce($this->children, function ($carry, $columns) {
+            return array_merge($carry, array_values(array_filter($columns, function (AbstractChild $child) {
+                return $child instanceof Block;
+            })));
+        }, []);
     }
 
     /**
@@ -203,77 +200,40 @@ class Block extends AbstractChild
     }
 
     /**
+     * Get a first level block by its index (starts from 1)
+     *
      * @param int $index
      *
      * @return null|Block
      */
     public function getBlock($index)
     {
-        $count = 0;
+        $blocks = $this->getBlocks();
+        $index  = (int) $index - 1;
 
-        if ($index <= 0) {
-            return null;
-        }
-
-        foreach ($this->children as $children) {
-            foreach ($children as $block) {
-                if ($block instanceof Block) {
-                    $count++;
-
-                    if (intval($index) === $count) {
-                        return $block;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return isset($blocks[$index]) ? $blocks[$index] : null;
     }
 
     /**
-     * @return null|Block
+     * Count first level blocks having objects
+     *
+     * @return int
      */
     public function getBlocksCount()
     {
-        $blocksCount =  0;
-
-        foreach ($this->children as $children) {
-            foreach ($children as $block) {
-                if ($block instanceof Block && count($block->getObjects()) > 0) {
-                    $blocksCount++;
-                }
-            }
-        }
-
-        return $blocksCount;
+        return count(array_filter($this->getBlocks(), function (Block $block) {
+            return count($block->getObjects()) > 0;
+        }));
     }
 
     /**
-     * @param int $currentBlock
+     * @param int $current
      *
      * @return int|null
      */
-    public function getNextBlockPosition($currentBlock)
+    public function getNextBlockPosition($current)
     {
-        $count = 0;
-
-        if ($currentBlock <= 0) {
-            return null;
-        }
-
-        foreach ($this->children as $children) {
-            foreach ($children as $block) {
-                if ($block instanceof Block) {
-                    $count++;
-
-                    if (intval($currentBlock) < $count && count($block->getObjects()) > 0) {
-                        return $count;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return $current < $this->getBlocksCount() ? ++$current : null;
     }
 
     /**
