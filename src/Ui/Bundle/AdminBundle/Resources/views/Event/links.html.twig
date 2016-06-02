@@ -18,20 +18,10 @@
         </li>
     </ul>
 </li>
-<li class="dropdown-submenu">
-    <a href="{{ path('admin_product', { 'event': event.id }) }}">{{ 'admin.product.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_product', { 'event': event.id }) }}">
-                {{ 'admin.product.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_package', { 'event': event.id }) }}">
-                {{ 'admin.package.link'|trans }}
-            </a>
-        </li>
-    </ul>
+<li>
+    <a href="{{ path('admin_product', { 'event': event.id }) }}">
+        {{ 'admin.product.link'|trans }}
+    </a>
 </li>
 <li>
     <a href="{{ path('admin_sheet', { 'event': event.id }) }}">

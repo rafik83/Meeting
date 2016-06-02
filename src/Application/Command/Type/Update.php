@@ -32,7 +32,7 @@ class Update
     /**
      * @var int
      */
-    public $position;
+    public $rank;
 
     /**
      * Update constructor.
@@ -42,7 +42,7 @@ class Update
     public function __construct(Type $type)
     {
         $this->type                                = $type;
-        $this->position                            = $type->getPosition();
+        $this->rank                                = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
 
         foreach ($type->getTranslations() as $translation) {

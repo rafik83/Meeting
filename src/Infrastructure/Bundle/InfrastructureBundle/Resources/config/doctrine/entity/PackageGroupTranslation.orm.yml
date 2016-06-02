@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
+    type:  entity
+    table: package_group_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        label:
+            type: string
+    manyToOne:
+        group:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

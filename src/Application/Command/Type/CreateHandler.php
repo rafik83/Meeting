@@ -49,7 +49,7 @@ class CreateHandler
     public function handle(Create $create)
     {
         $type = new Type($create->event);
-        $type->setPosition($create->position);
+        $type->setPosition($create->rank);
 
         $localesTitleAlreadyExists = [];
 
@@ -100,6 +100,7 @@ class CreateHandler
 
         $type->setSheetTemplate($sheetTemplate);
         $type->setRegistrationTemplate($registrationTemplate);
+        $type->setPackage($create->package);
 
         $this->typeRepository->add($type);
 

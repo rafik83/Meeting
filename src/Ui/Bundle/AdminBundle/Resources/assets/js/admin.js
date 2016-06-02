@@ -1,14 +1,16 @@
-var $                    = require('jquery'),
-    bootstrap            = require('bootstrap'),
-    tablesort            = require('tablesort'),
-    Confirm              = require('./components/_Confirm'),
-    CheckAll             = require('./components/_CheckAll'),
-    LoadingButton        = require('./components/_LoadingButton'),
-    TemplateBuilder      = require('./components/_TemplateBuilder'),
-    SelectPackageProduct = require('./components/_SelectPackageProduct'),
-    Batch                = require('./components/_Batch'),
-    Slots                = require('./components/_Slots'),
-    Update               = require('./components/_Update');
+var $                       = require('jquery'),
+    bootstrap               = require('bootstrap'),
+    tablesort               = require('tablesort'),
+    Confirm                 = require('./components/_Confirm'),
+    CheckAll                = require('./components/_CheckAll'),
+    Sortable                = require('./components/_Sortable'),
+    LoadingButton           = require('./components/_LoadingButton'),
+    TemplateBuilder         = require('./components/_TemplateBuilder'),
+    Batch                   = require('./components/_Batch'),
+    Slots                   = require('./components/_Slots'),
+    SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
+    SortableCollection      = require('./components/_SortableCollection'),
+    Update                  = require('./components/_Update');
 
 require('elao-form.js');
 
@@ -16,7 +18,34 @@ require('elao-form.js');
 
 function init(target) {
 
-    $('[data-collection]', target).collection();
+    $('[data-collection]', target).collection()
+        .on('collection:added', function (event, item) { init(item.element.get(0)); })
+        .on('collection:deleted', function (event, item) {
+            // Refresh shared choices collection in sub collections
+            $('[data-shared-choices-collection]').each(function (key, element) {
+                var o = $(element).data('shared-choices-collection-object');
+                if (o !== undefined) {
+                    o.refresh();
+                }
+            });
+
+            /*
+            item.element.find('.collection').each(function (key, element) {
+
+                console.log(element);
+
+                var collection = $(element).data('collection');
+
+                console.log(collection); // => undefined
+
+                // trigger collection:deleted on sub collection items
+                //for (var i = 0, i < collection.items.length, i++) {
+                //    collection.element.trigger('collection:deleted', [collection.items[i]]);
+                //}
+            });
+            */
+
+        });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
@@ -65,19 +94,27 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
+    [].forEach.call(target.querySelectorAll('[data-sortable-collection]'), function (element) {
+        new SortableCollection(element, element.getAttribute('data-sortable-collection'));
+    });
 
     [].forEach.call(target.querySelectorAll('[data-loading-link]'), function (element) {
         var loadingButton = new LoadingButton(element, element.getAttribute('data-loading-link'));
         element.addEventListener('click', function () { loadingButton.start(); });
     });
 
-
     // Disable click on <a href="#"></a>
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
 
-    new SelectPackageProduct();
+    [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
+        $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
+    });
+
+    //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {
+    //    new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]');
+    //});
 }
 
 // Call init function when element is added to DOM

@@ -7,35 +7,42 @@ Proximum\Vimeet\Domain\Model\Package:
             generator:
                 strategy: AUTO
     fields:
-        name:
+        title:
             type: string
-        image:
-            type: string
-            nullable: true
-        unitPrice:
-            type: float
-        availabilityCurrent:
-            type: integer
-            nullable: true
-        availabilityMax:
-            type: integer
-            nullable: true
-        participantIncluded:
-            type: integer
+        plansEnabled:
+            type: boolean
+        participantAndPlanningEnabled:
+            type: boolean
+        optionsEnabled:
+            type: boolean
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+        planning:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageTranslation
             mappedBy: package
+            cascade: ["persist"]
             indexBy: locale
-            cascade: ["persist"]
-        features:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package\Feature
+            orphanRemoval: true
+        planRanks:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackagePlanRank
             mappedBy: package
             cascade: ["persist"]
-        productIncluded:
-            targetEntity: Proximum\Vimeet\Domain\Model\Package\ProductIncluded
+            orderBy: { rank: ASC }
+            orphanRemoval: true
+        groups:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageGroup
             mappedBy: package
             cascade: ["persist"]
-    manyToOne:
-        event:
-            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            orderBy: { rank: ASC }
+            orphanRemoval: true
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            mappedBy: package

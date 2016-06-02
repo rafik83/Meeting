@@ -30,7 +30,8 @@ class RegistrationTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $templates          = $this->get('repository.template.registration_template_repository')->getBaseTemplates();
-        $templatesOrganizer = $this->get('repository.template.registration_template_repository')->getAllOrganizersTemplates();
+        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
+        $templatesOrganizer = $this->get('repository.template.registration_template_repository')->getTemplateForGivenEvents($events);
 
         return $this->render('AdminBundle:RegistrationTemplate:list.html.twig', [
             'templates'          => $templates,

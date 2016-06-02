@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Product:
             generator:
                 strategy: AUTO
     fields:
+        type:
+            type: string
         name:
             type: string
         image:
@@ -14,9 +16,6 @@ Proximum\Vimeet\Domain\Model\Product:
             nullable: true
         unitPrice:
             type: float
-        quantityMin:
-            type: integer
-            nullable: true
         quantityMax:
             type: integer
             nullable: true
@@ -36,6 +35,14 @@ Proximum\Vimeet\Domain\Model\Product:
             targetEntity: Proximum\Vimeet\Domain\Model\ProductTranslation
             mappedBy: product
             indexBy: locale
+            cascade: ["persist"]
+        features:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product\Feature
+            mappedBy: product
+            cascade: ["persist"]
+        productIncluded:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product\ProductIncluded
+            mappedBy: product
             cascade: ["persist"]
     manyToOne:
         event:

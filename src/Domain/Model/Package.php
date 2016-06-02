@@ -11,12 +11,8 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Package\Feature;
-use Proximum\Vimeet\Domain\Model\Package\ProductIncluded;
+use Doctrine\Common\Collections\Criteria;
 
-/**
- * "Formule".
- */
 class Package
 {
     /**
@@ -30,81 +26,80 @@ class Package
     private $event;
 
     /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $planRanks;
+
+    /**
+     * @var Product
+     */
+    private $participant;
+
+    /**
+     * @var Product
+     */
+    private $planning;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $groups;
+
+    /**
      * @var ArrayCollection
      */
     private $translations;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $name;
+    private $plansEnabled = true;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $image;
+    private $participantAndPlanningEnabled = true;
 
     /**
-     * @var float;
+     * @var bool
      */
-    private $unitPrice;
+    private $optionsEnabled = true;
 
     /**
-     * @var int
+     * @var \DateTimeInterface
      */
-    private $availabilityCurrent;
+    private $createdAt;
 
     /**
-     * @var int
+     * @var Type[]
      */
-    private $availabilityMax;
+    private $types;
 
     /**
-     * @var ArrayCollection
+     * Package constructor.
+     *
+     * @param Event              $event
+     * @param string             $title
+     * @param \DateTimeInterface $createdAt
      */
-    private $features;
-
-    /**
-     * @var int
-     */
-    private $participantIncluded;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $productIncluded;
-
-    /**
-     * @param Event  $event
-     * @param string $name
-     * @param string $image
-     * @param float  $unitPrice
-     * @param int    $availabilityCurrent
-     * @param int    $availabilityMax
-     * @param int    $participantIncluded
-     */
-    public function __construct(
-        Event $event,
-        $name,
-        $image,
-        $unitPrice,
-        $availabilityCurrent,
-        $availabilityMax,
-        $participantIncluded
-    ) {
-        $this->event               = $event;
-        $this->translations        = new ArrayCollection();
-        $this->features            = new ArrayCollection();
-        $this->productIncluded     = new ArrayCollection();
-        $this->name                = $name;
-        $this->image               = $image;
-        $this->unitPrice           = $unitPrice;
-        $this->availabilityCurrent = $availabilityCurrent;
-        $this->availabilityMax     = $availabilityMax;
-        $this->participantIncluded = $participantIncluded;
+    public function __construct(Event $event, $title, \DateTimeInterface $createdAt)
+    {
+        $this->event        = $event;
+        $this->title        = $title;
+        $this->createdAt    = $createdAt;
+        $this->planRanks    = new ArrayCollection();
+        $this->groups       = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
+     * Get id
+     *
      * @return int
      */
     public function getId()
@@ -113,6 +108,18 @@ class Package
     }
 
     /**
+     * Get createdAt
+     *
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Get event
+     *
      * @return Event
      */
     public function getEvent()
@@ -121,128 +128,298 @@ class Package
     }
 
     /**
-     * @return ArrayCollection
+     * Get title
+     *
+     * @return string
      */
-    public function getTranslations()
+    public function getTitle()
     {
-        return $this->translations;
+        return $this->title;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Package
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get ordered plans
+     *
+     * @return Product[]
+     */
+    public function getPlans()
+    {
+        return $this
+            ->planRanks
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->map(function (PackagePlanRank $plan) { return $plan->getPlan(); })
+            ->toArray();
+    }
+
+    /**
+     * Get ordered groups
+     *
+     * @return PackageGroup[]
+     */
+    public function getGroups()
+    {
+        return $this
+            ->groups
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->toArray();
+    }
+
+    /**
+     * Get participant
+     *
+     * @return Product
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
+    }
+
+    /**
+     * Get planning
+     *
+     * @return Product
+     */
+    public function getPlanning()
+    {
+        return $this->planning;
+    }
+
+    /**
+     * Get plansEnabled
+     *
+     * @return boolean
+     */
+    public function isPlansEnabled()
+    {
+        return $this->plansEnabled;
+    }
+
+    /**
+     * Get participantAndPlanningEnabled
+     *
+     * @return boolean
+     */
+    public function isParticipantAndPlanningEnabled()
+    {
+        return $this->participantAndPlanningEnabled;
+    }
+
+    /**
+     * Get optionsEnabled
+     *
+     * @return boolean
+     */
+    public function isOptionsEnabled()
+    {
+        return $this->optionsEnabled;
     }
 
     /**
      * @param string $locale
-     * @param string $title
-     * @param string $descriptionTitle
-     * @param string $descriptionContent
-     * @param string $optionalPriceText
+     * @param string $plansLabel
+     * @param string $participantAndPlanningLabel
+     * @param string $optionsLabel
      *
      * @return Package
      */
-    public function translate($locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText)
+    public function translate($locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
-        if ($this->translations->get($locale)) {
-            $this->translations->get($locale)->set($title, $descriptionTitle, $descriptionContent, $optionalPriceText);
+        if (!$this->translations->containsKey($locale)) {
+            $this->translations->add(new PackageTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
         } else {
-            $this->translations->set($locale, new PackageTranslation($this, $locale, $title, $descriptionTitle, $descriptionContent, $optionalPriceText));
+            $this->translations->get($locale)->set($plansLabel, $participantAndPlanningLabel, $optionsLabel);
         }
 
         return $this;
     }
 
     /**
-     * @param string             $locale
-     * @param PackageTranslation $translation
-     */
-    public function setTranslation($locale, PackageTranslation $translation)
-    {
-        $this->translations->set($locale, $translation);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @return float
-     */
-    public function getUnitPrice()
-    {
-        return $this->unitPrice;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAvailabilityCurrent()
-    {
-        return $this->availabilityCurrent;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAvailabilityMax()
-    {
-        return $this->availabilityMax;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getFeatures()
-    {
-        return $this->features;
-    }
-
-    /**
-     * @param Feature $feature
+     * @param bool $plansEnabled
+     * @param bool $participantAndPlanningEnabled
+     * @param bool $optionsEnabled
      *
      * @return Package
      */
-    public function addFeature(Feature $feature)
+    public function enable($plansEnabled, $participantAndPlanningEnabled, $optionsEnabled)
     {
-        $this->features->add($feature);
+        $this->plansEnabled                  = $plansEnabled;
+        $this->participantAndPlanningEnabled = $participantAndPlanningEnabled;
+        $this->optionsEnabled                = $optionsEnabled;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @param Product $plan
+     *
+     * @return bool
      */
-    public function getParticipantIncluded()
+    public function hasPlan(Product $plan)
     {
-        return $this->participantIncluded;
+        return $this->planRanks->exists(function ($key, PackagePlanRank $pfp) use ($plan) {
+            return $pfp->getPlan() === $plan;
+        });
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getProductIncluded()
-    {
-        return $this->productIncluded;
-    }
-
-    /**
-     * @param Product $product
-     * @param int     $quantity
+     * @param array $plans
      *
      * @return Package
      */
-    public function includeProduct(Product $product, $quantity)
+    public function setPlans(array $plans)
     {
-        $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
+        // Remove delete plans
+        foreach ($this->planRanks as $planRank) {
+
+            if (!in_array($planRank->getPlan(), $plans)) {
+                $this->planRanks->removeElement($planRank);
+            } else {
+                $planRank->setRank(array_search($planRank->getPlan(), $plans));
+            }
+        }
+
+        // Add new plan
+        foreach ($plans as $rank => $plan) {
+            if (!$this->hasPlan($plan)) {
+                $this->planRanks->add(new PackagePlanRank($this, $plan, $rank));
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * @param int $rank
+     *
+     * @return PackageGroup
+     */
+    public function group($rank)
+    {
+        if (!$this->groups->containsKey($rank)) {
+            $this->groups->set($rank, new PackageGroup($this, $rank));
+        }
+
+        return $this->groups->get($rank);
+    }
+
+    /**
+     * Set planning
+     *
+     * @param Product $planning
+     *
+     * @return Package
+     */
+    public function setPlanning($planning)
+    {
+        $this->planning = $planning;
+
+        return $this;
+    }
+
+    /**
+     * Set participant
+     *
+     * @param Product $participant
+     *
+     * @return Package
+     */
+    public function setParticipant($participant)
+    {
+        $this->participant = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getPlansLabel($locale)
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getPlansLabel()
+            : null;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getParticipantAndPlanningLabel($locale)
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getParticipantAndPlanningLabel()
+            : null;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getOptionsLabel($locale)
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getOptionsLabel()
+            : null;
+    }
+
+    /**
+     * @param array $groupOptions
+     * @param array $groupLabels
+     *
+     * @return Package
+     */
+    public function setGroups(array $groupOptions, array $groupLabels)
+    {
+        foreach ($groupLabels as $rank => $labels) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            foreach ($labels as $locale => $label) {
+                $this->groups->get($rank)->setRank($rank)->translate($locale, $label);
+            }
+        }
+
+        foreach ($groupOptions as $rank => $options) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            $this->groups->get($rank)->setOptions(is_array($options) ? $options : []);
+        }
+
+        foreach ($this->getGroups() as $rank => $group) {
+            if (!isset($groupLabels[$rank]) && !isset($groupOptions[$rank])) {
+                $this->groups->remove($rank);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) 2015 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,9 +21,21 @@ interface PackageRepositoryInterface
     public function add(Package $package);
 
     /**
+     * @param Package $package
+     */
+    public function set(Package $package);
+
+    /**
      * @param Event $event
      *
      * @return Package[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event[] $events
+     *
+     * @return Package[]
+     */
+    public function findByEvents(array $events);
 }

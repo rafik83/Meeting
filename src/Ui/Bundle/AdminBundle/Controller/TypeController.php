@@ -58,9 +58,10 @@ class TypeController extends Controller
 
         $create = new Create($event, $request->getLocale(), new \DateTime());
         $form   = $this->createForm(TypeCreateType::class, $create, [
-            'action' => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
-            'method' => 'POST',
-            'events' => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'action'       => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
+            'method'       => 'POST',
+            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'currentEvent' => $event,
         ]);
         $form->add('submit', SubmitType::class);
 

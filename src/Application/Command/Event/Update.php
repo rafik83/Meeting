@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model;
 
 class Update
 {
     /**
-     * @var Event
+     * @var Model\Event
      */
     public $event;
 
@@ -70,9 +70,9 @@ class Update
     public $textColor;
 
     /**
-     * @param Event $event
+     * @param Model\Event $event
      */
-    public function __construct(Event $event)
+    public function __construct(Model\Event $event)
     {
         $this->event        = $event;
         $this->title        = $event->getTitle();

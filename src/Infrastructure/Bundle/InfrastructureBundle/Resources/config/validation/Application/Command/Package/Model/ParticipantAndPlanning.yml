@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Package\Model\ParticipantAndPlanning:
+    properties:
+        labels:
+            - NotBlank: ~
+            - All:
+                constraints:
+                    - NotBlank: ~
+                    - Type: { type: string }
+        enabled:
+            - Type: { type: boolean }
+        participant: []
+        planning: []

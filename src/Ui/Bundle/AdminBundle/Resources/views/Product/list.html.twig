@@ -4,27 +4,52 @@
 
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
-    <a href="{{ path('admin_product_create', {'event': event.id}) }}" class="btn btn-primary">{{ 'admin.product_create.title'|trans }}</a>
+    <a href="{{ path('admin_product_create_option', {'event': event.id}) }}" class="btn btn-primary">
+        <i class="glyphicon glyphicon-product-option"></i>
+        {{ 'admin.product_create.option.title'|trans }}
+    </a>
+    <a href="{{ path('admin_product_create_plan', {'event': event.id}) }}" class="btn btn-primary">
+        <i class="glyphicon glyphicon-product-plan"></i>
+        {{ 'admin.product_create.plan.title'|trans }}
+    </a>
+    <a href="{{ path('admin_product_create_participant', {'event': event.id}) }}" class="btn btn-primary">
+        <i class="glyphicon glyphicon-product-participant"></i>
+        {{ 'admin.product_create.participant.title'|trans }}
+    </a>
+    <a href="{{ path('admin_product_create_planning', {'event': event.id}) }}" class="btn btn-primary">
+        <i class="glyphicon glyphicon-product-planning"></i>
+        {{ 'admin.product_create.planning.title'|trans }}
+    </a>
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ 'admin.product.name'|trans }}</th>
-            <th>{{ 'admin.product.unitPrice'|trans }}</th>
-            <th>{{ 'admin.product.quantityMinMax'|trans }}</th>
-            <th>{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
-            <th>{{ 'admin.product.updatable'|trans }}</th>
-            <th>{{ 'admin.product.updatableUntil'|trans }}</th>
+            <th class="text-right">{{ 'admin.product.unitPrice'|trans }}</th>
+            <th class="text-right">{{ 'admin.product.quantityMax'|trans }}</th>
+            <th class="text-right">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.updatable'|trans }}</th>
+            <th class="text-right">{{ 'admin.product.updatableUntil'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for product in products %}
             <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.unitPrice }}</td>
-                <td>{{ product.quantityMin }} / {{ product.quantityMax }}</td>
-                <td>{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
-                <td>{{ product.updatable ? '✓' : '' }}</td>
-                <td>{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td>
+                    <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
+                    {{ product.name }}
+                    {% if product.hasIncludedProducts %}
+                        <ul>
+                            {% for includedProduct in product.includedProducts %}
+                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.product.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ product.unitPrice|number_format(2, ',', ' ') }} €</td>
+                <td class="text-right">{{ product.quantityMax }}</td>
+                <td class="text-right">{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
+                <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
+                <td class="text-right">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
             </tr>
         {% else %}
             <tr>

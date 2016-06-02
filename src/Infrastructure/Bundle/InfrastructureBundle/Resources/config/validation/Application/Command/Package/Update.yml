@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Package\Update:
+    properties:
+        package:
+            - NotBlank: ~
+        title:
+            - NotBlank: ~
+        plans:
+            - Valid: ~
+        participantAndPlanning:
+            - Valid: ~
+        options:
+            - Valid: ~

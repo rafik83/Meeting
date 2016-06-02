@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
+use Proximum\Vimeet\Domain\Model;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -44,11 +46,20 @@ class TypeCreateType extends AbstractType
                 'multiple'    => false,
                 'placeholder' => '',
             ])
+            ->add('package', PackageChoiceType::class, [
+                'currentEvent' => $options['currentEvent'],
+                'required'     => true,
+                'expanded'     => false,
+                'multiple'     => false,
+                'placeholder'  => '',
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
-            ->add('position', NumberType::class)
+            ->add('rank', NumberType::class, [
+                'required' => false,
+            ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
@@ -60,7 +71,8 @@ class TypeCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['events']);
+        $resolver->setRequired(['events', 'currentEvent']);
+        $resolver->setAllowedTypes('currentEvent', Model\Event::class);
         $resolver->setDefaults([
             'data_class'    => Create::class,
             'csrf_token_id' => 'type_create',

@@ -7,19 +7,17 @@ Proximum\Vimeet\Domain\Model\PackageTranslation:
             generator:
                 strategy: AUTO
     fields:
-        title:
-            type: string
-        descriptionTitle:
-            type: string
-        descriptionContent:
-            type: text
-            nullable: true
-        optionalPriceText:
-            type: text
-            nullable: true
         locale:
+            type: string
+        plansLabel:
+            type: string
+        participantAndPlanningLabel:
+            type: string
+        optionsLabel:
             type: string
     manyToOne:
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

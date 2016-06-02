@@ -155,10 +155,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.template.products_selection_template_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\Template\ProductsSelectionTemplateRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     repository.package_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
@@ -170,7 +166,7 @@ services:
     vimeet_infrastructure.data_fixtures_orm.provider:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
         arguments:
-            - %domain%
+            - '%domain%'
         tags:
             - { name: hautelook_alice.faker.provider }
 
@@ -690,48 +686,52 @@ services:
             - '@repository.template.registration_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\AddLocale }
-    command.template.products_selection.create_handler:
-        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\CreateHandler
+    command.package.create_handler:
+        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
         arguments:
-            - '@repository.template.products_selection_template_repository'
-            - '@template.products_selection_template_factory'
+            - '@repository.package_repository'
             - '@datetime'
+            - '%infrastructure.package.default_labels%'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Create }
-    command.template.products_selection.update_handler:
-        class: Proximum\Vimeet\Application\Command\Template\ProductsSelection\UpdateHandler
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
+    command.package.update_handler:
+        class: Proximum\Vimeet\Application\Command\Package\UpdateHandler
         arguments:
-            - '@repository.template.products_selection_template_repository'
+            - '@repository.package_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\ProductsSelection\Update }
-    command.register.participant_step_handler:
-        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@account.synchronizer'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Update }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
-    command.product.create_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreateHandler
+    command.product.create_option_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreateOptionHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Create }
-    command.package.create_handler:
-        class: Proximum\Vimeet\Application\Command\Package\CreateHandler
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateOption }
+    command.product.create_plan_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreatePlanHandler
         arguments:
-            - '@repository.package_repository'
+            - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Create }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlan }
+    command.product.create_participant_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreateParticipantHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateParticipant }
+    command.product.create_planning_handler:
+        class: Proximum\Vimeet\Application\Command\Product\CreatePlanningHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlanning }
     command.participant.update_profile_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler
         arguments:
@@ -746,6 +746,14 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
+    command.register.participant_step_handler:
+        class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
 
     #
     # Security
@@ -992,9 +1000,6 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
-
-    template.products_selection_template_factory:
-        class: Proximum\Vimeet\Domain\Template\ProductsSelectionTemplateFactory
 
     #
     # Guesser
