@@ -47,8 +47,11 @@
 
     .border-table {
         border: solid 1px #CCC;
-        margin: 0 0 10px 40px;
         padding: 10px;
+
+        &.with-title {
+            margin: 0 0 10px 40px;
+        }
 
         .table {
             margin-bottom: 0;
