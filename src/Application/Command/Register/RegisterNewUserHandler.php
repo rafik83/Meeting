@@ -51,6 +51,7 @@ class RegisterNewUserHandler
     /**
      * @param RegisterNewUser $register
      *
+     * @return RegisterNewUserResult
      * @throws EmailAlreadyExistsException
      */
     public function handle(RegisterNewUser $register)
@@ -66,6 +67,6 @@ class RegisterNewUserHandler
 
         $this->userRepository->add($user);
 
-        $register->user = $user;
+        return new RegisterNewUserResult($user);
     }
 }

@@ -23,6 +23,8 @@ interface FileStorageInterface
 
     /**
      * @param string $identifier
+     *
+     * @return FileStorageInterface
      */
     public function remove($identifier);
 }

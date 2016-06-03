@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -24,8 +25,8 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,42 +49,28 @@ class RegisterController extends Controller
             return $this->redirectToRoute('event');
         }
 
-        $email = new Email();
-        $form  = $this->createForm(EmailType::class, $email, [
-            'action' => $this->generateUrl('event_register', ['typeView'  => $typeView->id]),
-            'method' => 'POST',
-        ]);
+        $command = new Email();
+        $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email->email);
+            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
-            if (null !== $user) {
-                $sheets = $this->get('vimeet_infrastructure.repository.sheet_repository')->getSheetByUserAndEvent($user, $eventView);
-
-                if (!empty($sheets)) {
-                    $this->container->get('session')->getFlashBag()->get('login_email');
-                    $this->addFlash('login_email', $email->email);
+            if ($user) {
+                if ($this->hasSheets($user, $eventView)) {
                     $this->addFlash('success', 'flash.event.register.already_known.login');
-
-                    return $this->redirectToRoute('event_login_second_step');
                 } else {
-                    $this->container->get('session')->getFlashBag()->get('login_email');
-                    $this->container->get('session')->getFlashBag()->get('register_type');
-                    $this->addFlash('login_email', $email->email);
-                    $this->addFlash('register_type', $typeView->id);
+                    $this->setFlashRegisterType($typeView->id);
                     $this->addFlash('success', 'flash.event.register.already_known.message');
-
-                    return $this->redirectToRoute('event_login_second_step');
                 }
-            } else {
-                // Remove content of register_email bag before setting it
-                $this->container->get('session')->getFlashBag()->get('register_email');
-                $this->addFlash('register_email', $email->email);
 
-                return $this->redirectToRoute('event_register_new_user', [
-                    'typeView' => $typeView->id,
-                ]);
+                $this->setFlashLoginEmail($command->email);
+
+                return $this->redirectToRoute('event_login_second_step');
             }
+
+            $this->setFlashRegisterEmail($command->email);
+
+            return $this->redirectToRoute('event_register_new_user', ['typeView' => $typeView->id]);
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
@@ -104,50 +91,31 @@ class RegisterController extends Controller
      */
     public function registerNewUserAction(Request $request, EventView $eventView, TypeView $typeView)
     {
-        $registerEmailFlash = $this->container->get('session')->getFlashBag()->get('register_email');
+        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale());
 
-        $email           = array_shift($registerEmailFlash);
-        $registerNewUser = new RegisterNewUser($request->getLocale());
-
-        if (null !== $email) {
-            $exist = $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email);
-
-            if ($exist) {
-                return $this->redirectToRoute('event_register', [
-                    'typeView' => $typeView->id,
-                ]);
-            }
-
-            $registerNewUser->email = $email;
-            $this->addFlash('register_email', $email);
+        if ($command->email === null || $this->emailExists($command->email)) {
+            return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
         }
 
-        $form = $this->createForm(RegisterNewUserType::class, $registerNewUser, [
-            'action' => $this->generateUrl('event_register_new_user', ['typeView'  => $typeView->id]),
-            'method' => 'POST',
-        ]);
+        $this->setFlashRegisterEmail($command->email);
 
-        if (null === $registerNewUser->email) {
-            return $this->redirectToRoute('event_register', [
-                'typeView' => $typeView->id,
-            ]);
-        }
+        $form = $this->createForm(RegisterNewUserType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($registerNewUser);
-                $this->get('adapter.authentication_manager')->authenticate($registerNewUser->user, 'main');
+                $result = $this->get('tactician.commandbus')->handle($command);
+                $this->get('adapter.authentication_manager')->authenticate($result->user, 'main');
 
                 return $this->redirectToRoute('event_participate', ['typeView'  => $typeView->id]);
             } catch (EmailAlreadyExistsException $exception) {
-                $this->container->get('session')->getFlashBag()->get('register_email');
+                $this->resetFlashRegisterEmail();
 
                 return $this->redirectToRoute('event_login');
             }
         }
 
         return $this->render('EventBundle:Register:registerNewUser.html.twig', [
-            'email'     => $email,
+            'email'     => $command->email,
             'form'      => $form->createView(),
             'eventView' => $eventView,
             'typeView'  => $typeView,
@@ -166,21 +134,15 @@ class RegisterController extends Controller
     public function participateAction(Request $request, EventView $eventView, TypeView $typeView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        // Check if the user has already created a participate
         $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
 
-        $event = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
-        $type  = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
-
-        $locale = $request->getLocale();
-
+        $locale               = $request->getLocale();
+        $event                = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+        $type                 = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
         $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromType($type, $locale);
-
-        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
+        $user                 = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
-
-        $participantBlock = $registrationTemplate->getFirstBlock();
+        $participantBlock     = $registrationTemplate->getFirstBlock();
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
             'block'   => $participantBlock,
@@ -189,29 +151,15 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = array_filter($participantBlock->getData(), function ($value) {
-                return null !== $value;
-            });
-
-            // Create the participant
+            $data        = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
             $participate = new Participate($this->getUser(), $event, $type, $locale, $data, $registrationTemplate);
             $this->get('tactician.commandbus')->handle($participate);
 
-            if ($registrationTemplate->getBlocksCount() === 1) {
-                // Go to the sheet
-                return $this->redirectToRoute('event_sheet');
-            } else {
-                $nextStep = $registrationTemplate->getNextBlockPosition(1);
+            $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
-                if ($nextStep) {
-                    return $this->redirectToRoute('event_participant_step', [
-                        'step'        => $nextStep,
-                        'participant' => $participate->participant->getId(),
-                    ]);
-                } else {
-                    return $this->redirectToRoute('event_sheet');
-                }
-            }
+            return $nextStep
+                ? $this->redirectToRoute('event_participant_step', ['step' => 1, 'participant' => $participate->participant->getId()])
+                : $this->redirectToRoute('event_sheet');
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
@@ -234,31 +182,10 @@ class RegisterController extends Controller
     public function participantStepAction(Request $request, EventView $eventView, Participant $participant, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessIfWrongParticipant($eventView, $participant);
 
-        // Check if the user has already created a participate
-        $participants = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantsByUserForEvent($this->getUser()->getId(), $eventView);
-
-        if (0 === count($participants)) {
-            throw $this->createAccessDeniedException('Participation does not exist');
-        }
-
-        if (!in_array($participant, $participants)) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'The current user %s is not the owner of this participant %s',
-                    $this->getUser()->getId(),
-                    $participant->getId()
-                )
-            );
-        }
-
-        $locale = $request->getLocale();
-
-        $registrationTemplate = $this->get('template.template_data_factory')
-            ->createRegistrationFromParticipant($participant, $locale);
-
+        $locale               = $request->getLocale();
+        $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $participant->getUser());
         $participantBlock     = $registrationTemplate->getBlock(intval($step));
 
@@ -266,42 +193,22 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $form = $this->createForm(BlockType::class, $participantBlock, [
-            'block'   => $participantBlock,
-            'locale'  => $locale,
-            'country' => $eventView->country,
-        ]);
+        $data = ['block' => $participantBlock, 'locale' => $locale, 'country' => $eventView->country];
+        $form = $this->createForm(BlockType::class, $participantBlock, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = array_filter($participantBlock->getData(), function ($value) {
-                return null !== $value;
-            });
+            $data            = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+            $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+            $this->get('tactician.commandbus')->handle($participantStep);
 
-            $data = $this->handleUploadedFiles($registrationTemplate, $form, $data);
+            $nextStep = $registrationTemplate->getNextBlockPosition($step);
 
-            if ($form->isValid()) {
-                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
-                $this->get('tactician.commandbus')->handle($participantStep);
-
-                if ($registrationTemplate->getBlocksCount() === $step) {
-                    // Go to the sheet
-                    return $this->redirectToRoute('event_sheet');
-                } else {
-                    $nextStep = $registrationTemplate->getNextBlockPosition($step);
-
-                    if ($nextStep) {
-                        return $this->redirectToRoute('event_participant_step', [
-                            'step'        => $nextStep,
-                            'participant' => $participant->getId(),
-                        ]);
-                    } else {
-                        return $this->redirectToRoute('event_sheet');
-                    }
-                }
-            }
+            return $nextStep
+                ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participant->getId()])
+                : $this->redirectToRoute('event_sheet');
         }
 
-        $participantCard = $this->get('tactician.commandbus')->handle(new CardViewQuery($participant, $locale));
+        $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'eventView'       => $eventView,
@@ -314,6 +221,9 @@ class RegisterController extends Controller
     }
 
     /**
+     * Check if the user has already created a participate
+     *
+     * @param int $eventId
      * @param int $userId
      */
     private function hasUserAlreadyCreatedParticipant($eventId, $userId)
@@ -328,13 +238,16 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param TemplateData $registrationTemplate
-     * @param Form         $form
-     * @param array        $data
+     * @param TemplateData  $registrationTemplate
+     * @param FormInterface $form
+     * @param array         $data
+     *
      * @return array
      */
-    private function handleUploadedFiles($registrationTemplate, $form, $data)
+    private function handleData(TemplateData $registrationTemplate, FormInterface $form, array $data)
     {
+        $data = array_filter($data, function ($value) { return null !== $value; });
+
         $imageObjects = $registrationTemplate->getImageObjects();
         $fileStorage  = $this->get('adapter.local_file_storage');
 
@@ -342,12 +255,8 @@ class RegisterController extends Controller
             if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
                 $file = $form->get($key)->get('file')->getData();
 
-                if ($file instanceof UploadedFile && $file !== null) {
-                    if ('' !== $object->getContentValue()) {
-                        $fileStorage->remove($object->getContentValue());
-                    }
-
-                    $data[$key]['image'] = $fileStorage->upload($file);
+                if ($file instanceof UploadedFile) {
+                    $data[$key]['image'] = $fileStorage->remove($object->getContentValue())->upload($file);
                 } else {
                     $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
                 }
@@ -355,5 +264,123 @@ class RegisterController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getFlashEmail()
+    {
+        $emails = $this->container->get('session')->getFlashBag()->get('register_email');
+
+        return array_shift($emails);
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return RegisterController
+     */
+    protected function setFlashRegisterEmail($email)
+    {
+        $this->resetFlashRegisterEmail()->addFlash('register_email', $email);
+
+        return $this;
+    }
+
+    /**
+     * @return RegisterController
+     */
+    protected function resetFlashRegisterEmail()
+    {
+        $this->container->get('session')->getFlashBag()->get('register_email');
+
+        return $this;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return RegisterController
+     */
+    protected function setFlashLoginEmail($email)
+    {
+        $this->resetFlashLoginEmail()->addFlash('login_email', $email);
+
+        return $this;
+    }
+
+    /**
+     * @return RegisterController
+     */
+    protected function resetFlashLoginEmail()
+    {
+        $this->container->get('session')->getFlashBag()->get('login_email');
+
+        return $this;
+    }
+
+    /**
+     * @param $email
+     *
+     * @return bool
+     */
+    protected function emailExists($email)
+    {
+        return $this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email);
+    }
+
+    /**
+     * @return RegisterController
+     */
+    protected function resetFlashRegisterType()
+    {
+        $this->container->get('session')->getFlashBag()->get('register_type');
+
+        return $this;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return RegisterController
+     */
+    protected function setFlashRegisterType($id)
+    {
+        $this->resetFlashRegisterType()->addFlash('register_type', $id);
+
+        return $this;
+    }
+
+    /**
+     * @param User      $user
+     * @param EventView $eventView
+     *
+     * @return bool
+     */
+    protected function hasSheets(User $user, EventView $eventView)
+    {
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetByUserAndEvent($user, $eventView);
+
+        return !empty($sheets);
+    }
+
+    /**
+     * Deny access if the participant does not match the user and the event
+     *
+     * @param EventView   $eventView
+     * @param Participant $participant
+     */
+    protected function denyAccessIfWrongParticipant(EventView $eventView, Participant $participant)
+    {
+        if ($participant->getSheet()->getEvent()->getId() !== $eventView->getId()) {
+            throw $this->createAccessDeniedException('Participation does not exist');
+        }
+
+        if ($participant->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('The user does not match the particpant.');
+        }
     }
 }

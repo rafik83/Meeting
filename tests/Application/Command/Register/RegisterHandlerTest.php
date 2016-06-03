@@ -23,8 +23,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $command           = new RegisterNewUser('fr');
-        $command->email    = 'test@test.com';
+        $command           = new RegisterNewUser('test@test.com', 'fr');
         $command->password = 'password';
 
         $user         = new User('test@test.com', '__salt__', null, 'fr');
@@ -50,8 +49,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
-        $command           = new RegisterNewUser('fr');
-        $command->email    = 'test@test.com';
+        $command           = new RegisterNewUser('test@test.com', 'fr');
         $command->password = 'password';
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);

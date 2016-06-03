@@ -67,10 +67,14 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function remove($identifier)
     {
-        $filepath = $this->publicDir . $identifier;
+        if (!empty($identifier)) {
+            $filepath = $this->publicDir . $identifier;
 
-        if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
-            unlink($filepath);
+            if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
+                unlink($filepath);
+            }
         }
+
+        return $this;
     }
 }
