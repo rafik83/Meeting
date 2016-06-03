@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Product;
 
 class Plans extends AbstractStep
