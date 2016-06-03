@@ -30,15 +30,12 @@ class RegisterNewUser
     public $locale;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
+     * @param string $email
      * @param string $locale
      */
-    public function __construct($locale)
+    public function __construct($email, $locale)
     {
+        $this->email  = $email;
         $this->locale = $locale;
     }
 }
