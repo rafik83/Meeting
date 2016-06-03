@@ -526,7 +526,7 @@ form:
                 no:
                     label: Non
             submit:
-                label: Envoyer
+                label: Filtrer
     spot_create:
         children:
             reference:

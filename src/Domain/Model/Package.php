@@ -388,23 +388,8 @@ class Package
      */
     public function setGroups(array $groupOptions, array $groupLabels)
     {
-        foreach ($groupLabels as $rank => $labels) {
-            if (!$this->groups->containsKey($rank)) {
-                $this->groups->set($rank, new PackageGroup($this, $rank));
-            }
-
-            foreach ($labels as $locale => $label) {
-                $this->groups->get($rank)->setRank($rank)->translate($locale, $label);
-            }
-        }
-
-        foreach ($groupOptions as $rank => $options) {
-            if (!$this->groups->containsKey($rank)) {
-                $this->groups->set($rank, new PackageGroup($this, $rank));
-            }
-
-            $this->groups->get($rank)->setOptions(is_array($options) ? $options : []);
-        }
+        $this->setGroupsLabels($groupLabels);
+        $this->setGroupsOptions($groupOptions);
 
         foreach ($this->getGroups() as $rank => $group) {
             if (!isset($groupLabels[$rank]) && !isset($groupOptions[$rank])) {
@@ -421,5 +406,43 @@ class Package
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * @param array $groupLabels
+     *
+     * @return Package
+     */
+    protected function setGroupsLabels(array $groupLabels)
+    {
+        foreach ($groupLabels as $rank => $labels) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            foreach ($labels as $locale => $label) {
+                $this->groups->get($rank)->setRank($rank)->translate($locale, $label);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $groupOptions
+     *
+     * @return Package
+     */
+    protected function setGroupsOptions(array $groupOptions)
+    {
+        foreach ($groupOptions as $rank => $options) {
+            if (!$this->groups->containsKey($rank)) {
+                $this->groups->set($rank, new PackageGroup($this, $rank));
+            }
+
+            $this->groups->get($rank)->setOptions(is_array($options) ? $options : []);
+        }
+
+        return $this;
     }
 }
