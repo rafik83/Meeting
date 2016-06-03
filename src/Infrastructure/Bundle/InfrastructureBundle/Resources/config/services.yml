@@ -159,6 +159,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.cart_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
+        arguments:
+        - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1088,3 +1092,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\BuildEventGuidelineAssetCommand
         tags:
             - { name: console.command }
+
+    #
+    # Funnel
+    #
+    package.funnel.funnel_factory:
+        class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
+        arguments:
+            - '@repository.cart_row_repository'
