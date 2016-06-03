@@ -157,7 +157,11 @@ class RegisterController extends Controller
             $participate = new Participate($this->getUser(), $event, $type, $locale, $data, $registrationTemplate);
             $this->get('tactician.commandbus')->handle($participate);
 
-            return $this->redirectAfterStep($participate->participant, 1, $registrationTemplate);
+            $nextStep = $registrationTemplate->getNextBlockPosition(1);
+
+            return $nextStep
+                ? $this->redirectToRoute('event_participant_step', ['step' => 1, 'participant' => $participate->participant->getId()])
+                : $this->redirectToRoute('event_sheet');
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
@@ -206,7 +210,11 @@ class RegisterController extends Controller
             $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
             $this->get('tactician.commandbus')->handle($participantStep);
 
-            return $this->redirectAfterStep($participant, $step, $registrationTemplate);
+            $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+            return $nextStep
+                ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participant->getId()])
+                : $this->redirectToRoute('event_sheet');
         }
 
         $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
@@ -263,22 +271,6 @@ class RegisterController extends Controller
         }
 
         return $data;
-    }
-
-    /**
-     * @param Participant  $participant
-     * @param int          $step
-     * @param TemplateData $registrationTemplate
-     *
-     * @return RedirectResponse
-     */
-    protected function redirectAfterStep(Participant $participant, $step, TemplateData $registrationTemplate)
-    {
-        $nextStep = $registrationTemplate->getNextBlockPosition($step);
-
-        return $nextStep
-            ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participant->getId()])
-            : $this->redirectToRoute('event_sheet');
     }
 
     /**
