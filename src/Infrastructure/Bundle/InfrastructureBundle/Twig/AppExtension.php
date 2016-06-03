@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 
+use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
+use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
 
 class AppExtension extends \Twig_Extension
@@ -17,14 +19,26 @@ class AppExtension extends \Twig_Extension
     /**
      * @var LocaleHelper
      */
-    protected $localeHelper;
+    private $localeHelper;
+
+    /**
+     * @var DataFormatter
+     */
+    private $dataFormatter;
+
+    /**
+     * @var ChoiceListFormatter
+     */
+    private $choiceListFormatter;
 
     /**
      * @param LocaleHelper $localeHelper
      */
     public function __construct(LocaleHelper $localeHelper)
     {
-        $this->localeHelper = $localeHelper;
+        $this->localeHelper        = $localeHelper;
+        $this->dataFormatter       = new DataFormatter($localeHelper);
+        $this->choiceListFormatter = new ChoiceListFormatter();
     }
 
     /**
@@ -62,37 +76,7 @@ class AppExtension extends \Twig_Extension
      */
     public function formatData($value, $fieldTemplate, $locale)
     {
-        if (isset($fieldTemplate['type']) && isset($value)) {
-            if ('lib_country' === $fieldTemplate['type']) {
-                return $this->localeHelper->country($value, $locale);
-            }
-
-            if ('lib_choice' === $fieldTemplate['type']) {
-                $choices = $fieldTemplate['choices'];
-
-                if (is_array($choices)) {
-                    foreach ($choices as $key => $choice) {
-                        if (isset($choices[$value]['label'][$locale])) {
-                            return $choices[$value]['label'][$locale];
-                        } elseif (isset($choices[$key]['choices'])
-                            && isset($choices[$key]['choices'][$value]['label'][$locale])
-                        ) {
-                            return $choices[$key]['choices'][$value]['label'][$locale];
-                        }
-                    }
-                }
-            }
-        }
-
-        if (is_array($value)) {
-            if (isset($value[$locale])) {
-                return $value[$locale];
-            }
-
-            return implode(', ', $value);
-        }
-
-        return $value;
+        return $this->dataFormatter->format($value, $fieldTemplate, $locale);
     }
 
     /**
@@ -117,27 +101,7 @@ class AppExtension extends \Twig_Extension
      */
     public function choicesList($choices, $locale)
     {
-        if (!count($choices)) {
-            return [];
-        }
-
-        $items = [];
-
-        foreach ($choices as $choice) {
-            if (isset($choice['choices']) && isset($choice['label'][$locale])) {
-                $items[] = sprintf(
-                    '%s%s',
-                    $choice['label'][$locale],
-                    $this->choicesList($choice['choices'], $locale)
-                );
-            } elseif (isset($choice['label'][$locale])) {
-                $items[] = $choice['label'][$locale];
-            }
-        }
-
-        asort($items);
-
-        return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $items));
+        $this->choiceListFormatter->format($choices, $locale);
     }
 
     /**
