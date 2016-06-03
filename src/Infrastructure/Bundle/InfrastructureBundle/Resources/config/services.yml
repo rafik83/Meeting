@@ -838,6 +838,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.template.completeness_calculator:
         class: Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator
+    sheet.sheet_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetGuesser
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Rule Component
