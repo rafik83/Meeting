@@ -132,6 +132,7 @@ class ParticipantController extends Controller
      */
     public function updateAvatarAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant, $key)
     {
+        // to do: voter with sheet and user
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user               = $this->getUser();
