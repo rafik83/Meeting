@@ -134,8 +134,6 @@ class RegisterController extends Controller
     public function participateAction(Request $request, EventView $eventView, TypeView $typeView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        // Check if the user has already created a participate
         $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
 
         $locale               = $request->getLocale();
@@ -184,14 +182,7 @@ class RegisterController extends Controller
     public function participantStepAction(Request $request, EventView $eventView, Participant $participant, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        if ($participant->getSheet()->getEvent()->getId() !== $eventView->getId()) {
-            throw $this->createAccessDeniedException('Participation does not exist');
-        }
-
-        if ($participant->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('The user does not match the particpant.');
-        }
+        $this->denyAccessIfWrongParticipant($eventView, $participant);
 
         $locale               = $request->getLocale();
         $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
@@ -230,6 +221,8 @@ class RegisterController extends Controller
     }
 
     /**
+     * Check if the user has already created a participate
+     *
      * @param int $eventId
      * @param int $userId
      */
@@ -372,5 +365,22 @@ class RegisterController extends Controller
             ->getSheetByUserAndEvent($user, $eventView);
 
         return !empty($sheets);
+    }
+
+    /**
+     * Deny access if the participant does not match the user and the event
+     *
+     * @param EventView   $eventView
+     * @param Participant $participant
+     */
+    protected function denyAccessIfWrongParticipant(EventView $eventView, Participant $participant)
+    {
+        if ($participant->getSheet()->getEvent()->getId() !== $eventView->getId()) {
+            throw $this->createAccessDeniedException('Participation does not exist');
+        }
+
+        if ($participant->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('The user does not match the particpant.');
+        }
     }
 }
