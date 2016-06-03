@@ -6,6 +6,7 @@ var $                     = require('jquery'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
     EditableTextIndicator = require('./components/_EditableTextIndicator');
+    ProductSelector       = require('./components/_ProductSelector');
 
 require('bootstrap');
 require('elao-form.js');
@@ -60,6 +61,7 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });
     [].forEach.call(target.querySelectorAll('[data-text-max-length-indicator]'), function (element) { new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations')); });
+    [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) { new ProductSelector(element) });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
