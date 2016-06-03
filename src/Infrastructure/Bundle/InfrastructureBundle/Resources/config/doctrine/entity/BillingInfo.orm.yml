@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\BillingInfo:
+    type:  entity
+    table: billing_info
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        firstname:
+            type: string
+        function:
+            type: string
+        phone:
+            type: string
+        mobile:
+            type: string
+        email:
+            type: string
+        company:
+            type: string
+        vatNumber:
+            type: string
+    embedded:
+        address:
+            class: Proximum\Vimeet\Domain\Model\Address
+    oneToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
