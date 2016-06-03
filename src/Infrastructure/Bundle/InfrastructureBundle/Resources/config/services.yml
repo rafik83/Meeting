@@ -208,12 +208,6 @@ services:
             - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
-    vimeet_infrastructure.vimeet.application.command.billing.update_handler:
-        class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\Update }
     vimeet_infrastructure.vimeet.application.command.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
