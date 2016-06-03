@@ -968,7 +968,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         locale: 'en'
     product_plan_2_asddays_fr:
         __construct: false
-        product: '@product_plan_1_asddays'
+        product: '@product_plan_2_asddays'
         title: 'Formule Exposant'
         heading: 'Stand équipé 4m² (2x2m)'
         description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
@@ -976,7 +976,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         locale: 'fr'
     product_plan_2_asddays_en:
         __construct: false
-        product: '@product_plan_1_asddays'
+        product: '@product_plan_2_asddays'
         title: 'Exhibitor Formula'
         heading: 'An equipped 4 sqm booth (2X2 m)'
         description: 'With a banner, lighting, 1 table and 4 chairs.'
@@ -1047,6 +1047,130 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         addon: ''
         locale: 'en'
 
+Proximum\Vimeet\Domain\Model\Product\Feature:
+    feature_1:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_2:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_3:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_4:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_5:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_6:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_7:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_8:
+        __construct: false
+        product: '@product_plan_2_asddays'
+
+Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
+    feature_translation_1_fr:
+        __construct: false
+        feature: '@feature_1'
+        locale: 'fr'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_1_en:
+        __construct: false
+        feature: '@feature_1'
+        locale: 'en'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_2_fr:
+        __construct: false
+        feature: '@feature_2'
+        locale: 'fr'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_2_en:
+        __construct: false
+        feature: '@feature_2'
+        locale: 'en'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_3_fr:
+        __construct: false
+        feature: '@feature_3'
+        locale: 'fr'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_3_en:
+        __construct: false
+        feature: '@feature_3'
+        locale: 'en'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_4_fr:
+        __construct: false
+        feature: '@feature_4'
+        locale: 'fr'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_4_en:
+        __construct: false
+        feature: '@feature_4'
+        locale: 'en'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_5_fr:
+        __construct: false
+        feature: '@feature_5'
+        locale: 'fr'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_5_en:
+        __construct: false
+        feature: '@feature_5'
+        locale: 'en'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_6_fr:
+        __construct: false
+        feature: '@feature_6'
+        locale: 'fr'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_6_en:
+        __construct: false
+        feature: '@feature_6'
+        locale: 'en'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_7_fr:
+        __construct: false
+        feature: '@feature_7'
+        locale: 'fr'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_7_en:
+        __construct: false
+        feature: '@feature_7'
+        locale: 'en'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_8_fr:
+        __construct: false
+        feature: '@feature_8'
+        locale: 'fr'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+    feature_translation_8_en:
+        __construct: false
+        feature: '@feature_8'
+        locale: 'en'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+
 Proximum\Vimeet\Domain\Model\Package:
     package_asd_days:
         __construct: false
@@ -1064,14 +1188,14 @@ Proximum\Vimeet\Domain\Model\PackageTranslation:
         __construct: false
         package: '@package_asd_days'
         locale: 'fr'
-        plansLabel: 'Formules Rendez-vous d’Affaires'
+        plansLabel: 'Formules'
         participantAndPlanningLabel: 'Participants & plannings'
         optionsLabel: 'Options'
     package_asd_days_en:
         __construct: false
         package: '@package_asd_days'
         locale: 'en'
-        plansLabel: 'Business Meetings Formula'
+        plansLabel: 'Plan'
         participantAndPlanningLabel: 'Participants & plannings'
         optionsLabel: 'Options'
 
