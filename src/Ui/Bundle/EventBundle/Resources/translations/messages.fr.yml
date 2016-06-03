@@ -61,3 +61,10 @@ sheet:
             backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation
+
+package:
+    title: Forfait de participation
+    select: "Sélectionner:"
+    vatMode:
+        et: HT
+        ATI: TTC
