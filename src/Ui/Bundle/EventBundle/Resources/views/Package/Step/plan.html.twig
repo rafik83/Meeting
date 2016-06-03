@@ -1,0 +1,43 @@
+<section class="object object--collection style--style-1 section product">
+    {{ form_start(form, {'attr': {'class': 'form--table--head', 'data-product-selector': true }}) }}
+        {{ form_errors(form) }}
+        {{ form_errors(form.plan) }}
+        <table class="table table-striped form-group">
+            <tbody>
+
+            {% for plan in view.products.plans %}
+                <tr>
+                    <td width="190px">
+                        {{ form_widget(form.plan[plan.id]) }}
+                        <div class="product">
+                            <h2>{{ plan.title }}</h2>
+                            <span class="product-price">{{ plan.price }} <sup>€ {{ ('package.vatMode.' ~ plan.vatMode)|trans }}</sup></span>
+                        </div>
+                    </td>
+                    <td width="500px">
+                        <h3>{{ plan.heading }}</h3>
+                        <p>
+                            {{ plan.description }}
+                            {% if plan.image %}
+                                <img src="{{ plan.image }}" class="img-responsive"/>
+                            {% endif %}
+                        </p>
+                        <button type="submit" class="btn pull-right hidden-unselected"><i class="icon-Valider_3"></i>Valider votre formule</button>
+                    </td>
+                    <td>
+                        {% for feature in plan.features %}
+                            {% if loop.index == 4 %}
+                                <a href="#" class="hidden-selected"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
+                            {% endif %}
+                            <dl {% if loop.index > 3 %}class="hidden-unselected"{% endif %}>
+                                <dt>{{ feature.title }}</dt>
+                                <dd>{{ feature.description }}</dd>
+                            </dl>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {{ form_end(form) }}
+</section>

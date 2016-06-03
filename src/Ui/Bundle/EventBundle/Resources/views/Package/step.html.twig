@@ -1,0 +1,23 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}{{ 'package.title'|trans }}: {{ view.currentStep.title }}{% endblock %}
+
+{% block content %}
+<section class="main">
+
+    {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
+
+    <div class="main__container">
+        <div class="product">
+            <div class="step-number-title"> {{ view.currentStep.index }} </div>
+
+            <div class="content-header">
+                <h2>{{ 'package.select'|trans }} {{ view.currentStep.title }}</h2>
+            </div>
+
+            {{ include('EventBundle:Package/Step:' ~ view.currentStep.type ~ '.html.twig', {view: view, form: form}) }}
+
+        </div>
+    </div>
+</section>
+{% endblock %}
