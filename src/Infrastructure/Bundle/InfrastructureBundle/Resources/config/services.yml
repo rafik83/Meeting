@@ -758,6 +758,13 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.package.step.plans_handler:
+        class: Proximum\Vimeet\Application\Command\Package\Step\PlansHandler
+        arguments:
+            - '@repository.cart_row_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\Plans }
 
     #
     # Security
@@ -1070,6 +1077,34 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
+    query.package.plan_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PlanViewQueryHandler
+        arguments:
+            - '@query.package.features_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanViewQuery }
+    query.package.plans_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PlansViewQueryHandler
+        arguments:
+            - '@query.package.plan_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlansViewQuery }
+    query.package.feature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\FeatureViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\FeatureViewQuery }
+    query.package.features_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\FeaturesViewQueryHandler
+        arguments:
+            - '@query.package.feature_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\FeaturesViewQuery }
+    query.package.package_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PackageViewQueryHandler
+        arguments:
+            - '@query.package.plans_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
 
     #
     # Elastic Transformer
