@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 
 class UpdateInfoType extends AbstractType
 {
@@ -27,14 +29,14 @@ class UpdateInfoType extends AbstractType
             ->add('lastname', TextType::class, ['required' => true])
             ->add('firstname', TextType::class, ['required' => true])
             ->add('function', TextType::class, ['required' => false])
-            ->add('phone', TextType::class, ['required' => false])
-            ->add('mobile', TextType::class, ['required' => false])
+            ->add('phone', TelephoneType::class, ['required' => false, 'country' => $options['country']])
+            ->add('mobile', TelephoneType::class, ['required' => false, 'country' => $options['country']])
             ->add('email', TextType::class, ['required' => true])
             ->add('company', TextType::class, ['required' => true])
             ->add('street', TextType::class, ['required' => true])
             ->add('zipcode', TextType::class, ['required' => true])
             ->add('city', TextType::class, ['required' => true])
-            ->add('country', TextType::class, ['required' => true])
+            ->add('country', CountryType::class, ['required' => true, 'select2' => true, 'placeholder' => ''])
             ->add('vatNumber', TextType::class, ['required' => false])
         ;
     }
@@ -44,6 +46,7 @@ class UpdateInfoType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired('country');
         $resolver->setDefaults([
             'data_class' => UpdateInfo::class,
         ]);
