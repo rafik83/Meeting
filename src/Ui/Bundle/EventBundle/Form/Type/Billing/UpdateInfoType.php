@@ -24,7 +24,7 @@ class UpdateInfoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required' => true])
+            ->add('lastname', TextType::class, ['required' => true])
             ->add('firstname', TextType::class, ['required' => true])
             ->add('function', TextType::class, ['required' => false])
             ->add('phone', TextType::class, ['required' => false])

@@ -27,7 +27,7 @@ class BillingInfo
      *
      * @var string
      */
-    private $name;
+    private $lastname;
 
     /**
      * "prénom"
@@ -97,7 +97,7 @@ class BillingInfo
     }
 
     /**
-     * @param string  $name
+     * @param string  $lastname
      * @param string  $firstname
      * @param string  $function
      * @param string  $phone
@@ -107,9 +107,9 @@ class BillingInfo
      * @param Address $address
      * @param string  $vatNumber
      */
-    public function update($name, $firstname, $function, $phone, $mobile, $email, $company, Address $address, $vatNumber)
+    public function update($lastname, $firstname, $function, $phone, $mobile, $email, $company, Address $address, $vatNumber)
     {
-        $this->name      = $name;
+        $this->lastname  = $lastname;
         $this->firstname = $firstname;
         $this->function  = $function;
         $this->phone     = $phone;
@@ -141,13 +141,13 @@ class BillingInfo
     }
 
     /**
-     * Get name
+     * Get lastname
      *
      * @return string
      */
-    public function getName()
+    public function getLastname()
     {
-        return $this->name;
+        return $this->lastname;
     }
 
     /**

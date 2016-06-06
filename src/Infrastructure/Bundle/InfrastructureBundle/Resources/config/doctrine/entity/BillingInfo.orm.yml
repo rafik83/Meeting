@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\BillingInfo:
             generator:
                 strategy: AUTO
     fields:
-        name:
+        lastname:
             type: string
         firstname:
             type: string

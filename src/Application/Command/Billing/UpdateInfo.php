@@ -22,7 +22,7 @@ class UpdateInfo
     /**
      * @var string
      */
-    public $name;
+    public $lastname;
 
     /**
      * @var string
@@ -87,7 +87,7 @@ class UpdateInfo
     public function __construct(BillingInfo $billingInfo)
     {
         $this->billingInfo = $billingInfo;
-        $this->name        = $billingInfo->getName();
+        $this->lastname    = $billingInfo->getLastname();
         $this->firstname   = $billingInfo->getFirstname();
         $this->function    = $billingInfo->getFunction();
         $this->phone       = $billingInfo->getPhone();

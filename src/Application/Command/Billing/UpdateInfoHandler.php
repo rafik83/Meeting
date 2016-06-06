@@ -36,7 +36,7 @@ class UpdateInfoHandler
     public function handle(UpdateInfo $updateInfo)
     {
         $updateInfo->billingInfo->update(
-            $updateInfo->name,
+            $updateInfo->lastname,
             $updateInfo->firstname,
             $updateInfo->function,
             $updateInfo->phone,

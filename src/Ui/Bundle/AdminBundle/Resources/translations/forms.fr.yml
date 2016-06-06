@@ -981,7 +981,7 @@ form:
                             label: Titre
     billing_info_update:
         children:
-            name:
+            lastname:
                 label: Nom
             firstname:
                 label: Prénom
