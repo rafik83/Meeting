@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
-use Proximum\Vimeet\Application\Command\Package\Step\Plans;
-use Proximum\Vimeet\Application\Command\Package\Step\PlansHandler;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
-class PlansHandlerTest extends \PHPUnit_Framework_TestCase
+class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -50,11 +50,11 @@ class PlansHandlerTest extends \PHPUnit_Framework_TestCase
         $cartRowRepository->add($cartRow)->shouldBeCalled();
         $dateTime          = new \DateTimeImmutable();
 
-        $plans        = new Plans($sheet);
+        $plans        = new SelectPlan($sheet);
         $plans->plan  = $product;
         $plans->sheet = $sheet;
 
-        $plansHandler = new PlansHandler($cartRowRepository->reveal(), $dateTime);
+        $plansHandler = new SelectPlanHandler($cartRowRepository->reveal(), $dateTime);
         $plansHandler->handle($plans);
     }
 
@@ -103,11 +103,11 @@ class PlansHandlerTest extends \PHPUnit_Framework_TestCase
         $cartRowRepository->delete($cartRow)->shouldBeCalled();
         $cartRowRepository->add($expectedCartRow)->shouldBeCalled();
 
-        $plans        = new Plans($sheet);
+        $plans        = new SelectPlan($sheet);
         $plans->plan  = $product;
         $plans->sheet = $sheet;
 
-        $plansHandler = new PlansHandler($cartRowRepository->reveal(), $dateTime);
+        $plansHandler = new SelectPlanHandler($cartRowRepository->reveal(), $dateTime);
         $plansHandler->handle($plans);
     }
 }

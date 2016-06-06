@@ -758,13 +758,13 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
-    command.package.step.plans_handler:
-        class: Proximum\Vimeet\Application\Command\Package\Step\PlansHandler
+    command.package.step.select_plans_handler:
+        class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
             - '@repository.cart_row_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\Plans }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
 
     #
     # Security

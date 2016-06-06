@@ -11,7 +11,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Application\Command\Package\Step\Plans;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
 use Proximum\Vimeet\Domain\Model\Package;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -48,7 +48,7 @@ class PlansType extends AbstractType
         $optionsResolver->setRequired(['package']);
         $optionsResolver->addAllowedTypes('package', Package::class);
         $optionsResolver->setDefaults([
-            'data_class' => Plans::class,
+            'data_class' => SelectPlan::class,
         ]);
     }
 }

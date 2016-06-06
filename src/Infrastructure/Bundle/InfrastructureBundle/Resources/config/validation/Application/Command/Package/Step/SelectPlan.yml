@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Package\Step\Plans:
+Proximum\Vimeet\Application\Command\Package\Step\SelectPlan:
     properties:
         plan:
             - NotBlank:

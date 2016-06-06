@@ -121,9 +121,10 @@ class PackageController extends Controller
      * @return Step\AbstractStep
      * @throws \Exception
      */
-    private static function stepTypeAssociatedCommand($type) {
+    private static function stepTypeAssociatedCommand($type)
+    {
         $commands = [
-            FunnelStep::TYPE_PLAN                 => Step\Plans::class,
+            FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
             FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\ParticipantAndPlanning::class,
             FunnelStep::TYPE_OPTIONS              => Step\Options::class,
         ];
@@ -141,7 +142,8 @@ class PackageController extends Controller
      *
      * @throws \Exception
      */
-    private static function stepTypeAssociatedForm($type) {
+    private static function stepTypeAssociatedForm($type)
+    {
         $forms = [
             FunnelStep::TYPE_PLAN                 => PlansType::class,
             FunnelStep::TYPE_PARTICIPANT_PLANNING => ParticipantAndPlanningType::class,
@@ -160,7 +162,7 @@ class PackageController extends Controller
      */
     private function assignProductsToCommand(Step\AbstractStep $command)
     {
-        if ($command instanceof Step\Plans) {
+        if ($command instanceof Step\SelectPlan) {
             $cartRow = $this->get('repository.cart_row_repository')->findCartRowPlanBySheet($command->sheet);
 
             if (null !== $cartRow) {

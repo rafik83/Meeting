@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
-class PlansHandler
+class SelectPlanHandler
 {
     /**
      * @var CartRowRepositoryInterface
@@ -36,9 +36,9 @@ class PlansHandler
     }
 
     /**
-     * @param Plans $plans
+     * @param SelectPlan $plans
      */
-    public function handle(Plans $plans)
+    public function handle(SelectPlan $plans)
     {
         $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($plans->sheet);
 

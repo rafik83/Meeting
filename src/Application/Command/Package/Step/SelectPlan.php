@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Model\Product;
 
-class Plans extends AbstractStep
+class SelectPlan extends AbstractStep
 {
     /**
      * @var Product
