@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 
 class Block extends AbstractChild
 {
@@ -178,7 +179,7 @@ class Block extends AbstractChild
             return $objects[$key];
         }
 
-        throw new \Exception("Object $key not found.");
+        throw new ObjectNotFoundException($key);
     }
 
     /**
