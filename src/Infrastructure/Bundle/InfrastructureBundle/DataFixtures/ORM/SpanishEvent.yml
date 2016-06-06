@@ -594,7 +594,7 @@ Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
         description: 'Description Presta 6'
     feature_translation_7_fr_spanish_event:
         __construct: false
-        feature: '@feature_7_rdv_carnot'
+        feature: '@feature_7_spanish_event'
         locale: 'fr'
         title: 'Presta 7'
         description: 'Description Presta 7'
