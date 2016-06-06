@@ -68,3 +68,6 @@ package:
     vatMode:
         et: HT
         ATI: TTC
+    plans:
+        validate: Valider votre formule
+        seeMore: Voir la suite des prestations

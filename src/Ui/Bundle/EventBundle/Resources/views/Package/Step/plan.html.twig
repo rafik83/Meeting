@@ -22,12 +22,12 @@
                                 <img src="{{ plan.image }}" class="img-responsive"/>
                             {% endif %}
                         </p>
-                        <button type="submit" class="btn pull-right hidden-unselected"><i class="icon-Valider_3"></i>Valider votre formule</button>
+                        <button type="submit" class="btn pull-right hidden-unselected"><i class="icon-Valider_3"></i>{{ 'package.plans.validate'|trans }}</button>
                     </td>
                     <td>
                         {% for feature in plan.features %}
                             {% if loop.index == 4 %}
-                                <a href="#" class="hidden-selected"><i class="icon-Note_1"></i> Voir la suite des prestations</a>
+                                <a href="#" class="hidden-selected"><i class="icon-Note_1"></i> {{ 'package.plans.seeMore'|trans }}</a>
                             {% endif %}
                             <dl {% if loop.index > 3 %}class="hidden-unselected"{% endif %}>
                                 <dt>{{ feature.title }}</dt>
