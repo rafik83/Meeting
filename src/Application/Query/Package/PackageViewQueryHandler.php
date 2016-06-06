@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Package;
 
-
-
 use Proximum\Vimeet\Application\View\Package\PackageView;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
@@ -30,6 +28,11 @@ class PackageViewQueryHandler
         $this->plansViewQueryHandler = $plansViewQueryHandler;
     }
 
+    /**
+     * @param PackageViewQuery $packageViewQuery
+     * @return PackageView
+     * @throws \Exception
+     */
     public function handle(PackageViewQuery $packageViewQuery)
     {
         if ($packageViewQuery->currentStep->type === Step::TYPE_PLAN) {
