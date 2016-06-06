@@ -13,16 +13,20 @@ Proximum\Vimeet\Domain\Model\BillingInfo:
             type: string
         function:
             type: string
+            nullable: true
         phone:
             type: string
+            nullable: true
         mobile:
             type: string
+            nullable: true
         email:
             type: string
         company:
             type: string
         vatNumber:
             type: string
+            nullable: true
     embedded:
         address:
             class: Proximum\Vimeet\Domain\Model\Address
