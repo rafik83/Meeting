@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
 
 class SpotRepository implements SpotRepositoryInterface
 {
@@ -92,41 +93,8 @@ class SpotRepository implements SpotRepositoryInterface
      */
     public function getSpotFilter(Event $event, array $filter = [])
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('spot')
-            ->from(Spot::class, 'spot')
-            ->where('spot.event = :event')
-            ->setParameter('event', $event);
-
-        if (!empty($filter)) {
-            if ($filter['active'] === 0 || $filter['active'] === 1) {
-                $queryBuilder
-                    ->andWhere('spot.active = :active')
-                    ->setParameter('active', $filter['active']);
-            }
-            if ($filter['reference'] !== null && !empty($filter['reference'])) {
-                $queryBuilder
-                    ->andWhere('spot.reference LIKE :reference')
-                    ->setParameter('reference', '%'.$filter['reference'].'%');
-            }
-            if ($filter['meetingCapacity'] !== 0 && !empty($filter['meetingCapacity'])) {
-                $queryBuilder
-                    ->andWhere('spot.meetingCapacity = :meetingCapacity')
-                    ->setParameter('meetingCapacity', $filter['meetingCapacity']);
-            }
-            if ($filter['seatCapacity'] !== 0 && !empty($filter['seatCapacity'])) {
-                $queryBuilder
-                    ->andWhere('spot.seatCapacity = :seatCapacity')
-                    ->setParameter('seatCapacity', $filter['seatCapacity']);
-            }
-            if ($filter['size'] !== 0 && !empty($filter['size'])) {
-                $queryBuilder
-                    ->andWhere('spot.size = :size')
-                    ->setParameter('size', $filter['size']);
-            }
-        }
+        $queryBuilder = new FilteredQueryBuilder($this->entityManager);
+        $queryBuilder->hasEvent($event)->filter($filter);
 
         return $queryBuilder->getQuery()->getResult();
     }

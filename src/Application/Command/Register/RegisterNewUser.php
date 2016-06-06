@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
-use Proximum\Vimeet\Domain\Model\User;
-
 class RegisterNewUser
 {
     /**
@@ -30,15 +28,12 @@ class RegisterNewUser
     public $locale;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
+     * @param string $email
      * @param string $locale
      */
-    public function __construct($locale)
+    public function __construct($email, $locale)
     {
+        $this->email  = $email;
         $this->locale = $locale;
     }
 }

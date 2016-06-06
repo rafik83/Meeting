@@ -48,7 +48,9 @@ class FilterSpotType extends AbstractType
                 ],
                 'placeholder'       => '',
             ])
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, [
+                'label' => 'form.filter_spot_type.children.submit.label',
+            ])
         ;
     }
 
