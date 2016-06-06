@@ -158,7 +158,7 @@ class RegisterController extends Controller
             $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
             return $nextStep
-                ? $this->redirectToRoute('event_participant_step', ['step' => 1, 'participant' => $participate->participant->getId()])
+                ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participate->participant->getId()])
                 : $this->redirectToRoute('event_sheet');
         }
 
