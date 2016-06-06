@@ -1,5 +1,7 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
 {% block title 'billing_info.title'|trans %}
 
 {% block content %}
@@ -9,7 +11,7 @@
                 <h1>{{ 'billing_info.title'|trans }}</h1>
             </header>
             <div class="main__content">
-                {{ form(form, { 'attr': { 'class': 'styled-form' } }) }}
+                {{ form(form, { 'attr': { 'class': 'styled-form form-with-label' } }) }}
             </div>
         </section>
     </div>
