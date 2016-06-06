@@ -7,14 +7,18 @@
 
             {% for plan in view.products.plans %}
                 <tr>
-                    <td width="190px">
-                        {{ form_widget(form.plan[plan.id]) }}
-                        <div class="product">
-                            <h2>{{ plan.title }}</h2>
-                            <span class="product-price">{{ plan.price }} <sup>€ {{ ('package.vatMode.' ~ plan.vatMode)|trans }}</sup></span>
+                    <td class="col-md-3">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                {{ form_widget(form.plan[plan.id]) }}
+                            </div>
+                            <div class="col-sm-10 product">
+                                <h2>{{ plan.title }}</h2>
+                                <span class="product-price">{{ plan.price }} <sup>€ {{ ('package.vatMode.' ~ plan.vatMode)|trans }}</sup></span>
+                            </div>
                         </div>
                     </td>
-                    <td width="500px">
+                    <td class="col-md-5">
                         <h3>{{ plan.heading }}</h3>
                         <p>
                             {{ plan.description }}

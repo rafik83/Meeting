@@ -67,7 +67,7 @@ package:
     select: "Sélectionner:"
     vatMode:
         et: HT
-        ATI: TTC
+        ati: TTC
     plans:
         validate: Valider
         seeMore: Voir la suite des prestations
