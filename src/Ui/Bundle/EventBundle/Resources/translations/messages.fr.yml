@@ -69,5 +69,5 @@ package:
         et: HT
         ATI: TTC
     plans:
-        validate: Valider votre formule
+        validate: Valider
         seeMore: Voir la suite des prestations
