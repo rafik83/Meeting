@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 class FunnelFactory
 {
     /**
-     * @var
+     * @var CartRowRepositoryInterface
      */
     private $cartRowRepository;
 

@@ -53,14 +53,14 @@ class PlanView
     public $features;
 
     /**
-     * @param int    $id
-     * @param string $title
-     * @param float  $price
-     * @param string $heading
-     * @param string $description
-     * @param string $image
-     * @param string $vatMode
-     * @param array  $features
+     * @param int           $id
+     * @param string        $title
+     * @param float         $price
+     * @param string        $heading
+     * @param string        $description
+     * @param string        $image
+     * @param string        $vatMode
+     * @param FeatureView[] $features
      */
     public function __construct(
         $id,
