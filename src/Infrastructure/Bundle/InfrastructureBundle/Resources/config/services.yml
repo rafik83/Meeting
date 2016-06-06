@@ -1046,6 +1046,14 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
 
     #
+    # Billing
+    #
+    billing.prefiller:
+        class: Proximum\Vimeet\Domain\Billing\Prefiller
+        arguments:
+            - '@template.template_data_factory'
+
+    #
     # Queries
     #
     query.sheet.sheet_list_view_query_handler:

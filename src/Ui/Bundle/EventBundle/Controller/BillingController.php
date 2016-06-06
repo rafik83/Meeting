@@ -29,11 +29,18 @@ class BillingController extends Controller
      */
     public function infoAction(Request $request, EventView $eventView)
     {
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
-        $info  = $this->get('repository.billing_info_repository')->getBySheet($sheet);
+        $this->isGranted('IS_AUTHENTICATED_FULLY');
 
-        $command = new UpdateInfo($info ? : new BillingInfo($sheet));
-        $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true]);
+        $sheet   = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
+        $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ? : new BillingInfo($sheet);
+        $country = $sheet->getEvent()->getCountry();
+
+        if (null === $info->getId()) {
+            $this->get('billing.prefiller')->prefill($info);
+        }
+
+        $command = new UpdateInfo($info);
+        $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true, 'country' => $country]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);

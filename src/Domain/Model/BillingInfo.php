@@ -229,4 +229,28 @@ class BillingInfo
     {
         return $this->vatNumber;
     }
+
+    /**
+     * @param string  $firstname
+     * @param string  $lastname
+     * @param string  $company
+     * @param string  $phone
+     * @param string  $mobile
+     * @param string  $email
+     * @param Address $address
+     *
+     * @return BillingInfo
+     */
+    public function prefill($firstname, $lastname, $company, $phone, $mobile, $email, Address $address)
+    {
+        $this->firstname = $firstname;
+        $this->lastname  = $lastname;
+        $this->company   = $company;
+        $this->phone     = $phone;
+        $this->mobile    = $mobile;
+        $this->email     = $email;
+        $this->address   = $address;
+
+        return $this;
+    }
 }
