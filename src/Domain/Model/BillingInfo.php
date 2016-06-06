@@ -88,29 +88,12 @@ class BillingInfo
     /**
      * BillingInfo constructor.
      *
-     * @param Sheet   $sheet
-     * @param string  $name
-     * @param string  $firstname
-     * @param string  $function
-     * @param string  $phone
-     * @param string  $mobile
-     * @param string  $email
-     * @param string  $company
-     * @param Address $address
-     * @param string  $vatNumber
+     * @param Sheet $sheet
      */
-    public function __construct(Sheet $sheet, $name, $firstname, $function, $phone, $mobile, $email, $company, Address $address, $vatNumber)
+    public function __construct(Sheet $sheet)
     {
-        $this->sheet     = $sheet;
-        $this->name      = $name;
-        $this->firstname = $firstname;
-        $this->function  = $function;
-        $this->phone     = $phone;
-        $this->mobile    = $mobile;
-        $this->email     = $email;
-        $this->company   = $company;
-        $this->address   = $address;
-        $this->vatNumber = $vatNumber;
+        $this->sheet   = $sheet;
+        $this->address = new Address(null, null, null, null);
     }
 
     /**

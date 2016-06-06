@@ -186,13 +186,10 @@ event_sheet_delete_participant:
 # Sheet Billing
 #
 
-event_sheet_billing:
-    path:     /sheet/{sheet}/billing
-    requirements:
-        sheet: \d+
+event_billing_info:
+    path:     /billing-info
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Billing:billing }
-
+    defaults: { _controller: EventBundle:Billing:info }
 
 #
 # Authentication

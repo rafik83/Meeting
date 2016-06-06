@@ -159,6 +159,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.billing_info_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -748,6 +752,12 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.info.update_info_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\UpdateInfoHandler
+        arguments:
+            - '@repository.billing_info_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
 
     #
     # Security
