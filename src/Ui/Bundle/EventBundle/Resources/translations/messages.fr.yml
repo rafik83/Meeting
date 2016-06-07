@@ -61,3 +61,8 @@ sheet:
             backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation
+
+nomenclature:
+    select_all: Tous sélectionner
+    select_none: Aucun
+    back_to_sheet: Retour à la fiche
