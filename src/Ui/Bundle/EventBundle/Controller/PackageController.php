@@ -96,7 +96,7 @@ class PackageController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]);
+            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step+1]);
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(

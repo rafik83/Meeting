@@ -8,10 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Package;
+namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
-use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class ParticipantsViewQueryHandler
@@ -68,16 +67,17 @@ class ParticipantsViewQueryHandler
                     $numberIncluded > 0
                 )
             );
-
-            $numberIncluded--;
         }
 
         $participantsView = new ParticipantsView(
             $participantProduct->getTitle($locale),
-            $participantProduct->getDescription($locale)
+            $participantProduct->getDescription($locale),
+            $participantProduct->getUnitPrice(),
+            $participantProduct->getVatMode(),
+            $participantProduct->getQuantityMax(),
+            $numberIncluded,
+            $participantView
         );
-
-        $participantsView->participants = $participantsView;
 
         return $participantsView;
     }

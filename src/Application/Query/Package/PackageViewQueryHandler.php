@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Package;
 
+use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\PackageView;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
 

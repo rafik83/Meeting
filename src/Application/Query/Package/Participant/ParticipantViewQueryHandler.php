@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Package;
+namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;

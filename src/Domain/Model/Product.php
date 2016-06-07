@@ -443,6 +443,14 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->getEvent()->getMode();
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param string $image

@@ -8,10 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Package;
+namespace Proximum\Vimeet\Application\Query\Package\Planning;
 
 use Proximum\Vimeet\Application\View\Package\PlanningView;
-use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class PlanningViewQueryHandler
@@ -54,7 +53,7 @@ class PlanningViewQueryHandler
             $planningProduct->getTitle($locale),
             $planningProduct->getDescription($locale),
             $planningProduct->getUnitPrice(),
-            $planningViewQuery->sheet->getEvent()->getMode(),
+            $planningProduct->getVatMode(),
             $planningProduct->getQuantityMax(),
             $numberIncluded
         );

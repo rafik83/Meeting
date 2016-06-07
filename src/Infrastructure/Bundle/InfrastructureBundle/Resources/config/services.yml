@@ -1091,23 +1091,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
     query.package.plan_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\PlanViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Plan\PlanViewQueryHandler
         arguments:
             - '@query.package.features_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanViewQuery }
     query.package.plans_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\PlansViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQueryHandler
         arguments:
             - '@query.package.plan_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlansViewQuery }
     query.package.feature_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\FeatureViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Feature\FeatureViewQueryHandler
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\FeatureViewQuery }
     query.package.features_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\FeaturesViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Feature\FeaturesViewQueryHandler
         arguments:
             - '@query.package.feature_view_query_handler'
         tags:
@@ -1127,19 +1127,19 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantAndPlanningViewQuery }
     query.package.planning_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\PlanningViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQueryHandler
         arguments:
             - '@repository.cart_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanningViewQuery }
     query.package.participant_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\ParticipantViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantViewQueryHandler
         arguments:
             - '@query.participant.card_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantViewQuery }
     query.package.participants_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantsViewQueryHandler
         arguments:
             - '@query.package.participant_view_query_handler'
             - '@repository.cart_row_repository'
