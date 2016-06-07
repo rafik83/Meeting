@@ -423,6 +423,26 @@ class Product
     }
 
     /**
+     * @return boolean|Product
+     */
+    public function getIncludedParticipantProduct()
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            return $productIncluded->getProduct()->isParticipant();
+        })->first();
+    }
+
+    /**
+     * @return boolean|Product
+     */
+    public function getIncludedPlanningProduct()
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            return $productIncluded->getProduct()->isPlanning();
+        })->first();
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param string $image

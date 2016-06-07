@@ -46,16 +46,15 @@ class ParticipantsViewQueryHandler
     {
         $locale             = $participantsViewQuery->locale;
         $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
-        $planBought         = $this->cartRowRepository->findCartRowPlanBySheet($participantsViewQuery->sheet);
+        $selectedPlan       = $this->cartRowRepository->findCartRowPlanBySheet($participantsViewQuery->sheet);
         $numberIncluded     = 0;
 
-        if (null !== $planBought) {
-            $participantProductIncluded = array_filter($planBought->getProduct()->getIncludedProducts(), function (ProductIncluded $productIncluded) {
-                return $productIncluded->getProduct()->isParticipant();
-            });
+        if (null !== $selectedPlan) {
+            $participantProductIncluded = $selectedPlan->getProduct()->getIncludedParticipantProduct();
 
-            $participantProductIncluded = reset($participantProductIncluded);
-            $numberIncluded = $participantProductIncluded->getQuantity();
+            if ($participantProductIncluded) {
+                $numberIncluded = $participantProductIncluded->getQuantity();
+            }
         }
 
         $participantView = [];
@@ -66,7 +65,7 @@ class ParticipantsViewQueryHandler
                     $participantProduct,
                     $participant,
                     $locale,
-                    $numberIncluded > 0 ? true : false
+                    $numberIncluded > 0
                 )
             );
 

@@ -1121,6 +1121,9 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
     query.package.participant_and_planning_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\ParticipantAndPlanningViewQueryHandler
+        arguments:
+            - '@query.package.participants_view_query_handler'
+            - '@query.package.planning_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantAndPlanningViewQuery }
     query.package.planning_view_query_handler:

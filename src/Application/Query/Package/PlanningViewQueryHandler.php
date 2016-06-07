@@ -31,22 +31,22 @@ class PlanningViewQueryHandler
 
     /**
      * @param PlanningViewQuery $planningViewQuery
+     *
      * @return PlanningView
      */
     public function handle(PlanningViewQuery $planningViewQuery)
     {
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
-        $planBought      = $this->cartRowRepository->findCartRowPlanBySheet($planningViewQuery->sheet);
+        $selectedPlan    = $this->cartRowRepository->findCartRowPlanBySheet($planningViewQuery->sheet);
         $numberIncluded  = 0;
 
-        if (null !== $planBought) {
-            $planningProductIncluded = array_filter($planBought->getProduct()->getIncludedProducts(), function (ProductIncluded $productIncluded) {
-                return $productIncluded->getProduct()->isPlanning();
-            });
-
-            $planningProductIncluded = reset($planningProductIncluded);
-            $numberIncluded = $planningProductIncluded->getQuantity();
+        if (null !== $selectedPlan) {
+            $planningProductIncluded = $selectedPlan->getProduct()->getIncludedPlanningProduct();
+            
+            if ($planningProductIncluded) {
+                $numberIncluded = $planningProductIncluded->getQuantity();
+            }
         }
 
         return new PlanningView(

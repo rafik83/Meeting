@@ -36,6 +36,11 @@ class ParticipantAndPlanningViewQueryHandler
         $this->planningViewQueryHandler     = $planningViewQueryHandler;
     }
 
+    /**
+     * @param ParticipantAndPlanningViewQuery $participantAndPlanningViewQuery
+     *
+     * @return ParticipantAndPlanningView
+     */
     public function handle(ParticipantAndPlanningViewQuery $participantAndPlanningViewQuery)
     {
         $participantsView = $this->participantsViewQueryHandler->handle(
@@ -44,11 +49,16 @@ class ParticipantAndPlanningViewQueryHandler
                 $participantAndPlanningViewQuery->locale
             )
         );
+
         $planningView = $this->planningViewQueryHandler->handle(
+            new PlanningViewQuery(
+                $participantAndPlanningViewQuery->sheet,
+                $participantAndPlanningViewQuery->sheet->getPackage()->getParticipant(),
+                $participantAndPlanningViewQuery->locale
+            )
+        );
 
-        )
-
-        $participantAndPlanningView = new ParticipantAndPlanningView();
+        $participantAndPlanningView = new ParticipantAndPlanningView($participantsView, $planningView);
 
         return $participantAndPlanningView;
     }
