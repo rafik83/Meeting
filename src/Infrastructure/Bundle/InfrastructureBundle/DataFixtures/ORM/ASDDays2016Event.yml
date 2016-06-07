@@ -951,6 +951,13 @@ Proximum\Vimeet\Domain\Model\Product:
     product_option_5_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 9, 10, '', '', true, null] }
 
+Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
+    product_included_plan_1_asddays_fr:
+        __construct: false
+        quantity: 2
+        product: '@product_plan_1_asddays'
+        included: '@product_participant_1_asddays'
+
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_asddays_fr:
         __construct: false
@@ -1003,9 +1010,9 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_planning_1_asddays_fr:
         __construct: false
         product: '@product_planning_1_asddays'
-        title: 'Planning supplémentaire'
+        title: 'Packs de rendez-vous'
         heading: ''
-        description: 'En fonction du nombre de rendez-vous bi validés'
+        description: 'Description du pack de rendez-vous'
         addon: ''
         locale: 'fr'
     product_planning_1_asddays_en:
@@ -1013,7 +1020,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         product: '@product_planning_1_asddays'
         title: 'Extra planning'
         heading: ''
-        description: 'According to the number of bi-validated meetings'
+        description: 'Description extra planning'
         addon: ''
         locale: 'en'
     product_option_1_asddays_fr:
