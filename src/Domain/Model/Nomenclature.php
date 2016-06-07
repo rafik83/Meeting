@@ -149,6 +149,14 @@ class Nomenclature
     }
 
     /**
+     * @return NomenclatureItem[]
+     */
+    public function getChildren()
+    {
+        return $this->getItems();
+    }
+
+    /**
      * @param array $items
      *
      * @return NomenclatureItem[]

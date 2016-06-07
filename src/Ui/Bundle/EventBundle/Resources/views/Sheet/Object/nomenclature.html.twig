@@ -64,18 +64,18 @@
             </section>
         {% else %}
 
-            {% for child in nomenclature.value %}
+            {% for child in nomenclature.children if child.any(item.items) %}
 
                 <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                     <header>
-                        <h2>{{ child.label|localize(locale, fallback) }}</h2>
+                        <h2>{{ child.label(locale, fallback) }}</h2>
                     </header>
                     <div class="section__content">
                         <ul>
-                            {% for grandchild in child.children if grandchild.children|keys|intersect(item.items) is not empty %}
-                                <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                                {% for key, grandgrandchild in grandchild.children if key in item.items %}
-                                    <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
+                            {% for grandchild in child.children if grandchild.any(item.items) %}
+                                <li class="highlight">{{ grandchild.label(locale, fallback) }}</li>
+                                {% for grandgrandchild in grandchild.children if grandgrandchild.key in item.items %}
+                                    <li>{{ grandgrandchild.label(locale, fallback) }}</li>
                                 {% endfor %}
                             {% endfor %}
                         </ul>

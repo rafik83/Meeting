@@ -129,4 +129,16 @@ class NomenclatureItem
     {
         return $this->label[$locale];
     }
+
+    /**
+     * @param array $keys
+     *
+     * @return bool
+     */
+    public function any(array $keys)
+    {
+        return !empty (array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
+            return in_array($child->getKey(), $keys) || $child->any($keys);
+        }));
+    }
 }
