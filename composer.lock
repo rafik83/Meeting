@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9bff7034d45772d362a02dd3c1731fe9",
-    "content-hash": "9647ece1379aba9968f752fd6a0f2019",
+    "hash": "d0206c1c9bdbf79dc35d140a337f126e",
+    "content-hash": "3ece41b52da0bd25cd5e2513cce4ad25",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3678,16 +3678,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.11.3",
+            "version": "v1.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "b0a383d856d884d6b16e15892f507ecf89f8dbd2"
+                "reference": "eeb280e909834603ffe03524dbe0066e77c83084"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/b0a383d856d884d6b16e15892f507ecf89f8dbd2",
-                "reference": "b0a383d856d884d6b16e15892f507ecf89f8dbd2",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/eeb280e909834603ffe03524dbe0066e77c83084",
+                "reference": "eeb280e909834603ffe03524dbe0066e77c83084",
                 "shasum": ""
             },
             "require": {
@@ -3729,7 +3729,7 @@
             ],
             "description": "A tool to automatically fix PHP code style",
             "abandoned": "friendsofphp/php-cs-fixer",
-            "time": "2016-05-26 23:49:24"
+            "time": "2016-06-07 07:51:27"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4338,16 +4338,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "dev-master",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "eec64c9457ef6dff4c9eface0914ec1bc0048ba0"
+                "reference": "58a8137754bc24b25740d4281399a4a3596058e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/eec64c9457ef6dff4c9eface0914ec1bc0048ba0",
-                "reference": "eec64c9457ef6dff4c9eface0914ec1bc0048ba0",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/58a8137754bc24b25740d4281399a4a3596058e0",
+                "reference": "58a8137754bc24b25740d4281399a4a3596058e0",
                 "shasum": ""
             },
             "require": {
@@ -4396,7 +4396,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-06-06 10:57:18"
+            "time": "2016-06-07 08:13:47"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5506,8 +5506,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/intl-bundle": 20,
-        "friendsofsymfony/elastica-bundle": 20,
-        "phpspec/prophecy": 20
+        "friendsofsymfony/elastica-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
