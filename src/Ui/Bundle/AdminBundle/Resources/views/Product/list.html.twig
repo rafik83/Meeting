@@ -40,7 +40,7 @@
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
-                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.product.name }}</li>
+                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.included.name }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
