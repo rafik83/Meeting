@@ -23,26 +23,6 @@ class ParticipantsView
     public $description;
 
     /**
-     * @var float
-     */
-    public $unitPrice;
-
-    /**
-     * @var string
-     */
-    public $vatMode;
-
-    /**
-     * @var int
-     */
-    public $quantityMax;
-
-    /**
-     * @var int
-     */
-    public $numberIncluded;
-
-    /**
      * @var ParticipantView[]
      */
     public $participants;
@@ -50,27 +30,12 @@ class ParticipantsView
     /**
      * @param string $title
      * @param string $description
-     * @param float  $unitPrice
-     * @param string $vatMode
-     * @param int    $quantityMax
-     * @param int    $numberIncluded
      * @param array  $participants
      */
-    public function __construct(
-        $title,
-        $description,
-        $unitPrice,
-        $vatMode,
-        $quantityMax,
-        $numberIncluded,
-        array $participants
-    ) {
-        $this->title          = $title;
-        $this->description    = $description;
-        $this->unitPrice      = $unitPrice;
-        $this->vatMode        = $vatMode;
-        $this->quantityMax    = $quantityMax;
-        $this->numberIncluded = $numberIncluded;
-        $this->participants   = $participants;
+    public function __construct($title, $description, array $participants)
+    {
+        $this->title        = $title;
+        $this->description  = $description;
+        $this->participants = $participants;
     }
 }

@@ -72,10 +72,6 @@ class ParticipantsViewQueryHandler
         $participantsView = new ParticipantsView(
             $participantProduct->getTitle($locale),
             $participantProduct->getDescription($locale),
-            $participantProduct->getUnitPrice(),
-            $participantProduct->getVatMode(),
-            $participantProduct->getQuantityMax(),
-            $numberIncluded,
             $participantView
         );
 
