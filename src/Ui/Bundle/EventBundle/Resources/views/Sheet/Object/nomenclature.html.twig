@@ -12,11 +12,11 @@
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
             <div class="section__content">
-                {% if item.data['items']|default([]) is empty %}
+                {% if item.items is empty %}
                     <p class="help">{{ item.label(locale, fallback) }}</p>
                 {% else %}
                     <ul>
-                        {% for key, child in nomenclature.value if key in item.data['items']|default([]) %}
+                        {% for key, child in nomenclature.value if key in item.items %}
                             <li>{{ child.label|localize(locale, fallback) }}</li>
                         {% endfor %}
                     </ul>
@@ -35,9 +35,9 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for child in nomenclature.value if child.children|keys|intersect(item.data['items']|default([]))|length > 0 %}
+                    {% for child in nomenclature.value if child.children|keys|intersect(item.items)|length > 0 %}
                         <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                        {% for key, grandchild in child.children if key in item.data['items']|default([]) %}
+                        {% for key, grandchild in child.children if key in item.items %}
                             <li>{{ grandchild.label|localize(locale, fallback) }}</li>
                         {% endfor %}
                     {% endfor %}
@@ -50,7 +50,7 @@
 
     {% elseif nomenclature.depth == 3 %}
 
-        {% if item.data['items']|default([]) is empty %}
+        {% if item.items is empty %}
             <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                 <header>
                     <h2>{{ item.label(locale, fallback) }}</h2>
@@ -72,9 +72,9 @@
                     </header>
                     <div class="section__content">
                         <ul>
-                            {% for grandchild in child.children if grandchild.children|keys|intersect(item.data['items']|default([]))|length > 0 %}
+                            {% for grandchild in child.children if grandchild.children|keys|intersect(item.items) is not empty %}
                                 <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                                {% for key, grandgrandchild in grandchild.children if key in item.data['items']|default([]) %}
+                                {% for key, grandgrandchild in grandchild.children if key in item.items %}
                                     <li>{{ grandgrandchild.label|localize(locale, fallback) }}</li>
                                 {% endfor %}
                             {% endfor %}
