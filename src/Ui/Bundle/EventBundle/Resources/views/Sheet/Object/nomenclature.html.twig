@@ -23,7 +23,7 @@
                 {% endif %}
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ item.label(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
             </footer>
         </section>
 
@@ -44,7 +44,7 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ item.label(locale, fallback) }}"</a>
+                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
             </footer>
         </section>
 
@@ -59,7 +59,7 @@
                     <p class="help">{{ item.help|localize(locale, fallback) }}</p>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ item.label(locale, fallback) }}"</a>
+                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                 </footer>
             </section>
         {% else %}
@@ -81,7 +81,7 @@
                         </ul>
                     </div>
                     <footer>
-                        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">Editer "{{ item.label(locale, fallback) }}"</a>
+                        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                     </footer>
                 </section>
 

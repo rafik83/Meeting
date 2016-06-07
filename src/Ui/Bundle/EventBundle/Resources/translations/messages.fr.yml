@@ -61,6 +61,8 @@ sheet:
             backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation
+    edit:
+        object: Editer "%label%"
 
 nomenclature:
     select_all: Tous sélectionner
