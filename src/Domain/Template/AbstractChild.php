@@ -51,16 +51,19 @@ abstract class AbstractChild
     /**
      * @param string      $name
      * @param null|string $locale
+     * @param null|string $fallback
      *
      * @return mixed
      */
-    public function getOption($name, $locale = null)
+    public function getOption($name, $locale = null, $fallback = null)
     {
         if (null === $locale) {
             return isset($this->config[$name]) ? $this->config[$name] : null;
         }
 
-        return isset($this->config[$name][$locale]) ? $this->config[$name][$locale] : null;
+        return isset($this->config[$name][$locale])
+            ? $this->config[$name][$locale]
+            : ($fallback ? $this->getOption($name, $fallback) : null);
     }
 
     /**

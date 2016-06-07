@@ -282,7 +282,7 @@ class Nomenclature
     public function any(array $keys)
     {
         return !empty(array_filter($this->getChildren(), function (NomenclatureItem $item) use ($keys) {
-            return $item->any($keys);
+            return in_array($item->getKey(), $keys) || $item->any($keys);
         }));
     }
 }

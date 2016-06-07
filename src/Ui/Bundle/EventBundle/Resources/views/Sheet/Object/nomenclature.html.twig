@@ -12,14 +12,14 @@
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
             <div class="section__content">
-                {% if item.items is empty %}
-                    <p class="help">{{ item.label(locale, fallback) }}</p>
-                {% else %}
+                {% if nomenclature.any(item.items) %}
                     <ul>
-                        {% for key, child in nomenclature.value if key in item.items %}
-                            <li>{{ child.label|localize(locale, fallback) }}</li>
+                        {% for child in nomenclature.children if child.key in item.items %}
+                            <li>{{ child.label(locale, fallback) }}</li>
                         {% endfor %}
                     </ul>
+                {% else %}
+                    <p class="help">{{ item.help(locale, fallback) }}</p>
                 {% endif %}
             </div>
             <footer>
@@ -35,10 +35,10 @@
             </header>
             <div class="section__content">
                 <ul>
-                    {% for child in nomenclature.value if child.children|keys|intersect(item.items)|length > 0 %}
+                    {% for child in nomenclature.children if child.any(item.items) %}
                         <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
-                        {% for key, grandchild in child.children if key in item.items %}
-                            <li>{{ grandchild.label|localize(locale, fallback) }}</li>
+                        {% for grandchild in child.children if grandchild.key in item.items %}
+                            <li>{{ grandchild.label(locale, fallback) }}</li>
                         {% endfor %}
                     {% endfor %}
                 </ul>

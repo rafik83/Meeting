@@ -87,9 +87,7 @@ class Object extends AbstractChild
      */
     public function getLabel($locale, $fallback)
     {
-        $label = $this->getOption('label');
-
-        return $locale ? isset($label[$locale]) ? $label[$locale] : $this->getLabel($fallback, null) : null;
+        return $this->getOption('label', $locale, $fallback);
     }
 
     /**
@@ -125,11 +123,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @param null|string $locale
+     * @param null|string $fallback
+     *
      * @return string|null
      */
-    public function getHelp()
+    public function getHelp($locale = null, $fallback = null)
     {
-        return $this->getOption('help', $this->locale);
+        return $this->getOption('help', $locale ? : $this->locale, $fallback ? : $this->fallback);
     }
 
     /**
