@@ -103,8 +103,7 @@ class PackageController extends Controller
             new PackageViewQuery(
                 $funnel,
                 $currentStep,
-                $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->getId()),
-                $sheet->getPackage(),
+                $sheet,
                 $request->getLocale()
             )
         );
@@ -125,7 +124,7 @@ class PackageController extends Controller
     {
         $commands = [
             FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
-            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\ParticipantAndPlanning::class,
+            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
             FunnelStep::TYPE_OPTIONS              => Step\Options::class,
         ];
 

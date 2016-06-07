@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Application\Command\Package\Step\ParticipantAndPlanning;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Model\Package;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,7 +25,7 @@ class ParticipantAndPlanningType extends AbstractType
         $optionsResolver->setRequired(['package']);
         $optionsResolver->addAllowedTypes('package', Package::class);
         $optionsResolver->setDefaults([
-            'data_class' => ParticipantAndPlanning::class,
+            'data_class' => SelectParticipantAndPlanning::class,
         ]);
     }
 }

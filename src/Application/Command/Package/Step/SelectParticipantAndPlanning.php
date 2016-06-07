@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
-class ParticipantAndPlanning extends AbstractStep
+class SelectParticipantAndPlanning extends AbstractStep
 {
 }
