@@ -50,22 +50,8 @@
 
     {% elseif nomenclature.depth == 3 %}
 
-        {% if item.items is empty %}
-            <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
-                <header>
-                    <h2>{{ item.label(locale, fallback) }}</h2>
-                </header>
-                <div class="section__content">
-                    <p class="help">{{ item.help|localize(locale, fallback) }}</p>
-                </div>
-                <footer>
-                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
-                </footer>
-            </section>
-        {% else %}
-
+        {% if nomenclature.any(item.items) %}
             {% for child in nomenclature.children if child.any(item.items) %}
-
                 <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                     <header>
                         <h2>{{ child.label(locale, fallback) }}</h2>
@@ -84,9 +70,19 @@
                         <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                     </footer>
                 </section>
-
             {% endfor %}
-
+        {% else %}
+            <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+                <header>
+                    <h2>{{ item.label(locale, fallback) }}</h2>
+                </header>
+                <div class="section__content">
+                    <p class="help">{{ item.help|localize(locale, fallback) }}</p>
+                </div>
+                <footer>
+                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                </footer>
+            </section>
         {% endif %}
 
     {% endif %}
