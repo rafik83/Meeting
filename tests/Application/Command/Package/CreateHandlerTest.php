@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Application\Command\Package\CreateHandler;
 use Proximum\Vimeet\Application\Command\Package\CreateResult;
@@ -41,9 +42,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $event->setLocales(['fr', 'en']);
 
-        $package = new Package($event, 'Lorem ipsum', $dateTime);
-        $package->translate('fr', 'Forfait', 'Participant et planning', 'Options');
-        $package->translate('en', 'Plans', 'Participant and Planning', 'Options');
+        $expected = new Package($event, 'Lorem ipsum', $dateTime);
+        $expected->translate('fr', 'Forfait', 'Participant et planning', 'Options');
+        $expected->translate('en', 'Plans', 'Participant and Planning', 'Options');
 
         $command        = new Create();
         $command->event = $event;
@@ -52,10 +53,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $packageRepository = $this->prophesize(PackageRepositoryInterface::class);
         $dateTime          = new \DateTimeImmutable();
 
-        $packageRepository->add($package)->shouldBeCalled();
+        $packageRepository->add(Argument::that(function (Package $package) use ($expected) {
+            $this->assertEquals($expected, $package);
+
+            return true;
+        }))->shouldBeCalled();
 
         $handler = new CreateHandler($packageRepository->reveal(), $dateTime, $defaultLabels);
 
-        $this->assertEquals(new CreateResult($package), $handler->handle($command));
+        $this->assertEquals(new CreateResult($expected), $handler->handle($command));
     }
 }
