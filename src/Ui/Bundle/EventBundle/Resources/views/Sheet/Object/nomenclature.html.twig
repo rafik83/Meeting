@@ -54,7 +54,7 @@
             {% for child in nomenclature.children if child.any(item.items) %}
                 <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                     <header>
-                        <h2>{{ child.label(locale, fallback) }}</h2>
+                        <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
                     </header>
                     <div class="section__content">
                         <ul>
