@@ -42,6 +42,12 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if ($sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('The current User is not allowed to see this schedule');
+        }
+
         $participantSchedules = $this
             ->get('vimeet.application.components.schedule.schedule_builder')
             ->buildForSheet($sheet, $request->getLocale());
@@ -63,6 +69,12 @@ class ScheduleController extends Controller
     public function addUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('The current User is not allowed to create an unavailibity');
+        }
 
         $command = new Add();
         $form    = $this->createForm(AddUnavailabilityType::class, $command, [
@@ -98,6 +110,12 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if ($sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('The current User is not allowed to edit this unavailibity');
+        }
+
         $command = new Update($unavailability);
         $form    = $this->createForm(UpdateUnavailabilityType::class, $command, [
             'action' => $this->generateUrl('event_sheet_schedule_update_unavailability', [
@@ -123,16 +141,21 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param Request        $request
      * @param EventView      $eventView
      * @param Sheet          $sheet
      * @param Unavailability $unavailability
      *
      * @return RedirectResponse|Response
      */
-    public function removeUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Unavailability $unavailability)
+    public function removeUnavailabilityAction(EventView $eventView, Sheet $sheet, Unavailability $unavailability)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('The current User is not allowed to remove this unavailibity');
+        }
 
         $command = new Remove($unavailability);
         $this->get('tactician.commandbus')->handle($command);
@@ -151,6 +174,15 @@ class ScheduleController extends Controller
      */
     public function participateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($happening->getEvent()->getId() !== $eventView->getId()
+            || $sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('Event not linked to this happening');
+        }
+
         // Get user participant
         $participant = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
@@ -183,7 +215,6 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param Request     $request
      * @param EventView   $eventView
      * @param Sheet       $sheet
      * @param Happening   $happening
@@ -191,8 +222,17 @@ class ScheduleController extends Controller
      *
      * @return RedirectResponse
      */
-    public function unparticipateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening, Participant $participant)
+    public function unparticipateHappeningAction(EventView $eventView, Sheet $sheet, Happening $happening, Participant $participant)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if ($happening->getEvent()->getId() !== $eventView->getId()
+            || $sheet->getEvent()->getId() !== $eventView->getId()
+            || null === $sheet->getUserParticipant($this->getUser())
+        ) {
+            throw $this->createNotFoundException('Event not linked to this happening');
+        }
+
         $this->get('tactician.commandbus')->handle(new Unparticipate($happening, $participant));
         $this->addFlash('success', 'flash.event.schedule.happening.unparticipate.success');
 
