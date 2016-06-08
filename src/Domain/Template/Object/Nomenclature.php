@@ -74,6 +74,14 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
+    public function getContentLabel()
+    {
+        return $this->getNomenclatureLabel();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setContentValue($value)
     {
         $this->setItem($value);

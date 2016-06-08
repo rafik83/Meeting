@@ -45,6 +45,14 @@ class Telephone extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
+    public function getContentLabel()
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setContentValue($value)
     {
         $this->setTelephone($value);

@@ -233,6 +233,7 @@ class BillingInfo
     /**
      * @param string  $firstname
      * @param string  $lastname
+     * @param string  $function
      * @param string  $company
      * @param string  $phone
      * @param string  $mobile
@@ -241,10 +242,11 @@ class BillingInfo
      *
      * @return BillingInfo
      */
-    public function prefill($firstname, $lastname, $company, $phone, $mobile, $email, Address $address)
+    public function prefill($firstname, $lastname, $function, $company, $phone, $mobile, $email, Address $address)
     {
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
+        $this->function  = $function;
         $this->company   = $company;
         $this->phone     = $phone;
         $this->mobile    = $mobile;

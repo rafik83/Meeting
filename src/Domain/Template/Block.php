@@ -336,14 +336,14 @@ class Block extends AbstractChild
      *
      * @return mixed
      */
-    public function getTaggedContentValue($tag)
+    public function getTaggedContentLabel($tag)
     {
         $objects = new ArrayCollection($this->getObjects());
 
         return $objects->filter(function (Object $object) use ($tag) {
             return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
         })->map(function (Object\ContentObjectInterface $object) {
-            return $object->getContentValue();
+            return $object->getContentLabel();
         })->first();
     }
 

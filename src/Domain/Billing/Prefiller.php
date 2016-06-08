@@ -42,17 +42,18 @@ class Prefiller
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
         $billingInfo->prefill(
-            $templateData->getTaggedContentValue(Tag::PARTICIPANT_FIRSTNAME),
-            $templateData->getTaggedContentValue(Tag::PARTICIPANT_LASTNAME),
-            $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION),
-            $templateData->getTaggedContentValue(Tag::PARTICIPANT_PHONE),
-            $templateData->getTaggedContentValue(Tag::PARTICIPANT_MOBILE),
+            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_FIRSTNAME),
+            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_LASTNAME),
+            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_POSITION),
+            $templateData->getTaggedContentLabel(Tag::SHEET_ORGANIZATION),
+            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_PHONE),
+            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_MOBILE),
             $participant->getUser()->getEmail(),
             new Address(
-                $templateData->getTaggedContentValue(Tag::PARTICIPANT_ADDRESS),
-                $templateData->getTaggedContentValue(Tag::PARTICIPANT_ZIPCODE),
-                $templateData->getTaggedContentValue(Tag::PARTICIPANT_CITY),
-                $templateData->getTaggedContentValue(Tag::PARTICIPANT_COUNTRY)
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ADDRESS),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ZIPCODE),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_CITY),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_COUNTRY)
             )
         );
     }
