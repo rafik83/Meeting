@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "65581e48b0563a2c60c079f3c477574c",
-    "content-hash": "31f8dd49cb785f9124ce5721d5906372",
+    "hash": "cd497d1472df0d59b1b8e8743b07b9ee",
+    "content-hash": "4eea71228feea6fdb1b0aa194f8dfd4d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1057,16 +1057,16 @@
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",
-            "version": "v2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle.git",
-                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4"
+                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/9633412138630396fd6ca6515d5bc4fec2265ad4",
-                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4",
+                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/024e50ed688305577b0512329ec64724ddb5bf6d",
+                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d",
                 "shasum": ""
             },
             "require": {
@@ -1108,7 +1108,7 @@
                 "theme-bundle",
                 "twitter"
             ],
-            "time": "2015-12-14 09:15:39"
+            "time": "2016-06-07 15:42:52"
         },
         {
             "name": "erusev/parsedown",
@@ -5505,7 +5505,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/intl-bundle": 20,
-        "friendsofsymfony/elastica-bundle": 20
+        "friendsofsymfony/elastica-bundle": 20,
+        "elao/theme-twitter-bootstrap-3-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
