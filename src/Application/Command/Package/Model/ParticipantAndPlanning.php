@@ -52,7 +52,7 @@ class ParticipantAndPlanning
         }
 
         if ($planning && !$planning->isPlanning()) {
-            throw new WrongTypeException($participant, Product::TYPE_PLANNING);
+            throw new WrongTypeException($planning, Product::TYPE_PLANNING);
         }
 
         $this->labels      = $labels;

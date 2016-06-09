@@ -15,6 +15,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ChangePasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends Controller
 {
@@ -26,6 +27,11 @@ class AccountController extends Controller
         return $this->render('AdminBundle:Account:index.html.twig');
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
     public function updatePasswordAction(Request $request)
     {
         $changePassword = new ChangePassword($this->getUser());
