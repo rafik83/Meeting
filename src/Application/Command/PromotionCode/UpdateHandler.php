@@ -34,7 +34,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $update->promotionCode->update($update->title, $update->validUntil, $update->stock);
+        $update->promotionCode->update($update->title, $update->code, $update->validUntil, $update->stock);
 
         foreach ($update->translations as $locale => $translation) {
             $update->promotionCode->translate($locale, $translation['label'], $translation['description']);

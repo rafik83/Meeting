@@ -9,6 +9,8 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
     fields:
         title:
             type: string
+        code:
+            type: string
         validUntil:
             type: datetime
         stock:

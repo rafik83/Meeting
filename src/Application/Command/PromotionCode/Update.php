@@ -54,6 +54,7 @@ class Update
     {
         $this->promotionCode = $promotionCode;
         $this->title         = $promotionCode->getTitle();
+        $this->code          = $promotionCode->getCode();
         $this->validUntil    = $promotionCode->getValidUntil();
         $this->stock         = $promotionCode->getStock();
 

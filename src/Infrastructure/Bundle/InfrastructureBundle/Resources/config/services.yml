@@ -777,6 +777,7 @@ services:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
             - '@repository.promotion_code_repository'
+            - '@promotion.faker_code_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
     command.promotion_code.update_handler:
@@ -1167,3 +1168,9 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@repository.cart_row_repository'
+
+    #
+    # Promotion
+    #
+    promotion.faker_code_generator:
+        class: Proximum\Vimeet\Domain\Promotion\FakerCodeGenerator

@@ -30,6 +30,11 @@ class PromotionCode
     private $title;
 
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var ArrayCollection
      */
     private $promotions;
@@ -55,10 +60,11 @@ class PromotionCode
      * @param Event  $event
      * @param string $title
      */
-    public function __construct(Event $event, $title)
+    public function __construct(Event $event, $title, $code)
     {
-        $this->title        = $title;
         $this->event        = $event;
+        $this->code         = $code;
+        $this->title        = $title;
         $this->promotions   = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -83,14 +89,16 @@ class PromotionCode
 
     /**
      * @param string             $title
+     * @param string             $code
      * @param \DateTimeInterface $validUntil
      * @param int                $stock
      *
      * @return PromotionCode
      */
-    public function update($title, $validUntil, $stock)
+    public function update($title, $code, $validUntil, $stock)
     {
         $this->title      = $title;
+        $this->code       = $code;
         $this->validUntil = $validUntil;
         $this->stock      = $stock;
 
@@ -125,6 +133,16 @@ class PromotionCode
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
