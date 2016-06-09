@@ -56,7 +56,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         locale: 'en'
     product_plan_2_rdv_carnot_fr:
         __construct: false
-        product: '@product_plan_1_rdv_carnot'
+        product: '@product_plan_2_rdv_carnot'
         title: 'Formule Exposant'
         heading: 'Stand équipé 4m² (2x2m)'
         description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
@@ -64,7 +64,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         locale: 'fr'
     product_plan_2_rdv_carnot_en:
         __construct: false
-        product: '@product_plan_1_rdv_carnot'
+        product: '@product_plan_2_rdv_carnot'
         title: 'Exhibitor Formula'
         heading: 'An equipped 4 sqm booth (2X2 m)'
         description: 'With a banner, lighting, 1 table and 4 chairs.'
@@ -134,6 +134,130 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: ''
         addon: ''
         locale: 'en'
+
+Proximum\Vimeet\Domain\Model\Product\Feature:
+    feature_1_rdv_carnot:
+        __construct: false
+        product: '@product_plan_1_rdv_carnot'
+    feature_2_rdv_carnot:
+        __construct: false
+        product: '@product_plan_1_rdv_carnot'
+    feature_3_rdv_carnot:
+        __construct: false
+        product: '@product_plan_1_rdv_carnot'
+    feature_4_rdv_carnot:
+        __construct: false
+        product: '@product_plan_2_rdv_carnot'
+    feature_5_rdv_carnot:
+        __construct: false
+        product: '@product_plan_2_rdv_carnot'
+    feature_6_rdv_carnot:
+        __construct: false
+        product: '@product_plan_2_rdv_carnot'
+    feature_7_rdv_carnot:
+        __construct: false
+        product: '@product_plan_2_rdv_carnot'
+    feature_8_rdv_carnot:
+        __construct: false
+        product: '@product_plan_2_rdv_carnot'
+
+Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
+    feature_translation_1_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_1_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_1_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_1_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_2_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_2_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_2_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_2_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_3_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_3_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_3_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_3_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_4_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_4_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_4_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_4_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_5_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_5_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_5_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_5_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_6_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_6_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_6_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_6_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_7_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_7_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_7_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_7_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_8_fr_rdv_carnot:
+        __construct: false
+        feature: '@feature_8_rdv_carnot'
+        locale: 'fr'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+    feature_translation_8_en_rdv_carnot:
+        __construct: false
+        feature: '@feature_8_rdv_carnot'
+        locale: 'en'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
 
 Proximum\Vimeet\Domain\Model\Package:
     package_rdv_carnot:

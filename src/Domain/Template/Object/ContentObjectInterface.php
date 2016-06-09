@@ -18,6 +18,11 @@ interface ContentObjectInterface
     public function getContentValue();
 
     /**
+     * @return string
+     */
+    public function getContentLabel();
+
+    /**
      * @param string $value
      */
     public function setContentValue($value);

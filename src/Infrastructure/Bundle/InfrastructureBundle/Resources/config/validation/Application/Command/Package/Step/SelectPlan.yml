@@ -1,0 +1,5 @@
+Proximum\Vimeet\Application\Command\Package\Step\SelectPlan:
+    properties:
+        plan:
+            - NotBlank:
+                message: 'package.plans.notBlank'

@@ -22,6 +22,6 @@ Feature: Impersonation
     When I follow "admin.sheet.impersonate"
     Then I should be on this url "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/sheet"
     And I should see "admin.sheet.exit_impersonation"
-    And I should see "FICHE DE PRÉSENTATION"
+    And I should see "sheet.title"
     When I follow "admin.sheet.exit_impersonation"
     Then I should be on this page "/admin/fr/event/1/sheet"

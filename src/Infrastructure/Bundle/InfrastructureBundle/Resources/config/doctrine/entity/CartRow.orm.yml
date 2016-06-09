@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\CartRow:
+    type:  entity
+    table: cart_row
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+        serializedProduct:
+            type: json_array
+        createdAt:
+            type: datetime
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: "cascade"
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: "cascade"

@@ -32,10 +32,7 @@ class TelephoneDataType extends AbstractType
                 'label'       => $label ? $telephone->getOption('label')[$locale] : false,
                 'required'    => $telephone->getOption('required'),
                 'placeholder' => $telephone->getOption('placeholder')[$locale],
-                'attr'        => [
-                    'class'                => 'telephone-intl-input',
-                    'data-initial-country' => strtolower($options['country']),
-                ]
+                'country'     => $options['country'],
             ])
         ;
     }

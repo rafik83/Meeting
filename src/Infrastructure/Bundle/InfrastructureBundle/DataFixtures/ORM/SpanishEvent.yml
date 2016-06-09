@@ -404,30 +404,30 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: 'Vous changez de lieu à chaque rendez-vous.'
         addon: ''
         locale: 'fr'
-    product_plan_1_spanish_event_en:
+    product_plan_1_spanish_event_es:
         __construct: false
         product: '@product_plan_1_spanish_event'
         title: 'B2B Meeting Formula'
         heading: 'No booth'
         description: 'You have to move at each appointment.'
         addon: ''
-        locale: 'en'
+        locale: 'es'
     product_plan_2_spanish_event_fr:
         __construct: false
-        product: '@product_plan_1_spanish_event'
+        product: '@product_plan_2_spanish_event'
         title: 'Formule Exposant'
         heading: 'Stand équipé 4m² (2x2m)'
         description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
         addon: ''
         locale: 'fr'
-    product_plan_2_spanish_event_en:
+    product_plan_2_spanish_event_es:
         __construct: false
-        product: '@product_plan_1_spanish_event'
+        product: '@product_plan_2_spanish_event'
         title: 'Exhibitor Formula'
         heading: 'An equipped 4 sqm booth (2X2 m)'
         description: 'With a banner, lighting, 1 table and 4 chairs.'
         addon: ''
-        locale: 'en'
+        locale: 'es'
     product_participant_1_spanish_event_fr:
         __construct: false
         product: '@product_participant_1_spanish_event'
@@ -436,14 +436,14 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: 'Accompagnant le premier sur un même agenda incluant une entrée à la convention d’affaire, accès illimité à la pause café et aux conférences.'
         addon: ''
         locale: 'fr'
-    product_participant_1_spanish_event_en:
+    product_participant_1_spanish_event_es:
         __construct: false
         product: '@product_participant_1_spanish_event'
         title: 'Extra participant'
         heading: ''
         description: 'Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.'
         addon: ''
-        locale: 'en'
+        locale: 'es'
     product_planning_1_spanish_event_fr:
         __construct: false
         product: '@product_planning_1_spanish_event'
@@ -452,14 +452,14 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: 'En fonction du nombre de rendez-vous bi validés'
         addon: ''
         locale: 'fr'
-    product_planning_1_spanish_event_en:
+    product_planning_1_spanish_event_es:
         __construct: false
         product: '@product_planning_1_spanish_event'
         title: 'Extra planning'
         heading: ''
         description: 'According to the number of bi-validated meetings'
         addon: ''
-        locale: 'en'
+        locale: 'es'
     product_option_1_spanish_event_fr:
         __construct: false
         product: '@product_option_1_spanish_event'
@@ -468,14 +468,14 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: 'Option valable uniquement en complément des formules Exposant et Parrain.'
         addon: ''
         locale: 'fr'
-    product_option_1_spanish_event_en:
+    product_option_1_spanish_event_es:
         __construct: false
         product: '@product_option_1_spanish_event'
         title: 'Add booth option (4 sqm)'
         heading: ''
         description: 'Option available in addition with exhibitor and sponsor formula only.'
         addon: ''
-        locale: 'en'
+        locale: 'es'
     product_option_2_spanish_event_fr:
         __construct: false
         product: '@product_option_2_spanish_event'
@@ -484,14 +484,138 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: ''
         addon: ''
         locale: 'fr'
-    product_option_2_spanish_event_en:
+    product_option_2_spanish_event_es:
         __construct: false
         product: '@product_option_2_spanish_event'
         title: 'Chair'
         heading: ''
         description: ''
         addon: ''
-        locale: 'en'
+        locale: 'es'
+
+Proximum\Vimeet\Domain\Model\Product\Feature:
+    feature_1_spanish_event:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+    feature_2_spanish_event:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+    feature_3_spanish_event:
+        __construct: false
+        product: '@product_plan_1_spanish_event'
+    feature_4_spanish_event:
+        __construct: false
+        product: '@product_plan_2_spanish_event'
+    feature_5_spanish_event:
+        __construct: false
+        product: '@product_plan_2_spanish_event'
+    feature_6_spanish_event:
+        __construct: false
+        product: '@product_plan_2_spanish_event'
+    feature_7_spanish_event:
+        __construct: false
+        product: '@product_plan_2_spanish_event'
+    feature_8_spanish_event:
+        __construct: false
+        product: '@product_plan_2_spanish_event'
+
+Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
+    feature_translation_1_fr_spanish_event:
+        __construct: false
+        feature: '@feature_1_spanish_event'
+        locale: 'fr'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_1_es_spanish_event:
+        __construct: false
+        feature: '@feature_1_spanish_event'
+        locale: 'es'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_2_fr_spanish_event:
+        __construct: false
+        feature: '@feature_2_spanish_event'
+        locale: 'fr'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_2_es_spanish_event:
+        __construct: false
+        feature: '@feature_2_spanish_event'
+        locale: 'es'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_3_fr_spanish_event:
+        __construct: false
+        feature: '@feature_3_spanish_event'
+        locale: 'fr'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_3_es_spanish_event:
+        __construct: false
+        feature: '@feature_3_spanish_event'
+        locale: 'es'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_4_fr_spanish_event:
+        __construct: false
+        feature: '@feature_4_spanish_event'
+        locale: 'fr'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_4_es_spanish_event:
+        __construct: false
+        feature: '@feature_4_spanish_event'
+        locale: 'es'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_5_fr_spanish_event:
+        __construct: false
+        feature: '@feature_5_spanish_event'
+        locale: 'fr'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_5_es_spanish_event:
+        __construct: false
+        feature: '@feature_5_spanish_event'
+        locale: 'es'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_6_fr_spanish_event:
+        __construct: false
+        feature: '@feature_6_spanish_event'
+        locale: 'fr'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_6_es_spanish_event:
+        __construct: false
+        feature: '@feature_6_spanish_event'
+        locale: 'es'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_7_fr_spanish_event:
+        __construct: false
+        feature: '@feature_7_spanish_event'
+        locale: 'fr'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_7_es_spanish_event:
+        __construct: false
+        feature: '@feature_7_spanish_event'
+        locale: 'es'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_8_fr_spanish_event:
+        __construct: false
+        feature: '@feature_8_spanish_event'
+        locale: 'fr'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+    feature_translation_8_es_spanish_event:
+        __construct: false
+        feature: '@feature_8_spanish_event'
+        locale: 'es'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
 
 Proximum\Vimeet\Domain\Model\Package:
     package_spanish_event:
@@ -510,14 +634,14 @@ Proximum\Vimeet\Domain\Model\PackageTranslation:
         __construct: false
         package: '@package_spanish_event'
         locale: 'fr'
-        plansLabel: 'Formules Rendez-vous d’Affaires'
+        plansLabel: 'Formules'
         participantAndPlanningLabel: 'Participants & plannings'
         optionsLabel: 'Options'
-    package_spanish_event_en:
+    package_spanish_event_es:
         __construct: false
         package: '@package_spanish_event'
-        locale: 'en'
-        plansLabel: 'Business Meetings Formula'
+        locale: 'es'
+        plansLabel: 'Plan'
         participantAndPlanningLabel: 'Participants & plannings'
         optionsLabel: 'Options'
 
@@ -553,9 +677,9 @@ Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
         locale: 'fr'
         label: 'Options d’exposition'
         group: '@package_group_1_spanish_event'
-    package_group_1_spanish_event_en:
+    package_group_1_spanish_event_es:
         __construct: false
-        locale: 'en'
+        locale: 'es'
         label: 'Exhibiting options'
         group: '@package_group_1_spanish_event'
     package_group_2_spanish_event_fr:
@@ -563,9 +687,9 @@ Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
         locale: 'fr'
         label: "Options d'exposition et de communication"
         group: '@package_group_2_spanish_event'
-    package_group_2_spanish_event_en:
+    package_group_2_spanish_event_es:
         __construct: false
-        locale: 'en'
+        locale: 'es'
         label: 'Exhibiting and communication options'
         group: '@package_group_2_spanish_event'
     package_group_3_spanish_event_fr:
@@ -573,9 +697,9 @@ Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
         locale: 'fr'
         label: 'Options de communication'
         group: '@package_group_3_spanish_event'
-    package_group_3_spanish_event_en:
+    package_group_3_spanish_event_es:
         __construct: false
-        locale: 'en'
+        locale: 'es'
         label: 'Communication options'
         group: '@package_group_3_spanish_event'
 

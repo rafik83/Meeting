@@ -1,0 +1,31 @@
+<header class="header-product">
+    <h1>
+        <i class="icon-Panier_2"></i>
+        {{ 'package.title'|trans }}
+    </h1>
+
+    <ul class="tunnel-step">
+        {% for step in view.funnel.steps %}
+            <li class="li {% if step.completed %}complete{% endif %} {% if step == view.currentStep %}current{% endif %}">
+                <div class="number-step">{{ step.index }}</div>
+                <div class="name-step">
+                    <p>{{ step.title }}</p>
+                </div>
+            </li>
+        {% endfor %}
+
+        <li class="li">
+            <div class="number-step">4</div>
+            <div class="name-step">
+                <p>Récapitulatif & Facturation</p>
+            </div>
+        </li>
+
+        <li class="li">
+            <div class="number-step">5</div>
+            <div class="name-step">
+                <p>Paiement</p>
+            </div>
+        </li>
+    </ul>
+</header>

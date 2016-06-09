@@ -229,6 +229,15 @@ class Package
     }
 
     /**
+     * Return true if the package has at least a step activated
+     * @return bool
+     */
+    public function isPassable()
+    {
+        return $this->isPlansEnabled() || $this->isParticipantAndPlanningEnabled() || $this->isOptionsEnabled();
+    }
+
+    /**
      * @param string $locale
      * @param string $plansLabel
      * @param string $participantAndPlanningLabel

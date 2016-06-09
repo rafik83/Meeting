@@ -258,6 +258,14 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
+     * @return Package
+     */
+    public function getPackage()
+    {
+        return $this->getType()->getPackage();
+    }
+
+    /**
      * Set packageData.
      *
      * @param array $packageData
