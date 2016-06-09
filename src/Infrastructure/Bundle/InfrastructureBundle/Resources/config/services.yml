@@ -167,6 +167,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.promotion_code_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -769,6 +773,18 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
+    command.promotion_code.create_handler:
+        class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
+        arguments:
+            - '@repository.promotion_code_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
+    command.promotion_code.update_handler:
+        class: Proximum\Vimeet\Application\Command\PromotionCode\UpdateHandler
+        arguments:
+            - '@repository.promotion_code_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
 
     #
     # Security

@@ -82,13 +82,15 @@ class PromotionCode
     }
 
     /**
+     * @param string             $title
      * @param \DateTimeInterface $validUntil
      * @param int                $stock
      *
-     * @return $this
+     * @return PromotionCode
      */
-    public function update($validUntil, $stock)
+    public function update($title, $validUntil, $stock)
     {
+        $this->title      = $title;
         $this->validUntil = $validUntil;
         $this->stock      = $stock;
 
@@ -177,5 +179,47 @@ class PromotionCode
     public function getStock()
     {
         return $this->stock;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasPromotion(Product $product)
+    {
+        return $this->promotions->exists(function (Promotion $promotion) use ($product) {
+            return $promotion->getProduct() === $product;
+        });
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return Promotion
+     */
+    public function getPromotion(Product $product)
+    {
+        return $this->promotions->filter(function (Promotion $promotion) use ($product) {
+            return $promotion->getProduct() === $product;
+        })->first();
+    }
+
+    /**
+     * @param Product $product
+     * @param string  $type
+     * @param int     $value
+     *
+     * @return PromotionCode
+     */
+    public function setPromotion(Product $product, $type, $value)
+    {
+        if ($this->hasPromotion($product)) {
+            $this->getPromotion($product)->update($type, $value);
+        } else {
+            $this->promotions->add(new Promotion($this, $product, $type, $value));
+        }
+
+        return $this;
     }
 }

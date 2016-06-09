@@ -106,4 +106,18 @@ class Promotion
     {
         return $this->value;
     }
+
+    /**
+     * @param $type
+     * @param $value
+     *
+     * @return Promotion
+     */
+    public function update($type, $value)
+    {
+        $this->type  = $type;
+        $this->value = $value;
+
+        return $this;
+    }
 }

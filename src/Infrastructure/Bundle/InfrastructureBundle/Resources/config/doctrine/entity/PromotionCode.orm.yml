@@ -22,6 +22,11 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation
             mappedBy: promotionCode
+            indexBy: locale
+            cascade: ["all"]
+            orphanRemoval: true
         promotions:
             targetEntity: Proximum\Vimeet\Domain\Model\Promotion
             mappedBy: promotionCode
+            cascade: ["all"]
+            orphanRemoval: true

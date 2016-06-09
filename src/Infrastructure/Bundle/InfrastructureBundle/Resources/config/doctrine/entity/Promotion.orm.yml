@@ -20,3 +20,6 @@ Proximum\Vimeet\Domain\Model\Promotion:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
                 onDelete: CASCADE
+    uniqueConstraints:
+        unique_promotion_product:
+            columns: [promotion_code_id, product_id]
