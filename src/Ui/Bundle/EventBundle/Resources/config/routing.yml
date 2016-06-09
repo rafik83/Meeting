@@ -405,3 +405,18 @@ event_notification_read:
         notification: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:read }
+
+#
+# Package
+#
+event_package:
+    path: /package
+    defaults: { _controller: EventBundle:Package:redirect }
+    methods: [GET]
+event_package_step:
+    path: /sheet/{sheet}/package/step/{step}
+    defaults: { _controller: EventBundle:Package:step }
+    requirements:
+        sheet: \d+
+        step: \d+
+    methods:  [GET, POST]

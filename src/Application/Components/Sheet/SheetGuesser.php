@@ -51,14 +51,6 @@ class SheetGuesser
             throw new \Exception('Sheet not found.');
         }
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()) {
-            throw new \Exception('Sheet not found');
-        }
-
-        if (!$sheet->hasUser($user)) {
-            throw new \Exception('No participant for this user is attached on this sheet');
-        }
-
         if (!$eventView->hasLocale($locale)) {
             throw new \Exception('Locale not available for this event.');
         }

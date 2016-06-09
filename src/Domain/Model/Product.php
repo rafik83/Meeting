@@ -270,6 +270,16 @@ class Product
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getHeading($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getHeading() : '';
+    }
+
+    /**
      * @return string
      */
     public function getName()

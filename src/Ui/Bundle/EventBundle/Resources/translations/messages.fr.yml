@@ -62,5 +62,15 @@ sheet:
     participant:
         sendInvite: Envoyer l'invitation
 
+package:
+    title: Forfait de participation
+    select: "Sélectionner:"
+    vatMode:
+        et: HT
+        ati: TTC
+    plans:
+        validate: Valider
+        seeMore: Voir la suite des prestations
+
 billing_info:
     title: Info de facturation

@@ -159,6 +159,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.cart_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
+        arguments:
+        - '@doctrine.orm.entity_manager'
     repository.billing_info_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
@@ -752,6 +756,13 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.package.step.select_plans_handler:
+        class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
+        arguments:
+            - '@repository.cart_row_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.info.update_info_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateInfoHandler
         arguments:
@@ -1078,6 +1089,34 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
+    query.package.plan_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PlanViewQueryHandler
+        arguments:
+            - '@query.package.features_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanViewQuery }
+    query.package.plans_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PlansViewQueryHandler
+        arguments:
+            - '@query.package.plan_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlansViewQuery }
+    query.package.feature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\FeatureViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\FeatureViewQuery }
+    query.package.features_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\FeaturesViewQueryHandler
+        arguments:
+            - '@query.package.feature_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\FeaturesViewQuery }
+    query.package.package_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\PackageViewQueryHandler
+        arguments:
+            - '@query.package.plans_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
 
     #
     # Elastic Transformer
@@ -1104,3 +1143,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\BuildEventGuidelineAssetCommand
         tags:
             - { name: console.command }
+
+    #
+    # Funnel
+    #
+    package.funnel.funnel_factory:
+        class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
+        arguments:
+            - '@repository.cart_row_repository'

@@ -73,13 +73,13 @@
                             <li>
                                 <a href="{{ path('event_sheet') }}" class="btn btn-lg">
                                     <i class="icon-Document_1"></i>
-                                    <span class="name">Fiche de présentation</span>
+                                    <span class="name">{{ 'sheet.title'|trans }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="" class="btn btn-lg btn-inactive">
+                                <a href="{{ path('event_package') }}" class="btn btn-lg btn-inactive">
                                     <i class="icon-Panier_2"></i>
-                                    <span class="name">Forfait de participation</span>
+                                    <span class="name">{{ 'package.title'|trans }}</span>
                                 </a>
                             </li>
                         </ul>

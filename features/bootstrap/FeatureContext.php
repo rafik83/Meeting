@@ -252,6 +252,48 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When /^(?:|I )check radio "([^"]*)"$/
+     */
+    public function iCheckRadio($radio)
+    {
+        $page = $this->getSession()->getPage();
+
+        $element = $page->findById($radio);
+
+        if ($element->getTagName() === 'input') {
+            $this->fillField(
+                $element->getAttribute('name'),
+                true
+            );
+
+            return;
+        }
+
+        throw new \Exception('Radio button not found');
+    }
+
+    /**
+     * @When /^The radio "([^"]*)" should be checked$/
+     */
+    public function theRadioShouldBeChecked($radio)
+    {
+        $page = $this->getSession()->getPage();
+
+        $element = $page->findById($radio);
+
+        if ($element->getTagName() === 'input') {
+            // Behat return 1 instead of true for the value of a radio
+            if ((bool) $element->getValue() !== true) {
+                throw new \Exception('The radio button is not checked');
+            }
+
+            return;
+        }
+
+        throw new \Exception('Radio button not found');
+    }
+
+    /**
      * @When I select the quantity :quantity for the checkbox :checkbox
      */
     public function iSelectTheQuantityForTheCheckbox($quantity, $checkbox)

@@ -1,0 +1,372 @@
+.main {
+    > .header-product {
+        height: 90px;
+        position: relative;
+
+        h1 {
+          position: absolute;
+          bottom: 34px;
+      }
+    }
+}
+
+.product {
+    padding-left: 25px;
+    position: relative;
+
+    .step-number-title {
+        font-size: 20px;
+        font-family: 'OpenSans';
+        font-weight: bold;
+        border-width: 2px 0;
+        color: #FFF;
+        padding: 4px 10px 4px 25px;
+        display: block;
+        position: absolute;
+        left: -40px;
+        top: 0;
+        @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+        &:after {
+
+        }
+
+        &:before {
+            border-color: $color-primary transparent transparent transparent;
+            position: absolute;
+            left: 0;
+            border-width: 11px 0 0 15px;
+            display: block;
+            border-style: solid;
+            bottom: -11px;
+            content: '';
+        }
+    }
+
+    h2 { text-transform: none; }
+
+    .row { margin-bottom: 20px; }
+
+    .category-option {
+        margin-left: 20px;
+        color: #FFF;
+        background: #333333;
+        border-radius: 20px;
+        padding: 5px 12px;
+    }
+
+    .object--participant {
+        .user__container {
+            background: #fff;
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+
+            .list--users {
+                padding: 25px 35px;
+                height: 145px;
+                width: 100%;
+                .user {
+                    margin-bottom: 0;
+                }
+            }
+
+            .user__formule {
+                border-left: solid 1px #CCC;
+                font-family: 'OpenSans';
+                padding: 25px 0;
+                height: 145px;
+                width: 50%;
+                text-align: center;
+
+                .ranking-formule {
+                    background: #F2E63D;
+                    display: inline-block;
+                    padding: 5px 8px;
+                    border-radius: 4px;
+                }
+
+                h2 {
+                    color: $color-highlighted;
+                    display: inline-block;
+                    font-size: 40px;
+                    margin-top: 5px;
+                    margin-bottom: 0;
+                    sup {
+                        font-size: 20px;
+                        top: -0.8em;
+                    }
+                    span.included-formule {
+                        font-size: 15px;
+                        font-family: 'RobotoRegular';
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+
+    .form--table {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        .form-group:nth-of-type(odd) {
+            background-color: #FFF;
+        }
+        .form-group {
+            margin-bottom: 0;
+
+            .checkbox {
+                margin: 0;
+                label { margin-bottom: -7px; }
+                input {
+                    margin-top: 30px;
+                    margin-left: -5px;
+                }
+            }
+
+            .selected-line {
+                border: solid 3px $color-highlighted;
+                margin: -3px;
+            }
+
+            .table {
+                margin-bottom: 0;
+
+                tbody {
+                    tr td {
+                        border-top: 0;
+                        border-right: solid 1px #CCC;
+                        padding: 20px;
+                        &:last-child { border-right: 0; }
+
+                        h3 {
+                            font-size: 24px;
+                            text-transform: none;
+                        }
+
+                        dl {
+                            border-top: solid 1px #CCC;
+                            padding-top: 10px;
+                            margin-bottom: 0;
+                            &:first-child {
+                                border-top: 0;
+                                padding-top: 0;
+                            }
+                            dt {
+                                font-family: 'OpenSans';
+                                font-size: 18px;
+                            }
+                            dd { padding-bottom: 10px; }
+                        }
+
+                        .product {
+                            font-family: 'OpenSans';
+
+                            h2 { margin-bottom: 0; }
+                            h3 { margin-bottom: 0; }
+
+                            .product-price {
+                                display: block;
+                                font-size: 40px;
+                                color: $color-highlighted;
+                                sup {
+                                    font-size: 20px;
+                                    top: -0.8em;
+                                }
+                            }
+
+                            .product-limite {
+                                background: #F2E63D;
+                                display: inline-block;
+                                padding: 8px;
+                                border-radius: 4px;
+                            }
+
+                            .additional-planning {
+                                color: $color-highlighted;
+                                font-size: 24px;
+                            }
+                        }
+
+                        .select-quantity {
+                            text-align: center;
+                            font-size: 26px;
+                            margin: 8px 0 12px 0;
+
+                            input {
+                                margin-left: -8px;
+                                margin-top: 0;
+                                font-weight: bold;
+                                font-family: 'OpenSans';
+                            }
+
+                            .qty {
+                                border: solid 2px #CCC;
+                                color: $color-highlighted;
+                                text-align: center;
+                                width: 45px;
+                                height: 45px;
+                            }
+                            .qtyplus,
+                            .qtyminus {
+                                width: 45px;
+                                height: 45px;
+                                background: #FFF;
+                                border: solid 2px #CCC;
+                                border-radius: 10px;
+                                color: #CCC;
+                            }
+                            .qtyplus {
+                                border-top-left-radius: 0;
+                                border-bottom-left-radius: 0;
+                            }
+                            .qtyminus {
+                                border-top-right-radius: 0;
+                                border-bottom-right-radius: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .form--table--head {
+        margin-bottom: 20px;
+
+
+        .hidden-unselected {
+            display: none;
+        }
+
+        .selected-line {
+            border: solid 3px $color-highlighted;
+            margin: -3px;
+
+            .hidden-unselected {
+                display: block;
+            }
+
+            .hidden-selected {
+                display: none;
+            }
+        }
+
+        .table {
+            margin-bottom: 0;
+
+            thead tr th,
+            tbody tr td {
+                border-right: solid 1px #CCC;
+                padding: 20px;
+                &:last-child { border-right: 0; }
+            }
+
+            thead {
+                font-family: 'OpenSans';
+                color: $color-highlighted;
+                text-transform: uppercase;
+
+                tr th {
+                    border-bottom: 0;
+                }
+            }
+
+            tbody {
+                tr td {
+                    border-top: 0;
+
+                    h3 {
+                        font-size: 24px;
+                        text-transform: none;
+                    }
+
+                    dl {
+                        border-top: solid 1px #CCC;
+                        padding-top: 10px;
+                        margin-bottom: 0;
+                        &:first-child {
+                            border-top: 0;
+                            padding-top: 0;
+                        }
+                        dt {
+                            font-family: 'OpenSans';
+                            font-size: 18px;
+                        }
+                        dd { padding-bottom: 10px; }
+                    }
+
+                    .product {
+                        font-family: 'OpenSans';
+
+                        h2 { margin-bottom: 0; }
+                        h3 { margin-bottom: 0; }
+
+                        .product-price {
+                            display: block;
+                            font-size: 40px;
+                            color: $color-highlighted;
+                            sup {
+                                font-size: 20px;
+                                top: -0.8em;
+                            }
+                        }
+
+                        .product-limite {
+                            background: #F2E63D;
+                            display: inline-block;
+                            padding: 8px;
+                            border-radius: 4px;
+                        }
+
+                        .additional-planning {
+                            color: $color-highlighted;
+                            font-size: 24px;
+                        }
+                    }
+
+                    .out-of-stock { color: $color-highlighted; }
+
+                    .select-quantity {
+                        text-align: center;
+                        font-size: 26px;
+                        margin: 8px 0 12px 0;
+
+                        input {
+                            margin-left: -8px;
+                            margin-top: 0;
+                            font-weight: bold;
+                            font-family: 'OpenSans';
+                        }
+
+                        .qty {
+                            border: solid 2px #CCC;
+                            color: $color-highlighted;
+                            text-align: center;
+                            width: 45px;
+                            height: 45px;
+                        }
+                        .qtyplus,
+                        .qtyminus {
+                            width: 45px;
+                            height: 45px;
+                            background: #FFF;
+                            border: solid 2px #CCC;
+                            border-radius: 10px;
+                            color: #CCC;
+                        }
+                        .qtyplus {
+                            border-top-left-radius: 0;
+                            border-bottom-left-radius: 0;
+                        }
+                        .qtyminus {
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
