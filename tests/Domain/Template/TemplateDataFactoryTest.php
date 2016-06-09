@@ -93,4 +93,36 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
         // Assert getData() give back the data array
         $this->assertEquals($data, $templateData->getData());
     }
+
+    public function testCreateWithMissingTemplate()
+    {
+        $template = [
+            'ec74be5e' => [
+                'component' => 'object',
+                'type'      => 'text',
+                'config'    => [
+                    'content' => ['fr' => 'Lorem ipsum']
+                ],
+            ],
+        ];
+
+        $data = [
+            'ec74be5e' => [
+                'text' => ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
+            ],
+            '0aea62b2' => [
+                'text' => ['fr' => 'Lorem ipsum 0aea62b2 fr', 'en' => 'Lorem ipsum 0aea62b2 en'],
+            ],
+        ];
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+
+        $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
+        $templateData = $factory->create($template, $data, 'fr', 'fr');
+
+        // Assert objects are created
+        $objects = $templateData->getObjects();
+        $this->assertCount(1, $objects);
+        $this->assertArrayHasKey('ec74be5e', $objects);
+    }
 }
