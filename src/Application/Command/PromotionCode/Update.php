@@ -73,4 +73,20 @@ class Update
             ];
         }
     }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasPromotion(Product $product)
+    {
+        foreach ($this->promotions as $promotion) {
+            if ($product === $promotion['product']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -34,7 +34,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $update->promotionCode->update($update->title, $update->code, $update->validUntil, $update->stock);
+        $update->promotionCode->update($update->title, $update->code, $update->stock, $update->validUntil);
 
         foreach ($update->translations as $locale => $translation) {
             $update->promotionCode->translate($locale, $translation['label'], $translation['description']);
@@ -42,6 +42,12 @@ class UpdateHandler
 
         foreach ($update->promotions as $promotion) {
             $update->promotionCode->setPromotion($promotion['product'], $promotion['type'], $promotion['value']);
+        }
+
+        foreach ($update->promotionCode->getPromotions() as $promotion) {
+            if (!$update->hasPromotion($promotion->getProduct())) {
+                $update->promotionCode->removePromotion($promotion);
+            }
         }
 
         $this->promotionCodeRepository->set($update->promotionCode);

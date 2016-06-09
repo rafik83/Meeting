@@ -59,6 +59,7 @@ class PromotionCode
      *
      * @param Event  $event
      * @param string $title
+     * @param string $code
      */
     public function __construct(Event $event, $title, $code)
     {
@@ -90,17 +91,17 @@ class PromotionCode
     /**
      * @param string             $title
      * @param string             $code
-     * @param \DateTimeInterface $validUntil
      * @param int                $stock
+     * @param \DateTimeInterface $validUntil
      *
      * @return PromotionCode
      */
-    public function update($title, $code, $validUntil, $stock)
+    public function update($title, $code, $stock, \DateTimeInterface $validUntil = null)
     {
         $this->title      = $title;
         $this->code       = $code;
-        $this->validUntil = $validUntil;
         $this->stock      = $stock;
+        $this->validUntil = $validUntil;
 
         return $this;
     }
@@ -206,7 +207,7 @@ class PromotionCode
      */
     public function hasPromotion(Product $product)
     {
-        return $this->promotions->exists(function (Promotion $promotion) use ($product) {
+        return $this->promotions->exists(function ($key, Promotion $promotion) use ($product) {
             return $promotion->getProduct() === $product;
         });
     }
@@ -237,6 +238,18 @@ class PromotionCode
         } else {
             $this->promotions->add(new Promotion($this, $product, $type, $value));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param Promotion $promotion
+     *
+     * @return PromotionCode
+     */
+    public function removePromotion(Promotion $promotion)
+    {
+        $this->promotions->removeElement($promotion);
 
         return $this;
     }

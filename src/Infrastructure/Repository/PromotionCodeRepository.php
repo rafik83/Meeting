@@ -48,4 +48,20 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     {
         $this->entityManager->flush($promotionCode);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->where('promotion_code.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

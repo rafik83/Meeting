@@ -13,20 +13,22 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
             type: string
         validUntil:
             type: datetime
+            nullable: true
         stock:
             type: integer
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation
             mappedBy: promotionCode
             indexBy: locale
-            cascade: ["all"]
-            orphanRemoval: true
+            cascade: ["persist"]
         promotions:
             targetEntity: Proximum\Vimeet\Domain\Model\Promotion
             mappedBy: promotionCode

@@ -297,6 +297,21 @@ admin:
         availabilityCurrentMax: Disponibilité courante / max
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
+    promotion_code:
+        link: Codes promos
+        title: Codes promos
+        new: Nouveau code
+        action:
+            close: Fermer
+        table:
+            column:
+                title: Titre
+                stock: Stock
+                validUntil: Valide jusqu'au
+                action: Action
+            action:
+                edit: Modifier
+            no_result: Aucun code promo
     sheet:
         title: Participations
         link: Participations

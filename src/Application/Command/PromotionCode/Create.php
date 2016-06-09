@@ -23,4 +23,14 @@ class Create
      * @var string
      */
     public $title;
+
+    /**
+     * Create constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
 }
