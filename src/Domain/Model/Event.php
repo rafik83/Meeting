@@ -126,6 +126,13 @@ class Event implements EventInterface
     private $country;
 
     /**
+     * ISO 4217 3-letter currency code
+     *
+     * @var string
+     */
+    private $currency;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -380,5 +387,21 @@ class Event implements EventInterface
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
     }
 }
