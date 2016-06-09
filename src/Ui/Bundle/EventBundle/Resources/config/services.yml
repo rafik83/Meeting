@@ -38,6 +38,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\TranslationDomainExtension
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+    form_extension.select2:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\Select2Extension
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType' }
 
     #
     # Form type

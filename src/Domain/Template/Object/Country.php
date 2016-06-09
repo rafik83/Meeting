@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template\Object;
 
 use Proximum\Vimeet\Domain\Template\Object;
+use Symfony\Component\Intl\Intl;
 
 class Country extends EditableObject implements ContentObjectInterface
 {
@@ -40,6 +41,14 @@ class Country extends EditableObject implements ContentObjectInterface
     public function getContentValue()
     {
         return $this->getCountry() ? $this->getCountry() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentLabel()
+    {
+        return $this->getCountry() ? Intl::getRegionBundle()->getCountryName($this->getCountry()) : '';
     }
 
     /**

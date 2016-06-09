@@ -29,3 +29,23 @@
         </ul>
     {% endif %}
 {%- endblock form_errors -%}
+
+{%- block form_rows -%}
+    <div class="inputs">
+        {% for child in form %}
+            {{- form_row(child) -}}
+        {% endfor %}
+    </div>
+{%- endblock form_rows -%}
+
+{%- block submit_row -%}
+    <div class="validation">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block submit_widget -%}
+    {%- set type = type|default('submit') -%}
+    {%- set attr = attr|default({})|merge({'class': 'btn'}) -%}
+    {{ block('button_widget') }}
+{%- endblock -%}

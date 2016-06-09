@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 
 class Block extends AbstractChild
 {
@@ -178,7 +180,7 @@ class Block extends AbstractChild
             return $objects[$key];
         }
 
-        throw new \Exception("Object $key not found.");
+        throw new ObjectNotFoundException($key);
     }
 
     /**
@@ -328,6 +330,22 @@ class Block extends AbstractChild
         }
 
         return $tagged;
+    }
+
+    /**
+     * @param string $tag
+     *
+     * @return mixed
+     */
+    public function getTaggedContentLabel($tag)
+    {
+        $objects = new ArrayCollection($this->getObjects());
+
+        return $objects->filter(function (Object $object) use ($tag) {
+            return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
+        })->map(function (Object\ContentObjectInterface $object) {
+            return $object->getContentLabel();
+        })->first();
     }
 
     /**

@@ -979,3 +979,31 @@ form:
                     children:
                         title:
                             label: Titre
+    billing_info_update:
+        children:
+            lastname:
+                label: Nom
+            firstname:
+                label: Prénom
+            function:
+                label: Fonction
+            phone:
+                label: Téléphone
+            mobile:
+                label: Mobile
+            email:
+                label: Email
+            company:
+                label: Société
+            street:
+                label: Adresse
+            zipcode:
+                label: Code postal
+            city:
+                label: Ville
+            country:
+                label: Pays
+            vatNumber:
+                label: N° de TVA
+            submit:
+                label: Enregistrer

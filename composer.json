@@ -29,8 +29,8 @@
         "friendsofsymfony/elastica-bundle": "3.2.*@dev",
         "pagerfanta/pagerfanta": "^1.0",
         "elao/form-bundle": "^2.1",
-        "elao/form-translation-bundle": "~1.4",
-        "elao/theme-twitter-bootstrap-3-bundle": "2.0",
+        "elao/form-translation-bundle": "^2.0",
+        "elao/theme-twitter-bootstrap-3-bundle": "^2.0@dev",
         "elao/error-notifier-bundle": "1.0.7",
         "nelmio/alice": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "~2.3",
@@ -54,7 +54,7 @@
         "behat/mink-goutte-driver": "~1.2.1",
         "theofidry/alice-bundle-extension": "~1.1",
         "hautelook/alice-bundle": "~1.2.2",
-        "fabpot/php-cs-fixer": "^1.10",
+        "friendsofphp/php-cs-fixer": "^1.10",
         "phpmd/phpmd": "^2.4"
     },
     "scripts": {

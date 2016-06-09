@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d0206c1c9bdbf79dc35d140a337f126e",
-    "content-hash": "3ece41b52da0bd25cd5e2513cce4ad25",
+    "hash": "cd497d1472df0d59b1b8e8743b07b9ee",
+    "content-hash": "4eea71228feea6fdb1b0aa194f8dfd4d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1002,16 +1002,16 @@
         },
         {
             "name": "elao/form-translation-bundle",
-            "version": "v1.4",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoFormTranslationBundle.git",
-                "reference": "60245b345c3bbde8177f5d039c560e8116c615ff"
+                "reference": "91f8c5b27efaea99a0be87a5ff3557268d13b2f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/60245b345c3bbde8177f5d039c560e8116c615ff",
-                "reference": "60245b345c3bbde8177f5d039c560e8116c615ff",
+                "url": "https://api.github.com/repos/Elao/ElaoFormTranslationBundle/zipball/91f8c5b27efaea99a0be87a5ff3557268d13b2f2",
+                "reference": "91f8c5b27efaea99a0be87a5ff3557268d13b2f2",
                 "shasum": ""
             },
             "require": {
@@ -1024,7 +1024,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -1053,20 +1053,20 @@
                 "form",
                 "translation"
             ],
-            "time": "2015-12-10 09:06:01"
+            "time": "2015-12-22 09:01:08"
         },
         {
             "name": "elao/theme-twitter-bootstrap-3-bundle",
-            "version": "v2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle.git",
-                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4"
+                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/9633412138630396fd6ca6515d5bc4fec2265ad4",
-                "reference": "9633412138630396fd6ca6515d5bc4fec2265ad4",
+                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/024e50ed688305577b0512329ec64724ddb5bf6d",
+                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d",
                 "shasum": ""
             },
             "require": {
@@ -1108,7 +1108,7 @@
                 "theme-bundle",
                 "twitter"
             ],
-            "time": "2015-12-14 09:15:39"
+            "time": "2016-06-07 15:42:52"
         },
         {
             "name": "erusev/parsedown",
@@ -3677,7 +3677,7 @@
             "time": "2015-11-05 12:58:44"
         },
         {
-            "name": "fabpot/php-cs-fixer",
+            "name": "friendsofphp/php-cs-fixer",
             "version": "v1.11.4",
             "source": {
                 "type": "git",
@@ -3728,7 +3728,6 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "abandoned": "friendsofphp/php-cs-fixer",
             "time": "2016-06-07 07:51:27"
         },
         {
@@ -5391,16 +5390,16 @@
         },
         {
             "name": "theofidry/alice-bundle-extension",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theofidry/AliceBundleExtension.git",
-                "reference": "36d94aa917fe2a94a7e6ebbe0bb076e36ab64112"
+                "reference": "c731f255d6c21ba20f955662ce9f43b5ff886a9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/AliceBundleExtension/zipball/36d94aa917fe2a94a7e6ebbe0bb076e36ab64112",
-                "reference": "36d94aa917fe2a94a7e6ebbe0bb076e36ab64112",
+                "url": "https://api.github.com/repos/theofidry/AliceBundleExtension/zipball/c731f255d6c21ba20f955662ce9f43b5ff886a9a",
+                "reference": "c731f255d6c21ba20f955662ce9f43b5ff886a9a",
                 "shasum": ""
             },
             "require": {
@@ -5450,7 +5449,7 @@
                 "orm",
                 "symfony"
             ],
-            "time": "2016-05-10 09:11:10"
+            "time": "2016-06-07 14:53:02"
         },
         {
             "name": "webmozart/assert",
@@ -5506,7 +5505,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "sonata-project/intl-bundle": 20,
-        "friendsofsymfony/elastica-bundle": 20
+        "friendsofsymfony/elastica-bundle": 20,
+        "elao/theme-twitter-bootstrap-3-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

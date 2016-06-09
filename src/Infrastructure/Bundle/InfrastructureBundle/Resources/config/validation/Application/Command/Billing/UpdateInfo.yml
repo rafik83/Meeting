@@ -1,0 +1,37 @@
+Proximum\Vimeet\Application\Command\Billing\UpdateInfo:
+    properties:
+        billingInfo:
+            - NotBlank: ~
+        lastname:
+            - NotBlank: ~
+            - Type: { type: string }
+        firstname:
+            - NotBlank: ~
+            - Type: { type: string }
+        function:
+            - Type: { type: string }
+        phone:
+            - Type: { type: string }
+        mobile:
+            - Type: { type: string }
+        email:
+            - NotBlank: ~
+            - Email: ~
+            - Type: { type: string }
+        company:
+            - NotBlank: ~
+            - Type: { type: string }
+        street:
+            - NotBlank: ~
+            - Type: { type: string }
+        zipcode:
+            - NotBlank: ~
+            - Type: { type: string }
+        city:
+            - NotBlank: ~
+            - Type: { type: string }
+        country:
+            - NotBlank: ~
+            - Type: { type: string }
+        vatNumber:
+            - Type: { type: string }

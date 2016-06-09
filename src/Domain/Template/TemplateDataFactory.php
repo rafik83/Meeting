@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 
 class TemplateDataFactory
 {
@@ -166,7 +167,11 @@ class TemplateDataFactory
         }
 
         foreach ($data as $key => $value) {
-            $templateData->getObject($key)->setData($value ? : []);
+            try {
+                $templateData->getObject($key)->setData($value ? : []);
+            } catch (ObjectNotFoundException $exception) {
+                // Don't try to set data if object not found
+            }
         }
 
         return $templateData;

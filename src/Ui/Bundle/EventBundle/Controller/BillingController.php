@@ -10,14 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Billing\Update;
-use Proximum\Vimeet\Application\Exception\Data\RequiredDataEmptyException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\BillingUpdateType;
+use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
+use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\UpdateInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,44 +24,31 @@ class BillingController extends Controller
     /**
      * @param Request   $request
      * @param EventView $eventView
-     * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function billingAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function infoAction(Request $request, EventView $eventView)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->isGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
+        $sheet   = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
+        $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ? : new BillingInfo($sheet);
+        $country = $sheet->getEvent()->getCountry();
+
+        if (null === $info->getId()) {
+            $this->get('billing.prefiller')->prefill($info);
         }
 
-        $update = new Update($sheet, $sheet->getBillingData());
-
-        $form = $this->createForm(BillingUpdateType::class, $update, [
-            'template' => $sheet->getEvent()->getBillingTemplate(),
-            'locale'   => $request->getLocale(),
-        ]);
-        $form->add('submit', SubmitType::class);
+        $command = new UpdateInfo($info);
+        $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true, 'country' => $country]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($update);
-                $this->addFlash('success', 'flash.sheet.update_billing.success');
-
-                return $this->redirectToRoute('event_sheet_package_payment_mode', [
-                    'sheet' => $sheet->getId(),
-                ]);
-            } catch (RequiredDataEmptyException $exception) {
-                foreach ($exception->getKeys() as $key) {
-                    $form->get($key)->addError(new FormError('validators.field.required'));
-                }
-            }
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.billing.update_info.success');
         }
 
-        return $this->render('EventBundle:Billing:billing.html.twig', [
+        return $this->render('EventBundle:Billing:info.html.twig', [
             'eventView' => $eventView,
-            'sheet'     => $sheet,
             'form'      => $form->createView(),
         ]);
     }

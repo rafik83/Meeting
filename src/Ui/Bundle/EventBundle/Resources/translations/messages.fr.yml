@@ -71,3 +71,6 @@ package:
     plans:
         validate: Valider
         seeMore: Voir la suite des prestations
+
+billing_info:
+    title: Info de facturation
