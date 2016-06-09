@@ -167,6 +167,8 @@ class PackageController extends Controller
             if (null !== $cartRow) {
                 $command->plan = $cartRow->getProduct();
             }
+
+            return;
         }
     }
 }

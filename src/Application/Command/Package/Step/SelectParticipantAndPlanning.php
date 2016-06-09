@@ -12,4 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 class SelectParticipantAndPlanning extends AbstractStep
 {
+    /**
+     * @var int
+     */
+    public $planningQuantity = 0;
 }

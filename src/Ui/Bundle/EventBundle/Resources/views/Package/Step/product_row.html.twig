@@ -1,0 +1,29 @@
+<tr>
+    <td class="col-md-2">
+        <div class="product">
+            <span class="product-price">
+                {{ price }}
+                <sup>{{ currency }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+            </span>
+        </div>
+    </td>
+    <td class="col-md-6">
+        <h3>{{ title }}</h3>
+        <p>{{ description }}</p>
+    </td>
+    <td class="col-md-2">
+        <div class="select-quantity">
+            <input type="button" value="-" class="qtyminus" />
+            {{ form_widget(quantityForm, {attr: {class: 'qty'}}) }}
+            <input type="button" value="+" class="qtyplus" />
+        </div>
+    </td>
+    <td class="col-md-2">
+        <div class="product">
+            <span class="product-price text-center">
+                {{ total }}
+                <sup>{{ currency }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+            </span>
+        </div>
+    </td>
+</tr>

@@ -1,92 +1,82 @@
-<section class="object object--collection object--participant style--style-1 section">
-    <p>{{ view.products.participantsView.description }}</p>
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
 
-    <div class="row">
-        {% for participant in view.products.participantsView.participants %}
-            <div class="col-md-6">
-                <div class="user__container clearfix">
-                    <div class="list--users">
-                        {{ include('EventBundle:Participant:preview.html.twig', {participant: participant.card}) }}
-                    </div>
+{{ form_start(form) }}
+    {{ form_errors(form) }}
 
-                    <div class="user__formule">
-                        <h2>
-                            {% if participant.included %}
-                                {{ 'package.participants.included'|trans }}
-                            {% else %}
-                                {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
-                            {% endif %}
-                        </h2>
+    <section class="object object--collection object--participant style--style-1 section">
+        <p>{{ view.products.participantsView.description }}</p>
+
+        <div class="row">
+            {% for participant in view.products.participantsView.participants %}
+                <div class="col-md-6">
+                    <div class="user__container clearfix">
+                        <div class="list--users">
+                            {{ include('EventBundle:Participant:preview.html.twig', {participant: participant.card}) }}
+                        </div>
+
+                        <div class="user__formule">
+                            <h2>
+                                {% if participant.included %}
+                                    {{ 'package.participants.included'|trans }}
+                                {% else %}
+                                    {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
+                                {% endif %}
+                            </h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-
-    {#
-    <div class="row">
-        <div class="col-md-12">
-            <a href="#" class="pull-left">
-                <i class="icon-Effacer"></i> Supprimer des participants
-            </a>
-
-            <a href="#" class="btn pull-right">
-                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>Ajouter des participants
-            </a>
+            {% endfor %}
         </div>
-    </div>
-    #}
-</section>
-
-<div class="content-header">
-    <h2>{{ view.products.planningView.title }}</h2>
-</div>
-
-<section class="object object--collection style--style-1 section">
-    <form class="form--table--head">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Prix unitaire</th>
-                <th>Intitulé & description</th>
-                <th class="text-center">Quantité</th>
-                <th class="text-center">Total</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr>
-                <td width="200px">
-                    <div class="product">
-                        <span class="product-price">{{ view.products.planningView.price }} <sup>€ {{ ('package.vatMode.' ~ view.products.planningView.vatMode)|trans }}</sup></span>
-                    </div>
-                </td>
-                <td>
-                    <h3>{{ view.products.planningView.title }}</h3>
-                    <p>{{ view.products.planningView.description }}</p>
-                </td>
-                <td width="200px">
-                    <div class="select-quantity">
-                        <input type="button" value="-" class="qtyminus" field="quantity" />
-                        <input type="text" name="quantity" value="0" class="qty" />
-                        <input type="button" value="+" class="qtyplus" field="quantity" />
-                    </div>
-                </td>
-                <td width="200px">
-                    <div class="product">
-                        <span class="product-price text-center">{{ view.products.planningView.price }} <sup>€ {{ ('package.vatMode.' ~ view.products.planningView.vatMode)|trans }}</sup></span>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
 
         {#
         <div class="row">
             <div class="col-md-12">
-                <a href="#" class="btn pull-right"><i class="icon-Valider_3"></i>Valider vos participants et plannings</a>
+                <a href="#" class="pull-left">
+                    <i class="icon-Effacer"></i> Supprimer des participants
+                </a>
+
+                <a href="#" class="btn pull-right">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>Ajouter des participants
+                </a>
             </div>
         </div>
         #}
-    </form>
-</section>
+    </section>
+
+    <div class="content-header">
+        <h2>{{ view.products.planningView.title }}</h2>
+    </div>
+
+    <section class="object object--collection style--style-1 section">
+        <div class="form--table--head">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Prix unitaire</th>
+                    <th>Intitulé & description</th>
+                    <th class="text-center">Quantité</th>
+                    <th class="text-center">Total</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                    title: view.products.planningView.title,
+                    description: view.products.planningView.description,
+                    price: view.products.planningView.price,
+                    vatMode: view.products.planningView.vatMode,
+                    currency: '€',
+                    quantityForm: form.planningQuantity,
+                    total: 0
+                }) }}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>{{ 'package.participant_planning.validate'|trans }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}
