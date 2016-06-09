@@ -50,6 +50,14 @@ class Image extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
+    public function getContentLabel()
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setContentValue($value)
     {
         $this->setImage($value);

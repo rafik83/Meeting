@@ -37,6 +37,14 @@ class Url extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
+    public function getContentLabel()
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContentValue()
     {
         return $this->getUrl() ? $this->getUrl() : '';

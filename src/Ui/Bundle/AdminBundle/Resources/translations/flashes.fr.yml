@@ -184,3 +184,6 @@ flash:
     template:
         incomplete_translations:
             warning: Vous avez des traductions manquantes.
+    billing:
+        update_info:
+            success: Vos informations de facturation ont été mis à jour

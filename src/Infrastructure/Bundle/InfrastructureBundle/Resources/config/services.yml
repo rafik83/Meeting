@@ -159,6 +159,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.billing_info_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -208,12 +212,6 @@ services:
             - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
-    vimeet_infrastructure.vimeet.application.command.billing.update_handler:
-        class: Proximum\Vimeet\Application\Command\Billing\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\Update }
     vimeet_infrastructure.vimeet.application.command.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
@@ -754,6 +752,12 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
+    command.info.update_info_handler:
+        class: Proximum\Vimeet\Application\Command\Billing\UpdateInfoHandler
+        arguments:
+            - '@repository.billing_info_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
 
     #
     # Security
@@ -834,6 +838,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.template.completeness_calculator:
         class: Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator
+    sheet.sheet_guesser:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetGuesser
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Rule Component
@@ -1036,6 +1044,14 @@ services:
         class: Proximum\Vimeet\Domain\Account\Synchronizer
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
+
+    #
+    # Billing
+    #
+    billing.prefiller:
+        class: Proximum\Vimeet\Domain\Billing\Prefiller
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Queries
