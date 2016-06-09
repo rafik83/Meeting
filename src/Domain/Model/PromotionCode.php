@@ -25,9 +25,14 @@ class PromotionCode
     private $event;
 
     /**
+     * @var string
+     */
+    private $title;
+
+    /**
      * @var ArrayCollection
      */
-    private $products;
+    private $promotions;
 
     /**
      * @var ArrayCollection
@@ -45,40 +50,32 @@ class PromotionCode
     private $stock;
 
     /**
-     * @var string
-     */
-    private $mode;
-
-    /**
-     * @var float
-     */
-    private $value;
-
-    /**
      * PromotionCode constructor.
      *
-     * @param Event $event
+     * @param Event  $event
+     * @param string $title
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $title)
     {
+        $this->title        = $title;
         $this->event        = $event;
-        $this->products     = new ArrayCollection();
+        $this->promotions   = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
     /**
      * @param string $locale
-     * @param string $title
+     * @param string $label
      * @param string $description
      *
      * @return PromotionCode
      */
-    public function translate($locale, $title, $description)
+    public function translate($locale, $label, $description)
     {
         if ($this->translations->containsKey($locale)) {
-            $this->translations->get($locale)->update($title, $description);
+            $this->translations->get($locale)->update($label, $description);
         } else {
-            $this->translations->add(new PromotionCodeTranslation($this, $locale, $title, $description));
+            $this->translations->add(new PromotionCodeTranslation($this, $locale, $label, $description));
         }
 
         return $this;
@@ -87,17 +84,13 @@ class PromotionCode
     /**
      * @param \DateTimeInterface $validUntil
      * @param int                $stock
-     * @param string             $mode
-     * @param float              $value
      *
      * @return $this
      */
-    public function update($validUntil, $stock, $mode, $value)
+    public function update($validUntil, $stock)
     {
         $this->validUntil = $validUntil;
         $this->stock      = $stock;
-        $this->mode       = $mode;
-        $this->value      = $value;
 
         return $this;
     }
@@ -123,13 +116,23 @@ class PromotionCode
     }
 
     /**
-     * Get products
+     * Get title
      *
-     * @return ArrayCollection
+     * @return string
      */
-    public function getProducts()
+    public function getTitle()
     {
-        return $this->products;
+        return $this->title;
+    }
+
+    /**
+     * Get promotions
+     *
+     * @return Promotion[]
+     */
+    public function getPromotions()
+    {
+        return $this->promotions->toArray();
     }
 
     /**
@@ -143,15 +146,15 @@ class PromotionCode
     }
 
     /**
-     * Get title
+     * Get label
      *
      * @param string $locale
      *
      * @return string
      */
-    public function getTitle($locale)
+    public function getLabel($locale)
     {
-        return $this->translations->containsKey($locale)->getTitle();
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getLabel() : null;
     }
 
     /**
@@ -163,7 +166,7 @@ class PromotionCode
      */
     public function getDescription($locale)
     {
-        return $this->translations->containsKey($locale)->getDescription();
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : null;
     }
 
     /**
@@ -174,25 +177,5 @@ class PromotionCode
     public function getStock()
     {
         return $this->stock;
-    }
-
-    /**
-     * Get mode
-     *
-     * @return string
-     */
-    public function getMode()
-    {
-        return $this->mode;
-    }
-
-    /**
-     * Get value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 }

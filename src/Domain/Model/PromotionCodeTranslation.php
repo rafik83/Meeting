@@ -30,7 +30,7 @@ class PromotionCodeTranslation
     /**
      * @var string
      */
-    private $title;
+    private $label;
 
     /**
      * @var string
@@ -42,24 +42,24 @@ class PromotionCodeTranslation
      *
      * @param PromotionCode $promotionCode
      * @param string        $locale
-     * @param string        $title
+     * @param string        $label
      * @param string        $description
      */
-    public function __construct(PromotionCode $promotionCode, $locale, $title, $description)
+    public function __construct(PromotionCode $promotionCode, $locale, $label, $description)
     {
         $this->promotionCode = $promotionCode;
         $this->locale        = $locale;
-        $this->title         = $title;
+        $this->label         = $label;
         $this->description   = $description;
     }
 
     /**
-     * @param string $title
+     * @param string $label
      * @param string $description
      */
-    public function update($title, $description)
+    public function update($label, $description)
     {
-        $this->title       = $title;
+        $this->label       = $label;
         $this->description = $description;
     }
 
@@ -94,13 +94,13 @@ class PromotionCodeTranslation
     }
 
     /**
-     * Get title
+     * Get label
      *
      * @return string
      */
-    public function getTitle()
+    public function getLabel()
     {
-        return $this->title;
+        return $this->label;
     }
 
     /**
