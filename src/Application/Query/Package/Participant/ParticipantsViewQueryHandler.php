@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
+use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class ParticipantsViewQueryHandler
@@ -51,7 +52,7 @@ class ParticipantsViewQueryHandler
         if (null !== $selectedPlan) {
             $participantProductIncluded = $selectedPlan->getProduct()->getIncludedParticipantProduct();
 
-            if ($participantProductIncluded) {
+            if (false !== $participantProductIncluded && $participantProductIncluded instanceof ProductIncluded) {
                 $numberIncluded = $participantProductIncluded->getQuantity();
             }
         }
@@ -67,6 +68,8 @@ class ParticipantsViewQueryHandler
                     $numberIncluded > 0
                 )
             );
+
+            $numberIncluded--;
         }
 
         $participantsView = new ParticipantsView(

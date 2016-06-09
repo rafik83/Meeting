@@ -428,7 +428,7 @@ class Product
     public function getIncludedParticipantProduct()
     {
         return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
-            return $productIncluded->getProduct()->isParticipant();
+            return $productIncluded->getIncluded()->isParticipant();
         })->first();
     }
 
@@ -438,7 +438,7 @@ class Product
     public function getIncludedPlanningProduct()
     {
         return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
-            return $productIncluded->getProduct()->isPlanning();
+            return $productIncluded->getIncluded()->isPlanning();
         })->first();
     }
 
