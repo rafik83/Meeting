@@ -30,8 +30,8 @@ class ParticipantAndPlanningType extends AbstractType
         $builder->add('planningQuantity', TextType::class, [
             'label' => false,
             'attr'  => [
-                'min' => 0,
-                'max' => $package->getParticipant()->getQuantityMax(),
+                'data-min' => 0,
+                'data-max' => $package->getPlanning()->getQuantityMax(),
             ],
         ]);
     }

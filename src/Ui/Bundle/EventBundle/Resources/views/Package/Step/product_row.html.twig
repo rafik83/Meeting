@@ -1,4 +1,4 @@
-<tr>
+<tr class="row-quantity">
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -13,15 +13,15 @@
     </td>
     <td class="col-md-2">
         <div class="select-quantity">
-            <input type="button" value="-" class="qtyminus" />
-            {{ form_widget(quantityForm, {attr: {class: 'qty'}}) }}
-            <input type="button" value="+" class="qtyplus" />
+            <input type="button" value="-" class="qtyminus"/>
+            {{ form_widget(quantityForm, {attr: {'class': 'qty', 'data-unit-price': price}}) }}
+            <input type="button" value="+" class="qtyplus"/>
         </div>
     </td>
     <td class="col-md-2">
         <div class="product">
             <span class="product-price text-center">
-                {{ total }}
+                <span class="product-total-price">{{ total }}</span>
                 <sup>{{ currency }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
             </span>
         </div>
