@@ -1,34 +1,46 @@
-.btn {
-  position: relative;
-  color: $button-text-color !important;
-  font-size: 15px;
-  line-height: 22px;
-  font-family: OpenSans;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 18px;
-  transition: background .2s ease-in-out;
-  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
 
-  > i[class^='icon-'],
-  > img {
-    float: left;
-    margin-right: 5px;
-    font-size: 20px;
-    max-width: 20px;
-    max-height: 20px;
-  }
-
-  &:hover,
-  &:active {
-    color: $button-text-color;
-    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
-  }
+button, a {
+    &:active, &:hover, &:focus, &:link, &:target, &:visited {
+        outline:none !important;
+    }
 }
 
-.btn.btn-gray {
-  background: $bg-container-color !important;
-  color: #00398c !important;
+.btn {
+    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-lg {
+        position: relative;
+        font-size: 15px;
+        line-height: 22px;
+        font-family: OpenSans;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 18px;
+        transition: background .2s ease-in-out;
+
+        > i[class^='icon-'],
+        > img {
+            float: left;
+            margin-right: 5px;
+            font-size: 20px;
+            max-width: 20px;
+            max-height: 20px;
+        }
+
+        &:hover,
+        &:active {
+            color: $button-text-color;
+            @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+        }
+    }
+
+    &.btn-primary {
+        @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+        color: $button-text-color !important;
+    }
+
+    &.btn-gray {
+        background: $bg-container-color !important;
+        color: #00398c !important;
+    }
 }
 
 .btn-inactive {

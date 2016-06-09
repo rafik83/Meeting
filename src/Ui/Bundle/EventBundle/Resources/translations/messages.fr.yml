@@ -61,6 +61,13 @@ sheet:
             backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation
+    edit:
+        object: Editer "%label%"
+
+nomenclature:
+    select_all: Tous sélectionner
+    select_none: Aucun
+    back_to_sheet: Retour à la fiche
 
 package:
     title: Forfait de participation

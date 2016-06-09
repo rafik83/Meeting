@@ -1,6 +1,16 @@
 
 .object--nomenclature {
 
+    .badge-skill {
+        background-color: #222;
+        color: #fff;
+        text-transform: none;
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: normal;
+        font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif;
+    }
+
     ul {
         margin-bottom: 18px;
 
@@ -22,6 +32,10 @@
                 text-transform: uppercase;
             }
         }
+    }
+
+    .help {
+        color: #999;
     }
 
     .title-table {
@@ -47,8 +61,11 @@
 
     .border-table {
         border: solid 1px #CCC;
-        margin: 0 0 10px 40px;
         padding: 10px;
+
+        &.with-title {
+            margin: 0 0 10px 40px;
+        }
 
         .table {
             margin-bottom: 0;

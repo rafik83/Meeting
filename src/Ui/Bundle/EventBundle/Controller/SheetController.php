@@ -45,8 +45,6 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
-        $template      = $sheet->getType()->getSheetTemplate();
-        $data          = $sheet->getData();
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
@@ -62,15 +60,16 @@ class SheetController extends Controller
 
         $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
-            'template'      => $template,
-            'data'          => $data,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
+            'templateData'  => $templateData,
         ]);
     }
 
@@ -218,8 +217,6 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the object form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getSheetTemplate();
-        $data          = $sheet->getData();
         $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
@@ -242,8 +239,7 @@ class SheetController extends Controller
         return $this->render($twig, [
             'eventView'     => $eventView,
             'sheet'         => $sheet,
-            'template'      => $template,
-            'data'          => $data,
+            'templateData'  => $templateData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
             'taggedData'    => $taggedData,
@@ -323,8 +319,6 @@ class SheetController extends Controller
 
         // If the form is not valid, render the sheet and force the popin with the participant form
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $template      = $sheet->getType()->getSheetTemplate();
-        $data          = $sheet->getData();
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
                 $sheet,
@@ -342,11 +336,10 @@ class SheetController extends Controller
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'        => $eventView,
             'sheet'            => $sheet,
-            'template'         => $template,
-            'data'             => $data,
+            'templateData'     => $templateData,
             'locale'           => $locale,
             'nomenclatures'    => $nomenclatures,
-            'taggedData'    => $taggedData,
+            'taggedData'       => $taggedData,
             'form_participant' => $form->createView(),
             'label'            => $label,
             'uid'              => $key,

@@ -40,7 +40,7 @@
                 {{ form_row(form.password, {label: false}) }}
 
                 <div class="validation">
-                    <button type="submit" class="btn"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
+                    <button type="submit" class="btn btn-primary"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
                 </div>
                 {% if typeId %}
                     <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />

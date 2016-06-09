@@ -160,7 +160,7 @@ class TemplateDataFactory
      */
     public function create(array $template, array $data, $locale, $fallback)
     {
-        $templateData = new TemplateData('root', []);
+        $templateData = new TemplateData('root', [], $locale, $fallback);
 
         foreach ($this->doCreate($template, $locale, $fallback) as $name => $child) {
             $templateData->addChild(0, $name, $child);
@@ -228,7 +228,7 @@ class TemplateDataFactory
      */
     private function buildBlock(array $config, $locale, $fallback)
     {
-        $block = new Block($config['type'], $config['config']);
+        $block = new Block($config['type'], $config['config'], $locale, $fallback);
 
         foreach ($config['children'] as $column => $children) {
             $block->addColumn($column);

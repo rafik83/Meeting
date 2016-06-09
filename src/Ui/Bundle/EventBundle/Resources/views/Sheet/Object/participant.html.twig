@@ -1,7 +1,7 @@
 
-<section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ config['style'] }} section section--list">
+<section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ item.style }} section section--list">
     <header>
-        <h2>{{ config['label']|localize(locale, fallback) }}</h2>
+        <h2>{{ item.label(locale, fallback) }}</h2>
     </header>
     <div class="section__content">
         <div class="list list--users">
@@ -12,7 +12,7 @@
     </div>
     <footer>
         <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
-            <button class="btn"><img src="{{ asset('assets/images/icons/icon-user.png') }}">{{ 'sheet.object.action.add'|trans }} {{ config['label']|localize(locale, fallback) }}</button>
+            <button class="btn btn-primary"><img src="{{ asset('assets/images/icons/icon-user.png') }}">{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}</button>
         </a>
     </footer>
 </section>

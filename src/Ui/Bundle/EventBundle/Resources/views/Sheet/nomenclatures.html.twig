@@ -9,10 +9,14 @@
         {{ form_start(form) }}
             {{ form_errors(form) }}
             {% for key, child in form if key != 'submit' %}
-                {{ form_row(child) }}
+                {{ form_row(child, {
+                    'sheet_uri': path('event_sheet', { 'sheet': sheet.id }),
+                    'nomenclature_label': label
+                }) }}
             {% endfor %}
-            {{ form_widget(form.submit) }}
+            <div class="text-right mg-bt mg-tp clearboth">
+                {{ form_widget(form.submit) }}
+            </div>
         {{ form_end(form) }}
     </section>
-
 {% endblock %}

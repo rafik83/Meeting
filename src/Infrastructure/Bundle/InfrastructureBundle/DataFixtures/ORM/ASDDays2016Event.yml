@@ -271,7 +271,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 placeholder:
                                     fr: ""
                                 help:
-                                    fr: ""
+                                    fr: "Ces informations sont utilisées par le moteur de recherche : il propose des résultats conforme aux compétences des exposants avec les besoins des donneurs d'ordres."
                                 required: false
                                 mode: "checkboxes"
                                 default: 1

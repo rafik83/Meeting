@@ -149,6 +149,14 @@ class Nomenclature
     }
 
     /**
+     * @return NomenclatureItem[]
+     */
+    public function getChildren()
+    {
+        return $this->getItems();
+    }
+
+    /**
      * @param array $items
      *
      * @return NomenclatureItem[]
@@ -166,6 +174,31 @@ class Nomenclature
     public function getFirstLevel()
     {
         return $this->getItems();
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return NomenclatureItem[]
+     */
+    public function getFirstLevelSorted($locale)
+    {
+        $items = $this->getItems();
+
+        self::sort($items, $locale);
+
+        return $items;
+    }
+
+    /**
+     * @param array  $items
+     * @param string $locale
+     */
+    public static function sort(&$items, $locale)
+    {
+        usort($items, function (NomenclatureItem $one, NomenclatureItem $another) use ($locale) {
+            return strcasecmp($one->getLabel($locale), $another->getLabel($locale));
+        });
     }
 
     /**
@@ -239,5 +272,17 @@ class Nomenclature
         }
 
         return [];
+    }
+
+    /**
+     * @param array $keys
+     *
+     * @return bool
+     */
+    public function any(array $keys)
+    {
+        return !empty(array_filter($this->getChildren(), function (NomenclatureItem $item) use ($keys) {
+            return in_array($item->getKey(), $keys) || $item->any($keys);
+        }));
     }
 }

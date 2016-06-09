@@ -18,29 +18,11 @@ class Object extends AbstractChild
     protected $data;
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    protected $locale;
-
-    /**
-     * @var string
-     */
-    protected $fallback;
-
-    /**
-     * Object constructor.
-     *
-     * @param string $type
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
-     */
-    public function __construct($type, array $config, $locale, $fallback)
+    public function getComponent()
     {
-        parent::__construct($type, $config);
-
-        $this->locale   = $locale;
-        $this->fallback = $fallback;
+        return 'object';
     }
 
     /**
@@ -55,22 +37,6 @@ class Object extends AbstractChild
         $this->data = $data;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFallback()
-    {
-        return $this->fallback;
     }
     
     /**
@@ -121,9 +87,7 @@ class Object extends AbstractChild
      */
     public function getLabel($locale, $fallback)
     {
-        $label = $this->getOption('label');
-
-        return $locale ? isset($label[$locale]) ? $label[$locale] : $this->getLabel($fallback, null) : null;
+        return $this->getOption('label', $locale, $fallback);
     }
 
     /**
@@ -159,11 +123,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @param null|string $locale
+     * @param null|string $fallback
+     *
      * @return string|null
      */
-    public function getHelp()
+    public function getHelp($locale = null, $fallback = null)
     {
-        return $this->getOption('help', $this->locale);
+        return $this->getOption('help', $locale ? : $this->locale, $fallback ? : $this->fallback);
     }
 
     /**
@@ -172,5 +139,13 @@ class Object extends AbstractChild
     public function getRequired()
     {
         return null !== $this->getOption('required') ? $this->getOption('required') : false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->getOption('tag');
     }
 }

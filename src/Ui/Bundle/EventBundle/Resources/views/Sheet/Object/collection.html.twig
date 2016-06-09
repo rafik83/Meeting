@@ -1,16 +1,16 @@
 
-<section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ config['style'] }} section">
+<section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
     <header>
-        <h2>{{ config['label']|localize(locale, fallback) }}{% if config['required']|default(false) %}*{% endif %}</h2>
+        <h2>{{ item.label(locale, fallback) }}{% if item.required|default(false) %}*{% endif %}</h2>
     </header>
     <div class="section__content">
         <ul>
-            {% for list_item in data[uid]['items']|default([]) %}
+            {% for list_item in item.data['items']|default([]) %}
                 <li>{{ list_item['title']|localize(locale, fallback) }}</li>
             {% endfor %}
         </ul>
     </div>
     <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ config['label']|localize(locale, fallback) }}"</a>
+        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
     </footer>
 </section>

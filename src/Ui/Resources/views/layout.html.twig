@@ -12,40 +12,48 @@
             <div class="content-header clearfix">
                 <h1 class="pull-left">
                     <i class="icon-Valider_4"></i>
-                    {{ form_label(form) }}
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
                 </h1>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
             </div>
 
             <section class="object object--collection style--style-1 section">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="object--nomenclature">
-                            <h3 class="title-table">{{ nomenclature.title }}</h3>
 
-                            <div class="border-table">
-                                <table class="table table-striped">
-                                    <tbody>
-                                        {% for first_label_item in nomenclature.firstLevel %}
-                                            <tr>
-                                                <td>
-                                                    {{ form_row(form[first_label_item.key]) }}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                <header>
+                    <h2>{{ nomenclature_label }}</h2>
+                </header>
 
-                            <p class="link-table pull-right">
-                                <a href="#">Tous sélectionner</a> /
-                                <a href="#">Aucun</a>
-                            </p>
+                <div class="object--nomenclature">
+                    <div class="border-table">
+                        <div class="row">
+                            {% for table in nomenclature.firstLevelSorted(locale)|batch(nomenclature.firstLevel|length / 3) %}
+                                <div class="col-md-4">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            {% for first_label_item in table %}
+                                                <tr>
+                                                    <td>
+                                                        {{ form_row(form[first_label_item.key], { 'attr': { 'class': 'item' } }) }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
+
+                    <p class="link-table pull-right">
+                        <button type="button" class="btn btn-link" data-check-all-button=".item">{{ 'nomenclature.select_all'|trans }}</button>
+                        /
+                        <button type="button" class="btn btn-link" data-uncheck-all-button=".item">{{ 'nomenclature.select_none'|trans}}</button>
+                    </p>
                 </div>
             </section>
         </div>
@@ -54,25 +62,27 @@
             <div class="content-header clearfix">
                 <h1 class="pull-left">
                     <i class="icon-Valider_4"></i>
-                    {{ form_label(form) }}
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
                 </h1>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
             </div>
 
             <section class="object object--collection style--style-1 section">
                 <div class="row">
-                    {% for first_level_item in nomenclature.firstLevel %}
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                         <div class="col-md-4">
                             <div class="object--nomenclature">
                                 <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
 
-                                <div class="border-table">
+                                <div class="border-table with-title">
                                     <table class="table table-striped">
                                         <tbody>
-                                        {% for second_label_item in first_level_item.children %}
+                                        {% for second_label_item in first_level_item.childrenSorted(locale) %}
                                             <tr>
                                                 <td>
                                                     {{ form_row(form[second_label_item.key]) }}
@@ -84,8 +94,8 @@
                                 </div>
 
                                 <p class="link-table pull-right">
-                                    <a href="#">Tous sélectionner</a> /
-                                    <a href="#">Aucun</a>
+                                    <a href="#">{{ 'nomenclature.select_all'|trans }}</a> /
+                                    <a href="#">{{ 'nomenclature.select_none'|trans}}</a>
                                 </p>
                             </div>
                         </div>
@@ -98,11 +108,11 @@
             <div class="content-header clearfix">
                 <h1 class="pull-left">
                     <i class="icon-Valider_4"></i>
-                    {{ form_label(form) }}
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
                 </h1>
 
                 <ul class="nav nav-pills pull-left" role="tablist">
-                    {% for first_level_item in nomenclature.firstLevel %}
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                         <li role="presentation"{% if loop.first %} class="active"{% endif %}>
                             <a href="#{{ first_level_item.key }}" aria-controls="{{ first_level_item.key }}">
                                 {{ first_level_item.label(locale) }}
@@ -111,32 +121,33 @@
                     {% endfor %}
                 </ul>
 
-                <a href="#" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i>Retour à la fiche
-                </a>
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
             </div>
 
-
-            {% for first_level_item in nomenclature.firstLevel %}
+            {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                 <section class="object object--collection style--style-1 section">
-                    <div role="tabpanel" class="tab-pane{% if loop.first %} active{% endif %}" id="{{ first_level_item.key }}">
+                    <div id="{{ first_level_item.key }}">
                         <header>
                             <h2>{{ first_level_item.label(locale) }}</h2>
                         </header>
 
                         <div class="row">
-                            {% for second_level_item in first_level_item.children %}
+                            {% for second_level_item in first_level_item.childrenSorted(locale) %}
                                 <div class="col-md-4">
                                     <div class="object--nomenclature">
                                         <h3 class="title-table">{{ second_level_item.label(locale) }}</h3>
 
-                                        <div class="border-table">
+                                        <div class="border-table with-title">
                                             <table class="table table-striped">
                                                 <tbody>
-                                                    {% for third_label_item in second_level_item.children %}
+                                                    {% for third_label_item in second_level_item.childrenSorted(locale) %}
                                                         <tr>
                                                             <td>
-                                                                {{ form_row(form[third_label_item.key]) }}
+                                                                {{ form_row(form[third_label_item.key], { 'attr': { 'class': 'item-' ~ second_level_item.key } }) }}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -145,8 +156,9 @@
                                         </div>
 
                                         <p class="link-table pull-right">
-                                            <a href="#">Tous sélectionner</a> /
-                                            <a href="#">Aucun</a>
+                                            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+                                            /
+                                            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
                                         </p>
                                     </div>
                                 </div>

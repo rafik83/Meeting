@@ -2,7 +2,7 @@ var $                       = require('jquery'),
     bootstrap               = require('bootstrap'),
     tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
-    CheckAll                = require('./components/_CheckAll'),
+    CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
     Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
@@ -28,23 +28,6 @@ function init(target) {
                     o.refresh();
                 }
             });
-
-            /*
-            item.element.find('.collection').each(function (key, element) {
-
-                console.log(element);
-
-                var collection = $(element).data('collection');
-
-                console.log(collection); // => undefined
-
-                // trigger collection:deleted on sub collection items
-                //for (var i = 0, i < collection.items.length, i++) {
-                //    collection.element.trigger('collection:deleted', [collection.items[i]]);
-                //}
-            });
-            */
-
         });
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
@@ -90,7 +73,7 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
-    [].forEach.call(target.querySelectorAll('[data-check-all]'), function (element) { new CheckAll(element, element.getAttribute('data-check-all')); });
+    [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
@@ -111,10 +94,6 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
     });
-
-    //[].forEach.call(target.querySelectorAll('[data-shared-choices]'), function (element) {
-    //    new SharedChoices(element, '[data-shared-choices="' + element.getAttribute('data-shared-choices') + '"]');
-    //});
 }
 
 // Call init function when element is added to DOM

@@ -95,6 +95,20 @@ class NomenclatureItem
     }
 
     /**
+     * @param string $locale
+     *
+     * @return NomenclatureItem[]
+     */
+    public function getChildrenSorted($locale)
+    {
+        $children = $this->getChildren();
+
+        Nomenclature::sort($children, $locale);
+
+        return $children;
+    }
+
+    /**
      * Get grant children
      *
      * @return NomenclatureItem[]
@@ -114,5 +128,17 @@ class NomenclatureItem
     public function getLabel($locale)
     {
         return $this->label[$locale];
+    }
+
+    /**
+     * @param array $keys
+     *
+     * @return bool
+     */
+    public function any(array $keys)
+    {
+        return !empty (array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
+            return in_array($child->getKey(), $keys) || $child->any($keys);
+        }));
     }
 }

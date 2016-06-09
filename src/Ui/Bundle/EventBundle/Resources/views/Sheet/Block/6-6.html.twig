@@ -1,14 +1,12 @@
-<div class="row block block--6-6 {{ 'style--' ~ config['style'] }}">
+<div class="row block block--6-6 {{ 'style--' ~ item.style }}">
     <div class="col-md-6">
-        {% for uid, item in children[0]|default([]) %}
-            {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+        {% for uid, child in item.column(0) %}
+            {{ include('EventBundle:Sheet/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
                 'sheet': sheet,
                 'uid': uid,
-                'config': item.config,
-                'children': item.children|default([]),
+                'item': child,
                 'locale': locale,
                 'fallback': fallback|default,
-                'data': data,
                 'taggedData': taggedData,
                 'nomenclatures': nomenclatures,
                 'participants': participants,
@@ -16,15 +14,13 @@
         {% endfor %}
     </div>
     <div class="col-md-6">
-        {% for uid, item in children[1]|default([]) %}
-            {{ include('EventBundle:Sheet/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+        {% for uid, child in item.column(1) %}
+            {{ include('EventBundle:Sheet/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
                 'sheet': sheet,
                 'uid': uid,
-                'config': item.config,
-                'children': item.children|default([]),
+                'item': child,
                 'locale': locale,
                 'fallback': fallback|default,
-                'data': data,
                 'taggedData': taggedData,
                 'nomenclatures': nomenclatures,
                 'participants': participants,

@@ -88,8 +88,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
-        $templateData = new Template\TemplateData('root', []);
-        $block = new Template\Block('12', []);
+        $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
+        $block = new Template\Block('12', [], 'fr', 'fr');
         $editableText1 = new Template\Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
@@ -159,8 +159,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
-        $templateData = new Template\TemplateData('root', []);
-        $block = new Template\Block('12', []);
+        $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
+        $block = new Template\Block('12', [], 'fr', 'fr');
         $editableText1 = new Template\Object\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');

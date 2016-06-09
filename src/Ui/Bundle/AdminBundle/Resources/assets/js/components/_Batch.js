@@ -1,5 +1,5 @@
 
-var CheckAll    = require('./_CheckAll');
+var CheckAllCheckbox    = require('./_CheckAllCheckbox');
 
 /**
  * Batch component
@@ -14,7 +14,7 @@ function Batch(element)
 
     // Add check all
     [].forEach.call(element.querySelectorAll('[data-batch-all]'), function (item) {
-        new CheckAll(item, item.getAttribute('data-batch-all'));
+        new CheckAllCheckbox(item, item.getAttribute('data-batch-all'));
         item.addEventListener('change', this.toggle.bind(this));
     }.bind(this));
 
