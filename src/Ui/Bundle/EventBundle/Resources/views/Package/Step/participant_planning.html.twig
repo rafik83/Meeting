@@ -12,8 +12,7 @@
                     <div class="user__formule">
                         <h2>
                             {% if participant.included %}
-                                inclus
-                                <span class="included-formule">dans la formule</span>
+                                {{ 'package.participants.included'|trans }}
                             {% else %}
                                 {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
                             {% endif %}

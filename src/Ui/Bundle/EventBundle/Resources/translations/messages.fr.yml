@@ -78,6 +78,8 @@ package:
     plans:
         validate: Valider
         seeMore: Voir la suite des prestations
+    participants:
+        included: inclus
 
 billing_info:
     title: Info de facturation
