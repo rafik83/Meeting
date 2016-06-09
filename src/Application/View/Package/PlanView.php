@@ -48,6 +48,11 @@ class PlanView
     public $vatMode;
 
     /**
+     * @var string
+     */
+    public $currency;
+
+    /**
      * @var FeatureView[]
      */
     public $features;
@@ -60,6 +65,7 @@ class PlanView
      * @param string        $description
      * @param string        $image
      * @param string        $vatMode
+     * @param string        $currency
      * @param FeatureView[] $features
      */
     public function __construct(
@@ -70,6 +76,7 @@ class PlanView
         $description,
         $image,
         $vatMode,
+        $currency,
         array $features
     ) {
         $this->id          = $id;
@@ -79,6 +86,7 @@ class PlanView
         $this->description = $description;
         $this->image       = $image;
         $this->vatMode     = $vatMode;
+        $this->currency    = $currency;
         $this->features    = $features;
     }
 }
