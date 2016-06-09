@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\PromotionCode:
+    type:  entity
+    table: promotion_code
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        validUntil:
+            type: datetime
+        stock:
+            type: integer
+        mode:
+            type: string
+        value:
+            type: float
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+    manyToMany:
+        products:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation
+            mappedBy: promotionCode
