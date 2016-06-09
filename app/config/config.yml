@@ -71,7 +71,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: %kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity
+                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
 
@@ -100,10 +100,10 @@ sonata_intl:
 # Elastica
 fos_elastica:
     clients:
-        default: { host: %elastic_host%, port: %elastic_port% }
+        default: { host: "%elastic_host%", port: "%elastic_port%" }
     indexes:
         app:
-            index_name: app_%kernel.environment%
+            index_name: "app_%kernel.environment%"
             settings:
                 index:
                     analysis:
