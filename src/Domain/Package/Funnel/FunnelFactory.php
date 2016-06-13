@@ -41,7 +41,7 @@ class FunnelFactory
         $funnel  = new Funnel();
 
         if ($package->isPlansEnabled()) {
-            $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), STEP::TYPE_PLAN);
+            $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), Step::TYPE_PLAN);
             $funnel->addStep($step);
 
             $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($sheet);
@@ -52,12 +52,12 @@ class FunnelFactory
         }
 
         if ($package->isParticipantAndPlanningEnabled()) {
-            $step = new Step($this->getNextIndex($funnel), $package->getParticipantAndPlanningLabel($locale), STEP::TYPE_PARTICIPANT_PLANNING);
+            $step = new Step($this->getNextIndex($funnel), $package->getParticipantAndPlanningLabel($locale), Step::TYPE_PARTICIPANT_PLANNING);
             $funnel->addStep($step);
         }
 
         if ($package->isOptionsEnabled()) {
-            $step = new Step($this->getNextIndex($funnel), $package->getOptionsLabel($locale), STEP::TYPE_OPTIONS);
+            $step = new Step($this->getNextIndex($funnel), $package->getOptionsLabel($locale), Step::TYPE_OPTIONS);
             $funnel->addStep($step);
         }
 
