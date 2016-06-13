@@ -56,6 +56,7 @@ class EditableTextDataType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 'placeholder' => $options['placeholder'],
+                'label'       => false,
                 'attr'        => $attributes,
                 'required'    => $object->getRequired(),
             ])
