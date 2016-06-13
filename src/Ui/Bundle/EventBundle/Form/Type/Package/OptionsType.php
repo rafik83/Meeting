@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\Options;
-use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OptionsType extends AbstractType
@@ -20,12 +21,23 @@ class OptionsType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setRequired(['package']);
-        $optionsResolver->addAllowedTypes('package', Package::class);
-        $optionsResolver->setDefaults([
-            'data_class' => Options::class,
-        ]);
+        $optionsResolver->setRequired(['sheet']);
+        $optionsResolver->addAllowedTypes('sheet', Sheet::class);
+        $optionsResolver->setDefaults(
+            [
+                'data_class' => Options::class,
+            ]
+        );
     }
 }
