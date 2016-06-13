@@ -32,3 +32,6 @@ vimeet_admin:
 vimeet_event:
     resource: '@EventBundle/Resources/config/routing.yml'
     prefix:   /{_locale}
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
