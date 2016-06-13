@@ -42,13 +42,15 @@ class PromotionCodeType extends AbstractType
                 'label'         => false,
             ])
             ->add('promotions', CollectionType::class, [
-                'entry_type'    => PromotionType::class,
-                'entry_options' => [
-                    'event' => $options['event'],
-                    'label' => false
+                'entry_type'     => PromotionType::class,
+                'entry_options'  => [
+                    'event'          => $options['event'],
+                    'label'          => false,
+                    'error_bubbling' => false,
                 ],
-                'allow_add'     => true,
-                'allow_delete'  => true,
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'error_bubbling' => false,
             ])
         ;
     }

@@ -51,3 +51,5 @@ validators:
     promotion_code:
         code:
             already_exist: Ce code est déjà utilisé
+        promotion:
+            value: Indiquez une valeur
