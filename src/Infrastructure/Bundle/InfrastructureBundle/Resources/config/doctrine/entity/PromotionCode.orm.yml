@@ -34,3 +34,6 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
             mappedBy: promotionCode
             cascade: ["all"]
             orphanRemoval: true
+    uniqueConstraints:
+        unique_code_idx:
+            columns: event_id, code
