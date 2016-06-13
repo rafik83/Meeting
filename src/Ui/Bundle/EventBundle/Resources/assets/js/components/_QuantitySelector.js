@@ -1,11 +1,13 @@
 function QuantitySelector(element)
 {
-    this.input      = element.querySelector('input.qty');
-    this.max        = this.input.getAttribute('data-max');
-    this.min        = this.input.getAttribute('data-min');
-    this.min        = null !== this.min ? this.min : 0;
-    this.unitPrice  = this.input.getAttribute('data-unit-price');
-    this.totalPrice = element.querySelector('.product-total-price');
+    this.element           = element;
+    this.input             = element.querySelector('input.qty');
+    this.max               = this.input.getAttribute('data-max');
+    this.min               = this.input.getAttribute('data-min');
+    this.selectedLineClass = this.input.getAttribute('data-selected-line-class');
+    this.min               = null !== this.min ? this.min : 0;
+    this.unitPrice         = this.input.getAttribute('data-unit-price');
+    this.totalPrice        = element.querySelector('.product-total-price');
 
     element.querySelector('.qtyminus').addEventListener('click', function () {
         this.input.value--;
@@ -30,6 +32,14 @@ QuantitySelector.prototype.updateTotalPrice = function ()
 
     if (null === this.max || this.max <= this.input.value) {
         this.input.value = this.max;
+    }
+
+    if (null !== this.selectedLineClass) {
+        if (0 == this.input.value) {
+            this.element.classList.remove('selected-line');
+        } else {
+            this.element.classList.add('selected-line');
+        }
     }
 
     this.totalPrice.innerHTML = this.unitPrice * this.input.value;

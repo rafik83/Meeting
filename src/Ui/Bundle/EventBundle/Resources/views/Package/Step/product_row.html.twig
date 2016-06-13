@@ -19,7 +19,11 @@
 
         <div class="select-quantity">
             <input type="button" value="-" class="qtyminus"/>
-            {{ form_widget(quantityForm, {attr: {'class': 'qty', 'data-unit-price': product.price}}) }}
+            {{ form_widget(quantityForm, {attr: {
+                'class': 'qty',
+                'data-selected-line-class': 'selected-line',
+                'data-unit-price': product.price
+            }}) }}
             <input type="button" value="+" class="qtyplus"/>
         </div>
     </td>
