@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class CreateParticipant extends AbstractCreate
 {
 }
