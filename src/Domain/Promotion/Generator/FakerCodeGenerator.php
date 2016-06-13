@@ -8,16 +8,17 @@
 * @author Elao <contact@elao.com>
 */
 
-namespace Proximum\Vimeet\Domain\Promotion;
+namespace Proximum\Vimeet\Domain\Promotion\Generator;
 
 use Faker\Provider\Base;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class FakerCodeGenerator implements CodeGeneratorInterface
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function generate()
+    public function generate(Event $event)
     {
         return strtoupper(Base::lexify('??????'));
     }

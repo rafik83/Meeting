@@ -12,54 +12,17 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode;
 
 use Proximum\Vimeet\Application\Command\PromotionCode\Update;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Promotion;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class UpdateType extends PromotionCodeType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('title', TextType::class)
-            ->add('code', TextType::class)
-            ->add('validUntil', DateTimeType::class, ['required' => false])
-            ->add('stock', IntegerType::class, ['required' => false])
-            ->add('translations', TranslationsType::class, [
-                'locales'       => $options['event']->getLocales(),
-                'entry_type'    => TranslationType::class,
-                'entry_options' => [],
-                'label'         => false,
-            ])
-            ->add('promotions', CollectionType::class, [
-                'entry_type'    => PromotionType::class,
-                'entry_options' => [
-                    'event' => $options['event'],
-                    'label' => false
-                ],
-                'allow_add'     => true,
-                'allow_delete'  => true,
-            ])
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
-        $resolver->setAllowedTypes('event', Event::class);
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => Update::class,
         ]);

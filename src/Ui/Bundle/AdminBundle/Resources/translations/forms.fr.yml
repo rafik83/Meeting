@@ -1011,8 +1011,26 @@ form:
         children:
             title:
                 label: Titre
+            code:
+                label: Code
+            validUntil:
+                label: Valide jusqu'au
+            stock:
+                label: Stock
             submit:
                 label: Enregistrer
+            promotions:
+                label: Promotions
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        product:
+                            label: Produit
+                        type:
+                            label: Type
+                        value:
+                            label: Valeur
     promotion_code_update:
         children:
             title:

@@ -16,14 +16,14 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 interface PromotionCodeRepositoryInterface
 {
     /**
-     * @param PromotionCode $code
+     * @param PromotionCode $promotionCode
      */
-    public function add(PromotionCode $code);
+    public function add(PromotionCode $promotionCode);
 
     /**
-     * @param PromotionCode $code
+     * @param PromotionCode $promotionCode
      */
-    public function set(PromotionCode $code);
+    public function set(PromotionCode $promotionCode);
 
     /**
      * @param Event $event
@@ -31,4 +31,19 @@ interface PromotionCodeRepositoryInterface
      * @return PromotionCode[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return PromotionCode[]
+     */
+    public function findDuplicate(PromotionCode $promotionCode);
+
+    /**
+     * @param Event  $event
+     * @param string $code
+     *
+     * @return PromotionCode[]
+     */
+    public function findByEventAndCode(Event $event, $code);
 }

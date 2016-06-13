@@ -596,12 +596,19 @@ admin_organizer_template_sheet_duplicate:
 admin_promotion_code_list:
     path: /event/{event}/promotion_code
     defaults: { _controller: AdminBundle:PromotionCode:list }
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_promotion_code_create:
+    path: /event/{event}/promotion_code/create
+    defaults: { _controller: AdminBundle:PromotionCode:create }
     methods: [GET, POST]
     requirements:
         event: \d+
 
 admin_promotion_code_update:
-    path: /event/{event}/promotion_code/{promotionCode}
+    path: /event/{event}/promotion_code/{promotionCode}/update
     defaults: { _controller: AdminBundle:PromotionCode:update }
     methods: [GET, POST]
     requirements:

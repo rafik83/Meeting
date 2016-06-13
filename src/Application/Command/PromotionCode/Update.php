@@ -13,37 +13,12 @@ namespace Proximum\Vimeet\Application\Command\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 
-class Update
+class Update extends AbstractCommand
 {
     /**
      * @var PromotionCode
      */
     public $promotionCode;
-
-    /**
-     * @var string
-     */
-    public $title;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $validUntil;
-
-    /**
-     * @var int
-     */
-    public $stock;
-
-    /**
-     * @var array
-     */
-    public $translations;
-
-    /**
-     * @var array
-     */
-    public $promotions;
 
     /**
      * Update constructor.
@@ -61,7 +36,7 @@ class Update
         foreach ($promotionCode->getEvent()->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'label'       => $promotionCode->getLabel($locale),
-                'description' => $promotionCode->getDescription($locale)
+                'description' => $promotionCode->getDescription($locale),
             ];
         }
 
@@ -72,21 +47,5 @@ class Update
                 'value'   => $promotion->getValue(),
             ];
         }
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return bool
-     */
-    public function hasPromotion(Product $product)
-    {
-        foreach ($this->promotions as $promotion) {
-            if ($product === $promotion['product']) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -12,17 +12,12 @@ namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class Create extends AbstractCommand
 {
     /**
      * @var Event
      */
     public $event;
-
-    /**
-     * @var string
-     */
-    public $title;
 
     /**
      * Create constructor.
@@ -32,5 +27,12 @@ class Create
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        foreach ($event->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'label'       => null,
+                'description' => null,
+            ];
+        }
     }
 }

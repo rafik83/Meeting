@@ -11,35 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
 use Proximum\Vimeet\Domain\Model\PromotionCode;
-use Proximum\Vimeet\Domain\Promotion\CodeGeneratorInterface;
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
-class CreateHandler
+class CreateHandler extends AbstractCommandHandler
 {
-    /**
-     * @var PromotionCodeRepositoryInterface
-     */
-    private $promotionCodeRepository;
-
-    /**
-     * @var CodeGeneratorInterface
-     */
-    private $codeGenerator;
-
-    /**
-     * CreateHandler constructor.
-     *
-     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param CodeGeneratorInterface           $codeGenerator
-     */
-    public function __construct(
-        PromotionCodeRepositoryInterface $promotionCodeRepository,
-        CodeGeneratorInterface $codeGenerator
-    ) {
-        $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->codeGenerator           = $codeGenerator;
-    }
-
     /**
      * @param Create $command
      *
@@ -47,7 +21,17 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $promotionCode = new PromotionCode($command->event, $command->title, $this->codeGenerator->generate());
+        $promotionCode = new PromotionCode(
+            $command->event,
+            $command->title,
+            $command->code,
+            $command->stock,
+            $command->validUntil
+        );
+
+        $this->checkUniqueCode($promotionCode);
+        $this->translate($promotionCode, $command);
+        $this->setPromotions($promotionCode, $command);
 
         $this->promotionCodeRepository->add($promotionCode);
 

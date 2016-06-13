@@ -14,9 +14,11 @@ use Proximum\Vimeet\Application\Command\PromotionCode\Create;
 use Proximum\Vimeet\Application\Command\PromotionCode\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeExcetpion;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,28 +26,46 @@ use Symfony\Component\HttpFoundation\Response;
 class PromotionCodeController extends Controller
 {
     /**
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function listAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $promotionCodes = $this->get('repository.promotion_code_repository')->findByEvent($event);
+
+        return $this->render('AdminBundle:PromotionCode:list.html.twig', [
+            'event'           => $event,
+            'promotion_codes' => $promotionCodes,
+        ]);
+    }
+
+    /**
      * @param Request $request
      * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
-    public function listAction(Request $request, Event $event)
+    public function createAction(Request $request, Event $event)
     {
-        $create     = new Create($event);
-        $createForm = $this->createForm(CreateType::class, $create, ['submit' => true]);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        if ($createForm->handleRequest($request)->isSubmitted() && $createForm->isValid()) {
+        $create       = new Create($event);
+        $create->code = $this->get('promotion.generator.unique_code_generator')->generate($event);
+        $form         = $this->createForm(CreateType::class, $create, ['submit' => true, 'event' => $event]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
+            $this->addFlash('success', 'flash.promotion_code.create.success');
 
             return $this->redirectToUpdate($result->promotionCode);
         }
 
-        $promotionCodes = $this->get('repository.promotion_code_repository')->findByEvent($event);
-
-        return $this->render('AdminBundle:PromotionCode:list.html.twig', [
-            'create_form'     => $createForm->createView(),
-            'event'           => $event,
-            'promotion_codes' => $promotionCodes,
+        return $this->render('AdminBundle:PromotionCode:create.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
         ]);
     }
 
@@ -61,19 +81,25 @@ class PromotionCodeController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongPromotionCodeEvent($event, $promotionCode);
 
-        $update     = new Update($promotionCode);
-        $updateForm = $this->createForm(UpdateType::class, $update, ['submit' => true, 'event' => $event]);
+        $update = new Update($promotionCode);
+        $form   = $this->createForm(UpdateType::class, $update, ['submit' => true, 'event' => $event]);
 
-        if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($update);
+                $this->addFlash('success', 'flash.promotion_code.update.success');
 
-            return $this->redirectToUpdate($promotionCode);
+                return $this->redirectToUpdate($promotionCode);
+            } catch (NonUniqueCodeExcetpion $exception) {
+                $error = $this->get('error_factory')->create('validators.promotion_code.code.already_exist', $request->getLocale());
+                $form->get('code')->addError($error);
+            }
         }
 
         return $this->render('AdminBundle:PromotionCode:update.html.twig', [
             'promotion_code' => $promotionCode,
             'event'          => $event,
-            'update_form'    => $updateForm->createView(),
+            'form'           => $form->createView(),
         ]);
     }
 
@@ -94,7 +120,7 @@ class PromotionCodeController extends Controller
      * @param Event         $event
      * @param PromotionCode $promotionCode
      */
-    protected function notFoundIfWrongPromotionCodeEvent(Event $event, PromotionCode $promotionCode)
+    private function notFoundIfWrongPromotionCodeEvent(Event $event, PromotionCode $promotionCode)
     {
         if ($event !== $promotionCode->getEvent()) {
             throw $this->createNotFoundException('Promotion code not found.');

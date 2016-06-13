@@ -64,4 +64,46 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findDuplicate(PromotionCode $promotionCode)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->where('promotion_code.event = :event')
+            ->setParameter('event', $promotionCode->getEvent())
+            ->andWhere('promotion_code.code = :code')
+            ->setParameter('code', $promotionCode->getCode());
+
+        if ($this->entityManager->contains($promotionCode)) {
+            $queryBuilder
+                ->andWhere('promotion_code != :promotion_code')
+                ->setParameter('promotion_code', $promotionCode);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventAndCode(Event $event, $code)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->where('promotion_code.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('promotion_code.code = :code')
+            ->setParameter('code', $code);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

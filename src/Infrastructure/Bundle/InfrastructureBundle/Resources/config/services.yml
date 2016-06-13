@@ -777,13 +777,14 @@ services:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
             - '@repository.promotion_code_repository'
-            - '@promotion.faker_code_generator'
+            - '@promotion.unique_code_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
     command.promotion_code.update_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\UpdateHandler
         arguments:
             - '@repository.promotion_code_repository'
+            - '@promotion.unique_code_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
 
@@ -1173,4 +1174,13 @@ services:
     # Promotion
     #
     promotion.faker_code_generator:
-        class: Proximum\Vimeet\Domain\Promotion\FakerCodeGenerator
+        class: Proximum\Vimeet\Domain\Promotion\Generator\FakerCodeGenerator
+    promotion.unique_code_checker:
+        class: Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker
+        arguments:
+            - '@repository.promotion_code_repository'
+    promotion.generator.unique_code_generator:
+        class: Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator
+        arguments:
+            - '@promotion.faker_code_generator'
+            - '@promotion.unique_code_checker'

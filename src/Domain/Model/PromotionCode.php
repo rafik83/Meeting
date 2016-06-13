@@ -57,15 +57,19 @@ class PromotionCode
     /**
      * PromotionCode constructor.
      *
-     * @param Event  $event
-     * @param string $title
-     * @param string $code
+     * @param Event              $event
+     * @param string             $title
+     * @param string             $code
+     * @param int                $stock
+     * @param \DateTimeInterface $validUntil
      */
-    public function __construct(Event $event, $title, $code)
+    public function __construct(Event $event, $title, $code, $stock = null, \DateTimeInterface $validUntil = null)
     {
         $this->event        = $event;
-        $this->code         = $code;
         $this->title        = $title;
+        $this->code         = $code;
+        $this->stock        = $stock;
+        $this->validUntil   = $validUntil;
         $this->promotions   = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -96,7 +100,7 @@ class PromotionCode
      *
      * @return PromotionCode
      */
-    public function update($title, $code, $stock, \DateTimeInterface $validUntil = null)
+    public function update($title, $code, $stock = null, \DateTimeInterface $validUntil = null)
     {
         $this->title      = $title;
         $this->code       = $code;

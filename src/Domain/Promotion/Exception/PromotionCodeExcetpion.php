@@ -8,9 +8,8 @@
 * @author Elao <contact@elao.com>
 */
 
-namespace Proximum\Vimeet\Domain\Promotion;
+namespace Proximum\Vimeet\Domain\Promotion\Exception;
 
-interface CodeGeneratorInterface
+class PromotionCodeExcetpion extends \DomainException
 {
-    public function generate();
 }

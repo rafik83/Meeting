@@ -10,46 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
-
-class UpdateHandler
+class UpdateHandler extends AbstractCommandHandler
 {
     /**
-     * @var PromotionCodeRepositoryInterface
+     * @param Update $command
      */
-    private $promotionCodeRepository;
-
-    /**
-     * UpdateHandler constructor.
-     *
-     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     */
-    public function __construct(PromotionCodeRepositoryInterface $promotionCodeRepository)
+    public function handle(Update $command)
     {
-        $this->promotionCodeRepository = $promotionCodeRepository;
-    }
+        $command->promotionCode->update($command->title, $command->code, $command->stock, $command->validUntil);
 
-    /**
-     * @param Update $update
-     */
-    public function handle(Update $update)
-    {
-        $update->promotionCode->update($update->title, $update->code, $update->stock, $update->validUntil);
+        $this->checkUniqueCode($command->promotionCode);
+        $this->translate($command->promotionCode, $command);
+        $this->setPromotions($command->promotionCode, $command);
 
-        foreach ($update->translations as $locale => $translation) {
-            $update->promotionCode->translate($locale, $translation['label'], $translation['description']);
-        }
-
-        foreach ($update->promotions as $promotion) {
-            $update->promotionCode->setPromotion($promotion['product'], $promotion['type'], $promotion['value']);
-        }
-
-        foreach ($update->promotionCode->getPromotions() as $promotion) {
-            if (!$update->hasPromotion($promotion->getProduct())) {
-                $update->promotionCode->removePromotion($promotion);
-            }
-        }
-
-        $this->promotionCodeRepository->set($update->promotionCode);
+        $this->promotionCodeRepository->set($command->promotionCode);
     }
 }

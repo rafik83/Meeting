@@ -306,12 +306,15 @@ admin:
         table:
             column:
                 title: Titre
+                code: Code
                 stock: Stock
                 validUntil: Valide jusqu'au
                 action: Action
             action:
                 edit: Modifier
             no_result: Aucun code promo
+        error:
+            non_unique_code: Ce code est déjà utilisé
     sheet:
         title: Participations
         link: Participations

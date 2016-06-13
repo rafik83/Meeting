@@ -48,3 +48,6 @@ validators:
             greaterOrEqual: La quantité min doit être inférieure à la quantité max
             minRequired: Si vous définissez une quantité, vous devez définir un min et un max
             maxRequired: Si vous définissez une quantité, vous devez définir un min et un max
+    promotion_code:
+        code:
+            already_exist: Ce code est déjà utilisé
