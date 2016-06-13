@@ -91,8 +91,7 @@ class PromotionCodeController extends Controller
 
                 return $this->redirectToUpdate($promotionCode);
             } catch (NonUniqueCodeExcetpion $exception) {
-                $error = $this->get('error_factory')->create('validators.promotion_code.code.already_exist', $request->getLocale());
-                $form->get('code')->addError($error);
+                $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
             }
         }
 
@@ -125,5 +124,15 @@ class PromotionCodeController extends Controller
         if ($event !== $promotionCode->getEvent()) {
             throw $this->createNotFoundException('Promotion code not found.');
         }
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return FormError
+     */
+    private function createNonUniqueCodeError($locale)
+    {
+        return $this->get('error_factory')->create('validators.promotion_code.code.already_exist', $locale);
     }
 }
