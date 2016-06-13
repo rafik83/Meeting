@@ -52,4 +52,7 @@ validators:
         code:
             already_exist: Ce code est déjà utilisé
         promotion:
-            value: Indiquez une valeur
+            value:
+                free: Indiquez une valeur
+                percent_off: Indiquez un pourcentage entre 0 et 100
+                value_off: Indiquez un montant entre 0 et le prix du produit

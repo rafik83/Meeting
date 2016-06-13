@@ -33,4 +33,10 @@ Proximum\Vimeet\Application\Command\PromotionCode\Create:
                         - Type: { type: float }
                 - Expression:
                     expression: "value['type'] === 'free' || value['value'] !== null"
-                    message: "validators.promotion_code.promotion.value"
+                    message: "validators.promotion_code.promotion.value.free"
+                - Expression:
+                    expression: "value['type'] !== 'percent_off' || value['value'] > 0 && value['value'] < 100"
+                    message: "validators.promotion_code.promotion.value.percent_off"
+                - Expression:
+                    expression: "value['type'] !== 'value_off' || value['value'] > 0 && value['value'] < value['product'].unitPrice"
+                    message: "validators.promotion_code.promotion.value.value_off"
