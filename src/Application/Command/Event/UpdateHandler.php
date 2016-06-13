@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -29,13 +30,23 @@ class UpdateHandler
     private $guidelinesGenerator;
 
     /**
+     * @var FileStorageInterface
+     */
+    private $fileStorage;
+
+    /**
      * @param EventRepositoryInterface $eventRepository
      * @param Generator                $guidelinesGenerator
+     * @param FileStorageInterface     $fileStorage
      */
-    public function __construct(EventRepositoryInterface $eventRepository, Generator $guidelinesGenerator)
-    {
+    public function __construct(
+        EventRepositoryInterface $eventRepository,
+        Generator $guidelinesGenerator,
+        FileStorageInterface $fileStorage
+    ) {
         $this->eventRepository     = $eventRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
+        $this->fileStorage         = $fileStorage;
     }
 
     /**
@@ -57,6 +68,11 @@ class UpdateHandler
             $update->country
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
+
+        if (null !== $update->logo) {
+            $this->fileStorage->remove($event->getLogo());
+            $event->setLogo($this->fileStorage->upload($update->logo));
+        }
 
         $this->updateTranslatons($update);
 
