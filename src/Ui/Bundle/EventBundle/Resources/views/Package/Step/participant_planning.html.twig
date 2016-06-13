@@ -9,7 +9,7 @@
         <div class="row">
             {% for participant in view.products.participantsView.participants %}
                 <div class="col-md-6">
-                    <div class="user__container clearfix">
+                    <div class="user__container selected-product clearfix">
                         <div class="list--users">
                             {{ include('EventBundle:Participant:preview.html.twig', {participant: participant.card}) }}
                         </div>
