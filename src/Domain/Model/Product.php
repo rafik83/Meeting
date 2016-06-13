@@ -423,6 +423,16 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        // Temporary. Will be replaced by the event currency
+
+        return 'EUR';
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param string $image

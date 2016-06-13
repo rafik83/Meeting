@@ -54,7 +54,11 @@ class PromotionCodeController extends Controller
 
         $create       = new Create($event);
         $create->code = $this->get('promotion.generator.unique_code_generator')->generate($event);
-        $form         = $this->createForm(CreateType::class, $create, ['submit' => true, 'event' => $event]);
+        $form         = $this->createForm(CreateType::class, $create, [
+            'submit' => true,
+            'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
@@ -82,7 +86,11 @@ class PromotionCodeController extends Controller
         $this->notFoundIfWrongPromotionCodeEvent($event, $promotionCode);
 
         $update = new Update($promotionCode);
-        $form   = $this->createForm(UpdateType::class, $update, ['submit' => true, 'event' => $event]);
+        $form   = $this->createForm(UpdateType::class, $update, [
+            'submit' => true,
+            'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {

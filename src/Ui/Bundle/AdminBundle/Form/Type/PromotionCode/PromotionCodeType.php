@@ -10,12 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode;
 
-use Proximum\Vimeet\Application\Command\PromotionCode\Update;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -47,6 +44,7 @@ class PromotionCodeType extends AbstractType
                     'event'          => $options['event'],
                     'label'          => false,
                     'error_bubbling' => false,
+                    'locale'         => $options['locale']
                 ],
                 'allow_add'      => true,
                 'allow_delete'   => true,
@@ -60,7 +58,7 @@ class PromotionCodeType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
     }
 }

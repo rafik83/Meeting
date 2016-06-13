@@ -29,10 +29,11 @@ class PromotionType extends AbstractType
     {
         $builder
             ->add('product', ProductChoiceType::class, [
-                'select2'     => true,
-                'placeholder' => '',
-                'event'       => $options['event'],
-                'group_by'    => function (Product $product) {
+                'select2'      => true,
+                'placeholder'  => '',
+                'event'        => $options['event'],
+                'locale'       => $options['locale'],
+                'group_by'     => function (Product $product) {
                     return sprintf('form.product_choice.group_by.type.%s', $product->getType());
                 },
             ])
@@ -55,7 +56,7 @@ class PromotionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
     }
 
