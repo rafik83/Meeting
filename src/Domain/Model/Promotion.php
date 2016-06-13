@@ -54,7 +54,7 @@ class Promotion
         $this->promotionCode = $promotionCode;
         $this->product       = $product;
         $this->type          = $type;
-        $this->value         = $value;
+        $this->value         = $type === self::TYPE_FREE ? null : $value;
     }
 
     /**
@@ -116,7 +116,7 @@ class Promotion
     public function update($type, $value)
     {
         $this->type  = $type;
-        $this->value = $value;
+        $this->value = $type === self::TYPE_FREE ? null : $value;
 
         return $this;
     }
