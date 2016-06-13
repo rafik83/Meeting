@@ -2,27 +2,27 @@
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
-                {{ price }}
-                <sup>{{ currency }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+                {{ product.price }}
+                <sup>€ {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
             </span>
         </div>
     </td>
     <td class="col-md-6">
-        <h3>{{ title }}</h3>
-        <p>{{ description }}</p>
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.description }}</p>
     </td>
     <td class="col-md-2">
         <div class="select-quantity">
             <input type="button" value="-" class="qtyminus"/>
-            {{ form_widget(quantityForm, {attr: {'class': 'qty', 'data-unit-price': price}}) }}
+            {{ form_widget(quantityForm, {attr: {'class': 'qty', 'data-unit-price': product.price}}) }}
             <input type="button" value="+" class="qtyplus"/>
         </div>
     </td>
     <td class="col-md-2">
         <div class="product">
             <span class="product-price text-center">
-                <span class="product-total-price">{{ total }}</span>
-                <sup>{{ currency }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+                <span class="product-total-price">{{ quantityForm.vars.value * product.price }}</span>
+                <sup>€ {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
             </span>
         </div>
     </td>

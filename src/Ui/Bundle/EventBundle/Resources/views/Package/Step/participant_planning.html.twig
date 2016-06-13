@@ -61,13 +61,8 @@
 
                 <tbody>
                 {{ include('EventBundle:Package/Step:product_row.html.twig', {
-                    title: view.products.planningView.title,
-                    description: view.products.planningView.description,
-                    price: view.products.planningView.price,
-                    vatMode: view.products.planningView.vatMode,
-                    currency: '€',
-                    quantityForm: form.planningQuantity,
-                    total: 0
+                    product: view.products.planningView,
+                    quantityForm: form.planningQuantity
                 }) }}
                 </tbody>
             </table>
