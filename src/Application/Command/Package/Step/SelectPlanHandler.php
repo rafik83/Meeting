@@ -43,17 +43,11 @@ class SelectPlanHandler
         $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($plans->sheet);
 
         if (null === $cartRow || $cartRow->getProduct() !== $plans->plan) {
-            // remove if other plan selected previously
-            if ($cartRow) {
-                $this->cartRowRepository->delete($cartRow);
-            }
+            // Delete all Sheet Cart when the plan is selected or has changed
+            $this->cartRowRepository->deleteCartRowsBySheet($plans->sheet);
 
-            $this->cartRowRepository->add(new CartRow(
-                $plans->sheet,
-                $plans->plan,
-                1,
-                $this->datetime
-            ));
+            // Add the selected plan
+            $this->cartRowRepository->add(new CartRow($plans->sheet, $plans->plan, 1, $this->datetime));
         }
     }
 }

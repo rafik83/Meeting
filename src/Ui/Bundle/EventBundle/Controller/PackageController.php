@@ -75,7 +75,7 @@ class PackageController extends Controller
         $currentStep     = $funnel->getStep($step);
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
-        if (!$currentStep->completed && null !== $uncompletedStep && $uncompletedStep !== $currentStep) {
+        if (null !== $uncompletedStep && FunnelStep::TYPE_PLAN === $uncompletedStep->type) {
             return $this->redirectToRoute(
                 'event_package_step',
                 [
@@ -161,11 +161,23 @@ class PackageController extends Controller
      */
     private function assignProductsToCommand(Step\AbstractStep $command)
     {
-        if ($command instanceof Step\SelectPlan) {
-            $cartRow = $this->get('repository.cart_row_repository')->findCartRowPlanBySheet($command->sheet);
+        $cartRowRepository = $this->get('repository.cart_row_repository');
 
-            if (null !== $cartRow) {
-                $command->plan = $cartRow->getProduct();
+        if ($command instanceof Step\SelectPlan) {
+            $selectedPlan = $cartRowRepository->findCartRowPlanBySheet($command->sheet);
+
+            if (null !== $selectedPlan) {
+                $command->plan = $selectedPlan->getProduct();
+            }
+
+            return;
+        }
+
+        if ($command instanceof Step\SelectParticipantAndPlanning) {
+            $planningRow = $cartRowRepository->findCartRowPlanningBySheet($command->sheet);
+
+            if (null !== $planningRow) {
+                $command->planningQuantity = $planningRow->getQuantity();
             }
 
             return;

@@ -423,7 +423,7 @@ class Product
     }
 
     /**
-     * @return boolean|Product
+     * @return boolean|ProductIncluded
      */
     public function getIncludedParticipantProduct()
     {
@@ -433,7 +433,7 @@ class Product
     }
 
     /**
-     * @return boolean|Product
+     * @return boolean|ProductIncluded
      */
     public function getIncludedPlanningProduct()
     {
@@ -550,6 +550,24 @@ class Product
             $availabilityMax,
             $updatable,
             $updatableUntil
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedData()
+    {
+        return json_encode(
+            [
+                'name'                => $this->name,
+                'unitPrice'           => $this->unitPrice,
+                'quantityMax'         => $this->quantityMax,
+                'availabilityCurrent' => $this->availabilityCurrent,
+                'availabilityMax'     => $this->availabilityMax,
+                'updatable'           => $this->updatable,
+                'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
+            ]
         );
     }
 }

@@ -50,8 +50,8 @@ class CartRowRepository implements CartRowRepositoryInterface
             ->createQueryBuilder()
             ->select('cartRow')
             ->from(CartRow::class, 'cartRow')
-            ->join('cartRow.sheet', 'sheet', 'WITH', 'sheet.id = :id')
-            ->setParameter('id', $sheet->getId());
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -61,18 +61,39 @@ class CartRowRepository implements CartRowRepositoryInterface
      */
     public function findCartRowPlanBySheet(Sheet $sheet)
     {
-        $queryBuilder = $this
+        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PLAN);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCartRowPlanningBySheet(Sheet $sheet)
+    {
+        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PLANNING);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCartRowParticipantBySheet(Sheet $sheet)
+    {
+        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PARTICIPANT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteCartRowsBySheet(Sheet $sheet)
+    {
+        $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('cartRow')
+            ->delete()
             ->from(CartRow::class, 'cartRow')
-            ->join('cartRow.sheet', 'sheet', 'WITH', 'sheet.id = :id')
-            ->setParameter('id', $sheet->getId())
-            ->join('cartRow.product', 'product', 'WITH', 'product.type = :type')
-            ->setParameter('type', Product::TYPE_PLAN)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -82,5 +103,28 @@ class CartRowRepository implements CartRowRepositoryInterface
     {
         $this->entityManager->remove($cartRow);
         $this->entityManager->flush($cartRow);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $productType
+     *
+     * @return null|CartRow
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function findCartRowByProductTypeAndBySheet(Sheet $sheet, $productType)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('cartRow')
+            ->from(CartRow::class, 'cartRow')
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->join('cartRow.product', 'product', 'WITH', 'product.type = :type')
+            ->setParameter('type', $productType)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

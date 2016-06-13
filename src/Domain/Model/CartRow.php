@@ -51,10 +51,10 @@ class CartRow
     public function __construct(Sheet $sheet, Product $product, $quantity, \DateTimeInterface $createdAt)
     {
         $this->sheet             = $sheet;
-        $this->product           = $product;
         $this->quantity          = $quantity;
         $this->createdAt         = $createdAt;
-        $this->serializedProduct = json_encode($product);
+        $this->product           = $product;
+        $this->serializedProduct = $product->getSerializedData();
     }
 
     /**

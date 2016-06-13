@@ -33,9 +33,30 @@ interface CartRowRepositoryInterface
     public function findBySheet(Sheet $sheet);
 
     /**
+     * Delete all CartRow for a given sheet
+     *
+     * @param Sheet $sheet
+     */
+    public function deleteCartRowsBySheet(Sheet $sheet);
+
+    /**
      * @param Sheet $sheet
      *
      * @return CartRow
      */
     public function findCartRowPlanBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return CartRow
+     */
+    public function findCartRowPlanningBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return CartRow
+     */
+    public function findCartRowParticipantBySheet(Sheet $sheet);
 }
