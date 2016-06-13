@@ -15,6 +15,8 @@ use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EditableTextDataType extends AbstractType
@@ -53,12 +55,15 @@ class EditableTextDataType extends AbstractType
             );
         }
 
+        $fallback = $object instanceof EditableText && $object->getLocale() !== $object->getFallback() ? $object->getFallbackContent() : false;
+
         $builder
             ->add('content', TextareaType::class, [
-                'placeholder' => $options['placeholder'],
-                'label'       => false,
-                'attr'        => $attributes,
-                'required'    => $object->getRequired(),
+                'placeholder'         => $options['placeholder'],
+                'label'               => false,
+                'attr'                => $attributes,
+                'required'            => $object->getRequired(),
+                'fallbackTranslation' => $fallback,
             ])
         ;
     }
