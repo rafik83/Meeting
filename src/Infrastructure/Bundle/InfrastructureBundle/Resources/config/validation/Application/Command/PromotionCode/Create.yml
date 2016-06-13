@@ -20,7 +20,7 @@ Proximum\Vimeet\Application\Command\PromotionCode\Create:
                     description:
                         - Type: { type: string }
         promotions:
-            - Count: { min: 2 }
+            - Count: { min: 1 }
             - All:
                 - Collection:
                     product:
@@ -33,4 +33,4 @@ Proximum\Vimeet\Application\Command\PromotionCode\Create:
                         - Type: { type: float }
                 - Expression:
                     expression: "value['type'] === 'free' || value['value'] !== null"
-                    message: "bladkslfj"
+                    message: "validators.promotion_code.promotion.value"
