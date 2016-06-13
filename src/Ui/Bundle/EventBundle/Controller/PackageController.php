@@ -52,7 +52,7 @@ class PackageController extends Controller
      * @param Sheet     $sheet
      * @param int       $step
      *
-     * @return Response
+     * @return RedirectResponse|Response
      */
     public function stepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
@@ -72,7 +72,13 @@ class PackageController extends Controller
             throw $this->createNotFoundException(sprintf('Unkown %s step for package of sheet %s', $step, $sheet->getId()));
         }
 
-        $currentStep     = $funnel->getStep($step);
+        $currentStep = $funnel->getStep($step);
+
+        if (FunnelStep::TYPE_OPTIONS === $currentStep->type) {
+            // Options step not implemented, redirect to sheet
+            return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
+        }
+
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
         if (null !== $uncompletedStep && FunnelStep::TYPE_PLAN === $uncompletedStep->type) {
@@ -88,7 +94,8 @@ class PackageController extends Controller
         $commandClass = $this->stepTypeAssociatedCommand($currentStep->type);
         $command      = new $commandClass($sheet);
         $this->assignProductsToCommand($command);
-        $form         = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
+
+        $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
             'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
             'sheet'  => $sheet,
         ]);

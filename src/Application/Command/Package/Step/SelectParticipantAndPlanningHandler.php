@@ -44,10 +44,11 @@ class SelectParticipantAndPlanningHandler
         $package = $selectParticipantAndPlanning->sheet->getPackage();
 
         // Find a Participant CartRow
-        $cartRow = $this->cartRowRepository->findCartRowParticipantBySheet($selectParticipantAndPlanning->sheet);
+        $participantCartRow = $this->cartRowRepository->findCartRowParticipantBySheet($selectParticipantAndPlanning->sheet);
         
-        if (null !== $cartRow) {
-            $this->cartRowRepository->delete($cartRow);
+        if (null !== $participantCartRow) {
+            // Delete previous participant CartRow
+            $this->cartRowRepository->delete($participantCartRow);
         }
 
         $includedParticipantNumber  = 0;
@@ -72,11 +73,12 @@ class SelectParticipantAndPlanningHandler
         }
 
         // Find a Planning CartRow
-        $cartRow = $this->cartRowRepository->findCartRowPlanningBySheet($selectParticipantAndPlanning->sheet);
+        $planningCartRow = $this->cartRowRepository->findCartRowPlanningBySheet($selectParticipantAndPlanning->sheet);
 
-        if (null === $cartRow || $cartRow->getQuantity() !== $selectParticipantAndPlanning->planningQuantity) {
-            if (null !== $cartRow) {
-                $this->cartRowRepository->delete($cartRow);
+        if (null === $planningCartRow || $planningCartRow->getQuantity() !== $selectParticipantAndPlanning->planningQuantity) {
+            if (null !== $planningCartRow) {
+                // Delete previous planning CartRow
+                $this->cartRowRepository->delete($planningCartRow);
             }
 
             if (null !== $package->getPlanning() && $selectParticipantAndPlanning->planningQuantity > 0) {
