@@ -572,3 +572,7 @@ admin:
         name: Nom
         unitPrice: Prix unitaire
         productIncluded: Produits inclus
+    schedule:
+        link: Agenda
+        slots:
+            title: Crénaux de rendez-vous
