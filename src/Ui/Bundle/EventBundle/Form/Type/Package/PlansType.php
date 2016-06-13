@@ -12,7 +12,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
-use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,8 +25,8 @@ class PlansType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Package $package */
-        $package = $options['package'];
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
 
         $builder
             ->add('plan', ChoiceType::class, [
@@ -34,7 +34,7 @@ class PlansType extends AbstractType
                 'multiple'    => false,
                 'label'       => false,
                 'choice_name' => 'id',
-                'choices'     => $package->getPlans(),
+                'choices'     => $sheet->getPackage()->getPlans(),
                 'required'    => true,
             ]);
         ;
@@ -45,8 +45,8 @@ class PlansType extends AbstractType
      */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setRequired(['package']);
-        $optionsResolver->addAllowedTypes('package', Package::class);
+        $optionsResolver->setRequired(['sheet']);
+        $optionsResolver->addAllowedTypes('sheet', Sheet::class);
         $optionsResolver->setDefaults([
             'data_class' => SelectPlan::class,
         ]);

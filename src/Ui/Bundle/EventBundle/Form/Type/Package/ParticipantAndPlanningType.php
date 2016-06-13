@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
-use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,14 +24,14 @@ class ParticipantAndPlanningType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Package $package */
-        $package = $options['package'];
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
 
         $builder->add('planningQuantity', TextType::class, [
             'label' => false,
             'attr'  => [
                 'data-min' => 0,
-                'data-max' => $package->getPlanning()->getQuantityMax(),
+                'data-max' => $sheet->getPackage()->getPlanning()->getQuantityMax(),
             ],
         ]);
     }
@@ -41,8 +41,8 @@ class ParticipantAndPlanningType extends AbstractType
      */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setRequired(['package']);
-        $optionsResolver->addAllowedTypes('package', Package::class);
+        $optionsResolver->setRequired(['sheet']);
+        $optionsResolver->addAllowedTypes('sheet', Sheet::class);
         $optionsResolver->setDefaults(
             [
                 'data_class' => SelectParticipantAndPlanning::class,

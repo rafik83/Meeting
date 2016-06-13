@@ -89,8 +89,8 @@ class PackageController extends Controller
         $command      = new $commandClass($sheet);
         $this->assignProductsToCommand($command);
         $form         = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
-            'action'  => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
-            'package' => $sheet->getPackage(),
+            'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
+            'sheet'  => $sheet,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
