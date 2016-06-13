@@ -39,3 +39,4 @@ ansible.cfg
 .openl10n.yml
 /web/uploads/*
 /web/css/*
+/web/media/*
