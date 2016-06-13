@@ -134,6 +134,8 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            logo:
+                label: Logo
             country:
                 label: Pays
             mode:
