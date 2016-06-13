@@ -82,6 +82,8 @@ package:
         included: inclus
     participant_planning:
         validate: Valider
+    options:
+        included: inclus
 
 billing_info:
     title: Info de facturation

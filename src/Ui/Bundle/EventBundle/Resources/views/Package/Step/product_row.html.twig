@@ -12,6 +12,11 @@
         <p>{{ product.description }}</p>
     </td>
     <td class="col-md-2">
+        {% if product.numberIncluded %}
+            <h2 class="text-center">{{ product.numberIncluded }}</h2>
+            <hr>
+        {% endif %}
+
         <div class="select-quantity">
             <input type="button" value="-" class="qtyminus"/>
             {{ form_widget(quantityForm, {attr: {'class': 'qty', 'data-unit-price': product.price}}) }}
@@ -20,6 +25,11 @@
     </td>
     <td class="col-md-2">
         <div class="product">
+            {% if product.numberIncluded %}
+                <h2 class="text-center">{{ 'package.options.included'|trans }}</h2>
+                <hr>
+            {% endif %}
+
             <span class="product-price text-center">
                 <span class="product-total-price">{{ quantityForm.vars.value * product.price }}</span>
                 <sup>€ {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
