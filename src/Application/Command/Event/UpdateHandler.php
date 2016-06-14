@@ -70,8 +70,9 @@ class UpdateHandler
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 
         if (null !== $update->logo) {
-            $this->fileStorage->remove($event->getLogo());
+            $toRemove = $event->getLogo();
             $event->setLogo($this->fileStorage->upload($update->logo));
+            $this->fileStorage->remove($toRemove);
         }
 
         $this->updateTranslatons($update);
