@@ -207,6 +207,7 @@ services:
             - '@template.template_data_factory'
             - '@components.token.user.activate_account_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@cart'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
@@ -768,6 +769,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler
         arguments:
             - '@repository.cart_row_repository'
+            - '@cart'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
@@ -1187,7 +1189,19 @@ services:
         arguments:
             - '@repository.cart_row_repository'
 
+    #
+    # Package
+    #
     package.planning.quantity_max_guesser:
         class: Proximum\Vimeet\Domain\Package\Planning\QuantityMaxGuesser
         arguments:
             - '@repository.cart_row_repository'
+
+    #
+    # Cart
+    #
+    cart:
+        class: Proximum\Vimeet\Domain\Cart\Cart
+        arguments:
+            - '@repository.cart_row_repository'
+            - '@datetime'

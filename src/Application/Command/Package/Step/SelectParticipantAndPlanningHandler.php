@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -23,17 +24,24 @@ class SelectParticipantAndPlanningHandler
     private $cartRowRepository;
 
     /**
+     * @var Cart
+     */
+    private $cart;
+
+    /**
      * @var \DateTimeInterface
      */
     private $datetime;
 
     /**
      * @param CartRowRepositoryInterface $cartRowRepository
+     * @param Cart                       $cart
      * @param \DateTimeInterface         $datetime
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, \DateTimeInterface $datetime)
+    public function __construct(CartRowRepositoryInterface $cartRowRepository, Cart $cart, \DateTimeInterface $datetime)
     {
         $this->cartRowRepository = $cartRowRepository;
+        $this->cart              = $cart;
         $this->datetime          = $datetime;
     }
 
@@ -42,36 +50,18 @@ class SelectParticipantAndPlanningHandler
      */
     public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning)
     {
-        $sheet        = $selectParticipantAndPlanning->sheet;
-        $selectedPlan = $this->cartRowRepository->findCartRowPlanBySheet($sheet);
-        $package      = $sheet->getPackage();
+        $sheet   = $selectParticipantAndPlanning->sheet;
+        $package = $sheet->getPackage();
 
-        // Find a Participant CartRow
-        $participantCartRow = $this->cartRowRepository->findCartRowParticipantBySheet($sheet);
-        
-        if (null !== $participantCartRow) {
-            // Delete previous participant CartRow
-            $this->cartRowRepository->delete($participantCartRow);
-        }
-
-        $additionalParticipantsNumber = $this->getAdditionalParticipantsNumber($selectedPlan->getProduct(), $sheet);
-
-        if ($additionalParticipantsNumber > 0) {
-            // Add participant product and quantity
-            $this->cartRowRepository->add(
-                new CartRow(
-                    $sheet,
-                    $package->getParticipant(),
-                    $additionalParticipantsNumber,
-                    $this->datetime
-                )
-            );
-        }
+        // Add participants number to cart
+        $this->cart->addSheetParticipantsToCart($sheet);
 
         // Find a Planning CartRow
         $planningCartRow = $this->cartRowRepository->findCartRowPlanningBySheet($sheet);
 
-        if (null === $planningCartRow || $planningCartRow->getQuantity() !== $selectParticipantAndPlanning->planningQuantity) {
+        if (null === $planningCartRow
+            || $planningCartRow->getQuantity() !== $selectParticipantAndPlanning->planningQuantity
+        ) {
             if (null !== $planningCartRow) {
                 // Delete previous planning CartRow
                 $this->cartRowRepository->delete($planningCartRow);
@@ -89,23 +79,5 @@ class SelectParticipantAndPlanningHandler
                 );
             }
         }
-    }
-
-    /**
-     * @param Product $plan
-     * @param Sheet   $sheet
-     *
-     * @return int
-     */
-    private function getAdditionalParticipantsNumber(Product $plan, Sheet $sheet)
-    {
-        $includedParticipantNumber  = 0;
-        $includedParticipantProduct = $plan->getIncludedParticipantProduct();
-
-        if ($includedParticipantProduct) {
-            $includedParticipantNumber = $includedParticipantProduct->getQuantity();
-        }
-
-        return $sheet->getParticipants()->count() - $includedParticipantNumber;
     }
 }
