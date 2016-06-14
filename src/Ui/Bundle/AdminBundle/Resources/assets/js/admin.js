@@ -13,6 +13,9 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update');
 
 require('elao-form.js');
+require('eonasdan-bootstrap-datetimepicker');
+require('moment/locale/fr');
+require('moment/locale/en-gb');
 
 // Init function
 
@@ -40,6 +43,23 @@ function init(target) {
             $(e.target).removeData('bs.modal').find('.modal-content').empty();
         })
     ;
+
+    $('[data-datatimepicker]').datetimepicker({
+        locale: 'fr',
+        sideBySide: true,
+        allowInputToggle: true,
+        icons: {
+            time: 'glyphicon glyphicon-time',
+            date: 'glyphicon glyphicon-calendar',
+            up: 'glyphicon glyphicon-chevron-up',
+            down: 'glyphicon glyphicon-chevron-down',
+            previous: 'glyphicon glyphicon-chevron-left',
+            next: 'glyphicon glyphicon-chevron-right',
+            today: 'glyphicon glyphicon-screenshot',
+            clear: 'glyphicon glyphicon-trash',
+            close: 'glyphicon glyphicon-remove'
+        }
+    });
 
     /* tablesort */
     function cleanNumber(i) {
