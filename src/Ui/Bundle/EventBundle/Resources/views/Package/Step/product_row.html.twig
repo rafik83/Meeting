@@ -17,18 +17,16 @@
             <hr>
         {% endif %}
 
-        <div class="select-quantity">
-            <input type="button" value="-" class="qtyminus"/>
-            {{ form_widget(quantityForm, {attr: {
-                'class': 'qty',
-                'data-selected-line-class': 'selected-line',
-                'data-unit-price': product.price,
-                'data-included': product.numberIncluded
-            }}) }}
-            <input type="button" value="+" class="qtyplus"/>
-        </div>
+        {{ form_widget(quantityForm, {attr: {
+            'class': 'qty',
+            'data-selected-line-class': 'selected-line',
+            'data-unit-price': product.price,
+            'data-included': product.numberIncluded
+        }}) }}
 
-        {{ form_errors(quantityForm) }}
+        <div class="message-error text-danger text-center">
+            {{ form_errors(quantityForm) }}
+        </div>
     </td>
     <td class="col-md-2">
         <div class="product">

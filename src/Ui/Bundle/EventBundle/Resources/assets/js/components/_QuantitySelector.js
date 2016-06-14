@@ -2,12 +2,15 @@ function QuantitySelector(element)
 {
     this.element           = element;
     this.input             = element.querySelector('input.qty');
-    this.max               = this.input.getAttribute('data-max');
-    this.min               = this.input.getAttribute('data-min');
-    this.included          = this.input.getAttribute('data-included');
+    this.messageArea       = element.querySelector('.message-error');
+    this.max               = parseInt(this.input.getAttribute('data-max'));
+    this.maxMessage        = this.input.getAttribute('data-max-message');
+    this.min               = parseInt(this.input.getAttribute('data-min'));
+    this.minMessage        = this.input.getAttribute('data-min-message');
+    this.included          = parseInt(this.input.getAttribute('data-included'));
     this.selectedLineClass = this.input.getAttribute('data-selected-line-class');
     this.min               = null !== this.min ? this.min : 0;
-    this.unitPrice         = this.input.getAttribute('data-unit-price');
+    this.unitPrice         = parseFloat(this.input.getAttribute('data-unit-price'));
     this.totalPrice        = element.querySelector('.product-total-price');
 
     element.querySelector('.qtyminus').addEventListener('click', function () {
@@ -27,23 +30,43 @@ function QuantitySelector(element)
 
 QuantitySelector.prototype.updateTotalPrice = function ()
 {
-    if (this.min >= this.input.value) {
-        this.input.value = this.min;
+    var value = parseInt(this.input.value);
+
+    if (isNaN(value)) {
+        value = 0;
     }
 
-    if (null === this.max || this.max <= this.input.value) {
-        this.input.value = this.max;
+    var newValue = value;
+
+    if (!isNaN(this.min) && value < this.min) {
+        newValue = this.min;
+
+        if (null !== this.messageArea && this.minMessage !== null) {
+            this.messageArea.innerHTML = this.minMessage;
+        }
+    } else if (!isNaN(this.max) && this.max < value) {
+        newValue = this.max;
+
+        if (null !== this.messageArea && this.maxMessage !== null) {
+            this.messageArea.innerHTML = this.maxMessage;
+        }
+    } else {
+        if (null !== this.messageArea) {
+            this.messageArea.innerHTML = '';
+        }
     }
 
-    if (null !== this.selectedLineClass && 0 == this.included) {
-        if (0 == this.input.value) {
+
+    if (null !== this.selectedLineClass && 0 === this.included) {
+        if (0 === newValue) {
             this.element.classList.remove('selected-line');
         } else {
             this.element.classList.add('selected-line');
         }
     }
 
-    this.totalPrice.innerHTML = this.unitPrice * this.input.value;
+    this.input.value = newValue;
+    this.totalPrice.innerHTML = this.unitPrice * newValue;
 };
 
 module.exports = QuantitySelector;

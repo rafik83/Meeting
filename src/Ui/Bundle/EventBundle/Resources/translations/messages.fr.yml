@@ -79,7 +79,16 @@ package:
         validate: Valider
         seeMore: Voir la suite des prestations
     participants:
+        add: Ajouter des participants
+        delete: Supprimer des participants
         included: inclus
+    planning:
+        unitPrice: Prix unitaire
+        label: Intitulé & descriptions
+        quantity: Quantité
+        total: Total
+        quantityMax: Quantité maximum atteinte
+        quantityMin: Quantité minimum atteinte
     participant_planning:
         validate: Valider
     options:

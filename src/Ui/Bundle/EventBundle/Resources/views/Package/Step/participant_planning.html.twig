@@ -31,11 +31,11 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="{{ path('event_sheet') }}" class="btn pull-left">
-                    <i class="icon-Effacer"></i> Supprimer des participants
+                    <i class="icon-Effacer"></i> {{ 'package.participants.delete'|trans }}
                 </a>
 
                 <a href="{{ path('event_sheet') }}" class="btn btn-primary pull-right">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>Ajouter des participants
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ 'package.participants.add'|trans }}
                 </a>
             </div>
         </div>
@@ -50,10 +50,10 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Prix unitaire</th>
-                    <th>Intitulé & description</th>
-                    <th class="text-center">Quantité</th>
-                    <th class="text-center">Total</th>
+                    <th>{{ 'package.planning.unitPrice'|trans }}</th>
+                    <th>{{ 'package.planning.label'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.quantity'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.total'|trans }}</th>
                 </tr>
                 </thead>
 
