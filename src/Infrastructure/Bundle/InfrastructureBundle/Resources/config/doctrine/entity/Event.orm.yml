@@ -39,6 +39,8 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         country:
             type: string
+        currency:
+            type: string
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

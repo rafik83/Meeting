@@ -23,6 +23,7 @@ class InfrastructureExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('infrastructure.eu_countries', $config['eu_countries']);
+        $container->setParameter('infrastructure.supported_currencies', $config['supported_currencies']);
         $container->setParameter('infrastructure.web_asset_event_guideline_path', $config['web_asset_event_guideline_path']);
         $container->setParameter('infrastructure.bundle_guideline_path', $config['bundle_guideline_path']);
         $container->setParameter('infrastructure.font_path', $config['font_path']);
