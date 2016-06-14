@@ -28,7 +28,7 @@ class ChangeMailHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $date = new DateTime();
         $user = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $eventView = new EventView(1, 'TESTEVENT', 'TOTO', 'fr', 'fr', [], 'EUROPE/PARIS', '', 'FR');
+        $eventView = new EventView(1, 'TESTEVENT', '', 'TOTO', 'fr', 'fr', [], 'EUROPE/PARIS', '', 'FR');
 
         // Expected
         $expectedChangeMailToken = new ChangeMailToken($user, 'toto@toto.fr', '1234567890', $date);

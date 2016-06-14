@@ -193,3 +193,18 @@ tactician:
             middleware:
                 - tactician.middleware.validator
                 - tactician.middleware.command_handler
+
+#
+# Liip Imagine Bundle
+#
+liip_imagine:
+    driver: imagick
+    resolvers:
+       default:
+          web_path: ~
+    filter_sets:
+        cache: ~
+        event_header_logo:
+            quality: 100
+            filters:
+                thumbnail: { size: [250, 100], mode: inset }

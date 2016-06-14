@@ -46,6 +46,11 @@ class Event implements EventInterface
     /**
      * @var string
      */
+    private $logo;
+
+    /**
+     * @var string
+     */
     private $timeZone;
 
     /**
@@ -268,6 +273,22 @@ class Event implements EventInterface
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param string $logo
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
     }
 
     /**

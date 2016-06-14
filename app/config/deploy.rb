@@ -36,7 +36,7 @@ set :cache_path,      "var/cache"
 
 # Shared
 set :shared_files,    [app_config_path + "/" + app_config_file]
-set :shared_children, ["web/uploads", "node_modules", log_path, "web/css"]
+set :shared_children, ["web/uploads", "node_modules", log_path, "web/css", "web/media"]
 
 # Assets
 set :dump_assetic_assets,        false

@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,6 +29,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
+        $event->setLogo('here.jpg');
 
         // Update command
         $update = new Update($event);
@@ -44,6 +47,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
+        $update->logo       = 'shouldBeUploadFile';
 
         // Expected event
         $expectedEvent = new Event();
@@ -51,15 +55,19 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20, 'FR');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
+        $expectedEvent->setLogo('toto.jpg');
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $fileStorage->remove('here.jpg')->shouldBeCalled();
+        $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 
@@ -102,9 +110,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 
@@ -145,9 +154,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldNotBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 }
