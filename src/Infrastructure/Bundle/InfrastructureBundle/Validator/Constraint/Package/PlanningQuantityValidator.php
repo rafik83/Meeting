@@ -36,6 +36,7 @@ class PlanningQuantityValidator extends ConstraintValidator
                 ->context
                 ->buildViolation('package.planning.quantity')
                 ->setParameters(['%min%' => 0, '%max%' => 1])
+                ->atPath('planningQuantity')
                 ->addViolation();
         }
     }
