@@ -638,3 +638,25 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 translatable: false
                                 tags: ["participant_country", "sheet_data"]
 
+Proximum\Vimeet\Domain\Model\Event\Content:
+    content_terms_of_sale_rdv_carnot:
+        __construct: false
+        type: 'terms_of_sale'
+        event: '@event_rdv_carnot_2016'
+
+Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
+    content_terms_of_sale_rdv_carnot_fr:
+        __construct: false
+        content: '@content_terms_of_sale_rdv_carnot'
+        locale: 'fr'
+        value: |+
+            Conditions générales de vente pour RDV Carnot
+    content_terms_of_sale_rdv_carnot_en:
+        __construct: false
+        content: '@content_terms_of_sale_rdv_carnot'
+        locale: 'en'
+        value: |+
+            Our General Terms and Conditions of Sale shall exclusively apply to all
+            contracts between us and our clients. Any differing conditions or terms of
+            buyer are herewith objected to and shall not apply. Any agreement affecting
+            the execution of this contract must be in writing.
