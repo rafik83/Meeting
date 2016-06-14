@@ -1,4 +1,4 @@
-<tr class="row-quantity {{ quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
+<tr class="row-quantity {{ product.numberIncluded > 0 or quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -22,7 +22,8 @@
             {{ form_widget(quantityForm, {attr: {
                 'class': 'qty',
                 'data-selected-line-class': 'selected-line',
-                'data-unit-price': product.price
+                'data-unit-price': product.price,
+                'data-included': product.numberIncluded
             }}) }}
             <input type="button" value="+" class="qtyplus"/>
         </div>

@@ -47,16 +47,18 @@ class QuantityMaxGuesser
             return $planningQuantityMax;
         }
 
-        $includedParticipantNumber  = 0;
-        $includedParticipantProduct = $selectedPlan->getProduct()->getIncludedParticipantProduct();
+        $included  = 0;
+        $includedPlanningProduct = $selectedPlan->getProduct()->getIncludedPlanningProduct();
 
-        if ($includedParticipantProduct) {
-            $includedParticipantNumber = $includedParticipantProduct->getQuantity();
+        if ($includedPlanningProduct) {
+            $included = $includedPlanningProduct->getQuantity();
         }
 
-        return min(
-            $sheet->getParticipants()->count() - $includedParticipantNumber,
+        $max = min(
+            $sheet->getParticipants()->count() - $included,
             $planningQuantityMax
         );
+
+        return $max < 0 ? 0 : $max;
     }
 }
