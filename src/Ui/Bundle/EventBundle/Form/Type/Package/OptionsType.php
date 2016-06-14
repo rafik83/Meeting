@@ -23,8 +23,6 @@ class OptionsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Sheet $sheet */
-        $sheet = $options['sheet'];
     }
 
     /**
