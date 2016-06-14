@@ -31,14 +31,14 @@ abstract class AbstractCommandHandler
      * CreateHandler constructor.
      *
      * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param UniqueCodeChecker           $uniqueCodeChecker
+     * @param UniqueCodeChecker                $uniqueCodeChecker
      */
     public function __construct(
         PromotionCodeRepositoryInterface $promotionCodeRepository,
         UniqueCodeChecker $uniqueCodeChecker
     ) {
         $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->uniqueCodeChecker           = $uniqueCodeChecker;
+        $this->uniqueCodeChecker       = $uniqueCodeChecker;
     }
 
     /**
