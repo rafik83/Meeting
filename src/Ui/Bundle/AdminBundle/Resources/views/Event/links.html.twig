@@ -7,6 +7,11 @@
             </a>
         </li>
         <li>
+            <a href="{{ path('admin_content_update_terms_of_sales', { 'event': event.id }) }}">
+                {{ 'admin.update_content.terms_of_sales.link'|trans }}
+            </a>
+        </li>
+        <li>
             <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
                 {{ 'admin.spot.link'|trans }}
             </a>
