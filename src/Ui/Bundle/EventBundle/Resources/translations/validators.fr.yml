@@ -11,3 +11,5 @@ validators:
 package:
     plans:
         notBlank: Vous devez sélectionner une formule.
+    planning:
+        quantity: La quantité doit être comprise entre %min% et %max%

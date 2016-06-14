@@ -1,4 +1,4 @@
-<tr class="row-quantity">
+<tr class="row-quantity {{ quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -26,6 +26,8 @@
             }}) }}
             <input type="button" value="+" class="qtyplus"/>
         </div>
+
+        {{ form_errors(quantityForm) }}
     </td>
     <td class="col-md-2">
         <div class="product">
