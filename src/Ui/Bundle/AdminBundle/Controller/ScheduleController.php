@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,8 +24,14 @@ class ScheduleController extends Controller
      */
     public function slotsAction(Event $event)
     {
+        $form = $this->createForm(ConfigType::class, [], ['submit' => true]);
+
+        $slots = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findByEvent($event);
+
         return $this->render('AdminBundle:Schedule:slots.html.twig', [
             'event' => $event,
+            'form'  => $form->createView(),
+            'slots' => $slots,
         ]);
     }
 }

@@ -2,4 +2,28 @@
 
 {% block content %}
     <h1>{{ 'admin.schedule.slots.title'|trans }}</h1>
+
+    {{ form(form) }}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Activé</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in slots %}
+                <tr>
+                    <td>{{ slot.begin|localizeddate }}</td>
+                    <td>{{ slot.end|localizeddate }}</td>
+                    <td>
+                        <i class="glyphicon {{ slot.enabled ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger' }}"></i>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
