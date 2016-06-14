@@ -37,6 +37,7 @@ class OptionsType extends AbstractType
             ])
             ->add('groups', GroupCollectionType::class, [
                 'event'          => $options['event'],
+                'locale'         => $options['locale'],
                 'error_bubbling' => false,
             ])
         ;
@@ -47,7 +48,7 @@ class OptionsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Options::class,

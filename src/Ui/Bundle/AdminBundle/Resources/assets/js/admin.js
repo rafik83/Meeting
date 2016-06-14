@@ -13,6 +13,7 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update');
 
 require('elao-form.js');
+require('select2');
 
 // Init function
 
@@ -32,7 +33,7 @@ function init(target) {
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
-    $('.clear-on-hidden-modal')
+    $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (e) {
             $(e.target).removeData('bs.modal').find('.modal-content').html($(e.target).data('placeholder'));
         })
@@ -40,6 +41,17 @@ function init(target) {
             $(e.target).removeData('bs.modal').find('.modal-content').empty();
         })
     ;
+
+    [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: true
+        });
+    });
 
     /* tablesort */
     function cleanNumber(i) {

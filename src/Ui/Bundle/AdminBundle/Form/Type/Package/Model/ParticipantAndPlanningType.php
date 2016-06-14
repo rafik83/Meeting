@@ -40,12 +40,14 @@ class ParticipantAndPlanningType extends AbstractType
             ])
             ->add('participant', ProductChoiceType::class, [
                 'event'            => $options['event'],
+                'locale'           => $options['locale'],
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PARTICIPANT]);
                 },
             ])
             ->add('planning', ProductChoiceType::class, [
                 'event'            => $options['event'],
+                'locale'           => $options['locale'],
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLANNING]);
                 },
@@ -58,7 +60,7 @@ class ParticipantAndPlanningType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => ParticipantAndPlanning::class,

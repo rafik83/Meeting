@@ -1,0 +1,39 @@
+Proximum\Vimeet\Domain\Model\PromotionCode:
+    type:  entity
+    table: promotion_code
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        code:
+            type: string
+        validUntil:
+            type: datetime
+            nullable: true
+        stock:
+            type: integer
+            nullable: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation
+            mappedBy: promotionCode
+            indexBy: locale
+            cascade: ["persist"]
+        promotions:
+            targetEntity: Proximum\Vimeet\Domain\Model\Promotion
+            mappedBy: promotionCode
+            cascade: ["all"]
+            orphanRemoval: true
+    uniqueConstraints:
+        unique_code_idx:
+            columns: event_id, code

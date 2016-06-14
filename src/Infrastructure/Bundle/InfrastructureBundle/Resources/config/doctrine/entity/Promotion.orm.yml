@@ -1,0 +1,28 @@
+Proximum\Vimeet\Domain\Model\Promotion:
+    type:  entity
+    table: promotion
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: string
+        value:
+            type: float
+    manyToOne:
+        promotionCode:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
+            inversedBy: promotions
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    uniqueConstraints:
+        unique_promotion_product:
+            columns: [promotion_code_id, product_id]

@@ -1015,3 +1015,64 @@ form:
                 label: N° de TVA
             submit:
                 label: Enregistrer
+    promotion_code_create:
+        children:
+            title:
+                label: Titre
+            code:
+                label: Code
+            validUntil:
+                label: Valide jusqu'au
+            stock:
+                label: Stock
+            submit:
+                label: Enregistrer
+            promotions:
+                label: Promotions
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        product:
+                            label: Produit
+                        type:
+                            label: Type
+                        value:
+                            label: Valeur
+    promotion_code_update:
+        children:
+            title:
+                label: Titre
+            code:
+                label: Code
+            validUntil:
+                label: Valide jusqu'au
+            stock:
+                label: Stock
+            submit:
+                label: Enregistrer
+            promotions:
+                label: Promotions
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        product:
+                            label: Produit
+                        type:
+                            label: Type
+                        value:
+                            label: Valeur
+    promotion_code_translation:
+        children:
+            label:
+                label: Libellé
+            description:
+                label: Description
+    product_choice:
+        group_by:
+            type:
+                plan: Formules
+                participant: Participants
+                planning: Plannings
+                option: Options
