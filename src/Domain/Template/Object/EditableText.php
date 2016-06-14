@@ -105,4 +105,20 @@ class EditableText extends EditableObject implements ContentObjectInterface
     {
         return (int) $this->getOption('maxLength');
     }
+
+    /**
+     * Get fallback content if object is translatable.
+     *
+     * @return string|null
+     */
+    public function getFallbackContent()
+    {
+        if ($this->isTranslatable() && is_array($this->data['text']) || is_array($this->data['text'])) {
+            return isset($this->data['text'][$this->getFallback()])
+                ? $this->data['text'][$this->getFallback()]
+                : null;
+        }
+
+        return null;
+    }
 }
