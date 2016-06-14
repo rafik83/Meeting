@@ -81,7 +81,10 @@ class PackageController extends Controller
 
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
-        if (null !== $uncompletedStep && FunnelStep::TYPE_PLAN === $uncompletedStep->type) {
+        if ($currentStep !== $uncompletedStep
+            && null !== $uncompletedStep
+            && FunnelStep::TYPE_PLAN === $uncompletedStep->type
+        ) {
             return $this->redirectToRoute(
                 'event_package_step',
                 [
