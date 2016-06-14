@@ -427,9 +427,7 @@ class Product
      */
     public function getCurrency()
     {
-        // Temporary. Will be replaced by the event currency
-
-        return 'EUR';
+        return $this->event->getCurrency();
     }
 
     /**
