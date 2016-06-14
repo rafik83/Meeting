@@ -96,6 +96,12 @@ services:
             - '@repository.package_repository'
         tags:
             - { name: form.type }
+    form_type_event.event_update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType
+        arguments:
+            - '%infrastructure.supported_currencies%'
+        tags:
+            - { name: form.type }
 
     #
     # Helper
