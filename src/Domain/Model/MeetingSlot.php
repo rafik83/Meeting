@@ -100,4 +100,12 @@ class MeetingSlot
     {
         return $this->enabled;
     }
+
+    /**
+     * @return \DateInterval
+     */
+    public function duration()
+    {
+        return $this->end->diff($this->begin)->format('%i min');
+    }
 }

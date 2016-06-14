@@ -1007,3 +1007,20 @@ form:
                 label: N° de TVA
             submit:
                 label: Enregistrer
+    generate_slot:
+        children:
+            recipes:
+                prototype:
+                    children:
+                        begin:
+                            label: Début
+                        end:
+                            label: Fin
+                        interval:
+                            label: Interval
+                        duration:
+                            label: Durée
+                label_add: Ajouter
+                label_delete: "&times;"
+        submit:
+            label:

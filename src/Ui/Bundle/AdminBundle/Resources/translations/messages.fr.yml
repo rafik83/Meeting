@@ -574,5 +574,6 @@ admin:
         productIncluded: Produits inclus
     schedule:
         link: Agenda
+        title: Agenda
         slots:
             title: Crénaux de rendez-vous

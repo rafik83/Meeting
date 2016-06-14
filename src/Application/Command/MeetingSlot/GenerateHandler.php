@@ -42,7 +42,7 @@ class GenerateHandler
      *
      * @return GenerateResult
      */
-    public function handler(Generate $generate)
+    public function handle(Generate $generate)
     {
         $slots = $this->slotGenerator->generate($generate->event, $generate->recipes);
 

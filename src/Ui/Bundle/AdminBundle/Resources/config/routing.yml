@@ -599,3 +599,9 @@ admin_schedule_slots:
     methods: [GET, POST]
     requirements:
         template: \d+
+admin_schedule_slots_generate:
+    path: /event/{event}/schedule/slots/generate
+    defaults: { _controller: AdminBundle:Schedule:generate }
+    methods: [GET, POST]
+    requirements:
+        template: \d+

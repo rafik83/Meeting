@@ -12,8 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigType;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\GenerateType;
+use Proximum\Vimeet\Application\Command\MeetingSlot\Generate;
 
 class ScheduleController extends Controller
 {
@@ -32,6 +37,32 @@ class ScheduleController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
             'slots' => $slots,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function generateAction(Request $request, Event $event)
+    {
+        $command = new Generate($event);
+        $form    = $this->createForm(GenerateType::class, $command, ['submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $result = $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', new TransMessage('flash.schedule.slot.generate.success', [
+                '%count%' => $result->count,
+            ]));
+
+            return $this->redirectToRoute('admin_schedule_slots', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Schedule:generate.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
         ]);
     }
 }
