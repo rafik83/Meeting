@@ -116,6 +116,16 @@ admin_event_update:
     defaults: { _controller: AdminBundle:Event:update }
 
 #
+# Content
+#
+admin_content_update_terms_of_sales:
+    path: /event/{event}/terms-of-sale/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Content:update }
+
+#
 # Rule
 #
 
