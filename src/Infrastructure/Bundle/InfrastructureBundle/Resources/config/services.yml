@@ -1186,3 +1186,8 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@repository.cart_row_repository'
+
+    package.planning.quantity_max_guesser:
+        class: Proximum\Vimeet\Domain\Package\Planning\QuantityMaxGuesser
+        arguments:
+            - '@repository.cart_row_repository'

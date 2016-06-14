@@ -133,7 +133,7 @@ services:
     form_type_package.participant_and_planning_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
         arguments:
-            - '@repository.cart_row_repository'
+            - '@package.planning.quantity_max_guesser'
         tags:
             - { name: form.type }
 
