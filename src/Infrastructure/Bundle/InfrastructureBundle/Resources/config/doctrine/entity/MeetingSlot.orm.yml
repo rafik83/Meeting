@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
             type: datetime
         end:
             type: datetime
+        enabled:
+            type: boolean
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

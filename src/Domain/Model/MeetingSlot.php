@@ -33,17 +33,24 @@ class MeetingSlot
     private $end;
 
     /**
+     * @var boolean
+     */
+    private $enabled = true;
+
+    /**
      * MeetingSlot constructor.
      *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param bool               $enabled
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, $enabled = true)
     {
-        $this->event    = $event;
-        $this->begin    = $begin;
-        $this->end      = $end;
+        $this->event   = $event;
+        $this->begin   = $begin;
+        $this->end     = $end;
+        $this->enabled = $enabled;
     }
 
     /**
@@ -65,14 +72,6 @@ class MeetingSlot
     }
 
     /**
-     * @param Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
      * Get begin.
      *
      * @return \DateTimeInterface
@@ -90,5 +89,15 @@ class MeetingSlot
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 }
