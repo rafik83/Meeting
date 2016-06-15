@@ -579,3 +579,8 @@ admin:
             title: Crénaux de rendez-vous
             generate:
                 title: Générer des crénaux de rendez-vous
+        slot:
+            lock: Blocker
+            unlock: Déblocker
+            locked: Blocké
+            unlocked: Déblocké

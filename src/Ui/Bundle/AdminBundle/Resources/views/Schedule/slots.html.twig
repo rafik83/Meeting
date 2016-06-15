@@ -43,10 +43,10 @@
                         {% if slot.locked %}
                             <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
                                 <div class="btn-group" role="group" aria-label="locked">
-                                    <button type="submit" class="btn btn-default">
+                                    <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
                                         <i class="glyphicon glyphicon-ok"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger active">
+                                    <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
                                         <i class="glyphicon glyphicon-lock"></i>
                                     </button>
                                 </div>
@@ -54,10 +54,10 @@
                         {% else %}
                             <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
                                 <div class="btn-group" role="group" aria-label="locked">
-                                    <button type="button" class="btn btn-success active">
+                                    <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
                                         <i class="glyphicon glyphicon-ok"></i>
                                     </button>
-                                    <button type="submit" class="btn btn-default">
+                                    <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
                                         <i class="glyphicon glyphicon-lock"></i>
                                     </button>
                                 </div>
