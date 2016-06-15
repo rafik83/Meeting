@@ -1022,5 +1022,11 @@ form:
                             label: Durée
                 label_add: Ajouter
                 label_delete: "&times;"
-        submit:
-            label:
+            submit:
+                label: Enregistrer
+    schedule_config:
+        children:
+            scale:
+                label: Echelle (min)
+            submit:
+                label: Enregistrer

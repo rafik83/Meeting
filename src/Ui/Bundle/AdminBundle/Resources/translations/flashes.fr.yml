@@ -191,3 +191,5 @@ flash:
         slot:
             generate:
                 success: %count% créneau a été ajouté|%count% crénaux ont été ajoutés
+        configure:
+            success: Votre configuration a bien été enregistrer

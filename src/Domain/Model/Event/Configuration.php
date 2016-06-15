@@ -28,6 +28,11 @@ class Configuration
     private $textColor;
 
     /**
+     * @var int
+     */
+    private $scheduleScale = 30;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -73,5 +78,29 @@ class Configuration
     public function getTextColor()
     {
         return $this->textColor;
+    }
+
+    /**
+     * Get scheduleScale
+     *
+     * @return int
+     */
+    public function getScheduleScale()
+    {
+        return $this->scheduleScale;
+    }
+
+    /**
+     * Set scheduleScale
+     *
+     * @param int $scheduleScale
+     *
+     * @return Configuration
+     */
+    public function setScheduleScale($scheduleScale)
+    {
+        $this->scheduleScale = $scheduleScale;
+
+        return $this;
     }
 }

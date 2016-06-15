@@ -776,6 +776,12 @@ services:
             - '@domain.meeting.slot.slot_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Generate }
+    command.schedule.configure_handler:
+        class: Proximum\Vimeet\Application\Command\Schedule\ConfigureHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Schedule\Configure }
 
     #
     # Security

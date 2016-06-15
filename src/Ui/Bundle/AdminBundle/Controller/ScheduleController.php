@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Schedule\Configure;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigureType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +24,22 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\Generate;
 class ScheduleController extends Controller
 {
     /**
-     * @param Event $event
+     * @param Request $request
+     * @param Event   $event
      *
      * @return Response
      */
-    public function slotsAction(Event $event)
+    public function slotsAction(Request $request, Event $event)
     {
-        $form = $this->createForm(ConfigType::class, [], ['submit' => true]);
+        $command = new Configure($event);
+        $form    = $this->createForm(ConfigureType::class, $command, ['submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.schedule.configure.success');
+
+            return $this->redirectToRoute('admin_schedule_slots', ['event' => $event->getId()]);
+        }
 
         $slots = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findByEvent($event);
 

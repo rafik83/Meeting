@@ -577,3 +577,5 @@ admin:
         title: Agenda
         slots:
             title: Crénaux de rendez-vous
+            generate:
+                title: Générer des crénaux de rendez-vous
