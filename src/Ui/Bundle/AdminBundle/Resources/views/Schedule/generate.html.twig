@@ -1,8 +1,24 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% form_theme form '@Ui/layout.html.twig' %}
+
 {% block content %}
     <h1>{{ 'admin.schedule.slots.generate.title'|trans }}</h1>
 
-    {{ form(form) }}
+    {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.recipes) }}
+        <div class="form-group submit-section navbar-fixed-bottom">
+            <div class="col-sm-3">
+                <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}" class="btn btn-text">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    Retour à la liste des créneaux
+                </a>
+            </div>
+            <div class="col-sm-9 text-right">
+                {{ form_widget(form.submit) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
 {% endblock %}
 

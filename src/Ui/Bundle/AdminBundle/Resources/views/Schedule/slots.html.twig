@@ -4,7 +4,15 @@
     <h1>{{ 'admin.schedule.title'|trans }}</h1>
 
     <div class="mg-bt">
-        {{ form(form) }}
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                {{ form_row(form.scale, { 'group_attr': { 'class': 'col-md-4 col-sm-6' }, 'label_columns': 6 }) }}
+                <div class="col-md-4 col-sm-6">
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
     </div>
 
     <h1>{{ 'admin.schedule.slots.title'|trans }}</h1>
