@@ -598,10 +598,24 @@ admin_schedule_slots:
     defaults: { _controller: AdminBundle:Schedule:slots }
     methods: [GET, POST]
     requirements:
-        template: \d+
+        event: \d+
 admin_schedule_slots_generate:
     path: /event/{event}/schedule/slots/generate
     defaults: { _controller: AdminBundle:Schedule:generate }
     methods: [GET, POST]
     requirements:
-        template: \d+
+        event: \d+
+admin_schedule_slot_lock:
+    path: /event/{event}/schedule/slog/{meetingSlot}/lock
+    defaults: { _controller: AdminBundle:Schedule:lock }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        meetingSlot: \d+
+admin_schedule_slot_unlock:
+    path: /event/{event}/schedule/slog/{meetingSlot}/unlock
+    defaults: { _controller: AdminBundle:Schedule:unlock }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        meetingSlot: \d+

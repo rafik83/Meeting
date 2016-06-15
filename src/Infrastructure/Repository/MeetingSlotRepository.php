@@ -45,6 +45,14 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(MeetingSlot $meetingSlot)
+    {
+        $this->entityManager->flush($meetingSlot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this

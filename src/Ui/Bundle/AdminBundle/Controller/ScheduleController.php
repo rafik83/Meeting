@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
+use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
 use Proximum\Vimeet\Application\Command\Schedule\Configure;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigureType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,6 +34,8 @@ class ScheduleController extends Controller
      */
     public function slotsAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $command = new Configure($event);
         $form    = $this->createForm(ConfigureType::class, $command, ['submit' => true]);
 
@@ -58,6 +63,8 @@ class ScheduleController extends Controller
      */
     public function generateAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $command = new Generate($event);
         $form    = $this->createForm(GenerateType::class, $command, ['submit' => true]);
 
@@ -74,5 +81,55 @@ class ScheduleController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Event       $event
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return RedirectResponse
+     */
+    public function lockAction(Event $event, MeetingSlot $meetingSlot)
+    {
+        return $this->handleAndRedirect($event, $meetingSlot, new Lock($meetingSlot));
+    }
+
+    /**
+     * @param Event       $event
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return RedirectResponse
+     */
+    public function unlockAction(Event $event, MeetingSlot $meetingSlot)
+    {
+        return $this->handleAndRedirect($event, $meetingSlot, new Unlock($meetingSlot));
+    }
+
+    /**
+     * @param Event       $event
+     * @param MeetingSlot $meetingSlot
+     */
+    private function denyAccessIfWrongEvent(Event $event, MeetingSlot $meetingSlot)
+    {
+        if ($meetingSlot->getEvent() !== $event) {
+            throw $this->createAccessDeniedException('This meeting slot is not available for this event.');
+        }
+    }
+
+    /**
+     * @param Event       $event
+     * @param MeetingSlot $meetingSlot
+     * @param mixed       $command
+     *
+     * @return RedirectResponse
+     */
+    private function handleAndRedirect(Event $event, MeetingSlot $meetingSlot, $command)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfWrongEvent($event, $meetingSlot);
+
+        $this->get('tactician.commandbus')->handle($command);
+
+        return $this->redirectToRoute('admin_schedule_slots', ['event' => $meetingSlot->getEvent()->getId()]);
     }
 }

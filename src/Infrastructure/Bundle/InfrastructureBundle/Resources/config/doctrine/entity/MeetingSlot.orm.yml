@@ -11,7 +11,7 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
             type: datetime
         end:
             type: datetime
-        enabled:
+        locked:
             type: boolean
     manyToOne:
         event:

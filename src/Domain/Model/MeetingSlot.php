@@ -35,7 +35,7 @@ class MeetingSlot
     /**
      * @var boolean
      */
-    private $enabled = true;
+    private $locked = false;
 
     /**
      * MeetingSlot constructor.
@@ -43,14 +43,14 @@ class MeetingSlot
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
-     * @param bool               $enabled
+     * @param bool               $locked
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, $enabled = true)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, $locked = false)
     {
         $this->event   = $event;
         $this->begin   = $begin;
         $this->end     = $end;
-        $this->enabled = $enabled;
+        $this->locked = $locked;
     }
 
     /**
@@ -92,13 +92,33 @@ class MeetingSlot
     }
 
     /**
-     * Get enabled
+     * Get locked
      *
      * @return boolean
      */
-    public function isEnabled()
+    public function isLocked()
     {
-        return $this->enabled;
+        return $this->locked;
+    }
+
+    /**
+     * @return MeetingSlot
+     */
+    public function lock()
+    {
+        $this->locked = true;
+
+        return $this;
+    }
+
+    /**
+     * @return MeetingSlot
+     */
+    public function unlock()
+    {
+        $this->locked = false;
+
+        return $this;
     }
 
     /**

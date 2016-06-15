@@ -30,7 +30,7 @@
                 <th>Début</th>
                 <th>Fin</th>
                 <th>Durée</th>
-                <th>Activé</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -39,8 +39,30 @@
                     <td>{{ slot.begin|localizeddate }}</td>
                     <td>{{ slot.end|localizeddate }}</td>
                     <td>{{ slot.duration }}</td>
-                    <td>
-                        <i class="glyphicon {{ slot.enabled ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger' }}"></i>
+                    <td class="text-center">
+                        {% if slot.locked %}
+                            <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                <div class="btn-group" role="group" aria-label="locked">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger active">
+                                        <i class="glyphicon glyphicon-lock"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                <div class="btn-group" role="group" aria-label="locked">
+                                    <button type="button" class="btn btn-success active">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </button>
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-lock"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
