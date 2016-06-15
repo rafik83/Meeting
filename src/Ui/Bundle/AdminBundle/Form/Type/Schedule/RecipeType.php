@@ -54,6 +54,9 @@ class RecipeType extends AbstractType
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getBlockPrefix()
     {
         return 'generate_slot_recipe';
