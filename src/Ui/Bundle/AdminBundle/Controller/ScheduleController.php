@@ -66,7 +66,7 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $command = new Generate($event);
-        $form    = $this->createForm(GenerateType::class, $command, ['submit' => true]);
+        $form    = $this->createForm(GenerateType::class, $command, ['submit' => true, 'event' => $event]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($command);

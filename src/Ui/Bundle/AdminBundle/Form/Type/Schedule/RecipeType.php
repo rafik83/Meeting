@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule;
 
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -26,8 +27,8 @@ class RecipeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('begin', DateTimePickerType::class)
-            ->add('end', DateTimePickerType::class)
+            ->add('begin', DateTimePickerType::class, ['view_timezone' => $options['event']->getTimeZone()])
+            ->add('end', DateTimePickerType::class, ['view_timezone' => $options['event']->getTimeZone()])
             ->add('interval', IntegerType::class)
             ->add('duration', IntegerType::class)
         ;
@@ -38,6 +39,8 @@ class RecipeType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired('event');
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Recipe::class,
             'empty_data' => function (FormInterface $form) {
