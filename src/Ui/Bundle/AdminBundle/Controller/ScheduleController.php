@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigType;
-use Proximum\Vimeet\Ui\Flash\TransMessage;
+use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,7 +53,7 @@ class ScheduleController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', new TransMessage('flash.schedule.slot.generate.success', [
+            $this->addFlash('success', new TranschoiceMessage('flash.schedule.slot.generate.success', $result->count, [
                 '%count%' => $result->count,
             ]));
 

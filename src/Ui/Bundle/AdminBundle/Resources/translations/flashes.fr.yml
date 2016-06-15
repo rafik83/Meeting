@@ -187,3 +187,7 @@ flash:
     billing:
         update_info:
             success: Vos informations de facturation ont été mis à jour
+    schedule:
+        slot:
+            generate:
+                success: %count% créneau a été ajouté|%count% crénaux ont été ajoutés
