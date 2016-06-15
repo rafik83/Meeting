@@ -53,7 +53,6 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
 
         $plans        = new SelectPlan($sheet);
         $plans->plan  = $product;
-        $plans->sheet = $sheet;
 
         $plansHandler = new SelectPlanHandler($cartRowRepository->reveal(), $dateTime);
         $plansHandler->handle($plans);
@@ -106,7 +105,6 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
 
         $plans        = new SelectPlan($sheet);
         $plans->plan  = $product;
-        $plans->sheet = $sheet;
 
         $plansHandler = new SelectPlanHandler($cartRowRepository->reveal(), $dateTime);
         $plansHandler->handle($plans);
