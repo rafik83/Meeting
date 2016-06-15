@@ -176,6 +176,14 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
+     * @return int
+     */
+    public function countParticipant()
+    {
+        return $this->participants->count();
+    }
+
+    /**
      * @param Participant $participant
      *
      * @return Sheet

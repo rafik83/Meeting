@@ -423,6 +423,18 @@ class Product
     }
 
     /**
+     * Get the number of participant included in this product
+     *
+     * @return int
+     */
+    public function getIncludedParticipantQuantity()
+    {
+        $included = $this->getIncludedParticipantProduct();
+
+        return $included ? $included->getQuantity() : 0;
+    }
+
+    /**
      * @return boolean|ProductIncluded
      */
     public function getIncludedParticipantProduct()

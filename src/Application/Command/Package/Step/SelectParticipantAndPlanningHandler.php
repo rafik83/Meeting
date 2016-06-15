@@ -10,8 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
-use Proximum\Vimeet\Domain\Cart\Cart;
-use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
@@ -24,9 +23,9 @@ class SelectParticipantAndPlanningHandler
     private $cartRowRepository;
 
     /**
-     * @var Cart
+     * @var CartManager
      */
-    private $cart;
+    private $cartManager;
 
     /**
      * @var \DateTimeInterface
@@ -35,13 +34,13 @@ class SelectParticipantAndPlanningHandler
 
     /**
      * @param CartRowRepositoryInterface $cartRowRepository
-     * @param Cart                       $cart
+     * @param CartManager                $cartManager
      * @param \DateTimeInterface         $datetime
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, Cart $cart, \DateTimeInterface $datetime)
+    public function __construct(CartRowRepositoryInterface $cartRowRepository, CartManager $cartManager, \DateTimeInterface $datetime)
     {
         $this->cartRowRepository = $cartRowRepository;
-        $this->cart              = $cart;
+        $this->cartManager       = $cartManager;
         $this->datetime          = $datetime;
     }
 
@@ -53,31 +52,13 @@ class SelectParticipantAndPlanningHandler
         $sheet   = $selectParticipantAndPlanning->sheet;
         $package = $sheet->getPackage();
 
-        // Add participants number to cart
-        $this->cart->addSheetParticipantsToCart($sheet);
+        $cart = $this->cartManager->getCart($sheet);
+        $cart->resolveParticipantsQuantity();
 
-        // Find a Planning CartRow
-        $planningCartRow = $this->cartRowRepository->findCartRowPlanningBySheet($sheet);
-
-        if (null === $planningCartRow
-            || $planningCartRow->getQuantity() !== $selectParticipantAndPlanning->planningQuantity
-        ) {
-            if (null !== $planningCartRow) {
-                // Delete previous planning CartRow
-                $this->cartRowRepository->delete($planningCartRow);
-            }
-
-            if (null !== $package->getPlanning() && $selectParticipantAndPlanning->planningQuantity > 0) {
-                // Add planning product and quantity
-                $this->cartRowRepository->add(
-                    new CartRow(
-                        $sheet,
-                        $package->getPlanning(),
-                        $selectParticipantAndPlanning->planningQuantity,
-                        $this->datetime
-                    )
-                );
-            }
+        if ($package && $package->getPlanning()) {
+            $cart->setProduct($package->getPlanning(), $selectParticipantAndPlanning->planningQuantity);
         }
+
+        $this->cartManager->save($cart);
     }
 }

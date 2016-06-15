@@ -10,95 +10,147 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
-use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\CartRow;
 
 class Cart
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var Sheet
      */
-    private $cartRowRepository;
+    private $sheet;
 
     /**
-     * @var \DateTimeInterface
+     * @var CartRow[]
      */
-    private $datetime;
+    private $rows;
 
     /**
-     * @param CartRowRepositoryInterface $cartRowRepository
-     * @param \DateTimeInterface         $datetime
+     * Cart constructor.
+     *
+     * @param Sheet     $sheet
+     * @param CartRow[] $rows
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, \DateTimeInterface $datetime)
+    public function __construct(Sheet $sheet, array $rows)
     {
-        $this->cartRowRepository = $cartRowRepository;
-        $this->datetime          = $datetime;
+        $this->sheet = $sheet;
+        $this->rows  = new ArrayCollection($rows);
     }
 
     /**
-     * @param Participant $participant
-     * @param Sheet       $sheet
+     * Get sheet
+     *
+     * @return Sheet
      */
-    public function addParticipantToSheetAndUpdateCart(Participant $participant, Sheet $sheet)
+    public function getSheet()
     {
-        $sheet->addParticipant($participant);
-        $this->addSheetParticipantsToCart($sheet);
+        return $this->sheet;
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Product $product
+     * @param int     $quantity
+     *
+     * @return Cart
      */
-    public function addSheetParticipantsToCart(Sheet $sheet)
+    public function setProduct(Product $product, $quantity)
     {
-        $selectedPlan = $this->cartRowRepository->findCartRowPlanBySheet($sheet);
+        if ($this->hasProduct($product)) {
 
-        if (null === $selectedPlan) {
-            return;
+            $row = $this->getRow($product);
+
+            if ($quantity > 0) {
+                $this->rows->removeElement($row);
+            } else {
+                $row->setQuantity($quantity);
+            }
+
+        } elseif ($quantity > 0) {
+            $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
 
-        $package = $sheet->getPackage();
-
-        // Find a Participant CartRow
-        $participantCartRow = $this->cartRowRepository->findCartRowParticipantBySheet($sheet);
-
-        if (null !== $participantCartRow) {
-            // Delete previous participant CartRow
-            $this->cartRowRepository->delete($participantCartRow);
-        }
-
-        $additionalParticipantsNumber = $this->getAdditionalParticipantsNumber($selectedPlan->getProduct(), $sheet);
-
-        if ($additionalParticipantsNumber > 0) {
-            // Add participant product and quantity
-            $this->cartRowRepository->add(
-                new CartRow(
-                    $sheet,
-                    $package->getParticipant(),
-                    $additionalParticipantsNumber,
-                    $this->datetime
-                )
-            );
-        }
+        return $this;
     }
 
     /**
-     * @param Product $plan
-     * @param Sheet   $sheet
+     * Set additionnal participant quantity
+     *
+     * @return Cart
+     */
+    public function resolveParticipantsQuantity()
+    {
+        $additionnal = $this->sheet->countParticipant() - $this->getIncludedParticipantQuantity();
+
+        if ($additionnal > 0 && $row = $this->getParticipantRow()) {
+            $row->setQuantity($additionnal);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get how many participant are included.
      *
      * @return int
      */
-    private function getAdditionalParticipantsNumber(Product $plan, Sheet $sheet)
+    public function getIncludedParticipantQuantity()
     {
-        $includedParticipantNumber  = 0;
-        $includedParticipantProduct = $plan->getIncludedParticipantProduct();
+        return array_reduce($this->getRows(), function ($carry, CartRow $row) {
+            return $carry + $row->getProduct()->getIncludedParticipantQuantity();
+        }, 0);
+    }
 
-        if ($includedParticipantProduct) {
-            $includedParticipantNumber = $includedParticipantProduct->getQuantity();
-        }
+    /**
+     * @return CartRow
+     */
+    public function getParticipantRow()
+    {
+        return $this->rows->filter(function (CartRow $cartRow) {
+            return $cartRow->getProduct()->isParticipant();
+        })->first();
+    }
 
-        return max(0, $sheet->getParticipants()->count() - $includedParticipantNumber);
+    /**
+     * @return CartRow
+     */
+    public function getPlanningRow()
+    {
+        return $this->rows->filter(function (CartRow $cartRow) {
+            return $cartRow->getProduct()->isPlanning();
+        })->first();
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasProduct(Product $product)
+    {
+        return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
+            return $cartRow->getProduct() === $product;
+        });
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return CartRow
+     */
+    public function getRow(Product $product)
+    {
+        return $this->rows->filter(function (CartRow $cartRow) use ($product) {
+            return $cartRow->getProduct() === $product;
+        })->first();
+    }
+
+    /**
+     * @return CartRow[]
+     */
+    public function getRows()
+    {
+        return $this->rows->toArray();
     }
 }

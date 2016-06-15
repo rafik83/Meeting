@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThi
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
@@ -82,7 +83,7 @@ class AddHandler
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         EventDispatcherInterface $eventDispatcher,
-        Cart $cart
+        CartManager $cart
     ) {
         $this->userRepository                = $userRepository;
         $this->participantRepository         = $participantRepository;
@@ -90,7 +91,7 @@ class AddHandler
         $this->templateDataFactory           = $templateDataFactory;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->eventDispatcher               = $eventDispatcher;
-        $this->cart                          = $cart;
+        $this->cartManager                   = $cart;
     }
 
     /**
@@ -117,9 +118,15 @@ class AddHandler
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
+        // Create participant
         $participant = $this->createAndFillParticipant($add, $user);
-        $this->cart->addParticipantToSheetAndUpdateCart($participant, $add->sheet);
 
+        // Add addionnal
+        $cart = $this->cartManager->getCart($add->sheet);
+        $cart->resolveParticipantsQuantity();
+        $this->cartManager->save($cart);
+
+        // Send event
         if ($user->isActive()) {
             $this->sendCompleteProfileEvent($add, $user, $participant);
         } else {
@@ -184,6 +191,8 @@ class AddHandler
 
         $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
         $this->participantRepository->add($participant);
+
+        $add->sheet->addParticipant($participant);
 
         return $participant;
     }

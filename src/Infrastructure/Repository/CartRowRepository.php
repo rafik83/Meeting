@@ -41,6 +41,33 @@ class CartRowRepository implements CartRowRepositoryInterface
     }
 
     /**
+     * @param CartRow $cartRow
+     */
+    public function set(CartRow $cartRow)
+    {
+        $this->entityManager->flush($cartRow);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $cartRows
+     */
+    public function deleteWhereNotIn(Sheet $sheet, array $cartRows)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(CartRow::class, 'cartRow')
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->andWhere('cartRow NOT IN (:cartRows)')
+            ->setParameter('cartRows', $cartRows);
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findBySheet(Sheet $sheet)
