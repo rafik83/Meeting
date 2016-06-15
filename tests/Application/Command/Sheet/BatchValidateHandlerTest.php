@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -31,9 +32,12 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $date    = new \DateTime();
         $comment = 'truc muche';
 
-        $sheet1 = new Sheet($event, $type, [], [], new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], [], new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], [], new \DateTime());
+        $user1 = new User('test@test.com', 'salt', 'password', 'fr');
+        $user2 = new User('test@test.com', 'salt', 'password', 'fr');
+        $user3 = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
+        $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
         $sheet3->markAsValidated();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);

@@ -14,9 +14,10 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
@@ -26,9 +27,12 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $dateTime = new \DateTime();
-        $sheet1   = new Sheet($event, $type, [], [], $dateTime);
-        $sheet2   = new Sheet($event, $type, [], [], $dateTime);
-        $sheet3   = new Sheet($event, $type, [], [], $dateTime);
+        $user1    = new User('test@test.com', 'salt', 'password', 'fr');
+        $user2    = new User('test@test.com', 'salt', 'password', 'fr');
+        $user3    = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet1   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheet2   = new Sheet($event, $type, [], $user2, $dateTime);
+        $sheet3   = new Sheet($event, $type, [], $user3, $dateTime);
 
         $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
 

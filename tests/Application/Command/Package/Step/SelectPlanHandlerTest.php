@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $sheet    = new Sheet($event, $type, [], [], $datetime);
+        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $product  = Product::createPlan(
             $event,
             'plan',
@@ -63,7 +65,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $sheet    = new Sheet($event, $type, [], [], $datetime);
+        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $product  = Product::createPlan(
             $event,
             'plan',

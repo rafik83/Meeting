@@ -24,9 +24,9 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
-
         $user1 = new User('user1@test.com', '', '', 'fr');
+        $sheet = new Sheet($event, $type, [], $user1, new \DateTime());
+
         $user2 = new User('user2@test.com', '', '', 'fr');
         $user3 = new User('user3@test.com', '', '', 'fr');
 
@@ -42,7 +42,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, new \DateTime());
 
         $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true, true);
         $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true, true);
@@ -61,9 +62,9 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
-
         $user1 = new User('user1@test.com', '', '', 'fr');
+        $sheet = new Sheet($event, $type, [], $user1, new \DateTime());
+
         $user2 = new User('user2@test.com', '', '', 'fr');
         $user3 = new User('user3@test.com', '', '', 'fr');
         $user4 = new User('user4@test.com', '', '', 'fr');
@@ -87,7 +88,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event    = new Event();
         $type     = new Type($event);
-        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $user     = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, new \DateTime());
         $dateTime = new \DateTime();
 
         $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
@@ -99,7 +101,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $event    = new Event();
         $type     = new Type($event);
-        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $user     = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, new \DateTime());
         $dateTime = new \DateTime();
 
         $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_OPERATOR, $dateTime);
@@ -113,7 +116,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
         $event    = new Event();
         $type     = new Type($event);
-        $sheet    = new Sheet($event, $type, [], [], new \DateTime());
+        $user     = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, new \DateTime());
         $dateTime = new \DateTime();
 
         $operator = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_SUPER_ADMIN, $dateTime);

@@ -100,7 +100,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
-        $sheet       = new Sheet($event, $type, [], [], $now);
+        $sheet       = new Sheet($event, $type, [], $user, $now);
         $participant = new Participant(
             $sheet,
             $user,
@@ -117,7 +117,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
 
-        $sheetWithParticipant = new Sheet($event, $type, [], [], $now);
+        $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
             $sheetWithParticipant,
             $user,
@@ -239,7 +239,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
-        $sheet = new Sheet($event, $type, [], [], $now);
+        $sheet = new Sheet($event, $type, [], $user, $now);
         $participant  = new Participant(
             $sheet,
             $user,
@@ -256,7 +256,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
 
-        $sheetWithParticipant = new Sheet($event, $type, [], [], $now);
+        $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
             $sheetWithParticipant,
             $user,
