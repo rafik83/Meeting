@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Domain\Meeting\Slot;
 
 class Recipe
 {
-
-
     /**
      * @var \DateTimeInterface
      */
