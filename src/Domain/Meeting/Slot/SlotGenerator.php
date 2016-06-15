@@ -34,7 +34,7 @@ class SlotGenerator
                 $end = clone $date;
                 $end->modify(sprintf('+%sminutes', $recipe->duration));
 
-                $slots[] = new MeetingSlot($event, $date, $end, true);
+                $slots[] = new MeetingSlot($event, $date, $end);
             }
 
         }

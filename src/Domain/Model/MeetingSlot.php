@@ -43,14 +43,14 @@ class MeetingSlot
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
-     * @param bool               $locked
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, $locked = false)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end)
     {
         $this->event   = $event;
         $this->begin   = $begin;
         $this->end     = $end;
-        $this->locked = $locked;
+
+        $this->unlock();
     }
 
     /**
