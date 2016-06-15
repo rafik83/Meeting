@@ -118,8 +118,7 @@ class AddHandler
         }
 
         $participant = $this->createAndFillParticipant($add, $user);
-        $add->sheet->addParticipant($participant);
-        $this->cart->addSheetParticipantsToCart($add->sheet);
+        $this->cart->addParticipantToSheetAndUpdateCart($participant, $add->sheet);
 
         if ($user->isActive()) {
             $this->sendCompleteProfileEvent($add, $user, $participant);

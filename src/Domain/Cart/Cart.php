@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
@@ -35,6 +36,16 @@ class Cart
     {
         $this->cartRowRepository = $cartRowRepository;
         $this->datetime          = $datetime;
+    }
+
+    /**
+     * @param Participant $participant
+     * @param Sheet       $sheet
+     */
+    public function addParticipantToSheetAndUpdateCart(Participant $participant, Sheet $sheet)
+    {
+        $sheet->addParticipant($participant);
+        $this->addSheetParticipantsToCart($sheet);
     }
 
     /**
