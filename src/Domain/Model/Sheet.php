@@ -180,7 +180,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
      *
      * @return Sheet
      */
-    public function addParticpant(Participant $participant)
+    public function addParticipant(Participant $participant)
     {
         $this->participants->add($participant);
 

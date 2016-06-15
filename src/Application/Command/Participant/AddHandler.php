@@ -118,7 +118,7 @@ class AddHandler
         }
 
         $participant = $this->createAndFillParticipant($add, $user);
-        $add->sheet->addParticpant($participant);
+        $add->sheet->addParticipant($participant);
         $this->cart->addSheetParticipantsToCart($add->sheet);
 
         if ($user->isActive()) {
