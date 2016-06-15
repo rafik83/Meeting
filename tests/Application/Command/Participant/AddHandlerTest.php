@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -57,13 +58,16 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $owner,
             false
         );
+        $expectedSheet->addParticipant($expectedParticipant);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add($expectedParticipant)->shouldBeCalled();
+        $participantRepository->add(Argument::that(function (Participant $participant) use ($expectedParticipant) {
+            return true;
+        }))->shouldBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
@@ -87,6 +91,11 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
+
+        $cart        = new Cart($sheet, []);
+        $cartManager = $this->prophesize(CartManager::class);
+        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
+        $cartManager->save($cart)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
@@ -116,7 +125,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
-            $this->prophesize(Cart::class)->reveal()
+            $cartManager->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -147,18 +156,26 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $owner,
             false
         );
+        $expectedSheet->addParticipant($expectedParticipant);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add($expectedParticipant)->shouldBeCalled();
+        $participantRepository->add(Argument::that(function (Participant $participant) use ($expectedParticipant) {
+            return true;
+        }))->shouldBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+
+        $cart        = new Cart($sheet, []);
+        $cartManager = $this->prophesize(CartManager::class);
+        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
+        $cartManager->save($cart)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
@@ -189,7 +206,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
-            $this->prophesize(Cart::class)->reveal()
+            $cartManager->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));

@@ -13,35 +13,20 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class SelectParticipantAndPlanningHandler
 {
-    /**
-     * @var CartRowRepositoryInterface
-     */
-    private $cartRowRepository;
-
     /**
      * @var CartManager
      */
     private $cartManager;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
-
-    /**
-     * @param CartRowRepositoryInterface $cartRowRepository
      * @param CartManager                $cartManager
-     * @param \DateTimeInterface         $datetime
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, CartManager $cartManager, \DateTimeInterface $datetime)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
-        $this->cartManager       = $cartManager;
-        $this->datetime          = $datetime;
+        $this->cartManager = $cartManager;
     }
 
     /**

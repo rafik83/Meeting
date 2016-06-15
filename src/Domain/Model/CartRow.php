@@ -75,6 +75,21 @@ class CartRow
     }
 
     /**
+     * Set product
+     *
+     * @param Product $product
+     *
+     * @return CartRow
+     */
+    public function setProduct($product)
+    {
+        $this->product           = $product;
+        $this->serializedProduct = $product->getSerializedData();
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getQuantity()

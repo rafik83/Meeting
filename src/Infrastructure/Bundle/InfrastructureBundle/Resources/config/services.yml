@@ -761,16 +761,13 @@ services:
     command.package.step.select_plans_handler:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
-            - '@repository.cart_row_repository'
-            - '@datetime'
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler
         arguments:
-            - '@repository.cart_row_repository'
             - '@cart_manager'
-            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
     command.info.update_info_handler:

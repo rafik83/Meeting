@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Hautelook\AliceBundle\Tests\SymfonyApp\TestBundle\Entity\Prod;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -62,9 +63,9 @@ class Cart
             $row = $this->getRow($product);
 
             if ($quantity > 0) {
-                $this->rows->removeElement($row);
+                $row->setProduct($product)->setQuantity($quantity);
             } else {
-                $row->setQuantity($quantity);
+                $this->rows->removeElement($row);
             }
 
         } elseif ($quantity > 0) {
@@ -129,6 +130,12 @@ class Cart
      */
     public function hasProduct(Product $product)
     {
+        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
+            return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
+                return $cartRow->getProduct()->getType() === $product->getType();
+            });
+        }
+
         return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
@@ -141,6 +148,12 @@ class Cart
      */
     public function getRow(Product $product)
     {
+        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
+            return $this->rows->filter(function (CartRow $cartRow) use ($product) {
+                return $cartRow->getProduct()->getType() === $product->getType();
+            })->first();
+        }
+
         return $this->rows->filter(function (CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         })->first();

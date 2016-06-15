@@ -21,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,19 +46,17 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $package->setParticipant($participantProduct);
         $type->setPackage($package);
 
-        $expectedPlanningCartRow = new CartRow($sheet, $planningProduct, 1, $datetime);
+        $actualCart = new Cart($sheet, []);
+        $expectedCart = new Cart($sheet, [new CartRow($sheet, $planningProduct, 1)]);
 
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
+        $cartManager = $this->prophesize(CartManager::class);
+        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($actualCart);
+        $cartManager->save($expectedCart)->shouldBeCalled();
 
-        $cartRowRepository->findCartRowPlanningBySheet($sheet)->shouldBeCalled()->willReturn(null);
-        $cartRowRepository->add($expectedPlanningCartRow)->shouldBeCalled();
+        $command                   = new SelectParticipantAndPlanning($sheet);
+        $command->planningQuantity = 1;
 
-        $selectParticipantAndPlanning = new SelectParticipantAndPlanning($sheet);
-        $selectParticipantAndPlanning->planningQuantity = 1;
-
-        $selectParticipantAndPlanningHandler = new SelectParticipantAndPlanningHandler(
-            $cartRowRepository->reveal(), $this->prophesize(Cart::class)->reveal(), $datetime
-        );
-        $selectParticipantAndPlanningHandler->handle($selectParticipantAndPlanning);
+        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal());
+        $handler->handle($command);
     }
 }

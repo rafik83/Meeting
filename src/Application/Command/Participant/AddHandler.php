@@ -63,7 +63,7 @@ class AddHandler
     /**
      * @var Cart
      */
-    private $cart;
+    private $cartManager;
 
     /**
      * AddHandler constructor.
@@ -74,7 +74,7 @@ class AddHandler
      * @param TemplateDataFactory            $templateDataFactory
      * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
      * @param EventDispatcherInterface       $eventDispatcher
-     * @param Cart                           $cart
+     * @param CartManager                    $cartManager
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -83,7 +83,7 @@ class AddHandler
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         EventDispatcherInterface $eventDispatcher,
-        CartManager $cart
+        CartManager $cartManager
     ) {
         $this->userRepository                = $userRepository;
         $this->participantRepository         = $participantRepository;
@@ -91,7 +91,7 @@ class AddHandler
         $this->templateDataFactory           = $templateDataFactory;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->eventDispatcher               = $eventDispatcher;
-        $this->cartManager                   = $cart;
+        $this->cartManager                   = $cartManager;
     }
 
     /**

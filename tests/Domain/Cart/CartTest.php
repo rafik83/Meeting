@@ -11,94 +11,36 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Cart\Cart;
-use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAddOneParticipantToCart()
+    public function testAdd()
     {
-        $event       = new Event();
-        $type        = new Type($event);
-        $datetime    = new \DateTime();
-        $sheet       = new Sheet($event, $type, [], [], $datetime);
-        $user        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
-        $participant = new Participant($sheet, $user, [], true, true);
-        $sheet->addParticipant($participant);
+        $datetime = new \DateTime();
+        $event    = new Event();
+        $type     = new Type($event);
+        $sheet    = new Sheet($event, $type, [], [], $datetime);
 
-        $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
-        $planningProduct    = Product::createPlanning($event, 'planning', 50, 10);
-        $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
+        $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 3, 3, 3, true);
+        $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 3, 3, 3, true);
 
-        $package  = new Package($event, 'My package', $datetime);
-        $package->enable(true, true, true);
-        $package->setPlans([$planProduct]);
-        $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
-        $type->setPackage($package);
+        $cart = new Cart($sheet, []);
+        $cart->setProduct($optionA, 1);
+        $this->assertCount(1, $cart->getRows());
+        $this->assertEquals(1, $cart->getRow($optionA)->getQuantity());
 
-        $expectedPlanCartRow = new CartRow($sheet, $planProduct, 1, $datetime);
-        $expectedParticipantCartRow = new CartRow($sheet, $participantProduct, 1, $datetime);
+        $cart->setProduct($optionA, 2);
+        $this->assertCount(1, $cart->getRows());
+        $this->assertEquals(2, $cart->getRow($optionA)->getQuantity());
 
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
-        $cartRowRepository->findCartRowParticipantBySheet($sheet)->shouldBeCalled()->willReturn(null);
-        $cartRowRepository->findCartRowPlanBySheet($sheet)->shouldBeCalled()->willReturn($expectedPlanCartRow);
-        $cartRowRepository->add($expectedParticipantCartRow)->shouldBeCalled();
-
-        $cart = new Cart($cartRowRepository->reveal(), $datetime);
-        $cart->addSheetParticipantsToCart($sheet);
-    }
-
-    public function testAddSeveralParticipantsToCart()
-    {
-        $event       = new Event();
-        $type        = new Type($event);
-        $datetime    = new \DateTime();
-        $sheet       = new Sheet($event, $type, [], [], $datetime);
-
-        $user1        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
-        $participant1 = new Participant($sheet, $user1, [], true, true);
-        $sheet->addParticipant($participant1);
-
-        $user2        = new User('marge.doe@example.net', '_salt_', '_password_', 'fr');
-        $participant2 = new Participant($sheet, $user2, [], false, true);
-        $sheet->addParticipant($participant2);
-
-        $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
-        $planningProduct    = Product::createPlanning($event, 'planning', 50, 10);
-        $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
-
-        $package  = new Package($event, 'My package', $datetime);
-        $package->enable(true, true, true);
-        $package->setPlans([$planProduct]);
-        $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
-        $type->setPackage($package);
-
-        $expectedPlanCartRow = new CartRow($sheet, $planProduct, 1, $datetime);
-        $previousParticipantCartRow = new CartRow($sheet, $participantProduct, 1, $datetime);
-        $expectedParticipantCartRow = new CartRow($sheet, $participantProduct, 2, $datetime);
-
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
-        $cartRowRepository->findCartRowPlanBySheet($sheet)->shouldBeCalled()->willReturn($expectedPlanCartRow);
-
-        // There is previous participant added to cart
-        $cartRowRepository->findCartRowParticipantBySheet($sheet)->shouldBeCalled()->willReturn($previousParticipantCartRow);
-
-        // Delete it
-        $cartRowRepository->delete($previousParticipantCartRow)->shouldBeCalled();
-
-        // Add the new one with two participants
-        $cartRowRepository->add($expectedParticipantCartRow)->shouldBeCalled();
-
-        $cart = new Cart($cartRowRepository->reveal(), $datetime);
-        $cart->addSheetParticipantsToCart($sheet);
+        $cart->setProduct($optionB, 1);
+        $this->assertCount(2, $cart->getRows());
+        $this->assertEquals(2, $cart->getRow($optionA)->getQuantity());
+        $this->assertEquals(1, $cart->getRow($optionB)->getQuantity());
     }
 }

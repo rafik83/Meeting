@@ -10,29 +10,23 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
-use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class SelectPlanHandler
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
-     * @var \DateTimeInterface
+     * SelectPlanHandler constructor.
+     *
+     * @param CartManager $cartManager
      */
-    private $datetime;
-
-    /**
-     * @param CartRowRepositoryInterface $cartRowRepository
-     * @param \DateTimeInterface         $datetime
-     */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, \DateTimeInterface $datetime)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
-        $this->datetime          = $datetime;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -40,14 +34,8 @@ class SelectPlanHandler
      */
     public function handle(SelectPlan $plans)
     {
-        $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($plans->sheet);
-
-        if (null === $cartRow || $cartRow->getProduct() !== $plans->plan) {
-            // Delete all Sheet Cart when the plan is selected or has changed
-            $this->cartRowRepository->deleteCartRowsBySheet($plans->sheet);
-
-            // Add the selected plan
-            $this->cartRowRepository->add(new CartRow($plans->sheet, $plans->plan, 1, $this->datetime));
-        }
+        $cartRow = $this->cartManager->getCart($plans->sheet);
+        $cartRow->setProduct($plans->plan, 1);
+        $this->cartManager->save($cartRow);
     }
 }
