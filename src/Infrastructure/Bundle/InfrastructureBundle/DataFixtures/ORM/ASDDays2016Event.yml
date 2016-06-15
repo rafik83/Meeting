@@ -27,53 +27,6 @@ Proximum\Vimeet\Domain\Model\Event:
             - Numéro de la Facture
             - Nom de l'événement
             - Montant net à payer
-        billingTemplate:
-            5645e4242d3df:
-                type: lib_text
-                required: true
-                label: { fr: "Nom", en: "Name" }
-                tags: ["billing_name"]
-            5645e47e7e499:
-                type: lib_text
-                required: false
-                label: { fr: "Téléphone", en: "Phone" }
-                tags: ["billing_phone"]
-            5645e52f445d1:
-                type: lib_email
-                required: true
-                label: { fr: "Email", en: "Email" }
-                tags: ["billing_email"]
-            5645e534daa0b:
-                type: lib_text
-                required: true
-                label: { fr: "Raison sociale", en: "Company" }
-                tags: ["billing_organization"]
-            5645e54061ff2:
-                type: lib_text
-                required: true
-                label: { fr: "Adresse", en: "Address" }
-                tags: ["billing_address"]
-            5645e5f35a9e0:
-                type: lib_text
-                required: true
-                label: { fr: "Code postal", en: "Zip code" }
-                tags: ["billing_zipcode"]
-            5645e6067f46a:
-                type: lib_text
-                required: true
-                label: { fr: "Ville", en: "City" }
-                tags: ["billing_city"]
-            5645e5fd8f6a7:
-                type: lib_country
-                required: true
-                label: { fr: "Pays", en: "Country" }
-                placeholder: { fr: "--- Sélectionner un pays  ---", en: "--- Sélectionner un pays  ---" }
-                tags: ["billing_country"]
-            5645e610e0e1b:
-                type: lib_text
-                required: false
-                label: { fr: "N° de TVA intracommunautaire", en: "N° VAT" }
-                tags: ["billing_vat_number"]
 
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     configuration_asddays_2016:
@@ -851,6 +804,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         type: '@event_asddays_2016_type_fournisseur'
         event: '@event_asddays_2016'
+        owner: '@user_asddays_1'
         data:
             # Titre de la fiche
             dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
@@ -886,7 +840,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
         registrationData:
             3ad4b72f: { text: "Elao" }
-        packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
@@ -895,7 +848,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: "@user_asddays_1"
         sheet: "@sheet_asddays_1"
-        owner: true
         active: true
         data:
             541f84d4: { text: "John" }
