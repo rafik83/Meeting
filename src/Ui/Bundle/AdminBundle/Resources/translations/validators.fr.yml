@@ -48,3 +48,7 @@ validators:
             greaterOrEqual: La quantité min doit être inférieure à la quantité max
             minRequired: Si vous définissez une quantité, vous devez définir un min et un max
             maxRequired: Si vous définissez une quantité, vous devez définir un min et un max
+    meeting:
+        slot:
+            recipe:
+                date_range: La date de début doit être antérieur à la date de fin
