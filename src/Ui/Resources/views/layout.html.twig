@@ -219,3 +219,17 @@
         {{ form_errors(form) }}
     </div>
 {% endblock %}
+
+{% block generate_slot_recipe_row %}
+    <div {{ block('row_container_attributes') }}>
+        <div class="row">
+            {{ form_row(form.begin, { 'group_attr': { 'class': 'col-md-2 col-sm-4 col-xs-6' } }) }}
+            {{ form_row(form.end, { 'group_attr': { 'class': 'col-md-2 col-sm-4 col-xs-6' } }) }}
+            {{ form_row(form.interval, { 'group_attr': { 'class': 'col-md-2 col-sm-4 col-xs-6' } }) }}
+            {{ form_row(form.duration, { 'group_attr': { 'class': 'col-md-2 col-sm-4 col-xs-6' } }) }}
+            <div class="col-md-2 col-sm-4 filter-buttons">
+                {{ block('collection_delete_button') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

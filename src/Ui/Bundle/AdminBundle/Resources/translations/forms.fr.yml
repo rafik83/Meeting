@@ -1013,14 +1013,14 @@ form:
                 prototype:
                     children:
                         begin:
-                            label: Début
+                            label: De
                         end:
-                            label: Fin
+                            label: à
                         interval:
-                            label: Interval
+                            label: Interval (min.)
                         duration:
-                            label: Durée
-                label_add: Ajouter
+                            label: Durée (min.)
+                label_add: Ajouter une plage
                 label_delete: "&times;"
             submit:
                 label: Enregistrer
