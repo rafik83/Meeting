@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
+use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -115,7 +115,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $this->prophesize(Cart::class)->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -187,7 +188,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $this->prophesize(Cart::class)->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));

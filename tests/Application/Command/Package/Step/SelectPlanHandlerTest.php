@@ -47,6 +47,7 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
         $cartRowRepository->findCartRowPlanBySheet($sheet)->shouldBeCalled()->willReturn(null);
+        $cartRowRepository->deleteCartRowsBySheet($sheet)->shouldBeCalled();
         $cartRowRepository->add($cartRow)->shouldBeCalled();
         $dateTime          = new \DateTimeImmutable();
 
@@ -100,7 +101,7 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
         $dateTime          = new \DateTimeImmutable();
         $cartRowRepository->findCartRowPlanBySheet($sheet)->shouldBeCalled()->willReturn($cartRow);
-        $cartRowRepository->delete($cartRow)->shouldBeCalled();
+        $cartRowRepository->deleteCartRowsBySheet($sheet)->shouldBeCalled();
         $cartRowRepository->add($expectedCartRow)->shouldBeCalled();
 
         $plans        = new SelectPlan($sheet);
