@@ -64,11 +64,6 @@ class Event implements EventInterface
     private $fallback;
 
     /**
-     * @var array
-     */
-    private $billingTemplate;
-
-    /**
      * @var string
      */
     private $organiserName;
@@ -268,26 +263,6 @@ class Event implements EventInterface
     public function hasLocale($locale)
     {
         return in_array($locale, $this->locales);
-    }
-
-    /**
-     * @param array $billingTemplate
-     *
-     * @deprecated billing template has to be rewritten
-     */
-    public function setBillingTemplate($billingTemplate)
-    {
-        $this->billingTemplate = $billingTemplate;
-    }
-
-    /**
-     * @return array
-     *
-     * @deprecated billing template has to be rewritten
-     */
-    public function getBillingTemplate()
-    {
-        return $this->billingTemplate;
     }
 
     /**

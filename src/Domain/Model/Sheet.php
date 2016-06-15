@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 /**
  * "Fiche de participation".
  */
-class Sheet implements BillingInfoInterface, TraceableInterface
+class Sheet implements TraceableInterface
 {
     const STATE_PENDING   = 'pending';
     const STATE_VALIDATED = 'validated';
@@ -53,16 +53,6 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     private $data;
 
     /**
-     * @var array
-     */
-    private $packageData;
-
-    /**
-     * @var array
-     */
-    private $billingData;
-
-    /**
      * @var ArrayCollection
      */
     private $orders;
@@ -97,20 +87,25 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     private $follower;
 
     /**
+     * @var User
+     */
+    private $owner;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
      * @param Type               $type
      * @param array              $data
-     * @param array              $packageData
+     * @param User               $owner
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(Event $event, Type $type, array $data, array $packageData, \DateTimeInterface $createdAt)
+    public function __construct(Event $event, Type $type, array $data, User $owner, \DateTimeInterface $createdAt)
     {
         $this->event        = $event;
         $this->type         = $type;
         $this->data         = $data;
-        $this->packageData  = $packageData;
+        $this->owner        = $owner;
         $this->createdAt    = $createdAt;
         $this->lastLoginAt  = $createdAt;
         $this->participants = new ArrayCollection();
@@ -250,11 +245,13 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     /**
      * Get packageData.
      *
+     * @deprecated
+     *
      * @return array
      */
     public function getPackageData()
     {
-        return $this->packageData;
+        return [];
     }
 
     /**
@@ -266,31 +263,12 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
-     * Set packageData.
-     *
-     * @param array $packageData
-     */
-    public function setPackageData(array $packageData)
-    {
-        $this->packageData = $packageData;
-    }
-
-    /**
      * {@inheritdoc}
+     * @deprecated
      */
     public function getBillingData()
     {
-        return $this->billingData;
-    }
-
-    /**
-     * Set billingData.
-     *
-     * @param array $billingData
-     */
-    public function setBillingData(array $billingData)
-    {
-        $this->billingData = $billingData;
+        return [];
     }
 
     /**
@@ -358,29 +336,23 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     }
 
     /**
-     * Get the sheet owner
+     * Get the sheet user owner
      *
-     * @return Participant
+     * @return User
      */
     public function getOwner()
     {
-        if ($this->participants !== null) {
-            foreach ($this->getParticipants() as $participant) {
-                if ($participant->isOwner()) {
-                    return $participant;
-                }
-            }
-        }
-
-        throw new \RuntimeException('Sheet owner not found.');
+        return $this->owner;
     }
 
     /**
-     * {@inheritdoc}
+     * Get the sheet participant owner
+     *
+     * @return Participant|null
      */
-    public function getBillingTemplate()
+    public function getParticipantOwner()
     {
-        return $this->getEvent()->getBillingTemplate();
+        return $this->getUserParticipant($this->owner);
     }
 
     /**
@@ -406,7 +378,7 @@ class Sheet implements BillingInfoInterface, TraceableInterface
      */
     public function hasUser(User $user)
     {
-        return $this->participants->exists(function ($index, Participant $participant) use ($user) {
+        return $this->owner === $user || $this->participants->exists(function ($index, Participant $participant) use ($user) {
             return $participant->getUser() === $user;
         });
     }

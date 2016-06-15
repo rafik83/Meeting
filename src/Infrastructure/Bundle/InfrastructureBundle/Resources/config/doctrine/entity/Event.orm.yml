@@ -17,8 +17,6 @@ Proximum\Vimeet\Domain\Model\Event:
             type: json_array
         fallback:
             type: string
-        billingTemplate:
-            type: json_array
         organiserName:
             type: string
         organiserEmail:

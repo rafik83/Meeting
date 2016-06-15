@@ -37,7 +37,10 @@ class Prefiller
      */
     public function prefill(BillingInfo $billingInfo)
     {
-        $participant  = $billingInfo->getSheet()->getOwner();
+        /*
+         * @todo Get the info from the user if no participant owner
+         */
+        $participant  = $billingInfo->getSheet()->getParticipantOwner();
         $locale       = $billingInfo->getSheet()->getEvent()->getFallback();
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
