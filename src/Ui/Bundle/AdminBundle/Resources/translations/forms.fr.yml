@@ -1017,9 +1017,9 @@ form:
                         end:
                             label: à
                         interval:
-                            label: Interval (min.)
+                            label: Interval (en minutes)
                         duration:
-                            label: Durée (min.)
+                            label: Durée (en minutes)
                 label_add: Ajouter une plage
                 label_delete: "&times;"
             submit:
@@ -1027,6 +1027,6 @@ form:
     schedule_config:
         children:
             scale:
-                label: Echelle (min.)
+                label: Echelle (en minutes)
             submit:
                 label: Enregistrer
