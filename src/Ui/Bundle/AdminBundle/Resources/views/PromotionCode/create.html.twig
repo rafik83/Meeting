@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.promotion_code.new'|trans }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
         {{ form_errors(form) }}
 
         {% for name, child in form.children if name != 'submit' %}
