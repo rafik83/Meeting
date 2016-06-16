@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Hautelook\AliceBundle\Tests\SymfonyApp\TestBundle\Entity\Prod;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -59,7 +58,6 @@ class Cart
     public function setProduct(Product $product, $quantity)
     {
         if ($this->hasProduct($product)) {
-
             $row = $this->getRow($product);
 
             if ($quantity > 0) {
@@ -84,8 +82,8 @@ class Cart
     {
         $additionnal = $this->sheet->countParticipant() - $this->getIncludedParticipantQuantity();
 
-        if ($additionnal > 0 && $row = $this->getParticipantRow()) {
-            $row->setQuantity($additionnal);
+        if ($additionnal > 0) {
+            $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
         }
 
         return $this;

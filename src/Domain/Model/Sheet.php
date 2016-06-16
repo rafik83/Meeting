@@ -105,8 +105,13 @@ class Sheet implements BillingInfoInterface, TraceableInterface
      * @param array              $packageData
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(Event $event, Type $type, array $data, array $packageData, \DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        Event $event,
+        Type $type,
+        array $data,
+        array $packageData,
+        \DateTimeInterface $createdAt
+    ) {
         $this->event        = $event;
         $this->type         = $type;
         $this->data         = $data;
@@ -271,6 +276,14 @@ class Sheet implements BillingInfoInterface, TraceableInterface
     public function getPackage()
     {
         return $this->getType()->getPackage();
+    }
+
+    /**
+     * @return Product
+     */
+    public function getPackageParticipant()
+    {
+        return $this->getPackage()->getParticipant();
     }
 
     /**
