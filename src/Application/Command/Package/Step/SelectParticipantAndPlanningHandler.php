@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SelectParticipantAndPlanningHandler
 {

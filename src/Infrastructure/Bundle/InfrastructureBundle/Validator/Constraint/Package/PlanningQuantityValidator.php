@@ -28,14 +28,15 @@ class PlanningQuantityValidator extends ConstraintValidator
      */
     public function validate($selectParticipantAndPlanning, Constraint $constraint)
     {
-        $quantity = $selectParticipantAndPlanning->planningQuantity;
-        $sheet    = $selectParticipantAndPlanning->sheet;
+        $quantity    = $selectParticipantAndPlanning->planningQuantity;
+        $sheet       = $selectParticipantAndPlanning->sheet;
+        $quantityMax = $this->quantityMaxGuesser->getMaxPlanning($sheet);
 
-        if ($quantity < 0 || $quantity > $this->quantityMaxGuesser->getMaxPlanning($sheet)) {
+        if ($quantity < 0 || $quantity > $quantityMax) {
             $this
                 ->context
                 ->buildViolation('package.planning.quantity')
-                ->setParameters(['%min%' => 0, '%max%' => 1])
+                ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
                 ->atPath('planningQuantity')
                 ->addViolation();
         }
