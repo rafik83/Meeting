@@ -137,6 +137,7 @@ class EventRepository implements EventRepositoryInterface
             ->select('NEW Proximum\Vimeet\Domain\View\EventView(
                 event.id,
                 event.title,
+                event.logo,
                 translations.description,
                 translations.locale,
                 event.fallback,

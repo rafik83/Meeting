@@ -216,11 +216,12 @@ services:
             - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
-    vimeet_infrastructure.vimeet.application.command.update_handler:
+    command.event.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@guideline.generator'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:

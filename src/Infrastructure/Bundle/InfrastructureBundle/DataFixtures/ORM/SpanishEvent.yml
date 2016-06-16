@@ -4,6 +4,7 @@ Proximum\Vimeet\Domain\Model\Event:
         domain: spanish-event.<domain()>
         timeZone: 'Europe/Paris'
         locales: [es]
+        logo: 'assets/images/asddays-logo.png'
         fallback: es
         assetPath: ''
         country: 'ES'

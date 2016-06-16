@@ -9,8 +9,8 @@ Proximum\Vimeet\Domain\Model\Address (local):
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     event_rdv_carnot_2016_configuration:
         __construct:
-            - '#59a4eb'
-            - '#00398c'
+            - '#4697ff'
+            - '#4b41d0'
             - '#00398C'
 
 Proximum\Vimeet\Domain\Model\Event:
@@ -18,6 +18,7 @@ Proximum\Vimeet\Domain\Model\Event:
         title: Les rendez-vous CARNOT 2016
         domain: rdv-carnot-2016.<domain()>
         timeZone: 'Europe/Paris'
+        logo: 'integration/src/images/rdv-carnot-logo.png'
         locales: [fr, en]
         fallback: fr
         country: 'FR'

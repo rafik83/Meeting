@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Model;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Update
 {
@@ -23,6 +24,11 @@ class Update
      * @var string
      */
     public $title;
+
+    /**
+     * @var UploadedFile
+     */
+    public $logo;
 
     /**
      * @var array
