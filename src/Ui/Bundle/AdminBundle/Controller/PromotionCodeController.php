@@ -99,9 +99,8 @@ class PromotionCodeController extends Controller
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.promotion_code.update.success');
 
-                return $this->redirectToRoute('admin_promotion_code_update', [
-                    'event'         => $event->getId(),
-                    'promotionCode' => $promotionCode->getId(),
+                return $this->redirectToRoute('admin_promotion_code_list', [
+                    'event' => $event->getId(),
                 ]);
             } catch (NonUniqueCodeExcetpion $exception) {
                 $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
