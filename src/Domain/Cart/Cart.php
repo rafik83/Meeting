@@ -102,7 +102,17 @@ class Cart
     }
 
     /**
-     * @return CartRow
+     * @return false|CartRow
+     */
+    public function getPlanRow()
+    {
+        return $this->rows->filter(function (CartRow $cartRow) {
+            return $cartRow->getProduct()->isPlan();
+        })->first();
+    }
+
+    /**
+     * @return false|CartRow
      */
     public function getParticipantRow()
     {
@@ -112,7 +122,7 @@ class Cart
     }
 
     /**
-     * @return CartRow
+     * @return false|CartRow
      */
     public function getPlanningRow()
     {
@@ -142,7 +152,7 @@ class Cart
     /**
      * @param Product $product
      *
-     * @return CartRow
+     * @return false|CartRow
      */
     public function getRow(Product $product)
     {
@@ -163,5 +173,13 @@ class Cart
     public function getRows()
     {
         return $this->rows->toArray();
+    }
+
+    /**
+     * Clear the cart
+     */
+    public function clear()
+    {
+        $this->rows->clear();
     }
 }

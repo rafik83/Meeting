@@ -22,7 +22,7 @@ class SelectParticipantAndPlanningHandler
     private $cartManager;
 
     /**
-     * @param CartManager                $cartManager
+     * @param CartManager $cartManager
      */
     public function __construct(CartManager $cartManager)
     {

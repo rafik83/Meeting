@@ -30,12 +30,18 @@ class SelectPlanHandler
     }
 
     /**
-     * @param SelectPlan $plans
+     * @param SelectPlan $selectPlan
      */
-    public function handle(SelectPlan $plans)
+    public function handle(SelectPlan $selectPlan)
     {
-        $cartRow = $this->cartManager->getCart($plans->sheet);
-        $cartRow->setProduct($plans->plan, 1);
-        $this->cartManager->save($cartRow);
+        $cart = $this->cartManager->getCart($selectPlan->sheet);
+
+        $previousPlan = $cart->getPlanRow();
+
+        if (!$previousPlan || $previousPlan->getProduct() !== $selectPlan->plan) {
+            $cart->clear();
+            $cart->setProduct($selectPlan->plan, 1);
+            $this->cartManager->save($cart);
+        }
     }
 }
