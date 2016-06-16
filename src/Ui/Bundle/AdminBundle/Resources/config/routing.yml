@@ -606,14 +606,14 @@ admin_schedule_slots_generate:
     requirements:
         event: \d+
 admin_schedule_slot_lock:
-    path: /event/{event}/schedule/slog/{meetingSlot}/lock
+    path: /event/{event}/schedule/slot/{meetingSlot}/lock
     defaults: { _controller: AdminBundle:Schedule:lock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_unlock:
-    path: /event/{event}/schedule/slog/{meetingSlot}/unlock
+    path: /event/{event}/schedule/slot/{meetingSlot}/unlock
     defaults: { _controller: AdminBundle:Schedule:unlock }
     methods: [GET, POST]
     requirements:
