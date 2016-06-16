@@ -125,6 +125,13 @@ class Product
     private $productIncluded;
 
     /**
+     * "Produit soumis à validation"
+     *
+     * @var boolean
+     */
+    private $subjectedToValidation = false;
+
+    /**
      * @param Event                   $event
      * @param string                  $type
      * @param string                  $name
