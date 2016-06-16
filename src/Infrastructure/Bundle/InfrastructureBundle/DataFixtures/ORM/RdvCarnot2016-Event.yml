@@ -35,6 +35,7 @@ Proximum\Vimeet\Domain\Model\Event:
             Pas d'escompte pour paiement anticipé
         mode: 'et'
         vat: 20
+        currency: 'EUR'
         assetPath: ''
         elementToJoinWithInvoice: |+
             - Numéro de la Facture
