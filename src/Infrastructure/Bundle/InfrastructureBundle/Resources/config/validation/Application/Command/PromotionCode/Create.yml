@@ -29,7 +29,6 @@ Proximum\Vimeet\Application\Command\PromotionCode\Create:
                         - NotBlank: ~
                         - Type: { type: string }
                     value:
-                        - NotBlank: ~
                         - Type: { type: float }
                 - Expression:
                     expression: "value['type'] === 'free' || value['value'] !== null"
