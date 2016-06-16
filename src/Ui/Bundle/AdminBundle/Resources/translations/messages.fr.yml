@@ -313,6 +313,21 @@ admin:
             auto: 'automatiquement'
             validate: 'Validée le %at%'
         details:
+            participants: Participants
+            owner:
+                email: Email du propriétaire
+                phone: Téléphone du propriétaire
+            meeting:
+                request:
+                    title: Demandes de rendez-vous
+                    approved: Demandes validées
+                    pending: Demandes en attente
+                    refused: Demandes refusées
+                proposition:
+                    title: Propositions de rendez-vous
+                    approved: Propositions validées
+                    pending: Propositions en attente
+                    refused: Propositions refusées
             historic:
                 title: Historique
             comments:
