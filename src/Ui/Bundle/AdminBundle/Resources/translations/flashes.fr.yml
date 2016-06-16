@@ -192,3 +192,9 @@ flash:
             success: Le code promotion a bien été créé
         update:
             success: Le code promotion a bien été mis à jour
+    schedule:
+        slot:
+            generate:
+                success: %count% créneau a été ajouté|%count% créneaux ont été ajoutés
+        configure:
+            success: Votre configuration a bien été enregistrer

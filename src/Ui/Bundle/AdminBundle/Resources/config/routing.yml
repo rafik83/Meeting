@@ -614,3 +614,33 @@ admin_promotion_code_update:
     requirements:
         event: \d+
         promotionCode: \d+
+
+#
+# Schedule
+#
+admin_schedule_slots:
+    path: /event/{event}/schedule/slots
+    defaults: { _controller: AdminBundle:Schedule:slots }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+admin_schedule_slots_generate:
+    path: /event/{event}/schedule/slots/generate
+    defaults: { _controller: AdminBundle:Schedule:generate }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+admin_schedule_slot_lock:
+    path: /event/{event}/schedule/slot/{meetingSlot}/lock
+    defaults: { _controller: AdminBundle:Schedule:lock }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        meetingSlot: \d+
+admin_schedule_slot_unlock:
+    path: /event/{event}/schedule/slot/{meetingSlot}/unlock
+    defaults: { _controller: AdminBundle:Schedule:unlock }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        meetingSlot: \d+
