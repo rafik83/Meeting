@@ -52,7 +52,8 @@ class CreateOptionHandler
             $createOption->availabilityCurrent,
             $createOption->availabilityMax,
             $createOption->updatable,
-            $createOption->updatableUntil
+            $createOption->updatableUntil,
+            $createOption->subjectedToValidation
         );
 
         foreach ($createOption->translations as $locale => $translation) {

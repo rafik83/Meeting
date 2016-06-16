@@ -66,7 +66,11 @@ class CreateOptionType extends AbstractType
             ->add('updatableUntil', DateTimeType::class, [
                 'data'     => null,
                 'required' => false,
-            ]);
+            ])
+            ->add('subjectedToValidation', CheckboxType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**

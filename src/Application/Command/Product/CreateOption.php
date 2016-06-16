@@ -66,6 +66,11 @@ class CreateOption
     public $updatableUntil;
 
     /**
+     * @var bool
+     */
+    public $subjectedToValidation;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
