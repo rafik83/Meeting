@@ -119,7 +119,11 @@ class Sheet implements TraceableInterface
      */
     public static function getAllStates()
     {
-        return [self::STATE_ACCEPTED, self::STATE_PENDING, self::STATE_VALIDATED];
+        return [
+            self::STATE_ACCEPTED,
+            self::STATE_PENDING,
+            self::STATE_VALIDATED,
+        ];
     }
 
     /**
@@ -391,6 +395,35 @@ class Sheet implements TraceableInterface
     public function hasParticipant(Participant $participant)
     {
         return $this->participants->contains($participant);
+    }
+
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasUserParticipant(User $user)
+    {
+        return null !== $this->getUserParticipant($user);
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return $this->participants->count();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isOwner(User $user)
+    {
+        return $this->owner === $user;
     }
 
     /**
