@@ -23,9 +23,11 @@ class StateChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices_as_values'         => true,
             'choices'                   => Sheet::getAllStates(),
             'choice_translation_domain' => 'messages',
+            'choice_label'              => function ($currentChoice) {
+                return sprintf('event.sheet.state.%s', $currentChoice);
+            },
         ]);
     }
 
