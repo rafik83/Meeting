@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Event\Content;
 
 use Proximum\Vimeet\Domain\Model\Event\Content;
 
-class UpdateTermsOfSale
+class Update
 {
     /**
      * @var Content
@@ -32,7 +32,7 @@ class UpdateTermsOfSale
         $this->content = $content;
 
         foreach ($this->content->getEvent()->getLocales() as $locale) {
-            $this->translations[$locale]['value'] = $this->content->getValueTranslation($locale);
+            $this->translations[$locale]['value'] = $this->content->getValue($locale);
         }
     }
 }

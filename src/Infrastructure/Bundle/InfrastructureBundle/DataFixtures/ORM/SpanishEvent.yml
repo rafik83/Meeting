@@ -735,7 +735,7 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
 Proximum\Vimeet\Domain\Model\Event\Content:
     content_terms_of_sale_spanish_event:
         __construct: false
-        type: 'terms_of_sale'
+        type: 'terms-of-sale'
         event: '@event_spanish'
 
 Proximum\Vimeet\Domain\Model\Event\ContentTranslation:

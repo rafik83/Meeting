@@ -21,9 +21,10 @@ interface ContentRepositoryInterface
     public function set(Content $content);
 
     /**
-     * @param Event $event
+     * @param Event  $event
+     * @param string $type
      *
      * @return Content|null
      */
-    public function getTermsOfSalesByEvent(Event $event);
+    public function findByEventAndType(Event $event, $type);
 }

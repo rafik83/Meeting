@@ -1015,7 +1015,7 @@ form:
                 label: N° de TVA
             submit:
                 label: Enregistrer
-    content_update_terms_of_sale:
+    content_update:
         children:
             submit:
                 label: Enregistrer

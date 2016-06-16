@@ -778,12 +778,12 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
-    command.event.content.update_terms_of_sale_handler:
-        class: Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSaleHandler
+    command.event.content.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\Content\UpdateHandler
         arguments:
             - '@repository.event.content_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSale }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\Update }
     command.promotion_code.create_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:

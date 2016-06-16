@@ -13,12 +13,12 @@ Feature: Update terms of sale
     When I go to this page "/admin/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
     And I go to this page "/admin/en/event/1"
-    When I follow "admin.update_content.terms_of_sales.link"
-    And I should be on this page "/admin/en/event/1/terms-of-sale/update"
+    When I follow "admin.update_content.terms-of-sale.link"
+    And I should be on this page "/admin/en/event/1/content/terms-of-sale/update"
     And I fill in the following:
-      | content_update_terms_of_sale_translations_fr_value | Bla Bla Bla  |
-      | content_update_terms_of_sale_translations_en_value | Foo Bar Foo  |
-    And I press "form.content_update_terms_of_sale.children.submit.label"
+      | content_update_translations_fr_value | Bla Bla Bla  |
+      | content_update_translations_en_value | Foo Bar Foo  |
+    And I press "form.content_update.children.submit.label"
     Then the response status code should be 200
-    And I should see "flash.content.update_terms_of_sale.success"
-    And I should be on this page "/admin/en/event/1/terms-of-sale/update"
+    And I should see "flash.content.update_terms-of-sale.success"
+    And I should be on this page "/admin/en/event/1/content/terms-of-sale/update"

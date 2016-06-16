@@ -10,26 +10,27 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Content;
 
+use Proximum\Vimeet\Application\Command\Event\Content\Update;
 use Proximum\Vimeet\Domain\Model\Event\Content;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContentTranslationLocaleType extends AbstractType
+class UpdateType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Content $content */
-        $content = $options['content'];
-
-        foreach ($content->getEvent()->getLocales() as $locale) {
-            $builder
-                ->add($locale, ContentTranslationType::class, [
-                    'label'              => ucfirst(Intl::getLocaleBundle()->getLocaleName($locale)),
-                    'translation_domain' => false,
-                ]);
-        }
+        $builder
+            ->add('translations', TranslationsType::class, [
+                'label'         => false,
+                'locales'       => $options['content']->getEvent()->getLocales(),
+                'entry_type'    => ContentTranslationType::class,
+            ])
+        ;
     }
 
     /**
@@ -39,6 +40,9 @@ class ContentTranslationLocaleType extends AbstractType
     {
         $resolver->setRequired(['content']);
         $resolver->setAllowedTypes('content', Content::class);
+        $resolver->setDefaults([
+            'data_class' => Update::class,
+        ]);
     }
 
     /**
@@ -46,6 +50,6 @@ class ContentTranslationLocaleType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'content_translation_locale';
+        return 'content_update';
     }
 }

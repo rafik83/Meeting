@@ -118,8 +118,8 @@ admin_event_update:
 #
 # Content
 #
-admin_content_update_terms_of_sales:
-    path: /event/{event}/terms-of-sale/update
+admin_content_update:
+    path: /event/{event}/content/{type}/update
     requirements:
         event: \d+
     methods: [GET, POST]

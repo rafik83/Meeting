@@ -188,7 +188,7 @@ flash:
         update_info:
             success: Vos informations de facturation ont été mis à jour
     content:
-        update_terms_of_sale:
+        update_terms-of-sale:
             success: Les conditions générales de vente ont été mis à jour
     promotion_code:
         create:

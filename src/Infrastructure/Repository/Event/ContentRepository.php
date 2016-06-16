@@ -42,7 +42,7 @@ class ContentRepository implements ContentRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTermsOfSalesByEvent(Event $event)
+    public function findByEventAndType(Event $event, $type)
     {
         $queryBuilder = $this
             ->manager
@@ -52,7 +52,7 @@ class ContentRepository implements ContentRepositoryInterface
             ->where('content.event = :event')
             ->setParameter('event', $event)
             ->andWhere('content.type = :type')
-            ->setParameter('type', Content::TYPE_TERMS_OF_SALE)
+            ->setParameter('type', $type)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();

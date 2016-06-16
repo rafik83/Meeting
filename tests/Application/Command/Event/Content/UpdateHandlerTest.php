@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event\Content;
 
-use Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSale;
-use Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSaleHandler;
+use Proximum\Vimeet\Application\Command\Event\Content\Update;
+use Proximum\Vimeet\Application\Command\Event\Content\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 
-class UpdateTermsOfSaleHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -34,7 +34,7 @@ class UpdateTermsOfSaleHandlerTest extends \PHPUnit_Framework_TestCase
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->set($expectedContent)->shouldBeCalled();
 
-        $update = new UpdateTermsOfSale($content);
+        $update = new Update($content);
         $update->translations = [
             'fr' => [
                 'value' => 'sup',
@@ -47,7 +47,7 @@ class UpdateTermsOfSaleHandlerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $handler = new UpdateTermsOfSaleHandler($contentRepository->reveal());
+        $handler = new UpdateHandler($contentRepository->reveal());
         $handler->handle($update);
     }
 }

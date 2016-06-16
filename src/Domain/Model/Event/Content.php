@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Content
 {
-    const TYPE_TERMS_OF_SALE = 'terms_of_sale';
+    const TYPE_TERMS_OF_SALE = 'terms-of-sale';
 
     /**
      * @var int
@@ -105,11 +105,11 @@ class Content
      * @param string|null $fallback
      * @return string
      */
-    public function getValueTranslation($locale, $fallback = null)
+    public function getValue($locale, $fallback = null)
     {
         return $this->hasTranslation($locale)
             ? $this->getTranslation($locale)->getValue()
-            : ($fallback ? $this->getValueTranslation($fallback) : '');
+            : ($fallback ? $this->getValue($fallback) : '');
     }
 
     /**
