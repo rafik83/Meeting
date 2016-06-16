@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -59,6 +60,12 @@ class EventUpdateType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => EventUpdateTranslationType::class,
                 'label'      => false,
+            ])
+            ->add('logo', FileType::class, [
+                'required' => false,
+                'attr'     => [
+                    'accept' => implode(', ', ["image/jpeg", "image/pjpeg", "image/png", "image/x-png",]),
+                ],
             ])
             ->add('country', CountryType::class)
             ->add('mode', VatModeType::class, [

@@ -14,6 +14,9 @@ var $                       = require('jquery'),
 
 require('elao-form.js');
 require('select2');
+require('eonasdan-bootstrap-datetimepicker');
+require('moment/locale/fr');
+require('moment/locale/en-gb');
 
 // Init function
 
@@ -51,6 +54,23 @@ function init(target) {
             },
             allowClear: true
         });
+    });
+
+    $('[data-datatimepicker]').datetimepicker({
+        locale: 'fr',
+        sideBySide: true,
+        allowInputToggle: true,
+        icons: {
+            time: 'glyphicon glyphicon-time',
+            date: 'glyphicon glyphicon-calendar',
+            up: 'glyphicon glyphicon-chevron-up',
+            down: 'glyphicon glyphicon-chevron-down',
+            previous: 'glyphicon glyphicon-chevron-left',
+            next: 'glyphicon glyphicon-chevron-right',
+            today: 'glyphicon glyphicon-screenshot',
+            clear: 'glyphicon glyphicon-trash',
+            close: 'glyphicon glyphicon-remove'
+        }
     });
 
     /* tablesort */

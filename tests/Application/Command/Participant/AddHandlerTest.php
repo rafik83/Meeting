@@ -39,7 +39,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
         $sheet = new Sheet($event, $type, [], [], $now);
         $owner = false;
-        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
+        $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
@@ -129,7 +129,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], [], $now);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $owner = false;
-        $eventView = new EventView(1, 'title', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
+        $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedParticipant = new Participant(

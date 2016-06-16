@@ -7,15 +7,17 @@
 
     <div class="wrapper profile">
         <div class="header">
-            <a href="{{ path('event') }}">
-                <img src="{{ asset('assets/images/asddays-logo.png') }}" class="logo">
-            </a>
-            <div class="header__info">
-                {% if eventView is defined %}
+            {% if eventView is defined %}
+                {% if eventView.logo != null %}
+                <a href="{{ path('event') }}">
+                    <img src="{{ eventView.logo|imagine_filter('event_header_logo') }}" class="logo">
+                </a>
+                {% endif %}
+                <div class="header__info">
                     <p>{{ eventView.title }}</p>
                     <p>{{ eventView.description }}</p>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             <ul class="header__navigation">
                 <li>
                     {% if eventView is defined %}
