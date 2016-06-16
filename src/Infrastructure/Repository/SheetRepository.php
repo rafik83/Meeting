@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\View\SheetView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -109,13 +110,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\SheetView(sheet.id, typeTranslation.title)')
             ->from('Entity:Sheet', 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
-            ->setParameter('user', $user)
             ->join('sheet.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('sheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->andWhere('sheet.owner = :user OR EXISTS (SELECT p.id FROM Entity:Participant p WHERE p.user = :user AND p.sheet = sheet)')
+            ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -124,6 +125,25 @@ class SheetRepository implements SheetRepositoryInterface
      * {@inheritdoc}
      */
     public function getSheetByUserAndEvent(User $user, EventInterface $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event->getId())
+            ->andWhere('sheet.owner = :user OR participant.user = :user')
+            ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
     {
         $queryBuilder = $this
             ->entityManager
