@@ -81,7 +81,7 @@ class CartRow
      *
      * @return CartRow
      */
-    public function setProduct($product)
+    public function setProduct(Product $product)
     {
         $this->product           = $product;
         $this->serializedProduct = $product->getSerializedData();
