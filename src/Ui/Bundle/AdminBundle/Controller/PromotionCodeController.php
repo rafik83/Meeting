@@ -61,10 +61,12 @@ class PromotionCodeController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('tactician.commandbus')->handle($create);
+            $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.promotion_code.create.success');
 
-            return $this->redirectToUpdate($result->promotionCode);
+            return $this->redirectToRoute('admin_promotion_code_list', [
+                'event' => $event->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:PromotionCode:create.html.twig', [
@@ -97,7 +99,10 @@ class PromotionCodeController extends Controller
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.promotion_code.update.success');
 
-                return $this->redirectToUpdate($promotionCode);
+                return $this->redirectToRoute('admin_promotion_code_update', [
+                    'event'         => $event->getId(),
+                    'promotionCode' => $promotionCode->getId(),
+                ]);
             } catch (NonUniqueCodeExcetpion $exception) {
                 $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
             }
@@ -107,19 +112,6 @@ class PromotionCodeController extends Controller
             'promotion_code' => $promotionCode,
             'event'          => $event,
             'form'           => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param PromotionCode $promotionCode
-     *
-     * @return RedirectResponse
-     */
-    private function redirectToUpdate(PromotionCode $promotionCode)
-    {
-        return $this->redirectToRoute('admin_promotion_code_update', [
-            'event'         => $promotionCode->getEvent()->getId(),
-            'promotionCode' => $promotionCode->getId(),
         ]);
     }
 
