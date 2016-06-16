@@ -770,6 +770,31 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
+    command.meeting_slot.generate_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.slot.slot_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Generate }
+    command.schedule.configure_handler:
+        class: Proximum\Vimeet\Application\Command\Schedule\ConfigureHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Schedule\Configure }
+    application.command.meeting_slot.lock_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
+    application.command.meeting_slot.unlock_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
 
     #
     # Security
@@ -1152,3 +1177,9 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@repository.cart_row_repository'
+
+    #
+    # MeetingSlot
+    #
+    domain.meeting.slot.slot_generator:
+        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator

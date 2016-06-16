@@ -111,6 +111,11 @@ function init(target) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
 
+    // Disable click on active button
+    [].forEach.call(target.querySelectorAll('button.active'), function  (element) {
+        element.addEventListener('click', function (event) { event.preventDefault(); });
+    });
+
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
     });

@@ -1015,3 +1015,26 @@ form:
                 label: N° de TVA
             submit:
                 label: Enregistrer
+    generate_slot:
+        children:
+            recipes:
+                prototype:
+                    children:
+                        begin:
+                            label: De
+                        end:
+                            label: à
+                        interval:
+                            label: Interval (en minutes)
+                        duration:
+                            label: Durée (en minutes)
+                label_add: Ajouter une plage
+                label_delete: "&times;"
+            submit:
+                label: Enregistrer
+    schedule_config:
+        children:
+            scale:
+                label: Echelle (en minutes)
+            submit:
+                label: Enregistrer
