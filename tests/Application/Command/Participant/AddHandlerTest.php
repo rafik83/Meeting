@@ -18,8 +18,11 @@ use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenera
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -41,6 +44,15 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], [], $now);
         $owner = false;
         $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
+
+        $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
+        $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
+
+        $package  = new Package($event, 'My package', $now);
+        $package->enable(true, true, true);
+        $package->setPlans([$planProduct]);
+        $package->setParticipant($participantProduct);
+        $type->setPackage($package);
 
         $expectedSheet       = new Sheet($event, $type, [], [], $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
@@ -92,10 +104,16 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
-        $cart        = new Cart($sheet, []);
+        $planRow     = new CartRow($sheet, $planProduct, 1);
+        $cart        = new Cart($sheet, [$planRow]);
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $cartManager->save($cart)->shouldBeCalled();
+
+        $expectedCart = new Cart($sheet, [
+            $planRow,
+            new CartRow($sheet, $participantProduct, 1),
+        ]);
+        $cartManager->save($expectedCart)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
@@ -175,7 +193,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cart        = new Cart($sheet, []);
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $cartManager->save($cart)->shouldBeCalled();
+        $cartManager->save()->shouldNotBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
