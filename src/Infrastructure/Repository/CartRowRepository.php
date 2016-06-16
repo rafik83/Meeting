@@ -86,72 +86,9 @@ class CartRowRepository implements CartRowRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findCartRowPlanBySheet(Sheet $sheet)
-    {
-        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PLAN);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findCartRowPlanningBySheet(Sheet $sheet)
-    {
-        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PLANNING);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findCartRowParticipantBySheet(Sheet $sheet)
-    {
-        return $this->findCartRowByProductTypeAndBySheet($sheet, Product::TYPE_PARTICIPANT);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteCartRowsBySheet(Sheet $sheet)
-    {
-        $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->delete()
-            ->from(CartRow::class, 'cartRow')
-            ->where('cartRow.sheet = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->getQuery()
-            ->execute();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function delete(CartRow $cartRow)
     {
         $this->entityManager->remove($cartRow);
         $this->entityManager->flush($cartRow);
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $productType
-     *
-     * @return null|CartRow
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    private function findCartRowByProductTypeAndBySheet(Sheet $sheet, $productType)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('cartRow')
-            ->from(CartRow::class, 'cartRow')
-            ->where('cartRow.sheet = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->join('cartRow.product', 'product', 'WITH', 'product.type = :type')
-            ->setParameter('type', $productType)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }
