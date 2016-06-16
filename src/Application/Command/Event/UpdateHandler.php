@@ -54,7 +54,8 @@ class UpdateHandler
             $update->fallback,
             $update->mode,
             $update->vat,
-            $update->country
+            $update->country,
+            $update->currency
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 

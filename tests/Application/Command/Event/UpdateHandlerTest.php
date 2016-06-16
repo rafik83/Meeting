@@ -24,7 +24,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -41,6 +41,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'USD';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
@@ -48,7 +49,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20, 'FR', 'USD');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
 
@@ -68,7 +69,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -85,6 +86,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'EUR';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
@@ -92,7 +94,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
         $expectedEvent->getTranslations()->set('de', new EventTranslation($expectedEvent, 'de', ''));
@@ -113,7 +115,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -130,6 +132,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'EUR';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
@@ -137,7 +140,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
         // Mock

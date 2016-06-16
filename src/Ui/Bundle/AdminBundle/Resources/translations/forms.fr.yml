@@ -1,4 +1,7 @@
 form:
+    vatMode:
+        et: HT
+        ati: TTC
     type_template:
         sheet:
             base: Template de Participation de base
@@ -140,6 +143,9 @@ form:
                 label: Mode
             vat:
                 label: TVA
+            currency:
+                label: Devise
+                placeholder: -- Choisir une devise pour l'événement --
             textColor:
                 label: Couleur du texte
             leftColor:

@@ -25,6 +25,7 @@ Feature: See and update event
       | event_update_translations_en_description | In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion. |
     And I select "en" from "event_update_fallback"
     And I select "fr" from "event_update_fallback"
+    And I select "EUR" from "event_update_currency"
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
