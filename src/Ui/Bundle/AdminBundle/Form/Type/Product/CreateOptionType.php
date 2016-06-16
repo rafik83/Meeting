@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Application\Command\Product\CreateOption;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -63,8 +64,7 @@ class CreateOptionType extends AbstractType
             ->add('updatable', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('updatableUntil', DateTimeType::class, [
-                'data'     => null,
+            ->add('updatableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
             ->add('subjectedToValidation', CheckboxType::class, [
